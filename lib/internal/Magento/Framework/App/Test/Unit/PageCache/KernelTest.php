@@ -6,6 +6,8 @@
 namespace Magento\Framework\App\Test\Unit\PageCache;
 
 use \Magento\Framework\App\PageCache\Kernel;
+use \Magento\Framework\App\Http\ContextFactory;
+use \Magento\Framework\App\Response\HttpFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -33,10 +35,10 @@ class KernelTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
     private $httpResponseMock;
 
-    /** @var \Magento\Framework\App\Http\ContextFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ContextFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $contextFactoryMock;
 
-    /** @var \Magento\Framework\App\Response\HttpFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HttpFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $httpFactoryMock;
 
     /** @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -59,8 +61,8 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class, [], [], '', false);
         $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
-        $this->contextFactoryMock = $this->getMock(\Magento\Framework\App\Http\ContextFactory::class, [], [], '', false);
-        $this->httpFactoryMock = $this->getMock(\Magento\Framework\App\Response\HttpFactory::class, [], [], '', false);
+        $this->contextFactoryMock = $this->getMock(ContextFactory::class, ['create'], [], '', false);
+        $this->httpFactoryMock = $this->getMock(HttpFactory::class, ['create'], [], '', false);
         $this->responseMock->expects($this->any())->method('getHeaders')->willReturn($headersMock);
 
         $this->kernel = new Kernel(
