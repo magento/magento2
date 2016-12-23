@@ -5,25 +5,43 @@
  */
 namespace Magento\MessageQueue\Setup;
 
-use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\MessageQueue\Model\ResourceModel\Lock;
 
 /**
- * Initializes lock table to lock messages that were processed already.
- *
- * @codeCoverageIgnore
+ * Upgrade the MessageQueue module DB scheme
  */
-class InstallSchema implements InstallSchemaInterface
+class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    {
+        $setup->startSetup();
+
+        if (version_compare($context->getVersion(), '2.1.0', '<')) {
+            $this->createQueueLockTable($setup);
+        }
+
+        $setup->endSetup();
+    }
+
+    /**
+     * Checks if queue lock table exists and creates one if it does not
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    protected function createQueueLockTable(SchemaSetupInterface $setup)
     {
         $installer = $setup;
-        $installer->startSetup();
+
+        if ($installer->tableExists(Lock::QUEUE_LOCK_TABLE)) {
+            return;
+        };
 
         /**
          * Create table 'queue_lock'
