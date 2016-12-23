@@ -129,7 +129,7 @@ class Cli extends SymfonyApplication
 
             // Specialized setup command list available before and after M2 install
             if (class_exists('Magento\Setup\Console\CommandList')
-                && class_exists('Magento\Setup\Model\ObjectManagerProvide')
+                && class_exists('Magento\Setup\Model\ObjectManagerProvider')
             ) {
                 /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
                 $omProvider = $this->serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class);
