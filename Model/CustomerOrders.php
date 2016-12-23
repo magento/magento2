@@ -3,16 +3,19 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Model\SignifydGateway\Request;
+namespace Magento\Signifyd\Model;
 
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Provides information about customer orders.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerOrders
 {
@@ -32,7 +35,7 @@ class CustomerOrders
     private $orderRepository;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -56,21 +59,20 @@ class CustomerOrders
      * @param FilterBuilder $filterBuilder
      * @param OrderRepositoryInterface $orderRepository
      * @param CurrencyFactory $currencyFactory
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
         OrderRepositoryInterface $orderRepository,
         CurrencyFactory $currencyFactory,
-        \Psr\Log\LoggerInterface $logger
+        LoggerInterface $logger
     ) {
-
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->orderRepository = $orderRepository;
-        $this->logger = $logger;
         $this->currencyFactory = $currencyFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -83,7 +85,7 @@ class CustomerOrders
      * @param int $customerId
      * @return array
      */
-    public function getCountAndTotalAmount($customerId)
+    public function getAggregatedOrdersInfo($customerId)
     {
         $result = [
             'aggregateOrderCount' => null,

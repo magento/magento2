@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Test\Unit\SignifydGateway\Request;
+namespace Magento\Signifyd\Test\Unit\Model;
 
 use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\FilterBuilder;
@@ -11,7 +11,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Model\Order;
-use Magento\Signifyd\Model\SignifydGateway\Request\CustomerOrders;
+use Magento\Signifyd\Model\CustomerOrders;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Psr\Log\LoggerInterface;
@@ -123,7 +123,7 @@ class CustomerOrdersTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Signifyd\Model\SignifydGateway\Request\CustomerOrders::getCountAndTotalAmount()
+     * @covers \Magento\Signifyd\Model\CustomerOrders::getCountAndTotalAmount()
      */
     public function testGetCountAndTotalAmount()
     {
@@ -137,7 +137,7 @@ class CustomerOrdersTest extends \PHPUnit_Framework_TestCase
             ->with(self::$uahAmount, 'USD')
             ->willReturn(10.35);
 
-        $actual = $this->model->getCountAndTotalAmount(1);
+        $actual = $this->model->getAggregatedOrdersInfo(self::$customerId);
 
         static::assertEquals(3, $actual['aggregateOrderCount']);
         static::assertEquals(169.35, $actual['aggregateOrderDollars']);
@@ -145,7 +145,7 @@ class CustomerOrdersTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test case when required currency rate is absent and exception is thrown
-     * @covers \Magento\Signifyd\Model\SignifydGateway\Request\CustomerOrders::getCountAndTotalAmount()
+     * @covers \Magento\Signifyd\Model\CustomerOrders::getCountAndTotalAmount()
      */
     public function testGetCountAndTotalAmountNegative()
     {
@@ -162,7 +162,7 @@ class CustomerOrdersTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->once())
             ->method('error');
 
-        $actual = $this->model->getCountAndTotalAmount(1);
+        $actual = $this->model->getAggregatedOrdersInfo(self::$customerId);
 
         $this->assertNull($actual['aggregateOrderCount']);
         $this->assertNull($actual['aggregateOrderDollars']);
