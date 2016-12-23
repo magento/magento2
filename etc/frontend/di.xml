@@ -6,16 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Checkout\Model\CompositeConfigProvider">
-        <arguments>
-            <argument name="configProviders" xsi:type="array">
-                <item name="signifyd_config_provider" xsi:type="object">Magento\Signifyd\Model\Ui\ConfigProvider</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Signifyd\Model\OrderSessionId">
-        <arguments>
-            <argument name="session" xsi:type="object">Magento\Checkout\Model\Session</argument>
-        </arguments>
-    </type>
+    <preference for="Magento\Signifyd\Model\QuoteSession\QuoteSessionInterface" type="Magento\Signifyd\Model\QuoteSession\FrontendSession" />
 </config>
