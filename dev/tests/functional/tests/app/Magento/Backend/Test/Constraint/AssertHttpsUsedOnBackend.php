@@ -62,6 +62,10 @@ class AssertHttpsUsedOnBackend extends AbstractConstraint
      */
     protected function assertUsedProtocol($expectedProtocol)
     {
+        if (substr($expectedProtocol, -3) !== "://") {
+            $expectedProtocol .= '://';
+        }
+
         \PHPUnit_Framework_Assert::assertStringStartsWith(
             $expectedProtocol,
             $this->browser->getUrl(),
