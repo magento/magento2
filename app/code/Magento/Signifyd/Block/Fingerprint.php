@@ -5,10 +5,10 @@
  */
 namespace Magento\Signifyd\Block;
 
-use Magento\Signifyd\Model\Config;
-use Magento\Signifyd\Model\OrderSessionId;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Signifyd\Model\Config;
+use Magento\Signifyd\Model\QuoteSessionId;
 
 /**
  * Class Fingerprint
@@ -16,9 +16,9 @@ use Magento\Framework\View\Element\Template\Context;
 class Fingerprint extends Template
 {
     /**
-     * @var OrderSessionId
+     * @var QuoteSessionId
      */
-    private $orderSessionId;
+    private $quoteSessionId;
 
     /**
      * @var Config
@@ -35,17 +35,17 @@ class Fingerprint extends Template
      *
      * @param Context $context
      * @param Config $config
-     * @param OrderSessionId $orderSessionId
+     * @param QuoteSessionId $orderSessionId
      * @param array $data
      */
     public function __construct(
         Context $context,
         Config $config,
-        OrderSessionId $orderSessionId,
+        QuoteSessionId $orderSessionId,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->orderSessionId = $orderSessionId;
+        $this->quoteSessionId = $orderSessionId;
         $this->config = $config;
     }
 
@@ -54,9 +54,9 @@ class Fingerprint extends Template
      *
      * @return string
      */
-    public function getOrderSessionId()
+    public function getQuoteSessionId()
     {
-        return $this->orderSessionId->generate();
+        return $this->quoteSessionId->generate();
     }
 
     /**
