@@ -94,13 +94,6 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     {
         $date = (new \DateTime())->setTimestamp($this->dateTime->gmtTimestamp());
         $date->add(new \DateInterval('PT' . $this->interval . 'S'));
-        $selectObject = $this->getConnection()->select();
-        $selectObject
-            ->from(['queue_lock' => $this->getTable(self::QUEUE_LOCK_TABLE)])
-            ->where(
-                'created_at <= ?',
-                $date
-            );
-        $this->getConnection()->delete($selectObject);
+        $this->getConnection()->delete($this->getTable(self::QUEUE_LOCK_TABLE), ['created_at <= ?' => $date]);
     }
 }
