@@ -13,4 +13,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="catalog/productalert_cron/error_email" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
