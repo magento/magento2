@@ -5,12 +5,6 @@
  */
 namespace Magento\Framework\App\PageCache;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\App\Http\Context;
-use Magento\Framework\App\Http\ContextFactory;
-use Magento\Framework\App\Response\HttpFactory;
-
 /**
  * Builtin cache processor
  */
@@ -39,22 +33,22 @@ class Kernel
     private $fullPageCache;
 
     /**
-     * @var SerializerInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
     private $serializer;
 
     /**
-     * @var Context
+     * @var \Magento\Framework\App\Http\Context
      */
     private $context;
 
     /**
-     * @var ContextFactory
+     * @var \Magento\Framework\App\Http\ContextFactory
      */
     private $contextFactory;
 
     /**
-     * @var HttpFactory
+     * @var \Magento\Framework\App\Response\HttpFactory
      */
     private $httpFactory;
 
@@ -62,27 +56,52 @@ class Kernel
      * @param Cache $cache
      * @param Identifier $identifier
      * @param \Magento\Framework\App\Request\Http $request
-     * @param Context|null $context
-     * @param ContextFactory|null $contextFactory
-     * @param HttpFactory|null $httpFactory
-     * @param SerializerInterface|null $serializer
+     * @param \Magento\Framework\App\Http\Context|null $context
+     * @param \Magento\Framework\App\Http\ContextFactory|null $contextFactory
+     * @param \Magento\Framework\App\Response\HttpFactory|null $httpFactory
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,
         \Magento\Framework\App\PageCache\Identifier $identifier,
         \Magento\Framework\App\Request\Http $request,
-        Context $context = null,
-        ContextFactory $contextFactory = null,
-        HttpFactory $httpFactory = null,
-        SerializerInterface $serializer = null
+        \Magento\Framework\App\Http\Context $context = null,
+        \Magento\Framework\App\Http\ContextFactory $contextFactory = null,
+        \Magento\Framework\App\Response\HttpFactory $httpFactory = null,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->cache = $cache;
         $this->identifier = $identifier;
         $this->request = $request;
-        $this->context = $context ?: ObjectManager::getInstance()->get(Context::class);
-        $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactory::class);
-        $this->httpFactory = $httpFactory ?: ObjectManager::getInstance()->get(HttpFactory::class);
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+
+        if ($context) {
+            $this->context = $context;
+        } else {
+            $this->context = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\App\Http\Context::class
+            );
+        }
+        if ($contextFactory) {
+            $this->contextFactory = $contextFactory;
+        } else {
+            $this->contextFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\App\Http\ContextFactory::class
+            );
+        }
+        if ($httpFactory) {
+            $this->httpFactory = $httpFactory;
+        } else {
+            $this->httpFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\App\Response\HttpFactory::class
+            );
+        }
+        if ($serializer) {
+            $this->serializer = $serializer;
+        } else {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Serialize\SerializerInterface::class
+            );
+        }
     }
 
     /**
@@ -190,7 +209,9 @@ class Kernel
     private function getCache()
     {
         if (!$this->fullPageCache) {
-            $this->fullPageCache = ObjectManager::getInstance()->get(\Magento\PageCache\Model\Cache\Type::class);
+            $this->fullPageCache = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\PageCache\Model\Cache\Type::class
+            );
         }
         return $this->fullPageCache;
     }
