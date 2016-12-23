@@ -12,6 +12,8 @@
             <module name="Magento_Store" />
             <module name="Magento_Customer" />
             <module name="Magento_Directory" />
+            <module name="Magento_Checkout" />
+            <module name="Magento_Backend" />
         </sequence>
     </module>
 </config>
