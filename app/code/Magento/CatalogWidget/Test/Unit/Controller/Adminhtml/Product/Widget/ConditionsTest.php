@@ -8,6 +8,9 @@ namespace Magento\CatalogWidget\Test\Unit\Controller\Adminhtml\Product\Widget;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Test class for \Magento\CatalogWidget\Controller\Adminhtml\Product\Widget\Conditions
+ */
 class ConditionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,8 +40,8 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rule = $this->getMock('Magento\CatalogWidget\Model\Rule', [], [], '', false);
-        $this->response = $this->getMockBuilder('\Magento\Framework\App\ResponseInterface')
+        $this->rule = $this->getMock(\Magento\CatalogWidget\Model\Rule::class, [], [], '', false);
+        $this->response = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
             ->setMethods(['setBody', 'sendResponse'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -46,7 +49,7 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = $objectManagerHelper->getConstructArguments(
-            'Magento\CatalogWidget\Controller\Adminhtml\Product\Widget\Conditions',
+            \Magento\CatalogWidget\Controller\Adminhtml\Product\Widget\Conditions::class,
             [
                 'rule' => $this->rule,
                 'response' => $this->response
@@ -56,7 +59,7 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = $arguments['context']->getObjectManager();
         $this->controller = $objectManagerHelper->getObject(
-            'Magento\CatalogWidget\Controller\Adminhtml\Product\Widget\Conditions',
+            \Magento\CatalogWidget\Controller\Adminhtml\Product\Widget\Conditions::class,
             $arguments
         );
     }
@@ -69,7 +72,7 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->at(2))->method('getParam')->with('form')
             ->will($this->returnValue('request_form_param_value'));
 
-        $condition = $this->getMockBuilder('Magento\CatalogWidget\Model\Rule\Condition\Product')
+        $condition = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\Product::class)
             ->setMethods([
                 'setId',
                 'setType',
@@ -82,7 +85,7 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $condition->expects($this->once())->method('setId')->with('1--1')->will($this->returnSelf());
         $condition->expects($this->once())->method('setType')
-            ->with('Magento\CatalogWidget\Model\Rule\Condition\Product')
+            ->with(\Magento\CatalogWidget\Model\Rule\Condition\Product::class)
             ->will($this->returnSelf());
         $condition->expects($this->once())->method('setRule')->with($this->rule)->will($this->returnSelf());
         $condition->expects($this->once())->method('setPrefix')->with('conditions')->will($this->returnSelf());
