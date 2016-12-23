@@ -7,6 +7,9 @@ namespace Magento\Framework\App\PageCache;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\App\Http\ContextFactory;
+use Magento\Framework\App\Response\HttpFactory;
 
 /**
  * Builtin cache processor
@@ -41,17 +44,17 @@ class Kernel
     private $serializer;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var Context
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\App\Http\ContextFactory
+     * @var ContextFactory
      */
     private $contextFactory;
 
     /**
-     * @var \Magento\Framework\App\Response\HttpFactory
+     * @var HttpFactory
      */
     private $httpFactory;
 
@@ -59,26 +62,26 @@ class Kernel
      * @param Cache $cache
      * @param Identifier $identifier
      * @param \Magento\Framework\App\Request\Http $request
-     * @param \Magento\Framework\App\Http\Context $context
-     * @param \Magento\Framework\App\Http\ContextFactory $contextFactory
-     * @param \Magento\Framework\App\Response\HttpFactory $httpFactory
+     * @param Context|null $context
+     * @param ContextFactory|null $contextFactory
+     * @param HttpFactory|null $httpFactory
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,
         \Magento\Framework\App\PageCache\Identifier $identifier,
         \Magento\Framework\App\Request\Http $request,
-        \Magento\Framework\App\Http\Context $context,
-        \Magento\Framework\App\Http\ContextFactory $contextFactory,
-        \Magento\Framework\App\Response\HttpFactory $httpFactory,
+        Context $context = null,
+        ContextFactory $contextFactory = null,
+        HttpFactory $httpFactory = null,
         SerializerInterface $serializer = null
     ) {
         $this->cache = $cache;
         $this->identifier = $identifier;
         $this->request = $request;
-        $this->context = $context;
-        $this->contextFactory = $contextFactory;
-        $this->httpFactory = $httpFactory;
+        $this->context = $context ?: ObjectManager::getInstance()->get(Context::class);
+        $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactory::class);
+        $this->httpFactory = $httpFactory ?: ObjectManager::getInstance()->get(HttpFactory::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
