@@ -95,24 +95,7 @@ class Kernel
                 return false;
             }
 
-            $context = $this->contextFactory->create(
-                [
-                    'data' => $responseData['context']['data'],
-                    'default' => $responseData['context']['default']
-                ]
-            );
-
-            $response = $this->httpFactory->create(
-                [
-                    'context' => $context
-                ]
-            );
-            $response->setStatusCode($responseData['status_code']);
-            $response->setContent($responseData['content']);
-            foreach ($responseData['headers'] as $headerKey => $headerValue) {
-                $response->setHeader($headerKey, $headerValue, true);
-            }
-            return $response;
+            return $this->buildResponse($responseData);
         }
         return false;
     }
@@ -165,6 +148,35 @@ class Kernel
             'context' => $this->context->toArray()
         ];
 
+    }
+
+    /**
+     * Build response using response data.
+     *
+     * @param array $responseData
+     * @return \Magento\Framework\App\Response\Http
+     */
+    private function buildResponse($responseData)
+    {
+        $context = $this->contextFactory->create(
+            [
+                'data' => $responseData['context']['data'],
+                'default' => $responseData['context']['default']
+            ]
+        );
+
+        $response = $this->httpFactory->create(
+            [
+                'context' => $context
+            ]
+        );
+        $response->setStatusCode($responseData['status_code']);
+        $response->setContent($responseData['content']);
+        foreach ($responseData['headers'] as $headerKey => $headerValue) {
+            $response->setHeader($headerKey, $headerValue, true);
+        }
+
+        return $response;
     }
 
     /**
