@@ -81,10 +81,10 @@ class SwitcherUsedInFulltextTest extends \PHPUnit_Framework_TestCase
 
         $objectManager->configure(
             [
-                'Magento\CatalogSearch\Model\Indexer\Fulltext' => [
+                ltrim(\Magento\CatalogSearch\Model\Indexer\Fulltext::class, '\\') => [
                     'arguments' => [
                         'indexSwitcher' => [
-                            'instance' => 'Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock',
+                            'instance' => ltrim(\Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock::class, '\\'),
                         ],
                     ],
                 ],
