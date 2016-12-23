@@ -1588,7 +1588,7 @@
             </field>
         </dataset>
 
-        <dataset name="simple_with_weight_10_for_salesrule">
+        <dataset name="simple_with_weight_10">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
