@@ -101,12 +101,7 @@ class UpdateSimpleProductEntityTest extends Injectable
         $this->configData = $configData;
         // Preconditions
         $initialProduct->persist();
-        $initialCategory = $initialProduct->hasData('category_ids')
-            ? $initialProduct->getDataFieldConfig('category_ids')['source']->getCategories()[0]
-            : null;
-        $category = $product->hasData('category_ids') && $product->getCategoryIds()[0]
-            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
-            : $initialCategory;
+        $category = $this->getCategories($initialProduct, $product);
 
         if ($store) {
             $store->persist();
@@ -134,6 +129,23 @@ class UpdateSimpleProductEntityTest extends Injectable
             'stores' => isset($store) ? [$store] : [],
             'productNames' => isset($productName) ? $productName : [],
         ];
+    }
+
+    /**
+     * Get Category instances
+     *
+     * @param CatalogProductSimple $initialProduct
+     * @param CatalogProductSimple $product
+     * @return array
+     */
+    protected function getCategories(CatalogProductSimple $initialProduct, CatalogProductSimple $product)
+    {
+        $initialCategory = $initialProduct->hasData('category_ids')
+            ? $initialProduct->getDataFieldConfig('category_ids')['source']->getCategories()[0]
+            : null;
+        return $product->hasData('category_ids') && $product->getCategoryIds()[0]
+            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
+            : $initialCategory;
     }
 
     /**
