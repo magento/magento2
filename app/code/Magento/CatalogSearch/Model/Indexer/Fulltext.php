@@ -6,7 +6,6 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
-use Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Framework\App\ObjectManager;
@@ -60,7 +59,7 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
     private $searchRequestConfig;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher
+     * @var IndexSwitcherInterface
      */
     private $indexSwitcher;
 
