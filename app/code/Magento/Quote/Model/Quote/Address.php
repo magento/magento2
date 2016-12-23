@@ -328,7 +328,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $this->attributeList = $attributeList;
         $this->totalsCollector = $totalsCollector;
         $this->totalsReader = $totalsReader;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct(
             $context,
             $registry,

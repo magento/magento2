@@ -60,7 +60,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         $this->_productOptionFactory = $productOptionFactory;
         $this->filter = $filter;
         $this->string = $string;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context);
     }
 

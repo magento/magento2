@@ -79,7 +79,7 @@ class Tax extends CommonTaxCollector
     ) {
         $this->setCode('tax');
         $this->_taxData = $taxData;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct(
             $taxConfig,
             $taxCalculationService,

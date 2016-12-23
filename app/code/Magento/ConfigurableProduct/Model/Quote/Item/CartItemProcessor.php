@@ -55,7 +55,7 @@ class CartItemProcessor implements CartItemProcessorInterface
         $this->productOptionFactory = $productOptionFactory;
         $this->extensionFactory = $extensionFactory;
         $this->itemOptionValueFactory = $itemOptionValueFactory;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**

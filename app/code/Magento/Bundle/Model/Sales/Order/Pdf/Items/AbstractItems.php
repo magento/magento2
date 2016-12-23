@@ -298,7 +298,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     private function getSerializer()
     {
         if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(SerializerInterface::class);
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
         }
         return $this->serializer;
     }

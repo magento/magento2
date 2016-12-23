@@ -117,7 +117,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $this->_rootDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->validatorInfo = $validatorInfo;
         $this->validatorFile = $validatorFile;
-        $this->serializer = $serializer ? $serializer : ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ? $serializer : ObjectManager::getInstance()->get(Json::class);
         parent::__construct($checkoutSession, $scopeConfig, $data);
     }
 

@@ -41,7 +41,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
         Json $serializer = null
     ) {
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(SerializerInterface::class);
+            ->get(Json::class);
 
         parent::__construct(
             $context,

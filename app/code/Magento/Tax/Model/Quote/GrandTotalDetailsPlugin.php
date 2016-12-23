@@ -60,7 +60,7 @@ class GrandTotalDetailsPlugin
         $this->totalSegmentExtensionFactory = $totalSegmentExtensionFactory;
         $this->taxConfig = $taxConfig;
         $this->code = 'tax';
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**

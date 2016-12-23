@@ -59,7 +59,7 @@ class ShipmentFactory
         $this->trackFactory = $trackFactory;
         $this->instanceName = \Magento\Sales\Api\Data\ShipmentInterface::class;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(SerializerInterface::class);
+            ->get(Json::class);
     }
 
     /**

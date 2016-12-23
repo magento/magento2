@@ -138,7 +138,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_localeResolver = $localeResolver;
         $this->catalogHelper = $catalogHelper;
         $this->orderTaxManagement = $orderTaxManagement;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
