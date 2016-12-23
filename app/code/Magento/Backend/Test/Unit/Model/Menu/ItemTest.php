@@ -377,7 +377,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
         $this->_menuFactoryMock->method('create')->will($this->returnValue($menuMock));
         $menuMock->method('toArray')
-            ->willReturn(isset($constructorData['sub_menu']) ? $constructorData['sub_menu'] : null);
+            ->willReturn(['submenuArray']);
 
         $model = $this->objectManager->getObject(
             \Magento\Backend\Model\Menu\Item::class,
@@ -468,7 +468,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'depends_on_module' => null,
                     'tooltip' => '',
                     'title' => null,
-                    'sub_menu' => null
+                    'sub_menu' => ['submenuArray']
                 ],
             ],
             'data with submenu to constructor' => [
@@ -520,15 +520,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'depends_on_module' => null,
                     'tooltip' => '',
                     'title' => null,
-                    'sub_menu' => [
-                        'id' => 'item',
-                        'title' => 'Item Title',
-                        'action' => '/system/config',
-                        'resource' => 'Magento_Config::config',
-                        'depends_on_module' => 'Magento_Backend',
-                        'depends_on_config' => 'system/config/isEnabled',
-                        'tooltip' => 'Item tooltip',
-                    ]
+                    'sub_menu' => ['submenuArray']
                 ],
             ]
         ];
