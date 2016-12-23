@@ -146,12 +146,10 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     {
         $prevCustomerData = null;
         $prevCustomerDataArr = null;
-
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $prevCustomerData->__toArray();
         }
-
         /** @var $customer \Magento\Customer\Model\Data\Customer */
         $customerArr = $customer->__toArray();
         $customer = $this->imageProcessor->save(
@@ -191,7 +189,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
-
         if (!array_key_exists('default_billing', $customerArr) &&
             null !== $prevCustomerDataArr &&
             array_key_exists('default_billing', $prevCustomerDataArr)

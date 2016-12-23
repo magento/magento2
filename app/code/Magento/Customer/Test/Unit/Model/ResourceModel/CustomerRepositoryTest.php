@@ -101,13 +101,8 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->getMock(\Magento\Customer\Model\ResourceModel\Customer::class, [], [], '', false);
         $this->customerRegistry = $this->getMock(\Magento\Customer\Model\CustomerRegistry::class, [], [], '', false);
         $this->dataObjectHelper = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
-        $this->customerFactory  = $this->getMock(
-            \Magento\Customer\Model\CustomerFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->customerFactory  =
+            $this->getMock(\Magento\Customer\Model\CustomerFactory::class, ['create'], [], '', false);
         $this->customerSecureFactory  = $this->getMock(
             \Magento\Customer\Model\Data\CustomerSecureFactory::class,
             ['create'],
@@ -115,7 +110,6 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->addressRepository = $this->getMock(
             \Magento\Customer\Model\ResourceModel\AddressRepository::class,
             [],
@@ -123,7 +117,6 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->customerMetadata = $this->getMockForAbstractClass(
             \Magento\Customer\Api\CustomerMetadataInterface::class,
             [],
@@ -179,10 +172,8 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 '__toArray'
             ]
         );
-
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
-
         $this->model = new \Magento\Customer\Model\ResourceModel\CustomerRepository(
             $this->customerFactory,
             $this->customerSecureFactory,
