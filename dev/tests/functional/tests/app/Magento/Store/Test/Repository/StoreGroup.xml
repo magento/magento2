@@ -37,6 +37,7 @@
                 <item name="dataset" xsi:type="string">default_category</item>
             </field>
         </dataset>
+
         <dataset name="store_group_new_1">
             <field name="website_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">website_new_1</item>
@@ -46,6 +47,7 @@
                 <item name="dataset" xsi:type="string">default_category</item>
             </field>
         </dataset>
+
         <dataset name="store_group_new_2">
             <field name="website_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">website_new_2</item>
