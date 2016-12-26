@@ -212,8 +212,7 @@ class Structure
     }
 
     /**
-     * Reformat page config structure to array.
-     * It can be possible for serialization and save to cache storage for example.
+     * Reformat 'Page config structure' to array.
      *
      * @return array
      */
@@ -228,8 +227,7 @@ class Structure
     }
 
     /**
-     * Update page config structure data.
-     * It can be used for case of set data from cache storage after initialization this class.
+     * Update 'Page config structure' data.
      *
      * @param array $data
      * @return void
@@ -237,19 +235,19 @@ class Structure
     public function populateWithArray(array $data)
     {
         foreach ($this->serializableProperties as $property) {
-            $this->{$property} = $this->getDataValue($property, $data);
+            $this->{$property} = $this->getArrayValueByKey($property, $data);
         }
     }
 
     /**
      * Get value from array by key.
      *
-     * @param string $name
-     * @param array $data
+     * @param string $key
+     * @param array $array
      * @return array
      */
-    private function getDataValue($name, array $data)
+    private function getArrayValueByKey($key, array $array)
     {
-        return isset($data[$name]) ? $data[$name] : [];
+        return isset($array[$key]) ? $array[$key] : [];
     }
 }
