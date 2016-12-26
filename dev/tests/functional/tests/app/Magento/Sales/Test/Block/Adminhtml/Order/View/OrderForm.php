@@ -7,30 +7,11 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
-use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info as OrderInformationBlock;
 
 /**
- * Order view tabs
+ * Order view tabs.
  */
 class OrderForm extends FormTabs
 {
-    /**
-     * Order information block.
-     *
-     * @var string
-     */
-    protected $orderInfoBlock = '[data-ui-id="sales-order-tabs-tab-content-order-info"]';
-
-    /**
-     * Get order information block.
-     *
-     * @return OrderInformationBlock
-     */
-    public function getOrderInfoBlock()
-    {
-        return $this->blockFactory->create(
-            \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info::class,
-            ['element' => $this->_rootElement->find($this->orderInfoBlock)]
-        );
-    }
+    //
 }
