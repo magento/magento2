@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -16,9 +17,9 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertCaptureInCommentsHistory extends AbstractConstraint
 {
     /**
-     * Message about captured amount in order.
+     * Pattern of message about captured amount in order.
      */
-    const CAPTURED_AMOUNT = 'Captured amount of $';
+    const CAPTURED_AMOUNT_PATTERN = '/^Captured amount of \w*\W{1,2}%s online. Transaction ID: "[\w\-]*"/';
 
     /**
      * Assert that comment about captured amount exist in Comments History section on order page in Admin.
@@ -40,8 +41,8 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
 
         $actualCapturedAmount = $salesOrderView->getOrderHistoryBlock()->getCapturedAmount();
         foreach ($capturedPrices as $key => $capturedPrice) {
-            \PHPUnit_Framework_Assert::assertContains(
-                self::CAPTURED_AMOUNT . $capturedPrice,
+            \PHPUnit_Framework_Assert::assertRegExp(
+                sprintf(self::CAPTURED_AMOUNT_PATTERN, $capturedPrice),
                 $actualCapturedAmount[$key],
                 'Incorrect captured amount value for the order #' . $orderId
             );
