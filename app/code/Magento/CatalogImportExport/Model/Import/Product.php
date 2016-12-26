@@ -1249,7 +1249,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $linkId = $this->_connection->fetchOne(
                     $this->_connection->select()
                         ->from($this->getResource()->getTable('catalog_product_entity'))
-                        ->where('sku = ?', $sku)
+                        ->where('sku = ?', strval($sku))
                         ->columns($this->getProductEntityLinkField())
                 );
 
