@@ -158,9 +158,9 @@ class Fallback implements PostProcessorInterface
     }
 
     /**
-     * Retrieve Website Config
+     * Find by id specific information about website.
      *
-     * @param array $websites
+     * @param array $websites Has next format: (website_code => [website_data])
      * @param int $id
      * @return array
      */
@@ -168,10 +168,11 @@ class Fallback implements PostProcessorInterface
     {
         foreach ($this->websiteData as $website) {
             if ($website['website_id'] == $id) {
-                $code = $website['website_id'];
+                $code = $website['code'];
                 return isset($websites[$code]) ? $websites[$code] : [];
             }
         }
+
         return [];
     }
 }
