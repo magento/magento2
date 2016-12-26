@@ -5,8 +5,10 @@
  */
 namespace Magento\Shipping\Model;
 
-use Magento\Sales\Model\Order\Shipment;
+use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
+use Magento\Quote\Model\Quote\Address\RateRequestFactory;
+use Magento\Sales\Model\Order\Shipment;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -80,6 +82,11 @@ class Shipping implements RateCollectorInterface
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
     protected $stockRegistry;
+
+    /**
+     * @var RateRequestFactory
+     */
+    private $rateRequestFactory;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -463,7 +470,7 @@ class Shipping implements RateCollectorInterface
     public function collectRatesByAddress(\Magento\Framework\DataObject $address, $limitCarrier = null)
     {
         /** @var $request \Magento\Quote\Model\Quote\Address\RateRequest */
-        $request = $this->_shipmentRequestFactory->create();
+        $request = $this->getRateRequestFactory()->create();
         $request->setAllItems($address->getAllItems());
         $request->setDestCountryId($address->getCountryId());
         $request->setDestRegionId($address->getRegionId());
@@ -473,10 +480,13 @@ class Shipping implements RateCollectorInterface
         $request->setPackageWeight($address->getWeight());
         $request->setFreeMethodWeight($address->getFreeMethodWeight());
         $request->setPackageQty($address->getItemQty());
-        $request->setStoreId($this->_storeManager->getStore()->getId());
-        $request->setWebsiteId($this->_storeManager->getStore()->getWebsiteId());
-        $request->setBaseCurrency($this->_storeManager->getStore()->getBaseCurrency());
-        $request->setPackageCurrency($this->_storeManager->getStore()->getCurrentCurrency());
+
+        /** @var \Magento\Store\Api\Data\StoreInterface $store */
+        $store = $this->_storeManager->getStore();
+        $request->setStoreId($store->getId());
+        $request->setWebsiteId($store->getWebsiteId());
+        $request->setBaseCurrency($store->getBaseCurrency());
+        $request->setPackageCurrency($store->getCurrentCurrency());
         $request->setLimitCarrier($limitCarrier);
 
         $request->setBaseSubtotalInclTax($address->getBaseSubtotalInclTax());
@@ -494,5 +504,18 @@ class Shipping implements RateCollectorInterface
     {
         $this->_availabilityConfigField = $code;
         return $this;
+    }
+
+    /**
+     * Gets factory to create rate request object for collecting rates.
+     * @return RateRequestFactory
+     * @deprecated
+     */
+    private function getRateRequestFactory()
+    {
+        if (!$this->rateRequestFactory) {
+            $this->rateRequestFactory = ObjectManager::getInstance()->get(RateRequestFactory::class);
+        }
+        return $this->rateRequestFactory;
     }
 }
