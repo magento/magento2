@@ -6,10 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\Authorizenet\Test\Repository\CreditCard">
-        <dataset name="visa_authorizenet">
-            <field name="cc_number" xsi:type="string">4111111111111111</field>
-            <field name="cc_exp_month" xsi:type="string">01 - January</field>
+    <repository class="Magento\Payment\Test\Repository\CreditCard">
+        <dataset name="visa_hosted_pro">
+            <field name="cc_type" xsi:type="string">V</field>
+            <field name="cc_number" xsi:type="string">4032034402702800</field>
+            <field name="cc_exp_month" xsi:type="string">01</field>
             <field name="cc_exp_year" xsi:type="string">2020</field>
             <field name="cc_cid" xsi:type="string">123</field>
         </dataset>
