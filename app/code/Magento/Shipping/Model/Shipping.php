@@ -98,6 +98,7 @@ class Shipping implements RateCollectorInterface
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Framework\Math\Division $mathDivision
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param RateRequestFactory $rateRequestFactory
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -108,7 +109,8 @@ class Shipping implements RateCollectorInterface
         \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Framework\Math\Division $mathDivision,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        RateRequestFactory $rateRequestFactory = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_shippingConfig = $shippingConfig;
@@ -119,6 +121,7 @@ class Shipping implements RateCollectorInterface
         $this->_regionFactory = $regionFactory;
         $this->mathDivision = $mathDivision;
         $this->stockRegistry = $stockRegistry;
+        $this->rateRequestFactory = $rateRequestFactory ?: ObjectManager::getInstance()->get(RateRequestFactory::class);
     }
 
     /**
@@ -470,7 +473,7 @@ class Shipping implements RateCollectorInterface
     public function collectRatesByAddress(\Magento\Framework\DataObject $address, $limitCarrier = null)
     {
         /** @var $request \Magento\Quote\Model\Quote\Address\RateRequest */
-        $request = $this->getRateRequestFactory()->create();
+        $request = $this->rateRequestFactory->create();
         $request->setAllItems($address->getAllItems());
         $request->setDestCountryId($address->getCountryId());
         $request->setDestRegionId($address->getRegionId());
@@ -504,18 +507,5 @@ class Shipping implements RateCollectorInterface
     {
         $this->_availabilityConfigField = $code;
         return $this;
-    }
-
-    /**
-     * Gets factory to create rate request object for collecting rates.
-     * @return RateRequestFactory
-     * @deprecated
-     */
-    private function getRateRequestFactory()
-    {
-        if (!$this->rateRequestFactory) {
-            $this->rateRequestFactory = ObjectManager::getInstance()->get(RateRequestFactory::class);
-        }
-        return $this->rateRequestFactory;
     }
 }
