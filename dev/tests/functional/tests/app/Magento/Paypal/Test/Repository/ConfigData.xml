@@ -477,6 +477,7 @@
                 <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
+
         <dataset name="payflowpro_use_vault">
             <field name="payment/paypal_payment_gateways/paypal_payflowpro_with_express_checkout/paypal_payflow_required/payflowpro_cc_vault_active" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
@@ -491,6 +492,35 @@
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">No</item>
                 <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="payflowpro_use_avs_zip">
+            <field name="payment/paypal_payment_gateways/paypal_payflowpro_with_express_checkout/settings_paypal_payflow/settings_paypal_payflow_advanced/paypal_payflow_avs_check/avs_zip" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">AVS Zip Does Not Match</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/paypal_payment_gateways/paypal_payflowpro_with_express_checkout/settings_paypal_payflow/settings_paypal_payflow_advanced/paypal_payflow_avs_check/avs_security_code" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Card Security Code Does Not Match	</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+        <dataset name="payflowpro_use_avs_zip_rollback">
+            <field name="payment/paypal_payment_gateways/paypal_payflowpro_with_express_checkout/settings_paypal_payflow/settings_paypal_payflow_advanced/paypal_payflow_avs_check/avs_zip" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">AVS Zip Does Not Match</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="payment/paypal_payment_gateways/paypal_payflowpro_with_express_checkout/settings_paypal_payflow/settings_paypal_payflow_advanced/paypal_payflow_avs_check/avs_security_code" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Card Security Code Does Not Match	</item>
+                <item name="value" xsi:type="number">1</item>
             </field>
         </dataset>
     </repository>

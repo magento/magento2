@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutDeclinedTest" summary="Error message during OnePageCheckout">
+        <variation name="OnePageCheckoutDeclinedTestWithAVSZIP" summary="Place order via Payflow Pro with AVS ZIP verification fail" ticketId="MAGETWO-37483">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">payflowpro</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="expectedErrorMessage" xsi:type="string">An error occurred on the server. Please try to place the order again.</data>
+            <data name="configData" xsi:type="string">payflowpro, payflowpro_use_avs_zip</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
+        </variation>
+    </testCase>
+</config>
