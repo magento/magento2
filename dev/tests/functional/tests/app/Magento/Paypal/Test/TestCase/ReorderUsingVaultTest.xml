@@ -20,7 +20,6 @@
             </data>
             <data name="payment/method" xsi:type="string">payflowpro</data>
             <data name="vault/method" xsi:type="string">payflowpro_cc_vault</data>
-            <data name="creditCardClass" xsi:type="string">credit_card</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="configData" xsi:type="string">payflowpro, payflowpro_use_vault</data>
             <data name="status" xsi:type="string">Processing</data>

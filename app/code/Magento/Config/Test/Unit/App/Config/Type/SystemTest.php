@@ -8,9 +8,9 @@ namespace Magento\Config\Test\Unit\App\Config\Type;
 use Magento\Config\App\Config\Type\System;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Config\Spi\PreProcessorInterface;
 use Magento\Framework\Cache\FrontendInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
 
 /**
@@ -30,6 +30,11 @@ class SystemTest extends \PHPUnit_Framework_TestCase
     private $postProcessor;
 
     /**
+     * @var PreProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $preProcessor;
+
+    /**
      * @var Fallback|\PHPUnit_Framework_MockObject_MockObject
      */
     private $fallback;
@@ -45,7 +50,7 @@ class SystemTest extends \PHPUnit_Framework_TestCase
     private $configType;
 
     /**
-     * @var Serialize|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializer;
 
@@ -60,7 +65,9 @@ class SystemTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->cache = $this->getMockBuilder(FrontendInterface::class)
             ->getMockForAbstractClass();
-        $this->serializer = $this->getMockBuilder(Serialize::class)
+        $this->preProcessor = $this->getMockBuilder(PreProcessorInterface::class)
+            ->getMockForAbstractClass();
+        $this->serializer = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configType = new System(
@@ -68,7 +75,8 @@ class SystemTest extends \PHPUnit_Framework_TestCase
             $this->postProcessor,
             $this->fallback,
             $this->cache,
-            $this->serializer
+            $this->serializer,
+            $this->preProcessor
         );
     }
 
@@ -109,6 +117,10 @@ class SystemTest extends \PHPUnit_Framework_TestCase
                 ->method('get')
                 ->willReturn($data);
             $this->fallback->expects($this->once())
+                ->method('process')
+                ->with($data)
+                ->willReturnArgument(0);
+            $this->preProcessor->expects($this->once())
                 ->method('process')
                 ->with($data)
                 ->willReturnArgument(0);
