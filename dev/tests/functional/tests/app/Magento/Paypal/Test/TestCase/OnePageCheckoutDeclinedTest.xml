@@ -18,7 +18,6 @@
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="expectedErrorMessage" xsi:type="string">An error occurred on the server. Please try to place the order again.</data>
             <data name="configData" xsi:type="string">payflowpro, payflowpro_use_avs_zip</data>
-            <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
         </variation>
