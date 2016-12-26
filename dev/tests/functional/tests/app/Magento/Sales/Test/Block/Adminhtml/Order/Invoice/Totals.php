@@ -29,6 +29,13 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
     protected $capture = '[name="invoice[capture_case]"]';
 
     /**
+     * Offline capture text message selector.
+     *
+     * @var string
+     */
+    private $captureOfflineMessage = './/input[@value="offline"]/following-sibling::div[1]';
+
+    /**
      * Submit invoice
      *
      * @return void
@@ -57,5 +64,16 @@ class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
     public function setCaptureOption($option)
     {
         $this->_rootElement->find($this->capture, Locator::SELECTOR_CSS, 'select')->setValue($option);
+    }
+
+    /**
+     * Get message that invoice can be created only offline.
+     *
+     * @return null|string
+     */
+    public function getCaptureOfflineMessage()
+    {
+        $captureCaseMessage = $this->_rootElement->find($this->captureOfflineMessage, Locator::SELECTOR_XPATH);
+        return $captureCaseMessage->isVisible() ? $captureCaseMessage->getText() : null;
     }
 }

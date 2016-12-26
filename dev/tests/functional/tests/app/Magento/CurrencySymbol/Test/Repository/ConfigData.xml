@@ -17,7 +17,6 @@
                 </item>
             </field>
         </dataset>
-
         <dataset name="config_currency_symbols_usd_and_uah_rollback">
             <field name="currency/options/allow" xsi:type="array">
                 <item name="scope" xsi:type="string">currency</item>
@@ -83,7 +82,6 @@
                 <item name="value" xsi:type="string">CHF</item>
             </field>
         </dataset>
-
         <dataset name="config_base_currency_ch_rollback">
             <field name="currency/options/allow" xsi:type="array">
                 <item name="scope" xsi:type="string">currency</item>
@@ -127,8 +125,50 @@
                 <item name="value" xsi:type="string">GBP</item>
             </field>
         </dataset>
-
         <dataset name="config_base_currency_gb_rollback">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="US Dollar" xsi:type="string">USD</item>
+                </item>
+            </field>
+            <field name="currency/options/base" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">US Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">USD</item>
+            </field>
+            <field name="currency/options/default" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">US Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">USD</item>
+            </field>
+        </dataset>
+
+        <dataset name="config_base_currency_aud">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="Australian Dollar" xsi:type="string">AUD</item>
+                </item>
+            </field>
+            <field name="currency/options/base" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">Australian Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">AUD</item>
+            </field>
+            <field name="currency/options/default" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="label" xsi:type="string">Australian Dollar</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">AUD</item>
+            </field>
+        </dataset>
+        <dataset name="config_base_currency_aud_rollback">
             <field name="currency/options/allow" xsi:type="array">
                 <item name="scope" xsi:type="string">currency</item>
                 <item name="scope_id" xsi:type="number">1</item>

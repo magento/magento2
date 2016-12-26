@@ -33,6 +33,9 @@
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
         </dataset>
 
         <dataset name="withSimpleProduct">
