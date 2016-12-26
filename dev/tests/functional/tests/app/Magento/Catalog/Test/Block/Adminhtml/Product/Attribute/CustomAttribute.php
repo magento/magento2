@@ -102,7 +102,7 @@ class CustomAttribute extends SimpleElement
     {
         $element = null;
         foreach (array_keys($this->classReferences) as $key) {
-            if (strpos($class, $key) !== false) {
+            if ($class == $key) {
                 return $this->classReferences[$class];
             }
         }
