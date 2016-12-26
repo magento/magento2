@@ -17,7 +17,7 @@ class Structure
      *
      * @var array
      */
-    private $propertyMap = [
+    private $serializableProperties = [
         'assets',
         'removeAssets',
         'title',
@@ -220,7 +220,7 @@ class Structure
     public function __toArray()
     {
         $result = [];
-        foreach ($this->propertyMap as $property) {
+        foreach ($this->serializableProperties as $property) {
             $result[$property] = $this->{$property};
         }
 
@@ -236,7 +236,7 @@ class Structure
      */
     public function populateWithArray(array $data)
     {
-        foreach ($this->propertyMap as $property) {
+        foreach ($this->serializableProperties as $property) {
             $this->{$property} = $this->getDataValue($property, $data);
         }
     }
@@ -248,7 +248,8 @@ class Structure
      * @param array $data
      * @return array
      */
-    private function getDataValue($name, array $data) {
+    private function getDataValue($name, array $data)
+    {
         return isset($data[$name]) ? $data[$name] : [];
     }
 }

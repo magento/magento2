@@ -24,7 +24,7 @@ class ScheduledStructure
      *
      * @var array
      */
-    private $propertyMap = [
+    private $serializableProperties = [
         'scheduledStructure',
         'scheduledData',
         'scheduledElements',
@@ -550,7 +550,7 @@ class ScheduledStructure
     public function __toArray()
     {
         $result = [];
-        foreach ($this->propertyMap as $property) {
+        foreach ($this->serializableProperties as $property) {
             $result[$property] = $this->{$property};
         }
 
@@ -566,7 +566,7 @@ class ScheduledStructure
      */
     public function populateWithArray(array $data)
     {
-        foreach ($this->propertyMap as $property) {
+        foreach ($this->serializableProperties as $property) {
             $this->{$property} = $this->getDataValue($property, $data);
         }
     }
@@ -578,7 +578,8 @@ class ScheduledStructure
      * @param array $data
      * @return array
      */
-    private function getDataValue($name, array $data) {
+    private function getDataValue($name, array $data)
+    {
         return isset($data[$name]) ? $data[$name] : [];
     }
 }
