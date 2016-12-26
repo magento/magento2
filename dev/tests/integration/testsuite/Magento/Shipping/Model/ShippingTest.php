@@ -6,8 +6,10 @@
 namespace Magento\Shipping\Model;
 
 use Magento\Framework\DataObject;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Quote\Model\Quote\Address\RateResult\Method;
+use Magento\Shipping\Model\Rate\Result;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Contains list of tests for Shipping model
@@ -36,8 +38,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks shipping rates processing by address.
      * @covers \Magento\Shipping\Model\Shipping::collectRatesByAddress
-     * @magentoConfigFixture carriers/flatrate/active 1
-     * @magentoConfigFixture carriers/flatrate/price 5.00
+     * @return Result
      */
     public function testCollectRatesByAddress()
     {
@@ -57,14 +58,29 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         ]);
         /** @var Shipping $result */
         $result = $this->model->collectRatesByAddress($address, 'flatrate');
+        static::assertInstanceOf(Shipping::class, $result);
 
-        static::assertEquals($this->model, $result);
+        return $result->getResult();
+    }
 
-        $rates = $result->getResult()->getAllRates();
+    /**
+     * Checks shipping rate details for processed address.
+     * @covers \Magento\Shipping\Model\Shipping::collectRatesByAddress
+     * @param Result $result
+     * @depends testCollectRatesByAddress
+     * @magentoConfigFixture carriers/flatrate/active 1
+     * @magentoConfigFixture carriers/flatrate/price 5.00
+     */
+    public function testCollectRates(Result $result)
+    {
+        $rates = $result->getAllRates();
         static::assertNotEmpty($rates);
 
-        /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $flatRate */
-        $flatRate = array_pop($rates);
-        static::assertEquals(5, $flatRate->getData('price'));
+        /** @var Method $rate */
+        $rate = array_pop($rates);
+
+        static::assertInstanceOf(Method::class, $rate);
+        static::assertEquals('flatrate', $rate->getData('carrier'));
+        static::assertEquals(5, $rate->getData('price'));
     }
 }
