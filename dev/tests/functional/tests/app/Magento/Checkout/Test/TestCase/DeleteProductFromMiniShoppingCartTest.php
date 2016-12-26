@@ -32,6 +32,7 @@ class DeleteProductFromMiniShoppingCartTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
+    const SEVERITY = 'S0';
     /* end tags */
 
     /**

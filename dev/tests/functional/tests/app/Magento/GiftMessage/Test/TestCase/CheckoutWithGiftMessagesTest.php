@@ -29,6 +29,7 @@ class CheckoutWithGiftMessagesTest extends Scenario
 {
     /* tags */
     const MVP = 'no';
+    const SEVERITY = 'S2';
     const TO_MAINTAIN = 'yes'; // Consider variation #2 to work correctly with Virtual products
     /* end tags */
 
