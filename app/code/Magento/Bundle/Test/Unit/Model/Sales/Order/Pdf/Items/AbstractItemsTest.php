@@ -27,13 +27,14 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $objectManager->getObject(\Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment::class);
+
         $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
-        $this->model = $objectManager->getObject(
-            \Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment::class,
-            [
-                'serializer' => $this->serializer,
-            ]
-        );
+        $reflection = new \ReflectionClass(\Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems::class);
+        $reflectionProperty = $reflection->getProperty('serializer');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->model, $this->serializer);
+
     }
 
     /**

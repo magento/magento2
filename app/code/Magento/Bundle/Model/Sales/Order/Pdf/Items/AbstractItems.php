@@ -43,7 +43,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
         array $data = [],
         Json $serializer = null
     ) {
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer;
 
         parent::__construct(
             $context,
@@ -202,7 +202,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
             $options = $item->getOrderItem()->getProductOptions();
         }
         if (isset($options['bundle_selection_attributes'])) {
-            return $this->serializer->unserialize($options['bundle_selection_attributes']);
+            return $this->getSerializer()->unserialize($options['bundle_selection_attributes']);
         }
         return null;
     }
@@ -286,5 +286,20 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
             return true;
         }
         return false;
+    }
+
+    /**
+     * The getter function to get serializer
+     *
+     * @return Json
+     *
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        }
+        return $this->serializer;
     }
 }
