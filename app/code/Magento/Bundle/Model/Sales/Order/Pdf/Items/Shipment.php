@@ -5,6 +5,8 @@
  */
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * Sales Order Shipment Pdf items renderer
  */
@@ -25,6 +27,7 @@ class Shipment extends AbstractItems
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -35,7 +38,8 @@ class Shipment extends AbstractItems
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->string = $string;
         parent::__construct(
@@ -46,7 +50,8 @@ class Shipment extends AbstractItems
             $filterManager,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $serializer
         );
     }
 

@@ -8,6 +8,8 @@
 
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * Sales Order Invoice Pdf default items renderer
  */
@@ -28,6 +30,7 @@ class Invoice extends AbstractItems
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -38,7 +41,8 @@ class Invoice extends AbstractItems
         \Magento\Framework\Stdlib\StringUtils $coreString,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->string = $coreString;
         parent::__construct(
@@ -49,7 +53,8 @@ class Invoice extends AbstractItems
             $filterManager,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $serializer
         );
     }
 

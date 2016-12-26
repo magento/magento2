@@ -5,6 +5,8 @@
  */
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * Sales Order Creditmemo Pdf default items renderer
  */
@@ -27,6 +29,7 @@ class Creditmemo extends AbstractItems
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -37,7 +40,8 @@ class Creditmemo extends AbstractItems
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->string = $string;
         parent::__construct(
@@ -48,7 +52,8 @@ class Creditmemo extends AbstractItems
             $filterManager,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $serializer
         );
     }
 
