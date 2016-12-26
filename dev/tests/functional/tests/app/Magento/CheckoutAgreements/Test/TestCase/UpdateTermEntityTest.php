@@ -27,6 +27,7 @@ class UpdateTermEntityTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
+    const SEVERITY = 'S2';
     /* end tags */
 
     /**
