@@ -13,7 +13,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Bundle\Block\Sales\Order\Items\Renderer $model */
     protected $model;
 
-    /** @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject $serializer */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject $serializer */
     protected $serializer;
 
     protected function setUp()
@@ -26,7 +26,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             \Magento\Bundle\Block\Sales\Order\Items\Renderer::class,

@@ -9,7 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Product\Exception as ProductException;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -73,7 +73,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $validatorFile;
 
     /**
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -93,7 +93,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param \Magento\Framework\Escaper $escaper
      * @param array $data
      * @param Filesystem $filesystem
-     * @param SerializerInterface|null $serializer
+     * @param Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -107,7 +107,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         \Magento\Framework\Escaper $escaper,
         array $data = [],
         Filesystem $filesystem = null,
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_urlBuilder = $urlBuilder;
@@ -117,7 +117,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $this->_rootDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->validatorInfo = $validatorInfo;
         $this->validatorFile = $validatorFile;
-        $this->serializer = $serializer ? $serializer : ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ? $serializer : ObjectManager::getInstance()->get(Json::class);
         parent::__construct($checkoutSession, $scopeConfig, $data);
     }
 

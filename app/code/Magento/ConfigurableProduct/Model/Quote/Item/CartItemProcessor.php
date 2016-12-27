@@ -7,7 +7,7 @@ namespace Magento\ConfigurableProduct\Model\Quote\Item;
 
 use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
 class CartItemProcessor implements CartItemProcessorInterface
@@ -33,7 +33,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     protected $itemOptionValueFactory;
 
     /**
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -42,20 +42,20 @@ class CartItemProcessor implements CartItemProcessorInterface
      * @param \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory
      * @param \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory
      * @param \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory
-     * @param SerializerInterface $serializer
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,
         \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory,
         \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory,
         \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory,
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->productOptionFactory = $productOptionFactory;
         $this->extensionFactory = $extensionFactory;
         $this->itemOptionValueFactory = $itemOptionValueFactory;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**

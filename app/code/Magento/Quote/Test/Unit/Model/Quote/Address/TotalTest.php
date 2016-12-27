@@ -15,7 +15,7 @@ class TotalTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $serializer->expects($this->any())

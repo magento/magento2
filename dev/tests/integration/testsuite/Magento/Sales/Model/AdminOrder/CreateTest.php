@@ -61,8 +61,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitFromOrderAndCreateOrderFromQuoteWithAdditionalOptions()
     {
-        /** @var $serializer \Magento\Framework\Serialize\SerializerInterface */
-        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\SerializerInterface::class);
+        /** @var $serializer \Magento\Framework\Serialize\Serializer\Json */
+        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\Serializer\Json::class);
 
         /** @var $order \Magento\Sales\Model\Order */
         $order = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);

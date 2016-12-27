@@ -88,7 +88,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->serializer = $this->getMock(
-            \Magento\Framework\Serialize\SerializerInterface::class,
+            \Magento\Framework\Serialize\Serializer\Json::class,
             [],
             [],
             '',

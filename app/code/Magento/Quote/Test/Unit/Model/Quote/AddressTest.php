@@ -33,7 +33,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     private $scopeConfig;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $serializer;
 
@@ -42,7 +42,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class, [], [], '', false);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
 
         $this->address = $objectManager->getObject(
             \Magento\Quote\Model\Quote\Address::class,

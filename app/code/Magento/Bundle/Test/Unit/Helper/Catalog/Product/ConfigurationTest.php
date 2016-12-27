@@ -28,7 +28,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     protected $item;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -53,7 +53,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class,
             ['getQty', 'getProduct', 'getOptionByCode', 'getFileDownloadParams']
         );
-        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->getMockForAbstractClass();
 
         $this->serializer->expects($this->any())

@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
 use \Magento\Sales\Model\Order;
 
@@ -33,7 +33,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $orderFactory;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializerMock;
 
@@ -43,7 +43,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $this->orderFactory = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['create'], [], '', false);
 
-        $this->serializerMock = $this->getMock(SerializerInterface::class, [], ['unserialize'], '', false);
+        $this->serializerMock = $this->getMock(Json::class, [], ['unserialize'], '', false);
 
         $arguments = [
             'orderFactory' => $this->orderFactory,

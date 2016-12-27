@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Helper\Product;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 
@@ -39,7 +39,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     protected $string;
 
     /**
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -48,19 +48,19 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Framework\Filter\FilterManager $filter
      * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param SerializerInterface $serializer
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Framework\Filter\FilterManager $filter,
         \Magento\Framework\Stdlib\StringUtils $string,
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->_productOptionFactory = $productOptionFactory;
         $this->filter = $filter;
         $this->string = $string;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context);
     }
 

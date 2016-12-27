@@ -38,7 +38,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     /**
      * Serializer interface instance.
      *
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -47,20 +47,20 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfiguration
      * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $productConfiguration,
         \Magento\Framework\Pricing\Helper\Data $pricingHelper,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->productConfiguration = $productConfiguration;
         $this->pricingHelper = $pricingHelper;
         $this->escaper = $escaper;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($context);
     }
 

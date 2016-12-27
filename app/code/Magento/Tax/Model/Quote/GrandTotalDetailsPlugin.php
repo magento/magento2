@@ -6,7 +6,7 @@
 namespace Magento\Tax\Model\Quote;
 
 use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
 class GrandTotalDetailsPlugin
@@ -37,7 +37,7 @@ class GrandTotalDetailsPlugin
     protected $code;
 
     /**
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -46,21 +46,21 @@ class GrandTotalDetailsPlugin
      * @param \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory
      * @param TotalSegmentExtensionFactory $totalSegmentExtensionFactory
      * @param \Magento\Tax\Model\Config $taxConfig
-     * @param SerializerInterface $serializer
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory,
         \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory,
         TotalSegmentExtensionFactory $totalSegmentExtensionFactory,
         \Magento\Tax\Model\Config $taxConfig,
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->detailsFactory = $detailsFactory;
         $this->ratesFactory = $ratesFactory;
         $this->totalSegmentExtensionFactory = $totalSegmentExtensionFactory;
         $this->taxConfig = $taxConfig;
         $this->code = 'tax';
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
