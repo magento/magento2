@@ -303,7 +303,7 @@ class SalesSetup extends EavSetup
     }
 
     /**
-     * Get quote connection
+     * Get sales connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
