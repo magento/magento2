@@ -81,6 +81,76 @@ class PaymentSectionModifierTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testMovedToTargetSpecialGroup()
+    {
+        $structure = [
+            'some_payment_method1' => [
+                'id' => 'some_payment_method1',
+                'displayIn' => 'recommended_solutions',
+            ],
+            'some_group' => [
+                'id' => 'some_group',
+                'children' => [
+                    'some_payment_method2' => [
+                        'id' => 'some_payment_method2',
+                        'displayIn' => 'recommended_solutions'
+                    ],
+                    'some_payment_method3' => [
+                        'id' => 'some_payment_method3',
+                        'displayIn' => 'other_payment_methods'
+                    ],
+                    'some_payment_method4' => [
+                        'id' => 'some_payment_method4',
+                        'displayIn' => 'recommended_solutions'
+                    ],
+                    'some_payment_method5' => [
+                        'id' => 'some_payment_method5',
+                    ],
+                ]
+            ],
+        ];
+
+        $modifier = new PaymentSectionModifier();
+        $modifiedStructure = $modifier->modify($structure);
+
+        $this->assertEquals(
+            [
+                'account' => [],
+                'recommended_solutions' => [
+                    'children' => [
+                        'some_payment_method1' => [
+                            'id' => 'some_payment_method1',
+                        ],
+                        'some_payment_method2' => [
+                            'id' => 'some_payment_method2',
+                        ],
+                        'some_payment_method4' => [
+                            'id' => 'some_payment_method4',
+                        ],
+                    ],
+                ],
+                'other_paypal_payment_solutions' => [],
+                'other_payment_methods' => [
+                    'children' => [
+                        'some_payment_method3' => [
+                            'id' => 'some_payment_method3',
+                        ],
+                        'some_group' => [
+                            'id' => 'some_group',
+                            'children' => [
+                                'some_payment_method5' => [
+                                    'id' => 'some_payment_method5',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            $modifiedStructure,
+            'Some group is not moved correctly'
+        );
+    }
+
     private function fetchAllAvailableGroups($structure)
     {
         $availableGroups = [];
