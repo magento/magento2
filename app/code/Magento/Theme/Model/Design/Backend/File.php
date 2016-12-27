@@ -9,8 +9,10 @@ use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
 use Magento\Config\Model\Config\Backend\File as BackendFile;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -28,6 +30,11 @@ class File extends BackendFile
      * @var UrlInterface
      */
     protected $urlBuilder;
+
+    /**
+     * @var Mime
+     */
+    private $mime;
 
     /**
      * @param Context $context
@@ -125,7 +132,9 @@ class File extends BackendFile
                         'url' => $url,
                         'file' => $value,
                         'size' => is_array($stat) ? $stat['size'] : 0,
-                        'exists' => true
+                        'name' => basename($value),
+                        'type' => $this->getMimeType($fileName),
+                        'exists' => true,
                     ]
                 ];
             }
@@ -191,5 +200,34 @@ class File extends BackendFile
     protected function getTmpMediaPath($filename)
     {
         return 'tmp/' . FileProcessor::FILE_DIR . '/' . $filename;
+    }
+
+    /**
+     * Retrieve MIME type of requested file
+     *
+     * @param string $fileName
+     * @return string
+     */
+    private function getMimeType($fileName)
+    {
+        $absoluteFilePath = $this->_mediaDirectory->getAbsolutePath($fileName);
+
+        $result = $this->getMime()->getMimeType($absoluteFilePath);
+        return $result;
+    }
+
+    /**
+     * Get Mime instance
+     *
+     * @return Mime
+     *
+     * @deprecated
+     */
+    private function getMime()
+    {
+        if ($this->mime === null) {
+            $this->mime = ObjectManager::getInstance()->get(Mime::class);
+        }
+        return $this->mime;
     }
 }

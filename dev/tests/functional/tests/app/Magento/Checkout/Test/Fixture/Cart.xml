@@ -10,7 +10,6 @@
              module="Magento_Checkout"
              type="flat"
              entity_type="quote"
-             repository_class="Magento\Checkout\Test\Repository\Cart"
              handler_interface="Magento\Checkout\Test\Handler\Cart\CartInterface"
              class="Magento\Checkout\Test\Fixture\Cart">
         <field name="entity_id" is_required="1" />

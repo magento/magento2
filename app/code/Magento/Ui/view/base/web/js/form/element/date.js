@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -52,6 +52,12 @@ define([
 
             pickerDefaultDateFormat: 'MM/dd/y', // ICU Date Format
             pickerDefaultTimeFormat: 'h:mm a', // ICU Time Format
+
+            /**
+             * Moment compatible format used for moment conversion
+             * of date from datePicker
+             */
+            momentFormat: 'MM/DD/YYYY',
 
             elementTmpl: 'ui/form/element/date',
 
@@ -142,7 +148,7 @@ define([
                     formattedValue = moment(shiftedValue).format('YYYY-MM-DD HH:mm');
                     value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
-                    value = moment(shiftedValue, this.pickerDateTimeFormat);
+                    value = moment(shiftedValue, this.momentFormat);
                     value = value.format(this.outputDateFormat);
                 }
             } else {
@@ -160,19 +166,21 @@ define([
          */
         prepareDateTimeFormats: function () {
             this.pickerDateTimeFormat = this.options.dateFormat;
+            this.momentFormat = this.options.dateFormat ?
+                    utils.convertToMomentFormat(this.options.dateFormat) : this.momentFormat;
 
             if (this.options.showsTime) {
                 this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
             }
 
-            this.pickerDateTimeFormat = utils.normalizeDate(this.pickerDateTimeFormat);
+            this.pickerDateTimeFormat = utils.convertToMomentFormat(this.pickerDateTimeFormat);
 
             if (this.dateFormat) {
                 this.inputDateFormat = this.dateFormat;
             }
 
-            this.inputDateFormat = utils.normalizeDate(this.inputDateFormat);
-            this.outputDateFormat = utils.normalizeDate(this.outputDateFormat);
+            this.inputDateFormat = utils.convertToMomentFormat(this.inputDateFormat);
+            this.outputDateFormat = utils.convertToMomentFormat(this.outputDateFormat);
 
             this.validationParams.dateFormat = this.outputDateFormat;
         }

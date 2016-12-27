@@ -13,8 +13,6 @@ namespace Magento\Framework\HTTP\Client;
  */
 class Curl implements \Magento\Framework\HTTP\ClientInterface
 {
-    const SSL_VERSION = 6;
-
     /**
      * Max supported protocol by curl CURL_SSLVERSION_TLSv1_2
      * @var int
@@ -122,7 +120,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     /**
      * @param int|null $sslVersion
      */
-    public function __construct($sslVersion = self::SSL_VERSION)
+    public function __construct($sslVersion = null)
     {
         $this->sslVersion = $sslVersion;
     }
@@ -383,7 +381,9 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
         $this->curlOption(CURLOPT_RETURNTRANSFER, 1);
         $this->curlOption(CURLOPT_HEADERFUNCTION, [$this, 'parseHeaders']);
-        $this->curlOption(CURLOPT_SSLVERSION, $this->sslVersion);
+        if ($this->sslVersion !== null) {
+            $this->curlOption(CURLOPT_SSLVERSION, $this->sslVersion);
+        }
 
         if (count($this->_curlUserOptions)) {
             foreach ($this->_curlUserOptions as $k => $v) {

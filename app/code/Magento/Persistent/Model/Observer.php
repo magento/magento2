@@ -121,6 +121,13 @@ class Observer
     public function emulateTopLinks($block)
     {
         $this->_applyAccountLinksPersistentData();
-        $block->removeLinkByUrl($this->_url->getUrl('customer/account/login'));
+        /** @var \Magento\Framework\View\Element\Html\Link[] $links */
+        $links = $block->getLinks();
+        $removeLink = $this->_url->getUrl('customer/account/login');
+        foreach ($links as $link) {
+            if ($link->getHref() == $removeLink) {
+                $this->_layout->unsetChild($block->getNameInLayout(), $link->getNameInLayout());
+            }
+        }
     }
 }
