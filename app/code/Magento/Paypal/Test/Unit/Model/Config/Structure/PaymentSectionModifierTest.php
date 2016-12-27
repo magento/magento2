@@ -257,7 +257,19 @@ class PaymentSectionModifierTest extends \PHPUnit_Framework_TestCase
                         'displayIn' => 'recommended_solutions',
                     ],
                 ]
-            ]
+            ],
+            [
+            'structure with displayIn that do not reference to special groups',
+                [
+                    'some_payment_method1' => [
+                        'id' => 'some_payment_method1',
+                    ],
+                    'some_payment_method2' => [
+                        'id' => 'some_payment_method2',
+                        'displayIn' => 'some_payment_method1',
+                    ],
+                ]
+            ],
         ];
     }
 }
