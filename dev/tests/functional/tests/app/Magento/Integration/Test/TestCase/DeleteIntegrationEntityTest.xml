@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Integration\Test\TestCase\DeleteIntegrationEntityTest" summary="Delete Integration" ticketId="MAGETWO-26058">
         <variation name="DeleteIntegrationEntityTestVariation1">
+            <data name="integration/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationSuccessDeleteMessage" />
             <constraint name="Magento\Integration\Test\Constraint\AssertIntegrationNotInGrid" />
         </variation>

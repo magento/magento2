@@ -6,9 +6,39 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-  <type name="Magento\CheckoutAgreements\Test\Constraint\AssertTermRequireMessageOnMultishippingCheckout">
-    <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
-    </arguments>
-  </type>
+    <type name="Magento\CheckoutAgreements\Test\Constraint\AssertTermRequireMessageOnMultishippingCheckout">
+        <arguments>
+            <argument name="severity" xsi:type="string">S3</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessSaveMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CheckoutAgreements\Test\Constraint\AssertTermInGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CheckoutAgreements\Test\Constraint\AssertTermOnCheckout">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentOnCheckout">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CheckoutAgreements\Test\Constraint\AssertTermSuccessDeleteMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CheckoutAgreements\Test\Constraint\AssertTermAbsentInGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">S3</argument>
+        </arguments>
+    </type>
 </config>
