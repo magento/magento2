@@ -26,6 +26,13 @@ class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
     protected $invoiceId = 'tbody td:nth-child(2)';
 
     /**
+     * Invoices data grid loader locator.
+     *
+     * @var string
+     */
+    protected $loader = '[data-component="sales_order_view_invoice_grid"]';
+
+    /**
      * Filters array mapping.
      *
      * @var array
@@ -57,6 +64,7 @@ class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
     public function getIds()
     {
         $result = [];
+        $this->waitForElementNotVisible($this->loader);
         $invoiceIds = $this->_rootElement->getElements($this->invoiceId);
         foreach ($invoiceIds as $invoiceId) {
             $result[] = trim($invoiceId->getText());
@@ -72,6 +80,7 @@ class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
      */
     public function viewInvoice()
     {
+        $this->waitForElementNotVisible($this->loader);
         $this->_rootElement->find($this->invoiceId)->click();
     }
 }

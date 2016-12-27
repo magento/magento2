@@ -7,21 +7,30 @@ namespace Magento\Config\Test\Unit\Model\Config\Reader\Source\Deployed;
 
 use Magento\Config\Model\Config\Reader;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
-use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Config\Model\Placeholder\PlaceholderInterface;
+use Magento\Config\Model\Placeholder\PlaceholderFactory;
 
 /**
  * Test class for checking settings that defined in config file
- *
- * @package Magento\Config\Test\Unit\Model\Config\Reader\Source\Deployed
  */
 class SettingCheckerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $config;
+    private $configMock;
+
+    /**
+     * @var PlaceholderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $placeholderMock;
+
+    /**
+     * @var Config\ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeCodeResolverMock;
 
     /**
      * @var SettingChecker
@@ -29,43 +38,109 @@ class SettingCheckerTest extends \PHPUnit_Framework_TestCase
     private $checker;
 
     /**
-     * @var ScopeCodeResolver | \PHPUnit_Framework_MockObject_MockObject
+     * @var array
      */
-    private $scopeCodeResolver;
+    private $env;
 
     public function setUp()
     {
-        $this->config = $this->getMockBuilder(DeploymentConfig::class)
+        $this->configMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeCodeResolver = $this->getMockBuilder(ScopeCodeResolver::class)
+        $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
+            ->getMockForAbstractClass();
+        $this->scopeCodeResolverMock = $this->getMockBuilder(Config\ScopeCodeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->checker = new SettingChecker($this->config, $this->scopeCodeResolver);
+        $placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->env = $_ENV;
+
+        $placeholderFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(PlaceholderFactory::TYPE_ENVIRONMENT)
+            ->willReturn($this->placeholderMock);
+
+        $this->checker = new SettingChecker($this->configMock, $placeholderFactoryMock, $this->scopeCodeResolverMock);
     }
 
-    public function testIsDefined()
+    /**
+     * @param string $path
+     * @param string $scope
+     * @param string $scopeCode
+     * @param string|null $confValue
+     * @param array $variables
+     * @param bool $expectedResult
+     * @dataProvider isReadonlyDataProvider
+     */
+    public function testIsReadonly($path, $scope, $scopeCode, $confValue, array $variables, $expectedResult)
     {
-        $path = 'general/web/locale';
-        $scope = 'website';
-        $scopeCode = 'myWebsite';
-        $scopeCodeId = '4';
+        $this->placeholderMock->expects($this->once())
+            ->method('isApplicable')
+            ->willReturn(true);
+        $this->placeholderMock->expects($this->once())
+            ->method('generate')
+            ->with($path, $scope, $scopeCode)
+            ->willReturn('SOME_PLACEHOLDER');
+        $this->scopeCodeResolverMock->expects($this->any())
+            ->method('resolve')
+            ->willReturnMap(
+                [
+                    ['website', 'myWebsite', ($scopeCode ? $scopeCode : '')]
+                ]
+            );
 
-        $this->config->expects($this->once())
+        $_ENV = array_merge($this->env, $variables);
+
+        $this->configMock->expects($this->any())
             ->method('get')
-            ->willReturn([
-                $scope => [
-                    $scopeCode => [
-                        $path => 'value'
-                    ],
+            ->willReturnMap([
+                [
+                    'system/' . $scope . "/" . ($scopeCode ? $scopeCode . '/' : '') . $path,
+                    null,
+                    $confValue
                 ],
             ]);
 
-        $this->scopeCodeResolver->expects($this->once())
-            ->method('resolve')
-            ->with($scope, $scopeCodeId)
-            ->willReturn($scopeCode);
+        $this->assertSame($expectedResult, $this->checker->isReadOnly($path, $scope, $scopeCode));
+    }
 
-        $this->assertTrue($this->checker->isReadOnly($path, $scope, $scopeCodeId));
+    /**
+     * @return array
+     */
+    public function isReadonlyDataProvider()
+    {
+        return [
+            [
+                'path' => 'general/web/locale',
+                'scope' => 'website',
+                'scopeCode' => 'myWebsite',
+                'confValue' => 'value',
+                'variables' => [],
+                'expectedResult' => true,
+            ],
+            [
+                'path' => 'general/web/locale',
+                'scope' => 'website',
+                'scopeCode' => 'myWebsite',
+                'confValue' => null,
+                'variables' => ['SOME_PLACEHOLDER' => 'value'],
+                'expectedResult' => true,
+            ],
+            [
+                'path' => 'general/web/locale',
+                'scope' => 'website',
+                'scopeCode' => 'myWebsite',
+                'confValue' => null,
+                'variables' => [],
+                'expectedResult' => false,
+            ]
+        ];
+    }
+
+    protected function tearDown()
+    {
+        $_ENV = $this->env;
     }
 }
