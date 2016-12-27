@@ -17,8 +17,8 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="vault/method" xsi:type="string">braintree_cc_vault</data>
-            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
-            <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="creditCardSave" xsi:type="string">Yes</data>
             <data name="configData" xsi:type="string">braintree, braintree_use_vault</data>
             <data name="status" xsi:type="string">Processing</data>

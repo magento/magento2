@@ -10,6 +10,7 @@ namespace Magento\Config\Test\Unit\Block\System\Config;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Test System config form block
@@ -71,6 +72,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_fieldsetFactoryMock;
+
+    /**
+     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManagerMock;
 
     /**
      * @return void
@@ -161,6 +167,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $context = $helper->getObject(
@@ -168,7 +177,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
             [
                 'scopeConfig' => $this->_coreConfigMock,
                 'request' => $requestMock,
-                'urlBuilder' => $this->_urlModelMock
+                'urlBuilder' => $this->_urlModelMock,
+                'storeManager' => $this->storeManagerMock
             ]
         );
 
@@ -423,6 +433,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * @param string|null $configPath
      * @param bool $inherit
      * @param string $expectedValue
+     * @param string|null $placeholderValue
      * @param int $hasBackendModel
      *
      * @dataProvider initFieldsDataProvider
@@ -434,6 +445,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $configPath,
         $inherit,
         $expectedValue,
+        $placeholderValue,
         $hasBackendModel
     ) {
         // Parameters initialization
@@ -502,6 +514,18 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($configValue)
         );
+
+        /** @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject $storeMock */
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->getMockForAbstractClass();
+        $storeMock->expects($this->once())
+            ->method('getCode')
+            ->willReturn('store_code');
+
+        $this->storeManagerMock->expects($this->atLeastOnce())
+            ->method('getStore')
+            ->with('store_code')
+            ->willReturn($storeMock);
 
         // Field mock configuration
         $fieldMock = $this->getMock(
@@ -596,17 +620,20 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $fieldMock->expects($this->once())->method('populateInput');
 
-
-        $settingChecker = $this->getMockBuilder(SettingChecker::class)
+        $settingCheckerMock = $this->getMockBuilder(SettingChecker::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $settingChecker->expects($this->once())
+        $settingCheckerMock->expects($this->once())
             ->method('isReadOnly')
             ->willReturn(false);
-        $reflection = new \ReflectionClass(get_class($this->object));
-        $reflectionProperty = $reflection->getProperty('settingChecker');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->object, $settingChecker);
+
+        $settingCheckerMock->expects($this->once())
+            ->method('getPlaceholderValue')
+            ->willReturn($placeholderValue);
+
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $helper->setBackwardCompatibleProperty($this->object, 'settingChecker', $settingCheckerMock);
 
         $this->object->initFields($fieldsetMock, $groupMock, $sectionMock, $fieldPrefix, $labelPrefix);
     }
@@ -617,8 +644,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function initFieldsDataProvider()
     {
         return [
-            [['section1/group1/field1' => 'some_value'], false, null, false, 'some_value', 1],
-            [[], 'Config Value', 'some/config/path', true, 'Config Value', 0]
+            [['section1/group1/field1' => 'some_value'], false, null, false, 'some_value', null, 1],
+            [[], 'Config Value', 'some/config/path', true, 'Config Value', null, 0],
+            [[], 'Config Value', 'some/config/path', true, 'Placeholder Value', 'Placeholder Value', 0]
         ];
     }
 }

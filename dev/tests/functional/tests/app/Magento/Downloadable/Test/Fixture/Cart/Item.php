@@ -6,9 +6,6 @@
 
 namespace Magento\Downloadable\Test\Fixture\Cart;
 
-use Magento\Downloadable\Test\Fixture\DownloadableProduct;
-use Magento\Mtf\Fixture\FixtureInterface;
-
 /**
  * Data for verify cart item block on checkout page.
  *
@@ -18,17 +15,17 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
 {
     /**
-     * @constructor
-     * @param FixtureInterface $product
+     * Return prepared dataset.
+     *
+     * @param null|string $key
+     * @return array
      */
-    public function __construct(FixtureInterface $product)
+    public function getData($key = null)
     {
-        parent::__construct($product);
-
-        /** @var DownloadableProduct $product */
+        parent::getData($key);
         $checkoutDownloadableOptions = [];
-        $checkoutData = $product->getCheckoutData();
-        $downloadableOptions = $product->getDownloadableLinks();
+        $checkoutData = $this->product->getCheckoutData();
+        $downloadableOptions = $this->product->getDownloadableLinks();
         foreach ($checkoutData['options']['links'] as $link) {
             $keyLink = str_replace('link_', '', $link['label']);
             $checkoutDownloadableOptions[] = [
@@ -38,5 +35,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
         }
 
         $this->data['options'] += $checkoutDownloadableOptions;
+
+        return $this->data;
     }
 }
