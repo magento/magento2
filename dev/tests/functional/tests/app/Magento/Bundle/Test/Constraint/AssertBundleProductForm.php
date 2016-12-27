@@ -14,6 +14,13 @@ use Magento\Catalog\Test\Constraint\AssertProductForm;
 class AssertBundleProductForm extends AssertProductForm
 {
     /**
+     * Skipped fields for verify data.
+     *
+     * @var array
+     */
+    protected $skippedFields = ['frontend_type'];
+
+    /**
      * Formatting options for array values.
      *
      * @var array

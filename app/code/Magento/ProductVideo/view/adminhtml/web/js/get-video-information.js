@@ -6,7 +6,8 @@
 require([
         'jquery',
         'Magento_Ui/js/modal/alert',
-        'jquery/ui'
+        'jquery/ui',
+        'mage/translate'
     ],
     function ($, alert) {
         'use strict';

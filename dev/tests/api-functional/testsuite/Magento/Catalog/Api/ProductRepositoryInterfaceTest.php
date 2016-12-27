@@ -574,7 +574,19 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertNotNull($response['items'][0]['sku']);
         $this->assertEquals('simple', $response['items'][0]['sku']);
-    }
+
+
+        $index = null;
+        foreach ($response['items'][0]['custom_attributes'] as $key => $customAttribute) {
+            if ($customAttribute['attribute_code'] == 'category_ids') {
+                $index = $key;
+                break;
+            }
+        }
+        $this->assertNotNull($index, 'Category information wasn\'t set');
+
+        $expectedResult = (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ? ['string' => '2'] : ['2'];
+        $this->assertEquals($expectedResult, $response['items'][0]['custom_attributes'][$index]['value']);    }
 
     /**
      * @param $customAttributes
