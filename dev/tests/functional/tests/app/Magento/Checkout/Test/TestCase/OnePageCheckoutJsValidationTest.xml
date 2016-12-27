@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutJsValidationTest" summary="JS validation verification for Checkout flow" ticketId="MAGETWO-59697">
         <variation name="OnePageCheckoutJsValidationTestVariation1" summary="JS validation is not applied for empty required checkout fields if customer did not fill them">
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertShippingAddressJsValidationMessagesIsAbsent" />
