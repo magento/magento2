@@ -1901,27 +1901,30 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $response = $client->request()->getBody();
 
         $response = $this->parseXml($response);
-        if ($response === false || $response->getName() == 'Error') {
-            $debugData['result'] = [
-                'error' => $response->Description,
-                'code' => $response->Number,
-                'xml' => $response->asXML(),
-            ];
-            $this->_debug($debugData);
-            $result->setErrors($debugData['result']['error']);
-        } else {
-            if ($recipientUSCountry && $service == 'Priority Express') {
-                $labelContent = base64_decode((string)$response->EMLabel);
-                $trackingNumber = (string)$response->EMConfirmationNumber;
-            } elseif ($recipientUSCountry) {
-                $labelContent = base64_decode((string)$response->SignatureConfirmationLabel);
-                $trackingNumber = (string)$response->SignatureConfirmationNumber;
+
+        if($response !== false) {
+            if ($response->getName() == 'Error') {
+                $debugData['result'] = [
+                    'error' => $response->Description,
+                    'code' => $response->Number,
+                    'xml' => $response->asXML(),
+                ];
+                $this->_debug($debugData);
+                $result->setErrors($debugData['result']['error']);
             } else {
-                $labelContent = base64_decode((string)$response->LabelImage);
-                $trackingNumber = (string)$response->BarcodeNumber;
+                if ($recipientUSCountry && $service == 'Priority Express') {
+                    $labelContent = base64_decode((string)$response->EMLabel);
+                    $trackingNumber = (string)$response->EMConfirmationNumber;
+                } elseif ($recipientUSCountry) {
+                    $labelContent = base64_decode((string)$response->SignatureConfirmationLabel);
+                    $trackingNumber = (string)$response->SignatureConfirmationNumber;
+                } else {
+                    $labelContent = base64_decode((string)$response->LabelImage);
+                    $trackingNumber = (string)$response->BarcodeNumber;
+                }
+                $result->setShippingLabelContent($labelContent);
+                $result->setTrackingNumber($trackingNumber);
             }
-            $result->setShippingLabelContent($labelContent);
-            $result->setTrackingNumber($trackingNumber);
         }
 
         $result->setGatewayResponse($response);
