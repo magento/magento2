@@ -9,7 +9,9 @@ use Magento\Config\Model\Config\ScopeDefiner;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\Section;
 use Magento\Config\Model\Config\Structure\ElementInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Paypal\Helper\Backend as BackendHelper;
+use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier;
 
 class StructurePlugin
 {
@@ -27,6 +29,11 @@ class StructurePlugin
      * @var ScopeDefiner
      */
     protected $_scopeDefiner;
+
+    /**
+     * @var PaymentSectionModifier
+     */
+    private $paymentSectionModifier;
 
     /**
      * @var string[]
@@ -51,10 +58,13 @@ class StructurePlugin
      */
     public function __construct(
         ScopeDefiner $scopeDefiner,
-        BackendHelper $helper
+        BackendHelper $helper,
+        PaymentSectionModifier $paymentSectionModifier = null
     ) {
         $this->_scopeDefiner = $scopeDefiner;
         $this->_helper = $helper;
+        $this->paymentSectionModifier = $paymentSectionModifier
+                                      ?: ObjectManager::getInstance()->get(PaymentSectionModifier::class);
     }
 
     /**
@@ -111,60 +121,16 @@ class StructurePlugin
 
     /**
      * Changes payment config structure.
-     * Groups which have `displayIn` element, transfer to appropriate group.
-     * Groups without `displayIn` transfer to other payment methods group.
      *
      * @param Section $result
      * @return void
      */
     private function restructurePayments(Section $result)
     {
-        $sectionMap = [
-            'account' => [],
-            'recommended_solutions' => [],
-            'other_paypal_payment_solutions' => [],
-            'other_payment_methods' => []
-        ];
-
-        $configuration = $result->getData();
-
-        foreach ($configuration['children'] as $section => $data) {
-            if (array_key_exists($section, $sectionMap)) {
-                $sectionMap[$section] = $data;
-            } elseif ($displayIn = $this->getDisplayInSection($section, $data)) {
-                $sectionMap[$displayIn['parent']]['children'][$displayIn['section']] = $displayIn['data'];
-            } else {
-                $sectionMap['other_payment_methods']['children'][$section] = $data;
-            }
-        }
-
-        $configuration['children'] = $sectionMap;
-        $result->setData($configuration, $this->_scopeDefiner->getScope());
-    }
-
-    /**
-     * Recursive search of `displayIn` element in node children
-     *
-     * @param string $section
-     * @param array $data
-     * @return array|null
-     */
-    private function getDisplayInSection($section, $data)
-    {
-        if (is_array($data) && array_key_exists('displayIn', $data)) {
-            return [
-                'parent' => $data['displayIn'],
-                'section' => $section,
-                'data' => $data
-            ];
-        }
-
-        if (array_key_exists('children', $data)) {
-            foreach ($data['children'] as $childSection => $childData) {
-                return $this->getDisplayInSection($childSection, $childData);
-            }
-        }
-
-        return null;
+        $sectionData = $result->getData();
+        $sectionInitialStructure = isset($sectionData['children']) ? $sectionData['children'] : [];
+        $sectionChangedStructure = $this->paymentSectionModifier->modify($sectionInitialStructure);
+        $sectionData['children'] = $sectionChangedStructure;
+        $result->setData($sectionData, $this->_scopeDefiner->getScope());
     }
 }
