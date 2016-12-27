@@ -69,7 +69,7 @@ class UpgradeData implements UpgradeDataInterface
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $queryModifier = $this->queryModifierFactory->create(
-            InQueryModifier::class,
+            'in',
             [
                 'values' => [
                     'code' => [
