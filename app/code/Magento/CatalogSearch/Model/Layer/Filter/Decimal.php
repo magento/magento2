@@ -115,7 +115,7 @@ class Decimal extends AbstractFilter
             }
             $label = $this->renderRangeLabel(
                 empty($from) ? 0 : $from,
-                empty($to) ? $to : $to
+                empty($to) ? 0 : $to
             );
             $value = $from . '-' . $to;
 
