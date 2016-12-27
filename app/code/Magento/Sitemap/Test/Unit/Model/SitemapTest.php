@@ -647,7 +647,6 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ['getStore']
         )->getMockForAbstractClass();
 
-
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructArguments = $objectManager->getConstructArguments(
             \Magento\Sitemap\Model\Sitemap::class,
