@@ -7,8 +7,8 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\Billing;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Client\Locator;
+use Magento\Payment\Test\Fixture\CreditCard;
 
 /**
  * Adminhtml sales order create payment method block.
@@ -20,66 +20,60 @@ class Method extends Block
      *
      * @var string
      */
-    protected $paymentMethod = '#p_method_%s';
+    private $paymentMethod = '#p_method_%s';
 
     /**
      * Purchase order number selector.
      *
      * @var string
      */
-    protected $purchaseOrderNumber = '#po_number';
-
-    /**
-     * Payment form.
-     *
-     * @var string
-     */
-    protected $paymentForm = '#payment_form_%s';
+    private $purchaseOrderNumber = '#po_number';
 
     /**
      * Magento loader selector.
      *
      * @var string
      */
-    protected $loader = '[data-role=loader]';
+    private $loader = '[data-role=loader]';
 
     /**
      * Field with Mage error.
      *
      * @var string
      */
-    protected $mageErrorField = '//fieldset/*[contains(@class,"field ")][.//*[contains(@class,"error")]]';
+    private $mageErrorField = './/*[contains(@name, "payment[")]/following-sibling::label[@class="mage-error"]';
 
     /**
-     * Mage error text.
+     * Error label preceding field of credit card form.
      *
      * @var string
      */
-    protected $mageErrorText = './/label[contains(@class,"error")]';
+    private $errorLabelPrecedingField = './preceding-sibling::*[1][contains(@name, "payment")]';
 
     /**
      * Select payment method.
      *
-     * @param array $paymentCode
-     * @param InjectableFixture|null $creditCard
+     * @param array $payment
+     * @param CreditCard|null $creditCard
+     * @return void
      */
-    public function selectPaymentMethod(array $paymentCode, InjectableFixture $creditCard = null)
+    public function selectPaymentMethod(array $payment, CreditCard $creditCard = null)
     {
-        $paymentInput = $this->_rootElement->find(sprintf($this->paymentMethod, $paymentCode['method']));
+        $paymentMethod = $payment['method'];
+        $paymentInput = $this->_rootElement->find(sprintf($this->paymentMethod, $paymentMethod));
         if ($paymentInput->isVisible()) {
             $paymentInput->click();
             $this->waitForElementNotVisible($this->loader);
         }
-        if (isset($paymentCode['po_number'])) {
-            $this->_rootElement->find($this->purchaseOrderNumber)->setValue($paymentCode['po_number']);
+        if (isset($payment['po_number'])) {
+            $this->_rootElement->find($this->purchaseOrderNumber)->setValue($payment['po_number']);
         }
         if ($creditCard !== null) {
-            $class = explode('\\', get_class($creditCard));
-            $module = $class[1];
-            /** @var \Magento\Payment\Test\Block\Form\Cc $formBlock */
+            $module = $creditCard->hasData('payment_code') ? ucfirst($creditCard->getPaymentCode()) : 'Payment';
+            /** @var \Magento\Payment\Test\Block\Form\PaymentCc $formBlock */
             $formBlock = $this->blockFactory->create(
-                "\\Magento\\{$module}\\Test\\Block\\Form\\Cc",
-                ['element' => $this->_rootElement->find('#payment_form_' . $paymentCode['method'])]
+                "\\Magento\\{$module}\\Test\\Block\\Form\\{$module}Cc",
+                ['element' => $this->_rootElement->find('#payment_form_' . $paymentMethod)]
             );
             $formBlock->fill($creditCard);
         }
@@ -92,10 +86,9 @@ class Method extends Block
     {
         $data = [];
         $elements = $this->_rootElement->getElements($this->mageErrorField, Locator::SELECTOR_XPATH);
-        foreach ($elements as $element) {
-            $error = $element->find($this->mageErrorText, Locator::SELECTOR_XPATH);
+        foreach ($elements as $error) {
             if ($error->isVisible()) {
-                $label = $element->find('.//*[contains(@name,"payment")]', Locator::SELECTOR_XPATH);
+                $label = $error->find($this->errorLabelPrecedingField, Locator::SELECTOR_XPATH);
                 $label = $label->getAttribute('name');
                 $label = preg_replace('/payment\[(.*)\]/u', '$1', $label);
                 $data[$label] = $error->getText();
