@@ -73,7 +73,13 @@ class WebsiteIds extends DataSource
         }
 
         foreach ($this->fixtureData as $dataset) {
-            if (is_array($dataset) && isset($dataset['dataset'])) {
+            if (isset($dataset['store'])) {
+                $website = $dataset['store']->getDataFieldConfig('group_id')['source']
+                    ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
+                $this->data[] = $website->getName();
+                $this->websites[] = $website;
+                $this->stores[] = $dataset['store'];
+            } elseif (is_array($dataset) && isset($dataset['dataset'])) {
                 $store = $this->fixtureFactory->createByCode('store', $dataset);
                 $this->processStore($store);
             } elseif ($dataset instanceof Store) {
