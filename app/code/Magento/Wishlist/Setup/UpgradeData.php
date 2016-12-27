@@ -107,7 +107,7 @@ class UpgradeData implements UpgradeDataInterface
                 $codes
             );
             $queryModifier = $this->queryModifierFactory->create(
-                InQueryModifier::class,
+                'in',
                 [
                     'values' => [
                         'code' => $codes
