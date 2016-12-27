@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Paypal\Test\Unit\Model\Config;
+namespace Magento\Paypal\Test\Unit\Model\Config\Structure;
 
 use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier;
 
