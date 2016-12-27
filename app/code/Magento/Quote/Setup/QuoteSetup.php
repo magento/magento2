@@ -207,7 +207,7 @@ class QuoteSetup extends EavSetup
     }
 
     /**
-     * Get table name for
+     * Get table name
      *
      * @param string $table
      * @return string
