@@ -8,7 +8,13 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class that handle new product creation
+ *
+ * @package Magento\Catalog\Controller\Adminhtml\Product
+ */
 class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
@@ -25,6 +31,11 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
     protected $resultForwardFactory;
+
+    /**
+     * @var Initialization\Helper
+     */
+    protected $initializationHelper;
 
     /**
      * @param Action\Context $context
@@ -69,7 +80,7 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
         if ($productData) {
             $stockData = isset($productData['stock_data']) ? $productData['stock_data'] : [];
             $productData['stock_data'] = $this->stockFilter->filter($stockData);
-            $product->addData($productData);
+            $product = $this->getInitializationHelper()->initializeFromData($product, $productData);
         }
 
         $this->_eventManager->dispatch('catalog_product_new_action', ['product' => $product]);
@@ -91,5 +102,17 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
         }
 
         return $resultPage;
+    }
+
+    /**
+     * @deprecated
+     * @return Initialization\Helper
+     */
+    protected function getInitializationHelper()
+    {
+        if (null === $this->initializationHelper) {
+            $this->initializationHelper = ObjectManager::getInstance()->get(Initialization\Helper::class);
+        }
+        return $this->initializationHelper;
     }
 }

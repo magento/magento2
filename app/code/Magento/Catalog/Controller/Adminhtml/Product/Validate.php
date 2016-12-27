@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Product validate
@@ -18,6 +19,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     * @deprecated
      */
     protected $_dateFilter;
 
@@ -38,6 +40,11 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /** @var \Magento\Catalog\Model\ProductFactory */
     protected $productFactory;
+
+    /**
+     * @var Initialization\Helper
+     */
+    protected $initializationHelper;
 
     /**
      * @param Action\Context $context
@@ -78,7 +85,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
         $response->setError(false);
 
         try {
-            $productData = $this->getRequest()->getPost('product');
+            $productData = $this->getRequest()->getPost('product', []);
 
             if ($productData && !isset($productData['stock_data']['use_config_manage_stock'])) {
                 $productData['stock_data']['use_config_manage_stock'] = 0;
@@ -102,19 +109,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             if ($productId) {
                 $product->load($productId);
             }
-
-            $dateFieldFilters = [];
-            $attributes = $product->getAttributes();
-            foreach ($attributes as $attrKey => $attribute) {
-                if ($attribute->getBackend()->getType() == 'datetime') {
-                    if (array_key_exists($attrKey, $productData) && $productData[$attrKey] != '') {
-                        $dateFieldFilters[$attrKey] = $this->_dateFilter;
-                    }
-                }
-            }
-            $inputFilter = new \Zend_Filter_Input($dateFieldFilters, [], $productData);
-            $productData = $inputFilter->getUnescaped();
-            $product->addData($productData);
+            $product = $this->getInitializationHelper()->initializeFromData($product, $productData);
 
             /* set restrictions for date ranges */
             $resource = $product->getResource();
@@ -139,5 +134,17 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
         }
 
         return $this->resultJsonFactory->create()->setJsonData($response->toJson());
+    }
+
+    /**
+     * @return Initialization\Helper
+     * @deprecated
+     */
+    protected function getInitializationHelper()
+    {
+        if (null === $this->initializationHelper) {
+            $this->initializationHelper = ObjectManager::getInstance()->get(Initialization\Helper::class);
+        }
+        return $this->initializationHelper;
     }
 }
