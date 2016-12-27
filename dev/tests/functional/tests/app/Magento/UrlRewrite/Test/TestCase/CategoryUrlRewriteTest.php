@@ -89,7 +89,9 @@ class CategoryUrlRewriteTest extends Injectable
             $parentCategory->getName(),
             $childCategory->getName()
         );
-        $this->catalogCategoryEdit->getModalBlock()->acceptWarning();
+        if ($this->catalogCategoryEdit->getModalBlock()->isVisible()) {
+            $this->catalogCategoryEdit->getModalBlock()->acceptWarning();
+        }
 
         return [
             'storeView' => $storeView,
