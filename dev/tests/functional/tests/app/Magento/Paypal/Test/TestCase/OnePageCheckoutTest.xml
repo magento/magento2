@@ -55,7 +55,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation" />
         </variation>
-        <variation name="OnePageCheckoutPayflowProWithAVSStreetMatches" summary="Place Order via Payflow Pro with success AVS Street verification" ticketId="MAGETWO-37479">
+        <variation name="OnePageCheckoutPayflowProWithAVSStreetMatch" summary="Place Order via Payflow Pro with success AVS Street verification" ticketId="MAGETWO-37479">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>

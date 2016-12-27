@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutDeclinedTest" summary="Error message during OnePageCheckout">
-        <variation name="OnePageCheckoutPayflowProWithAVSStreetDoesNotMatches" summary="Place Order via Payflow Pro with success AVS Street verification fail" ticketId="MAGETWO-37480">
+        <variation name="OnePageCheckoutPayflowProWithAVSStreetDoesNotMatch" summary="Place Order via Payflow Pro with AVS Street verification fail" ticketId="MAGETWO-37480">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
