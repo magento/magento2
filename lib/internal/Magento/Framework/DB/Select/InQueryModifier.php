@@ -8,7 +8,7 @@ namespace Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select;
 
 /**
- * Add in condition to select
+ * Add IN condition to select
  */
 class InQueryModifier implements QueryModifierInterface
 {
