@@ -17,7 +17,6 @@
             <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
             <data name="user/data/is_active" xsi:type="string">Active</data>
             <data name="user/data/role_id/dataset" xsi:type="string">role::Administrators</data>
-            <data name="isDuplicated" xsi:type="string">No</data>
             <data name="user/data/current_password" xsi:type="string">%current_password%</data>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
@@ -33,7 +32,6 @@
             <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
             <data name="user/data/is_active" xsi:type="string">Inactive</data>
             <data name="user/data/role_id/dataset" xsi:type="string">role::Administrators</data>
-            <data name="isDuplicated" xsi:type="string">No</data>
             <data name="user/data/current_password" xsi:type="string">123123q</data>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
@@ -72,7 +70,6 @@
             <data name="user/data/password" xsi:type="string">123123q</data>
             <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
             <data name="user/data/is_active" xsi:type="string">Active</data>
-            <data name="isDuplicated" xsi:type="string">No</data>
             <data name="user/data/current_password" xsi:type="string">%current_password%</data>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
@@ -87,7 +84,6 @@
             <data name="user/data/password" xsi:type="string">123123q</data>
             <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
             <data name="user/data/is_active" xsi:type="string">Active</data>
-            <data name="isDuplicated" xsi:type="string">No</data>
             <data name="user/data/current_password" xsi:type="string">%current_password%</data>
             <constraint name="Magento\User\Test\Constraint\AssertUserInvalidEmailHostnameMessage" />
         </variation>
@@ -98,7 +94,6 @@
             <data name="user/data/email" xsi:type="string">email%isolation%@example.com</data>
             <data name="user/data/password" xsi:type="string">123123q</data>
             <data name="user/data/password_confirmation" xsi:type="string">123123q</data>
-            <data name="isDuplicated" xsi:type="string">No</data>
             <data name="user/data/current_password" xsi:type="string">incorrect-password</data>
             <constraint name="Magento\User\Test\Constraint\AssertIncorrectUserPassword" />
         </variation>

@@ -92,7 +92,7 @@ class AssertBundleItemsOnProductPage extends AbstractAssertForm
      * @param int $key
      * @return bool
      */
-    public function isInStock(BundleProduct $product, int $key)
+    private function isInStock(BundleProduct $product, $key)
     {
         $assignedProducts = $product->getBundleSelections()['products'][0];
         $status = $assignedProducts[$key]->getData()['quantity_and_stock_status']['is_in_stock'];
