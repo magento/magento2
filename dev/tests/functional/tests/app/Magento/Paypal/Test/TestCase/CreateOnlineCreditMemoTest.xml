@@ -21,7 +21,6 @@
             <data name="configData" xsi:type="string">payflowpro</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="data/items_data/0/qty" xsi:type="string">-</data>
-            <data name="data/form_data/do_shipment" xsi:type="string">Yes</data>
             <data name="status" xsi:type="string">Closed</data>
             <data name="transactions/Authorization" xsi:type="array">
                 <item name="transactionType" xsi:type="string">Authorization</item>
