@@ -10,6 +10,11 @@ namespace Magento\Paypal\Model\Config\Structure;
  */
 class PaymentSectionModifier
 {
+    /**
+     * Identifiers of special payment method configuration groups
+     *
+     * @var array
+     */
     private static $specialGroups = [
         'account',
         'recommended_solutions',
