@@ -19,63 +19,63 @@ class AbstractItems extends Block
      *
      * @var string
      */
-    private $rowItem = 'tbody';
+    protected $rowItem = 'tbody';
 
     /**
      * Locator for product sku column.
      *
      * @var string
      */
-    private $sku = '.col-product .product-sku-block';
+    protected $sku = '.col-product .product-sku-block';
 
     /**
      * Locator for product title column.
      *
      * @var string
      */
-    private $title = '.col-product .product-title';
+    protected $title = '.col-product .product-title';
 
     /**
      * Locator for "Price" column.
      *
      * @var string
      */
-    private $price = '.col-price .price';
+    protected $price = '.col-price .price';
 
     /**
      * Locator for "Qty" column.
      *
      * @var string
      */
-    private $qty = '.col-qty';
+    protected $qty = '.col-qty';
 
     /**
      * Locator for "Subtotal" column.
      *
      * @var string
      */
-    private $subtotal = '.col-subtotal .price';
+    protected $subtotal = '.col-subtotal .price';
 
     /**
      * Locator for "Tax Amount" column.
      *
      * @var string
      */
-    private $taxAmount = '.col-tax .price';
+    protected $taxAmount = '.col-tax .price';
 
     /**
      * Locator for "Discount Amount" column.
      *
      * @var string
      */
-    private $discountAmount = '.col-discount .price';
+    protected $discountAmount = '.col-discount .price';
 
     /**
      * Locator for "Row total" column.
      *
      * @var string
      */
-    private $rowTotal = '.col-total .price';
+    protected $rowTotal = '.col-total .price';
 
     /**
      * Get items data.
