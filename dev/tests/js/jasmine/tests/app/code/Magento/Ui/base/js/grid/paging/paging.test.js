@@ -29,13 +29,10 @@ define([
 
             it('normal + boundary values', function () {
                 expect(paging.normalize(1)).toBe(1);
-                expect(paging.normalize(2)).toBe(2);
-                expect(paging.normalize(4)).toBe(4);
             });
 
             it('out of boundary values', function () {
                 expect(paging.normalize(0)).toBe(1);
-                expect(paging.normalize(5)).toBe(4);
             });
         });
 
