@@ -110,8 +110,13 @@ return [
             ],
             [
                 'type' => 'module',
-                'name' => 'magento/sales',
-                'path' => 'app/code/Magento/Sales/Setup/SerializedDataConverter.php'
+                'name' => 'Magento_Sales',
+                'path' => 'Setup/SerializedDataConverter.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Sales',
+                'path' => 'Test/Unit/Setup/SerializedDataConverterTest.php'
             ],
         ]
     ]
