@@ -60,7 +60,7 @@ class Cli extends SymfonyApplication
         if (!$generationDirectoryAccess->check()) {
             $output = new ConsoleOutput();
             $output->writeln(
-                '<error>Command line user does not have read and write permissions on var/generation directory.  Please'
+                '<error>Command line user does not have read and write permissions on generated/code directory.  Please'
                 . ' address this issue before using Magento command line.</error>'
             );
             exit(0);
@@ -97,7 +97,7 @@ class Cli extends SymfonyApplication
         if ($this->initException) {
             $output->writeln(
                 "<error>We're sorry, an error occurred. Try clearing the cache and code generation directories. "
-                . "By default, they are: var/cache, var/di, var/generation, and var/page_cache.</error>"
+                . "By default, they are: var/cache, generated/metadata, generated/code, and var/page_cache.</error>"
             );
             throw $this->initException;
         }

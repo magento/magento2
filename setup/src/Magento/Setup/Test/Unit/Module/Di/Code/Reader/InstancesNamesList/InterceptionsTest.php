@@ -97,7 +97,7 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetListNoValidation()
     {
-        $path = '/var/generation';
+        $path = '/generated/code';
 
         $classes = ['NameSpace1\ClassName1', 'NameSpace1\ClassName2'];
 

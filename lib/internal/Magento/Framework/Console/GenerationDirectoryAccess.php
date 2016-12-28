@@ -14,7 +14,7 @@ use Zend\ServiceManager\ServiceManager;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 
 /**
- * Check var/generation read and write access
+ * Check generated/code read and write access
  */
 class GenerationDirectoryAccess
 {
@@ -33,7 +33,7 @@ class GenerationDirectoryAccess
     }
 
     /**
-     * Check var/generation read and write access
+     * Check generated/code read and write access
      *
      * @return bool
      */
