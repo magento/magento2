@@ -508,9 +508,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
      */
     public function testGetCustomerCartExistingCart()
     {
@@ -535,10 +535,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Sales\Model\AdminOrder\Create::moveQuoteItem()
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
      */
     public function testMoveQuoteItemToCart()
     {

@@ -12,10 +12,9 @@ namespace Magento\Sales\Model\Order;
 class ItemTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \Magento\Sales\Model\Order\Item::getProductOptions
-     * @dataProvider getProductOptionsDataProvider
      * @param string $options
      * @param array $expectedData
+     * @dataProvider getProductOptionsDataProvider
      */
     public function testGetProductOptions($options, $expectedData)
     {

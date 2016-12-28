@@ -31,11 +31,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @covers \Magento\Wishlist\Model\Item::getBuyRequest()
-     * @covers \Magento\Wishlist\Model\Item::mergeBuyRequest()
      */
     public function testBuyRequest()
     {
@@ -64,9 +62,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers \Magento\Wishlist\Model\Item::setBuyRequest()
-     */
     public function testSetBuyRequest()
     {
         $buyRequest = $this->objectManager->create(

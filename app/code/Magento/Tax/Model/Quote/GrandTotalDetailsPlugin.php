@@ -14,27 +14,27 @@ class GrandTotalDetailsPlugin
     /**
      * @var \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory
      */
-    protected $detailsFactory;
+    private $detailsFactory;
 
     /**
      * @var \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory
      */
-    protected $ratesFactory;
+    private $ratesFactory;
 
     /**
      * @var TotalSegmentExtensionFactory
      */
-    protected $totalSegmentExtensionFactory;
+    private $totalSegmentExtensionFactory;
 
     /**
      * @var \Magento\Tax\Model\Config
      */
-    protected $taxConfig;
+    private $taxConfig;
 
     /**
      * @var string
      */
-    protected $code;
+    private $code;
 
     /**
      * @var Json
@@ -42,6 +42,8 @@ class GrandTotalDetailsPlugin
     private $serializer;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory
      * @param \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory
      * @param TotalSegmentExtensionFactory $totalSegmentExtensionFactory
@@ -53,14 +55,14 @@ class GrandTotalDetailsPlugin
         \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory,
         TotalSegmentExtensionFactory $totalSegmentExtensionFactory,
         \Magento\Tax\Model\Config $taxConfig,
-        Json $serializer = null
+        Json $serializer
     ) {
         $this->detailsFactory = $detailsFactory;
         $this->ratesFactory = $ratesFactory;
         $this->totalSegmentExtensionFactory = $totalSegmentExtensionFactory;
         $this->taxConfig = $taxConfig;
+        $this->serializer = $serializer;
         $this->code = 'tax';
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -83,7 +85,6 @@ class GrandTotalDetailsPlugin
      * @param \Magento\Quote\Model\Cart\TotalsConverter $subject
      * @param \Magento\Quote\Api\Data\TotalSegmentInterface[] $totalSegments
      * @param \Magento\Quote\Model\Quote\Address\Total[] $addressTotals
-     *
      * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
