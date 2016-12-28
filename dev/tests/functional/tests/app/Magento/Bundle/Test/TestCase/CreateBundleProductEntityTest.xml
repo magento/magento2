@@ -345,6 +345,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation25" summary="Create Bundle (dynamic) Product with one require option with one item" ticketId="MAGETWO-59841">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
             <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
