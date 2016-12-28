@@ -389,6 +389,8 @@ class DataGrid extends Grid
     }
 
     /**
+     * Sort grid by column.
+     *
      * @param string $columnLabel
      */
     public function sortByColumn($columnLabel)
@@ -396,6 +398,7 @@ class DataGrid extends Grid
         $this->waitLoader();
         $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
         $this->_rootElement->find(sprintf($this->columnHeader, $columnLabel), Locator::SELECTOR_XPATH)->click();
+        $this->waitLoader();
     }
 
     /**
