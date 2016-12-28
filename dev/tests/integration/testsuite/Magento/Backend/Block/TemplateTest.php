@@ -34,26 +34,4 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertGreaterThan(15, strlen($this->_block->getFormKey()));
     }
-
-    /**
-     * @magentoAppArea adminhtml
-     * @covers \Magento\Backend\Block\Template::isOutputEnabled
-     * @magentoConfigFixture current_store advanced/modules_disable_output/dummy 1
-     */
-    public function testIsOutputEnabledTrue()
-    {
-        $this->_block->setData('module_name', 'dummy');
-        $this->assertFalse($this->_block->isOutputEnabled('dummy'));
-    }
-
-    /**
-     * @magentoAppArea adminhtml
-     * @covers \Magento\Backend\Block\Template::isOutputEnabled
-     * @magentoConfigFixture current_store advanced/modules_disable_output/dummy 0
-     */
-    public function testIsOutputEnabledFalse()
-    {
-        $this->_block->setData('module_name', 'dummy');
-        $this->assertTrue($this->_block->isOutputEnabled('dummy'));
-    }
 }

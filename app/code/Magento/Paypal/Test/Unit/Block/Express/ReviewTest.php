@@ -3,11 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Paypal\Test\Unit\Block\Express;
 
 use Magento\Paypal\Block\Express\Review;
-use Magento\Quote\Model\Quote\Address\Rate;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -35,14 +33,6 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
         $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class, [], [], '', false);
         $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
-        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class, [], [], '', false);
-
-        $scopeConfig->expects($this->any())
-            ->method('getValue')
-            ->with(
-                $this->stringContains('advanced/modules_disable_output/'),
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )->will($this->returnValue(false));
 
         $urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
         $urlBuilder->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
@@ -60,7 +50,6 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
         $context->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
         $context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
-        $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
         $context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
         $context->expects($this->any())->method('getAssetRepository')->will($this->returnValue($this->assetRepo));
         $context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
