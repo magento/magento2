@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
   <type name="Magento\Multishipping\Test\Constraint\AssertMultishippingOrderSuccessPlacedMessage">
     <arguments>
-      <argument name="severity" xsi:type="string">high</argument>
+      <argument name="severity" xsi:type="string">S3</argument>
     </arguments>
   </type>
 </config>
