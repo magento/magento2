@@ -33,6 +33,7 @@ class Invoice extends AbstractItems
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -46,7 +47,6 @@ class Invoice extends AbstractItems
         array $data = [],
         Json $serializer = null
     ) {
-        $serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->string = $coreString;
         parent::__construct(
             $context,

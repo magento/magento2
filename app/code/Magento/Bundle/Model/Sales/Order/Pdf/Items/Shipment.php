@@ -31,6 +31,7 @@ class Shipment extends AbstractItems
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -45,7 +46,6 @@ class Shipment extends AbstractItems
         Json $serializer = null
     ) {
         $this->string = $string;
-        $serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct(
             $context,
             $registry,
