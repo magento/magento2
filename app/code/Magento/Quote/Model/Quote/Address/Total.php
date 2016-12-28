@@ -25,7 +25,9 @@ class Total extends \Magento\Framework\DataObject
     private $serializer;
 
     /**
-     * @param array $data [optional]
+     * Constructor
+     *
+     * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
