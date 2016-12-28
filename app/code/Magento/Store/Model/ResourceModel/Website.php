@@ -40,17 +40,23 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Read information about all websites
+     * Read all information about websites. Convert information to next format:
+     * [website_code => [website_data (website_id, code, name, etc...)]]
      *
      * @return array
      */
     public function readAllWebsites()
     {
+        $websites = [];
         $select = $this->getConnection()
             ->select()
             ->from($this->getTable('store_website'));
 
-        return $this->getConnection()->fetchAll($select);
+        foreach($this->getConnection()->fetchAll($select) as $websiteData) {
+            $websites[$websiteData['code']] = $websiteData;
+        }
+
+        return $websites;
     }
 
     /**
