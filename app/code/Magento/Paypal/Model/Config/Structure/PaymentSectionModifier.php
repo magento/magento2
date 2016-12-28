@@ -10,6 +10,11 @@ namespace Magento\Paypal\Model\Config\Structure;
  */
 class PaymentSectionModifier
 {
+    /**
+    * Identifiers of special payment method configuration groups
+    *
+    * @var array
+    */
     private static $specialGroups = [
         'account',
         'recommended_solutions',
@@ -49,10 +54,18 @@ class PaymentSectionModifier
                 }
                 $changedStructure[$childSection] = $childData;
             } else {
-                $displayIn = $this->getDisplayInSection($childSection, $childData);
-                if ($displayIn && in_array($displayIn['section'], self::$specialGroups)) {
-                    $changedStructure[$displayIn['parent']]['children'][$displayIn['section']] = $displayIn['data'];
-                } else {
+                $moveInstructions = $this->getMoveInstructions($childSection, $childData);
+                if (!empty($moveInstructions)) {
+                    foreach ($moveInstructions as $moveInstruction) {
+                        unset($childData['children'][$moveInstruction['section']]);
+                        unset($moveInstruction['data']['displayIn']);
+                        $changedStructure
+                            [$moveInstruction['parent']]
+                                ['children']
+                                    [$moveInstruction['section']] = $moveInstruction['data'];
+                    }
+                }
+                if (!isset($moveInstructions[$childSection])) {
                     $changedStructure['other_payment_methods']['children'][$childSection] = $childData;
                 }
             }
@@ -62,28 +75,39 @@ class PaymentSectionModifier
     }
 
     /**
-     * Recursive search of "displayIn" element in node children
+     * Recursively collect groups that should be moved to special section
      *
      * @param string $section
      * @param array $data
-     * @return array|null
+     * @return array
      */
-    private function getDisplayInSection($section, $data)
+    private function getMoveInstructions($section, $data)
     {
-        if (is_array($data) && array_key_exists('displayIn', $data)) {
-            return [
-                'parent' => $data['displayIn'],
-                'section' => $section,
-                'data' => $data
-            ];
-        }
+        $moved = [];
 
         if (array_key_exists('children', $data)) {
             foreach ($data['children'] as $childSection => $childData) {
-                return $this->getDisplayInSection($childSection, $childData);
+                $movedChildren = $this->getMoveInstructions($childSection, $childData);
+                if (isset($movedChildren[$childSection])) {
+                    unset($data['children'][$childSection]);
+                }
+                $moved = array_merge($moved, $movedChildren);
             }
         }
 
-        return null;
+        if (isset($data['displayIn']) && in_array($data['displayIn'], self::$specialGroups)) {
+            $moved = array_merge(
+                [
+                    $section => [
+                    'parent' => $data['displayIn'],
+                    'section' => $section,
+                    'data' => $data
+                    ]
+                ],
+                $moved
+            );
+        }
+
+        return $moved;
     }
 }
