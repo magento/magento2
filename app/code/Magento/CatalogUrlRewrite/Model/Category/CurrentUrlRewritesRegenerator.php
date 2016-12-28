@@ -6,14 +6,12 @@
 namespace Magento\CatalogUrlRewrite\Model\Category;
 
 use Magento\Catalog\Model\Category;
-use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap;
-use Magento\Framework\App\ObjectManager;
 use Magento\UrlRewrite\Model\UrlRewritesSetFactory;
 
 class CurrentUrlRewritesRegenerator
@@ -42,23 +40,24 @@ class CurrentUrlRewritesRegenerator
     /**
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory
-     * @param UrlFinderInterface $urlFinder
-     * @param UrlRewriteMap|null $urlRewriteMap
+     * @param \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder
+     * @param \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap|null $urlRewriteMap
      * @param \Magento\UrlRewrite\Model\UrlRewritesSetFactory|null $urlRewritesSetFactory
      */
     public function __construct(
-        CategoryUrlPathGenerator $categoryUrlPathGenerator,
-        UrlRewriteFactory $urlRewriteFactory,
-        UrlFinderInterface $urlFinder,
-        UrlRewriteMap $urlRewriteMap = null,
-        UrlRewritesSetFactory $urlRewritesSetFactory = null
+        \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
+        \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory,
+        \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder,
+        \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap $urlRewriteMap = null,
+        \Magento\UrlRewrite\Model\UrlRewritesSetFactory $urlRewritesSetFactory = null
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->urlRewritePlaceholder = $urlRewriteFactory->create();
         $this->urlFinder = $urlFinder;
-        $this->urlRewriteMap = $urlRewriteMap ?: ObjectManager::getInstance()->get(UrlRewriteMap::class);
-        $urlRewritesSetFactory = $urlRewritesSetFactory ?: ObjectManager::getInstance()
+        $this->urlRewriteMap = $urlRewriteMap ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(UrlRewriteMap::class);
+        $urlRewritesSetFactory = $urlRewritesSetFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(UrlRewritesSetFactory::class);
         $this->urlRewritesSetPlaceHolder = $urlRewritesSetFactory->create();
     }
