@@ -669,7 +669,7 @@ define([
                 return true;
             },
             function() {
-                return 'Please enter a value less than or equal to %s.'.replace('%s', this.lteToVal);
+                return $.mage.__('Please enter a value less than or equal to %s.').replace('%s', this.lteToVal);
             }
         ],
         "greater-than-equals-to": [
@@ -681,7 +681,7 @@ define([
                 return true;
             },
             function() {
-                return 'Please enter a value greater than or equal to %s.'.replace('%s', this.gteToVal);
+                return $.mage.__('Please enter a value greater than or equal to %s.').replace('%s', this.gteToVal);
             }
         ],
         "validate-emails": [
@@ -697,7 +697,8 @@ define([
                     }
                 }
                 return true;
-            }, "Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com."
+            },
+            $.mage.__("Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com.")
         ],
         "validate-cc-number": [
             /**
@@ -710,7 +711,8 @@ define([
                     return validateCreditCard(value);
                 }
                 return false;
-            }, $.mage.__('Please enter a valid credit card number.')
+            },
+            $.mage.__('Please enter a valid credit card number.')
         ],
         "validate-cc-ukss": [
             /**
@@ -720,17 +722,20 @@ define([
              */
             function(value) {
                 return value;
-            }, $.mage.__('Please enter issue number or start date for switch/solo card type.')
+            },
+            $.mage.__('Please enter issue number or start date for switch/solo card type.')
         ],
         'required-entry': [
             function(value) {
                 return !utils.isEmpty(value);
-            }, $.mage.__('This is a required field.')
+            },
+            $.mage.__('This is a required field.')
         ],
         'checked': [
             function(value) {
                 return value;
-            }, $.mage.__('This is a required field.')
+            },
+            $.mage.__('This is a required field.')
         ],
         'not-negative-amount': [
             function(value) {

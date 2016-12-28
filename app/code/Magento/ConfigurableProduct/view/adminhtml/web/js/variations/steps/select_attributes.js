@@ -51,9 +51,13 @@ define([
             this.setNotificationMessage();
         },
         setNotificationMessage: function () {
+            /*eslint-disable max-len*/
+            var msg = $.mage.__('When you remove or add an attribute, we automatically update all configurations and you will need to recreate current configurations manually.');
+
+            /*eslint-enable max-len*/
+
             if (this.mode === 'edit') {
-                this.wizard.setNotificationMessage($.mage.__('When you remove or add an attribute, we automatically ' +
-                'update all configurations and you will need to manually recreate the current configurations.'));
+                this.wizard.setNotificationMessage(msg);
             }
         },
         doSelectSavedAttributes: function () {

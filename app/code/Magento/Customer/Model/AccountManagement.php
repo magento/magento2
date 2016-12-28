@@ -168,10 +168,12 @@ class AccountManagement implements AccountManagementInterface
      * @var CustomerRepositoryInterface
      */
     private $customerRepository;
+
     /**
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
     /**
      * @var TransportBuilder
      */
@@ -502,6 +504,7 @@ class AccountManagement implements AccountManagementInterface
             }
             // Existing password hash will be used from secured customer data registry when saving customer
         }
+
         // Make sure we have a storeId to associate this customer with.
         if (!$customer->getStoreId()) {
             if ($customer->getWebsiteId()) {
@@ -534,9 +537,17 @@ class AccountManagement implements AccountManagementInterface
         }
         try {
             foreach ($customerAddresses as $address) {
-                $address->setCustomerId($customer->getId());
-                $this->addressRepository->save($address);
+                if ($address->getId()) {
+                    $newAddress = clone $address;
+                    $newAddress->setId(null);
+                    $newAddress->setCustomerId($customer->getId());
+                    $this->addressRepository->save($newAddress);
+                } else {
+                    $address->setCustomerId($customer->getId());
+                    $this->addressRepository->save($address);
+                }
             }
+            $this->customerRegistry->remove($customer->getId());
         } catch (InputException $e) {
             $this->customerRepository->delete($customer);
             throw $e;
@@ -618,9 +629,9 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Change customer password.
+     * Change customer password
      *
-     * @param CustomerModel $customer
+     * @param CustomerInterface $customer
      * @param string $currentPassword
      * @param string $newPassword
      * @return bool true on success

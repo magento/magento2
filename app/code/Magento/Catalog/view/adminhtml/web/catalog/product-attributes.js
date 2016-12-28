@@ -5,7 +5,8 @@
 define([
     'jquery',
     'underscore',
-    'jquery/ui'
+    'jquery/ui',
+    'mage/translate'
 ], function ($, _) {
     'use strict';
 

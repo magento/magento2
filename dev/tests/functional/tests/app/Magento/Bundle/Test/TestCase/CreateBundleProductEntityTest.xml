@@ -344,5 +344,17 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
         </variation>
+        <variation name="CreateBundleProductEntityTestVariation25" summary="Create Bundle (dynamic) Product with one require option with one item" ticketId="MAGETWO-59841">
+            <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
+            <data name="product/data/price_type" xsi:type="string">Dynamic</data>
+            <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+            <data name="product/data/shipment_type" xsi:type="string">Together</data>
+            <data name="product/data/bundle_selections/dataset" xsi:type="string">one_required_option_with_one_item</data>
+            <data name="product/data/checkout_data/dataset" xsi:type="string">one_required_option_with_one_item</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceCalculatedOnProductPage" />
+        </variation>
     </testCase>
 </config>

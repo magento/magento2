@@ -632,6 +632,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn(42);
         $collectionMock->expects($this->once())->method('setPageSize')->with(42);
         $collectionMock->expects($this->once())->method('load');
+        $collectionMock->expects($this->once())->method('addCategoryIds');
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$itemsMock]);
         $collectionMock->expects($this->once())->method('getSize')->willReturn(128);
         $searchResultsMock = $this->getMock(
