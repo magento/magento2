@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="braintree_sandbox_customer"
+             module="Magento_Braintree"
+             type="virtual"
+             repository_class="Magento\Braintree\Test\Repository\BraintreeSandboxCustomer"
+             class="Magento\Braintree\Test\Fixture\BraintreeSandboxCustomer">
+        <field name="environment" />
+        <field name="merchantId" />
+        <field name="publicKey" />
+        <field name="privateKey" />
+    </fixture>
+</config>
