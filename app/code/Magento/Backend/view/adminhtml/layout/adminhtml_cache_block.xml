@@ -23,10 +23,12 @@
                             <item name="enable" xsi:type="array">
                                 <item name="label" xsi:type="string" translate="true">Enable</item>
                                 <item name="url" xsi:type="string">adminhtml/*/massEnable</item>
+                                <item name="visible" xsi:type="object">Magento\Backend\Block\Cache\Grid\Massaction\ProductionModeVisibilityChecker</item>
                             </item>
                             <item name="disable" xsi:type="array">
                                 <item name="label" xsi:type="string" translate="true">Disable</item>
                                 <item name="url" xsi:type="string">adminhtml/*/massDisable</item>
+                                <item name="visible" xsi:type="object">Magento\Backend\Block\Cache\Grid\Massaction\ProductionModeVisibilityChecker</item>
                             </item>
                             <item name="refresh" xsi:type="array">
                                 <item name="label" xsi:type="string" translate="true">Refresh</item>
@@ -48,6 +50,7 @@
                             <argument name="width" xsi:type="string">180</argument>
                             <argument name="align" xsi:type="string">left</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="translate" xsi:type="boolean">true</argument>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="description">
@@ -57,6 +60,7 @@
                             <argument name="type" xsi:type="string">text</argument>
                             <argument name="align" xsi:type="string">left</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="translate" xsi:type="boolean">true</argument>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="tags">

@@ -10,6 +10,8 @@ use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
 
 /**
+ * Service contract, which manage scopes
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StoreManager implements
@@ -150,7 +152,7 @@ class StoreManager implements
     public function getStore($storeId = null)
     {
         if (!isset($storeId) || '' === $storeId || $storeId === true) {
-            if (!$this->currentStoreId) {
+            if (null === $this->currentStoreId) {
                 \Magento\Framework\Profiler::start('store.resolve');
                 $this->currentStoreId = $this->storeResolver->getCurrentStoreId();
                 \Magento\Framework\Profiler::stop('store.resolve');
@@ -198,9 +200,12 @@ class StoreManager implements
             $website = $websiteId;
         } elseif ($websiteId === true) {
             $website = $this->websiteRepository->getDefault();
-        } else {
+        } elseif (is_numeric($websiteId)) {
             $website = $this->websiteRepository->getById($websiteId);
+        } else {
+            $website = $this->websiteRepository->get($websiteId);
         }
+
         return $website;
     }
 
@@ -228,6 +233,7 @@ class StoreManager implements
      */
     public function reinitStores()
     {
+        $this->scopeConfig->clean();
         $this->currentStoreId = null;
         $this->storeRepository->clean();
         $this->websiteRepository->clean();

@@ -5,8 +5,7 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Api\StoreCookieManagerInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 {
@@ -21,7 +20,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     protected $storeRepository;
 
     /**
-     * @var StoreCookieManagerInterface
+     * @var \Magento\Store\Api\StoreCookieManagerInterface
      */
     protected $storeCookieManager;
 
@@ -31,7 +30,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     protected $cache;
 
     /**
-     * @var StoreResolver\ReaderList
+     * @var \Magento\Store\Model\StoreResolver\ReaderList
      */
     protected $readerList;
 
@@ -51,20 +50,25 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     protected $request;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
-     * @param StoreCookieManagerInterface $storeCookieManager
+     * @param \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Cache\FrontendInterface $cache
-     * @param StoreResolver\ReaderList $readerList
+     * @param \Magento\Store\Model\StoreResolver\ReaderList $readerList
      * @param string $runMode
      * @param null $scopeCode
      */
     public function __construct(
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
-        StoreCookieManagerInterface $storeCookieManager,
+        \Magento\Store\Api\StoreCookieManagerInterface $storeCookieManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Cache\FrontendInterface $cache,
-        StoreResolver\ReaderList $readerList,
+        \Magento\Store\Model\StoreResolver\ReaderList $readerList,
         $runMode = ScopeInterface::SCOPE_STORE,
         $scopeCode = null
     ) {
@@ -94,7 +98,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         if ($storeCode) {
             try {
                 $store = $this->getRequestedStoreByCode($storeCode);
-            } catch (NoSuchEntityException $e) {
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 $store = $this->getDefaultStoreById($defaultStoreId);
             }
 
@@ -117,10 +121,10 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         $cacheKey = 'resolved_stores_' . md5($this->runMode . $this->scopeCode);
         $cacheData = $this->cache->load($cacheKey);
         if ($cacheData) {
-            $storesData = unserialize($cacheData);
+            $storesData = $this->getSerializer()->unserialize($cacheData);
         } else {
             $storesData = $this->readStoresData();
-            $this->cache->save(serialize($storesData), $cacheKey, [self::CACHE_TAG]);
+            $this->cache->save($this->getSerializer()->serialize($storesData), $cacheKey, [self::CACHE_TAG]);
         }
         return $storesData;
     }
@@ -141,14 +145,14 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      *
      * @param string $storeCode
      * @return \Magento\Store\Api\Data\StoreInterface
-     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function getRequestedStoreByCode($storeCode)
     {
         try {
             $store = $this->storeRepository->getActiveStoreByCode($storeCode);
         } catch (StoreIsInactiveException $e) {
-            throw new NoSuchEntityException(__('Requested store is inactive'));
+            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Requested store is inactive'));
         }
 
         return $store;
@@ -159,16 +163,31 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      *
      * @param int $id
      * @return \Magento\Store\Api\Data\StoreInterface
-     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function getDefaultStoreById($id)
     {
         try {
             $store = $this->storeRepository->getActiveStoreById($id);
         } catch (StoreIsInactiveException $e) {
-            throw new NoSuchEntityException(__('Default store is inactive'));
+            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Default store is inactive'));
         }
 
         return $store;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }

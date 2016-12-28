@@ -8,5 +8,5 @@ if (isset($_GET['command'])) {
     $command = urldecode($_GET['command']);
     exec('php -f ../../../../bin/magento ' . $command);
 } else {
-    throw new \Exception("Command GET parameter is not set.");
+    throw new \InvalidArgumentException("Command GET parameter is not set.");
 }

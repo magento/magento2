@@ -5,19 +5,28 @@
  */
 namespace Magento\ImportExport\Model\Export;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
+/**
+ * Provides export configuration
+ */
 class Config extends \Magento\Framework\Config\Data implements \Magento\ImportExport\Model\Export\ConfigInterface
 {
     /**
-     * @param \Magento\ImportExport\Model\Export\Config\Reader $reader
+     * Constructor
+     *
+     * @param Config\Reader $reader
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param string $cacheId
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\ImportExport\Model\Export\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId = 'export_config_cache'
+        $cacheId = 'export_config_cache',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $cache, $cacheId);
+        parent::__construct($reader, $cache, $cacheId, $serializer);
     }
 
     /**

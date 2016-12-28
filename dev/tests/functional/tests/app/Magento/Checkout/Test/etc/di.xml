@@ -7,9 +7,9 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty">
+    <type name="Magento\Checkout\Test\Constraint\AssertAddedProductToCartSuccessMessage">
         <arguments>
-            <argument name="severity" xsi:type="string">middle</argument>
+            <argument name="severity" xsi:type="string">S2</argument>
         </arguments>
     </type>
     <type name="Magento\Checkout\Test\Constraint\AssertBillingAddressAbsentInPayment">
@@ -17,7 +17,147 @@
             <argument name="severity" xsi:type="string">S2</argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertBillingAddressSameAsShippingCheckbox">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertCustomerIsRedirectedToCheckoutFromCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertDiscountInShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertEstimateShippingAndTax">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertGrandTotalOrderReview">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
     <type name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertProductAbsentInMiniShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertProductIsNotEditable">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertProductOptionsAbsentInShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertProductPresentInMiniShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertProductsAbsentInShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertShippingAddressJsValidationMessagesIsAbsent">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertShippingInShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertShippingTotalOrderReview">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertSubTotalOrderReview">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertTaxInShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertTaxTotalOrderReview">
+        <arguments>
+            <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertCancelSuccessMessageInShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertProductPresentInShoppingCart">
         <arguments>
             <argument name="severity" xsi:type="string">S0</argument>
         </arguments>

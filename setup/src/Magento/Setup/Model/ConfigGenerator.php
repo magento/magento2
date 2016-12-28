@@ -116,19 +116,12 @@ class ConfigGenerator
      *
      * @param array $data
      * @return ConfigData
+     * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createDefinitionsConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
-
-        if (!empty($data[ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT])) {
-            $configData->set(
-                ObjectManagerFactory::CONFIG_PATH_DEFINITION_FORMAT,
-                $data[ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT]
-            );
-        }
-
-        return $configData;
+        return null;
     }
 
     /**

@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\App\ObjectManager;
 
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 class ConfigLoader implements ConfigLoaderInterface
@@ -31,6 +33,11 @@ class ConfigLoader implements ConfigLoaderInterface
      * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $_cache;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * @param \Magento\Framework\Config\CacheInterface $cache
@@ -67,11 +74,25 @@ class ConfigLoader implements ConfigLoaderInterface
 
         if (!$data) {
             $data = $this->_getReader()->read($area);
-            $this->_cache->save(serialize($data), $cacheId);
+            $this->_cache->save($this->getSerializer()->serialize($data), $cacheId);
         } else {
-            $data = unserialize($data);
+            $data = $this->getSerializer()->unserialize($data);
         }
 
         return $data;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
+        }
+        return $this->serializer;
     }
 }

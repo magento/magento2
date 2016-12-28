@@ -11,6 +11,11 @@
             <argument name="severity" xsi:type="string">S0</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Test\Constraint\AssertInvoiceStatusInOrdersGrid">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
     <type name="Magento\Sales\Test\Constraint\AssertOrderStatusDuplicateStatus">
         <arguments>
             <argument name="severity" xsi:type="string">S0</argument>
@@ -82,6 +87,26 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOnlineInvoiceCannotBeCreated">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOnlineInvoiceCannotBeCreated">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCanceled">
         <arguments>
             <argument name="severity" xsi:type="string">S0</argument>
         </arguments>

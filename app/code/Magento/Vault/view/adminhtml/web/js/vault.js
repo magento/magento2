@@ -33,8 +33,8 @@ define([
                 .observe(['active']);
 
             // re-init payment method events
-            self.$selector.off('changePaymentMethod.' + this.code)
-                .on('changePaymentMethod.' + this.code, this.changePaymentMethod.bind(this));
+            self.$selector.off('changePaymentMethod.' + this.getCode())
+                .on('changePaymentMethod.' + this.getCode(), this.changePaymentMethod.bind(this));
 
             if (this.active()) {
                 $('#' + this.fieldset + ' input:radio:first').trigger('click');
@@ -50,7 +50,7 @@ define([
          * @returns {exports.changePaymentMethod}
          */
         changePaymentMethod: function (event, method) {
-            this.active(method === this.code);
+            this.active(method === this.getCode());
 
             return this;
         },
@@ -61,13 +61,21 @@ define([
          */
         onActiveChange: function (isActive) {
             if (!isActive) {
-                this.$selector.trigger('setVaultNotActive');
+                this.$selector.trigger('setVaultNotActive.' + this.getCode());
 
                 return;
             }
 
             $('#' + this.fieldset + ' input:radio:first').trigger('click');
-            window.order.addExcludedPaymentMethod(this.code);
+            window.order.addExcludedPaymentMethod(this.getCode());
+        },
+
+        /**
+         * Get payment method code
+         * @returns {String}
+         */
+        getCode: function () {
+            return this.code;
         }
     });
 });

@@ -26,6 +26,7 @@ class DeleteTermEntityTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
+    const SEVERITY = 'S3';
     /* end tags */
 
     /**
