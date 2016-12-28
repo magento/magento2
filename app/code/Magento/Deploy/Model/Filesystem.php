@@ -13,7 +13,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
 
 /**
- * Generate static files, compile; clear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
+ * Generate static files, compile
+ * Сlear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
