@@ -368,14 +368,9 @@ class MenuTest extends \PHPUnit_Framework_TestCase
             ->method('unserialize')
             ->willReturn([['unserializedData']]);
         $menuItemFactoryMock = $this->getMock(Factory::class, [], [], '', false);
-        $menuItemMock = $this->getMock(Item::class, [], [], '', false);
         $menuItemFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($menuItemMock);
-        $menuItemMock->expects($this->once())
-            ->method('populateFromArray')
-            ->with(['unserializedData'])
-            ->willReturn($this);
+            ->with(['unserializedData']);
         $menu = $this->objectManagerHelper->getObject(
             \Magento\Backend\Model\Menu::class,
             [
