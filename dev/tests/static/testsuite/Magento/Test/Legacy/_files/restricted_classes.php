@@ -108,6 +108,11 @@ return [
                 'type' => 'setup',
                 'path' => 'src/Magento/Setup/Module/Di/Compiler/Config/Writer/Filesystem.php'
             ],
+            [
+                'type' => 'module',
+                'name' => 'magento/sales',
+                'path' => 'app/code/Magento/Sales/Setup/SerializedDataConverter.php'
+            ],
         ]
     ]
 ];
