@@ -55,7 +55,15 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->category = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $this->categoryRepository = $this->getMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+        $urlRewritesSetFactory = $this->getMock(
+            \Magento\UrlRewrite\Model\UrlRewritesSetFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->urlRewritesSet = new \Magento\UrlRewrite\Model\UrlRewritesSet;
+        $urlRewritesSetFactory->expects($this->once())->method('create')->willReturn($this->urlRewritesSet);
 
         $this->categoryUrlRewriteGenerator = (new ObjectManager($this))->getObject(
             \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator::class,
@@ -65,7 +73,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                 'currentUrlRewritesRegenerator' => $this->currentUrlRewritesRegenerator,
                 'storeViewService' => $this->storeViewService,
                 'categoryRepository' => $this->categoryRepository,
-                'urlRewritesSet' => $this->urlRewritesSet
+                'urlRewritesSetFactory' => $urlRewritesSetFactory
             ]
         );
     }

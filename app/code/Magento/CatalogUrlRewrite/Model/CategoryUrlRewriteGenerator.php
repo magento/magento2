@@ -12,8 +12,8 @@ use Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\UrlRewrite\Model\UrlRewritesSet;
 use Magento\Framework\App\ObjectManager;
+use Magento\UrlRewrite\Model\UrlRewritesSetFactory;
 
 class CategoryUrlRewriteGenerator
 {
@@ -33,7 +33,7 @@ class CategoryUrlRewriteGenerator
     protected $childrenUrlRewriteGenerator;
 
     /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
-    private $urlRewritesSet;
+    private $urlRewritesSetPlaceHolder;
 
     /**
      * @var bool
@@ -46,7 +46,7 @@ class CategoryUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator $childrenUrlRewriteGenerator
      * @param \Magento\CatalogUrlRewrite\Service\V1\StoreViewService $storeViewService
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
-     * @param \Magento\UrlRewrite\Model\UrlRewritesSet|null $urlRewritesSet
+     * @param \Magento\UrlRewrite\Model\UrlRewritesSetFactory|null $urlRewritesSetFactory
      */
     public function __construct(
         CanonicalUrlRewriteGenerator $canonicalUrlRewriteGenerator,
@@ -54,14 +54,16 @@ class CategoryUrlRewriteGenerator
         ChildrenUrlRewriteGenerator $childrenUrlRewriteGenerator,
         StoreViewService $storeViewService,
         CategoryRepositoryInterface $categoryRepository,
-        UrlRewritesSet $urlRewritesSet = null
+        UrlRewritesSetFactory $urlRewritesSetFactory = null
     ) {
         $this->storeViewService = $storeViewService;
         $this->canonicalUrlRewriteGenerator = $canonicalUrlRewriteGenerator;
         $this->childrenUrlRewriteGenerator = $childrenUrlRewriteGenerator;
         $this->currentUrlRewritesRegenerator = $currentUrlRewritesRegenerator;
         $this->categoryRepository = $categoryRepository;
-        $this->urlRewritesSet = $urlRewritesSet ?: ObjectManager::getInstance()->get(UrlRewritesSet::class);
+        $urlRewritesSetFactory = $urlRewritesSetFactory ?: ObjectManager::getInstance()
+            ->get(UrlRewritesSetFactory::class);
+        $this->urlRewritesSetPlaceHolder = $urlRewritesSetFactory->create();
     }
 
     /**
@@ -94,17 +96,18 @@ class CategoryUrlRewriteGenerator
      */
     protected function generateForGlobalScope(Category $category, $overrideStoreUrls, $rootCategoryId = null)
     {
+        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
         $categoryId = $category->getId();
         foreach ($category->getStoreIds() as $storeId) {
             if (!$this->isGlobalScope($storeId)
                 && $this->isOverrideUrlsForStore($storeId, $categoryId, $overrideStoreUrls)
             ) {
                 $this->updateCategoryUrlForStore($category, $storeId);
-                $this->urlRewritesSet->merge($this->generateForSpecificStoreView($category, $storeId, $rootCategoryId));
+                $urlRewritesSet->merge($this->generateForSpecificStoreView($category, $storeId, $rootCategoryId));
             }
         }
-        $result = $this->urlRewritesSet->getData();
-        $this->urlRewritesSet->resetData();
+        $result = $urlRewritesSet->getData();
+        $urlRewritesSet->resetData();
         return $result;
     }
 
@@ -162,17 +165,18 @@ class CategoryUrlRewriteGenerator
      */
     protected function generateForSpecificStoreView(Category $category, $storeId, $rootCategoryId = null)
     {
-        $this->urlRewritesSet->merge(
+        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
+        $urlRewritesSet->merge(
             $this->canonicalUrlRewriteGenerator->generate($storeId, $category)
         );
-        $this->urlRewritesSet->merge(
+        $urlRewritesSet->merge(
             $this->childrenUrlRewriteGenerator->generate($storeId, $category, $rootCategoryId)
         );
-        $this->urlRewritesSet->merge(
+        $urlRewritesSet->merge(
             $this->currentUrlRewritesRegenerator->generate($storeId, $category, $rootCategoryId)
         );
-        $result = $this->urlRewritesSet->getData();
-        $this->urlRewritesSet->resetData();
+        $result = $urlRewritesSet->getData();
+        $urlRewritesSet->resetData();
         return $result;
     }
 }

@@ -14,7 +14,7 @@ use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\UrlRewrite\Model\UrlRewritesSet;
+use Magento\UrlRewrite\Model\UrlRewritesSetFactory;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -59,7 +59,7 @@ class ProductScopeRewriteGenerator
     private $canonicalUrlRewriteGenerator;
 
     /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
-    private $urlRewritesSet;
+    private $urlRewritesSetPlaceHolder;
 
     /**
      * @param StoreViewService $storeViewService
@@ -69,7 +69,7 @@ class ProductScopeRewriteGenerator
      * @param CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator
      * @param CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator
      * @param AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator
-     * @param UrlRewritesSet|null $urlRewritesSet
+     * @param \Magento\UrlRewrite\Model\UrlRewritesSetFactory|null $urlRewritesSetFactory
      */
     public function __construct(
         StoreViewService $storeViewService,
@@ -79,7 +79,7 @@ class ProductScopeRewriteGenerator
         CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator,
         CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator,
         AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator,
-        UrlRewritesSet $urlRewritesSet = null
+        UrlRewritesSetFactory $urlRewritesSetFactory = null
     ) {
         $this->storeViewService = $storeViewService;
         $this->storeManager = $storeManager;
@@ -88,7 +88,9 @@ class ProductScopeRewriteGenerator
         $this->categoriesUrlRewriteGenerator = $categoriesUrlRewriteGenerator;
         $this->currentUrlRewritesRegenerator = $currentUrlRewritesRegenerator;
         $this->anchorUrlRewriteGenerator = $anchorUrlRewriteGenerator;
-        $this->urlRewritesSet = $urlRewritesSet ?: ObjectManager::getInstance()->get(UrlRewritesSet::class);
+        $urlRewritesSetFactory = $urlRewritesSetFactory ?: ObjectManager::getInstance()
+            ->get(UrlRewritesSetFactory::class);
+        $this->urlRewritesSetPlaceHolder = $urlRewritesSetFactory->create();
     }
 
     /**
@@ -113,6 +115,7 @@ class ProductScopeRewriteGenerator
     public function generateForGlobalScope($productCategories, Product $product, $rootCategoryId = null)
     {
         $productId = $product->getEntityId();
+        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
 
         foreach ($product->getStoreIds() as $id) {
             if (!$this->isGlobalScope($id) &&
@@ -121,14 +124,14 @@ class ProductScopeRewriteGenerator
                     $productId,
                     Product::ENTITY
                 )) {
-                $this->urlRewritesSet->merge(
+                $urlRewritesSet->merge(
                     $this->generateForSpecificStoreView($id, $productCategories, $product, $rootCategoryId)
                 );
             }
         }
 
-        $result = $this->urlRewritesSet->getData();
-        $this->urlRewritesSet->resetData();
+        $result = $urlRewritesSet->getData();
+        $urlRewritesSet->resetData();
         return $result;
     }
 
@@ -143,6 +146,7 @@ class ProductScopeRewriteGenerator
      */
     public function generateForSpecificStoreView($storeId, $productCategories, Product $product, $rootCategoryId = null)
     {
+        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
         $categories = [];
         foreach ($productCategories as $category) {
             if ($this->isCategoryProperForGenerating($category, $storeId)) {
@@ -151,13 +155,13 @@ class ProductScopeRewriteGenerator
         }
         $productCategories = $this->objectRegistryFactory->create(['entities' => $categories]);
 
-        $this->urlRewritesSet->merge(
+        $urlRewritesSet->merge(
             $this->canonicalUrlRewriteGenerator->generate($storeId, $product)
         );
-        $this->urlRewritesSet->merge(
+        $urlRewritesSet->merge(
             $this->categoriesUrlRewriteGenerator->generate($storeId, $product, $productCategories)
         );
-        $this->urlRewritesSet->merge(
+        $urlRewritesSet->merge(
             $this->currentUrlRewritesRegenerator->generate(
                 $storeId,
                 $product,
@@ -165,12 +169,12 @@ class ProductScopeRewriteGenerator
                 $rootCategoryId
             )
         );
-        $this->urlRewritesSet->merge(
+        $urlRewritesSet->merge(
             $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
         );
 
-        $result = $this->urlRewritesSet->getData();
-        $this->urlRewritesSet->resetData();
+        $result = $urlRewritesSet->getData();
+        $urlRewritesSet->resetData();
         return $result;
     }
 

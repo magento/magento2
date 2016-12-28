@@ -64,7 +64,15 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->storeViewService = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Service\V1\StoreViewService::class)
             ->disableOriginalConstructor()->getMock();
         $this->storeManager = $this->getMock(StoreManagerInterface::class);
+        $urlRewritesSetFactory = $this->getMock(
+            \Magento\UrlRewrite\Model\UrlRewritesSetFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->urlRewritesSet = new \Magento\UrlRewrite\Model\UrlRewritesSet;
+        $urlRewritesSetFactory->expects($this->once())->method('create')->willReturn($this->urlRewritesSet);
 
         $this->productScopeGenerator = (new ObjectManager($this))->getObject(
             \Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator::class,
@@ -76,7 +84,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                 'objectRegistryFactory' => $this->objectRegistryFactory,
                 'storeViewService' => $this->storeViewService,
                 'storeManager' => $this->storeManager,
-                'urlRewritesSet' => $this->urlRewritesSet
+                'urlRewritesSetFactory' => $urlRewritesSetFactory
             ]
         );
     }

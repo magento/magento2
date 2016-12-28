@@ -276,7 +276,15 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getCategoryProcessor')
             ->willReturn($categoryProcessor);
+        $urlRewritesSetFactory = $this->getMock(
+            \Magento\UrlRewrite\Model\UrlRewritesSetFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->urlRewritesSet = new \Magento\UrlRewrite\Model\UrlRewritesSet;
+        $urlRewritesSetFactory->expects($this->once())->method('create')->willReturn($this->urlRewritesSet);
 
         $this->objectManager = new ObjectManager($this);
         $this->import = $this->objectManager->getObject(
@@ -290,7 +298,7 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
                 'urlPersist' => $this->urlPersist,
                 'urlRewriteFactory' => $this->urlRewriteFactory,
                 'urlFinder' => $this->urlFinder,
-                'urlRewritesSet' => $this->urlRewritesSet
+                'urlRewritesSetFactory' => $urlRewritesSetFactory
             ]
         );
     }

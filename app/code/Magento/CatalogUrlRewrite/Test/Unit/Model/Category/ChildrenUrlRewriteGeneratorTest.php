@@ -40,14 +40,22 @@ class ChildrenUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->categoryUrlRewriteGenerator = $this->getMockBuilder(
             \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator::class
         )->disableOriginalConstructor()->getMock();
+        $urlRewritesSetFactory = $this->getMock(
+            \Magento\UrlRewrite\Model\UrlRewritesSetFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->urlRewritesSet = new \Magento\UrlRewrite\Model\UrlRewritesSet;
+        $urlRewritesSetFactory->expects($this->once())->method('create')->willReturn($this->urlRewritesSet);
 
         $this->childrenUrlRewriteGenerator = (new ObjectManager($this))->getObject(
             \Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator::class,
             [
                 'childrenCategoriesProvider' => $this->childrenCategoriesProvider,
                 'categoryUrlRewriteGeneratorFactory' => $this->categoryUrlRewriteGeneratorFactory,
-                'urlRewritesSet' => $this->urlRewritesSet
+                'urlRewritesSetFactory' => $urlRewritesSetFactory
             ]
         );
     }
