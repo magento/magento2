@@ -409,6 +409,9 @@ class LocaleDeploy implements DeployInterface
 
             $this->logger->critical($errorMessage);
         } catch (\Exception $exception) {
+            $pathInfo = $fullPath ?: $filePath;
+            $errorMessage =  __('Compilation from source: ') . $pathInfo . PHP_EOL . $exception->getMessage();
+            $this->output->write(PHP_EOL . PHP_EOL . $errorMessage . PHP_EOL, true);
             $this->output->write('.');
             if ($this->output->isVerbose()) {
                 $this->output->writeln($exception->getTraceAsString());
