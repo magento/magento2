@@ -10,6 +10,13 @@ namespace Magento\Paypal\Model\Config\Structure;
  */
 class PaymentSectionModifier
 {
+    private static $specialGroups = [
+        'account',
+        'recommended_solutions',
+        'other_paypal_payment_solutions',
+        'other_payment_methods',
+    ];
+
     /**
      * Returns changed section structure.
      *
@@ -28,15 +35,10 @@ class PaymentSectionModifier
      */
     public function modify(array $initialStructure)
     {
-        $changedStructure = [
-            'account' => [],
-            'recommended_solutions' => [],
-            'other_paypal_payment_solutions' => [],
-            'other_payment_methods' => []
-        ];
+        $changedStructure = array_fill_keys(self::$specialGroups, []);
 
         foreach ($initialStructure as $childSection => $childData) {
-            if (array_key_exists($childSection, $changedStructure)) {
+            if (in_array($childSection, self::$specialGroups)) {
                 if (isset($changedStructure[$childSection]['children'])) {
                     $children = $changedStructure[$childSection]['children'];
                     if (isset($childData['children'])) {
@@ -46,10 +48,13 @@ class PaymentSectionModifier
                     unset($children);
                 }
                 $changedStructure[$childSection] = $childData;
-            } elseif ($displayIn = $this->getDisplayInSection($childSection, $childData)) {
-                $changedStructure[$displayIn['parent']]['children'][$displayIn['section']] = $displayIn['data'];
             } else {
-                $changedStructure['other_payment_methods']['children'][$childSection] = $childData;
+                $displayIn = $this->getDisplayInSection($childSection, $childData);
+                if ($displayIn && in_array($displayIn['section'], self::$specialGroups)) {
+                    $changedStructure[$displayIn['parent']]['children'][$displayIn['section']] = $displayIn['data'];
+                } else {
+                    $changedStructure['other_payment_methods']['children'][$childSection] = $childData;
+                }
             }
         }
 
