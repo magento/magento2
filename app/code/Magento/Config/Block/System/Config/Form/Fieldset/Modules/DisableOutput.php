@@ -9,6 +9,9 @@
  */
 namespace Magento\Config\Block\System\Config\Form\Fieldset\Modules;
 
+/**
+ * @deprecated
+ */
 class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**

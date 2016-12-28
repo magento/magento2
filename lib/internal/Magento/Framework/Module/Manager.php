@@ -13,6 +13,7 @@ class Manager
 {
     /**
      * @var Output\ConfigInterface
+     * @deprecated
      */
     private $_outputConfig;
 
@@ -23,6 +24,7 @@ class Manager
 
     /**
      * @var array
+     * @deprecated
      */
     private $_outputConfigPaths;
 
@@ -57,18 +59,15 @@ class Manager
      *
      * @param string $moduleName Fully-qualified module name
      * @return boolean
+     * @deprecated
+     * @see \Magento\Framework\Module\Manager::isEnabled()
      */
     public function isOutputEnabled($moduleName)
     {
         if (!$this->isEnabled($moduleName)) {
             return false;
         }
-        if (!$this->_isCustomOutputConfigEnabled($moduleName)) {
-            return false;
-        }
-        if ($this->_outputConfig->isEnabled($moduleName)) {
-            return false;
-        }
+
         return true;
     }
 
@@ -77,6 +76,7 @@ class Manager
      *
      * @param string $moduleName Fully-qualified module name
      * @return boolean
+     * @deprecated
      */
     protected function _isCustomOutputConfigEnabled($moduleName)
     {

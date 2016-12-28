@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\Module\Output;
 
+/**
+ * @deprecated
+ */
 class Config implements \Magento\Framework\Module\Output\ConfigInterface
 {
     /**
@@ -41,7 +44,7 @@ class Config implements \Magento\Framework\Module\Output\ConfigInterface
      */
     public function isEnabled($moduleName)
     {
-        return $this->isSetFlag(sprintf(self::XML_PATH_MODULE_OUTPUT_STATUS, $moduleName));
+        return false;
     }
 
     /**
@@ -49,6 +52,6 @@ class Config implements \Magento\Framework\Module\Output\ConfigInterface
      */
     public function isSetFlag($path)
     {
-        return $this->_scopeConfig->isSetFlag($path, $this->_storeType);
+        return false;
     }
 }

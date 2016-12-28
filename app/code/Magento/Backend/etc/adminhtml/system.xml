@@ -16,7 +16,7 @@
         <tab id="advanced" translate="label" sortOrder="999999">
             <label>Advanced</label>
         </tab>
-        <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="0" showInWebsite="0" showInStore="0">
             <label>Advanced</label>
             <tab>advanced</tab>
             <resource>Magento_Backend::advanced</resource>
