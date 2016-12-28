@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateSimpleProductEntityTest" summary="Update Simple Product" ticketId="MAGETWO-23544">
         <variation name="UpdateSimpleProductEntityTestVariation1">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="description" xsi:type="string">Update visibility to Catalog, Search</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
@@ -25,7 +24,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation2">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="description" xsi:type="string">Update visibility to Not Visible Individually</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
@@ -40,7 +38,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation3">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="description" xsi:type="string">Update visibility to Catalog</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
@@ -58,7 +55,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation4">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="description" xsi:type="string">Update visibility to Search</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
@@ -76,7 +72,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation5">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="description" xsi:type="string">Update stock to Out of Stock</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
@@ -94,7 +89,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation6">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="description" xsi:type="string">Update product status to offline</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
@@ -109,7 +103,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation7">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="description" xsi:type="string">Update category</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default</data>
@@ -125,7 +118,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation8" summary="Edit Simple Product" ticketId="MAGETWO-12428">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default</data>
             <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
@@ -136,7 +128,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation9" summary="Unassign Products from the Category" ticketId="MAGETWO-12417">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/category_ids/dataset" xsi:type="string"> -</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
@@ -144,7 +135,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
         </variation>
         <variation name="EditSimpleProductTestVariation10">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="description" xsi:type="string">Edit product with enabled flat</data>
             <data name="configData" xsi:type="string">product_flat</data>
             <data name="initialProduct/dataset" xsi:type="string">simple_10_dollar</data>

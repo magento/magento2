@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateVirtualProductEntityTest" summary="Update Virtual Product" ticketId="MAGETWO-26204">
         <variation name="UpdateVirtualProductEntityTestVariation1">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -30,7 +29,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation2">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">120.00</data>
@@ -51,7 +49,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation3">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">185.00</data>
@@ -73,7 +70,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation4">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -90,7 +86,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation5">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">5.00</data>
@@ -107,7 +102,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation6">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">145.00</data>
@@ -128,7 +122,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation7">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -147,7 +140,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation8">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">5.00</data>
@@ -165,7 +157,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation9">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">120.00</data>
@@ -186,7 +177,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation10">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -203,7 +193,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation11">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>

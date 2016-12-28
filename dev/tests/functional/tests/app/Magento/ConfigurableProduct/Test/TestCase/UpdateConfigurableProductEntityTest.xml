@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ConfigurableProduct\Test\TestCase\UpdateConfigurableProductEntityTest" summary="Update Configurable Product" ticketId="MAGETWO-29916">
         <variation name="UpdateConfigurableProductEntityTestVariation1">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="description" xsi:type="string">Add new option to existed Attribute</data>
             <data name="attributeTypeAction" xsi:type="string">addOptions</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
@@ -35,7 +34,6 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately" />
         </variation>
         <variation name="UpdateConfigurableProductEntityTestVariation2">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="description" xsi:type="string">Add new variations</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
             <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
@@ -58,7 +56,6 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart" />
         </variation>
         <variation name="UpdateConfigurableProductEntityTestVariation3">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="description" xsi:type="string">Delete one attribute and add another</data>
             <data name="attributeTypeAction" xsi:type="string">deleteLast</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
@@ -83,7 +80,6 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesAbsentOnProductPage" />
         </variation>
         <variation name="UpdateConfigurableProductEntityTestVariation4">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="description" xsi:type="string">Delete attribute and add another with products qty = 0</data>
             <data name="attributeTypeAction" xsi:type="string">deleteAll</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
@@ -104,7 +100,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
         <variation name="UpdateConfigurableProductEntityTestVariation5" summary="Edit Configurable Product" ticketId="MAGETWO-12840">
-            <data name="issue" xsi:type="string">MAGETWO-59503: URL rewrite not created when URL key is changed for a product</data>
             <data name="attributeTypeAction" xsi:type="string">addOptions</data>
             <data name="product" xsi:type="string">configurableProduct::two_options_with_fixed_price</data>
             <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
