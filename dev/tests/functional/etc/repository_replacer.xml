@@ -147,10 +147,10 @@
 
     <repository class="Magento\Braintree\Test\Repository\BraintreeSandboxCustomer">
         <dataset name="braintree_sandbox_default">
-            <field name="environment" xsi:type="string">sandbox</field>
-            <field name="merchantId" xsi:type="string">v6cfgg6s452yc2ys</field>
-            <field name="publicKey" xsi:type="string">s7gr9jbddsyfhgj7</field>
-            <field name="privateKey" xsi:type="string">996440dc0e9d611fc2db5f48f610b674</field>
+            <field name="environment" xsi:type="string">BRAINTREEE_ENVIRONMENT</field>
+            <field name="merchantId" xsi:type="string">BRAINTREEE_MERCHANT_ID</field>
+            <field name="publicKey" xsi:type="string">BRAINTREE_PUBLIC_KEY</field>
+            <field name="privateKey" xsi:type="string">BRAINTREE_PRIVATE_KEY</field>
         </dataset>
     </repository>
 </config>
