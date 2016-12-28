@@ -52,7 +52,7 @@ class CurrentUrlRewritesRegenerator
         $this->urlRewriteMap = $urlRewriteMap ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap::class);
         $urlRewritesSetFactory = $urlRewritesSetFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(UrlRewritesSetFactory::class);
+            ->get(\Magento\UrlRewrite\Model\UrlRewritesSetFactory::class);
         $this->urlRewritesSetPlaceHolder = $urlRewritesSetFactory->create();
     }
 
