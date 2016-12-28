@@ -40,18 +40,18 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         );
         $this->configCacheType->save('', \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT);
 
+        $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $this->backupRegistrar = $paths->getValue();
+        $paths->setAccessible(false);
+
         $this->menuConfig = $this->prepareMenuConfig();
 
         $this->blockMenu = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Backend\Block\Menu::class,
             ['menuConfig' => $this->menuConfig]
         );
-
-        $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $this->backupRegistrar = $paths->getValue();
-        $paths->setAccessible(false);
     }
 
     /**
