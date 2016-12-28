@@ -3,13 +3,15 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
- * Sales Order Invoice Pdf default items renderer
+ * Order invoice pdf default items renderer
+ *
+ * @codingStandardsIgnoreFile
  */
 class Invoice extends AbstractItems
 {
@@ -19,6 +21,8 @@ class Invoice extends AbstractItems
     protected $string;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
@@ -28,6 +32,7 @@ class Invoice extends AbstractItems
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -38,8 +43,10 @@ class Invoice extends AbstractItems
         \Magento\Framework\Stdlib\StringUtils $coreString,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
+        $serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->string = $coreString;
         parent::__construct(
             $context,
@@ -49,7 +56,8 @@ class Invoice extends AbstractItems
             $filterManager,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $serializer
         );
     }
 
