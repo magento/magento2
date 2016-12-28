@@ -6,6 +6,7 @@
 
 namespace Magento\Paypal\Test\Unit\Model\Config;
 
+use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier;
 use Magento\Paypal\Model\Config\StructurePlugin;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -20,15 +21,27 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Paypal\Helper\Backend|\PHPUnit_Framework_MockObject_MockObject */
     protected $_helper;
 
+    /**
+     * @var PaymentSectionModifier
+     */
+    private $paymentSectionModifier;
+
     protected function setUp()
     {
         $this->_scopeDefiner = $this->getMock('Magento\Config\Model\Config\ScopeDefiner', [], [], '', false);
         $this->_helper = $this->getMock('Magento\Paypal\Helper\Backend', [], [], '', false);
 
+        $this->paymentSectionModifier = $this->getMockBuilder(PaymentSectionModifier::class)->getMock();
+
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->_model = $objectManagerHelper->getObject(
             'Magento\Paypal\Model\Config\StructurePlugin',
-            ['scopeDefiner' => $this->_scopeDefiner, 'helper' => $this->_helper]
+            [
+                'scopeDefiner' => $this->_scopeDefiner,
+                'helper' => $this->_helper,
+                'paymentSectionModifier' => $this->paymentSectionModifier,
+            ]
         );
     }
 
@@ -145,6 +158,7 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
             $self->_scopeDefiner->expects($self->any())
                 ->method('getScope')
                 ->will($self->returnValue($scope));
+            $this->paymentSectionModifier->method('modify')->willReturn($sectionMap);
             $result->expects($self->at(0))
                 ->method('getData')
                 ->will($self->returnValue(['children' => []]));
