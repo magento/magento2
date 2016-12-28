@@ -200,6 +200,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation11">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
