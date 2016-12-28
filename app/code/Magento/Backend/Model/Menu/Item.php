@@ -168,9 +168,7 @@ class Item
         array $data = []
     ) {
         $this->_validator = $validator;
-        if (!empty($data)) {
-            $this->_validator->validate($data);
-        }
+        $this->_validator->validate($data);
         $this->_moduleManager = $moduleManager;
         $this->_acl = $authorization;
         $this->_scopeConfig = $scopeConfig;

@@ -231,7 +231,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
         $this->_menuFactoryMock->method('create')->will($this->returnValue($menuMock));
         $menuMock->method('toArray')
-            ->willReturn(isset($data['sub_menu']) ? $data['sub_menu'] : null);
+            ->willReturn($data['sub_menu']);
 
         $model = $this->objectManager->getObject(
             \Magento\Backend\Model\Menu\Item::class,
@@ -248,119 +248,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $model->toArray());
     }
 
+    /**
+     * @return array
+     */
     public function toArrayDataProvider()
     {
-        return [
-            'No submenu' => [
-                [
-                    'id' => 'item',
-                    'title' => 'Item Title',
-                    'action' => '/system/config',
-                    'resource' => 'Magento_Config::config',
-                    'depends_on_module' => 'Magento_Backend',
-                    'depends_on_config' => 'system/config/isEnabled',
-                    'tooltip' => 'Item tooltip',
-                ],
-                [
-                    'parent_id' => null,
-                    'module_name' => 'Magento_Backend',
-                    'sort_index' => null,
-                    'depends_on_config' => 'system/config/isEnabled',
-                    'id' => 'item',
-                    'resource' => 'Magento_Config::config',
-                    'path' => '',
-                    'action' => '/system/config',
-                    'depends_on_module' => 'Magento_Backend',
-                    'tooltip' => 'Item tooltip',
-                    'title' => 'Item Title',
-                    'sub_menu' => null
-                ]
-            ],
-            'with submenu' => [
-                [
-                    'parent_id' => '1',
-                    'module_name' => 'Magento_Module1',
-                    'sort_index' => '50',
-                    'depends_on_config' => null,
-                    'id' => '5',
-                    'resource' => null,
-                    'path' => null,
-                    'action' => null,
-                    'depends_on_module' => null,
-                    'tooltip' => null,
-                    'title' => null,
-                    'sub_menu' => [
-                        'id' => 'item',
-                        'title' => 'Item Title',
-                        'action' => '/system/config',
-                        'resource' => 'Magento_Config::config',
-                        'depends_on_module' => 'Magento_Backend',
-                        'depends_on_config' => 'system/config/isEnabled',
-                        'tooltip' => 'Item tooltip',
-                    ],
-                ],
-                [
-                    'parent_id' => '1',
-                    'module_name' => 'Magento_Module1',
-                    'sort_index' => '50',
-                    'depends_on_config' => null,
-                    'id' => '5',
-                    'resource' => null,
-                    'path' => null,
-                    'action' => null,
-                    'depends_on_module' => null,
-                    'tooltip' => '',
-                    'title' => null,
-                    'sub_menu' => [
-                        'id' => 'item',
-                        'title' => 'Item Title',
-                        'action' => '/system/config',
-                        'resource' => 'Magento_Config::config',
-                        'depends_on_module' => 'Magento_Backend',
-                        'depends_on_config' => 'system/config/isEnabled',
-                        'tooltip' => 'Item tooltip',
-                    ]
-                ]
-            ],
-            'small set of data' => [
-                [
-                    'parent_id' => '1',
-                    'module_name' => 'Magento_Module1',
-                    'sort_index' => '50',
-                    'sub_menu' => [
-                        'id' => 'item',
-                        'title' => 'Item Title',
-                        'action' => '/system/config',
-                        'resource' => 'Magento_Config::config',
-                        'depends_on_module' => 'Magento_Backend',
-                        'depends_on_config' => 'system/config/isEnabled',
-                        'tooltip' => 'Item tooltip',
-                    ],
-                ],
-                [
-                    'parent_id' => '1',
-                    'module_name' => 'Magento_Module1',
-                    'sort_index' => '50',
-                    'depends_on_config' => null,
-                    'id' => null,
-                    'resource' => null,
-                    'path' => '',
-                    'action' => null,
-                    'depends_on_module' => null,
-                    'tooltip' => '',
-                    'title' => null,
-                    'sub_menu' => [
-                        'id' => 'item',
-                        'title' => 'Item Title',
-                        'action' => '/system/config',
-                        'resource' => 'Magento_Config::config',
-                        'depends_on_module' => 'Magento_Backend',
-                        'depends_on_config' => 'system/config/isEnabled',
-                        'tooltip' => 'Item tooltip',
-                    ]
-                ]
-            ]
-        ];
+        return include __DIR__ . '/../_files/menu_item_data.php';
     }
 
     /**
@@ -375,7 +268,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         array $expected
     ) {
         $menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
-        $this->_menuFactoryMock->method('create')->will($this->returnValue($menuMock));
+        $this->_menuFactoryMock->method('create')->willReturn($menuMock);
         $menuMock->method('toArray')
             ->willReturn(['submenuArray']);
 
@@ -395,134 +288,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $model->toArray());
     }
 
+    /**
+     * @return array
+     */
     public function populateFromArrayDataProvider()
     {
-        return [
-            'default data to constructor' => [
-                [],
-                [
-                    'id' => 'item',
-                    'title' => 'Item Title',
-                    'action' => '/system/config',
-                    'resource' => 'Magento_Config::config',
-                    'depends_on_module' => 'Magento_Backend',
-                    'depends_on_config' => 'system/config/isEnabled',
-                    'tooltip' => 'Item tooltip',
-                ],
-                [
-                    'parent_id' => null,
-                    'module_name' => 'Magento_Backend',
-                    'sort_index' => null,
-                    'depends_on_config' => 'system/config/isEnabled',
-                    'id' => 'item',
-                    'resource' => 'Magento_Config::config',
-                    'path' => '',
-                    'action' => '/system/config',
-                    'depends_on_module' => 'Magento_Backend',
-                    'tooltip' => 'Item tooltip',
-                    'title' => 'Item Title',
-                    'sub_menu' => null
-                ],
-            ],
-            'data without submenu to constructor' => [
-                [
-                    'id' => 'item',
-                    'title' => 'Item Title',
-                    'action' => '/system/config',
-                    'resource' => 'Magento_Config::config',
-                    'depends_on_module' => 'Magento_Backend',
-                    'depends_on_config' => 'system/config/isEnabled',
-                    'tooltip' => 'Item tooltip',
-                ],
-                [
-                    'parent_id' => '1',
-                    'module_name' => 'Magento_Module1',
-                    'sort_index' => '50',
-                    'depends_on_config' => null,
-                    'id' => '5',
-                    'resource' => null,
-                    'path' => null,
-                    'action' => null,
-                    'depends_on_module' => null,
-                    'tooltip' => null,
-                    'title' => null,
-                    'sub_menu' => [
-                        'id' => 'item',
-                        'title' => 'Item Title',
-                        'action' => '/system/config',
-                        'resource' => 'Magento_Config::config',
-                        'depends_on_module' => 'Magento_Backend',
-                        'depends_on_config' => 'system/config/isEnabled',
-                        'tooltip' => 'Item tooltip',
-                    ],
-                ],
-                [
-                    'parent_id' => '1',
-                    'module_name' => 'Magento_Module1',
-                    'sort_index' => '50',
-                    'depends_on_config' => null,
-                    'id' => '5',
-                    'resource' => null,
-                    'path' => '',
-                    'action' => null,
-                    'depends_on_module' => null,
-                    'tooltip' => '',
-                    'title' => null,
-                    'sub_menu' => ['submenuArray']
-                ],
-            ],
-            'data with submenu to constructor' => [
-                [
-                    'parent_id' => '1',
-                    'module_name' => 'Magento_Module1',
-                    'sort_index' => '50',
-                    'depends_on_config' => null,
-                    'id' => '5',
-                    'resource' => null,
-                    'path' => null,
-                    'action' => null,
-                    'depends_on_module' => null,
-                    'tooltip' => null,
-                    'title' => null,
-                    'sub_menu' => [
-                        'id' => 'item',
-                        'title' => 'Item Title',
-                        'action' => '/system/config',
-                        'resource' => 'Magento_Config::config',
-                        'depends_on_module' => 'Magento_Backend',
-                        'depends_on_config' => 'system/config/isEnabled',
-                        'tooltip' => 'Item tooltip',
-                    ],
-                ],
-                [
-                    'parent_id' => '1',
-                    'module_name' => 'Magento_Module1',
-                    'sort_index' => '50',
-                    'sub_menu' => [
-                        'id' => 'item',
-                        'title' => 'Item Title',
-                        'action' => '/system/config',
-                        'resource' => 'Magento_Config::config',
-                        'depends_on_module' => 'Magento_Backend',
-                        'depends_on_config' => 'system/config/isEnabled',
-                        'tooltip' => 'Item tooltip',
-                    ],
-                ],
-                [
-                    'parent_id' => '1',
-                    'module_name' => 'Magento_Module1',
-                    'sort_index' => '50',
-                    'depends_on_config' => null,
-                    'id' => null,
-                    'resource' => null,
-                    'path' => '',
-                    'action' => null,
-                    'depends_on_module' => null,
-                    'tooltip' => '',
-                    'title' => null,
-                    'sub_menu' => ['submenuArray']
-                ],
-            ]
-        ];
+        return include __DIR__ . '/../_files/menu_item_constructor_data.php';
     }
 }

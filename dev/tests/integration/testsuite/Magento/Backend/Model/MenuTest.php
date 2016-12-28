@@ -50,7 +50,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        //Add submenu
+        // Add submenu
         $menu->add(
             $itemFactory->create(
                 [

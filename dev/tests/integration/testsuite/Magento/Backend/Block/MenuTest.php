@@ -28,6 +28,11 @@ class MenuTest extends \PHPUnit_Framework_TestCase
      */
     protected $backupRegistrar;
 
+    /**
+     * @var \Magento\Backend\Model\Menu\Config
+     */
+    private $menuConfig;
+
     protected function setUp()
     {
         $this->configCacheType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -35,8 +40,11 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         );
         $this->configCacheType->save('', \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT);
 
+        $this->menuConfig = $this->prepareMenuConfig();
+
         $this->blockMenu = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Backend\Block\Menu::class
+            \Magento\Backend\Block\Menu::class,
+            ['menuConfig' => $this->menuConfig]
         );
 
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
@@ -51,8 +59,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
      */
     public function testRenderNavigation()
     {
-        $menuConfig = $this->prepareMenuConfig();
-        $menuHtml = $this->blockMenu->renderNavigation($menuConfig->getMenu());
+        $menuHtml = $this->blockMenu->renderNavigation($this->menuConfig->getMenu());
         $menu = new \SimpleXMLElement($menuHtml);
 
         $item = $menu->xpath('/ul/li/a/span')[0];

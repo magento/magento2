@@ -305,8 +305,7 @@ class Menu extends \ArrayObject
     {
         $items = [];
         foreach ($data as $itemData) {
-            $item = $this->menuItemFactory->create();
-            $item->populateFromArray($itemData);
+            $item = $this->menuItemFactory->create($itemData);
             $items[] = $item;
         }
         $this->exchangeArray($items);
