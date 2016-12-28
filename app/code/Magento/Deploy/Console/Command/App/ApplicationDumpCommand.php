@@ -5,7 +5,7 @@
  */
 namespace Magento\Deploy\Console\Command\App;
 
-use Magento\Framework\App\Config\Reader\Source\SourceInterface;
+use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
@@ -24,7 +24,7 @@ class ApplicationDumpCommand extends Command
     private $writer;
 
     /**
-     * @var SourceInterface[]
+     * @var ConfigSourceInterface[]
      */
     private $sources;
 
@@ -64,20 +64,29 @@ class ApplicationDumpCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dump = [];
+        $comments = [];
         foreach ($this->sources as $sourceData) {
-            /** @var SourceInterface $source */
+            /** @var ConfigSourceInterface $source */
             $source = $sourceData['source'];
             $namespace = $sourceData['namespace'];
             $dump[$namespace] = $source->get();
+            if (!empty($sourceData['comment'])) {
+                $comments[$namespace] = is_string($sourceData['comment'])
+                    ? $sourceData['comment']
+                    : $sourceData['comment']->get();
+            }
         }
-
         $this->writer
             ->saveConfig(
                 [ConfigFilePool::APP_CONFIG => $dump],
                 true,
-                ConfigFilePool::LOCAL
+                ConfigFilePool::LOCAL,
+                $comments
             );
+        if (!empty($comments)) {
+            $output->writeln($comments);
+        }
         $output->writeln('<info>Done.</info>');
-        return  Cli::RETURN_SUCCESS;
+        return Cli::RETURN_SUCCESS;
     }
 }
