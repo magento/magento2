@@ -113,7 +113,7 @@ class PaymentSectionModifierTest extends \PHPUnit_Framework_TestCase
                 []
             ],
             [
-                'structure with special groups at the begin of list',
+                'structure with special groups at the begin of the list',
                 [
                     'account' => [
                         'id' => 'account',
@@ -141,6 +141,82 @@ class PaymentSectionModifierTest extends \PHPUnit_Framework_TestCase
                     ],
                     'some_payment_method' => [
                         'id' => 'some_payment_method',
+                        'children' => [
+
+                        ]
+                    ],
+                ]
+            ],
+            [
+                'structure with special groups at the end of the list',
+                [
+                    'some_payment_method' => [
+                        'id' => 'some_payment_method',
+                        'children' => [
+
+                        ]
+                    ],
+                    'account' => [
+                        'id' => 'account',
+                        'children' => [
+
+                        ]
+                    ],
+                    'recommended_solutions' => [
+                        'id' => 'recommended_solutions',
+                        'children' => [
+
+                        ]
+                    ],
+                    'other_paypal_payment_solutions' => [
+                        'id' => 'other_paypal_payment_solutions',
+                        'children' => [
+
+                        ]
+                    ],
+                    'other_payment_methods' => [
+                        'id' => 'other_payment_methods',
+                        'children' => [
+
+                        ]
+                    ],
+                ]
+            ],
+            [
+                'structure with special groups in the middle of the list',
+                [
+                    'some_payment_methodq' => [
+                        'id' => 'some_payment_methodq',
+                        'children' => [
+
+                        ]
+                    ],
+                    'account' => [
+                        'id' => 'account',
+                        'children' => [
+
+                        ]
+                    ],
+                    'recommended_solutions' => [
+                        'id' => 'recommended_solutions',
+                        'children' => [
+
+                        ]
+                    ],
+                    'other_paypal_payment_solutions' => [
+                        'id' => 'other_paypal_payment_solutions',
+                        'children' => [
+
+                        ]
+                    ],
+                    'other_payment_methods' => [
+                        'id' => 'other_payment_methods',
+                        'children' => [
+
+                        ]
+                    ],
+                    'some_payment_method2' => [
+                        'id' => 'some_payment_method2',
                         'children' => [
 
                         ]

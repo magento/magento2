@@ -37,6 +37,14 @@ class PaymentSectionModifier
 
         foreach ($initialStructure as $childSection => $childData) {
             if (array_key_exists($childSection, $changedStructure)) {
+                if (isset($changedStructure[$childSection]['children'])) {
+                    $children = $changedStructure[$childSection]['children'];
+                    if (isset($childData['children'])) {
+                        $children += $childData['children'];
+                    }
+                    $childData['children'] = $children;
+                    unset($children);
+                }
                 $changedStructure[$childSection] = $childData;
             } elseif ($displayIn = $this->getDisplayInSection($childSection, $childData)) {
                 $changedStructure[$displayIn['parent']]['children'][$displayIn['section']] = $displayIn['data'];
