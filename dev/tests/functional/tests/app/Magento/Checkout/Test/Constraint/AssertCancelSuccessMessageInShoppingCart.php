@@ -17,7 +17,7 @@ class AssertCancelSuccessMessageInShoppingCart extends AbstractConstraint
     /**
      * Cancel success message text.
      */
-    const SUCCESS_MESSAGE = 'Payment was canceled.';
+    const SUCCESS_MESSAGE = 'Your purchase process has been cancelled.';
 
     /**
      * Assert that success message about canceled order is present and correct.
