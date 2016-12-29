@@ -177,6 +177,6 @@ class PaymentSectionModifierTest extends \PHPUnit_Framework_TestCase
 
     public function caseProvider()
     {
-        return __DIR__ . '/_files/payment_section_structure_variations.php';
+        return include __DIR__ . '/_files/payment_section_structure_variations.php';
     }
 }

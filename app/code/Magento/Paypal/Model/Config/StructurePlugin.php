@@ -142,6 +142,6 @@ class StructurePlugin
         $sectionInitialStructure = isset($sectionData['children']) ? $sectionData['children'] : [];
         $sectionChangedStructure = $this->paymentSectionModifier->modify($sectionInitialStructure);
         $sectionData['children'] = $sectionChangedStructure;
-        $result->setData($sectionData, $this->_scopeDefiner->getScope());
+        $result->setData($sectionData, $this->scopeDefiner->getScope());
     }
 }
