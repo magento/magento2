@@ -18,6 +18,11 @@ use Magento\Mtf\Fixture\FixtureFactory;
 class AssertProductInventoryThreshold extends AbstractConstraint
 {
     /**
+     * Product inventory threshold message.
+     */
+    const SUCCESS_MESSAGE = 'Only %s left';
+
+    /**
      * Check if threshold message setting is working correctly.
      *
      * @param BrowserInterface $browser
@@ -46,7 +51,7 @@ class AssertProductInventoryThreshold extends AbstractConstraint
             );
             if ($thresholdItem['is_message_displayed']) {
                 \PHPUnit_Framework_Assert::assertEquals(
-                    sprintf('Only %s left', $thresholdItem['expected']),
+                    sprintf(self::SUCCESS_MESSAGE, $thresholdItem['expected']),
                     $catalogProductView->getViewBlock()->getThresholdMessage(),
                     'Product inventory threshold message display is not correct.'
                 );

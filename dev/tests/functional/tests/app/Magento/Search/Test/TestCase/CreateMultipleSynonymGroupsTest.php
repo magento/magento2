@@ -46,7 +46,7 @@ class CreateMultipleSynonymGroupsTest extends Injectable
      * Create Synonym Groups.
      *
      * @param array $synonymGroups
-     * @return void
+     * @return array
      */
     public function test(array $synonymGroups)
     {

@@ -7,7 +7,6 @@
 namespace Magento\Downloadable\Test\TestCase;
 
 use Magento\Catalog\Test\Fixture\Category;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Downloadable\Test\Fixture\DownloadableProduct;

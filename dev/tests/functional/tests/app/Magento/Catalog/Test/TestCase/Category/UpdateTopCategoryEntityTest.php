@@ -94,7 +94,7 @@ class UpdateTopCategoryEntityTest extends Injectable
         $categories = [];
         $categoriesBeforeSave = [];
         $this->getCategoryFixture($categories, $initialCategory, $category->getData(), $nestingLevel);
-        $this->getCategories($initialCategory, $categoriesBeforeSave, $nestingLevel);
+        $this->getCategory($initialCategory, $categoriesBeforeSave, $nestingLevel);
 
         return [
             'categories' => $categories,
@@ -103,7 +103,7 @@ class UpdateTopCategoryEntityTest extends Injectable
     }
 
     /**
-     * Get category fixture after is was saved in the admin panel.
+     * Get category fixture after saving in the admin panel.
      *
      * @param array $categories
      * @param Category $currentCategory
@@ -111,7 +111,7 @@ class UpdateTopCategoryEntityTest extends Injectable
      * @param int $nestingLevel
      * @return Category
      */
-    private function getCategoryFixture(&$categories, $currentCategory, $data, $nestingLevel)
+    private function getCategoryFixture(array &$categories, Category $currentCategory, array $data, int $nestingLevel)
     {
         if (--$nestingLevel) {
             $parentCategory = $this->getCategoryFixture(
@@ -142,10 +142,10 @@ class UpdateTopCategoryEntityTest extends Injectable
      * @param int $nestingLevel
      * @return Category
      */
-    private function getCategories(Category $initialCategory, &$categoriesBeforeSave, $nestingLevel)
+    private function getCategory(Category $initialCategory, &$categoriesBeforeSave, $nestingLevel)
     {
         if (--$nestingLevel) {
-            $parentCategory = $this->getCategories(
+            $parentCategory = $this->getCategory(
                 $initialCategory->getDataFieldConfig('parent_id')['source']->getParentCategory(),
                 $categoriesBeforeSave,
                 $nestingLevel

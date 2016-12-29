@@ -6,7 +6,6 @@
 
 namespace Magento\UrlRewrite\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 

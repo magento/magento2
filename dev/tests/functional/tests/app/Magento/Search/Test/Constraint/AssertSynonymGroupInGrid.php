@@ -57,7 +57,7 @@ class AssertSynonymGroupInGrid extends AbstractConstraint
      *
      * @param SynonymGroup $synonymGroup
      * @param array|null $synonymFilter
-     * @return array
+     * @return void
      */
     private function prepareFilter(SynonymGroup $synonymGroup, $synonymFilter = null)
     {

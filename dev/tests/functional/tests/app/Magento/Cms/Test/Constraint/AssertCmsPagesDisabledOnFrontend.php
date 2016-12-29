@@ -6,7 +6,6 @@
 
 namespace Magento\Cms\Test\Constraint;
 
-use Magento\Cms\Test\Fixture\CmsPage;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageIndex;
 use Magento\Cms\Test\Page\CmsIndex as FrontCmsIndex;
 use Magento\Mtf\Client\BrowserInterface;
@@ -46,6 +45,6 @@ class AssertCmsPagesDisabledOnFrontend extends AbstractConstraint
      */
     public function toString()
     {
-        return '"404 Not Found" page is displayed.';
+        return 'Pages with message "404 Not Found" are displayed.';
     }
 }
