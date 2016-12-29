@@ -64,8 +64,6 @@ class Cli extends Console\Application
      *
      * @param string $name the application name
      * @param string $version the application version
-     *
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
@@ -143,7 +141,7 @@ class Cli extends Console\Application
             }
 
             if ($this->objectManager->get(DeploymentConfig::class)->isAvailable()) {
-                /** @var \Magento\Framework\Console\CommandListInterface */
+                /** @var CommandListInterface */
                 $commandList = $this->objectManager->create(CommandListInterface::class);
                 $commands = array_merge($commands, $commandList->getCommands());
             }
@@ -184,6 +182,7 @@ class Cli extends Console\Application
      *      developer - application will be terminated
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     private function assertGenerationPermissions()
     {
@@ -198,7 +197,7 @@ class Cli extends Console\Application
             && $state->getMode() !== State::MODE_PRODUCTION
             && !$generationDirectoryAccess->check()
         ) {
-            $output = new Console\Output\ConsoleOutput();
+            $output = new \Symfony\Component\Console\Output\ConsoleOutput();
             $output->writeln(
                 '<error>Command line user does not have read and write permissions on var/generation directory.  Please'
                 . ' address this issue before using Magento command line.</error>'
