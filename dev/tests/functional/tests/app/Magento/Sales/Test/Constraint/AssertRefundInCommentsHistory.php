@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -23,25 +24,25 @@ class AssertRefundInCommentsHistory extends AbstractConstraint
     /**
      * Assert that comment about refunded amount exist in Comments History section on order page in Admin.
      *
+     * @param OrderInjectable $order
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
      * @param string $orderId
-     * @param array $refundedPrices
      * @return void
      */
     public function processAssert(
+        OrderInjectable $order,
         SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
-        $orderId,
-        array $refundedPrices
+        $orderId
     ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
-
+        $refundedPrices = $order->getPrice()['refund'];
         $actualRefundedAmount = $salesOrderView->getOrderHistoryBlock()->getRefundedAmount();
         foreach ($refundedPrices as $key => $refundedPrice) {
             \PHPUnit_Framework_Assert::assertRegExp(
-                sprintf(self::REFUNDED_AMOUNT_PATTERN, $refundedPrice),
+                sprintf(self::REFUNDED_AMOUNT_PATTERN, $refundedPrice['grand_refund_total']),
                 $actualRefundedAmount[$key],
                 'Incorrect refunded amount value for the order #' . $orderId
             );

@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Test\TestStep;
 
+use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreditMemoNew;
@@ -59,9 +60,14 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
      * @var OrderInvoiceView
      */
     private $orderInvoiceView;
+    /**
+     * @var Cart
+     */
+    private $cart;
 
     /**
      * @construct
+     * @param Cart $cart
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
      * @param OrderInjectable $order
@@ -70,6 +76,7 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
      * @param array|null refundData [optional]
      */
     public function __construct(
+        Cart $cart,
         OrderIndex $orderIndex,
         SalesOrderView $salesOrderView,
         OrderInjectable $order,
@@ -83,6 +90,7 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
         $this->orderCreditMemoNew = $orderCreditMemoNew;
         $this->refundData = $refundData;
         $this->orderInvoiceView = $orderInvoiceView;
+        $this->cart = $cart;
     }
 
     /**
@@ -94,19 +102,20 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
     {
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid $invoicesGrid */
-        $invoicesGrid = $this->salesOrderView->getOrderForm()->getTab('invoices')->getGridBlock();
-        $this->salesOrderView->getOrderForm()->openTab('invoices');
-        $invoicesGrid->viewInvoice();
-        $this->salesOrderView->getPageActions()->orderInvoiceCreditMemo();
-        if (!empty($this->refundData)) {
+        $refundsData = $this->order->getRefund();
+        foreach ($refundsData as $refundData) {
+            /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid $invoicesGrid */
+            $invoicesGrid = $this->salesOrderView->getOrderForm()->getTab('invoices')->getGridBlock();
+            $this->salesOrderView->getOrderForm()->openTab('invoices');
+            $invoicesGrid->viewInvoice();
+            $this->salesOrderView->getPageActions()->orderInvoiceCreditMemo();
             $this->orderCreditMemoNew->getFormBlock()->fillProductData(
-                $this->refundData,
-                $this->order->getEntityId()['products']
+                $refundData,
+                $this->cart->getItems()
             );
             $this->orderCreditMemoNew->getFormBlock()->updateQty();
+            $this->orderCreditMemoNew->getFormBlock()->submit();
         }
-        $this->orderCreditMemoNew->getFormBlock()->submit();
 
         return ['ids' => ['creditMemoIds' => $this->getCreditMemoIds()]];
     }

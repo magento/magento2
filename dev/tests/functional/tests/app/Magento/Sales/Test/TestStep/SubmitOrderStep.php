@@ -8,6 +8,7 @@ namespace Magento\Sales\Test\TestStep;
 
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -61,13 +62,20 @@ class SubmitOrderStep implements TestStepInterface
     private $products;
 
     /**
-     * @constructor
+     * Fixture OrderInjectable.
+     *
+     * @var OrderInjectable
+     */
+    private $order;
+
+    /**
      * @param OrderCreateIndex $orderCreateIndex
      * @param SalesOrderView $salesOrderView
      * @param FixtureFactory $fixtureFactory
      * @param Customer $customer
      * @param Address $billingAddress
      * @param \Magento\Mtf\Fixture\FixtureInterface[] $products
+     * @param OrderInjectable $order
      */
     public function __construct(
         OrderCreateIndex $orderCreateIndex,
@@ -75,7 +83,8 @@ class SubmitOrderStep implements TestStepInterface
         FixtureFactory $fixtureFactory,
         Customer $customer,
         Address $billingAddress,
-        array $products
+        array $products,
+        OrderInjectable $order = null
     ) {
         $this->orderCreateIndex = $orderCreateIndex;
         $this->salesOrderView = $salesOrderView;
@@ -83,6 +92,7 @@ class SubmitOrderStep implements TestStepInterface
         $this->customer = $customer;
         $this->billingAddress = $billingAddress;
         $this->products = $products;
+        $this->order = $order;
     }
 
     /**
@@ -95,16 +105,16 @@ class SubmitOrderStep implements TestStepInterface
         $this->orderCreateIndex->getCreateBlock()->submitOrder();
         $this->salesOrderView->getMessagesBlock()->waitSuccessMessage();
         $orderId = trim($this->salesOrderView->getTitleBlock()->getTitle(), '#');
+        $data = [
+            'id' => $orderId,
+            'customer_id' => ['customer' => $this->customer],
+            'entity_id' => ['products' => $this->products],
+            'billing_address_id' => ['billingAddress' => $this->billingAddress],
+        ];
+        $orderData = $this->order !== null ? $this->order->getData() : [];
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
-            [
-                'data' => [
-                    'id' => $orderId,
-                    'customer_id' => ['customer' => $this->customer],
-                    'entity_id' => ['products' => $this->products],
-                    'billing_address_id' => ['billingAddress' => $this->billingAddress],
-                ]
-            ]
+            ['data' => array_merge($data, $orderData)]
         );
 
         return ['orderId' => $orderId, 'order' => $order];

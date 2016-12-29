@@ -38,7 +38,7 @@ class Items extends Block
      */
     public function getItemProductBlock(FixtureInterface $product)
     {
-        $selector = sprintf($this->productItems, $product->getSku());
+        $selector = sprintf($this->productItems, $product->getData()['sku']);
         return $this->blockFactory->create(
             \Magento\Sales\Test\Block\Adminhtml\Order\Creditmemo\Form\Items\Product::class,
             ['element' => $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)]

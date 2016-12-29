@@ -13,8 +13,10 @@
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="refundedPrices" xsi:type="array">
-                <item name="0" xsi:type="string">139.90</item>
+            <data name="order/data/price/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_refund_total" xsi:type="string">139.90</item>
+                </item>
             </data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
@@ -33,8 +35,10 @@
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="refundedPrices" xsi:type="array">
-                <item name="0" xsi:type="string">621.20</item>
+            <data name="order/data/price/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_refund_total" xsi:type="string">621.20</item>
+                </item>
             </data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
