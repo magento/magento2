@@ -73,9 +73,7 @@ class CreateCmsPageEntityMultipleStoreViewsTest extends Injectable
     {
         // Steps
         $cmsPageFixtures = [];
-        $identifier = 'identifier_' . time();
         foreach ($cmsPages as $cmsPage) {
-            $cmsPage['identifier'] = $identifier;
             $cmsPageFixture = $this->fixtureFactory->createByCode('cmsPage', ['data' => $cmsPage]);
             $cmsPageFixtures[] = $cmsPageFixture;
 
