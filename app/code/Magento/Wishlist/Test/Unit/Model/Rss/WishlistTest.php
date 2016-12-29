@@ -160,19 +160,6 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->will($this->returnValue($wishlistSharingUrl));
-        $this->scopeConfig->expects($this->any())
-            ->method('getValue')
-            ->will($this->returnValueMap(
-                    [
-                        [
-                            Data::XML_PATH_DEFAULT_LOCALE,
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                            null,
-                            $locale
-                        ],
-                    ]
-                )
-            );
 
         $staticArgs = [
             'productName' => $productName,

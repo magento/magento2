@@ -76,7 +76,7 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($abstractBlock);
 
         $infoMock = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
-            ->disableOriginalConstructor()->setMethods([])
+            ->disableOriginalConstructor()
             ->getMock();
         $methodMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();

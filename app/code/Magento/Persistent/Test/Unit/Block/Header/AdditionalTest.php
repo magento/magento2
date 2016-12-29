@@ -149,8 +149,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
             '',
             false,
             true,
-            true,
-            ['getValue']
+            true
         );
         $this->cacheStateMock = $this->getMockForAbstractClass(
             \Magento\Framework\App\Cache\StateInterface::class,

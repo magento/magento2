@@ -63,7 +63,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config::class, ['getValue'], [], '', false, false);
+        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false, false);
         $this->cacheState = $this->getMock(
             \Magento\Framework\App\Cache\State::class,
             ['isEnabled'],
