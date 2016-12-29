@@ -69,19 +69,24 @@ define(
             },
 
             /** Provide login action */
-            login: function (loginForm) {
+            login: function (formUiElement, event) {
                 var loginData = {},
-                    formDataArray = $(loginForm).serializeArray();
+                    formElement = $(event.currentTarget),
+                    formDataArray = formElement.serializeArray();
+
+                event.stopPropagation();
                 formDataArray.forEach(function (entry) {
                     loginData[entry.name] = entry.value;
                 });
 
-                if ($(loginForm).validation() &&
-                    $(loginForm).validation('isValid')
+                if (formElement.validation() &&
+                    formElement.validation('isValid')
                 ) {
                     this.isLoading(true);
-                    loginAction(loginData, null, false);
+                    loginAction(loginData);
                 }
+
+                return false;
             }
         });
     }
