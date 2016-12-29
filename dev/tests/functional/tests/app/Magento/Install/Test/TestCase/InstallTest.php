@@ -136,6 +136,7 @@ class InstallTest extends Injectable
      * @param bool $diCompile
      * @param array $install [optional]
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function test(
         User $user,
