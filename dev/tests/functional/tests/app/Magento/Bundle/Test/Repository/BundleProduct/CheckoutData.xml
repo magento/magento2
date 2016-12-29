@@ -85,6 +85,27 @@
             </field>
         </dataset>
 
+        <dataset name="bundle_fixed_100_dollar_buy_all">
+            <field name="options" xsi:type="array">
+                <item name="bundle_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Drop-down Option</item>
+                        <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="use_default" xsi:type="string">true</item>
+                        <item name="value" xsi:type="array">
+                            <item name="name" xsi:type="string">default_qty_1</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">110</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">110</item>
+            </field>
+        </dataset>
+
         <dataset name="bundle_update_mini_shopping_cart">
             <field name="options" xsi:type="array">
                 <item name="bundle_options" xsi:type="array">
@@ -393,6 +414,26 @@
             </field>
             <field name="cartItem" xsi:type="array">
                 <item name="configuredPrice" xsi:type="string">1680</item>
+            </field>
+        </dataset>
+
+        <dataset name="bundle_low_stock_fixed">
+            <field name="options" xsi:type="array">
+                <item name="bundle_options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Drop-down Option</item>
+                        <item name="type" xsi:type="string">Drop-down</item>
+                        <item name="value" xsi:type="array">
+                            <item name="name" xsi:type="string">low_stock_product</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="qty" xsi:type="string">1</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">756</item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">756</item>
             </field>
         </dataset>
 
