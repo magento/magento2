@@ -70,7 +70,7 @@ class RefreshReportsStatisticsTest extends Injectable
     public function test($action, $configData)
     {
         // Preconditions
-        $this->objectManager->create(
+        $this->testStepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]
         )->run();
