@@ -581,8 +581,8 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
 
             case \Magento\Framework\Exception\State\UserLockedException::class:
                 $message = __(
-                   'You did not sign in correctly or your account is temporarily disabled.'
-            );
+                    'You did not sign in correctly or your account is temporarily disabled.'
+                );
                 $this->messageManager->expects($this->once())
                     ->method('addError')
                     ->with($message)
