@@ -74,7 +74,7 @@ class SubmitOrderStep implements TestStepInterface
      * @param FixtureFactory $fixtureFactory
      * @param Customer $customer
      * @param \Magento\Mtf\Fixture\FixtureInterface[] $products
-     * @param OrderInjectable $order
+     * @param OrderInjectable|null $order
      * @param Address|null $billingAddress
      */
     public function __construct(
@@ -90,9 +90,9 @@ class SubmitOrderStep implements TestStepInterface
         $this->salesOrderView = $salesOrderView;
         $this->fixtureFactory = $fixtureFactory;
         $this->customer = $customer;
-        $this->billingAddress = $billingAddress;
         $this->products = $products;
         $this->order = $order;
+        $this->billingAddress = $billingAddress;
     }
 
     /**
