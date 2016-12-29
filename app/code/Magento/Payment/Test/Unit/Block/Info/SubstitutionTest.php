@@ -90,7 +90,8 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
         $this->layout->expects($this->any())
             ->method('createBlock')
             ->with(
-                \Magento\Framework\View\Element\Template::class, '',
+                \Magento\Framework\View\Element\Template::class,
+                '',
                 ['data' => ['method' => $methodMock, 'template' => 'Magento_Payment::info/substitution.phtml']]
             )->willReturn($fakeBlock);
 

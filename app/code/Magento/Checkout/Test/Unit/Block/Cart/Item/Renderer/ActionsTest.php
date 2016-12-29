@@ -65,10 +65,6 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
         $childNameTwo = 'child.2';
         $childNames = [$childNameOne, $childNameTwo];
 
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->willReturn(false);
-
         /**
          * @var Item|\PHPUnit_Framework_MockObject_MockObject $itemMock
          */
