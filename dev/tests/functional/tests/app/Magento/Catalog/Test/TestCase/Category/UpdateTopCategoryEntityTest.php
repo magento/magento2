@@ -140,7 +140,7 @@ class UpdateTopCategoryEntityTest extends Injectable
      * @param Category $initialCategory
      * @param array $categoriesBeforeSave
      * @param int $nestingLevel
-     * @return \Magento\Mtf\Fixture\FixtureInterface
+     * @return Category
      */
     private function getCategories(Category $initialCategory, &$categoriesBeforeSave, $nestingLevel)
     {
