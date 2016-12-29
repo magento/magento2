@@ -211,5 +211,16 @@
                 </item>
             </field>
         </dataset>
+
+        <dataset name="config_allowed_currency_usd_and_uah">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="US Dollar" xsi:type="string">USD</item>
+                    <item name="Ukrainian Hryvnia" xsi:type="string">UAH</item>
+                </item>
+            </field>
+        </dataset>
     </repository>
 </config>

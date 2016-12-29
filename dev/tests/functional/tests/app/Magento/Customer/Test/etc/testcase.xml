@@ -10,7 +10,8 @@
     <step name="createCustomer" module="Magento_Customer" next="openCustomerOnBackend"/>
     <step name="openCustomerOnBackend" module="Magento_Customer" next="createOrderFromCustomerAccount"/>
     <step name="createOrderFromCustomerAccount" module="Magento_Customer" next="createProducts"/>
-    <step name="createProducts" module="Magento_Catalog" next="addProducts"/>
+    <step name="createProducts" module="Magento_Catalog" next="selectStore"/>
+    <step name="selectStore" module="Magento_Sales" next="addProducts" />
     <step name="addProducts" module="Magento_Sales" next="updateProductsData"/>
     <step name="updateProductsData" module="Magento_Sales" next="fillBillingAddress"/>
     <step name="fillBillingAddress" module="Magento_Sales" next="fillShippingAddress"/>
