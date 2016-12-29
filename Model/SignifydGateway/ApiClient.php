@@ -14,6 +14,8 @@ use Magento\Signifyd\Model\SignifydGateway\Debugger\DebuggerFactory;
 
 /**
  * Encapsulates Signifyd API protocol.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ApiClient
 {
