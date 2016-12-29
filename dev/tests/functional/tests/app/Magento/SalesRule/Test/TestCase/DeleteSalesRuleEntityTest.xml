@@ -17,10 +17,13 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessDeleteMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleIsNotPresentedInGrid" />
         </variation>
-        <variation name="DeleteSalesRuleEntityTestVariation3">
+        <variation name="DeleteSalesRuleEntityTestVariation3" summary="Assert That Cart Price Rule Condition Is Not Applied" ticketId="MAGETWO-16987">
             <data name="salesRule/dataset" xsi:type="string">inactive_sales_rule</data>
+            <data name="productForSalesRule1/dataset" xsi:type="string">simple_for_salesrule_1</data>
+            <data name="productQuantity/productForSalesRule1" xsi:type="string">1</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessDeleteMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleIsNotPresentedInGrid" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleConditionIsNotApplied" />
         </variation>
     </testCase>
 </config>
