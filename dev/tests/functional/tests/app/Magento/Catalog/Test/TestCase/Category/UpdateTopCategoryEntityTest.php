@@ -109,7 +109,7 @@ class UpdateTopCategoryEntityTest extends Injectable
      * @param Category $currentCategory
      * @param array $data
      * @param int $nestingLevel
-     * @return \Magento\Mtf\Fixture\FixtureInterface
+     * @return Category
      */
     private function getCategoryFixture(&$categories, $currentCategory, $data, $nestingLevel)
     {
