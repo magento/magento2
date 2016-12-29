@@ -59,6 +59,27 @@ class FormPageActions extends ParentFormPageActions
     private $addAttribute = '[data-ui-id="addattribute-button"]';
 
     /**
+     * Default store switcher block locator.
+     *
+     * @var string
+     */
+    private $storeSwitcherBlock = '.store-switcher';
+
+    /**
+     * Dropdown block locator.
+     *
+     * @var string
+     */
+    private $dropdownBlock = '.dropdown';
+
+    /**
+     * Selector for confirm.
+     *
+     * @var string
+     */
+    private $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
      * Click on "Save" button.
      *
      * @param FixtureInterface|null $product [optional]
@@ -121,5 +142,27 @@ class FormPageActions extends ParentFormPageActions
     public function addNewAttribute()
     {
         $this->_rootElement->find($this->addAttribute)->click();
+    }
+
+    /**
+     * Change Store View scope.
+     *
+     * @param FixtureInterface $store
+     * @return void
+     */
+    public function changeStoreViewScope(FixtureInterface $store)
+    {
+        $this->waitForElementNotVisible($this->spinner);
+        $this->waitForElementVisible($this->storeSwitcherBlock);
+        $this->_rootElement->find($this->storeSwitcherBlock)
+            ->find($this->dropdownBlock, Locator::SELECTOR_CSS, 'liselectstore')
+            ->setValue(sprintf('%s/%s', $store->getGroupId(), $store->getName()));
+        $modalElement = $this->browser->find($this->confirmModal);
+        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+        $modal = $this->blockFactory->create(
+            \Magento\Ui\Test\Block\Adminhtml\Modal::class,
+            ['element' => $modalElement]
+        );
+        $modal->acceptAlert();
     }
 }

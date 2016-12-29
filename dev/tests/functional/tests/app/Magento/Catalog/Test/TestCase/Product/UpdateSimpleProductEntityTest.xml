@@ -169,5 +169,13 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCart" />
         </variation>
+        <variation name="UpdateSimpleProductEntityTestVariation12" summary="Verify data overriding on Store View level" ticketId="MAGETWO-50640">
+            <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
+            <data name="store/dataset" xsi:type="string">custom</data>
+            <data name="product/data/use_default_name" xsi:type="string">No</data>
+            <data name="product/data/name" xsi:type="string">Test simple product %isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductNameOnDifferentStoreViews" />
+        </variation>
     </testCase>
 </config>
