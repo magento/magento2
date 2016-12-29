@@ -8,6 +8,7 @@ namespace Magento\Braintree\Test\TestStep;
 use Magento\Braintree\Test\Fixture\BraintreeSandboxCustomer;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
+use Magento\Mtf\ObjectManagerFactory;
 use Braintree\Gateway;
 use Magento\Mtf\TestStep\TestStepInterface;
 
@@ -70,7 +71,7 @@ class SettleTransactionStep implements TestStepInterface
     public function run()
     {
         $credentials = $this->braintreeSandboxCustomer->getData();
-        $gateway = new Gateway($credentials);
+        $gateway = ObjectManagerFactory::getObjectManager()->create(Gateway::class, ['config' => $credentials]);
         $transactionId = $this->getTransactionId();
         $gateway->testing()->settle($transactionId);
     }
