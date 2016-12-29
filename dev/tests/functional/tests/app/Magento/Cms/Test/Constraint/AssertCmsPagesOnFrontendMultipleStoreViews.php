@@ -52,6 +52,6 @@ class AssertCmsPagesOnFrontendMultipleStoreViews extends AbstractConstraint
      */
     public function toString()
     {
-        return 'CMS Page content equals to data from fixture.';
+        return 'Created CMS Page displayed on store view with expected content.';
     }
 }
