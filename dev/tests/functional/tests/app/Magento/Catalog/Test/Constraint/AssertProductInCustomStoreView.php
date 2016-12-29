@@ -40,7 +40,7 @@ class AssertProductInCustomStoreView extends AbstractAssertForm
     private $cmsIndexPage;
 
     /**
-     * Assert that product name is correct in Custom adn Default store views.
+     * Assert that product name is correct in Custom and Default store views.
      *
      * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
