@@ -73,18 +73,18 @@ class SubmitOrderStep implements TestStepInterface
      * @param SalesOrderView $salesOrderView
      * @param FixtureFactory $fixtureFactory
      * @param Customer $customer
-     * @param Address $billingAddress
      * @param \Magento\Mtf\Fixture\FixtureInterface[] $products
      * @param OrderInjectable $order
+     * @param Address|null $billingAddress
      */
     public function __construct(
         OrderCreateIndex $orderCreateIndex,
         SalesOrderView $salesOrderView,
         FixtureFactory $fixtureFactory,
         Customer $customer,
-        Address $billingAddress,
         array $products,
-        OrderInjectable $order = null
+        OrderInjectable $order = null,
+        Address $billingAddress = null
     ) {
         $this->orderCreateIndex = $orderCreateIndex;
         $this->salesOrderView = $salesOrderView;

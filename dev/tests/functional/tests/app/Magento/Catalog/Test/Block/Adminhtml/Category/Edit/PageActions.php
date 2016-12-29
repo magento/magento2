@@ -17,7 +17,7 @@ class PageActions extends FormPageActions
     /**
      * Top page element to implement a scrolling in case of floating blocks overlay.
      */
-    const TOP_ELEMENT_TO_SCROLL = '.page-title';
+    const TOP_ELEMENT_TO_SCROLL = 'header.page-header';
 
     /**
      * Locator for "OK" button in warning block
@@ -62,7 +62,7 @@ class PageActions extends FormPageActions
      */
     public function selectStoreView($name)
     {
-        $this->browser->find(self::TOP_ELEMENT_TO_SCROLL)->click();
+        $this->browser->find(self::TOP_ELEMENT_TO_SCROLL)->hover();
         $this->_rootElement->find($this->storeChangeButton)->click();
         $this->waitForElementVisible($name, Locator::SELECTOR_LINK_TEXT);
         $this->_rootElement->find($name, Locator::SELECTOR_LINK_TEXT)->click();

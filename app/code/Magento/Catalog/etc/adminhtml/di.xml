@@ -169,4 +169,9 @@
             <argument name="scopeName" xsi:type="string">product_form.product_form</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice">
+        <arguments>
+            <argument name="productPriceOptions" xsi:type="object">Magento\Catalog\Model\Config\Source\Product\Options\TierPrice</argument>
+        </arguments>
+    </type>
 </config>
