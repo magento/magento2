@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateSimpleProductEntityTest" summary="Add Video to PCF" ticketId="PV-1">
         <variation name="DeleteVideoFromPCFTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Delete video youtube</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_video_youtube</data>
             <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
@@ -18,6 +19,7 @@
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoProductView" />
         </variation>
         <variation name="DeleteVideoFromPCFTestVariation2">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Delete video vimeo</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_video_vimeo</data>
             <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
@@ -28,6 +30,7 @@
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoProductView" />
         </variation>
         <variation name="AddVideoToPCFTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Add youtube video with all available fields filled in</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
@@ -40,6 +43,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
         </variation>
         <variation name="AddVideoToPCFTestVariation2">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Add vimeo video with all available fields filled in</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
@@ -52,6 +56,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
         </variation>
         <variation name="AddVideoToPCFTestVariation3">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
@@ -63,6 +68,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
         </variation>
         <variation name="AddVideoToPCFTestVariation4">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
             <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/21776334</data>
@@ -73,6 +79,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
         </variation>
         <variation name="UpdateVideoInPCFTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Edit Youtube URL</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_video_youtube</data>
             <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
@@ -81,6 +88,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
         </variation>
         <variation name="UpdateVideoInPCFTestVariation2">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Edit vimeo URL</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_video_youtube</data>
             <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
@@ -89,6 +97,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
         </variation>
         <variation name="UpdateVideoInPCFTestVariation3">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Edit all available fields except URL</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_video_vimeo</data>
             <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
@@ -98,6 +107,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
         </variation>
         <variation name="UpdateVideoInPCFTestVariation4">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Edit all fields</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_video_vimeo</data>
             <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
@@ -108,6 +118,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
         </variation>
         <variation name="GetVideoInfoTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Validate Youtube video info</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
@@ -117,6 +128,7 @@
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertGetVideoInfoDataIsCorrect" />
         </variation>
         <variation name="GetVideoInfoTestVariation2">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Validate Vimeo video info</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>

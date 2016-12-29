@@ -66,6 +66,7 @@ class SuggestElement extends SimpleElement
             $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
             if ($searchedItem->isVisible()) {
                 try {
+                    $searchedItem->hover();
                     $searchedItem->click();
                     break;
                 } catch (\Exception $e) {

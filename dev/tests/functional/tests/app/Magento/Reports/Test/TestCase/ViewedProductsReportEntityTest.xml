@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Reports\Test\TestCase\ViewedProductsReportEntityTest" summary="Viewed Products Report" ticketId="MAGETWO-27954">
         <variation name="ViewedProductsReportEntityTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">View products on front and verify they all reflected in Year report.</data>
             <data name="total" xsi:type="string">1, 1</data>
             <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
@@ -18,6 +19,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertProductViewsReportTotalResult" />
         </variation>
         <variation name="ViewedProductsReportEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">View products on front and verify they all reflected in Month report.</data>
             <data name="total" xsi:type="string">1, 1</data>
             <data name="products" xsi:type="string">downloadableProduct::default, bundleProduct::bundle_dynamic_product</data>
@@ -28,6 +30,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertProductViewsReportTotalResult" />
         </variation>
         <variation name="ViewedProductsReportEntityTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">View products on front and verify they all reflected in Day report.</data>
             <data name="total" xsi:type="string">1, 1</data>
             <data name="products" xsi:type="string">configurableProduct::default, groupedProduct::default</data>

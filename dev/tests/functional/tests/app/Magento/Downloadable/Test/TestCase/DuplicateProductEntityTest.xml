@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\DuplicateProductEntityTest">
         <variation name="DuplicateProductEntityTestVariation3" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="productType" xsi:type="string">downloadableProduct::default</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertProductDuplicateMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductDuplicateMessage" next="Magento\Downloadable\Test\Constraint\AssertDownloadableDuplicateForm" />

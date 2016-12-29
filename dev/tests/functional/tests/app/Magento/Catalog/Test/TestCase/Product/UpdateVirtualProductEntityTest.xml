@@ -29,6 +29,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation2">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">120.00</data>
@@ -49,6 +50,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation3">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">185.00</data>
@@ -70,6 +72,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation4">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -86,6 +89,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation5">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">5.00</data>
@@ -122,6 +126,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation7">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -140,6 +145,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation8">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">5.00</data>
@@ -177,6 +183,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation10">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -193,6 +200,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation11">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>

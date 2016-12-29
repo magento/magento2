@@ -81,7 +81,7 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
         $this->currencyIndex->open();
         $this->currencyIndex->getCurrencyRateForm()->clickImportButton();
         if ($this->currencyIndex->getMessagesBlock()->isVisibleMessage('warning')) {
-            throw new \Exception($this->currencyIndex->getMessagesBlock()->getWarningMessages());
+            throw new \Exception($this->currencyIndex->getMessagesBlock()->getWarningMessage());
         }
         $this->currencyIndex->getFormPageActions()->save();
     }

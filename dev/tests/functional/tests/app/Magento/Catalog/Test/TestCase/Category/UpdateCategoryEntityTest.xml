@@ -47,6 +47,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
         <variation name="UpdateCategoryEntityTestVariation4" summary="Update Category with custom Store View.">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="category/data/store_id/dataset" xsi:type="string">custom</data>
             <data name="category/data/name" xsi:type="string">Category %isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />

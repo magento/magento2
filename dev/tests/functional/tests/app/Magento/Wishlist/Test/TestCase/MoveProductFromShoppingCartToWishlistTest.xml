@@ -8,18 +8,21 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Wishlist\Test\TestCase\MoveProductFromShoppingCartToWishlistTest" summary="Move Products from Shopping Cart to Wishlist" ticketId="MAGETWO-29545">
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation1" firstConstraint="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" method="test">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product" xsi:type="string">catalogProductSimple::default</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" prev="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" prev="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
         </variation>
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation2" firstConstraint="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" method="test">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product" xsi:type="string">catalogProductVirtual::default</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" prev="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" prev="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
         </variation>
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation3" firstConstraint="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" method="test">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" prev="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" />
@@ -27,6 +30,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" prev="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
         </variation>
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation4" firstConstraint="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" method="test">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" prev="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" />
@@ -34,6 +38,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" prev="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
         </variation>
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation5" firstConstraint="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" method="test">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" prev="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" />
@@ -41,6 +46,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" prev="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
         </variation>
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation6" firstConstraint="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" method="test">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" next="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" next="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" prev="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" />

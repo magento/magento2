@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogRule\Test\TestCase\CreateCatalogRuleTest" summary="Applying Catalog Rule for Simple Product if Custom options with fixed price" ticketId="MAGETWO-23036">
         <variation name="CreateCatalogRuleTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product" xsi:type="string">MAGETWO-23036</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>
             <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
