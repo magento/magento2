@@ -12,7 +12,6 @@ use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
@@ -127,13 +126,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $scopeConfigMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn('test@host.com');
-
         $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -157,11 +149,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             'emailNotification',
             $this->emailNotification
         );
-        $objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'scopeConfig',
-            $scopeConfigMock
-        );
+
         $objectManager->setBackwardCompatibleProperty(
             $this->model,
             'authentication',
