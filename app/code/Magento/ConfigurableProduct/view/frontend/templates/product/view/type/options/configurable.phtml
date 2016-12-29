@@ -33,7 +33,9 @@ $_attributes = $block->decorateArray($block->getAllowAttributes());
         {
             "#product_addtocart_form": {
                 "configurable": {
-                    "spConfig": <?php /* @escapeNotVerified */ echo $block->getJsonConfig() ?>
+                    "spConfig": <?php /* @escapeNotVerified */ echo $block->getJsonConfig() ?>,
+                    "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar('gallery_switch_strategy',
+                        'Magento_ConfigurableProduct') ?: 'replace'; ?>"
                 }
             }
         }
