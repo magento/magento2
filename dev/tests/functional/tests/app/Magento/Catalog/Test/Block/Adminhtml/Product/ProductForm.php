@@ -97,6 +97,7 @@ class ProductForm extends FormSections
         } else {
             $sections = $this->getFixtureFieldsByContainers($product);
             if ($product->hasData('category_ids') || $category) {
+                $sections['product-details']['category_ids']['value'] = [];
                 $categories = $product->hasData('category_ids')
                     ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
                     : [$category];
@@ -107,8 +108,11 @@ class ProductForm extends FormSections
                         $this->getNewCategoryModalForm()->addNewCategory($category);
                     }
                 }
-                $sections['product-details']['category_ids']['value'] =
-                    array_unique($sections['product-details']['category_ids']['value']);
+                if (empty($sections['product-details']['category_ids']['value'])) {
+                    // We need to clear 'category_ids' key in case of category(es) absence in Product Fixture
+                    // to avoid force clear related form input on edit product page
+                    unset($sections['product-details']['category_ids']);
+                }
             }
             $this->fillContainers($sections, $element);
         }
