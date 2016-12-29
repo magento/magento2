@@ -8,6 +8,8 @@
 
 namespace Magento\GiftMessage\Helper;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
+
 /**
  * Gift Message helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -193,20 +195,20 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check availablity of gift messages from store config if flag eq 2.
      *
-     * @param bool $productGiftMessageAllow
+     * @param bool $productConfig
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool|string|null
      */
-    protected function _getDependenceFromStoreConfig($productGiftMessageAllow, $store = null)
+    protected function _getDependenceFromStoreConfig($productConfig, $store = null)
     {
         $result = $this->scopeConfig->getValue(
             self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store
         );
-        if ($productGiftMessageAllow === '' || is_null($productGiftMessageAllow)) {
+        if ($productConfig === null || '' === $productConfig || $productConfig == Boolean::VALUE_USE_CONFIG) {
             return $result;
         } else {
-            return $productGiftMessageAllow;
+            return $productConfig;
         }
     }
 
