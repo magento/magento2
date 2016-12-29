@@ -176,6 +176,7 @@ class Tree extends Block
             sprintf($this->categoryInTree, $parentCategoryName),
             Locator::SELECTOR_XPATH
         );
+        $targetElement->hover();
         $this->_rootElement->find(sprintf($this->categoryInTree, $childCategoryName), Locator::SELECTOR_XPATH)
             ->dragAndDrop($targetElement);
     }
@@ -185,7 +186,7 @@ class Tree extends Block
      *
      * @return void
      */
-    protected function expandAllCategories()
+    public function expandAllCategories()
     {
         $this->_rootElement->find($this->expandAll)->click();
     }

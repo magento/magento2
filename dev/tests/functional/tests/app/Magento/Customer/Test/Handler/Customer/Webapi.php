@@ -79,6 +79,7 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         $data['customer'] = $this->replaceMappingData($customer->getData());
         $data['customer']['group_id'] = $this->getCustomerGroup($customer);
         $data['password'] = $data['customer']['password'];
+        $data['customer']['website_id'] = $this->getCustomerWebsite($customer);
         unset($data['customer']['password']);
         unset($data['customer']['password_confirmation']);
         $data = $this->prepareAddressData($data);
@@ -181,5 +182,16 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         }
 
         return $addressData;
+    }
+
+    /**
+     * Prepare customer website data.
+     *
+     * @param Customer $customer
+     * @return int
+     */
+    private function getCustomerWebsite(Customer $customer)
+    {
+        return $customer->getDataFieldConfig('website_id')['source']->getWebsite()->getWebsiteId();
     }
 }
