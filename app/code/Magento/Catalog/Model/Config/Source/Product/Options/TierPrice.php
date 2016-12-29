@@ -8,11 +8,9 @@ namespace Magento\Catalog\Model\Config\Source\Product\Options;
 use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 
 /**
- * Price types mode source
- *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * TierPrice types mode source.
  */
-class Price implements ProductPriceOptionsInterface
+class TierPrice implements ProductPriceOptionsInterface
 {
     /**
      * {@inheritdoc}
@@ -23,7 +21,7 @@ class Price implements ProductPriceOptionsInterface
     {
         return [
             ['value' => self::VALUE_FIXED, 'label' => __('Fixed')],
-            ['value' => self::VALUE_PERCENT, 'label' => __('Percent')],
+            ['value' => self::VALUE_PERCENT, 'label' => __('Discount')],
         ];
     }
 }

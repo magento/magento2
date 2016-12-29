@@ -123,4 +123,25 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Price\CostStorage">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="2" xsi:type="string">downloadable</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Price\TierPriceValidator">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="3" xsi:type="string">downloadable</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Price\BasePriceStorage">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="3" xsi:type="string">downloadable</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
