@@ -173,7 +173,16 @@ class ApiClient
             throw new ApiCallException($errorMessage);
         }
 
-        $responseBody = $response->getBody();
+        $responseBody = (string)$response->getBody();
+
+        if (PHP_VERSION_ID < 70000 && empty($responseBody)) {
+            /*
+             * Only since PHP 7.0 empty string treated as JSON syntax error
+             * http://php.net/manual/en/function.json-decode.php
+             */
+            throw new ApiCallException('Response is not valid JSON: Decoding failed: Syntax error');
+        }
+
         try {
             $decodedResponseBody = $this->dataDecoder->decode($responseBody);
         } catch (\Exception $e) {
