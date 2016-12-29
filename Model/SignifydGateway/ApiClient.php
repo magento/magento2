@@ -5,13 +5,12 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway;
 
-use Magento\Signifyd\Model\Config;
-use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Json\DecoderInterface;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Signifyd\Model\Config;
 use Magento\Signifyd\Model\SignifydGateway\Debugger\DebuggerFactory;
-use Exception;
 
 /**
  * Encapsulates Signifyd API protocol.
