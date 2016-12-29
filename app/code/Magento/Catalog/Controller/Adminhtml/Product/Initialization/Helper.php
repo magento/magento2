@@ -3,12 +3,11 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
 /**
  * Product initialization helper class
- * 
- * @package Magento\Catalog\Controller\Adminhtml\Product\Initialization
  */
 class Helper
 {
@@ -67,18 +66,16 @@ class Helper
     }
 
     /**
-     * Initialize product from data
+     * Initialize product before saving
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param array $productData
      * @return \Magento\Catalog\Model\Product
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function initializeFromData(\Magento\Catalog\Model\Product $product, array $productData = null)
+    public function initialize(\Magento\Catalog\Model\Product $product)
     {
-        $productData = $productData ?: $this->request->getPost('product', []);
+        $productData = $this->request->getPost('product', []);
         unset($productData['custom_attributes']);
         unset($productData['extension_attributes']);
 
@@ -154,7 +151,7 @@ class Helper
             foreach ($options as &$customOptionData) {
                 if (isset($customOptionData['values'])) {
                     $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
-                        return empty($valueData['is_delete']);
+                        return !($valueData['option_type_id'] == '-1' && !empty($valueData['is_delete']));
                     });
                 }
             }
@@ -166,18 +163,6 @@ class Helper
         );
 
         return $product;
-    }
-
-    /**
-     * Initialize product before saving
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
-     */
-    public function initialize(\Magento\Catalog\Model\Product $product)
-    {
-        $productData = $this->request->getPost('product', []);
-        return $this->initializeFromData($product, $productData);
     }
 
     /**

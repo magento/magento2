@@ -4,16 +4,11 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
-use Magento\Catalog\Controller\Adminhtml\Product\NewAction;
+namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
 /**
  * Class to test new product creation
- *
- * @package Magento\Catalog\Test\Unit\Controller\Adminhtml\Product
  */
 class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest
 {
@@ -28,11 +23,6 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
     protected $product;
 
-    /**
-     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $initializationHelper;
-
     protected function setUp()
     {
         $this->productBuilder = $this->getMock(
@@ -42,7 +32,8 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
             '',
             false
         );
-        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)->disableOriginalConstructor()
+        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
             ->setMethods(['addData', 'getTypeId', 'getStoreId', '__sleep', '__wakeup'])->getMock();
         $this->product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
         $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
@@ -70,24 +61,19 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
         $resultForwardFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->resultForward);
-        $this->initializationHelper = $this->getMock(Helper::class, [], [], '', false);
-        $stockDataFilter = $this->getMockBuilder(StockDataFilter::class)
-            ->disableOriginalConstructor()->getMock();
 
-        $this->action = $this->getMockBuilder(NewAction::class)
-            ->setMethods(['getInitializationHelper'])
-            ->setConstructorArgs(
-                [
-                    'context' => $this->initContext(),
-                    'productBuilder' => $this->productBuilder,
-                    'stockFilter' => $stockDataFilter,
-                    'resultPageFactory' => $resultPageFactory,
-                    'resultForwardFactory' => $resultForwardFactory,
-                ]
-            )->getMock();
+        $stockFilter = $this->getMockBuilder(
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter::class
+        )->disableOriginalConstructor()->getMock();
 
-        $this->action->method('getInitializationHelper')->willReturn($this->initializationHelper);
-        $this->action->method('getRequest')->willReturn($this->request);
+        $this->action = new \Magento\Catalog\Controller\Adminhtml\Product\NewAction(
+            $this->initContext(),
+            $this->productBuilder,
+            $stockFilter,
+            $resultPageFactory,
+            $resultForwardFactory
+        );
+
         $this->resultPage->expects($this->atLeastOnce())
             ->method('getLayout')
             ->willReturn($this->layout);
@@ -107,15 +93,10 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
         $this->action->getRequest()->expects($this->any())->method('getFullActionName')
             ->willReturn('catalog_product_new');
 
-        $productData = ['name' => 'test-name', 'stock_data' => null];
         $this->session->expects($this->any())->method('getProductData')
-            ->willReturn(['product' => $productData]);
+            ->willReturn(['product' => ['name' => 'test-name']]);
 
-        $this->initializationHelper
-            ->expects($this->once())
-            ->method('initializeFromData')
-            ->with($this->product, $productData)
-            ->willReturn($this->product);
+        $this->product->expects($this->once())->method('addData')->with(['name' => 'test-name', 'stock_data' => null]);
 
         $this->action->execute();
     }

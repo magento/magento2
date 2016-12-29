@@ -3,6 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
@@ -155,8 +156,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             'option1' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '13'],
             'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '14',
                 'values' => [
-                    'value1' => ['is_delete' =>''],
-                    'value2' => ['is_delete' =>'1']
+                    'value1' => ['option_type_id' => 1, 'is_delete' =>''],
+                    'value2' => ['option_type_id' => '-1', 'is_delete' =>'1']
                 ]
             ],
         ];

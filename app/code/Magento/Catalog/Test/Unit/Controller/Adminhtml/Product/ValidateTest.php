@@ -7,58 +7,41 @@
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class to test product validation  before save
- *
- * @package Magento\Catalog\Test\Unit\Controller\Adminhtml\Product
  */
 class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest
 {
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Validate */
     protected $action;
-
     /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultPage;
-
     /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultForward;
-
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit_Framework_MockObject_MockObject */
     protected $productBuilder;
-
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
     protected $product;
-
     /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultRedirectFactory;
-
     /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultRedirect;
-
     /** @var Helper|\PHPUnit_Framework_MockObject_MockObject */
     protected $initializationHelper;
-
     /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $productFactory;
-
     /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultJson;
-
     /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultJsonFactory;
-
-    /** @var  \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit_Framework_MockObject_MockObject */
-    protected $dateFilter;
-
-    /** @var  \Magento\Catalog\Model\Product\Validator|\PHPUnit_Framework_MockObject_MockObject */
-    protected $productValidator;
-
-    /** @var   */
-    protected $layoutFactory;
+    /** @var  ObjectManagerHelper */
+    protected $objectManagerHelper;
 
     protected function setUp()
     {
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->productBuilder = $this->getMock(
             \Magento\Catalog\Controller\Adminhtml\Product\Builder::class,
             ['build'],
@@ -115,7 +98,13 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
         );
         $this->resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);
 
-        $this->initializationHelper = $this->getMock(Helper::class, [], [], '', false);
+        $this->initializationHelper = $this->getMock(
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->productFactory = $this->getMockBuilder(\Magento\Catalog\Model\ProductFactory::class)
             ->disableOriginalConstructor()
@@ -130,46 +119,26 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
             ->getMock();
         $this->resultJsonFactory->expects($this->any())->method('create')->willReturn($this->resultJson);
 
-        $this->dateFilter = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\Filter\Date::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->productValidator = $this->getMockBuilder(\Magento\Catalog\Model\Product\Validator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->layoutFactory = $this->getMockBuilder(\Magento\Framework\View\LayoutFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $additionalParams = ['resultRedirectFactory' => $this->resultRedirectFactory];
-        $this->action = $this->getMockBuilder(\Magento\Catalog\Controller\Adminhtml\Product\Validate::class)
-            ->setMethods(['getInitializationHelper'])
-            ->setConstructorArgs(
-                [
-                    'context' => $this->initContext($additionalParams),
-                    'productBuilder' => $this->productBuilder,
-                    'dateFilter' => $this->dateFilter,
-                    'productValidator' => $this->productValidator,
-                    'resultJsonFactory' => $this->resultJsonFactory,
-                    'layoutFactory' =>  $this->layoutFactory,
-                    'productFactory' => $this->productFactory,
-
-                ]
-            )->getMock();
-        $this->action->method('getInitializationHelper')->willReturn($this->initializationHelper);
+        $this->action = $this->objectManagerHelper->getObject(
+            \Magento\Catalog\Controller\Adminhtml\Product\Validate::class,
+            [
+                'context' => $this->initContext($additionalParams),
+                'productBuilder' => $this->productBuilder,
+                'resultPageFactory' => $resultPageFactory,
+                'resultForwardFactory' => $resultForwardFactory,
+                'initializationHelper' => $this->initializationHelper,
+                'resultJsonFactory' => $this->resultJsonFactory,
+                'productFactory' => $this->productFactory,
+            ]
+        );
     }
 
     public function testAttributeSetIsObtainedFromPostByDefault()
     {
         $this->request->expects($this->any())->method('getParam')->willReturnMap([['set', null, 4]]);
-        $this->request->expects($this->any())->method('getPost')->willReturnMap([
-            ['set', null, 9],
-            ['product', [], []],
-        ]);
+        $this->request->expects($this->any())->method('getPost')->willReturnMap([['set', null, 9]]);
         $this->product->expects($this->once())->method('setAttributeSetId')->with(9);
-        $this->initializationHelper->expects($this->any())->method('initializeFromData')
-            ->willReturn($this->product);
 
         $this->action->execute();
     }
@@ -177,30 +146,8 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
     public function testAttributeSetIsObtainedFromGetWhenThereIsNoOneInPost()
     {
         $this->request->expects($this->any())->method('getParam')->willReturnMap([['set', null, 4]]);
-        $this->request->expects($this->any())->method('getPost')->willReturnMap([
-            ['set', null, null],
-            ['product', [], []],
-        ]);
+        $this->request->expects($this->any())->method('getPost')->willReturnMap([['set', null, null]]);
         $this->product->expects($this->once())->method('setAttributeSetId')->with(4);
-        $this->initializationHelper->expects($this->any())
-            ->method('initializeFromData')
-            ->willReturn($this->product);
-
-        $this->action->execute();
-    }
-
-    public function testInitializeFromData()
-    {
-        $productData = ['name' => 'test-name', 'stock_data' => ['use_config_manage_stock' => 0]];
-        $this->request->expects($this->any())->method('getPost')->willReturnMap([
-            ['product', [], $productData],
-        ]);
-
-        $this->initializationHelper
-            ->expects($this->once())
-            ->method('initializeFromData')
-            ->with($this->product, $productData)
-            ->willReturn($this->product);
 
         $this->action->execute();
     }
