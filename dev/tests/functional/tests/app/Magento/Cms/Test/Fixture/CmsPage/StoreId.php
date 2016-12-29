@@ -8,6 +8,7 @@ namespace Magento\Cms\Test\Fixture\CmsPage;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Cms Page store id scope.
@@ -17,12 +18,18 @@ class StoreId extends DataSource
     /**
      * Store fixture.
      *
-     * @var \Magento\Store\Test\Fixture\Store
+     * @var Store
      */
-    public $store;
+    private $store;
 
     /**
-     * @constructor
+     * Fixture factory instance.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array|string $data [optional]
@@ -30,18 +37,8 @@ class StoreId extends DataSource
     public function __construct(FixtureFactory $fixtureFactory, array $params, $data = [])
     {
         $this->params = $params;
-
-        if (is_array($data) && isset($data['dataset'])) {
-            $store = $fixtureFactory->createByCode('store', $data);
-            /** @var \Magento\Store\Test\Fixture\Store $store */
-            if (!$store->getStoreId()) {
-                $store->persist();
-            }
-            $this->store = $store;
-            $this->data = $store->getGroupId() . '/' . $store->getName();
-        } else {
-            $this->data = $data;
-        }
+        $this->fixtureFactory = $fixtureFactory;
+        $this->processData($data);
     }
 
     /**
@@ -52,5 +49,25 @@ class StoreId extends DataSource
     public function getStore()
     {
         return $this->store;
+    }
+
+    /**
+     * Process input data.
+     *
+     * @param array|string $data
+     */
+    private function processData($data)
+    {
+        if (is_array($data) && isset($data['dataset'])) {
+            $store = $this->fixtureFactory->createByCode('store', $data);
+            /** @var Store $store */
+            if (!$store->getStoreId()) {
+                $store->persist();
+            }
+            $this->store = $store;
+            $this->data = $store->getGroupId() . '/' . $store->getName();
+        } else {
+            $this->data = $data;
+        }
     }
 }
