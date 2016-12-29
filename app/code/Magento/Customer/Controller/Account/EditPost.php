@@ -61,11 +61,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     private $emailNotification;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @var AuthenticationInterface
      */
     private $authentication;
