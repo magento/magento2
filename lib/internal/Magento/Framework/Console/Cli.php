@@ -5,18 +5,19 @@
  */
 namespace Magento\Framework\Console;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
 use Magento\Framework\Composer\ComposerJsonFinder;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Application as SymfonyApplication;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Symfony\Component\Console;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Shell\ComplexParameter;
 use Magento\Setup\Console\CompilerPreparation;
 use Magento\Framework\App\ProductMetadata;
 use Magento\Framework\ObjectManagerInterface;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Magento 2 CLI Application.
@@ -25,7 +26,7 @@ use Magento\Framework\ObjectManagerInterface;
  * {@inheritdoc}
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Cli extends SymfonyApplication
+class Cli extends Console\Application
 {
     /**
      * Name of input option.
@@ -42,7 +43,7 @@ class Cli extends SymfonyApplication
     /**
      * Service Manager.
      *
-     * @var \Zend\ServiceManager\ServiceManager
+     * @var ServiceManager
      */
     private $serviceManager;
 
@@ -52,6 +53,11 @@ class Cli extends SymfonyApplication
      * @var \Exception
      */
     private $initException;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
 
     /**
      * Constructor.
@@ -66,6 +72,9 @@ class Cli extends SymfonyApplication
         $this->serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
             ->getServiceManager();
 
+        $this->initObjectManager();
+        $this->assertGenerationPermissions();
+
         /**
          * Temporary workaround until the compiler is able to clear the generation directory
          * @todo remove after MAGETWO-44493 resolved
@@ -73,7 +82,7 @@ class Cli extends SymfonyApplication
         if (class_exists(CompilerPreparation::class)) {
             $compilerPreparation = new CompilerPreparation(
                 $this->serviceManager,
-                new ArgvInput(),
+                new Console\Input\ArgvInput(),
                 new File()
             );
 
@@ -81,9 +90,9 @@ class Cli extends SymfonyApplication
         }
 
         if ($version == 'UNKNOWN') {
-            $directoryList      = new DirectoryList(BP);
+            $directoryList = new DirectoryList(BP);
             $composerJsonFinder = new ComposerJsonFinder($directoryList);
-            $productMetadata    = new ProductMetadata($composerJsonFinder);
+            $productMetadata = new ProductMetadata($composerJsonFinder);
             $version = $productMetadata->getVersion();
         }
 
@@ -93,18 +102,21 @@ class Cli extends SymfonyApplication
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
+     * @throws \Exception the exception in case of unexpected error
      */
-    public function doRun(InputInterface $input, OutputInterface $output)
+    public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
         $exitCode = parent::doRun($input, $output);
+
         if ($this->initException) {
             $output->writeln(
                 "<error>We're sorry, an error occurred. Try clearing the cache and code generation directories. "
                 . "By default, they are: var/cache, var/di, var/generation, and var/page_cache.</error>"
             );
+
             throw $this->initException;
         }
+
         return $exitCode;
     }
 
@@ -119,37 +131,81 @@ class Cli extends SymfonyApplication
     /**
      * Gets application commands
      *
-     * @return array
+     * @return array a list of available application commands
      */
     protected function getApplicationCommands()
     {
         $commands = [];
         try {
-            $bootstrapParam = new ComplexParameter(self::INPUT_KEY_BOOTSTRAP);
-            $params = $bootstrapParam->mergeFromArgv($_SERVER, $_SERVER);
-            $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
-            $bootstrap = Bootstrap::create(BP, $params);
-            $objectManager = $bootstrap->getObjectManager();
-            /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
-            $omProvider = $this->serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class);
-            $omProvider->setObjectManager($objectManager);
-
             if (class_exists(\Magento\Setup\Console\CommandList::class)) {
                 $setupCommandList = new \Magento\Setup\Console\CommandList($this->serviceManager);
                 $commands = array_merge($commands, $setupCommandList->getCommands());
             }
 
-            if ($objectManager->get(\Magento\Framework\App\DeploymentConfig::class)->isAvailable()) {
+            if ($this->objectManager->get(DeploymentConfig::class)->isAvailable()) {
                 /** @var \Magento\Framework\Console\CommandListInterface */
-                $commandList = $objectManager->create(\Magento\Framework\Console\CommandListInterface::class);
+                $commandList = $this->objectManager->create(CommandListInterface::class);
                 $commands = array_merge($commands, $commandList->getCommands());
             }
 
-            $commands = array_merge($commands, $this->getVendorCommands($objectManager));
+            $commands = array_merge(
+                $commands,
+                $this->getVendorCommands($this->objectManager)
+            );
         } catch (\Exception $e) {
             $this->initException = $e;
         }
+
         return $commands;
+    }
+
+    /**
+     * Object Manager initialization.
+     *
+     * @return void
+     */
+    private function initObjectManager()
+    {
+        $params = (new ComplexParameter(self::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
+        $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
+
+        $this->objectManager = Bootstrap::create(BP, $params)->getObjectManager();
+
+        /** @var ObjectManagerProvider $omProvider */
+        $omProvider = $this->serviceManager->get(ObjectManagerProvider::class);
+        $omProvider->setObjectManager($this->objectManager);
+    }
+
+    /**
+     * Checks whether generation directory is read-only.
+     * Depends on the current mode:
+     *      production - application will proceed
+     *      default - application will be terminated
+     *      developer - application will be terminated
+     *
+     * @return void
+     */
+    private function assertGenerationPermissions()
+    {
+        $generationDirectoryAccess = new GenerationDirectoryAccess($this->serviceManager);
+        /** @var DeploymentConfig $deploymentConfig */
+        $deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
+        /** @var State $state */
+        $state = $this->objectManager->get(State::class);
+
+        if (
+            $deploymentConfig->isAvailable()
+            && $state->getMode() !== State::MODE_PRODUCTION
+            && !$generationDirectoryAccess->check()
+        ) {
+            $output = new Console\Output\ConsoleOutput();
+            $output->writeln(
+                '<error>Command line user does not have read and write permissions on var/generation directory.  Please'
+                . ' address this issue before using Magento command line.</error>'
+            );
+
+            exit(static::RETURN_FAILURE);
+        }
     }
 
     /**
