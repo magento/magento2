@@ -15,7 +15,7 @@ use Magento\Customer\Test\Page\CustomerAccountLogin;
 class AssertCustomerIsLocked extends AbstractConstraint
 {
     const CUSTOMER_LOCKED_MESSAGE =
-        'The account is locked. Please wait and try again or contact hello@example.com.';
+        'You did not sign in correctly or your account is temporarily disabled.';
 
     /**
      * Assert that customer locked message is present on customer login page.

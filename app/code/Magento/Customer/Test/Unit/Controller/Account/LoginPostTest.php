@@ -536,7 +536,6 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
     protected function mockExceptions($exception, $username)
     {
         $url = 'url1';
-        $email = 'hello@example.com';
 
         switch ($exception) {
             case \Magento\Framework\Exception\EmailNotConfirmedException::class:
@@ -564,7 +563,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             case \Magento\Framework\Exception\AuthenticationException::class:
                 $this->messageManager->expects($this->once())
                     ->method('addError')
-                    ->with(__('Invalid login or password.'))
+                    ->with(__('You did not sign in correctly or your account is temporarily disabled.'))
                     ->willReturnSelf();
 
                 $this->session->expects($this->once())
@@ -581,11 +580,9 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
                 break;
 
             case \Magento\Framework\Exception\State\UserLockedException::class:
-                $this->scopeConfig->expects($this->once())->method('getValue')->willReturn($email);
                 $message = __(
-                    'The account is locked. Please wait and try again or contact %1.',
-                    $email
-                );
+                   'You did not sign in correctly or your account is temporarily disabled.'
+            );
                 $this->messageManager->expects($this->once())
                     ->method('addError')
                     ->with($message)

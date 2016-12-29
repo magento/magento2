@@ -412,7 +412,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             [
                 'testNumber' => 2,
                 'exceptionClass' => \Magento\Framework\Exception\State\UserLockedException::class,
-                'errorMessage' => __('The account is locked. Please wait and try again or contact %1.', 'test@host.com')
+                'errorMessage' => __('You did not sign in correctly or your account is temporarily disabled.')
             ]
         ];
     }
