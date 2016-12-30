@@ -13,6 +13,11 @@
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                </item>
+            </data>
             <data name="order/data/price/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="grand_refund_total" xsi:type="string">139.90</item>
@@ -35,6 +40,11 @@
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                </item>
+            </data>
             <data name="order/data/price/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="grand_refund_total" xsi:type="string">621.20</item>

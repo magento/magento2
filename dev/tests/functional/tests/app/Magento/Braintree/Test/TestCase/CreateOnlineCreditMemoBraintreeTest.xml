@@ -28,6 +28,11 @@
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Closed</data>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                </item>
+            </data>
             <data name="order/data/price/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="grand_refund_total" xsi:type="string">145.98</item>
