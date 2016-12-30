@@ -60,7 +60,8 @@ class Cli extends SymfonyApplication
         if (!$generationDirectoryAccess->check()) {
             $output = new ConsoleOutput();
             $output->writeln(
-                '<error>Command line user does not have read and write permissions on generated/code directory.  Please'
+                '<error>Command line user does not have read and write permissions on '
+                . $this->getDefaultDirectoryPath(DirectoryList::GENERATION) . ' directory.  Please'
                 . ' address this issue before using Magento command line.</error>'
             );
             exit(0);
@@ -97,7 +98,9 @@ class Cli extends SymfonyApplication
         if ($this->initException) {
             $output->writeln(
                 "<error>We're sorry, an error occurred. Try clearing the cache and code generation directories. "
-                . "By default, they are: var/cache, generated/metadata, generated/code, and var/page_cache.</error>"
+                . "By default, they are: " . $this->getDefaultDirectoryPath(DirectoryList::CACHE) . ", "
+                . $this->getDefaultDirectoryPath(DirectoryList::DI) . ", "
+                . $this->getDefaultDirectoryPath(DirectoryList::GENERATION) . ", and var/page_cache.</error>"
             );
             throw $this->initException;
         }
@@ -166,5 +169,23 @@ class Cli extends SymfonyApplication
             }
         }
         return $commands;
+    }
+
+    /**
+     * Get default directory path by code
+     *
+     * @param string $code
+     * @return string
+     */
+    private function getDefaultDirectoryPath($code)
+    {
+        $config = DirectoryList::getDefaultConfig();
+        $result = '';
+
+        if (isset($config[$code][DirectoryList::PATH])) {
+            $result = $config[$code][DirectoryList::PATH];
+        }
+
+        return $result;
     }
 }
