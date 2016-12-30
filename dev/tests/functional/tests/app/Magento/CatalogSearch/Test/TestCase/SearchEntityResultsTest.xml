@@ -29,7 +29,7 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
         <variation name="SearchEntityResultsTestVariation6" summary="Search grouped product and add to cart" ticketId="MAGETWO-43235">
-            <data name="catalogSearch/data/query_text/value" xsi:type="string">groupedProduct::default::grouped</data>
+            <data name="catalogSearch/data/query_text/value" xsi:type="string">groupedProduct::withSimpleProducts_without_qty::grouped</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
         <variation name="SearchEntityResultsTestVariation7" summary="Search bundle dynamic product and add to cart" ticketId="MAGETWO-43235">
