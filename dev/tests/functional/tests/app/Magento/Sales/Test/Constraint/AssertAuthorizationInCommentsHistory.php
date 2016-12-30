@@ -40,14 +40,11 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
 
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
-        $historyBlock = $infoTab->getCommentHistoryBlock();
-        $lastComment = $historyBlock->getLatestComment();
-
-        //$actualAuthorizedAmount = $salesOrderView->getOrderHistoryBlock()->getAuthorizedAmount();
+        $latestComment = $infoTab->getCommentHistoryBlock()->getLatestComment();
 
         \PHPUnit_Framework_Assert::assertRegExp(
             sprintf(self::AUTHORIZED_AMOUNT_PATTERN, $prices['grandTotal']),
-            $lastComment['authorized_amount'],
+            $latestComment['comment'],
             'Incorrect authorized amount value for the order #' . $orderId
         );
     }

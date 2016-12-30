@@ -35,8 +35,13 @@ class AssertOrderCommentsHistoryNotifyStatus extends AbstractConstraint
             $data['form_data']['send_email'],
             FILTER_VALIDATE_BOOLEAN
         ) : false;
+
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $latestComment = $infoTab->getCommentHistoryBlock()->getLatestComment();
+
         \PHPUnit_Framework_Assert::assertContains(
-            $salesOrderView->getOrderHistoryBlock()->getNotifiedStatus(),
+            $latestComment['is_customer_notified'],
             (bool)$sendMail ? 'Customer Notified' : 'Customer Not Notified'
         );
     }

@@ -39,11 +39,14 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
-        $actualCapturedAmount = $salesOrderView->getOrderHistoryBlock()->getCapturedAmount();
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $comments = $infoTab->getCommentHistoryBlock()->getComments();
+
         foreach ($capturedPrices as $key => $capturedPrice) {
             \PHPUnit_Framework_Assert::assertRegExp(
                 sprintf(self::CAPTURED_AMOUNT_PATTERN, $capturedPrice),
-                $actualCapturedAmount[$key],
+                $comments[$key]['comment'],
                 'Incorrect captured amount value for the order #' . $orderId
             );
         }

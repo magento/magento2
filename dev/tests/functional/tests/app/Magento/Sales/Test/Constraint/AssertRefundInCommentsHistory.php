@@ -38,11 +38,14 @@ class AssertRefundInCommentsHistory extends AbstractConstraint
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
-        $actualRefundedAmount = $salesOrderView->getOrderHistoryBlock()->getRefundedAmount();
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $comments = $infoTab->getCommentHistoryBlock()->getComments();
+
         foreach ($refundedPrices as $key => $refundedPrice) {
             \PHPUnit_Framework_Assert::assertRegExp(
                 sprintf(self::REFUNDED_AMOUNT_PATTERN, $refundedPrice),
-                $actualRefundedAmount[$key],
+                $comments[$key]['comment'],
                 'Incorrect refunded amount value for the order #' . $orderId
             );
         }

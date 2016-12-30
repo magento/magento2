@@ -71,10 +71,12 @@ class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
      */
     private function getTransactionId()
     {
-        $comments = $this->salesOrderView->getOrderHistoryBlock()->getCommentsHistory();
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $this->salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $latestComment = $infoTab->getCommentHistoryBlock()->getLatestComment();
         $transactionId = null;
 
-        preg_match('/(\w+-*\w+)"/', $comments, $matches);
+        preg_match('/(\w+-*\w+)"/', $latestComment['comment'], $matches);
         if (!empty($matches[1])) {
             $transactionId = $matches[1];
         }

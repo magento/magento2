@@ -22,17 +22,21 @@ class AssertDenyPaymentMessageInCommentsHistory extends AbstractConstraint
     private static $message = 'Denied the payment online';
 
     /**
-     * @param SalesOrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex
      * @param $orderId
+     * @internal param SalesOrderView $orderView
      */
-    public function processAssert(SalesOrderView $orderView, OrderIndex $orderIndex, $orderId)
+    public function processAssert(SalesOrderView $salesOrderView, OrderIndex $orderIndex, $orderId)
     {
         $orderIndex->open();
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
-        $history = $orderView->getOrderHistoryBlock()->getCommentsHistory();
 
-        \PHPUnit_Framework_Assert::assertContains(self::$message, $history);
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $latestComment = $infoTab->getCommentHistoryBlock()->getLatestComment();
+
+        \PHPUnit_Framework_Assert::assertContains(self::$message, $latestComment['comment']);
     }
 
     /**

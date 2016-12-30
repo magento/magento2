@@ -33,9 +33,11 @@ class AssertRefundOrderStatusInCommentsHistory extends AbstractConstraint
 
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $latestComment = $infoTab->getCommentHistoryBlock()->getLatestComment();
+
         \PHPUnit_Framework_Assert::assertContains(
             $infoTab->getOrderStatus(),
-            $salesOrderView->getOrderHistoryBlock()->getStatus()
+            $latestComment['status']
         );
     }
 
