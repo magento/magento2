@@ -78,6 +78,8 @@ class InstallTest extends Injectable
     protected $installPage;
 
     /**
+     * Setup Magento for tests executions.
+     *
      * @var Setup
      */
     private $magentoSetup;
