@@ -72,20 +72,7 @@ class Cli extends Console\Application
 
         $this->initObjectManager();
         $this->assertGenerationPermissions();
-
-        /**
-         * Temporary workaround until the compiler is able to clear the generation directory
-         * @todo remove after MAGETWO-44493 resolved
-         */
-        if (class_exists(CompilerPreparation::class)) {
-            $compilerPreparation = new CompilerPreparation(
-                $this->serviceManager,
-                new Console\Input\ArgvInput(),
-                new File()
-            );
-
-            $compilerPreparation->handleCompilerEnvironment();
-        }
+        $this->assertCompilerPreparation();
 
         if ($version == 'UNKNOWN') {
             $directoryList = new DirectoryList(BP);
@@ -127,7 +114,7 @@ class Cli extends Console\Application
     }
 
     /**
-     * Gets application commands
+     * Gets application commands.
      *
      * @return array a list of available application commands
      */
@@ -204,6 +191,39 @@ class Cli extends Console\Application
             );
 
             exit(static::RETURN_FAILURE);
+        }
+    }
+
+    /**
+     * Checks whether compiler preparation is being prepared.
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     */
+    private function assertCompilerPreparation()
+    {
+        /**
+         * Temporary workaround until the compiler is able to clear the generation directory
+         * @todo remove after MAGETWO-44493 resolved
+         */
+        if (class_exists(CompilerPreparation::class)) {
+            $compilerPreparation = new CompilerPreparation(
+                $this->serviceManager,
+                new Console\Input\ArgvInput(),
+                new File()
+            );
+
+            try {
+                $compilerPreparation->handleCompilerEnvironment();
+            } catch (\Magento\Framework\Exception\FileSystemException $e) {
+                $output = new \Symfony\Component\Console\Output\ConsoleOutput();
+                $output->writeln(
+                    '<error>Command line user does not have read and write permissions on var/generation directory.  Please'
+                    . ' address this issue before using Magento command line.</error>'
+                );
+
+                exit(static::RETURN_FAILURE);
+            }
         }
     }
 

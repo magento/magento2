@@ -9,7 +9,9 @@ namespace Magento\Setup\Console;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Console\GenerationDirectoryAccess;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Phrase;
 use Magento\Setup\Console\Command\DiCompileCommand;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -24,6 +26,11 @@ class CompilerPreparation
 
     /** @var File */
     private $filesystemDriver;
+
+    /**
+     * @var GenerationDirectoryAccess
+     */
+    private $generationDirectoryAccess;
 
     /**
      * @param \Zend\ServiceManager\ServiceManager $serviceManager
@@ -63,10 +70,30 @@ class CompilerPreparation
         $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATION);
         $compileDirList[] = $directoryList->getPath(DirectoryList::DI);
 
+        if (!$this->getGenerationDirectoryAccess()->check()) {
+            throw new \Magento\Framework\Exception\FileSystemException(
+                new Phrase('Generation directory can not be written.')
+            );
+        }
+
         foreach ($compileDirList as $compileDir) {
             if ($this->filesystemDriver->isExists($compileDir)) {
                 $this->filesystemDriver->deleteDirectory($compileDir);
             }
         }
+    }
+
+    /**
+     * Retrieves generation directory access checker.
+     *
+     * @return GenerationDirectoryAccess the generation directory access checker
+     */
+    private function getGenerationDirectoryAccess()
+    {
+        if (null === $this->generationDirectoryAccess) {
+            $this->generationDirectoryAccess = new GenerationDirectoryAccess($this->serviceManager);
+        }
+
+        return $this->generationDirectoryAccess;
     }
 }
