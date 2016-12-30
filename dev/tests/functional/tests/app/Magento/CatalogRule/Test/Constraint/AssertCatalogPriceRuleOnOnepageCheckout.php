@@ -13,7 +13,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 /**
  * Assert that Catalog Price Rule is applied on OnePage Checkout page.
  */
-class AssertCatalogPriceRuleAppliedOnepageCheckout extends AbstractConstraint
+class AssertCatalogPriceRuleOnOnepageCheckout extends AbstractConstraint
 {
     /* tags */
     const SEVERITY = 'high';
