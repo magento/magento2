@@ -10,7 +10,7 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
- * Assert that deny payment message exist in Comments History section on order page in Admin.
+ * Assert that deny payment message exists in Comments History section on order page in Admin.
  *
  * Constraint checks deny payment message in order comments history
  */
@@ -24,7 +24,7 @@ class AssertDenyPaymentMessageInCommentsHistory extends AbstractConstraint
     private static $message = 'Denied the payment online';
 
     /**
-     * Assert that deny payment message exist in Comments History section on order page in Admin.
+     * Assert that deny payment message exists in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex

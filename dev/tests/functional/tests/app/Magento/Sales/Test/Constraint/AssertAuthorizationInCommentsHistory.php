@@ -21,7 +21,7 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
     const AUTHORIZED_AMOUNT_PATTERN = '/(IPN "Pending" )*Authorized amount of \w*\W{1,2}%s. Transaction ID: "[\w\-]*"/';
 
     /**
-     * Assert that comment about authorized amount exist in Comments History section on order page in Admin.
+     * Assert that comment about authorized amount exists in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder

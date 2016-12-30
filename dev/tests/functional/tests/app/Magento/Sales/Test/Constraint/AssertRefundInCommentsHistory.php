@@ -21,7 +21,7 @@ class AssertRefundInCommentsHistory extends AbstractConstraint
     const REFUNDED_AMOUNT_PATTERN = '/^We refunded \w*\W{1,2}%s online. Transaction ID: "[\w\-]*"/';
 
     /**
-     * Assert that comment about refunded amount exist in Comments History section on order page in Admin.
+     * Assert that comment about refunded amount exists in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder

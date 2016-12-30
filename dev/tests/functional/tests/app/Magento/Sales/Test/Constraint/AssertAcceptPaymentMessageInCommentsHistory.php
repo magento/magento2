@@ -10,7 +10,7 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
- * Assert that accept payment message exist in Comments History section on order page in Admin.
+ * Assert that accept payment message exists in Comments History section on order page in Admin.
  *
  */
 class AssertAcceptPaymentMessageInCommentsHistory extends AbstractConstraint
@@ -23,7 +23,7 @@ class AssertAcceptPaymentMessageInCommentsHistory extends AbstractConstraint
     private static $message = 'Approved the payment online.';
 
     /**
-     * Assert that accept payment message exist in Comments History section on order page in Admin.
+     * Assert that accept payment message exists in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex

@@ -70,9 +70,9 @@ class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
     }
 
     /**
-     * Get transaction id from order comments
+     * Get transaction id from order comments.
      *
-     * @return mixed
+     * @return null|string
      */
     private function getTransactionId()
     {

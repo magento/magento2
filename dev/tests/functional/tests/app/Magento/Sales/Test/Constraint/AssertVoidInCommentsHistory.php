@@ -21,7 +21,7 @@ class AssertVoidInCommentsHistory extends AbstractConstraint
     const VOIDED_AMOUNT = 'Voided authorization. Amount: $';
 
     /**
-     * Assert that comment about voided amount exist in Comments History section on order page in Admin.
+     * Assert that comment about voided amount exists in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
