@@ -60,13 +60,15 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
      * @var OrderInvoiceView
      */
     private $orderInvoiceView;
+
     /**
+     * Checkout Cart fixture.
+     *
      * @var Cart
      */
     private $cart;
 
     /**
-     * @construct
      * @param Cart $cart
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
@@ -84,13 +86,13 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
         OrderCreditMemoNew $orderCreditMemoNew,
         $refundData = null
     ) {
+        $this->cart = $cart;
         $this->orderIndex = $orderIndex;
         $this->salesOrderView = $salesOrderView;
         $this->order = $order;
+        $this->orderInvoiceView = $orderInvoiceView;
         $this->orderCreditMemoNew = $orderCreditMemoNew;
         $this->refundData = $refundData;
-        $this->orderInvoiceView = $orderInvoiceView;
-        $this->cart = $cart;
     }
 
     /**
