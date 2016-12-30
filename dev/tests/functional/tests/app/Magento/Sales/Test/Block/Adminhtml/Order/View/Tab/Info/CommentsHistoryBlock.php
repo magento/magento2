@@ -65,11 +65,13 @@ class CommentsHistoryBlock extends Block
         $result = [];
         $elements = $this->_rootElement->getElements($this->commentHistory);
         foreach ($elements as $key => $item) {
-            $result[$key]['date'] = $item->find($this->commentHistoryDate)->getText();
-            $result[$key]['time'] = $item->find($this->commentHistoryTime)->getText();
-            $result[$key]['status'] = $item->find($this->commentHistoryStatus)->getText();
-            $result[$key]['is_customer_notified'] = $item->find($this->commentHistoryNotifiedStatus)->getText();
-            $result[$key]['comment'] = $item->find($this->comment)->getText();
+            $result[$key] = [
+                'date' => $item->find($this->commentHistoryDate)->getText(),
+                'time' => $item->find($this->commentHistoryTime)->getText(),
+                'status' => $item->find($this->commentHistoryStatus)->getText(),
+                'is_customer_notified' => $item->find($this->commentHistoryNotifiedStatus)->getText(),
+                'comment' => $item->find($this->comment)->getText()
+            ];
         }
 
         return $result;
@@ -83,6 +85,6 @@ class CommentsHistoryBlock extends Block
     public function getLatestComment()
     {
         $comments = $this->getComments();
-        return end($comments);
+        return current($comments);
     }
 }
