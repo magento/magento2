@@ -218,8 +218,10 @@ class Cli extends Console\Application
             } catch (\Magento\Framework\Exception\FileSystemException $e) {
                 $output = new \Symfony\Component\Console\Output\ConsoleOutput();
                 $output->writeln(
-                    '<error>Command line user does not have read and write permissions on var/generation directory.  Please'
-                    . ' address this issue before using Magento command line.</error>'
+                    '<error>'
+                    . 'Command line user does not have read and write permissions on var/generation directory.  Please'
+                    . ' address this issue before using Magento command line.'
+                    . '</error>'
                 );
 
                 exit(static::RETURN_FAILURE);
