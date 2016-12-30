@@ -40,7 +40,13 @@ class AssertRefundInCommentsHistory extends AbstractConstraint
 
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
-        $comments = $infoTab->getCommentHistoryBlock()->getComments();
+        $comments = $infoTab->getCommentsHistoryBlock()->getComments();
+
+        foreach ($comments as $key => $comment) {
+            if (stristr($comment['comment'], 'refunded') === false) {
+                unset($comments[$key]);
+            }
+        }
 
         foreach ($refundedPrices as $key => $refundedPrice) {
             \PHPUnit_Framework_Assert::assertRegExp(

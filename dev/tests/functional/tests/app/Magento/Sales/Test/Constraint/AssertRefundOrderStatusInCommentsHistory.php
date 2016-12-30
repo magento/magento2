@@ -11,12 +11,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
- * Assert that comment about refunded amount exist in Comments History section on order page in Admin.
+ * Assert that comment with correct order status exist in Comments History section on order page in Admin.
  */
 class AssertRefundOrderStatusInCommentsHistory extends AbstractConstraint
 {
     /**
-     * Assert that comment about refunded amount exist in Comments History section on order page in Admin.
+     * Assert that comment with correct order status exist in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
@@ -33,7 +33,7 @@ class AssertRefundOrderStatusInCommentsHistory extends AbstractConstraint
 
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
-        $latestComment = $infoTab->getCommentHistoryBlock()->getLatestComment();
+        $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
 
         \PHPUnit_Framework_Assert::assertContains(
             $infoTab->getOrderStatus(),

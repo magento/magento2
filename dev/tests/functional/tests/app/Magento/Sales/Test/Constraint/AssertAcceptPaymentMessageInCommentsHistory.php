@@ -10,23 +10,25 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
- * Class AssertAcceptPaymentMessageInCommentsHistory
+ * Assert that accept payment message exist in Comments History section on order page in Admin.
  *
- * Constraint checks accept payment message in order comments history
  */
 class AssertAcceptPaymentMessageInCommentsHistory extends AbstractConstraint
 {
-
     /**
+     * Accept payment message.
+     *
      * @var string
      */
     private static $message = 'Approved the payment online.';
 
     /**
+     * Assert that accept payment message exist in Comments History section on order page in Admin.
+     *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex
      * @param $orderId
-     * @internal param SalesOrderView $orderView
+     * @return void
      */
     public function processAssert(SalesOrderView $salesOrderView, OrderIndex $orderIndex, $orderId)
     {
@@ -35,13 +37,15 @@ class AssertAcceptPaymentMessageInCommentsHistory extends AbstractConstraint
 
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
-        $latestComment = $infoTab->getCommentHistoryBlock()->getLatestComment();
+        $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
 
         \PHPUnit_Framework_Assert::assertContains(self::$message, $latestComment['comment']);
     }
 
     /**
-     * @inheritdoc
+     * Returns a string representation of the object.
+     *
+     * @return string
      */
     public function toString()
     {

@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Braintree\Test\TestCase\InvoicePayPalBraintreeTest" summary="Capture for order placed within PayPal Braintree">
-        <variation name="InvoicePayPalBraintreeTestVariation1" summary="Full capture of order placed within Braintree PayPal" ticketId="MAGETWO-48614">
+        <!--<variation name="InvoicePayPalBraintreeTestVariation1" summary="Full capture of order placed within Braintree PayPal" ticketId="MAGETWO-48614">
             <data name="description" xsi:type="string">Full capture of order placed within Braintree PayPal</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="products/1" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
@@ -30,7 +30,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
-        </variation>
+        </variation>-->
         <variation name="InvoicePayPalBraintreeTestVariation2" summary="Partial capture for order placed within Braintree PayPal" ticketId="MAGETWO-48615, MAGETWO-48684">
             <data name="description" xsi:type="string">Partial capture for order placed within Braintree PayPal</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
@@ -56,12 +56,12 @@
                 <item name="statusIsClosed" xsi:type="string">No</item>
             </data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
-            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
+            <!--<constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />-->
             <constraint name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <!--<constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceInInvoicesGrid" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus" />-->
         </variation>
     </testCase>
 </config>

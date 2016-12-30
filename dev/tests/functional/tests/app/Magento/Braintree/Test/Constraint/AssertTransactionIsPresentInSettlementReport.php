@@ -11,7 +11,7 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
- * Class AssertTransactionIsPresentInSettlementReport
+ * Assert that comment with transaction id exists in Comments History section on order page in Admin.
  */
 class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
 {
@@ -26,6 +26,8 @@ class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
     private $settlementReportIndex;
 
     /**
+     * Assert that comment with transaction id exists in Comments History section on order page in Admin.
+     *
      * @param $orderId
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
@@ -58,7 +60,9 @@ class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
     }
 
     /**
-     * @inheritdoc
+     * Returns a string representation of the object.
+     *
+     * @return string
      */
     public function toString()
     {
@@ -67,13 +71,14 @@ class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
 
     /**
      * Get transaction id from order comments
+     *
      * @return mixed
      */
     private function getTransactionId()
     {
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
         $infoTab = $this->salesOrderView->getOrderForm()->openTab('info')->getTab('info');
-        $latestComment = $infoTab->getCommentHistoryBlock()->getLatestComment();
+        $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
         $transactionId = null;
 
         preg_match('/(\w+-*\w+)"/', $latestComment['comment'], $matches);

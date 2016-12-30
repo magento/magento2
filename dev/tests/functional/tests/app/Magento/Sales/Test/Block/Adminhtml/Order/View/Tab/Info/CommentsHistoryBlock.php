@@ -11,14 +11,14 @@ use Magento\Mtf\Block\Block;
 /**
  * Order comments history block.
  */
-class CommentHistoryBlock extends Block
+class CommentsHistoryBlock extends Block
 {
     /**
      * Comment history list locator.
      *
      * @var string
      */
-    protected $commentHistory = '.note-list';
+    protected $commentHistory = '.note-list-item';
 
     /**
      * Comment date.

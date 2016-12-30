@@ -7,7 +7,7 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\CommentHistoryBlock;
+use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\CommentsHistoryBlock;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\PaymentInfoBlock;
 
 /**
@@ -30,11 +30,11 @@ class Info extends Tab
     private $paymentInfoBlockSelector = '.order-payment-method';
 
     /**
-     * Selector for Comment history block.
+     * Selector for Comments history block.
      *
      * @var string
      */
-    private $commentHistoryBlockSelector = '#order_history_block';
+    private $commentsHistoryBlockSelector = '#order_history_block';
 
     /**
      * Get order status from info block.
@@ -60,15 +60,15 @@ class Info extends Tab
     }
 
     /**
-     * Returns Comment history block.
+     * Returns Comments history block.
      *
-     * @return CommentHistoryBlock
+     * @return CommentsHistoryBlock
      */
-    public function getCommentHistoryBlock()
+    public function getCommentsHistoryBlock()
     {
         return $this->blockFactory->create(
-            CommentHistoryBlock::class,
-            ['element' => $this->_rootElement->find($this->commentHistoryBlockSelector)]
+            CommentsHistoryBlock::class,
+            ['element' => $this->_rootElement->find($this->commentsHistoryBlockSelector)]
         );
     }
 }
