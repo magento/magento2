@@ -108,7 +108,7 @@ class ProductScopeRewriteGenerator
 
         foreach ($product->getStoreIds() as $id) {
             if (!$this->isGlobalScope($id)
-                && $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore($id, $productId, Product::ENTITY)
+                && !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore($id, $productId, Product::ENTITY)
             ) {
                 // before loading the category collection by looping it, clone it and set the correct store id,
                 // so we get the correct url_path & url_key for that specific store id
