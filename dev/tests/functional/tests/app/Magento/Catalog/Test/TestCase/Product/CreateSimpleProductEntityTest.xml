@@ -252,7 +252,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation14">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create simple product and check visibility in category</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -414,17 +413,21 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddToCartButtonAbsent" />
         </variation>
-        <variation name="CreateSimpleProductEntityTestVariation23" summary="Create Simple Product with Creating New Category (Required Fields Only)" ticketId="MAGETWO-13345">
+        <variation name="CreateSimpleProductEntityTestVariation23" summary="Create Simple Product with Creating New Category (Required Fields Only)" ticketId="MAGETWO-13345, MAGETWO-27293">
             <data name="product/data/category_ids/new_category" xsi:type="string">yes</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
+            <data name="product/data/website_ids/0/dataset" xsi:type="string">default</data>
             <data name="product/data/url_key" xsi:type="string">simple%isolation%</data>
             <data name="product/data/name" xsi:type="string">simple%isolation%</data>
             <data name="product/data/sku" xsi:type="string">simple%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">10</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">345</data>
+            <data name="redirectType/data/redirect_type" xsi:type="string">Temporary (302)</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteProductInGrid" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation24" summary="Create Simple Product and Assigning It to Category" ticketId="MAGETWO-12514">
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
