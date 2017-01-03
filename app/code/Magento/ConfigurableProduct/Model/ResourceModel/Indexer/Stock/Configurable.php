@@ -29,17 +29,24 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
         $connection = $this->getConnection();
         $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
         $select = parent::_getStockStatusSelect($entityIds, $usePrimaryTable);
+        $linkField = $metadata->getLinkField();
         $select->reset(
             \Magento\Framework\DB\Select::COLUMNS
         )->columns(
             ['e.entity_id', 'cis.website_id', 'cis.stock_id']
         )->joinLeft(
             ['l' => $this->getTable('catalog_product_super_link')],
-            'l.parent_id = e.' . $metadata->getLinkField(),
+            'l.parent_id = e.' . $linkField,
             []
         )->join(
             ['le' => $this->getTable('catalog_product_entity')],
             'le.entity_id = l.product_id',
+            []
+        )->joinInner(
+            ['cpei' => $this->getTable('catalog_product_entity_int')],
+            'le.' . $linkField . ' = cpei.' . $linkField
+            . ' AND cpei.attribute_id = ' . $this->_getAttribute('status')->getId()
+            . ' AND cpei.value = ' . ProductStatus::STATUS_ENABLED,
             []
         )->joinLeft(
             ['i' => $idxTable],

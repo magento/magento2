@@ -9,25 +9,23 @@ use Magento\Catalog\Api\Data\ProductInterface;
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var Magento\Store\Model\Website $website */
 $website = $objectManager->get(Magento\Store\Model\Website::class);
-$website->load('second_website', 'code');
 
-if (!$website->getId()) {
-    $website->setData(
-        [
-            'code' => 'second_website',
-            'name' => 'Test Website',
-        ]
-    );
+$website->setData(
+    [
+        'code' => 'second_website',
+        'name' => 'Test Website',
+    ]
+);
 
-    $website->save();
-}
+$website->save();
+
+$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(ProductInterface::class);
 $product
     ->setTypeId('simple')
-    ->setId(1)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1, $website->getId()])
     ->setName('Simple Product')
