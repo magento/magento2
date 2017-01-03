@@ -1,28 +1,35 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Analytics\Controller\Adminhtml\Subscription;
 
 
-use Magento\Analytics\Model\Subscription;
+use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\App\Action\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
-class Activate extends Action
+/**
+ * Class Postpone
+ */
+class Postpone extends Action
 {
     /**
-     * Resource for managing subscription to Magento Analytics.
-     *
-     * @var Subscription
+     * @var DateTimeFactory
      */
-    private $subscription;
+    private $dateTimeFactory;
+
+    /**
+     * @var NotificationTime
+     */
+    private $notificationTime;
 
     /**
      * @var LoggerInterface
@@ -30,48 +37,56 @@ class Activate extends Action
     private $logger;
 
     /**
+     * Postpone constructor.
+     *
      * @param Context $context
-     * @param Subscription $subscription
+     * @param DateTimeFactory $dateTimeFactory
+     * @param NotificationTime $notificationTime
      * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        Subscription $subscription,
+        DateTimeFactory $dateTimeFactory,
+        NotificationTime $notificationTime,
         LoggerInterface $logger
     ) {
-        $this->subscription = $subscription;
+        $this->dateTimeFactory = $dateTimeFactory;
+        $this->notificationTime = $notificationTime;
         $this->logger = $logger;
         parent::__construct($context);
+
     }
 
     /**
-     * Activate subscription to Magento Analytics via AJAX.
+     * Postpones notification about subscription
      *
      * @return Json
      */
     public function execute()
     {
         try {
-            $this->subscription->enable();
+            $dateTime = $this->dateTimeFactory->create();
+            $this->notificationTime->storeLastTimeNotification($dateTime->getTimestamp());
             $responseContent = [
                 'success' => true,
-                'error_message' => '',
+                'error_message' => ''
             ];
         } catch (LocalizedException $e) {
+            $this->logger->error($e->getMessage());
             $responseContent = [
                 'success' => false,
-                'error_message' => $e->getMessage(),
+                'error_message' => $e->getMessage()
             ];
-            $this->logger->error($e->getMessage());
         } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
             $responseContent = [
                 'success' => false,
-                'error_message' => __('Sorry, something went wrong.'),
+                'error_message' => __('Error occurred during postponement notification')
             ];
-            $this->logger->error($e->getMessage());
         }
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         return $resultJson->setData($responseContent);
     }
+
 }
