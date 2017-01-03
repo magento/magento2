@@ -11,7 +11,7 @@
         <title translate="true">Customer Grid</title>
         <description translate="true">Rebuild Customer grid index</description>
 
-        <fieldset name="customer" source="Magento\Customer\Model\ResourceModel\Customer\Collection"
+        <fieldset name="customer" source="Magento\Customer\Model\Indexer\Source"
                   provider="Magento\Customer\Model\Indexer\AttributeProvider">
             <field name="name" xsi:type="searchable" dataType="text" handler="CustomerNameHandler"/>
             <field name="email" xsi:type="searchable" dataType="varchar"/>

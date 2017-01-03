@@ -171,4 +171,14 @@ class Content extends Tab
             'content_heading' => ''
         ];
     }
+
+    /**
+     * Check if system variables block is visible.
+     *
+     * @return bool
+     */
+    public function isVariablesBlockVisible()
+    {
+        return $this->_rootElement->find($this->systemVariableBlock, Locator::SELECTOR_XPATH)->isVisible();
+    }
 }

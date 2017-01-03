@@ -26,12 +26,7 @@ class AssertSwatchConfigurableProductPage extends AssertProductPage
     ) {
         $this->product = $product;
         $this->productView = $catalogProductView->getProductViewWithSwatchesBlock();
-        $this->objectManager->create(
-            \Magento\Swatches\Test\TestStep\AddProductToCartFromCatalogCategoryPageStep::class,
-            [
-                'product' => $product
-            ]
-        )->run();
+
         // we need this line for waiti until page will be fully loaded
         $this->productView->getSelectedSwatchOptions($this->product);
         $errors = $this->verify();

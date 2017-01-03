@@ -23,7 +23,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Verify created category
  *
  * @group Category_Management
- * @ZephyrId MAGETWO-23411
+ * @ZephyrId MAGETWO-23411, MAGETWO-48379
  */
 class CreateCategoryEntityTest extends Injectable
 {

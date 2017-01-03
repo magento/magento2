@@ -60,5 +60,27 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchNoResultMessage" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchNoResult" />
         </variation>
+        <variation name="SearchEntityResultsTestVariation12" summary="Search for simple product name using 2 symbols query length" ticketId="MAGETWO-36542">
+            <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::name</data>
+            <data name="queryLength" xsi:type="string">2</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchNoResultMessage" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchNoResult" />
+        </variation>
+        <variation name="SearchEntityResultsTestVariation13" summary="Search for simple product name using 3 symbols query length" ticketId="MAGETWO-36542">
+            <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::name</data>
+            <data name="queryLength" xsi:type="string">3</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
+        </variation>
+        <variation name="SearchEntityResultsTestVariation14" summary="Search for simple product name using 128 symbols query length" ticketId="MAGETWO-36542">
+            <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::product_with_long_name::name</data>
+            <data name="queryLength" xsi:type="string">128</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
+        </variation>
+        <variation name="SearchEntityResultsTestVariation15" summary="Search for simple product name using 129 symbols query length" ticketId="MAGETWO-36542">
+            <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::product_with_long_name::name</data>
+            <data name="queryLength" xsi:type="string">129</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchQueryLength" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
+        </variation>
     </testCase>
 </config>
