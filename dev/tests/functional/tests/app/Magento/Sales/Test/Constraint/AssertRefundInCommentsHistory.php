@@ -47,6 +47,7 @@ class AssertRefundInCommentsHistory extends AbstractConstraint
                 unset($comments[$key]);
             }
         }
+        $comments = array_values($comments);
 
         foreach ($refundedPrices as $key => $refundedPrice) {
             \PHPUnit_Framework_Assert::assertRegExp(
