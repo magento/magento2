@@ -6,6 +6,8 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices;
 
+use Magento\Mtf\Client\Locator;
+
 /**
  * Invoices grid on order view page.
  */
@@ -19,18 +21,18 @@ class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
     protected $editLink = '[data-column="increment_id"]';
 
     /**
-     * Locator for invoice ids
+     * Css selector for invoice ids.
      *
      * @var string
      */
     protected $invoiceId = 'tbody td:nth-child(2)';
 
     /**
-     * Invoices data grid loader locator.
+     * Invoices data grid loader Xpath locator.
      *
      * @var string
      */
-    protected $loader = '[data-component="sales_order_view_invoice_grid"]';
+    protected $loader = '//div[contains(@data-component, "sales_order_view_invoice_grid")]';
 
     /**
      * Filters array mapping.
@@ -64,7 +66,7 @@ class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
     public function getIds()
     {
         $result = [];
-        $this->waitForElementNotVisible($this->loader);
+        $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
         $invoiceIds = $this->_rootElement->getElements($this->invoiceId);
         foreach ($invoiceIds as $invoiceId) {
             $result[] = trim($invoiceId->getText());
@@ -80,7 +82,7 @@ class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
      */
     public function viewInvoice()
     {
-        $this->waitForElementNotVisible($this->loader);
+        $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
         $this->_rootElement->find($this->invoiceId)->click();
     }
 }

@@ -7,8 +7,8 @@
 namespace Magento\Customer\Test\TestCase;
 
 use Magento\Customer\Test\Fixture\CustomerGroup;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -17,7 +17,7 @@ use Magento\Mtf\TestCase\Injectable;
  * Test Flow:
  *
  * Preconditions:
- * 1. Create customer
+ * 1. Create customers
  * 2. Create customer group
  *
  * Steps:
@@ -30,7 +30,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 7. Perform all assertions
  *
  * @group Customer_Groups, Customers
- * @ZephyrId MAGETWO-27892
+ * @ZephyrId MAGETWO-27892, MAGETWO-19456
  */
 class MassAssignCustomerGroupTest extends Injectable
 {
@@ -54,19 +54,6 @@ class MassAssignCustomerGroupTest extends Injectable
     protected $customersGridActions = 'Assign a Customer Group';
 
     /**
-     * Prepare data
-     *
-     * @param Customer $customer
-     * @return array
-     */
-    public function __prepare(Customer $customer)
-    {
-        $customer->persist();
-
-        return ['customer' => $customer];
-    }
-
-    /**
      * Injection data
      *
      * @param CustomerIndex $customerIndex
@@ -80,19 +67,32 @@ class MassAssignCustomerGroupTest extends Injectable
     /**
      * Mass assign customer group
      *
-     * @param Customer $customer
      * @param CustomerGroup $customerGroup
-     * @return void
+     * @param FixtureFactory $fixtureFactory
+     * @param array $customers
+     * @return array
      */
-    public function test(Customer $customer, CustomerGroup $customerGroup)
+    public function test(CustomerGroup $customerGroup, FixtureFactory $fixtureFactory, array $customers)
     {
+        // Preconditions
+        if (!$customerGroup->hasData('customer_group_id')) {
+            $customerGroup->persist();
+        }
+
+        $customerEmails = [];
+        foreach ($customers as &$customer) {
+            $customer = $fixtureFactory->createByCode('customer', ['dataset' => $customer]);
+            $customer->persist();
+            $customerEmails[] = ['email' => $customer->getEmail()];
+        }
+
         // Steps
-        $customerGroup->persist();
         $this->customerIndex->open();
         $this->customerIndex->getCustomerGridBlock()->massaction(
-            [['email' => $customer->getEmail()]],
+            $customerEmails,
             [$this->customersGridActions => $customerGroup->getCustomerGroupCode()],
             true
         );
+        return ['customers' => $customers];
     }
 }
