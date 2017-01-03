@@ -6,8 +6,9 @@
 /*eslint max-nested-callbacks: 0*/
 
 define([
-    'Magento_Ui/js/form/element/date'
-], function (DateElement) {
+    'Magento_Ui/js/form/element/date',
+    'mageUtils'
+], function (DateElement, utils) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/date', function () {
@@ -19,5 +20,12 @@ define([
             };
             model = new DateElement(params);
         });
+
+        it('Check prepareDateTimeFormats function', function () {
+            spyOn(utils, 'convertToMomentFormat');
+            model.prepareDateTimeFormats();
+            expect(utils.convertToMomentFormat).toHaveBeenCalled();
+        });
+
     });
 });

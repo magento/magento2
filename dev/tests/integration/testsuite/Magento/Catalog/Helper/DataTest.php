@@ -248,6 +248,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @dataProvider getTaxPriceDataProvider
      */
     public function testGetTaxPrice(
@@ -397,7 +398,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ],
             'price include tax, display excluding tax, high rate product tax class, round' => [
                 (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(true),
-                '2.67',
+                '2.97',
                 [
                     [
                         'path' => Config::CONFIG_XML_PATH_PRICE_INCLUDES_TAX,

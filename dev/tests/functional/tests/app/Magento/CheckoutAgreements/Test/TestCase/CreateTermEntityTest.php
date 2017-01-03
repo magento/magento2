@@ -27,6 +27,7 @@ class CreateTermEntityTest extends Scenario
     /* tags */
     const MVP = 'yes';
     const TEST_TYPE = 'extended_acceptance_test';
+    const SEVERITY = 'S3';
     /* end tags */
 
     /**

@@ -118,8 +118,8 @@ abstract class AbstractAssertForm extends AbstractConstraint
 
     /**
      * Sort multidimensional array by paths.
-     * Pattern path: key/subKey::sorkKey.
-     * Exapmle:
+     * Pattern path: key/subKey::sortKey.
+     * Example:
      * $data = [
      *     'custom_options' => [
      *         'options' => [

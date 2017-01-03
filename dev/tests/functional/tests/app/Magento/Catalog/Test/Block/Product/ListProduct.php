@@ -77,6 +77,11 @@ class ListProduct extends Block
      */
     public function getSortByValues()
     {
-        return explode("\n", $this->_rootElement->find($this->sorter)->getText());
+        $values = explode("\n", $this->_rootElement->find($this->sorter)->getText());
+        $result = [];
+        foreach ($values as $value) {
+            $result[] = trim($value);
+        }
+        return $result;
     }
 }

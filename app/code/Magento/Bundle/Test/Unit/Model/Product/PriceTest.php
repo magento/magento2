@@ -8,60 +8,67 @@ namespace Magento\Bundle\Test\Unit\Model\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
+ * Test for Model ProductPrice.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\ResourceModel\RuleFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $ruleFactoryMock;
+    private $ruleFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $localeDateMock;
+    private $localeDateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManagerMock;
+    private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerSessionMock;
+    private $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eventManagerMock;
+    private $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $catalogHelperMock;
+    private $catalogHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeMock;
+    private $storeMock;
 
     /**
      * @var \Magento\Bundle\Model\Product\Price
      */
-    protected $model;
+    private $model;
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $priceCurrency;
+    private $priceCurrency;
 
     /**
-     * @var \Magento\Customer\Api\GroupManagementInterface
+     * @var \Magento\Customer\Api\GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $groupManagement;
+    private $groupManagement;
 
+    /**
+     * Set up.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->ruleFactoryMock = $this->getMock(
@@ -110,6 +117,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for calculateSpecialPrice().
+     *
      * @param float $finalPrice
      * @param float $specialPrice
      * @param int $callsNumber
@@ -119,6 +128,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      * @covers \Magento\Bundle\Model\Product\Price::calculateSpecialPrice
      * @covers \Magento\Bundle\Model\Product\Price::__construct
      * @dataProvider calculateSpecialPrice
+     * @return void
      */
     public function testCalculateSpecialPrice($finalPrice, $specialPrice, $callsNumber, $dateInInterval, $expected)
     {
@@ -138,6 +148,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Data provider for calculateSpecialPrice() test.
+     *
      * @return array
      */
     public function calculateSpecialPrice()
@@ -152,6 +164,11 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * Test for getTotalBundleItemsPrice() with noCustom options.
+     *
+     * @return void
+     */
     public function testGetTotalBundleItemsPriceWithNoCustomOptions()
     {
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
@@ -166,8 +183,11 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for getTotalBundleItemsPrice() with empty options.
+     *
      * @param string|null $value
      * @dataProvider dataProviderWithEmptyOptions
+     * @return void
      */
     public function testGetTotalBundleItemsPriceWithEmptyOptions($value)
     {
@@ -191,11 +211,12 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $dataObjectMock->expects($this->once())
             ->method('getValue')
             ->willReturn($value);
-
         $this->assertEquals(0, $this->model->getTotalBundleItemsPrice($productMock));
     }
 
     /**
+     * Data provider for getTotalBundleItemsPrice() with empty options.
+     *
      * @return array
      */
     public function dataProviderWithEmptyOptions()
@@ -207,6 +228,11 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * Test for getTotalBundleItemsPrice() with empty options.
+     *
+     * @return void
+     */
     public function testGetTotalBundleItemsPriceWithNoItems()
     {
         $storeId = 1;
@@ -242,10 +268,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->method('getStoreId')
             ->willReturn($storeId);
 
-        $dataObjectMock->expects($this->once())
-            ->method('getValue')
-            ->willReturn('a:1:{i:0;s:1:"1";}');
-
+        $customOptionValue = 'a:1:{i:0;s:1:"1";}';
+        $dataObjectMock->expects($this->once())->method('getValue')->willReturn($customOptionValue);
         $productTypeMock->expects($this->once())
             ->method('getSelectionsByIds')
             ->with([1], $productMock)

@@ -11,7 +11,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
- * Deployment configuration reader
+ * Deployment configuration reader from files: env.php, config.php (config.local.php, config.dist.php)
  */
 class Reader
 {
@@ -72,7 +72,26 @@ class Reader
      */
     public function getFiles()
     {
-        return $this->files;
+        $path = $this->dirList->getPath(DirectoryList::CONFIG);
+        $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
+        $initialFilePools = $this->configFilePool->getInitialFilePools();
+
+        $files = [];
+        foreach ($this->files as $fileKey => $filePath) {
+            $files[$fileKey] = $filePath;
+            if (!$fileDriver->isExists($path . "/" . $filePath)) {
+                foreach ($initialFilePools as $initialFiles) {
+                    if (
+                        isset($initialFiles[$fileKey])
+                        && $fileDriver->isExists($path . '/' . $initialFiles[$fileKey])
+                    ) {
+                        $files[$fileKey] = $initialFiles[$fileKey];
+                    }
+                }
+            }
+        }
+
+        return $files;
     }
 
     /**
@@ -84,26 +103,19 @@ class Reader
      */
     public function load($fileKey = null)
     {
-        $path = $this->dirList->getPath(DirectoryList::CONFIG);
-        $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
-        $result = [];
         if ($fileKey) {
-            $filePath = $path . '/' . $this->configFilePool->getPath($fileKey);
-            if ($fileDriver->isExists($filePath)) {
-                $result = include $filePath;
-            }
+            $pathConfig = $this->configFilePool->getPath($fileKey);
+            return $this->loadConfigFile($fileKey, $pathConfig);
         } else {
             $configFiles = $this->configFilePool->getPaths();
             $allFilesData = [];
             $result = [];
-            foreach (array_keys($configFiles) as $fileKey) {
-                $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
-                if ($fileDriver->isExists($configFile)) {
-                    $fileData = include $configFile;
-                } else {
+            foreach ($configFiles as $fileKey => $pathConfig) {
+                $fileData = $this->loadConfigFile($fileKey, $pathConfig);
+                if (!$fileData) {
                     continue;
                 }
-                $allFilesData[$configFile] = $fileData;
+                $allFilesData[$fileKey] = $fileData;
                 if (!empty($fileData)) {
                     $intersection = array_intersect_key($result, $fileData);
                     if (!empty($intersection)) {
@@ -116,8 +128,47 @@ class Reader
                     $result = array_merge($result, $fileData);
                 }
             }
+            return $result;
         }
-        return $result ?: [];
+    }
+
+    /**
+     * @param string $fileKey
+     * @param string $pathConfig
+     * @param bool $ignoreInitialConfigFiles
+     * @return array
+     */
+    public function loadConfigFile($fileKey, $pathConfig, $ignoreInitialConfigFiles = false)
+    {
+        $result = [];
+        $initialFilePools = $this->configFilePool->getInitialFilePools();
+        $path = $this->dirList->getPath(DirectoryList::CONFIG);
+        $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
+
+        if (!$ignoreInitialConfigFiles) {
+            foreach ($initialFilePools as $initialFiles) {
+                if (isset($initialFiles[$fileKey]) && $fileDriver->isExists($path . '/' . $initialFiles[$fileKey])) {
+                    $fileBuffer = include $path . '/' . $initialFiles[$fileKey];
+                    if (is_array($fileBuffer)) {
+                        $result = array_replace_recursive($result, $fileBuffer);
+                    }
+                }
+            }
+        }
+
+        if ($fileDriver->isExists($path . '/' . $pathConfig)) {
+            $fileBuffer = include $path . '/' . $pathConfig;
+            $result = array_replace_recursive($result, $fileBuffer);
+        }
+
+        if ($fileDriver->isExists($path . '/' . $pathConfig)) {
+            $configResult = include $path . '/' . $pathConfig;
+            if (is_array($configResult)) {
+                $result = array_replace_recursive($result, $configResult);
+            }
+        }
+
+        return $result;
     }
 
     /**

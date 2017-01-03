@@ -25,5 +25,11 @@
         <price_to>
             <selector>#price_to</selector>
         </price_to>
+        <weight_from>
+            <selector>#weight</selector>
+        </weight_from>
+        <weight_to>
+            <selector>#weight_to</selector>
+        </weight_to>
     </fields>
 </mapping>

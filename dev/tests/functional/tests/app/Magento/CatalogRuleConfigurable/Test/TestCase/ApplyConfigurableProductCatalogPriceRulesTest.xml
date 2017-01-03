@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\CatalogRuleConfigurable\Test\TestCase\ApplyConfigurableProductCatalogPriceRulesTest" summary="Apply Catalog Price Rules">
+        <variation name="ApplyCatalogRuleForComfigurableProductWithOptions1" summary="Apply Catalog Rule For Configurable Product With Promo Simple Product" ticketId="MAGETWO-47186">
+            <data name="products/0" xsi:type="string">configurableProduct::Stellar_Solar_Jacket_SIZE_S</data>
+            <data name="products/1" xsi:type="string">configurableProduct::Stellar_Solar_Jacket_SIZE_M</data>
+            <data name="products/2" xsi:type="string">configurableProduct::Stellar_Solar_Jacket_SIZE_L</data>
+            <data name="promo" xsi:type="string">2</data>
+            <data name="catalogRules/0/data/name" xsi:type="string">Catalog Price Rule %isolation%</data>
+            <data name="catalogRules/0/data/is_active" xsi:type="string">Active</data>
+            <data name="catalogRules/0/data/website_ids/option_0" xsi:type="string">Main Website</data>
+            <data name="catalogRules/0/data/customer_group_ids/option_0" xsi:type="string">NOT LOGGED IN</data>
+            <data name="catalogRules/0/data/rule" xsi:type="string">[Attribute|%attribute_id%|is|%attribute_value%]</data>
+            <data name="catalogRules/0/data/simple_action" xsi:type="string">Apply as fixed amount</data>
+            <data name="catalogRules/0/data/discount_amount" xsi:type="string">0.55</data>
+            <data name="cartPrice/sub_total" xsi:type="string">224.45</data>
+            <data name="cartPrice/grand_total" xsi:type="string">239.45</data>
+            <data name="productPrice/0/special" xsi:type="string">74.45</data>
+            <data name="productPrice/0/sub_total" xsi:type="string">75</data>
+            <data name="productPrice/0/regular" xsi:type="string">No</data>
+            <data name="productPrice/1/special" xsi:type="string">74.45</data>
+            <data name="productPrice/1/sub_total" xsi:type="string">75</data>
+            <data name="productPrice/1/regular" xsi:type="string">No</data>
+            <data name="productPrice/2/special" xsi:type="string">74.45</data>
+            <data name="productPrice/2/sub_total" xsi:type="string">74.45</data>
+            <data name="productPrice/2/regular" xsi:type="string">No</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
+        </variation>
+        <variation name="ApplyCatalogRuleForConfigurableProductWithAssignedSimpleProducts" summary="Apply Catalog Rule For Configurable Product With Custom Options" ticketId="MAGETWO-23042">
+            <data name="products/0" xsi:type="string">configurableProduct::first_product_with_custom_options_and_option_key_1</data>
+            <data name="products/1" xsi:type="string">configurableProduct::first_product_with_custom_options_and_option_key_2</data>
+            <data name="products/2" xsi:type="string">configurableProduct::second_product_with_custom_options_and_option_key_1</data>
+            <data name="products/3" xsi:type="string">configurableProduct::second_product_with_custom_options_and_option_key_2</data>
+            <data name="customer/dataset" xsi:type="string">customer_US</data>
+            <data name="customer/data/group_id/dataset" xsi:type="string">default</data>
+            <data name="catalogRules/0/data/customer_group_ids/option_0" xsi:type="string">NOT LOGGED IN</data>
+            <data name="catalogRules/0/data/name" xsi:type="string">CatalogPriceRule %isolation%</data>
+            <data name="catalogRules/0/data/is_active" xsi:type="string">Active</data>
+            <data name="catalogRules/0/data/website_ids/option_0" xsi:type="string">Main Website</data>
+            <data name="catalogRules/0/data/simple_action" xsi:type="string">Apply as fixed amount</data>
+            <data name="catalogRules/0/data/stop_rules_processing" xsi:type="string">Yes</data>
+            <data name="catalogRules/0/data/discount_amount" xsi:type="string">5</data>
+            <data name="cartPrice/sub_total" xsi:type="string">382</data>
+            <data name="cartPrice/grand_total" xsi:type="string">402</data>
+            <data name="productPrice/0/special" xsi:type="string">15.01</data>
+            <data name="productPrice/0/sub_total" xsi:type="string">86.99</data>
+            <data name="productPrice/0/regular" xsi:type="string">No</data>
+            <data name="productPrice/1/special" xsi:type="string">15.01</data>
+            <data name="productPrice/1/sub_total" xsi:type="string">163.99</data>
+            <data name="productPrice/1/regular" xsi:type="string">No</data>
+            <data name="productPrice/2/special" xsi:type="string">15.01</data>
+            <data name="productPrice/2/sub_total" xsi:type="string">27.01</data>
+            <data name="productPrice/2/regular" xsi:type="string">No</data>
+            <data name="productPrice/3/special" xsi:type="string">15.01</data>
+            <data name="productPrice/3/sub_total" xsi:type="string">104.01</data>
+            <data name="productPrice/3/regular" xsi:type="string">No</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
+            <data name="payment/method" xsi:type="string">checkmo</data>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
+        </variation>
+    </testCase>
+</config>

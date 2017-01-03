@@ -48,9 +48,8 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($this->connection);
         $this->indexScopeResolver = $this->getMockBuilder(
-            \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver::class
+            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
         )->setMethods(['resolve'])
-            ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManager($this);
@@ -64,11 +63,6 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param string $table
-     * @param array $dimensions
-     * @param bool $isTableExist
-     */
     public function testDelete()
     {
         $index = 'index_name';

@@ -1,12 +1,15 @@
 <?php
 /**
- * Event configuration data container
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event\Config;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
+/**
+ * Provides event configuration
+ */
 class Data extends \Magento\Framework\Config\Data\Scoped
 {
     /**
@@ -17,17 +20,21 @@ class Data extends \Magento\Framework\Config\Data\Scoped
     protected $_scopePriorityScheme = ['global'];
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Event\Config\Reader $reader
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param string $cacheId
+     * @param string|null $cacheId
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         \Magento\Framework\Event\Config\Reader $reader,
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Config\CacheInterface $cache,
-        $cacheId = 'event_config_cache'
+        $cacheId = 'event_config_cache',
+        SerializerInterface $serializer = null
     ) {
-        parent::__construct($reader, $configScope, $cache, $cacheId);
+        parent::__construct($reader, $configScope, $cache, $cacheId, $serializer);
     }
 }

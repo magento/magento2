@@ -433,7 +433,7 @@
     </virtualType>
     <virtualType name="layoutObjectArgumentInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\DataObject">
         <arguments>
-            <argument name="expectedClass" xsi:type="string">Magento\Framework\Data\CollectionDataSourceInterface</argument>
+            <argument name="expectedClass" xsi:type="string">Magento\Framework\View\Element\Block\ArgumentInterface</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\View\Layout\Argument\Interpreter\NamedParams">
@@ -954,11 +954,6 @@
     <type name="Magento\Framework\View\Design\Theme\Image">
         <arguments>
             <argument name="uploader" xsi:type="object">Magento\Framework\View\Design\Theme\Image\Uploader\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\App\Config\ScopePool">
-        <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Config\Initial">

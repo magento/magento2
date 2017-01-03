@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\AddProductsToShoppingCartEntityTest" summary="Add Products to Shopping Cart" ticketId="MAGETWO-25382">
         <variation name="AddProductsToShoppingCartEntityTestVariation1">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S2</data>
             <data name="productsData/0" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
             <data name="cart/data/grand_total" xsi:type="string">210</data>
             <data name="cart/data/subtotal" xsi:type="string">200</data>
@@ -21,7 +21,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation2">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S2</data>
             <data name="productsData/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <data name="cart/data/grand_total" xsi:type="string">761</data>
             <data name="cart/data/subtotal" xsi:type="string">756</data>
@@ -34,7 +34,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation3">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S0</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <data name="cart/data/grand_total" xsi:type="string">345</data>
             <data name="cart/data/subtotal" xsi:type="string">340</data>
@@ -47,7 +47,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation4">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S1</data>
             <data name="productsData/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="cart/data/grand_total" xsi:type="string">50</data>
             <data name="cart/data/subtotal" xsi:type="string">50</data>
@@ -60,7 +60,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation5">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S0</data>
             <data name="productsData/0" xsi:type="string">configurableProduct::default</data>
             <data name="cart/data/grand_total" xsi:type="string">135</data>
             <data name="cart/data/subtotal" xsi:type="string">120</data>
@@ -73,6 +73,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation6">
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <data name="cart/data/grand_total" xsi:type="string">22.43</data>
             <data name="cart/data/subtotal" xsi:type="string">22.43</data>
@@ -85,7 +86,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation7">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S2</data>
             <data name="productsData/0" xsi:type="string">groupedProduct::three_simple_products</data>
             <data name="cart/data/grand_total" xsi:type="string">1950</data>
             <data name="cart/data/subtotal" xsi:type="string">1920</data>
@@ -98,7 +99,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation8">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S0</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <data name="productsData/1" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="productsData/2" xsi:type="string">downloadableProduct::with_two_separately_links</data>
@@ -114,6 +115,19 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
+        </variation>
+        <variation name="AddProductsToShoppingCartEntityTestVariation9" summary="Verify Top Destinations for Country Options configuration applied in shopping cart" ticketId="MAGETWO-38700">
+            <data name="productsData/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="configData" xsi:type="string">top_destinations_DE_ES_GB</data>
+            <data name="cart/data/grand_total" xsi:type="string">15.00</data>
+            <data name="cart/data/subtotal" xsi:type="string">10.00</data>
+            <data name="topDestinations" xsi:type="array">
+                <item name="0" xsi:type="string">DE</item>
+                <item name="1" xsi:type="string">ES</item>
+                <item name="2" xsi:type="string">GB</item>
+            </data>
+            <data name="issue" xsi:type="string">MAGETWO-61592 - [Shopping Cart] Top destinations are not displayed in the shopping cart summary</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertTopDestinationsInSelect" />
         </variation>
     </testCase>
 </config>
