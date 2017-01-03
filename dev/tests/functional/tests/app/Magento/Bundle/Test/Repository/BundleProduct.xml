@@ -29,6 +29,28 @@
             </field>
         </dataset>
 
+        <dataset name="default_with_one_simple_product">
+            <field name="name" xsi:type="string">Bundle dynamic product %isolation%</field>
+            <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
+            <field name="sku_type" xsi:type="string">Yes</field>
+            <field name="price_type" xsi:type="string">Yes</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="dataset" xsi:type="string">bundle_dynamic_with_category</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="dataset" xsi:type="string">one_simple_product</item>
+            </field>
+        </dataset>
+
         <dataset name="bundle_dynamic_product">
             <field name="name" xsi:type="string">Bundle dynamic product %isolation%</field>
             <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
@@ -254,6 +276,47 @@
             </field>
         </dataset>
 
+        <dataset name="bundle_fixed_100_dollar_product_buy_all">
+            <field name="name" xsi:type="string">Bundle fixed product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_fixed_product_%isolation%</field>
+            <field name="sku_type" xsi:type="string">No</field>
+            <field name="price_type" xsi:type="string">No</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">100</item>
+                <item name="dataset" xsi:type="string">fixed_100_dollar</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="weight_type" xsi:type="string">No</field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="shipment_type" xsi:type="string">Together</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="stock_data" xsi:type="array">
+                <item name="manage_stock" xsi:type="string">Yes</item>
+                <item name="use_config_enable_qty_increments" xsi:type="string">Yes</item>
+                <item name="use_config_qty_increments" xsi:type="string">Yes</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="url_key" xsi:type="string">bundle-fixed-product-%isolation%</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="dataset" xsi:type="string">fixed_100_dollar_buy_all</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="string">Default</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">bundle_fixed_100_dollar_buy_all</item>
+            </field>
+        </dataset>
+
         <dataset name="with_3_bundle_options">
             <field name="name" xsi:type="string">Bundle with 3 options %isolation%</field>
             <field name="url_key" xsi:type="string">with_3_bundle_options-%isolation%</field>
@@ -273,6 +336,47 @@
             </field>
             <field name="bundle_selections" xsi:type="array">
                 <item name="dataset" xsi:type="string">with_3_options</item>
+            </field>
+        </dataset>
+
+        <dataset name="bundle_low_stock">
+            <field name="name" xsi:type="string">Bundle low stock product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_low_stock_product_%isolation%</field>
+            <field name="sku_type" xsi:type="string">No</field>
+            <field name="price_type" xsi:type="string">No</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">750</item>
+                <item name="dataset" xsi:type="string">default_fixed</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="weight_type" xsi:type="string">No</field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="shipment_type" xsi:type="string">Together</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="stock_data" xsi:type="array">
+                <item name="manage_stock" xsi:type="string">Yes</item>
+                <item name="use_config_enable_qty_increments" xsi:type="string">Yes</item>
+                <item name="use_config_qty_increments" xsi:type="string">Yes</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="url_key" xsi:type="string">bundle-fixed-product-%isolation%</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="dataset" xsi:type="string">low_stock_fixed</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="string">Default</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">bundle_low_stock_fixed</item>
             </field>
         </dataset>
     </repository>
