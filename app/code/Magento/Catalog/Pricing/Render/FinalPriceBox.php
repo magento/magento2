@@ -7,6 +7,8 @@
 namespace Magento\Catalog\Pricing\Render;
 
 use Magento\Catalog\Pricing\Price;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Pricing\Render\PriceBox as BasePriceBox;
 use Magento\Msrp\Pricing\Price\MsrpPrice;
@@ -28,6 +30,9 @@ class FinalPriceBox extends BasePriceBox
      * @var SalableResolverInterface
      */
     private $salableResolver;
+
+    /** @var  Manager */
+    private $moduleManager;
 
     /**
      * @param Context $context
@@ -84,8 +89,14 @@ class FinalPriceBox extends BasePriceBox
      *
      * @return bool
      */
-    protected function isMsrpPriceApplicable()
+    private function isMsrpPriceApplicable()
     {
+        $moduleManager = $this->getModuleManager();
+
+        if (!$moduleManager->isEnabled('Magento_Msrp') || !$moduleManager->isOutputEnabled('Magento_Msrp') ) {
+            return false;
+        }
+
         try {
             /** @var MsrpPrice $msrpPriceType */
             $msrpPriceType = $this->getSaleableItem()->getPriceInfo()->getPrice('msrp_price');
@@ -99,6 +110,7 @@ class FinalPriceBox extends BasePriceBox
         }
 
         $product = $this->getSaleableItem();
+        
         return $msrpPriceType->canApplyMsrp($product) && $msrpPriceType->isMinimalPriceLessMsrp($product);
     }
 
@@ -185,5 +197,17 @@ class FinalPriceBox extends BasePriceBox
         $cacheKeys = parent::getCacheKeyInfo();
         $cacheKeys['display_minimal_price'] = $this->getDisplayMinimalPrice();
         return $cacheKeys;
+    }
+
+    /**
+     * @deprecated
+     * @return Manager
+     */
+    private function getModuleManager()
+    {
+        if ($this->moduleManager === null) {
+            $this->moduleManager = ObjectManager::getInstance()->get(Manager::class);
+        }
+        return $this->moduleManager;
     }
 }
