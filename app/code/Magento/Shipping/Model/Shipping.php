@@ -99,6 +99,8 @@ class Shipping implements RateCollectorInterface
      * @param \Magento\Framework\Math\Division $mathDivision
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param RateRequestFactory $rateRequestFactory
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
