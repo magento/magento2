@@ -84,6 +84,17 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 );
             }
         }
+        if (version_compare($context->getVersion(), '2.0.5', '<')) {
+            $connection = $installer->getConnection(self::$connectionName);
+            $connection->modifyColumn(
+                $installer->getTable('sales_order_payment', self::$connectionName),
+                'cc_number_enc',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 128
+                ]
+            );
+        }
     }
 
     /**
