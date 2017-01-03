@@ -478,32 +478,19 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
 
         $model = $this->_getModelMock(true);
 
-        $storeMock = $this->getMockBuilder(
-            \Magento\Store\Model\Store::class
-        )->setMethods(
-            ['isFrontUrlSecure', 'getBaseUrl']
-        )->disableOriginalConstructor()->getMock();
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+            ->setMethods(['isFrontUrlSecure', 'getBaseUrl'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $storeMock->expects($this->atLeastOnce())->method('isFrontUrlSecure')->willReturn(false);
-        $storeMock->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getBaseUrl'
-        )->with(
-            $this->isType('string'),
-            false
-        )->willReturn(
-            'http://store.com/'
-        );
-
-        $this->_storeManagerMock->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getStore'
-        )->with(
-            1
-        )->willReturn(
-            $storeMock
-        );
+        $storeMock->expects($this->atLeastOnce())
+            ->method('getBaseUrl')
+            ->with($this->isType('string'), false)
+            ->willReturn('http://store.com/');
+        $this->_storeManagerMock->expects($this->atLeastOnce())
+            ->method('getStore')
+            ->with(1)
+            ->willReturn($storeMock);
 
         return $model;
     }
@@ -641,11 +628,9 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $cmsFactory->expects($this->any())->method('create')->will($this->returnValue($this->_sitemapCmsPageMock));
 
-        $this->_storeManagerMock = $this->getMockBuilder(
-            \Magento\Store\Model\StoreManagerInterface::class
-        )->setMethods(
-            ['getStore']
-        )->getMockForAbstractClass();
+        $this->_storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+            ->setMethods(['getStore'])
+            ->getMockForAbstractClass();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructArguments = $objectManager->getConstructArguments(
