@@ -16,7 +16,7 @@ $registry->register('isSecureArea', true);
 $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
-foreach (['simple_10', 'simple_20', 'configurable'] as $sku) {
+foreach (['simple_1010', 'simple_1020', 'configurable'] as $sku) {
     try {
         $product = $productRepository->get($sku, false, null, true);
 

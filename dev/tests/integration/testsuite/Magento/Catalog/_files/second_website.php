@@ -19,3 +19,5 @@ if (!$website->getId()) {
 
     $website->save();
 }
+
+$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();

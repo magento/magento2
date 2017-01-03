@@ -15,12 +15,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertProductSaveMessage extends AbstractConstraint
 {
     /**
-     * Text value to be checked
+     * Text value to be checked.
      */
     const SUCCESS_MESSAGE = 'You saved the product.';
 
     /**
-     * Assert that success message is displayed after product save
+     * Assert that success message is displayed after product save.
      *
      * @param CatalogProductEdit $productPage
      * @return void
