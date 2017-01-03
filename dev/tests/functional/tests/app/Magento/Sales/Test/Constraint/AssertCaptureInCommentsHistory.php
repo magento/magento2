@@ -47,6 +47,7 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
                 unset($comments[$key]);
             }
         }
+        $comments = array_values($comments);
 
         foreach ($capturedPrices as $key => $capturedPrice) {
             \PHPUnit_Framework_Assert::assertRegExp(
