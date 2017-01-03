@@ -136,14 +136,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ]
         );
         foreach ($keys as $key) {
-            $setup->getConnection()->modifyColumn(
+            $description = $setup->getConnection()->describeTable($key['TABLE_NAME'])[$key['COLUMN_NAME']];
+            $description['DATA_TYPE'] = 'int';
+            $setup->getConnection()->modifyColumnByDdl(
                 $key['TABLE_NAME'],
                 $key['COLUMN_NAME'],
-                [
-                    'type' => 'integer',
-                    'unsigned' => true,
-                    'nullable' => false
-                ]
+                $description
             );
         }
     }

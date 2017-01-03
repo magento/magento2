@@ -34,6 +34,7 @@ class AssertAdvancedSearchProductByAttribute extends AbstractConstraint
      * @param AdvancedSearch $searchPage
      * @param CatalogsearchResult $catalogSearchResult
      * @param FixtureFactory $fixtureFactory
+     * @param int|null $attributeValue
      * @return void
      */
     public function processAssert(
@@ -41,13 +42,14 @@ class AssertAdvancedSearchProductByAttribute extends AbstractConstraint
         InjectableFixture $product,
         AdvancedSearch $searchPage,
         CatalogsearchResult $catalogSearchResult,
-        FixtureFactory $fixtureFactory
+        FixtureFactory $fixtureFactory,
+        $attributeValue = null
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $cmsIndex->open();
         $cmsIndex->getFooterBlock()->openAdvancedSearch();
         $searchForm = $searchPage->getForm();
-        $productSearch = $this->prepareFixture($product);
+        $productSearch = $this->prepareFixture($product, $attributeValue);
 
         $searchForm->fill($productSearch);
         $searchForm->submit();
@@ -63,11 +65,15 @@ class AssertAdvancedSearchProductByAttribute extends AbstractConstraint
      * Preparation of fixture data before comparing.
      *
      * @param InjectableFixture $productSearch
+     * @param int|null $attributeValue
      * @return CatalogProductSimple
      */
-    protected function prepareFixture(InjectableFixture $productSearch)
+    protected function prepareFixture(InjectableFixture $productSearch, $attributeValue)
     {
         $customAttribute = $productSearch->getDataFieldConfig('custom_attribute')['source']->getAttribute();
+        if ($attributeValue !== null) {
+            $customAttribute = ['value' => $attributeValue, 'attribute' => $customAttribute];
+        }
         return $this->fixtureFactory->createByCode(
             'catalogProductSimple',
             ['data' => ['custom_attribute' => $customAttribute]]

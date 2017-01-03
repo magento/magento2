@@ -91,10 +91,10 @@ class CreateAdminUserEntityTest extends Injectable
      * @param string $isDuplicated
      * @return array
      */
-    public function test(User $user, User $adminUser, $isDuplicated)
+    public function test(User $user, User $adminUser, $isDuplicated = null)
     {
         // Prepare data
-        if ($isDuplicated != '-') {
+        if ($isDuplicated !== null) {
             $data = $user->getData();
             $data[$isDuplicated] = $adminUser->getData($isDuplicated);
             $data['role_id'] = ['role' => $user->getDataFieldConfig('role_id')['source']->getRole()];

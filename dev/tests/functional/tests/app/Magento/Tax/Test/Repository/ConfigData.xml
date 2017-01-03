@@ -164,7 +164,7 @@
             <field name="tax/calculation/apply_after_discount" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Before Discount</item>
+                <item name="label" xsi:type="string">After Discount</item>
                 <item name="value" xsi:type="number">0</item>
             </field>
             <field name="tax/calculation/discount_tax" xsi:type="array">
@@ -541,6 +541,15 @@
             </field>
         </dataset>
 
+        <dataset name="row_cat_incl_ship_excl_before_disc_on_incl_rollback">
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
         <dataset name="unit_cat_incl_ship_incl_before_disc_on_incl">
             <field name="tax/calculation/algorithm" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
@@ -580,6 +589,15 @@
             </field>
         </dataset>
 
+        <dataset name="unit_cat_incl_ship_incl_before_disc_on_incl_rollback">
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
         <dataset name="total_cat_excl_ship_incl_before_disc_on_incl">
             <field name="tax/calculation/algorithm" xsi:type="array">
                 <item name="scope" xsi:type="string">tax</item>
@@ -616,6 +634,15 @@
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">No</item>
                 <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="total_cat_excl_ship_incl_before_disc_on_incl_rollback">
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
             </field>
         </dataset>
 
@@ -694,6 +721,15 @@
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">No</item>
                 <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="total_cat_incl_ship_excl_before_disc_on_excl_rollback">
+            <field name="tax/calculation/apply_after_discount" xsi:type="array">
+                <item name="scope" xsi:type="string">tax</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">After Discount</item>
+                <item name="value" xsi:type="number">1</item>
             </field>
         </dataset>
 
