@@ -55,6 +55,8 @@ class Cli extends Console\Application
     private $initException;
 
     /**
+     * Object Manager.
+     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -70,9 +72,9 @@ class Cli extends Console\Application
         $this->serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
             ->getServiceManager();
 
+        $this->assertCompilerPreparation();
         $this->initObjectManager();
         $this->assertGenerationPermissions();
-        $this->assertCompilerPreparation();
 
         if ($version == 'UNKNOWN') {
             $directoryList = new DirectoryList(BP);
