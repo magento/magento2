@@ -399,4 +399,11 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->creditmemoService->refund($creditMemoMock, true);
     }
+
+    protected function tearDown()
+    {
+        \Magento\Framework\Phrase::setRenderer(
+            new \Magento\Framework\Phrase\Renderer\Placeholder()
+        );
+    }
 }
