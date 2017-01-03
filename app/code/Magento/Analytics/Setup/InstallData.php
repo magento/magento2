@@ -67,7 +67,7 @@ class InstallData implements InstallDataInterface
         $integrationData['name'] = "Magento Analytics user";
         $integrationData['all_resources'] = false;
         $integrationData['resource'][] = "Magento_Analytics::analytics";
-        $integrationData['resource'][] = "Magento_Analytics::analytics-api";
+        $integrationData['resource'][] = "Magento_Analytics::analytics_api";
         return $integrationData;
     }
 

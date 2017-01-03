@@ -10,7 +10,7 @@
         <resources>
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Analytics::analytics" title="Analytics" translate="title" sortOrder="10">
-                    <resource id="Magento_Analytics::analytics-api" title="API" translate="title" sortOrder="10"/>
+                    <resource id="Magento_Analytics::analytics_api" title="API" translate="title" sortOrder="10"/>
                 </resource>
             </resource>
         </resources>
