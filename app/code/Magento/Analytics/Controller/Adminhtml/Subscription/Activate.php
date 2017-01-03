@@ -6,9 +6,8 @@
 
 namespace Magento\Analytics\Controller\Adminhtml\Subscription;
 
-
 use Magento\Analytics\Model\Subscription;
-use Magento\Framework\App\Action\Action;
+use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
@@ -42,6 +41,16 @@ class Activate extends Action
         $this->subscription = $subscription;
         $this->logger = $logger;
         parent::__construct($context);
+    }
+
+    /**
+     * Check admin permissions for this controller
+     *
+     * @return boolean
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Analytics::analytics');
     }
 
     /**

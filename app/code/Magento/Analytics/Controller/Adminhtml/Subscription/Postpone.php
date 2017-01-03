@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Analytics\Controller\Adminhtml\Subscription;
 
-
 use Magento\Analytics\Model\NotificationTime;
-use Magento\Framework\App\Action\Action;
+use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Controller\Result\Json;
@@ -55,6 +54,16 @@ class Postpone extends Action
         $this->logger = $logger;
         parent::__construct($context);
 
+    }
+
+    /**
+     * Check admin permissions for this controller
+     *
+     * @return boolean
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Analytics::analytics');
     }
 
     /**
