@@ -7,6 +7,7 @@ namespace Magento\Sales\Setup;
 
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\FieldDataConverter;
 
 /**
  *  Convert serialized data in sales tables to JSON
@@ -26,26 +27,35 @@ class ConvertSerializedDataToJson
     /**
      * @var array
      */
+    private $fieldDataConverters = [];
+
+    /**
+     * @var array
+     */
     private $fieldsToUpdate = [
         [
             'table' => 'sales_order_item',
             'identifier' => 'item_id',
-            'title' => 'product_options'
+            'title' => 'product_options',
+            'data_converter' => SerializedDataConverter::class
         ],
         [
             'table' => 'sales_shipment',
             'identifier' => 'entity_id',
-            'title' => 'packages'
+            'title' => 'packages',
+            'data_converter' => SerializedToJson::class
         ],
         [
             'table' => 'sales_order_payment',
             'identifier' => 'entity_id',
-            'title' => 'additional_information'
+            'title' => 'additional_information',
+            'data_converter' => SerializedToJson::class
         ],
         [
             'table' => 'sales_payment_transaction',
             'identifier' => 'transaction_id',
-            'title' => 'additional_information'
+            'title' => 'additional_information',
+            'data_converter' => SerializedToJson::class
         ]
     ];
 
@@ -74,8 +84,8 @@ class ConvertSerializedDataToJson
      */
     public function convert()
     {
-        $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         foreach ($this->fieldsToUpdate as $field) {
+            $fieldDataConverter = $this->getFieldDataConverter($field['data_converter']);
             $fieldDataConverter->convert(
                 $this->salesSetup->getConnection(),
                 $this->salesSetup->getTable($field['table']),
@@ -83,5 +93,21 @@ class ConvertSerializedDataToJson
                 $field['title']
             );
         }
+    }
+
+    /**
+     * Get field data converter
+     *
+     * @param string $dataConverterClassName
+     * @return FieldDataConverter
+     */
+    private function getFieldDataConverter($dataConverterClassName)
+    {
+        if (!isset($this->fieldDataConverters[$dataConverterClassName])) {
+            $this->fieldDataConverters[$dataConverterClassName] = $this->fieldDataConverterFactory->create(
+                $dataConverterClassName
+            );
+        }
+        return $this->fieldDataConverters[$dataConverterClassName];
     }
 }
