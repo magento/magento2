@@ -81,7 +81,7 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param FixtureFactory $fixtureFactory
      * @param array $products
-     * @param array|null $prices
+     * @param array $prices
      * @param OrderInjectable|null $order
      */
     public function __construct(
