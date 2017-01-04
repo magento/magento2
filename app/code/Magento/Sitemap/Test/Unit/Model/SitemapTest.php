@@ -53,7 +53,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $_storeManagerMock;
+    private $storeManagerMock;
 
     /**
      * Set helper mocks, create resource model mock
@@ -487,7 +487,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ->method('getBaseUrl')
             ->with($this->isType('string'), false)
             ->willReturn('http://store.com/');
-        $this->_storeManagerMock->expects($this->atLeastOnce())
+        $this->storeManagerMock->expects($this->atLeastOnce())
             ->method('getStore')
             ->with(1)
             ->willReturn($storeMock);
@@ -628,7 +628,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $cmsFactory->expects($this->any())->method('create')->will($this->returnValue($this->_sitemapCmsPageMock));
 
-        $this->_storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->setMethods(['getStore'])
             ->getMockForAbstractClass();
 
@@ -639,7 +639,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 'categoryFactory' => $categoryFactory,
                 'productFactory' => $productFactory,
                 'cmsFactory' => $cmsFactory,
-                'storeManager' => $this->_storeManagerMock,
+                'storeManager' => $this->storeManagerMock,
                 'sitemapData' => $this->_helperMockSitemap,
                 'filesystem' => $this->_filesystemMock
             ]
