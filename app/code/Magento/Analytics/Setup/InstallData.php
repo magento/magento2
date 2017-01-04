@@ -12,6 +12,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\Flag\FlagResource;
 use Magento\Integration\Model\IntegrationService;
+use Magento\Config\Model\Config;
 
 /**
  * @codeCoverageIgnore
@@ -34,19 +35,27 @@ class InstallData implements InstallDataInterface
     private $integrationService;
 
     /**
+     * @var Config
+     */
+    public $config;
+
+    /**
      * InstallData constructor.
      * @param NotificationTime $notificationTime
      * @param FlagResource $flagResource
      * @param IntegrationService $integrationService
+     * @param Config $config
      */
     public function __construct(
         NotificationTime $notificationTime,
         FlagResource $flagResource,
-        IntegrationService $integrationService
+        IntegrationService $integrationService,
+        Config $config
     ) {
         $this->notificationTime = $notificationTime;
         $this->flagResource = $flagResource;
         $this->integrationService = $integrationService;
+        $this->config = $config;
     }
 
     /**
@@ -64,7 +73,7 @@ class InstallData implements InstallDataInterface
      */
     private function getIntegrationData()
     {
-        $integrationData['name'] = "Magento Analytics user";
+        $integrationData['name'] = $this->config->getConfigDataValue('analytics/integration_name');
         $integrationData['all_resources'] = false;
         $integrationData['resource'][] = "Magento_Analytics::analytics";
         $integrationData['resource'][] = "Magento_Analytics::analytics_api";

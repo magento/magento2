@@ -12,6 +12,11 @@
                 <time>00,00,00</time>
                 <day>0</day>
             </schedule>
+            <url>
+                <signup>http://drakelair1.corp.magento.com/mamock/signup</signup>
+                <update>http://drakelair1.corp.magento.com/mamock/update</update>
+            </url>
+            <integration_name>Magento Analytics user</integration_name>
         </analytics>
     </default>
 </config>

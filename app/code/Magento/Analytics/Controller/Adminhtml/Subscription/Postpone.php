@@ -63,7 +63,7 @@ class Postpone extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Analytics::analytics');
+        return $this->_authorization->isAllowed('Magento_Analytics::analytics_settings');
     }
 
     /**
@@ -75,9 +75,8 @@ class Postpone extends Action
     {
         try {
             $dateTime = $this->dateTimeFactory->create();
-            $this->notificationTime->storeLastTimeNotification($dateTime->getTimestamp());
             $responseContent = [
-                'success' => true,
+                'success' => $this->notificationTime->storeLastTimeNotification($dateTime->getTimestamp()),
                 'error_message' => ''
             ];
         } catch (LocalizedException $e) {
