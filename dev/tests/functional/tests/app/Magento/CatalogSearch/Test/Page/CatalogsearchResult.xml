@@ -10,5 +10,6 @@
         <block name="listProductBlock" class="Magento\Catalog\Test\Block\Product\ListProduct" locator=".search.results" strategy="css selector" />
         <block name="bottomToolbar" class="Magento\Catalog\Test\Block\Product\ProductList\BottomToolbar" locator=".//*[contains(@class,'toolbar-products')][2]" strategy="xpath" />
         <block name="searchResultBlock" class="Magento\CatalogSearch\Test\Block\Advanced\Result" locator=".column.main" strategy="css selector" />
+        <block name="searchResultsTitleBlock" class="Magento\CatalogSearch\Test\Block\Advanced\SearchResultsTitle" locator=".page-title-wrapper" strategy="css selector" />
     </page>
 </config>

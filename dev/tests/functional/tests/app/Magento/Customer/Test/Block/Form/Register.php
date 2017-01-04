@@ -45,6 +45,21 @@ class Register extends Form
     protected $passwordConfirmationError = "#password-confirmation-error";
 
     /**
+     * Fixture mapping.
+     *
+     * @param array|null $fields
+     * @param string|null $parent
+     * @return array
+     */
+    protected function dataMapping(array $fields = null, $parent = null)
+    {
+        if (isset($fields['website_id'])) {
+            unset($fields['website_id']);
+        }
+        return parent::dataMapping($fields, $parent);
+    }
+
+    /**
      * Create new customer account and fill billing address if it exists
      *
      * @param FixtureInterface $fixture

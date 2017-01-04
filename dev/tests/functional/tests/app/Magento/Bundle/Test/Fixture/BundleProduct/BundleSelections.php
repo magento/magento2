@@ -98,4 +98,14 @@ class BundleSelections extends DataSource
             }
         }
     }
+
+    /**
+     * Get products from bundle items.
+     *
+     * @return array
+     */
+    public function getProducts()
+    {
+        return $this->data['products'];
+    }
 }

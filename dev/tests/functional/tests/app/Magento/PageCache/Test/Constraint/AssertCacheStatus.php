@@ -21,6 +21,7 @@ class AssertCacheStatus extends AbstractConstraint
      */
     private $cacheTypes = [
         'block_html' => "Blocks HTML output",
+        'full_page' => "Page Cache",
     ];
 
     /**
