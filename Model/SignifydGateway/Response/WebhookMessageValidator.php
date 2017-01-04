@@ -8,10 +8,10 @@ namespace Magento\Signifyd\Model\SignifydGateway\Response;
 use Magento\Signifyd\Model\Config;
 
 /**
- * Validates webhook response.
+ * Validates webhook message.
  *
  */
-class ResponseValidator
+class WebhookMessageValidator
 {
 
     /**
@@ -47,24 +47,22 @@ class ResponseValidator
     }
 
     /**
-     * Validates webhook response.
+     * Validates webhook message.
      *
-     * @param string $rawResponseBody
-     * @param string $hash Base64 encoded output of the HMAC SHA256 encoding of the JSON body of the message.
-     * @param string $topic event topic identifier.
+     * @param WebhookMessage $webhookMessage
      * @return bool
      */
-    public function validate($rawResponseBody, $hash, $topic)
+    public function validate(WebhookMessage $webhookMessage)
     {
-        if ($this->isValidTopic($topic) === false) {
+        if ($this->isValidTopic($webhookMessage->getEventTopic()) === false) {
             $this->errorMessages[] = 'Value of X-SIGNIFYD-TOPIC header is not allowed';
         }
 
-        if (empty($rawResponseBody)) {
+        if (empty($webhookMessage->getData())) {
             $this->errorMessages[] = 'Webhook message is empty';
         }
 
-        if ($this->isValidHmacSha256($rawResponseBody, $hash, $topic) === false) {
+        if ($this->isValidHash($webhookMessage) === false) {
             $this->errorMessages[] = 'X-SIGNIFYD-SEC-HMAC-SHA256 header verification fails';
         }
 
@@ -96,17 +94,14 @@ class ResponseValidator
     /**
      * Verifies a webhook message has in fact come from SIGNIFYD.
      *
-     * @param string $rawResponseBody
-     * @param string $hash X-SIGNIFYD-SEC-HMAC-SHA256 header is included in each webhook POST message.
-     * @param string $topic topic identifier.
+     * @param WebhookMessage $webhookMessage
      * @return bool
      */
-    private function isValidHmacSha256($rawResponseBody, $hash, $topic)
+    private function isValidHash(WebhookMessage $webhookMessage)
     {
         // In the case that this is a webhook test, the encoding ABCDE is allowed
-        $apiKey = $topic == 'cases/test' ? 'ABCDE' : $this->config->getApiKey();
-        $check = base64_encode(hash_hmac('sha256', $rawResponseBody, $apiKey, true));
+        $apiKey = $webhookMessage->isTest() ? 'ABCDE' : $this->config->getApiKey();
 
-        return $check === $hash;
+        return $webhookMessage->getActualHash($apiKey) === $webhookMessage->getExpectedHash();
     }
 }
