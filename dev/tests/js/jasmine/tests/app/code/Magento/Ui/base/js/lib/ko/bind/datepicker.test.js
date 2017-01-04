@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,9 +23,9 @@ define([
 
             config = {
                 options: {
-                    'dateFormat': 'M/d/yy',
-                    'storeLocale': 'en_US',
-                    'timeFormat': 'h:mm: a'
+                    dateFormat: 'M/d/yy',
+                    storeLocale: 'en_US',
+                    timeFormat: 'h:mm: a'
                 },
                 storage: observable
             };
