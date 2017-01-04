@@ -23,6 +23,12 @@ class CategoryUrlRewriteGenerator
     /** @var StoreViewService */
     protected $storeViewService;
 
+    /**
+     * @var \Magento\Catalog\Model\Category
+     * @deprecated
+     */
+    protected $category;
+
     /** @var \Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator */
     protected $canonicalUrlRewriteGenerator;
 
@@ -33,7 +39,7 @@ class CategoryUrlRewriteGenerator
     protected $childrenUrlRewriteGenerator;
 
     /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
-    private $urlRewritesSetPlaceHolder;
+    private $urlRewritesSetPrototype;
 
     /**
      * @var bool
@@ -63,7 +69,7 @@ class CategoryUrlRewriteGenerator
         $this->categoryRepository = $categoryRepository;
         $urlRewritesSetFactory = $urlRewritesSetFactory ?: ObjectManager::getInstance()
             ->get(UrlRewritesSetFactory::class);
-        $this->urlRewritesSetPlaceHolder = $urlRewritesSetFactory->create();
+        $this->urlRewritesSetPrototype = $urlRewritesSetFactory->create();
     }
 
     /**
@@ -96,7 +102,7 @@ class CategoryUrlRewriteGenerator
      */
     protected function generateForGlobalScope(Category $category, $overrideStoreUrls, $rootCategoryId = null)
     {
-        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
+        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
         $categoryId = $category->getId();
         foreach ($category->getStoreIds() as $storeId) {
             if (!$this->isGlobalScope($storeId)
@@ -107,7 +113,6 @@ class CategoryUrlRewriteGenerator
             }
         }
         $result = $urlRewritesSet->getData();
-        $urlRewritesSet->resetData();
         return $result;
     }
 
@@ -165,7 +170,7 @@ class CategoryUrlRewriteGenerator
      */
     protected function generateForSpecificStoreView(Category $category, $storeId, $rootCategoryId = null)
     {
-        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
+        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
         $urlRewritesSet->merge(
             $this->canonicalUrlRewriteGenerator->generate($storeId, $category)
         );
@@ -175,8 +180,6 @@ class CategoryUrlRewriteGenerator
         $urlRewritesSet->merge(
             $this->currentUrlRewritesRegenerator->generate($storeId, $category, $rootCategoryId)
         );
-        $result = $urlRewritesSet->getData();
-        $urlRewritesSet->resetData();
-        return $result;
+        return $urlRewritesSet->getData();
     }
 }

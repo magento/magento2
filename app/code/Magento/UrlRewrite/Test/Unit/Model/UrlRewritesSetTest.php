@@ -70,21 +70,6 @@ class UrlRewritesSetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Run test resetData method
-     *
-     * @return void
-     */
-    public function testResetData()
-    {
-        $data = new \ReflectionProperty($this->urlRewritesSet, 'data');
-        $data->setAccessible(true);
-        $data->setValue($this->urlRewritesSet, [new UrlRewrite()]);
-        $data->setAccessible(false);
-        $this->urlRewritesSet->resetData();
-        $this->assertEmpty($this->urlRewritesSet->getData());
-    }
-
-    /**
      * Data provider  for testMerge
      *
      * @return array

@@ -62,7 +62,7 @@ class Storage
      */
     public function beforeDeleteByData(StorageInterface $object, array $data)
     {
-        $this->productResource->removeMultipleByFilter($data);
+        $this->productResource->removeMultipleByProductCategory($data);
     }
 
     /**

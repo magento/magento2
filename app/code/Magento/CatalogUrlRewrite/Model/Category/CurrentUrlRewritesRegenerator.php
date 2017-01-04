@@ -17,7 +17,13 @@ class CurrentUrlRewritesRegenerator
     protected $urlRewriteFactory;
 
     /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite */
-    private $urlRewritePlaceholder;
+    private $urlRewritePrototype;
+
+    /**
+     * @var \Magento\Catalog\Model\Category
+     * @deprecated
+     */
+    protected $category;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlFinderInterface
@@ -29,7 +35,7 @@ class CurrentUrlRewritesRegenerator
     private $urlRewriteMap;
 
     /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
-    private $urlRewritesSetPlaceHolder;
+    private $urlRewritesSetPrototype;
 
     /**
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
@@ -47,13 +53,13 @@ class CurrentUrlRewritesRegenerator
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->urlRewriteFactory = $urlRewriteFactory;
-        $this->urlRewritePlaceholder = $urlRewriteFactory->create();
+        $this->urlRewritePrototype = $urlRewriteFactory->create();
         $this->urlFinder = $urlFinder;
         $this->urlRewriteMap = $urlRewriteMap ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap::class);
         $urlRewritesSetFactory = $urlRewritesSetFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\UrlRewrite\Model\UrlRewritesSetFactory::class);
-        $this->urlRewritesSetPlaceHolder = $urlRewritesSetFactory->create();
+        $this->urlRewritesSetPrototype = $urlRewritesSetFactory->create();
     }
 
     /**
@@ -66,7 +72,7 @@ class CurrentUrlRewritesRegenerator
      */
     public function generate($storeId, \Magento\Catalog\Model\Category $category, $rootCategoryId = null)
     {
-        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
+        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
         $currentUrlRewrites = $this->urlRewriteMap->getByIdentifiers(
             $category->getEntityId(),
             $storeId,
@@ -82,9 +88,7 @@ class CurrentUrlRewritesRegenerator
             );
         }
 
-        $result = $urlRewritesSet->getData();
-        $urlRewritesSet->resetData();
-        return $result;
+        return $urlRewritesSet->getData();
     }
 
     /**
@@ -98,7 +102,7 @@ class CurrentUrlRewritesRegenerator
         if ($category->getData('save_rewrites_history')) {
             $targetPath = $this->categoryUrlPathGenerator->getUrlPathWithSuffix($category, $storeId);
             if ($url->getRequestPath() !== $targetPath) {
-                $generatedUrl = clone $this->urlRewritePlaceholder;
+                $generatedUrl = clone $this->urlRewritePrototype;
                 $generatedUrl->setEntityType(CategoryUrlRewriteGenerator::ENTITY_TYPE)
                     ->setEntityId($category->getEntityId())
                     ->setRequestPath($url->getRequestPath())
@@ -124,7 +128,7 @@ class CurrentUrlRewritesRegenerator
             ? $url->getTargetPath()
             : $this->categoryUrlPathGenerator->getUrlPathWithSuffix($category, $storeId);
         if ($url->getRequestPath() !== $targetPath) {
-            $generatedUrl = clone $this->urlRewritePlaceholder;
+            $generatedUrl = clone $this->urlRewritePrototype;
             $generatedUrl->setEntityType(CategoryUrlRewriteGenerator::ENTITY_TYPE)
                 ->setEntityId($category->getEntityId())
                 ->setRequestPath($url->getRequestPath())

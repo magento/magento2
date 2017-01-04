@@ -25,7 +25,7 @@ class UrlRewriteMap
     private $urlFinder;
 
     /** @var UrlRewrite */
-    private $urlRewritePlaceholder;
+    private $urlRewritePrototype;
 
     /**
      * @param DataMapPoolInterface $dataMapPool
@@ -39,7 +39,7 @@ class UrlRewriteMap
     ) {
         $this->dataMapPool = $dataMapPool;
         $this->urlFinder = $urlFinder;
-        $this->urlRewritePlaceholder = $urlRewriteFactory->create();
+        $this->urlRewritePrototype = $urlRewriteFactory->create();
     }
 
     /**
@@ -98,7 +98,7 @@ class UrlRewriteMap
      */
     private function createUrlRewrite($data)
     {
-        $dataObject = clone $this->urlRewritePlaceholder;
+        $dataObject = clone $this->urlRewritePrototype;
         $dataObject->setUrlRewriteId($data['url_rewrite_id']);
         $dataObject->setEntityType($data['entity_type']);
         $dataObject->setEntityId($data['entity_id']);

@@ -32,6 +32,12 @@ class ProductUrlRewriteGenerator
     protected $storeViewService;
 
     /**
+     * @var \Magento\Catalog\Model\Product
+     * @deprecated
+     */
+    protected $product;
+
+    /**
      * @deprecated
      * @var \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator
      */

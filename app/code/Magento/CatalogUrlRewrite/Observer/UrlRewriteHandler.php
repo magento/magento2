@@ -41,7 +41,7 @@ class UrlRewriteHandler
     private $categoryBasedProductRewriteGenerator;
 
     /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
-    private $urlRewritesSetPlaceHolder;
+    private $urlRewritesSetPrototype;
 
     /**
      * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider
@@ -66,7 +66,7 @@ class UrlRewriteHandler
         $this->productCollectionFactory = $productCollectionFactory;
         $urlRewritesSetFactory = $urlRewritesSetFactory ?: ObjectManager::getInstance()
             ->get(UrlRewritesSetFactory::class);
-        $this->urlRewritesSetPlaceHolder = $urlRewritesSetFactory->create();
+        $this->urlRewritesSetPrototype = $urlRewritesSetFactory->create();
     }
 
     /**
@@ -77,7 +77,7 @@ class UrlRewriteHandler
      */
     public function generateProductUrlRewrites(Category $category)
     {
-        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
+        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
         $this->isSkippedProduct = [];
         $saveRewriteHistory = $category->getData('save_rewrites_history');
         $storeId = $category->getStoreId();
@@ -118,9 +118,7 @@ class UrlRewriteHandler
             );
         }
 
-        $result = $urlRewritesSet->getData();
-        $urlRewritesSet->resetData();
-        return $result;
+        return $urlRewritesSet->getData();
     }
 
     /**
@@ -136,7 +134,7 @@ class UrlRewriteHandler
         $saveRewriteHistory,
         $rootCategoryId = null
     ) {
-        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
+        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $category->getProductCollection()
             ->addAttributeToSelect('name')
@@ -155,9 +153,7 @@ class UrlRewriteHandler
             );
         }
 
-        $result = $urlRewritesSet->getData();
-        $urlRewritesSet->resetData();
-        return $result;
+        return $urlRewritesSet->getData();
     }
 
     /**

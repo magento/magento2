@@ -100,7 +100,7 @@ class AfterImportDataObserver implements ObserverInterface
     ];
 
     /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
-    private $urlRewritesSetPlaceHolder;
+    private $urlRewritesSetPrototype;
 
     /**
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
@@ -136,7 +136,7 @@ class AfterImportDataObserver implements ObserverInterface
         $this->urlFinder = $urlFinder;
         $urlRewritesSetFactory = $urlRewritesSetFactory ?: ObjectManager::getInstance()
             ->get(UrlRewritesSetFactory::class);
-        $this->urlRewritesSetPlaceHolder = $urlRewritesSetFactory->create();
+        $this->urlRewritesSetPrototype = $urlRewritesSetFactory->create();
     }
 
     /**
@@ -269,7 +269,7 @@ class AfterImportDataObserver implements ObserverInterface
      */
     protected function generateUrls()
     {
-        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
+        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
         $urlRewritesSet->merge($this->canonicalUrlRewriteGenerate());
         $urlRewritesSet->merge($this->categoriesUrlRewriteGenerate());
         $urlRewritesSet->merge($this->currentUrlRewritesRegenerate());
@@ -278,9 +278,7 @@ class AfterImportDataObserver implements ObserverInterface
         unset($this->products);
         $this->products = [];
 
-        $result = $urlRewritesSet->getData();
-        $urlRewritesSet->resetData();
-        return $result;
+        return $urlRewritesSet->getData();
     }
 
     /**

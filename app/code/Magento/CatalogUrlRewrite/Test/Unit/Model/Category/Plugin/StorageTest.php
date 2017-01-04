@@ -102,7 +102,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     {
         $data = [1, 2, 3];
         $this->productResourceModel->expects(static::once())
-            ->method('removeMultipleByFilter')
+            ->method('removeMultipleByProductCategory')
             ->with($data)->willReturnSelf();
         $this->plugin->beforeDeleteByData($this->storage, $data);
     }

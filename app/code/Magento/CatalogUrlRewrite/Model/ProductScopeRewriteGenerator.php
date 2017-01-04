@@ -59,7 +59,7 @@ class ProductScopeRewriteGenerator
     private $canonicalUrlRewriteGenerator;
 
     /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
-    private $urlRewritesSetPlaceHolder;
+    private $urlRewritesSetPrototype;
 
     /**
      * @param StoreViewService $storeViewService
@@ -90,7 +90,7 @@ class ProductScopeRewriteGenerator
         $this->anchorUrlRewriteGenerator = $anchorUrlRewriteGenerator;
         $urlRewritesSetFactory = $urlRewritesSetFactory ?: ObjectManager::getInstance()
             ->get(UrlRewritesSetFactory::class);
-        $this->urlRewritesSetPlaceHolder = $urlRewritesSetFactory->create();
+        $this->urlRewritesSetPrototype = $urlRewritesSetFactory->create();
     }
 
     /**
@@ -115,7 +115,7 @@ class ProductScopeRewriteGenerator
     public function generateForGlobalScope($productCategories, Product $product, $rootCategoryId = null)
     {
         $productId = $product->getEntityId();
-        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
+        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
 
         foreach ($product->getStoreIds() as $id) {
             if (!$this->isGlobalScope($id) &&
@@ -130,9 +130,7 @@ class ProductScopeRewriteGenerator
             }
         }
 
-        $result = $urlRewritesSet->getData();
-        $urlRewritesSet->resetData();
-        return $result;
+        return $urlRewritesSet->getData();
     }
 
     /**
@@ -146,7 +144,7 @@ class ProductScopeRewriteGenerator
      */
     public function generateForSpecificStoreView($storeId, $productCategories, Product $product, $rootCategoryId = null)
     {
-        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
+        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
         $categories = [];
         foreach ($productCategories as $category) {
             if ($this->isCategoryProperForGenerating($category, $storeId)) {
@@ -173,9 +171,7 @@ class ProductScopeRewriteGenerator
             $this->anchorUrlRewriteGenerator->generate($storeId, $product, $productCategories)
         );
 
-        $result = $urlRewritesSet->getData();
-        $urlRewritesSet->resetData();
-        return $result;
+        return $urlRewritesSet->getData();
     }
 
     /**

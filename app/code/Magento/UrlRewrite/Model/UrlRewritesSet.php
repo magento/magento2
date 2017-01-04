@@ -8,7 +8,9 @@ namespace Magento\UrlRewrite\Model;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
- * Removes duplicates for a set/array of Url Rewrites
+ * This class is to be used as a container for new generated url rewrites by adding new ones using merge method
+ * Removes duplicates for a set/array of Url Rewrites based on the unique key of the url_rewrites table
+ *
  */
 class UrlRewritesSet
 {
@@ -23,13 +25,13 @@ class UrlRewritesSet
      * @param UrlRewrite[] $urlRewritesArray
      * @return void
      */
-    public function merge($urlRewritesArray)
+    public function merge(array $urlRewritesArray)
     {
         $separator = '_';
         foreach ($urlRewritesArray as $urlRewrite) {
             $key = $urlRewrite->getRequestPath() . $separator . $urlRewrite->getStoreId();
             if ($key !== $separator) {
-                $this->data[$urlRewrite->getRequestPath() . $separator . $urlRewrite->getStoreId()] = $urlRewrite;
+                $this->data[$key] = $urlRewrite;
             } else {
                 $this->data[] = $urlRewrite;
             }
@@ -44,16 +46,5 @@ class UrlRewritesSet
     public function getData()
     {
         return $this->data;
-    }
-
-    /**
-     * Resets the container to an empty array
-     *
-     * @return void
-     */
-    public function resetData()
-    {
-        unset($this->data);
-        $this->data = [];
     }
 }

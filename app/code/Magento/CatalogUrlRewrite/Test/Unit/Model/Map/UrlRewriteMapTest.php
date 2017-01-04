@@ -26,7 +26,7 @@ class UrlRewriteMapTest extends \PHPUnit_Framework_TestCase
     private $urlRewriteFactoryMock;
 
     /** @var UrlRewrite|\PHPUnit_Framework_MockObject_MockObject */
-    private $urlRewritePlaceholderMock;
+    private $urlRewritePrototypeMock;
 
     /** @var UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $urlFinderMock;
@@ -39,11 +39,11 @@ class UrlRewriteMapTest extends \PHPUnit_Framework_TestCase
         $this->dataMapPoolMock = $this->getMock(DataMapPoolInterface::class);
         $this->urlFinderMock = $this->getMock(UrlFinderInterface::class);
         $this->urlRewriteFactoryMock = $this->getMock(UrlRewriteFactory::class, ['create'], [], '', false);
-        $this->urlRewritePlaceholderMock = new UrlRewrite();
+        $this->urlRewritePrototypeMock = new UrlRewrite();
 
         $this->urlRewriteFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturn($this->urlRewritePlaceholderMock);
+            ->willReturn($this->urlRewritePrototypeMock);
 
         $this->model = (new ObjectManager($this))->getObject(
             UrlRewriteMap::class,

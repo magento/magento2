@@ -24,6 +24,18 @@ use Magento\UrlRewrite\Model\UrlRewritesSetFactory;
 class CurrentUrlRewritesRegenerator
 {
     /**
+     * @var Product
+     * @deprecated
+     */
+    protected $product;
+
+    /**
+     * @var ObjectRegistry
+     * @deprecated
+     */
+    protected $productCategories;
+
+    /**
      * @var UrlFinderInterface
      * @deprecated
      */
@@ -36,13 +48,13 @@ class CurrentUrlRewritesRegenerator
     protected $urlRewriteFactory;
 
     /** @var UrlRewrite */
-    private $urlRewritePlaceholder;
+    private $urlRewritePrototype;
 
     /** @var UrlRewriteMap */
     private $urlRewriteMap;
 
     /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
-    private $urlRewritesSetPlaceHolder;
+    private $urlRewritesSetPrototype;
 
     /**
      * @param UrlFinderInterface $urlFinder
@@ -61,11 +73,11 @@ class CurrentUrlRewritesRegenerator
         $this->urlFinder = $urlFinder;
         $this->productUrlPathGenerator = $productUrlPathGenerator;
         $this->urlRewriteFactory = $urlRewriteFactory;
-        $this->urlRewritePlaceholder = $urlRewriteFactory->create();
+        $this->urlRewritePrototype = $urlRewriteFactory->create();
         $this->urlRewriteMap = $urlRewriteMap ?: ObjectManager::getInstance()->get(UrlRewriteMap::class);
         $urlRewritesSetFactory = $urlRewritesSetFactory ?: ObjectManager::getInstance()
             ->get(UrlRewritesSetFactory::class);
-        $this->urlRewritesSetPlaceHolder = $urlRewritesSetFactory->create();
+        $this->urlRewritesSetPrototype = $urlRewritesSetFactory->create();
     }
 
     /**
@@ -79,7 +91,7 @@ class CurrentUrlRewritesRegenerator
      */
     public function generate($storeId, Product $product, ObjectRegistry $productCategories, $rootCategoryId = null)
     {
-        $urlRewritesSet = clone $this->urlRewritesSetPlaceHolder;
+        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
         $currentUrlRewrites = $this->urlRewriteMap->getByIdentifiers(
             $product->getEntityId(),
             $storeId,
@@ -99,9 +111,7 @@ class CurrentUrlRewritesRegenerator
             );
         }
 
-        $result = $urlRewritesSet->getData();
-        $urlRewritesSet->resetData();
-        return $result;
+        return $urlRewritesSet->getData();
     }
 
     /**
@@ -116,7 +126,7 @@ class CurrentUrlRewritesRegenerator
         if ($product->getData('save_rewrites_history')) {
             $targetPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category);
             if ($url->getRequestPath() !== $targetPath) {
-                $generatedUrl = clone $this->urlRewritePlaceholder;
+                $generatedUrl = clone $this->urlRewritePrototype;
                 $generatedUrl->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                     ->setEntityId($product->getEntityId())
                     ->setRequestPath($url->getRequestPath())
@@ -145,7 +155,7 @@ class CurrentUrlRewritesRegenerator
             ? $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category)
             : $url->getTargetPath();
         if ($url->getRequestPath() !== $targetPath) {
-            $generatedUrl = clone $this->urlRewritePlaceholder;
+            $generatedUrl = clone $this->urlRewritePrototype;
             $generatedUrl->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                 ->setEntityId($product->getEntityId())
                 ->setRequestPath($url->getRequestPath())

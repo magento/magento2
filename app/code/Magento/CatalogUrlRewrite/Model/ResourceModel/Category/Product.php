@@ -70,12 +70,13 @@ class Product extends AbstractDb
     }
 
     /**
-     * Removes data by entities from url_rewrite table using a select
+     * Removes multiple entities from url_rewrite table using entities from catalog_url_rewrite_product_category
+     * Example: $filter = ['category_id' => [1, 2, 3], 'product_id' => [1, 2, 3]]
      *
      * @param array $filter
      * @return int
      */
-    public function removeMultipleByFilter(array $filter)
+    public function removeMultipleByProductCategory(array $filter)
     {
         return $this->getConnection()->delete(
             $this->getTable(self::TABLE_NAME),
