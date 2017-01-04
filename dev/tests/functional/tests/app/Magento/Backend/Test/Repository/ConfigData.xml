@@ -172,6 +172,16 @@
                 <item name="label" xsi:type="string">Yes</item>
                 <item name="value" xsi:type="number">1</item>
             </field>
+            <field name="web/secure/base_url" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="string">{{basic_url_to_secure}}</item>
+            </field>
+            <field name="web/secure/base_link_url" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="string">{{basic_url_to_secure}}</item>
+            </field>
         </dataset>
 
         <dataset name="enable_https_frontend_admin_rollback">
@@ -186,6 +196,12 @@
                 <item name="scope_id" xsi:type="number">0</item>
                 <item name="label" xsi:type="string">No</item>
                 <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="web/secure/base_url" xsi:type="array">
+                <item name="value" xsi:type="string">{{basic_url_to_unsecure}}</item>
+            </field>
+            <field name="web/secure/base_link_url" xsi:type="array">
+                <item name="value" xsi:type="string">{{basic_url_to_unsecure}}</item>
             </field>
         </dataset>
 

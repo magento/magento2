@@ -110,6 +110,7 @@
             <data name="cart/data/grand_total" xsi:type="string">3473.43</data>
             <data name="cart/data/subtotal" xsi:type="string">3408.43</data>
             <data name="configData" xsi:type="string">enable_https_frontend_admin</data>
+            <data name="flushCache" xsi:type="boolean">true</data>
             <data name="expectedItemsQty" xsi:type="number">15</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartItemsQty" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />

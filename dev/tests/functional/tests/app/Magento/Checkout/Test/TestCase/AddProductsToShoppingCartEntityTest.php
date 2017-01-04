@@ -13,6 +13,8 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
+use Magento\Mtf\Util\Command\Cli\Cache;
 
 /**
  * Preconditions:
@@ -26,6 +28,7 @@ use Magento\Mtf\TestStep\TestStepFactory;
  *
  * @group Shopping_Cart
  * @ZephyrId MAGETWO-25382, MAGETWO-42677
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddProductsToShoppingCartEntityTest extends Injectable
 {
@@ -84,6 +87,20 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     private $flushCache;
 
     /**
+     * "Configuration" page in Admin panel.
+     *
+     * @var SystemConfigEdit
+     */
+    private $configurationAdminPage;
+
+    /**
+     * Cache CLI.
+     *
+     * @var Cache
+     */
+    private $cache;
+
+    /**
      * Prepare test data.
      *
      * @param BrowserInterface $browser
@@ -91,6 +108,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $cartPage
      * @param TestStepFactory $testStepFactory
+     * @param Cache $cache
      * @return void
      */
     public function __prepare(
@@ -98,13 +116,15 @@ class AddProductsToShoppingCartEntityTest extends Injectable
         FixtureFactory $fixtureFactory,
         CatalogProductView $catalogProductView,
         CheckoutCart $cartPage,
-        TestStepFactory $testStepFactory
+        TestStepFactory $testStepFactory,
+        Cache $cache
     ) {
         $this->browser = $browser;
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogProductView = $catalogProductView;
         $this->cartPage = $cartPage;
         $this->testStepFactory = $testStepFactory;
+        $this->cache = $cache;
     }
 
     /**
@@ -120,14 +140,17 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     {
         // Preconditions
         $this->configData = $configData;
-        $this->flushCache = $flushCache;
-        $this->objectManager->create(
+        $this->flushCache = (bool) $flushCache;
+
+        ObjectManager::getInstance()->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
-        // Change http://app_backend_url to https://app_backend_url
+
         if ($this->configData == 'enable_https_frontend_admin') {
-            $this->changeBackendUrl(true);
+            $_ENV['app_backend_url'] = mb_ereg_replace ("(http[s]?)", 'https', $_ENV['app_backend_url']);
+            $_ENV['app_frontend_url'] = mb_ereg_replace ("(http[s]?)", 'https', $_ENV['app_frontend_url']);
+
         }
         $products = $this->prepareProducts($productsData);
 
@@ -171,34 +194,53 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     }
 
     /**
-     * Change app_backend_url.
-     *
-     * @param bool $useHttps
-     * @return void
-     */
-    private function changeBackendUrl($useHttps = false)
-    {
-        if ($useHttps) {
-            $_ENV['app_backend_url'] = preg_replace('/(http[s]?)/', 'https', $_ENV['app_backend_url']);
-        } else {
-            $_ENV['app_backend_url'] = preg_replace('/(http[s]?)/', 'http', $_ENV['app_backend_url']);
-        }
-    }
-
-    /**
      * Clean data after running test.
      *
      * @return void
      */
     public function tearDown()
     {
-        $this->testStepFactory->create(
-            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $this->configData, 'rollback' => true]
-        )->run();
-        // Change https://app_backend_url to http://app_backend_url
+        // Workaround until MTA-3879 is delivered.
         if ($this->configData == 'enable_https_frontend_admin') {
-            $this->changeBackendUrl();
+            $this->getSystemConfigEditPage()->open();
+            $this->getSystemConfigEditPage()->getForm()
+                ->getGroup('web', 'secure')->setValue('web', 'secure', 'use_in_frontend', 'No');
+            $this->getSystemConfigEditPage()->getForm()
+                ->getGroup('web', 'secure')->setValue('web', 'secure', 'use_in_adminhtml', 'No');
+            $this->getSystemConfigEditPage()->getForm()
+                ->getGroup('web', 'secure')->setValue('web', 'secure', 'base_url', $this->getBaseUrl());
+            $this->getSystemConfigEditPage()->getForm()
+                ->getGroup('web', 'secure')->setValue('web', 'secure', 'base_link_url', $this->getBaseUrl());
+            $this->getSystemConfigEditPage()->getPageActions()->save();
+            $this->cache->flush();
         }
+    }
+
+    /**
+     * Get base URL.
+     *
+     * @param bool $useHttps
+     * @return string
+     */
+    private function getBaseUrl($useHttps = false)
+    {
+        $protocol = $useHttps ? 'https' : 'http';
+        return mb_ereg_replace ("(http[s]?)", $protocol, $_ENV['app_frontend_url']);
+    }
+
+    /**
+     * Create System Config Edit Page.
+     *
+     * @return SystemConfigEdit
+     */
+    private function getSystemConfigEditPage()
+    {
+        if (null === $this->configurationAdminPage) {
+            $this->configurationAdminPage = ObjectManager::getInstance()->create(
+                \Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit::class
+            );
+        }
+
+        return $this->configurationAdminPage;
     }
 }
