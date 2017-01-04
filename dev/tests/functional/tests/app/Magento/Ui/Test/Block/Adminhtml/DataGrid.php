@@ -345,6 +345,7 @@ class DataGrid extends Grid
             ->find(sprintf($this->actionList, $actionType), Locator::SELECTOR_XPATH)
             ->click();
         if (is_array($action)) {
+            $this->waitForElementVisible(sprintf($this->actionList, end($action)), Locator::SELECTOR_XPATH);
             $this->getGridHeaderElement()
                 ->find(sprintf($this->actionList, end($action)), Locator::SELECTOR_XPATH)
                 ->click();
