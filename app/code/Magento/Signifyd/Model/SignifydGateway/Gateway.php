@@ -60,4 +60,22 @@ class Gateway
 
         return (int)$caseCreationResult['investigationId'];
     }
+
+    /**
+     * @param int $signifydCaseId
+     * @return array
+     * @throws GatewayException
+     */
+    public function submitCaseForGuarantee($signifydCaseId)
+    {
+        $guaranteeCreationResult = $this->apiClient->makeApiCall(
+            '/guarantees',
+            'POST',
+            [
+                'caseId' => $signifydCaseId,
+            ]
+        );
+
+        return $guaranteeCreationResult;
+    }
 }

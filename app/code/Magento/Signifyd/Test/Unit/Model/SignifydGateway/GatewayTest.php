@@ -166,4 +166,23 @@ class GatewayTest extends TestCase
             'Method must return value specified in "investigationId" response parameter and ignore any other parameters'
         );
     }
+
+    public function testCreateGuaranteeCallsValidApiMethod()
+    {
+        $dummySygnifydCaseId = 42;
+
+        $this->apiClient
+            ->expects($this->atLeastOnce())
+            ->method('makeApiCall')
+            ->with(
+                $this->equalTo('/guarantees'),
+                $this->equalTo('POST'),
+                $this->equalTo([
+                    'caseId' => $dummySygnifydCaseId
+                ])
+            );
+
+        $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+
+    }
 }
