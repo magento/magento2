@@ -33,9 +33,23 @@ class Topmenu extends Template implements IdentityInterface
     /**
      * Core registry
      *
+     * Deprecated since not used in this class.
+     *
      * @var Registry
+     *
+     * @deprecated
      */
     protected $registry;
+
+    /**
+     * @var NodeFactory
+     */
+    private $nodeFactory;
+
+    /**
+     * @var TreeFactory
+     */
+    private $treeFactory;
 
     /**
      * @param Template\Context $context
@@ -50,13 +64,8 @@ class Topmenu extends Template implements IdentityInterface
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->_menu = $nodeFactory->create(
-            [
-                'data' => [],
-                'idField' => 'root',
-                'tree' => $treeFactory->create()
-            ]
-        );
+        $this->nodeFactory = $nodeFactory;
+        $this->treeFactory = $treeFactory;
     }
 
     /**
@@ -81,18 +90,18 @@ class Topmenu extends Template implements IdentityInterface
     {
         $this->_eventManager->dispatch(
             'page_block_html_topmenu_gethtml_before',
-            ['menu' => $this->_menu, 'block' => $this]
+            ['menu' => $this->getMenu(), 'block' => $this, 'request' => $this->getRequest()]
         );
 
-        $this->_menu->setOutermostClass($outermostClass);
-        $this->_menu->setChildrenWrapClass($childrenWrapClass);
+        $this->getMenu()->setOutermostClass($outermostClass);
+        $this->getMenu()->setChildrenWrapClass($childrenWrapClass);
 
-        $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
+        $html = $this->_getHtml($this->getMenu(), $childrenWrapClass, $limit);
 
         $transportObject = new \Magento\Framework\DataObject(['html' => $html]);
         $this->_eventManager->dispatch(
             'page_block_html_topmenu_gethtml_after',
-            ['menu' => $this->_menu, 'transportObject' => $transportObject]
+            ['menu' => $this->getMenu(), 'transportObject' => $transportObject]
         );
         $html = $transportObject->getHtml();
         return $html;
@@ -374,6 +383,15 @@ class Topmenu extends Template implements IdentityInterface
      */
     public function getMenu()
     {
+        if (!$this->_menu) {
+            $this->_menu = $this->nodeFactory->create(
+                [
+                    'data' => [],
+                    'idField' => 'root',
+                    'tree' => $this->treeFactory->create()
+                ]
+            );
+        }
         return $this->_menu;
     }
 }
