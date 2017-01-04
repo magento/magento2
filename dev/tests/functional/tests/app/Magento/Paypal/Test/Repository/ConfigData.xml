@@ -236,6 +236,15 @@
             </field>
         </dataset>
 
+        <dataset name="payflowpro_avs_security_code_does_not_match">
+            <field name="payment/payflowpro/avs_security_code" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
         <dataset name="hosted_pro">
             <field name="payment/paypal_group_all_in_one/payments_pro_hosted_solution_with_express_checkout/pphs_required_settings/pphs_required_settings_pphs/business_account" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
