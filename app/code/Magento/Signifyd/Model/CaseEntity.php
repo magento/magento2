@@ -23,7 +23,7 @@ class CaseEntity extends AbstractModel implements CaseInterface
     /**
      * @var SerializerInterface
      */
-    protected $serializer;
+    private $serializer;
 
     /**
      * @inheritdoc
