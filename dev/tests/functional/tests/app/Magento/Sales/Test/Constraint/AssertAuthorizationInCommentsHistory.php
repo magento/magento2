@@ -21,7 +21,7 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
     const AUTHORIZED_AMOUNT_PATTERN = '/(IPN "Pending" )*Authorized amount of \w*\W{1,2}%s. Transaction ID: "[\w\-]*"/';
 
     /**
-     * Assert that comment about authorized amount exist in Comments History section on order page in Admin.
+     * Assert that comment about authorized amount exists in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
@@ -37,11 +37,14 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
     ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
-        $actualAuthorizedAmount = $salesOrderView->getOrderHistoryBlock()->getAuthorizedAmount();
+
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
 
         \PHPUnit_Framework_Assert::assertRegExp(
             sprintf(self::AUTHORIZED_AMOUNT_PATTERN, $prices['grandTotal']),
-            $actualAuthorizedAmount,
+            $latestComment['comment'],
             'Incorrect authorized amount value for the order #' . $orderId
         );
     }
