@@ -93,6 +93,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $productRewrite = [$productId => ['rewrite' => 'product']];
         $itemData = ['item' => 'data'];
         $shortcutButtonsHtml = '<span>Buttons</span>';
+        $websiteId = 100;
 
         $subtotalMock = $this->getMock('\Magento\Framework\DataObject', ['getValue'], [], '', false);
         $subtotalMock->expects($this->once())->method('getValue')->willReturn($subtotalValue);
@@ -100,7 +101,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $quoteMock = $this->getMock(
             '\Magento\Quote\Model\Quote',
-            ['getTotals', 'getHasError', 'getAllVisibleItems'],
+            ['getTotals', 'getHasError', 'getAllVisibleItems', 'getStore'],
             [],
             '',
             false
@@ -118,6 +119,10 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $quoteItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', ['getProduct', 'getStoreId'], [], '', false);
         $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([$quoteItemMock]);
+
+        $storeMock = $this->getMock(\Magento\Store\Model\System\Store::class, ['getWebsiteId'], [], '', false);
+        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
+        $quoteMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $productMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
@@ -166,7 +171,8 @@ class CartTest extends \PHPUnit_Framework_TestCase
                 ['item' => 'data']
             ],
             'extra_actions' => '<span>Buttons</span>',
-            'isGuestCheckoutAllowed' => 1
+            'isGuestCheckoutAllowed' => 1,
+            'website_id' => $websiteId
         ];
         $this->assertEquals($expectedResult, $this->model->getSectionData());
     }
