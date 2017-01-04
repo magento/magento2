@@ -63,7 +63,7 @@ class Postpone extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Analytics::analytics');
+        return $this->_authorization->isAllowed('Magento_Analytics::analytics_settings');
     }
 
     /**
