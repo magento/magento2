@@ -1,12 +1,9 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /*eslint max-nested-callbacks: 0*/
-/*jscs:disable requirePaddingNewLinesInObjects*/
-/*jscs:disable jsDoc*/
-
 define([
     'Magento_Ui/js/grid/data-storage',
 ], function (DataStorage) {
@@ -17,6 +14,7 @@ define([
                 dataScope: '',
             }),
             type;
+
         describe('"initConfig" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initConfig')).toBeDefined();
@@ -26,9 +24,10 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check method change "$this.dataScope" property', function () {
-                var obj = new DataStorage({dataScope: 'magento'});
-                obj.initConfig;
-                expect(obj.dataScope).toEqual(['magento']);
+                var model = new DataStorage({dataScope: 'magento'});
+
+                model.initConfig;
+                expect(model.dataScope).toEqual(['magento']);
             });
         });
         describe('"hasScopeChanged" method', function () {
@@ -41,11 +40,13 @@ define([
             });
             it('Check method with empty cached requests', function () {
                 var expectedResult;
+
                 expectedResult = obj.hasScopeChanged();
                 expect(expectedResult).toBeFalsy();
             });
             it('Check method with not empty cached requests', function () {
-                var expectedResult, params, requestParams;
+                var expectedResult, params, requestParams, model;
+
                 params = {
                     namespace: "magento",
                     search: "",
@@ -64,12 +65,12 @@ define([
                     sorting: {},
                     paging: {}
                 };
-                var obj = new DataStorage(
+                model = new DataStorage(
                     {
                         dataScope: ['filters.store_id'] //became after initConfig method call
                     }
                 );
-                spyOn(obj, "getRequest").and.returnValue({
+                spyOn(model, "getRequest").and.returnValue({
                     ids: [],
                     params: {
                         namespace: "magento",
@@ -82,13 +83,13 @@ define([
                     },
                     totalRecords: 0
                 });
-                spyOn(obj, "removeRequest").and.callFake(function () {
+                spyOn(model, "removeRequest").and.callFake(function () {
                     return false;
                 });
-                obj.cacheRequest({totalRecords: 0}, params);
-                expect(obj.getRequest).toHaveBeenCalled();
-                expect(obj.removeRequest).toHaveBeenCalled();
-                expectedResult = obj.hasScopeChanged(requestParams);
+                model.cacheRequest({totalRecords: 0}, params);
+                expect(model.getRequest).toHaveBeenCalled();
+                expect(model.removeRequest).toHaveBeenCalled();
+                expectedResult = model.hasScopeChanged(requestParams);
                 expect(expectedResult).toBeTruthy();
             });
         });
