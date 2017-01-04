@@ -43,7 +43,6 @@ class WebhookFactory
         $this->dataDecoder = $decoder;
     }
 
-
     /**
      * Create webhook data object.
      *
