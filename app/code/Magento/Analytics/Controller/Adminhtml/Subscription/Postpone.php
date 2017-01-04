@@ -75,9 +75,8 @@ class Postpone extends Action
     {
         try {
             $dateTime = $this->dateTimeFactory->create();
-            $this->notificationTime->storeLastTimeNotification($dateTime->getTimestamp());
             $responseContent = [
-                'success' => true,
+                'success' => $this->notificationTime->storeLastTimeNotification($dateTime->getTimestamp()),
                 'error_message' => ''
             ];
         } catch (LocalizedException $e) {
