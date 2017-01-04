@@ -141,16 +141,16 @@ define([
         onShiftedValueChange: function (shiftedValue) {
             var value,
                 formattedValue,
-                momentDateTime;
+                momentValue;
 
             if (shiftedValue) {
+                momentValue = moment(shiftedValue, this.pickerDateTimeFormat);
+
                 if (this.options.showsTime) {
-                    momentDateTime = moment(shiftedValue, this.pickerDateTimeFormat);
-                    formattedValue = moment(momentDateTime).format(this.timezoneFormat);
+                    formattedValue = moment(momentValue).format(this.timezoneFormat);
                     value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
-                    value = moment(shiftedValue, this.pickerDateTimeFormat);
-                    value = value.format(this.outputDateFormat);
+                    value = momentValue.format(this.outputDateFormat);
                 }
             } else {
                 value = '';
