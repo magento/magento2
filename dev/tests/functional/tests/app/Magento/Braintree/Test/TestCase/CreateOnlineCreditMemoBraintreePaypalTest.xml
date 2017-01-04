@@ -54,6 +54,9 @@
             </data>
             <data name="order/data/price/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">621.20</item>
+                </item>
+                <item name="1" xsi:type="array">
                     <item name="grand_creditmemo_total" xsi:type="string">606.20</item>
                 </item>
             </data>
