@@ -25,10 +25,12 @@ define([
          */
         (function lookup(element) {
             // prevent cross origin iframe content reading
-            if (element.nodeName === "IFRAME"
-                && element.src.indexOf(window.location.hostname) === -1
-            ) {
-                return;
+            if (element.nodeName === "IFRAME") {
+                var iframeSrc = document.createElement('a');
+                iframeSrc.href = element.src;
+                if (window.location.hostname !== iframeSrc.hostname) {
+                    return [];
+                }
             }
 
             $(element).contents().each(function (index, el) {
