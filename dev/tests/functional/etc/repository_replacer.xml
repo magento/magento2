@@ -144,4 +144,13 @@
             <field name="id" xsi:type="number">1</field>
         </dataset>
     </repository>
+
+    <repository class="Magento\Braintree\Test\Repository\BraintreeSandboxCustomer">
+        <dataset name="braintree_sandbox_default">
+            <field name="environment" xsi:type="string">BRAINTREEE_ENVIRONMENT</field>
+            <field name="merchantId" xsi:type="string">BRAINTREEE_MERCHANT_ID</field>
+            <field name="publicKey" xsi:type="string">BRAINTREE_PUBLIC_KEY</field>
+            <field name="privateKey" xsi:type="string">BRAINTREE_PRIVATE_KEY</field>
+        </dataset>
+    </repository>
 </config>
