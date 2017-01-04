@@ -7,6 +7,8 @@
 namespace Magento\Catalog\Pricing\Render;
 
 use Magento\Catalog\Pricing\Price;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Pricing\Render\PriceBox as BasePriceBox;
 use Magento\Msrp\Pricing\Price\MsrpPrice;
@@ -28,6 +30,9 @@ class FinalPriceBox extends BasePriceBox
      * @var SalableResolverInterface
      */
     private $salableResolver;
+
+    /** @var  Manager */
+    private $moduleManager;
 
     /**
      * @param Context $context
@@ -55,23 +60,15 @@ class FinalPriceBox extends BasePriceBox
      */
     protected function _toHtml()
     {
-        if (!$this->salableResolver->isSalable($this->getSaleableItem())) {
+        // Check catalog permissions
+        if ($this->getSaleableItem()->getCanShowPrice() === false) {
             return '';
         }
 
         $result = parent::_toHtml();
 
-        try {
-            /** @var MsrpPrice $msrpPriceType */
-            $msrpPriceType = $this->getSaleableItem()->getPriceInfo()->getPrice('msrp_price');
-        } catch (\InvalidArgumentException $e) {
-            $this->_logger->critical($e);
-            return $this->wrapResult($result);
-        }
-
         //Renders MSRP in case it is enabled
-        $product = $this->getSaleableItem();
-        if ($msrpPriceType->canApplyMsrp($product) && $msrpPriceType->isMinimalPriceLessMsrp($product)) {
+        if ($this->isMsrpPriceApplicable()) {
             /** @var BasePriceBox $msrpBlock */
             $msrpBlock = $this->rendererPool->createPriceRender(
                 MsrpPrice::PRICE_CODE,
@@ -85,6 +82,36 @@ class FinalPriceBox extends BasePriceBox
         }
 
         return $this->wrapResult($result);
+    }
+
+    /**
+     * Check is MSRP applicable for the current product.
+     *
+     * @return bool
+     */
+    private function isMsrpPriceApplicable()
+    {
+        $moduleManager = $this->getModuleManager();
+
+        if (!$moduleManager->isEnabled('Magento_Msrp') || !$moduleManager->isOutputEnabled('Magento_Msrp') ) {
+            return false;
+        }
+
+        try {
+            /** @var MsrpPrice $msrpPriceType */
+            $msrpPriceType = $this->getSaleableItem()->getPriceInfo()->getPrice('msrp_price');
+        } catch (\InvalidArgumentException $e) {
+            $this->_logger->critical($e);
+            return false;
+        }
+
+        if ($msrpPriceType === null) {
+            return false;
+        }
+
+        $product = $this->getSaleableItem();
+        
+        return $msrpPriceType->canApplyMsrp($product) && $msrpPriceType->isMinimalPriceLessMsrp($product);
     }
 
     /**
@@ -170,5 +197,17 @@ class FinalPriceBox extends BasePriceBox
         $cacheKeys = parent::getCacheKeyInfo();
         $cacheKeys['display_minimal_price'] = $this->getDisplayMinimalPrice();
         return $cacheKeys;
+    }
+
+    /**
+     * @deprecated
+     * @return Manager
+     */
+    private function getModuleManager()
+    {
+        if ($this->moduleManager === null) {
+            $this->moduleManager = ObjectManager::getInstance()->get(Manager::class);
+        }
+        return $this->moduleManager;
     }
 }

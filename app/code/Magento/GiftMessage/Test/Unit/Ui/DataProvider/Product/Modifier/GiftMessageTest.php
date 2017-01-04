@@ -8,6 +8,9 @@ namespace Magento\GiftMessage\Test\Unit\Ui\DataProvider\Product\Modifier;
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\GiftMessage\Ui\DataProvider\Product\Modifier\GiftMessage;
+use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 
 /**
  * Class GiftMessageTest
@@ -66,5 +69,50 @@ class GiftMessageTest extends AbstractModifierTest
                 ],
             ]
         ));
+    }
+
+    public function testModifyDataUsesConfigurationValuesWhenProductDoesNotContainValidValue()
+    {
+        $productId = 1;
+        $this->productMock->expects($this->any())->method('getId')->willReturn($productId);
+
+        $configValue = 1;
+        $this->scopeConfigMock->expects($this->any())
+            ->method('getValue')
+            ->with(GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS, ScopeInterface::SCOPE_STORE)
+            ->willReturn($configValue);
+
+        $data = [$productId => [
+            GiftMessage::DATA_SOURCE_DEFAULT => [
+                GiftMessage::FIELD_MESSAGE_AVAILABLE => Boolean::VALUE_USE_CONFIG,
+            ],
+        ]];
+        $expectedResult = [$productId => [
+            GiftMessage::DATA_SOURCE_DEFAULT => [
+                GiftMessage::FIELD_MESSAGE_AVAILABLE => $configValue,
+                'use_config_gift_message_available' => 1
+            ],
+        ]];
+
+        $this->assertEquals($expectedResult, $this->getModel()->modifyData($data));
+    }
+
+    public function testModifyDataUsesConfigurationValuesForNewProduct()
+    {
+        $productId = null;
+        $configValue = 1;
+        $this->scopeConfigMock->expects($this->any())
+            ->method('getValue')
+            ->with(GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS, ScopeInterface::SCOPE_STORE)
+            ->willReturn($configValue);
+
+        $expectedResult = [$productId => [
+            GiftMessage::DATA_SOURCE_DEFAULT => [
+                GiftMessage::FIELD_MESSAGE_AVAILABLE => $configValue,
+                'use_config_gift_message_available' => 1
+            ],
+        ]];
+
+        $this->assertEquals($expectedResult, $this->getModel()->modifyData([]));
     }
 }
