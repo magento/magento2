@@ -57,6 +57,10 @@
     <preference for="Magento\Catalog\Api\Data\BasePriceInterface" type="Magento\Catalog\Model\Product\Price\BasePrice" />
     <preference for="Magento\Catalog\Api\CostStorageInterface" type="Magento\Catalog\Model\Product\Price\CostStorage" />
     <preference for="Magento\Catalog\Api\Data\CostInterface" type="Magento\Catalog\Model\Product\Price\Cost" />
+    <preference for="Magento\Catalog\Api\SpecialPriceStorageInterface" type="Magento\Catalog\Model\Product\Price\SpecialPriceStorage" />
+    <preference for="Magento\Catalog\Api\Data\SpecialPriceInterface" type="Magento\Catalog\Model\Product\Price\SpecialPrice" />
+    <preference for="Magento\Catalog\Api\Data\PriceUpdateResultInterface" type="Magento\Catalog\Model\Product\Price\PriceUpdateResult" />
+    <preference for="Magento\Catalog\Api\SpecialPriceInterface" type="Magento\Catalog\Model\ResourceModel\Product\Price\SpecialPrice" />
     <preference for="Magento\Catalog\Model\ProductIdLocatorInterface" type="Magento\Catalog\Model\ProductIdLocator" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
@@ -872,12 +876,20 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product\Price\TierPriceValidator">
+    <type name="Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator">
         <arguments>
             <argument name="allowedProductTypes" xsi:type="array">
                 <item name="0" xsi:type="string">simple</item>
                 <item name="1" xsi:type="string">virtual</item>
                 <item name="2" xsi:type="string">bundle</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Price\SpecialPriceStorage">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="0" xsi:type="string">simple</item>
+                <item name="1" xsi:type="string">virtual</item>
             </argument>
         </arguments>
     </type>
