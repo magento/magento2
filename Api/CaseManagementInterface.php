@@ -18,7 +18,7 @@ interface CaseManagementInterface
     /**
      * Creates new Case entity linked to order id.
      *
-     * @param string $orderId
+     * @param int $orderId
      * @return CaseInterface
      * @throws \Magento\Framework\Exception\AlreadyExistsException If case for $orderId already exists
      */
@@ -27,7 +27,7 @@ interface CaseManagementInterface
     /**
      * Gets Case entity associated with order id.
      *
-     * @param string $orderId
+     * @param int $orderId
      * @return CaseInterface|null
      */
     public function getByOrderId($orderId);
@@ -35,7 +35,7 @@ interface CaseManagementInterface
     /**
      * Gets Case entity by received case (investigation) id.
      *
-     * @param $caseId
+     * @param int $caseId
      * @return CaseInterface|null
      */
     public function getByCaseId($caseId);
