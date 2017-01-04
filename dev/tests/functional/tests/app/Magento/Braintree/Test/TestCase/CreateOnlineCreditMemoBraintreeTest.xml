@@ -35,14 +35,13 @@
             </data>
             <data name="order/data/price/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
-                    <item name="grand_refund_total" xsi:type="string">145.98</item>
+                    <item name="grand_creditmemo_total" xsi:type="string">145.98</item>
                 </item>
             </data>
             <data name="transactions/refund" xsi:type="array">
                 <item name="transactionType" xsi:type="string">Refund</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
-            <data name="data/items_data/0/qty" xsi:type="string">-</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
@@ -84,10 +83,10 @@
             </data>
             <data name="order/data/price/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
-                    <item name="grand_refund_total" xsi:type="string">1.08</item>
+                    <item name="grand_creditmemo_total" xsi:type="string">1.08</item>
                 </item>
                 <item name="1" xsi:type="array">
-                    <item name="grand_refund_total" xsi:type="string">134.07</item>
+                    <item name="grand_creditmemo_total" xsi:type="string">134.07</item>
                 </item>
             </data>
             <data name="transactions/refund" xsi:type="array">

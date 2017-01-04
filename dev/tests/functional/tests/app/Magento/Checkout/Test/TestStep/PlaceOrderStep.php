@@ -72,9 +72,9 @@ class PlaceOrderStep implements TestStepInterface
      * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param FixtureFactory $fixtureFactory
-     * @param OrderInjectable $order
-     * @param array $products
-     * @param array $prices
+     * @param OrderInjectable|null $order
+     * @param array|null $products
+     * @param array|null $prices
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,

@@ -18,7 +18,7 @@
             </data>
             <data name="order/data/price/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
-                    <item name="grand_refund_total" xsi:type="string">15.00</item>
+                    <item name="grand_creditmemo_total" xsi:type="string">15.00</item>
                 </item>
             </data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
