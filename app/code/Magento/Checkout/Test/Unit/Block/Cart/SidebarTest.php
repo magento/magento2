@@ -124,7 +124,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     public function testGetConfig()
     {
         $websiteId = 100;
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
 
         $shoppingCartUrl = 'http://url.com/cart';
         $checkoutUrl = 'http://url.com/checkout';
