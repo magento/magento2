@@ -395,22 +395,39 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
 
         if ($putOrderId) {
             $page->drawText(__('Order # ') . $order->getRealOrderId(), 35, $top -= 30, 'UTF-8');
-        }
-        $page->drawText(
-            __('Order Date: ') .
-            $this->_localeDate->formatDate(
-                $this->_localeDate->scopeDate(
-                    $order->getStore(),
-                    $order->getCreatedAt(),
-                    true
+
+            $page->drawText(
+                __('Order Date: ') .
+                $this->_localeDate->formatDate(
+                    $this->_localeDate->scopeDate(
+                        $order->getStore(),
+                        $order->getCreatedAt(),
+                        true
+                    ),
+                    \IntlDateFormatter::MEDIUM,
+                    false
                 ),
-                \IntlDateFormatter::MEDIUM,
-                false
-            ),
-            35,
-            $top -= 15,
-            'UTF-8'
-        );
+                35,
+                $top -= 15,
+                'UTF-8'
+            );
+        } else {
+            $page->drawText(
+                __('Order Date: ') .
+                $this->_localeDate->formatDate(
+                    $this->_localeDate->scopeDate(
+                        $order->getStore(),
+                        $order->getCreatedAt(),
+                        true
+                    ),
+                    \IntlDateFormatter::MEDIUM,
+                    false
+                ),
+                35,
+                $top -= 30,
+                'UTF-8'
+            );
+        }
 
         $top -= 10;
         $page->setFillColor(new \Zend_Pdf_Color_Rgb(0.93, 0.92, 0.92));
