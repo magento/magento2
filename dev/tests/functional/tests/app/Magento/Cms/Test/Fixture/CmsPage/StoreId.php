@@ -30,6 +30,13 @@ class StoreId extends DataSource
     private $fixtureFactory;
 
     /**
+     * Data which have been passed from the variation.
+     *
+     * @var mixed
+     */
+    private $variationData;
+
+    /**
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array|string $data [optional]
@@ -38,7 +45,23 @@ class StoreId extends DataSource
     {
         $this->params = $params;
         $this->fixtureFactory = $fixtureFactory;
-        $this->processData($data);
+        $this->variationData = $data;
+    }
+
+    /**
+     * Return prepared data set.
+     *
+     * @param string $key [optional]
+     * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getData($key = null)
+    {
+        if (null === $this->data) {
+            $this->processData();
+        }
+        return parent::getData();
     }
 
     /**
@@ -53,13 +76,11 @@ class StoreId extends DataSource
 
     /**
      * Process input data.
-     *
-     * @param array|string $data
      */
-    private function processData($data)
+    private function processData()
     {
-        if (is_array($data) && isset($data['dataset'])) {
-            $store = $this->fixtureFactory->createByCode('store', $data);
+        if (is_array($this->variationData) && isset($this->variationData['dataset'])) {
+            $store = $this->fixtureFactory->createByCode('store', $this->variationData);
             /** @var Store $store */
             if (!$store->getStoreId()) {
                 $store->persist();
@@ -67,7 +88,7 @@ class StoreId extends DataSource
             $this->store = $store;
             $this->data = $store->getGroupId() . '/' . $store->getName();
         } else {
-            $this->data = $data;
+            $this->data = $this->variationData;
         }
     }
 }
