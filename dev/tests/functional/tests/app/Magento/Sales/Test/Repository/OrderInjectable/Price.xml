@@ -34,20 +34,27 @@
         </dataset>
 
         <dataset name="full_refund">
-            <field name="0" xsi:type="array">
-                <item name="grand_creditmemo_total" xsi:type="string">565</item>
+            <field name="refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">565</item>
+                </item>
             </field>
         </dataset>
 
         <dataset name="full_refund_with_zero_shipping_refund">
-            <field name="0" xsi:type="array">
-                <item name="grand_creditmemo_total" xsi:type="string">555</item>
+            <field name="refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">555</item>
+                </item>
             </field>
         </dataset>
 
+
         <dataset name="partial_refund">
-            <field name="0" xsi:type="array">
-                <item name="grand_creditmemo_total" xsi:type="string">110</item>
+            <field name="refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">110</item>
+                </item>
             </field>
         </dataset>
 

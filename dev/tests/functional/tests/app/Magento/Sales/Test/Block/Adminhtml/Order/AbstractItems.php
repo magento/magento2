@@ -111,7 +111,7 @@ class AbstractItems extends Block
      * @param ElementInterface $item
      * @return null|int
      */
-    private function getQty(ElementInterface $item)
+    protected function getQty(ElementInterface $item)
     {
         $qty = null;
         $elements = $item->getElements($this->qty);
@@ -127,7 +127,7 @@ class AbstractItems extends Block
      * @param ElementInterface $item
      * @return string
      */
-    private function getSku(ElementInterface $item)
+    protected function getSku(ElementInterface $item)
     {
         $itemContent = $item->find($this->sku)->getText();
         $itemContent = preg_replace('/\n|\r/', '', $itemContent);

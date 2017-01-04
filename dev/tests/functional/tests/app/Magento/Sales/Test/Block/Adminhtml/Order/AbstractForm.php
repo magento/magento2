@@ -68,8 +68,9 @@ abstract class AbstractForm extends Form
     {
         $data = $this->prepareData($data);
         if (isset($data['items_data']) && $products !== null) {
-            foreach ($products as $key => $product) {
-                $this->getItemsBlock()->getItemProductBlock($product)->fillProduct($data['items_data'][$key]);
+            foreach ($data['items_data'] as $key => $item) {
+                $productSku = $products[$key]->getData()['sku'];
+                $this->getItemsBlock()->getItemProductBlock($productSku)->fillProduct($item);
             }
         }
     }

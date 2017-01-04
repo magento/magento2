@@ -61,7 +61,6 @@ class SubmitOrderStep implements TestStepInterface
     private $products;
 
     /**
-     * @constructor
      * @param OrderCreateIndex $orderCreateIndex
      * @param SalesOrderView $salesOrderView
      * @param FixtureFactory $fixtureFactory
@@ -81,6 +80,7 @@ class SubmitOrderStep implements TestStepInterface
         $this->salesOrderView = $salesOrderView;
         $this->fixtureFactory = $fixtureFactory;
         $this->customer = $customer;
+        $this->products = $products;
         $this->billingAddress = $billingAddress;
         $this->products = $products;
     }

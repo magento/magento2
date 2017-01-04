@@ -28,14 +28,80 @@
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Closed</data>
-            <data name="refundedPrices" xsi:type="array">
-                <item name="0" xsi:type="string">145.98</item>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                </item>
+            </data>
+            <data name="order/data/price/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">145.98</item>
+                </item>
             </data>
             <data name="transactions/refund" xsi:type="array">
                 <item name="transactionType" xsi:type="string">Refund</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
-            <data name="data/items_data/0/qty" xsi:type="string">-</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus" />
+        </variation>
+        <variation name="CreateOnlineCreditMemoBraintreeTestVariation2" summary="Partial Refund an order placed through Braintree with Partial capture" ticketId="MAGETWO-38325">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <data name="products" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::product_10_dollar</item>
+                <item name="1" xsi:type="string">configurableProduct::with_one_option</item>
+                <item name="2" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</item>
+            </data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="braintreeSandboxCustomer/dataset" xsi:type="string">braintree_sandbox_default</data>
+            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping" xsi:type="array">
+                <item name="shipping_service" xsi:type="string">Flat Rate</item>
+                <item name="shipping_method" xsi:type="string">Fixed</item>
+            </data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
+            <data name="configData" xsi:type="string">braintree</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                    <item name="items_data" xsi:type="array">
+                        <item name="1" xsi:type="array">
+                            <item name="qty" xsi:type="string">0</item>
+                        </item>
+                    </item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                </item>
+            </data>
+            <data name="order/data/price/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">134.07</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">1.08</item>
+                </item>
+            </data>
+            <data name="transactions/refund" xsi:type="array">
+                <item name="transactionType" xsi:type="string">Refund</item>
+                <item name="statusIsClosed" xsi:type="string">Yes</item>
+            </data>
+            <data name="transactions/capture" xsi:type="array">
+                <item name="transactionType" xsi:type="string">Capture</item>
+                <item name="statusIsClosed" xsi:type="string">Yes</item>
+            </data>
+            <data name="data/items_data" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="qty" xsi:type="string">0</item>
+                </item>
+            </data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
