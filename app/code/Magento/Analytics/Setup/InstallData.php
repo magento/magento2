@@ -71,14 +71,19 @@ class InstallData implements InstallDataInterface
     }
 
     /**
+     * Generate array with important data for creating MA API user.
      * @return array
      */
     private function getIntegrationData()
     {
-        $integrationData['name'] = $this->config->getConfigDataValue(self::MAGENTO_API_USER_NAME_PATH);
-        $integrationData['all_resources'] = false;
-        $integrationData['resource'][] = "Magento_Analytics::analytics";
-        $integrationData['resource'][] = "Magento_Analytics::analytics_api";
+        $integrationData = [
+            'name' => $this->config->getConfigDataValue(self::MAGENTO_API_USER_NAME_PATH),
+            'all_resources' => false,
+            'resource' => [
+                'Magento_Analytics::analytics',
+                'Magento_Analytics::analytics_api'
+            ],
+        ];
         return $integrationData;
     }
 
