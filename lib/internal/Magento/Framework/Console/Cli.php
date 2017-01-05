@@ -8,7 +8,9 @@ namespace Magento\Framework\Console;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
+use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Composer\ComposerJsonFinder;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console;
 use Magento\Framework\App\Bootstrap;
@@ -62,8 +64,6 @@ class Cli extends Console\Application
     private $objectManager;
 
     /**
-     * Constructor.
-     *
      * @param string $name the application name
      * @param string $version the application version
      */
@@ -150,17 +150,24 @@ class Cli extends Console\Application
      * Object Manager initialization.
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     private function initObjectManager()
     {
-        $params = (new ComplexParameter(self::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
-        $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
+        try {
+            $params = (new ComplexParameter(self::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
+            $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
 
-        $this->objectManager = Bootstrap::create(BP, $params)->getObjectManager();
+            $this->objectManager = Bootstrap::create(BP, $params)->getObjectManager();
 
-        /** @var ObjectManagerProvider $omProvider */
-        $omProvider = $this->serviceManager->get(ObjectManagerProvider::class);
-        $omProvider->setObjectManager($this->objectManager);
+            /** @var ObjectManagerProvider $omProvider */
+            $omProvider = $this->serviceManager->get(ObjectManagerProvider::class);
+            $omProvider->setObjectManager($this->objectManager);
+        } catch (\RuntimeException $exception) {
+            $this->writeGenerationDirectoryReadError();
+
+            exit(static::RETURN_FAILURE);
+        }
     }
 
     /**
@@ -175,7 +182,11 @@ class Cli extends Console\Application
      */
     private function assertGenerationPermissions()
     {
-        $generationDirectoryAccess = new GenerationDirectoryAccess($this->serviceManager);
+        /** @var GenerationDirectoryAccess $generationDirectoryAccess */
+        $generationDirectoryAccess = $this->objectManager->create(
+            GenerationDirectoryAccess::class,
+            ['serviceManager' => $this->serviceManager]
+        );
         /** @var DeploymentConfig $deploymentConfig */
         $deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
         /** @var State $state */
@@ -186,18 +197,14 @@ class Cli extends Console\Application
             && $state->getMode() !== State::MODE_PRODUCTION
             && !$generationDirectoryAccess->check()
         ) {
-            $output = new \Symfony\Component\Console\Output\ConsoleOutput();
-            $output->writeln(
-                '<error>Command line user does not have read and write permissions on var/generation directory.  Please'
-                . ' address this issue before using Magento command line.</error>'
-            );
+            $this->writeGenerationDirectoryReadError();
 
             exit(static::RETURN_FAILURE);
         }
     }
 
     /**
-     * Checks whether compiler preparation is being prepared.
+     * Checks whether compiler is being prepared.
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
@@ -217,18 +224,28 @@ class Cli extends Console\Application
 
             try {
                 $compilerPreparation->handleCompilerEnvironment();
-            } catch (\Magento\Framework\Exception\FileSystemException $e) {
-                $output = new \Symfony\Component\Console\Output\ConsoleOutput();
-                $output->writeln(
-                    '<error>'
-                    . 'Command line user does not have read and write permissions on var/generation directory.  Please'
-                    . ' address this issue before using Magento command line.'
-                    . '</error>'
-                );
+            } catch (FileSystemException $e) {
+                $this->writeGenerationDirectoryReadError();
 
                 exit(static::RETURN_FAILURE);
             }
         }
+    }
+
+    /**
+     * Writes read error to console.
+     *
+     * @return void
+     */
+    private function writeGenerationDirectoryReadError()
+    {
+        $output = new Console\Output\ConsoleOutput();
+        $output->writeln(
+            '<error>'
+            . 'Command line user does not have read and write permissions on ' . Io::DEFAULT_DIRECTORY . ' directory. '
+            . 'Please address this issue before using Magento command line.'
+            . '</error>'
+        );
     }
 
     /**
