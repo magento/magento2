@@ -97,13 +97,29 @@ class CaseUpdatingService implements CaseUpdatingServiceInterface
      */
     private function prepareCaseData(CaseInterface $case, DataObject $data)
     {
-        $case->setGuaranteeEligible($data->getData('guaranteeEligible') ?: $case->isGuaranteeEligible())
-            ->setStatus($data->getData('status') ?: $case->getStatus())
-            ->setReviewDisposition($data->getData('reviewDisposition') ?: $case->getReviewDisposition())
-            ->setAssociatedTeam($data->getData('associatedTeam') ?: $case->getAssociatedTeam())
-            ->setCreatedAt($data->getData('createdAt') ?: $case->getCreatedAt())
-            ->setUpdatedAt($data->getData('updatedAt') ?: $case->getUpdatedAt())
-            ->setScore($data->getData('score') ?: $case->getScore())
-            ->setGuaranteeDisposition($data->getData('guaranteeDisposition') ?: $case->getGuaranteeDisposition());
+        if ($data->getData('guaranteeEligible') !== null) {
+            $case->setGuaranteeEligible($data->getData('guaranteeEligible'));
+        }
+        if ($data->getData('status') !== null) {
+            $case->setStatus($data->getData('status'));
+        }
+        if ($data->getData('reviewDisposition') !== null) {
+            $case->setReviewDisposition($data->getData('reviewDisposition'));
+        }
+        if ($data->getData('associatedTeam') !== null) {
+            $case->setAssociatedTeam($data->getData('associatedTeam'));
+        }
+        if ($data->getData('createdAt') !== null) {
+            $case->setCreatedAt($data->getData('createdAt'));
+        }
+        if ($data->getData('updatedAt') !== null) {
+            $case->setUpdatedAt($data->getData('updatedAt'));
+        }
+        if ($data->getData('score') !== null) {
+            $case->setScore($data->getData('score'));
+        }
+        if ($data->getData('guaranteeDisposition') !== null) {
+            $case->setGuaranteeDisposition($data->getData('guaranteeDisposition'));
+        }
     }
 }
