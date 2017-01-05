@@ -8,7 +8,7 @@ namespace Magento\Signifyd\Model\SignifydGateway\Response;
 use Magento\Framework\App\Request\Http;
 
 /**
- *  Reads raw data from the request body.
+ *  Reads Signifyd webhook request data.
  */
 class WebhookRequest
 {
@@ -27,14 +27,23 @@ class WebhookRequest
     }
 
     /**
-     * Retrieve header value.
+     * Returns Base64 encoded output of the HMAC SHA256 encoding of the JSON body of the message.
      *
-     * @param string $name header name to retrieve.
      * @return string
      */
-    public function getHeader($name)
+    public function getHash()
     {
-        return $this->request->getHeader($name) ?: '';
+        return (string)$this->request->getHeader('X-SIGNIFYD-SEC-HMAC-SHA256');
+    }
+
+    /**
+     * Returns event topic identifier.
+     *
+     * @return string
+     */
+    public function getEventTopic()
+    {
+        return (string)$this->request->getHeader('X-SIGNIFYD-TOPIC');
     }
 
     /**
@@ -44,6 +53,6 @@ class WebhookRequest
      */
     public function getBody()
     {
-        return file_get_contents("php://input") ?: '';
+        return (string)file_get_contents("php://input");
     }
 }

@@ -8,12 +8,10 @@ namespace Magento\Signifyd\Controller\Webhooks;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Signifyd\Model\CaseUpdatingService;
 use Magento\Signifyd\Model\CaseUpdatingServiceFactory;
-use Magento\Signifyd\Model\Config;
+use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequestValidator;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
-use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequestReader;
-use Magento\Signifyd\Model\SignifydGateway\Response\WebhookException;
+use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageReader;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -29,19 +27,14 @@ class Handler extends Action
     private $webhookRequest;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @var WebhookRequestReader
+     * @var WebhookMessageReader
      */
-    private $webhookRequestReader;
+    private $webhookMessageReader;
 
     /**
      * @var CaseUpdatingServiceFactory
@@ -49,50 +42,51 @@ class Handler extends Action
     private $caseUpdatingServiceFactory;
 
     /**
+     * @var WebhookRequestValidator
+     */
+    private $webhookRequestValidator;
+
+    /**
      * @param Context $context
      * @param WebhookRequest $webhookRequest
-     * @param Config $config
      * @param LoggerInterface $logger
-     * @param WebhookRequestReader $webhookRequestReader
+     * @param WebhookMessageReader $webhookMessageReader
      * @param CaseUpdatingServiceFactory $caseUpdatingServiceFactory
+     * @param WebhookRequestValidator $webhookRequestValidator
      */
     public function __construct(
         Context $context,
         WebhookRequest $webhookRequest,
-        Config $config,
         LoggerInterface $logger,
-        WebhookRequestReader $webhookRequestReader,
-        CaseUpdatingServiceFactory $caseUpdatingServiceFactory
+        WebhookMessageReader $webhookMessageReader,
+        CaseUpdatingServiceFactory $caseUpdatingServiceFactory,
+        WebhookRequestValidator $webhookRequestValidator
     ) {
         parent::__construct($context);
         $this->webhookRequest = $webhookRequest;
-        $this->config = $config;
         $this->logger = $logger;
-        $this->webhookRequestReader = $webhookRequestReader;
+        $this->webhookMessageReader = $webhookMessageReader;
         $this->caseUpdatingServiceFactory = $caseUpdatingServiceFactory;
+        $this->webhookRequestValidator = $webhookRequestValidator;
     }
 
     /**
-     * Processes webhook message data and updates case entity
+     * Processes webhook request data and updates case entity
      *
      * @return void
      */
     public function execute()
     {
-        if ($this->config->isActive() === false) {
+        if (!$this->webhookRequestValidator->validate($this->webhookRequest)) {
+            $this->getResponse()->setHttpResponseCode(400);
             return;
         }
 
+        $webhookMessage = $this->webhookMessageReader->read($this->webhookRequest);
+        $caseUpdatingService = $this->caseUpdatingServiceFactory->create($webhookMessage->getEventTopic());
+
         try {
-            $webhookMessage = $this->webhookRequestReader->read($this->webhookRequest);
-            $caseUpdatingService = $this->caseUpdatingServiceFactory->create($webhookMessage->getEventTopic());
             $caseUpdatingService->update($webhookMessage->getData());
-        } catch (WebhookException $e) {
-            $this->getResponse()->setHttpResponseCode(400);
-            $this->logger->error($e->getMessage());
-        } catch (\InvalidArgumentException $e) {
-            $this->getResponse()->setHttpResponseCode(400);
-            $this->logger->error($e->getMessage());
         } catch (LocalizedException $e) {
             $this->getResponse()->setHttpResponseCode(400);
             $this->logger->error($e->getMessage());

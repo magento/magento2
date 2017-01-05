@@ -33,35 +33,15 @@ class WebhookMessage
     private $eventTopic;
 
     /**
-     * Raw webhook request body.
-     *
-     * @var string
-     */
-    private $rawData;
-
-    /**
-     * Base64 encoded output of the HMAC SHA256 encoding of the JSON body of the message.
-     *
-     * @var string
-     */
-    private $expectedHash;
-
-    /**
-     * @param string $rawData
      * @param array $data
      * @param string $eventTopic
-     * @param string $expectedHash
      */
     public function __construct(
-        $rawData,
         array $data,
-        $eventTopic,
-        $expectedHash
+        $eventTopic
     ) {
-        $this->rawData = $rawData;
         $this->data = $data;
         $this->eventTopic = $eventTopic;
-        $this->expectedHash = $expectedHash;
     }
 
     /**
@@ -82,36 +62,5 @@ class WebhookMessage
     public function getEventTopic()
     {
         return $this->eventTopic;
-    }
-
-    /**
-     * Returns expected hash.
-     *
-     * @return string
-     */
-    public function getExpectedHash()
-    {
-        return $this->expectedHash;
-    }
-
-    /**
-     * Returns actual hash based on raw request body and api key
-     *
-     * @param string $apiKey
-     * @return string
-     */
-    public function getActualHash($apiKey)
-    {
-        return base64_encode(hash_hmac('sha256', $this->rawData, $apiKey, true));
-    }
-
-    /**
-     * Checks if webhook is a test.
-     *
-     * @return bool
-     */
-    public function isTest()
-    {
-        return $this->eventTopic === 'cases/test';
     }
 }
