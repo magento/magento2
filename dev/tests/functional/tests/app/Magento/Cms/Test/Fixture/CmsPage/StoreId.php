@@ -76,6 +76,8 @@ class StoreId extends DataSource
 
     /**
      * Process input data.
+     *
+     * @return void
      */
     private function processData()
     {
