@@ -5,7 +5,6 @@
  */
 namespace Magento\Signifyd\Model\MessageGenerators;
 
-use Magento\Framework\DataObject;
 use Magento\Signifyd\Model\MessageGeneratorException;
 use Magento\Signifyd\Model\MessageGeneratorInterface;
 
@@ -17,15 +16,15 @@ class CaseReview implements MessageGeneratorInterface
     /**
      * @inheritdoc
      */
-    public function generate(DataObject $data)
+    public function generate(array $data)
     {
-        if (empty($data->getData('reviewDisposition'))) {
+        if (empty($data['reviewDisposition'])) {
             throw new MessageGeneratorException(__('The "%1" should not be empty.', 'reviewDisposition'));
         }
 
         return __(
             'Case Update: Case Review was completed. Review Deposition is %1.',
-            __($data->getData('reviewDisposition'))
+            __($data['reviewDisposition'])
         );
     }
 }

@@ -5,8 +5,6 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway\Response;
 
-use Magento\Framework\DataObject;
-
 /**
  * Webhooks are messages sent by SIGNIFYD via HTTP POST to a url you configure on your
  * Notifications page in the SIGNIFYD settings.
@@ -47,11 +45,11 @@ class WebhookMessage
     /**
      * Returns decoded webhook request body.
      *
-     * @return DataObject
+     * @return array
      */
     public function getData()
     {
-        return new DataObject($this->data);
+        return $this->data;
     }
 
     /**

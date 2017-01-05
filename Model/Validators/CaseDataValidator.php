@@ -5,8 +5,6 @@
  */
 namespace Magento\Signifyd\Model\Validators;
 
-use Magento\Framework\DataObject;
-
 /**
  * Validates Signifyd Case id field.
  */
@@ -14,12 +12,12 @@ class CaseDataValidator
 {
     /**
      * Checks if data object contains Signifyd Case id.
-     * @param DataObject $data
+     * @param array $data
      * @return bool
      */
-    public function validate(DataObject $data)
+    public function validate(array $data)
     {
-        if (empty($data->getData('caseId'))) {
+        if (empty($data['caseId'])) {
             return false;
         }
 

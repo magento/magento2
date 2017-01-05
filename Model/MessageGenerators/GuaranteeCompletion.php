@@ -5,7 +5,6 @@
  */
 namespace Magento\Signifyd\Model\MessageGenerators;
 
-use Magento\Framework\DataObject;
 use Magento\Signifyd\Model\MessageGeneratorException;
 use Magento\Signifyd\Model\MessageGeneratorInterface;
 
@@ -17,12 +16,12 @@ class GuaranteeCompletion implements MessageGeneratorInterface
     /**
      * @inheritdoc
      */
-    public function generate(DataObject $data)
+    public function generate(array $data)
     {
-        if (empty($data->getData('guaranteeDisposition'))) {
+        if (empty($data['guaranteeDisposition'])) {
             throw new MessageGeneratorException(__('The "%1" should not be empty.', 'guaranteeDisposition'));
         }
 
-        return __('Case Update: Guarantee Disposition is %1.', __($data->getData('guaranteeDisposition')));
+        return __('Case Update: Guarantee Disposition is %1.', __($data['guaranteeDisposition']));
     }
 }

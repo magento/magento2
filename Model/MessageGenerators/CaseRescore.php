@@ -5,7 +5,6 @@
  */
 namespace Magento\Signifyd\Model\MessageGenerators;
 
-use Magento\Framework\DataObject;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Model\MessageGeneratorException;
 use Magento\Signifyd\Model\MessageGeneratorInterface;
@@ -41,13 +40,13 @@ class CaseRescore implements MessageGeneratorInterface
     /**
      * @inheritdoc
      */
-    public function generate(DataObject $data)
+    public function generate(array $data)
     {
         if (!$this->caseDataValidator->validate($data)) {
             throw new MessageGeneratorException(__('The "%1" should not be empty.', 'caseId'));
         }
 
-        $caseEntity = $this->caseRepository->getByCaseId($data->getData('caseId'));
+        $caseEntity = $this->caseRepository->getByCaseId($data['caseId']));
 
         if ($caseEntity === null) {
             throw new MessageGeneratorException(__('Case entity not found.'));
@@ -55,7 +54,7 @@ class CaseRescore implements MessageGeneratorInterface
 
         return __(
             'Case Update: New score for the order is %1. Previous score was %2.',
-            $data->getData('score'),
+            !empty($data['score']) ? $data['score'] : 0,
             $caseEntity->getScore()
         );
     }

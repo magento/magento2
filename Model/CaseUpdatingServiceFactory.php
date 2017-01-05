@@ -7,6 +7,7 @@ namespace Magento\Signifyd\Model;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
+use Magento\Signifyd\Model\Config;
 
 /**
  * Creates instance of case updating service configured with specific message generator.
@@ -32,15 +33,25 @@ class CaseUpdatingServiceFactory
     private $generatorFactory;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * CaseUpdatingServiceFactory constructor.
      *
      * @param ObjectManagerInterface $objectManager
      * @param GeneratorFactory $generatorFactory
+     * @param Config $config
      */
-    public function __construct(ObjectManagerInterface $objectManager, GeneratorFactory $generatorFactory)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        GeneratorFactory $generatorFactory,
+        Config $config
+    ) {
         $this->objectManager = $objectManager;
         $this->generatorFactory = $generatorFactory;
+        $this->config = $config;
     }
 
     /**
@@ -53,14 +64,14 @@ class CaseUpdatingServiceFactory
      */
     public function create($type)
     {
-        if ($type === self::$caseTest) {
-            $service = $this->objectManager->create(StubCaseUpdatingService::class);
-        } else {
-            $messageGenerator = $this->generatorFactory->create($type);
-            $service = $this->objectManager->create(CaseUpdatingService::class, [
-                'messageGenerator' => $messageGenerator
-            ]);
+        if (!$this->config->isActive() || $type === self::$caseTest) {
+            return $this->objectManager->create(StubCaseUpdatingService::class);
         }
+
+        $messageGenerator = $this->generatorFactory->create($type);
+        $service = $this->objectManager->create(CaseUpdatingService::class, [
+            'messageGenerator' => $messageGenerator
+        ]);
 
         return $service;
     }

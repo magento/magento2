@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Model;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Signifyd\Api\Data\CaseInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Signifyd\Api\Data\CaseInterface;
 
 /**
- * Implementation of Signifyd Case interface
+ * Implementation of Signifyd Case interface.
  */
 class CaseEntity extends AbstractModel implements CaseInterface
 {
@@ -25,12 +28,23 @@ class CaseEntity extends AbstractModel implements CaseInterface
      */
     private $serializer;
 
+    public function __construct(
+        SerializerInterface $serializer,
+        Context $context,
+        Registry $registry,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        $this->serializer = $serializer;
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+    }
+
     /**
      * @inheritdoc
      */
     protected function _construct()
     {
-        $this->serializer = ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->_init(ResourceModel\CaseEntity::class);
     }
 
