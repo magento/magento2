@@ -5,7 +5,6 @@
  */
 namespace Magento\Signifyd\Model\MessageGenerators;
 
-use Magento\Framework\DataObject;
 use Magento\Signifyd\Model\MessageGeneratorException;
 use Magento\Signifyd\Model\MessageGeneratorInterface;
 use Magento\Signifyd\Model\Validators\CaseDataValidator;
@@ -33,12 +32,12 @@ class CaseCreation implements MessageGeneratorInterface
     /**
      * @inheritdoc
      */
-    public function generate(DataObject $data)
+    public function generate(array $data)
     {
         if (!$this->caseDataValidator->validate($data)) {
             throw new MessageGeneratorException(__('The "%1" should not be empty.', 'caseId'));
         }
 
-        return __('Signifyd Case %1 has been created for order.', $data->getData('caseId'));
+        return __('Signifyd Case %1 has been created for order.', $data['caseId']);
     }
 }

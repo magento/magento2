@@ -5,7 +5,6 @@
  */
 namespace Magento\Signifyd\Model;
 
-use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
@@ -60,18 +59,18 @@ class CaseUpdatingService implements CaseUpdatingServiceInterface
     /**
      * Updates Signifyd Case entity by received data.
      *
-     * @param DataObject $data
+     * @param array $data
      * @return void
      * @throws LocalizedException
      * @throws NotFoundException
      */
-    public function update(DataObject $data)
+    public function update(array $data)
     {
         if (!$this->caseDataValidator->validate($data)) {
             throw new LocalizedException(__('The "%1" should not be empty.', 'caseId'));
         }
 
-        $case = $this->caseRepository->getByCaseId($data->getData('caseId'));
+        $case = $this->caseRepository->getByCaseId($data['caseId']);
         if ($case === null) {
             throw new NotFoundException(__('Case entity not found.'));
         }
@@ -92,34 +91,20 @@ class CaseUpdatingService implements CaseUpdatingServiceInterface
      * Sets data to case entity.
      *
      * @param CaseInterface $case
-     * @param DataObject $data
+     * @param array $data
      * @return void
      */
-    private function prepareCaseData(CaseInterface $case, DataObject $data)
+    private function prepareCaseData(CaseInterface $case, array $data)
     {
-        if ($data->getData('guaranteeEligible') !== null) {
-            $case->setGuaranteeEligible($data->getData('guaranteeEligible'));
-        }
-        if ($data->getData('status') !== null) {
-            $case->setStatus($data->getData('status'));
-        }
-        if ($data->getData('reviewDisposition') !== null) {
-            $case->setReviewDisposition($data->getData('reviewDisposition'));
-        }
-        if ($data->getData('associatedTeam') !== null) {
-            $case->setAssociatedTeam($data->getData('associatedTeam'));
-        }
-        if ($data->getData('createdAt') !== null) {
-            $case->setCreatedAt($data->getData('createdAt'));
-        }
-        if ($data->getData('updatedAt') !== null) {
-            $case->setUpdatedAt($data->getData('updatedAt'));
-        }
-        if ($data->getData('score') !== null) {
-            $case->setScore($data->getData('score'));
-        }
-        if ($data->getData('guaranteeDisposition') !== null) {
-            $case->setGuaranteeDisposition($data->getData('guaranteeDisposition'));
+        // list of keys which should not be replaced, like order id
+        $notResolvedKeys = [
+            'orderId'
+        ];
+        foreach ($data as $key => $value) {
+            $methodName = 'set' . ucfirst($key);
+            if (!in_array($key, $notResolvedKeys) && method_exists($case, $methodName)) {
+                call_user_func([$case, $methodName], $value);
+            }
         }
     }
 }
