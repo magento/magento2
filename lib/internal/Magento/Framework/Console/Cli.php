@@ -163,7 +163,7 @@ class Cli extends Console\Application
             /** @var ObjectManagerProvider $omProvider */
             $omProvider = $this->serviceManager->get(ObjectManagerProvider::class);
             $omProvider->setObjectManager($this->objectManager);
-        } catch (\RuntimeException $exception) {
+        } catch (FileSystemException $exception) {
             $this->writeGenerationDirectoryReadError();
 
             exit(static::RETURN_FAILURE);
