@@ -337,11 +337,13 @@
 
     <xs:simpleType name="htmlTagType">
         <xs:restriction base="xs:string">
+            <xs:enumeration value="aside"/>
             <xs:enumeration value="dd"/>
             <xs:enumeration value="div"/>
             <xs:enumeration value="dl"/>
             <xs:enumeration value="fieldset"/>
             <xs:enumeration value="main"/>
+            <xs:enumeration value="nav"/>
             <xs:enumeration value="header"/>
             <xs:enumeration value="footer"/>
             <xs:enumeration value="ol"/>
