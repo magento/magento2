@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Http;
@@ -26,6 +26,16 @@ class Context
      * @var array
      */
     protected $default = [];
+
+    /**
+     * @param array $data
+     * @param array $default
+     */
+    public function __construct(array $data = [], array $default = [])
+    {
+        $this->data = $data;
+        $this->default = $default;
+    }
 
     /**
      * Data setter
@@ -98,5 +108,18 @@ class Context
             return sha1(serialize($data));
         }
         return null;
+    }
+
+    /**
+     * Get data and default data in "key-value" format
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'data' => $this->data,
+            'default' => $this->default
+        ];
     }
 }
