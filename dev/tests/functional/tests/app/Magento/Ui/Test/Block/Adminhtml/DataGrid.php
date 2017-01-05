@@ -402,6 +402,7 @@ class DataGrid extends Grid
 
     /**
      * @param string $columnLabel
+     * @return void
      */
     public function sortByColumn($columnLabel)
     {
