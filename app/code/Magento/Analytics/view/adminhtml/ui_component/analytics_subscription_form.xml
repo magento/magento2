@@ -48,7 +48,7 @@
     <modal name="analytics_subscription_modal">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="onCancel" xsi:type="string">actionCancel</item>
+                <item name="onCancel" xsi:type="string">closeModal</item>
                 <item name="state" xsi:type="boolean">true</item>
                 <item name="options" xsi:type="array">
                     <item name="title" xsi:type="string" translate="true">Subscription Confirmation</item>
