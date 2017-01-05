@@ -10,7 +10,6 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
@@ -140,9 +139,9 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     {
         // Preconditions
         $this->configData = $configData;
-        $this->flushCache = (bool) $flushCache;
+        $this->flushCache = $flushCache;
 
-        ObjectManager::getInstance()->create(
+        $this->testStepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
@@ -169,7 +168,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      */
     protected function prepareProducts(array $productList)
     {
-        $addToCartStep = ObjectManager::getInstance()->create(
+        $addToCartStep = $this->testStepFactory->create(
             \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $productList]
         );
@@ -186,7 +185,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      */
     protected function addToCart(array $products)
     {
-        $addToCartStep = ObjectManager::getInstance()->create(
+        $addToCartStep = $this->testStepFactory->create(
             \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => $products]
         );
@@ -236,7 +235,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     private function getSystemConfigEditPage()
     {
         if (null === $this->configurationAdminPage) {
-            $this->configurationAdminPage = ObjectManager::getInstance()->create(
+            $this->configurationAdminPage = $this->testStepFactory->create(
                 \Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit::class
             );
         }
