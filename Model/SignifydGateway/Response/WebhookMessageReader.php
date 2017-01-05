@@ -8,15 +8,10 @@ namespace Magento\Signifyd\Model\SignifydGateway\Response;
 use Magento\Framework\Json\DecoderInterface;
 
 /**
- * Reads request and produces webhook data object based on request params.
+ * Reads request and produces webhook message data object based on request params.
  */
-class WebhookRequestReader
+class WebhookMessageReader
 {
-    /**
-     * @var WebhookMessageValidator
-     */
-    private $webhookMessageValidator;
-
     /**
      * @var DecoderInterface
      */
@@ -28,16 +23,13 @@ class WebhookRequestReader
     private $webhookMessageFactory;
 
     /**
-     * @param WebhookMessageValidator $webhookMessageValidator
      * @param DecoderInterface $decoder
      * @param WebhookMessageFactory $webhookMessageFactory
      */
     public function __construct(
-        WebhookMessageValidator $webhookMessageValidator,
         DecoderInterface $decoder,
         WebhookMessageFactory $webhookMessageFactory
     ) {
-        $this->webhookMessageValidator = $webhookMessageValidator;
         $this->dataDecoder = $decoder;
         $this->webhookMessageFactory = $webhookMessageFactory;
     }
@@ -47,39 +39,24 @@ class WebhookRequestReader
      *
      * @param WebhookRequest $request
      * @return WebhookMessage
-     * @throws WebhookException if data validation fails
      */
     public function read(WebhookRequest $request)
     {
-        $hash = $request->getHeader('X-SIGNIFYD-SEC-HMAC-SHA256');
-        $eventTopic = $request->getHeader('X-SIGNIFYD-TOPIC');
-        $rawData = $request->getBody();
-
         try {
-            $decodedData = $this->dataDecoder->decode($rawData);
+            $decodedData = $this->dataDecoder->decode($request->getBody());
         } catch (\Exception $e) {
-            throw new WebhookException(
+            throw new \InvalidArgumentException(
                 'Webhook request body is not valid JSON: ' . $e->getMessage(),
                 $e->getCode(),
                 $e
             );
         }
 
-        $webhookMessage = $this->webhookMessageFactory->create(
+        return $this->webhookMessageFactory->create(
             [
-                'rawData' => $rawData,
                 'data' => $decodedData,
-                'eventTopic' => $eventTopic,
-                'expectedHash' => $hash
+                'eventTopic' => $request->getEventTopic()
             ]
         );
-
-        if (!$this->webhookMessageValidator->validate($webhookMessage)) {
-            throw new WebhookException(
-                $this->webhookMessageValidator->getErrorMessage()
-            );
-        }
-
-        return $webhookMessage;
     }
 }
