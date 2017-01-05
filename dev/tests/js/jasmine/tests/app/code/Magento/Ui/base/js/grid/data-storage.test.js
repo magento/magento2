@@ -12,22 +12,12 @@ define([
     'use strict';
 
     describe('Magento_Ui/js/grid/data-storage', function () {
-        describe('initConfig', function () {
-            it('is function', function () {
-                var model = new DataStorage({
-                    dataScope: ''
-                });
-
-                expect(model.initConfig).toBeDefined();
-                expect(typeof model.initConfig).toEqual('function');
-            });
-
-            it('Check method change "$this.dataScope" property', function () {
+        describe('costructor', function () {
+            it('converts dataScope property to array', function () {
                 var model = new DataStorage({
                     dataScope: 'magento'
                 });
 
-                model.initConfig;
                 expect(model.dataScope).toEqual(['magento']);
             });
         });
@@ -50,7 +40,7 @@ define([
                 expect(model.hasScopeChanged()).toBeFalsy();
             });
 
-            it('check if requests have been made', function () {
+            it('tells whether parameters defined in the dataScope property have changed', function () {
                 var params, newParams, model;
 
                 params = {
@@ -71,7 +61,7 @@ define([
                 });
 
                 model = new DataStorage({
-                    dataScope: ['filters.store_id'] //became after initConfig method call
+                    dataScope: 'filters.store_id'
                 });
 
                 model.cacheRequest({
