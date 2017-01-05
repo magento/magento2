@@ -4,14 +4,15 @@
  */
 
 /*eslint max-nested-callbacks: 0*/
+/*jscs:disable requireCamelCaseOrUpperCaseIdentifiers*/
 define([
-    'Magento_Ui/js/grid/data-storage',
+    'Magento_Ui/js/grid/data-storage'
 ], function (DataStorage) {
     'use strict';
 
     describe('Magento_Ui/js/grid/data-storage', function () {
         var obj = new DataStorage({
-                dataScope: '',
+                dataScope: ''
             }),
             type;
 
@@ -24,7 +25,9 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check method change "$this.dataScope" property', function () {
-                var model = new DataStorage({dataScope: 'magento'});
+                var model = new DataStorage({
+                    dataScope: 'magento'
+                });
 
                 model.initConfig;
                 expect(model.dataScope).toEqual(['magento']);
@@ -48,8 +51,8 @@ define([
                 var expectedResult, params, requestParams, model;
 
                 params = {
-                    namespace: "magento",
-                    search: "",
+                    namespace: 'magento',
+                    search: '',
                     filters: {
                         store_id: 0
                     },
@@ -57,8 +60,8 @@ define([
                     paging: {}
                 };
                 requestParams = {
-                    namespace: "magento",
-                    search: "magento",
+                    namespace: 'magento',
+                    search: 'magento',
                     filters: {
                         store_id: 1
                     },
@@ -70,11 +73,11 @@ define([
                         dataScope: ['filters.store_id'] //became after initConfig method call
                     }
                 );
-                spyOn(model, "getRequest").and.returnValue({
+                spyOn(model, 'getRequest').and.returnValue({
                     ids: [],
                     params: {
-                        namespace: "magento",
-                        search: "",
+                        namespace: 'magento',
+                        search: '',
                         filters: {
                             store_id: 0
                         },
@@ -83,10 +86,15 @@ define([
                     },
                     totalRecords: 0
                 });
-                spyOn(model, "removeRequest").and.callFake(function () {
+                spyOn(model, 'removeRequest').and.callFake(function () {
                     return false;
                 });
-                model.cacheRequest({totalRecords: 0}, params);
+                model.cacheRequest(
+                    {
+                        totalRecords: 0
+                    },
+                    params
+                );
                 expect(model.getRequest).toHaveBeenCalled();
                 expect(model.removeRequest).toHaveBeenCalled();
                 expectedResult = model.hasScopeChanged(requestParams);
