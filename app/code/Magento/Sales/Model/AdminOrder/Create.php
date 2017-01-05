@@ -225,6 +225,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected $quoteFactory;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -253,6 +260,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Sales\Api\OrderManagementInterface $orderManagement
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -283,7 +291,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Sales\Api\OrderManagementInterface $orderManagement,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -312,6 +321,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->dataObjectHelper = $dataObjectHelper;
         $this->orderManagement = $orderManagement;
         $this->quoteFactory = $quoteFactory;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($data);
     }
 
@@ -632,7 +643,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         [
                             'product' => $item->getProduct(),
                             'code' => 'additional_options',
-                            'value' => serialize($additionalOptions)
+                            'value' => $this->serializer->serialize($additionalOptions)
                         ]
                     )
                 );
@@ -794,7 +805,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
                         $info = $item->getOptionByCode('info_buyRequest');
                         if ($info) {
-                            $info = new \Magento\Framework\DataObject(unserialize($info->getValue()));
+                            $info = new \Magento\Framework\DataObject(
+                                $this->serializer->unserialize($info->getValue())
+                            );
                             $info->setQty($qty);
                             $info->setOptions($this->_prepareOptionsForRequest($item));
                         } else {
@@ -1102,6 +1115,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param string $additionalOptions
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     *
+     * @deprecated
      */
     protected function _parseOptions(\Magento\Quote\Model\Quote\Item $item, $additionalOptions)
     {
@@ -1166,6 +1181,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Quote\Model\Quote\Item $item
      * @param array $options
      * @return $this
+     *
+     * @deprecated
      */
     protected function _assignOptionsToItem(\Magento\Quote\Model\Quote\Item $item, $options)
     {
@@ -1209,7 +1226,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                     [
                         'product' => $item->getProduct(),
                         'code' => 'additional_options',
-                        'value' => serialize($options['additional_options'])
+                        'value' => $this->serializer->serialize($options['additional_options'])
                     ]
                 )
             );
@@ -1844,7 +1861,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             }
             $addOptions = $item->getOptionByCode('additional_options');
             if ($addOptions) {
-                $options['additional_options'] = unserialize($addOptions->getValue());
+                $options['additional_options'] = $this->serializer->unserialize($addOptions->getValue());
             }
             $item->setProductOrderOptions($options);
         }
