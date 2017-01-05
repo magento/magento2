@@ -53,6 +53,8 @@ class Items extends DataSource
      *
      * @param null|string $key
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getData($key = null)
     {
