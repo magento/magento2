@@ -5,6 +5,12 @@
  */
 namespace Magento\Backend\Model;
 
+use Magento\Backend\Model\Menu\Item;
+use Magento\Backend\Model\Menu\Item\Factory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
+use Psr\Log\LoggerInterface;
+
 /**
  * Backend menu model
  */
@@ -18,33 +24,54 @@ class Menu extends \ArrayObject
     protected $_path = '';
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $_logger;
 
     /**
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param string $pathInMenuStructure
+     * @var Factory
      */
-    public function __construct(\Psr\Log\LoggerInterface $logger, $pathInMenuStructure = '')
-    {
+    private $menuItemFactory;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * Menu constructor
+     *
+     * @param LoggerInterface $logger
+     * @param string $pathInMenuStructure
+     * @param Factory|null $menuItemFactory
+     * @param SerializerInterface|null $serializer
+     */
+    public function __construct(
+        LoggerInterface $logger,
+        $pathInMenuStructure = '',
+        Factory $menuItemFactory = null,
+        SerializerInterface $serializer = null
+    ) {
         if ($pathInMenuStructure) {
             $this->_path = $pathInMenuStructure . '/';
         }
         $this->_logger = $logger;
         $this->setIteratorClass(\Magento\Backend\Model\Menu\Iterator::class);
+        $this->menuItemFactory = $menuItemFactory ?: ObjectManager::getInstance()
+            ->create(Factory::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->create(SerializerInterface::class);
     }
 
     /**
      * Add child to menu item
      *
-     * @param \Magento\Backend\Model\Menu\Item $item
+     * @param Item $item
      * @param string $parentId
      * @param int $index
      * @return void
      * @throws \InvalidArgumentException
      */
-    public function add(\Magento\Backend\Model\Menu\Item $item, $parentId = null, $index = null)
+    public function add(Item $item, $parentId = null, $index = null)
     {
         if ($parentId !== null) {
             $parentItem = $this->get($parentId);
@@ -69,13 +96,13 @@ class Menu extends \ArrayObject
      * Retrieve menu item by id
      *
      * @param string $itemId
-     * @return \Magento\Backend\Model\Menu\Item|null
+     * @return Item|null
      */
     public function get($itemId)
     {
         $result = null;
+        /** @var Item $item */
         foreach ($this as $item) {
-            /** @var $item \Magento\Backend\Model\Menu\Item */
             if ($item->getId() == $itemId) {
                 $result = $item;
                 break;
@@ -116,8 +143,8 @@ class Menu extends \ArrayObject
     public function remove($itemId)
     {
         $result = false;
+        /** @var Item $item */
         foreach ($this as $key => $item) {
-            /** @var $item \Magento\Backend\Model\Menu\Item */
             if ($item->getId() == $itemId) {
                 unset($this[$key]);
                 $result = true;
@@ -144,8 +171,8 @@ class Menu extends \ArrayObject
     public function reorder($itemId, $position)
     {
         $result = false;
+        /** @var Item $item */
         foreach ($this as $key => $item) {
-            /** @var $item \Magento\Backend\Model\Menu\Item */
             if ($item->getId() == $itemId) {
                 unset($this[$key]);
                 $this->add($item, null, $position);
@@ -161,10 +188,10 @@ class Menu extends \ArrayObject
     /**
      * Check whether provided item is last in list
      *
-     * @param \Magento\Backend\Model\Menu\Item $item
+     * @param Item $item
      * @return bool
      */
-    public function isLast(\Magento\Backend\Model\Menu\Item $item)
+    public function isLast(Item $item)
     {
         return $this->offsetGet(max(array_keys($this->getArrayCopy())))->getId() == $item->getId();
     }
@@ -172,12 +199,12 @@ class Menu extends \ArrayObject
     /**
      * Find first menu item that user is able to access
      *
-     * @return \Magento\Backend\Model\Menu\Item|null
+     * @return Item|null
      */
     public function getFirstAvailable()
     {
         $result = null;
-        /** @var $item \Magento\Backend\Model\Menu\Item */
+        /** @var Item $item */
         foreach ($this as $item) {
             if ($item->isAllowed() && !$item->isDisabled()) {
                 if ($item->hasChildren()) {
@@ -198,7 +225,7 @@ class Menu extends \ArrayObject
      * Get parent items by item id
      *
      * @param string $itemId
-     * @return \Magento\Backend\Model\Menu\Item[]
+     * @return Item[]
      */
     public function getParentItems($itemId)
     {
@@ -217,8 +244,8 @@ class Menu extends \ArrayObject
      */
     protected function _findParentItems($menu, $itemId, &$parents)
     {
+        /** @var Item $item */
         foreach ($menu as $item) {
-            /** @var $item \Magento\Backend\Model\Menu\Item */
             if ($item->getId() == $itemId) {
                 return true;
             }
@@ -233,16 +260,54 @@ class Menu extends \ArrayObject
     }
 
     /**
-     * Hack to unset logger instance which cannot be serialized
+     * Serialize menu
      *
      * @return string
      */
     public function serialize()
     {
-        $logger = $this->_logger;
-        unset($this->_logger);
-        $result = parent::serialize();
-        $this->_logger = $logger;
-        return $result;
+        return $this->serializer->serialize($this->toArray());
+    }
+
+    /**
+     * Get menu data represented as an array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $data = [];
+        foreach ($this as $item) {
+            $data[] = $item->toArray();
+        }
+        return $data;
+    }
+
+    /**
+     * Unserialize menu
+     *
+     * @param string $serialized
+     * @return void
+     */
+    public function unserialize($serialized)
+    {
+        $data = $this->serializer->unserialize($serialized);
+        $this->populateFromArray($data);
+    }
+
+    /**
+     * Populate the menu with data from array
+     *
+     * @param array $data
+     * @return void
+     */
+    public function populateFromArray(array $data)
+    {
+        $items = [];
+        foreach ($data as $itemData) {
+            $item = $this->menuItemFactory->create($itemData);
+            $items[] = $item;
+        }
+        $this->exchangeArray($items);
     }
 }
