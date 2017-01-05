@@ -174,7 +174,7 @@ class SensitiveConfigSetCommand extends Command
     }
 
     /**
-     * Write success message.
+     * Writes success message.
      *
      * @param OutputInterface $output
      * @param boolean $isInteractive
