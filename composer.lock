@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "db5eb5dcf9b4af8ae63345ebda1c92f4",
-    "content-hash": "600aca1692cf3fe5c2ea1cbf66de09ab",
+    "hash": "a04e636dac93483fe9806467d38003f2",
+    "content-hash": "07be52ec4880d0390acff2dd605a194d",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -56,7 +56,7 @@
         },
         {
             "name": "colinmollenhour/cache-backend-file",
-            "version": "1.4",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_File.git",

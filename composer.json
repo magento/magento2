@@ -151,7 +151,7 @@
         "magento/module-rss": "100.2.0-dev",
         "magento/module-rule": "100.2.0-dev",
         "magento/module-sales": "100.2.0-dev",
-        "magento/module-sales-inventory": "100.0.0-dev",
+        "magento/module-sales-inventory": "100.2.0-dev",
         "magento/module-sales-rule": "100.2.0-dev",
         "magento/module-sales-sequence": "100.2.0-dev",
         "magento/module-sample-data": "100.2.0-dev",
