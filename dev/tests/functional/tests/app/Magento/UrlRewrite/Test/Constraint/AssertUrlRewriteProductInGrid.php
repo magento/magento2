@@ -18,6 +18,13 @@ use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 class AssertUrlRewriteProductInGrid extends AbstractConstraint
 {
     /**
+     * Parent Category Index.
+     *
+     * @var int
+     */
+    private $parentCategoryIndex;
+
+    /**
      * Curl transport on webapi.
      *
      * @var WebapiDecorator
@@ -50,9 +57,10 @@ class AssertUrlRewriteProductInGrid extends AbstractConstraint
         $urlRewriteIndex->open();
         $categories = $product->getDataFieldConfig('category_ids')['source']->getCategories();
         $rootCategoryArray = [];
-        foreach ($categories as $category) {
+        foreach ($categories as $index => $category) {
             $parentName = $category->getDataFieldConfig('parent_id')['source']->getParentCategory()->getName();
-            $rootCategoryArray[$parentName] = strtolower($category->getName());
+            $rootCategoryArray[$parentName]['name'] = strtolower($category->getUrlKey());
+            $rootCategoryArray[$parentName]['index'] = $index;
         }
 
         $stores = $product->getDataFieldConfig('website_ids')['source']->getStores();
@@ -63,6 +71,8 @@ class AssertUrlRewriteProductInGrid extends AbstractConstraint
                 ->getCategory()
                 ->getName();
 
+            $this->parentCategoryIndex = $rootCategoryArray[$rootCategoryName]['index'];
+
             $storeName = $store->getName();
             $filters = [
                 [
@@ -70,11 +80,12 @@ class AssertUrlRewriteProductInGrid extends AbstractConstraint
                     'store_id' => $storeName
                 ],
                 [
-                    'request_path' => $rootCategoryArray[$rootCategoryName] . '.html',
+                    'request_path' => $rootCategoryArray[$rootCategoryName]['name'] . '.html',
                     'store_id' => $storeName
                 ],
                 [
-                    'request_path' => $rootCategoryArray[$rootCategoryName] . '/' . $product->getUrlKey() . '.html',
+                    'request_path' =>
+                        $rootCategoryArray[$rootCategoryName]['name'] . '/' . $product->getUrlKey() . '.html',
                     'target_path' => $this->getTargetPath($product, $category),
                     'store_id' => $storeName
                 ],
@@ -116,10 +127,12 @@ class AssertUrlRewriteProductInGrid extends AbstractConstraint
     private function getCategoryId(FixtureInterface $product)
     {
         $productSku = $product->getSku();
-        $categoryId = $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]->getId();
+        $categoryId = $product->getDataFieldConfig('category_ids')['source']
+            ->getCategories()[$this->parentCategoryIndex]->getId();
         $categoryId = $categoryId
             ? $categoryId
-            : $this->retrieveProductBySku($productSku)['extension_attributes']['category_links'][0]['category_id'];
+            : $this->retrieveProductBySku($productSku)
+                ['extension_attributes']['category_links'][$this->parentCategoryIndex]['category_id'];
         return $categoryId;
     }
 
