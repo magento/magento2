@@ -75,7 +75,10 @@ class Activate extends Action
         } catch (\Exception $e) {
             $responseContent = [
                 'success' => false,
-                'error_message' => __('Sorry, something went wrong.'),
+                'error_message' => __(
+                    'Sorry, there was an error processing your registration request to Magento Analytics. '
+                    . 'Please try again later.'
+                ),
             ];
             $this->logger->error($e->getMessage());
         }

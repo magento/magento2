@@ -6,7 +6,6 @@
 
 namespace Magento\Analytics\Test\Unit\Model;
 
-
 use Magento\Analytics\Model\Subscription as SubscriptionModel;
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Config\Model\Config\Structure\SearchInterface;
