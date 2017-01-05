@@ -78,7 +78,7 @@ class Handler extends Action
     public function execute()
     {
         if (!$this->webhookRequestValidator->validate($this->webhookRequest)) {
-            $this->getResponse()->setHttpResponseCode(400);
+            $this->_redirect('noroute');
             return;
         }
 
