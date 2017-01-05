@@ -6,10 +6,7 @@
 namespace Magento\Signifyd\Model;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Signifyd\Model\MessageGenerators\CaseCreation;
-use Magento\Signifyd\Model\MessageGenerators\CaseRescore;
-use Magento\Signifyd\Model\MessageGenerators\CaseReview;
-use Magento\Signifyd\Model\MessageGenerators\GuaranteeCompletion;
+use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
 
 /**
  * Creates instance of case updating service configured with specific message generator.
@@ -19,28 +16,10 @@ use Magento\Signifyd\Model\MessageGenerators\GuaranteeCompletion;
 class CaseUpdatingServiceFactory
 {
     /**
-     * Type of message for Signifyd case creation.
+     * Type of testing Signifyd case
      * @var string
      */
-    private static $caseCreation = 'CASE_CREATION';
-
-    /**
-     * Type of message for Signifyd case re-scoring.
-     * @var string
-     */
-    private static $caseRescore = 'CASE_RESCORE';
-
-    /**
-     * Type of message for Signifyd case reviewing
-     * @var string
-     */
-    private static $caseReview = 'CASE_REVIEW';
-
-    /**
-     * Type of message of Signifyd guarantee completion
-     * @var string
-     */
-    private static $guaranteeCompletion = 'GUARANTEE_COMPLETION';
+    private static $caseTest = 'cases/test';
 
     /**
      * @var ObjectManagerInterface
@@ -48,13 +27,20 @@ class CaseUpdatingServiceFactory
     private $objectManager;
 
     /**
+     * @var GeneratorFactory
+     */
+    private $generatorFactory;
+
+    /**
      * CaseUpdatingServiceFactory constructor.
      *
      * @param ObjectManagerInterface $objectManager
+     * @param GeneratorFactory $generatorFactory
      */
-    public function __construct(ObjectManagerInterface $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager, GeneratorFactory $generatorFactory)
     {
         $this->objectManager = $objectManager;
+        $this->generatorFactory = $generatorFactory;
     }
 
     /**
@@ -62,31 +48,19 @@ class CaseUpdatingServiceFactory
      * As param retrieves type of message generator.
      *
      * @param string $type
-     * @return CaseUpdatingService
+     * @return CaseUpdatingServiceInterface
+     * @throws \InvalidArgumentException
      */
     public function create($type)
     {
-        switch ($type) {
-            case self::$caseCreation:
-                $className = CaseCreation::class;
-                break;
-            case self::$caseRescore:
-                $className = CaseRescore::class;
-                break;
-            case self::$caseReview:
-                $className = CaseReview::class;
-                break;
-            case self::$guaranteeCompletion:
-                $className = GuaranteeCompletion::class;
-                break;
-            default:
-                throw new \InvalidArgumentException('Specified message type does not supported.');
+        if ($type === self::$caseTest) {
+            $service = $this->objectManager->create(StubCaseUpdatingService::class);
+        } else {
+            $messageGenerator = $this->generatorFactory->create($type);
+            $service = $this->objectManager->create(CaseUpdatingService::class, [
+                'messageGenerator' => $messageGenerator
+            ]);
         }
-
-        $messageGenerator = $this->objectManager->get($className);
-        $service = $this->objectManager->create(CaseUpdatingService::class, [
-            'messageGenerator' => $messageGenerator
-        ]);
 
         return $service;
     }

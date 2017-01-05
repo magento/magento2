@@ -6,7 +6,7 @@
 namespace Magento\Signifyd\Model\MessageGenerators;
 
 use Magento\Framework\DataObject;
-use Magento\Signifyd\Api\CaseManagementInterface;
+use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Model\MessageGeneratorException;
 use Magento\Signifyd\Model\MessageGeneratorInterface;
 use Magento\Signifyd\Model\Validators\CaseDataValidator;
@@ -17,9 +17,9 @@ use Magento\Signifyd\Model\Validators\CaseDataValidator;
 class CaseRescore implements MessageGeneratorInterface
 {
     /**
-     * @var CaseManagementInterface
+     * @var CaseRepositoryInterface
      */
-    private $caseManagement;
+    private $caseRepository;
 
     /**
      * @var CaseDataValidator
@@ -29,12 +29,12 @@ class CaseRescore implements MessageGeneratorInterface
     /**
      * CaseRescore constructor.
      *
-     * @param CaseManagementInterface $caseManagement
+     * @param CaseRepositoryInterface $caseRepository
      * @param CaseDataValidator $caseDataValidator
      */
-    public function __construct(CaseManagementInterface $caseManagement, CaseDataValidator $caseDataValidator)
+    public function __construct(CaseRepositoryInterface $caseRepository, CaseDataValidator $caseDataValidator)
     {
-        $this->caseManagement = $caseManagement;
+        $this->caseRepository = $caseRepository;
         $this->caseDataValidator = $caseDataValidator;
     }
 
@@ -47,7 +47,7 @@ class CaseRescore implements MessageGeneratorInterface
             throw new MessageGeneratorException(__('The "%1" should not be empty.', 'caseId'));
         }
 
-        $caseEntity = $this->caseManagement->getByCaseId($data->getData('caseId'));
+        $caseEntity = $this->caseRepository->getByCaseId($data->getData('caseId'));
 
         if ($caseEntity === null) {
             throw new MessageGeneratorException(__('Case entity not found.'));

@@ -9,11 +9,10 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Signifyd\Api\CaseManagementInterface;
+use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Signifyd\Model\MessageGenerators\CaseCreation;
-use Psr\Log\LoggerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Contains tests for case entity updating service.
@@ -39,13 +38,8 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
 
         $messageGenerator = $this->objectManager->create(CaseCreation::class);
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->service = $this->objectManager->create(CaseUpdatingService::class, [
-            'messageGenerator' => $messageGenerator,
-            'logger' => $logger
+            'messageGenerator' => $messageGenerator
         ]);
     }
 
@@ -59,8 +53,6 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $data = new DataObject(
             [
                 'caseId' => $caseId,
-                'guaranteeEligible' => true,
-                'status' => CaseInterface::STATUS_DISMISSED,
                 'score' => 750,
                 'reviewDisposition' => CaseInterface::DISPOSITION_FRAUDULENT,
                 'associatedTeam' => [
@@ -77,14 +69,16 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->service->update($data);
 
-        /** @var CaseManagementInterface $caseManagement */
-        $caseManagement = $this->objectManager->get(CaseManagementInterface::class);
-        $caseEntity = $caseManagement->getByCaseId($caseId);
+        /** @var CaseRepositoryInterface $caseManagement */
+        $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
+        $caseEntity = $caseRepository->getByCaseId($caseId);
 
         static::assertNotEmpty($caseEntity);
         static::assertEquals('2017-01-05 22:23:26', $caseEntity->getCreatedAt());
         static::assertEquals(CaseInterface::GUARANTEE_APPROVED, $caseEntity->getGuaranteeDisposition());
         static::assertEquals('AnyTeam', $caseEntity->getAssociatedTeam()['teamName']);
+        static::assertEquals(true, $caseEntity->isGuaranteeEligible());
+        static::assertEquals(CaseInterface::STATUS_PROCESSING, $caseEntity->getStatus());
 
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);

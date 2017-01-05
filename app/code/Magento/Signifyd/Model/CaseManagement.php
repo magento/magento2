@@ -88,20 +88,4 @@ class CaseManagement implements CaseManagementInterface
         $items = $this->caseRepository->getList($searchCriteria)->getItems();
         return !empty($items) ? array_pop($items) : null;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function getByCaseId($caseId)
-    {
-        $filters = [
-            $this->filterBuilder->setField('case_id')
-                ->setValue($caseId)
-                ->create()
-        ];
-
-        $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)->create();
-        $items = $this->caseRepository->getList($searchCriteria)->getItems();
-        return !empty($items) ? array_pop($items) : null;
-    }
 }

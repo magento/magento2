@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Model;
@@ -91,6 +91,18 @@ class CaseRepository implements CaseRepositoryInterface
         $this->resourceModel->load($case, $id);
 
         return $case;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getByCaseId($caseId)
+    {
+        /** @var CaseEntity $case */
+        $case = $this->caseFactory->create();
+        $this->resourceModel->load($case, $caseId, 'case_id');
+
+        return $case->getEntityId() ? $case : null;
     }
 
     /**
