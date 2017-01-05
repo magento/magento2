@@ -1,29 +1,27 @@
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright Â© 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /*eslint max-nested-callbacks: 0*/
 /*jscs:disable requireCamelCaseOrUpperCaseIdentifiers*/
 define([
+    'mageUtils',
     'Magento_Ui/js/grid/data-storage'
-], function (DataStorage) {
+], function (utils, DataStorage) {
     'use strict';
 
     describe('Magento_Ui/js/grid/data-storage', function () {
-        var obj = new DataStorage({
-                dataScope: ''
-            }),
-            type;
+        describe('initConfig', function () {
+            it('is function', function () {
+                var model = new DataStorage({
+                    dataScope: ''
+                });
 
-        describe('"initConfig" method', function () {
-            it('Check for defined ', function () {
-                expect(obj.hasOwnProperty('initConfig')).toBeDefined();
+                expect(model.initConfig).toBeDefined();
+                expect(typeof model.initConfig).toEqual('function');
             });
-            it('Check method type', function () {
-                type = typeof obj.initConfig;
-                expect(type).toEqual('function');
-            });
+
             it('Check method change "$this.dataScope" property', function () {
                 var model = new DataStorage({
                     dataScope: 'magento'
@@ -33,22 +31,27 @@ define([
                 expect(model.dataScope).toEqual(['magento']);
             });
         });
-        describe('"hasScopeChanged" method', function () {
-            it('Check for defined ', function () {
-                expect(obj.hasOwnProperty('hasScopeChanged')).toBeDefined();
-            });
-            it('Check method type', function () {
-                type = typeof obj.hasScopeChanged;
-                expect(type).toEqual('function');
-            });
-            it('Check method with empty cached requests', function () {
-                var expectedResult;
 
-                expectedResult = obj.hasScopeChanged();
-                expect(expectedResult).toBeFalsy();
+        describe('hasScopeChanged', function () {
+            it('is function', function () {
+                var model = new DataStorage({
+                    dataScope: ''
+                });
+
+                expect(model.hasScopeChanged).toBeDefined();
+                expect(typeof model.hasScopeChanged).toEqual('function');
             });
-            it('Check method with not empty cached requests', function () {
-                var expectedResult, params, requestParams, model;
+
+            it('returns false if no requests have been made', function () {
+                var model = new DataStorage({
+                    dataScope: ''
+                });
+
+                expect(model.hasScopeChanged()).toBeFalsy();
+            });
+
+            it('check if requests have been made', function () {
+                var params, newParams, model;
 
                 params = {
                     namespace: 'magento',
@@ -59,46 +62,24 @@ define([
                     sorting: {},
                     paging: {}
                 };
-                requestParams = {
-                    namespace: 'magento',
+
+                newParams = utils.extend({}, params, {
                     search: 'magento',
                     filters: {
                         store_id: 1
-                    },
-                    sorting: {},
-                    paging: {}
-                };
-                model = new DataStorage(
-                    {
-                        dataScope: ['filters.store_id'] //became after initConfig method call
                     }
-                );
-                spyOn(model, 'getRequest').and.returnValue({
-                    ids: [],
-                    params: {
-                        namespace: 'magento',
-                        search: '',
-                        filters: {
-                            store_id: 0
-                        },
-                        sorting: {},
-                        paging: {}
-                    },
+                });
+
+                model = new DataStorage({
+                    dataScope: ['filters.store_id'] //became after initConfig method call
+                });
+
+                model.cacheRequest({
                     totalRecords: 0
-                });
-                spyOn(model, 'removeRequest').and.callFake(function () {
-                    return false;
-                });
-                model.cacheRequest(
-                    {
-                        totalRecords: 0
-                    },
-                    params
-                );
-                expect(model.getRequest).toHaveBeenCalled();
-                expect(model.removeRequest).toHaveBeenCalled();
-                expectedResult = model.hasScopeChanged(requestParams);
-                expect(expectedResult).toBeTruthy();
+                }, params);
+
+                expect(model.hasScopeChanged(params)).toBeFalsy();
+                expect(model.hasScopeChanged(newParams)).toBeTruthy();
             });
         });
     });
