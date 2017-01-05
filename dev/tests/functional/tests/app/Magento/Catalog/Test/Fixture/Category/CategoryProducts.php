@@ -33,18 +33,24 @@ class CategoryProducts extends DataSource
         if (!empty($data['dataset']) && $data['dataset'] !== '-') {
             $dataset = array_map('trim', explode(',', $data['dataset']));
             foreach ($dataset as $value) {
-                $explodeValue = explode('::', $value);
-                $product = $fixtureFactory->createByCode($explodeValue[0], ['dataset' => $explodeValue[1]]);
-                if (!$product->getId()) {
-                    $product->persist();
-                }
-                $this->data[] = $product->getName();
+                list($fixtureCode, $dataset) = explode('::', $value);
+                $this->products[] = $fixtureFactory->createByCode($fixtureCode, ['dataset' => $dataset]);
+            }
+        }
+        if (isset($data['products'])) {
+            foreach ($data['products'] as $product) {
                 $this->products[] = $product;
             }
         }
+        foreach ($this->products as $product) {
+            if (!$product->hasData('id')) {
+                $product->persist();
+            }
+            $this->data[] = $product->getName();
+        }
     }
 
-    /**
+    /**\
      * Return products.
      *
      * @return array

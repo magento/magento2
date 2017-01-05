@@ -29,6 +29,13 @@ class PageForm extends FormTabs
     protected $contentForm = "#page_content";
 
     /**
+     * Cms page loader.
+     *
+     * @var string
+     */
+    protected $loader = "data-role='loader'";
+
+    /**
      * Page Content Show/Hide Editor toggle button.
      *
      * @return void
@@ -75,5 +82,20 @@ class PageForm extends FormTabs
             $tabHeader->click();
         };
         return $this;
+    }
+
+    /**
+     * Check if block with system variables is visible.
+     *
+     * @return bool
+     */
+    public function isVariablesBlockVisible()
+    {
+        $this->openTab('content');
+        /** @var \Magento\Cms\Test\Block\Adminhtml\Page\Edit\Tab\Content $contentTab */
+        $contentTab = $this->getTab('content');
+        $contentTab->clickInsertVariable();
+        $this->waitForElementNotVisible($this->loader);
+        return $contentTab->isVariablesBlockVisible();
     }
 }
