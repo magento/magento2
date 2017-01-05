@@ -15,7 +15,7 @@ class ScopeValidator implements ScopeValidatorInterface
     /**
      * @var ScopeResolverPool
      */
-    private $scopeResolverPool;
+    protected $scopeResolverPool;
 
     /**
      * @param ScopeResolverPool $scopeResolverPool

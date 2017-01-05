@@ -20,7 +20,7 @@ class Validator implements ValidatorInterface
     /**
      * @var ScopeResolverPool
      */
-    protected $scopeResolverPool;
+    private $scopeResolverPool;
 
     /**
      * @param ScopeResolverPool $scopeResolverPool
