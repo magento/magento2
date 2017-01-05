@@ -24,6 +24,6 @@ class Entity extends Base
     {
         return !count($ids)
             ? $this->createResultCollection()
-            : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getRowIdFieldName(), $ids);
+            : $this->createResultCollection()->addFieldToFilter($this->getPrimaryResource()->getIdFieldName(), $ids);
     }
 }

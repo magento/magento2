@@ -73,6 +73,36 @@
             <field name="include_in_menu" xsi:type="string">Yes</field>
         </dataset>
 
+        <dataset name="three_nested_categories">
+            <field name="name" xsi:type="string">Category%isolation%</field>
+            <field name="url_key" xsi:type="string">category-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">two_nested_categories</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+
+        <dataset name="four_nested_categories">
+            <field name="name" xsi:type="string">Category%isolation%</field>
+            <field name="url_key" xsi:type="string">category-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">three_nested_categories</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+
+        <dataset name="five_nested_categories">
+            <field name="name" xsi:type="string">Category%isolation%</field>
+            <field name="url_key" xsi:type="string">category-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">four_nested_categories</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+
         <dataset name="default_subcategory_with_assigned_simple_product">
             <field name="name" xsi:type="string">Category%isolation%</field>
             <field name="url_key" xsi:type="string">category%isolation%</field>

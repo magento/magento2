@@ -15,7 +15,7 @@ define([
             var format, momentFormat;
 
             format = 'M/d/yy';
-            momentFormat = 'MM/DD/YYYY';
+            momentFormat = 'M/DD/YYYY';
             expect(utils.convertToMomentFormat(format)).toBe(momentFormat);
         });
 
