@@ -106,5 +106,15 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory" />
         </variation>
+        <variation name="OnePageCheckoutBraintreeTestVariation5" summary="Registered Checkout with Braintree Credit Card from Storefront with virtual quote and CVV Verification = No" ticketId="MAGETWO-38399">
+            <data name="products/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_with_addresses</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_braintree_no_cvv</data>
+            <data name="configData" xsi:type="string">braintree, braintree_paypal_skip_order_review, braintree_cvv_disabled</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S2</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+        </variation>
     </testCase>
 </config>

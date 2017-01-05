@@ -38,6 +38,7 @@ class BraintreeCc extends PaymentCc
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
+        $this->braintreeForm = array_intersect_key($this->braintreeForm, $fixture->getData());
         $mapping = $this->dataMapping($fixture->getData());
         foreach ($this->braintreeForm as $field => $iframe) {
             $element = $this->browser->find('body');
