@@ -146,7 +146,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
             ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
 
-        if ($this->configData == 'enable_https_frontend_admin') {
+        if ($this->configData == 'enable_https_frontend_admin_with_url') {
             $_ENV['app_backend_url'] = mb_ereg_replace ("(http[s]?)", 'https', $_ENV['app_backend_url']);
             $_ENV['app_frontend_url'] = mb_ereg_replace ("(http[s]?)", 'https', $_ENV['app_frontend_url']);
 
@@ -200,7 +200,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     public function tearDown()
     {
         // Workaround until MTA-3879 is delivered.
-        if ($this->configData == 'enable_https_frontend_admin') {
+        if ($this->configData == 'enable_https_frontend_admin_with_url') {
             $this->getSystemConfigEditPage()->open();
             $this->getSystemConfigEditPage()->getForm()
                 ->getGroup('web', 'secure')->setValue('web', 'secure', 'use_in_frontend', 'No');

@@ -114,19 +114,19 @@ class Section extends DataSource
     {
         foreach ($data as &$params) {
             $params = array_map(function ($value) {
-                if (mb_ereg ("\{\{(.+)\}\}", $value, $matches)) {
+                if (is_string($value) && preg_match('/\{\{(.+)\}\}/', $value, $matches)) {
                     switch ($matches[1]) {
                         case 'basic_url_to_secure':
-                            $value = mb_ereg_replace (
-                                '{{basic_url_to_secure}}',
-                                mb_ereg_replace ("(http[s]?)", 'https', $_ENV['app_frontend_url']),
+                            $value = preg_replace(
+                                '/{{basic_url_to_secure}}/',
+                                preg_replace('/(http[s]?)/', 'https', $_ENV['app_frontend_url']),
                                 $value
                             );
                             break;
                         case 'basic_url_to_unsecure':
-                            $value = mb_ereg_replace (
-                                '{{basic_url_to_unsecure}}',
-                                mb_ereg_replace ("(http[s]?)", 'http', $_ENV['app_frontend_url']),
+                            $value = preg_replace(
+                                '/{{basic_url_to_unsecure}}/',
+                                preg_replace('/(http[s]?)/', 'http', $_ENV['app_frontend_url']),
                                 $value
                             );
                             break;
