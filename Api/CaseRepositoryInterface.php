@@ -33,6 +33,14 @@ interface CaseRepositoryInterface
     public function getById($id);
 
     /**
+     * Gets entity by Signifyd case id.
+     *
+     * @param int $caseId
+     * @return CaseInterface|null
+     */
+    public function getByCaseId($caseId);
+
+    /**
      * Deletes case entity.
      *
      * @param CaseInterface $case

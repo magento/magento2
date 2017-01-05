@@ -13,8 +13,7 @@ use Magento\Framework\DataObject;
 class CaseDataValidator
 {
     /**
-     * Checks if data object contains Signifyd Case id
-     * @see
+     * Checks if data object contains Signifyd Case id.
      * @param DataObject $data
      * @return bool
      */

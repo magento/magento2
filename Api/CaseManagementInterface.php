@@ -31,12 +31,4 @@ interface CaseManagementInterface
      * @return CaseInterface|null
      */
     public function getByOrderId($orderId);
-
-    /**
-     * Gets Case entity by received case (investigation) id.
-     *
-     * @param int $caseId
-     * @return CaseInterface|null
-     */
-    public function getByCaseId($caseId);
 }
