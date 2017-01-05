@@ -73,7 +73,7 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
 
         $scheduleStructure->expects($this->once())->method('setStructureElementData')->with(
             $element->getAttribute('name'),
-            ['attributes' => ['group' => '', 'component' => 'listing']]
+            ['attributes' => ['group' => '', 'component' => 'listing', 'acl' => 'test']]
         );
         $scheduleStructure->expects($this->once())->method('setElementToIfconfigList')->with(
             $element->getAttribute('name'),
@@ -88,7 +88,7 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 $this->getElement(
-                    '<uiComponent name="cms_block_listing" component="listing" ifconfig="config_path"/>',
+                    '<uiComponent name="cms_block_listing" acl="test" component="listing" ifconfig="config_path"/>',
                     'uiComponent'
                 ),
             ]
