@@ -19,6 +19,8 @@ use Magento\Config\Model\Config;
  */
 class InstallData implements InstallDataInterface
 {
+    const MAGENTO_API_USER_NAME_PATH = 'analytics/integration_name';
+
     /**
      * @var NotificationTime
      */
@@ -73,7 +75,7 @@ class InstallData implements InstallDataInterface
      */
     private function getIntegrationData()
     {
-        $integrationData['name'] = $this->config->getConfigDataValue('analytics/integration_name');
+        $integrationData['name'] = $this->config->getConfigDataValue(self::MAGENTO_API_USER_NAME_PATH);
         $integrationData['all_resources'] = false;
         $integrationData['resource'][] = "Magento_Analytics::analytics";
         $integrationData['resource'][] = "Magento_Analytics::analytics_api";
