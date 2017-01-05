@@ -11,6 +11,7 @@ use Magento\Config\Model\Config;
 use Magento\Integration\Api\OauthServiceInterface;
 use Magento\Integration\Model\Integration;
 use Magento\Analytics\Setup\InstallData;
+use Magento\Integration\Model\ResourceModel\Integration as IntegratedResourceModel;
 
 /**
  * Class GenerateTokenCommand
@@ -33,19 +34,27 @@ class GenerateTokenCommand implements AnalyticsCommandInterface
     private $oauthService;
 
     /**
+     * @var IntegratedResourceModel
+     */
+    private $integrationResourceModel;
+
+    /**
      * GenerateTokenCommand constructor.
      * @param IntegrationServiceInterface $integrationService
      * @param Config $config
      * @param OauthServiceInterface $oauthService
+     * @param IntegratedResourceModel $integrationResourceModel
      */
     public function __construct(
         IntegrationServiceInterface $integrationService,
         Config $config,
-        OauthServiceInterface $oauthService
+        OauthServiceInterface $oauthService,
+        IntegratedResourceModel $integrationResourceModel
     ) {
         $this->integrationService = $integrationService;
         $this->config = $config;
         $this->oauthService = $oauthService;
+        $this->integrationResourceModel = $integrationResourceModel;
     }
 
     /**
@@ -58,10 +67,11 @@ class GenerateTokenCommand implements AnalyticsCommandInterface
             ->findByName(
                 $this->config->getConfigDataValue(InstallData::MAGENTO_API_USER_NAME_PATH)
             );
-        $CreateTokenResult = $this->oauthService->createAccessToken($integration->getConsumerId());
-        if ($CreateTokenResult) {
+
+        $creationResult = $this->oauthService->createAccessToken($integration->getConsumerId(), true);
+        if ($creationResult === true) {
             $integration->setStatus(Integration::STATUS_ACTIVE);
-            $this->integrationService->update($integration->getData());
+            $this->integrationResourceModel->save($integration);
             return true;
         }
         return false;

@@ -14,7 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class AnalyticsConnector
 {
-    /** AnalyticsCommandInterface[] */
+    /** string[] */
     private $commands;
 
     /** ObjectManagerInterface */
@@ -22,7 +22,7 @@ class AnalyticsConnector
 
     /**
      * AnalyticsConnector constructor.
-     * @param AnalyticsCommandInterface[] $commands
+     * @param string[] $commands
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
@@ -35,7 +35,7 @@ class AnalyticsConnector
 
     /**
      * Create the instance of the command and execute it.
-     * @param $commandName
+     * @param string $commandName
      * @return bool
      * @throws NotFoundException
      */
