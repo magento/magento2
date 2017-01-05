@@ -155,7 +155,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
         </variation>
         <variation name="CreateCategoryEntityTestVariation9_FiveNesting" summary="Create category with five nesting" ticketId="MAGETWO-48379">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="addCategory" xsi:type="string">addSubcategory</data>
             <data name="category/data/parent_id/dataset" xsi:type="string">five_nested_categories</data>
             <data name="category/data/is_active" xsi:type="string">Yes</data>
