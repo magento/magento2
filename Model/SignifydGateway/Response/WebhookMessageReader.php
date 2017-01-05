@@ -39,6 +39,7 @@ class WebhookMessageReader
      *
      * @param WebhookRequest $request
      * @return WebhookMessage
+     * @throws \InvalidArgumentException
      */
     public function read(WebhookRequest $request)
     {
@@ -52,11 +53,13 @@ class WebhookMessageReader
             );
         }
 
-        return $this->webhookMessageFactory->create(
+        $webhookMessage = $this->webhookMessageFactory->create(
             [
                 'data' => $decodedData,
                 'eventTopic' => $request->getEventTopic()
             ]
         );
+
+        return $webhookMessage;
     }
 }
