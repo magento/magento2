@@ -168,12 +168,25 @@ class SensitiveConfigSetCommand extends Command
             return Cli::RETURN_FAILURE;
         }
 
+        $this->writeSuccessMessage($output, $isInteractive);
+
+        return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Write success message.
+     *
+     * @param OutputInterface $output
+     * @param boolean $isInteractive
+     * @return void
+     */
+    private function writeSuccessMessage(OutputInterface $output, $isInteractive)
+    {
         $output->writeln(sprintf(
-            '<info>Configuration value%s saved in app/etc/%s</info>',
+            '<info>Configuration value' . $isInteractive ? 's' : ''
+                . ' saved in app/etc/%s</info>',
             $isInteractive ? 's' : '',
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG)
         ));
-
-        return Cli::RETURN_SUCCESS;
     }
 }
