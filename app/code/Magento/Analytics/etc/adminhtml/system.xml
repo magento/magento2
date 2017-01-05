@@ -16,6 +16,7 @@
                 <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Send the system and transaction data to Magento Analytics service</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <backend_model>Magento\Analytics\Model\Config\Backend\Enabled</backend_model>
                     <config_path>analytics/subscription/enabled</config_path>
                 </field>
             </group>
