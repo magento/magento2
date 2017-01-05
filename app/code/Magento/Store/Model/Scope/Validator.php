@@ -69,6 +69,7 @@ class Validator implements ValidatorInterface
      * Throw exception if not valid.
      *
      * @param $scopeCode
+     * @return void
      * @throws LocalizedException if scope code is empty or has a wrong format
      */
     private function validateScopeCode($scopeCode)
