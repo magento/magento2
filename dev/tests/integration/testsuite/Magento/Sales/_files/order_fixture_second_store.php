@@ -1,25 +1,28 @@
 <?php
 /**
+ * Order for second store fixture.
+ *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
-require 'default_rollback.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
+require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_multiwebsite.php';
 /** @var \Magento\Catalog\Model\Product $product */
+/** @var \Magento\Store\Model\Store $store */
 
 $addressData = include __DIR__ . '/address_data.php';
-
+/** @var Magento\TestFramework\ObjectManager $objectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
+/** @var \Magento\Sales\Model\Order\Address $billingAddress */
 $billingAddress = $objectManager->create(\Magento\Sales\Model\Order\Address::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
 
+/** @var \Magento\Sales\Model\Order\Address $shippingAddress */
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
 
+/** @var \Magento\Sales\Model\Order\Payment $payment */
 $payment = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
 $payment->setMethod('checkmo');
 
@@ -31,10 +34,12 @@ $orderItem->setPrice($product->getPrice());
 $orderItem->setRowTotal($product->getPrice());
 $orderItem->setProductType('simple');
 
+$storeId = $store->getStoreId();
+$incrementId = $storeId . '00000001';
 /** @var \Magento\Sales\Model\Order $order */
 $order = $objectManager->create(\Magento\Sales\Model\Order::class);
 $order->setIncrementId(
-    '100000001'
+    $incrementId
 )->setState(
     \Magento\Sales\Model\Order::STATE_PROCESSING
 )->setStatus(
@@ -42,10 +47,6 @@ $order->setIncrementId(
 )->setSubtotal(
     100
 )->setBaseSubtotal(
-    100
-)->setGrandTotal(
-    100
-)->setBaseGrandTotal(
     100
 )->setCustomerIsGuest(
     true
@@ -56,7 +57,7 @@ $order->setIncrementId(
 )->setShippingAddress(
     $shippingAddress
 )->setStoreId(
-    $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId()
+    $storeId
 )->addItem(
     $orderItem
 )->setPayment(
