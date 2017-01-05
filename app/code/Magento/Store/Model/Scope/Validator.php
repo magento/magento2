@@ -50,6 +50,29 @@ class Validator implements ValidatorInterface
             throw new LocalizedException(__('Scope can\'t be empty'));
         }
 
+        $this->validateScopeCode($scopeCode);
+
+        try {
+            $scopeResolver = $this->scopeResolverPool->get($scope);
+            $scopeResolver->getScope($scopeCode)->getId();
+        } catch (InvalidArgumentException $e) {
+            throw new LocalizedException(__('Scope "%1" doesn\'t exist', $scope));
+        } catch (NoSuchEntityException $e) {
+            throw new LocalizedException(__('Scope code "%1" doesn\'t exist in scope "%2"', $scopeCode, $scope));
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate scope code
+     * Throw exception if not valid.
+     *
+     * @param $scopeCode
+     * @throws LocalizedException if scope code is empty or has a wrong format
+     */
+    private function validateScopeCode($scopeCode)
+    {
         if (empty($scopeCode)) {
             throw new LocalizedException(__('Scope code can\'t be empty'));
         }
@@ -57,19 +80,5 @@ class Validator implements ValidatorInterface
         if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $scopeCode)) {
             throw new LocalizedException(__('Wrong scope code format'));
         }
-
-        try {
-            $scopeResolver = $this->scopeResolverPool->get($scope);
-        } catch (InvalidArgumentException $e) {
-            throw new LocalizedException(__('Scope "%1" doesn\'t exist', $scope));
-        }
-
-        try {
-            $scopeResolver->getScope($scopeCode)->getId();
-        } catch (NoSuchEntityException $e) {
-            throw new LocalizedException(__('Scope code "%1" doesn\'t exist in scope "%2"', $scopeCode, $scope));
-        }
-
-        return true;
     }
 }
