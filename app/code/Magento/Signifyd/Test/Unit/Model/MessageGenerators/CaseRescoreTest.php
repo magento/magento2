@@ -36,7 +36,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
     /**
      * @var CaseRescore|MocObject
      */
-    private $CaseRescore;
+    private $caseRescore;
 
     /**
      * @var Case|MockObject
@@ -56,7 +56,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
                                      ->disableOriginalConstructor()
                                      ->getMock();
 
-        $this->CaseRescore = $this->objectManager->getObject(CaseRescore::class, [
+        $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
             'caseDataValidator' => new CaseDataValidator(),
             'caseRepository'    => $this->caseRepository
         ]);
@@ -71,7 +71,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateEmptyCaseIdException()
     {
-        $this->CaseRescore->generate([]);
+        $this->caseRescore->generate([]);
     }
 
     /**
@@ -87,12 +87,12 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
                              ->with(self::$data['caseId'])
                              ->willReturn(null);
 
-        $this->CaseRescore = $this->objectManager->getObject(CaseRescore::class, [
+        $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
             'caseDataValidator' => new CaseDataValidator(),
             'caseRepository'    => $this->caseRepository
         ]);
 
-        $this->CaseRescore->generate(self::$data);
+        $this->caseRescore->generate(self::$data);
     }
 
     /**
@@ -109,7 +109,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
                              ->with(self::$data['caseId'])
                              ->willReturn($this->case);
 
-        $this->CaseRescore = $this->objectManager->getObject(CaseRescore::class, [
+        $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
             'caseDataValidator' => new CaseDataValidator(),
             'caseRepository'    => $this->caseRepository
         ]);
@@ -117,9 +117,10 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
         $phrase = __(
             'Case Update: New score for the order is %1. Previous score was %2.',
             self::$data['score'],
-            self::$data['score']);
+            self::$data['score']
+        );
 
-        $message = $this->CaseRescore->generate(self::$data);
+        $message = $this->caseRescore->generate(self::$data);
 
         $this->assertEquals($phrase, $message);
     }
@@ -134,7 +135,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
                              ->with(self::$data['caseId'])
                              ->willReturn($this->case);
 
-        $this->CaseRescore = $this->objectManager->getObject(CaseRescore::class, [
+        $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
             'caseDataValidator' => new CaseDataValidator(),
             'caseRepository'    => $this->caseRepository
         ]);
@@ -142,9 +143,10 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
         $phrase = __(
             'Case Update: New score for the order is %1. Previous score was %2.',
             self::$data['score'],
-            null);
+            null
+        );
 
-        $message = $this->CaseRescore->generate(self::$data);
+        $message = $this->caseRescore->generate(self::$data);
 
         $this->assertEquals($phrase, $message);
     }
