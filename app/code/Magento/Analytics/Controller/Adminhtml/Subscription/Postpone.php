@@ -96,5 +96,4 @@ class Postpone extends Action
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         return $resultJson->setData($responseContent);
     }
-
 }

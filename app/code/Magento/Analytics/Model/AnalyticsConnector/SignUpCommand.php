@@ -128,5 +128,4 @@ class SignUpCommand implements AnalyticsCommandInterface
     {
         $this->configWriter->save('analytics/ma/token', $token);
     }
-
 }

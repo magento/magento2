@@ -16,6 +16,7 @@ use \Magento\Framework\Flag\FlagResource;
 class NotificationTime
 {
     const NOTIFICATION_TIME = 'notification_time';
+
     /**
      * @var FlagFactory
      */

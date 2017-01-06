@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Analytics\Test\Unit\Controller\Adminhtml\Subscription\Activate;
+namespace Magento\Analytics\Test\Unit\Controller\Adminhtml\Subscription;
 
 use Magento\Analytics\Controller\Adminhtml\Subscription\Activate;
 use Magento\Analytics\Model\Subscription;

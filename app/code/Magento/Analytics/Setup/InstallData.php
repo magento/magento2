@@ -86,5 +86,4 @@ class InstallData implements InstallDataInterface
         ];
         return $integrationData;
     }
-
 }
