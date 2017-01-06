@@ -109,7 +109,8 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
                 'importCustomerAddressData',
                 'save',
                 'getShippingRateByCode',
-                'getShippingMethod'
+                'getShippingMethod',
+                'setLimitCarrier'
             ],
             [],
             '',
@@ -208,7 +209,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
     private function setShippingAssignmentsMocks($shippingMethod)
     {
         $this->quoteMock->expects($this->once())->method('getExtensionAttributes')->willReturn(null);
-
+        $this->shippingAddressMock->expects($this->once())->method('setLimitCarrier');
         $this->cartExtensionMock = $this->getMock(
             \Magento\Quote\Api\Data\CartExtension::class,
             ['getShippingAssignments', 'setShippingAssignments'],

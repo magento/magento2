@@ -121,6 +121,13 @@ class Item extends AbstractModel implements ItemInterface
     protected $productRepository;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -133,6 +140,7 @@ class Item extends AbstractModel implements ItemInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -147,7 +155,8 @@ class Item extends AbstractModel implements ItemInterface
         ProductRepositoryInterface $productRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->productTypeConfig = $productTypeConfig;
         $this->_storeManager = $storeManager;
@@ -155,6 +164,8 @@ class Item extends AbstractModel implements ItemInterface
         $this->_catalogUrl = $catalogUrl;
         $this->_wishlistOptFactory = $wishlistOptFactory;
         $this->_wishlOptionCollectionFactory = $wishlOptionCollectionFactory;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->productRepository = $productRepository;
     }
@@ -472,7 +483,7 @@ class Item extends AbstractModel implements ItemInterface
     public function getBuyRequest()
     {
         $option = $this->getOptionByCode('info_buyRequest');
-        $initialData = $option ? unserialize($option->getValue()) : null;
+        $initialData = $option ? $this->serializer->unserialize($option->getValue()) : null;
 
         if ($initialData instanceof \Magento\Framework\DataObject) {
             $initialData = $initialData->getData();
@@ -500,7 +511,7 @@ class Item extends AbstractModel implements ItemInterface
         }
 
         $oldBuyRequest = $this->getBuyRequest()->getData();
-        $sBuyRequest = serialize($buyRequest + $oldBuyRequest);
+        $sBuyRequest = $this->serializer->serialize($buyRequest + $oldBuyRequest);
 
         $option = $this->getOptionByCode('info_buyRequest');
         if ($option) {
@@ -523,7 +534,7 @@ class Item extends AbstractModel implements ItemInterface
     {
         $buyRequest->setId($this->getId());
 
-        $_buyRequest = serialize($buyRequest->getData());
+        $_buyRequest = $this->serializer->serialize($buyRequest->getData());
         $this->setData('buy_request', $_buyRequest);
         return $this;
     }
