@@ -6,7 +6,6 @@
 
 namespace Magento\Analytics\Model\Config\Backend;
 
-
 use Magento\Config\Model\ResourceModel\Config\Data;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -112,13 +111,15 @@ class Enabled extends Value
 
             $enabled = $this->getData('value');
 
-            if ($enabled) {
-                try {
+            try {
+                if ($enabled) {
                     $this->setCronSchedule();
                     $this->setAttemptsFlag();
-                } catch (\Exception $e) {
-                    throw new LocalizedException(__('We can\'t save the Cron expression.'));
+                } else {
+                    $this->unsetAttemptsFlag();
                 }
+            } catch (\Exception $e) {
+                throw new LocalizedException(__('There was an error post-processing save configuration value.'));
             }
         }
 
@@ -166,6 +167,21 @@ class Enabled extends Value
         $attemptsFlag->setFlagData($this->attemptsInitValue);
 
         $this->flagResource->save($attemptsFlag);
+
+        return true;
+    }
+
+    /**
+     * Unset flag of attempts subscription operation.
+     *
+     * @return bool
+     */
+    private function unsetAttemptsFlag()
+    {
+        $attemptsFlag = $this->flagFactory
+            ->create(['data' => ['flag_code' => self::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE]])
+            ->loadSelf();
+        $this->flagResource->delete($attemptsFlag);
 
         return true;
     }
