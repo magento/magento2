@@ -77,11 +77,9 @@ class CaseUpdatingService implements CaseUpdatingServiceInterface
 
         try {
             $this->prepareCaseData($case, $data);
+            $orderHistoryComment = $this->messageGenerator->generate($data);
             $this->caseRepository->save($case);
-
-            // add comment to order history
-            $message = $this->messageGenerator->generate($data);
-            $this->commentsHistoryUpdater->addComment($case, $message);
+            $this->commentsHistoryUpdater->addComment($case, $orderHistoryComment);
         } catch (\Exception $e) {
             throw new LocalizedException(__('Cannot update Case entity.'), $e);
         }

@@ -89,7 +89,7 @@ class Handler extends Action
             $caseUpdatingService->update($webhookMessage->getData());
         } catch (LocalizedException $e) {
             $this->getResponse()->setHttpResponseCode(400);
-            $this->logger->error($e->getMessage());
+            $this->logger->critical($e);
         }
     }
 }

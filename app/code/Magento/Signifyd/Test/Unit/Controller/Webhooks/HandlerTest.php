@@ -201,8 +201,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setHttpResponseCode')
             ->with(400);
         $this->logger->expects($this->once())
-            ->method('error')
-            ->with(__('Error'));
+            ->method('critical');
 
         $this->controller->execute();
     }
