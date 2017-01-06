@@ -218,7 +218,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
             ->with($caseId)
             ->willReturnSelf();
 
-        $this->caseRepository->expects(self::once())
+        $this->caseRepository->expects(self::never())
             ->method('save')
             ->with($caseEntity)
             ->willReturn($caseEntity);
