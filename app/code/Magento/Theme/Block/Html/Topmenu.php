@@ -33,8 +33,6 @@ class Topmenu extends Template implements IdentityInterface
     /**
      * Core registry
      *
-     * Deprecated since not used in this class.
-     *
      * @var Registry
      *
      * @deprecated
@@ -378,6 +376,9 @@ class Topmenu extends Template implements IdentityInterface
 
     /**
      * Get menu object.
+     *
+     * Creates \Magento\Framework\Data\Tree\Node root node object.
+     * The creation logic was moved from class constructor into separate method.
      *
      * @return Node
      */
