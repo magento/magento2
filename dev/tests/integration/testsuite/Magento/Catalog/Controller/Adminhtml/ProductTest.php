@@ -109,4 +109,74 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             '"Save & Duplicate" button isn\'t present on Edit Product page'
         );
     }
+
+    /**
+     * @dataProvider saveWithInvalidCustomOptionDataProvider
+     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
+     */
+    public function testSaveWithInvalidCustomOption($postData)
+    {
+        $this->getRequest()->setPostValue($postData);
+        $this->dispatch('backend/catalog/product/save/id/1');
+
+        $this->assertSessionMessages(
+            $this->contains('You saved the product.'),
+            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+        );
+    }
+
+    /**
+     * Data Provider for save
+     *
+     * @return array
+     */
+    public function saveWithInvalidCustomOptionDataProvider()
+    {
+        return [
+            [
+                [
+                    'product' => [
+                        'options' => [
+                            [
+                                'title' => 'drop_down option',
+                                'type' => 'drop_down',
+                                'is_require' => true,
+                                'sort_order' => 0,
+                                'values' => [
+                                    [
+                                        'title' => 'drop_down option 1',
+                                        'price' => 10,
+                                        'price_type' => 'fixed',
+                                        'sku' => 'drop_down option 1 sku',
+                                        'option_type_id' => '-1',
+                                        'is_delete' => '',
+                                        'sort_order' => 0,
+                                    ],
+                                    [
+                                        'title' => 'drop_down option 2',
+                                        'price' => 20,
+                                        'price_type' => 'fixed',
+                                        'sku' => 'drop_down option 2 sku',
+                                        'option_type_id' => '-1',
+                                        'is_delete' => '',
+                                        'sort_order' => 1,
+                                    ],
+                                    [
+                                        'title' => '',
+                                        'price' => '',
+                                        'price_type' => 'fixed',
+                                        'sku' => '',
+                                        'option_type_id' => '-1',
+                                        'is_delete' => '1',
+                                        'sort_order' => 2,
+                                    ]
+                                ],
+                            ]
+                        ],
+                    ],
+                    'affect_product_custom_options' => 1,
+                ]
+            ],
+        ];
+    }
 }
