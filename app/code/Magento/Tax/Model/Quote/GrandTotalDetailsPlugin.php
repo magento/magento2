@@ -6,50 +6,62 @@
 namespace Magento\Tax\Model\Quote;
 
 use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 class GrandTotalDetailsPlugin
 {
     /**
      * @var \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory
      */
-    protected $detailsFactory;
+    private $detailsFactory;
 
     /**
      * @var \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory
      */
-    protected $ratesFactory;
+    private $ratesFactory;
 
     /**
      * @var TotalSegmentExtensionFactory
      */
-    protected $totalSegmentExtensionFactory;
+    private $totalSegmentExtensionFactory;
 
     /**
      * @var \Magento\Tax\Model\Config
      */
-    protected $taxConfig;
+    private $taxConfig;
 
     /**
      * @var string
      */
-    protected $code;
+    private $code;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory
      * @param \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory
      * @param TotalSegmentExtensionFactory $totalSegmentExtensionFactory
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory,
         \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory,
         TotalSegmentExtensionFactory $totalSegmentExtensionFactory,
-        \Magento\Tax\Model\Config $taxConfig
+        \Magento\Tax\Model\Config $taxConfig,
+        Json $serializer
     ) {
         $this->detailsFactory = $detailsFactory;
         $this->ratesFactory = $ratesFactory;
         $this->totalSegmentExtensionFactory = $totalSegmentExtensionFactory;
         $this->taxConfig = $taxConfig;
+        $this->serializer = $serializer;
         $this->code = 'tax';
     }
 
@@ -73,7 +85,6 @@ class GrandTotalDetailsPlugin
      * @param \Magento\Quote\Model\Cart\TotalsConverter $subject
      * @param \Magento\Quote\Api\Data\TotalSegmentInterface[] $totalSegments
      * @param \Magento\Quote\Model\Quote\Address\Total[] $addressTotals
-     *
      * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -97,7 +108,7 @@ class GrandTotalDetailsPlugin
         $finalData = [];
         $fullInfo = $taxes['full_info'];
         if (is_string($fullInfo)) {
-            $fullInfo = unserialize($fullInfo);
+            $fullInfo = $this->serializer->unserialize($fullInfo);
         }
         foreach ($fullInfo as $info) {
             if ((array_key_exists('hidden', $info) && $info['hidden'])

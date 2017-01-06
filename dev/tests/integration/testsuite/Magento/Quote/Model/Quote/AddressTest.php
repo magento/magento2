@@ -285,4 +285,28 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_quote->getId(), $this->_address->getQuoteId());
         $this->assertEquals($customerAddressId, $this->_address->getCustomerAddressId());
     }
+
+    /**
+     * Tests
+     *
+     * @covers \Magento\Quote\Model\Quote\Address::setAppliedTaxes()
+     * @covers \Magento\Quote\Model\Quote\Address::getAppliedTaxes()
+     * @dataProvider dataProvider
+     * @param $taxes
+     * @param $expected
+     */
+    public function testAppliedTaxes($taxes, $expected)
+    {
+        $this->_address->setAppliedTaxes($taxes);
+
+        $this->assertSame($expected, $this->_address->getAppliedTaxes());
+    }
+
+    public function dataProvider()
+    {
+        return [
+            ['test', 'test'],
+            [[123, true], [123, true]]
+        ];
+    }
 }

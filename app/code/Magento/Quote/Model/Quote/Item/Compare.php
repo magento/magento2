@@ -13,6 +13,22 @@ use Magento\Quote\Model\Quote\Item;
 class Compare
 {
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     */
+    public function __construct(\Magento\Framework\Serialize\Serializer\Json $serializer = null)
+    {
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+    }
+
+    /**
      * Returns option values adopted to compare
      *
      * @param mixed $value
@@ -20,8 +36,8 @@ class Compare
      */
     protected function getOptionValues($value)
     {
-        if (is_string($value) && is_array(@unserialize($value))) {
-            $value = @unserialize($value);
+        if (is_string($value) && is_array($this->serializer->unserialize($value))) {
+            $value = $this->serializer->unserialize($value);
             unset($value['qty'], $value['uenc']);
             $value = array_filter($value, function ($optionValue) {
                 return !empty($optionValue);

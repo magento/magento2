@@ -13,6 +13,9 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment $model */
     protected $model;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json $serializer */
+    protected $serializer;
+
     protected function setUp()
     {
         $this->orderItem = $this->getMock(
@@ -24,7 +27,13 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(\Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment::class);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->model = $objectManager->getObject(
+            \Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment::class,
+            [
+                'serializer' => $this->serializer
+            ]
+        );
     }
 
     /**
@@ -234,21 +243,25 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @dataProvider getSelectionAttributesDataProvider
-     */
-    public function testGetSelectionAttributes($productOptions, $result)
+    public function testGetSelectionAttributes()
     {
-        $this->orderItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
-        $this->assertSame($result, $this->model->getSelectionAttributes($this->orderItem));
+        $this->orderItem->expects($this->any())->method('getProductOptions')->will($this->returnValue([]));
+        $this->assertNull($this->model->getSelectionAttributes($this->orderItem));
     }
 
-    public function getSelectionAttributesDataProvider()
+    public function testGetSelectionAttributesWithBundle()
     {
-        return [
-            [[], null],
-            [['bundle_selection_attributes' => 'a:1:{i:0;i:1;}'], [0 => 1]],
-        ];
+        $bundleAttributes = 'Serialized value';
+        $options = ['bundle_selection_attributes' => $bundleAttributes];
+        $unserializedResult = 'result of "bundle_selection_attributes" unserialization';
+
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->with($bundleAttributes)
+            ->will($this->returnValue($unserializedResult));
+        $this->orderItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($options));
+
+        $this->assertEquals($unserializedResult, $this->model->getSelectionAttributes($this->orderItem));
     }
 
     public function testGetOrderOptions()
