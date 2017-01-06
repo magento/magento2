@@ -130,5 +130,11 @@
             </argument>
         </arguments>
     </type>
-
+    <type name="Magento\Catalog\Model\Product\Price\SpecialPriceStorage">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="2" xsi:type="string">bundle</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

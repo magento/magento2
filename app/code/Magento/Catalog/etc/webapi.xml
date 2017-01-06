@@ -300,6 +300,24 @@
             <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
+    <route url="/V1/products/special-price-information" method="POST">
+        <service class="Magento\Catalog\Api\SpecialPriceStorageInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/special-price" method="POST">
+        <service class="Magento\Catalog\Api\SpecialPriceStorageInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/special-price-delete" method="POST">
+        <service class="Magento\Catalog\Api\SpecialPriceStorageInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
 
     <route url="/V1/categories/:categoryId" method="DELETE">
         <service class="Magento\Catalog\Api\CategoryRepositoryInterface" method="deleteByIdentifier" />

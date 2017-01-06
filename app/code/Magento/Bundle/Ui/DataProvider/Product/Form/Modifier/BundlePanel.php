@@ -203,17 +203,19 @@ class BundlePanel extends AbstractModifier
         $pricePath = $this->arrayManager->slicePath($pricePath, 0, -1) . '/value_type/arguments/data/options';
 
         $price = $this->arrayManager->get($pricePath, $meta);
-        $meta = $this->arrayManager->remove($pricePath, $meta);
-        foreach ($price as $key => $item) {
-            if ($item['value'] == ProductPriceOptionsInterface::VALUE_FIXED) {
-                unset($price[$key]);
+        if ($price) {
+            $meta = $this->arrayManager->remove($pricePath, $meta);
+            foreach ($price as $key => $item) {
+                if ($item['value'] == ProductPriceOptionsInterface::VALUE_FIXED) {
+                    unset($price[$key]);
+                }
             }
+            $meta = $this->arrayManager->merge(
+                $this->arrayManager->slicePath($pricePath, 0, -1),
+                $meta,
+                ['options' => $price]
+            );
         }
-        $meta = $this->arrayManager->merge(
-            $this->arrayManager->slicePath($pricePath, 0, -1),
-            $meta,
-            ['options' => $price]
-        );
 
         return $meta;
     }
