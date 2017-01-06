@@ -35,7 +35,7 @@ class FlagManager
     /**
      * Return raw data from flag
      * @param string $flagCode
-     * @return mixed|null
+     * @return integer|string|bool|float|null
      */
     public function getFlagData($flagCode)
     {
@@ -43,26 +43,28 @@ class FlagManager
     }
 
     /**
-     * Update flag by code
+     * Save flag by code
      * @param string $flagCode
-     * @return void
+     * @return bool
      */
-    public function updateFlag($flagCode, $value)
+    public function saveFlag($flagCode, $value)
     {
         $flag = $this->getFlagObject($flagCode);
         $flag->setFlagData($value);
         $this->flagResource->save($flag);
+        return true;
     }
 
     /**
      * Delete flag by code
      * @param string $flagCode
-     * @return void
+     * @return bool
      */
     public function deleteFlag($flagCode)
     {
         $flag = $this->getFlagObject($flagCode);
         $this->flagResource->delete($flag);
+        return true;
     }
 
     /**

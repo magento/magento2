@@ -97,7 +97,7 @@ class SignUp
             return false;
         }
         $attemptsCount -= 1;
-        $this->flagManager->updateFlag(Enabled::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);
+        $this->flagManager->saveFlag(Enabled::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);
         $generateTokenResult = $this->analyticsConnector->execute('generateTokenCommand');
         if ($generateTokenResult === false) {
             $this->writeErrorLog("The attempt of subscription was unsuccessful on step generate token.");
@@ -117,20 +117,22 @@ class SignUp
 
     /**
      * Delete Analytics cron config
-     * @return void
+     * @return bool
      */
     private function deleteAnalyticsCronExpr()
     {
         $this->configWriter->delete(Enabled::CRON_STRING_PATH);
+        return true;
     }
 
     /**
      * Write Error Log
      * @param string $value
-     * @return void
+     * @return bool
      */
     private function writeErrorLog($value)
     {
         $this->logger->warning($value);
+        return true;
     }
 }
