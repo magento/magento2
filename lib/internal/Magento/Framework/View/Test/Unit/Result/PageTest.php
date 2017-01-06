@@ -18,55 +18,55 @@ class PageTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\View\Result\Page
      */
-    protected $page;
+    private $page;
 
     /**
      * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $context;
+    private $context;
 
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $request;
+    private $request;
 
     /**
      * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $layout;
+    private $layout;
 
     /**
      * @var \Magento\Framework\View\Model\Layout\Merge|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $layoutMerge;
+    private $layoutMerge;
 
     /**
      * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $pageConfig;
+    private $pageConfig;
 
     /**
      * @var \Magento\Framework\Translate\InlineInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $translateInline;
+    private $translateInline;
 
     /**
      * @var \Magento\Framework\View\Page\Config\Renderer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $pageConfigRenderer;
+    private $pageConfigRenderer;
 
     /**
      * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewFileSystem;
+    private $viewFileSystem;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $layoutFactory;
+    private $layoutFactory;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|EntitySpecificHandlesList */
-    protected $entitySpecificHandlesListMock;
+    private $entitySpecificHandlesListMock;
 
     protected function setUp()
     {

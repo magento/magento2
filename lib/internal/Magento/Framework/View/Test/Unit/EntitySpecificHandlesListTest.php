@@ -13,7 +13,7 @@ class EntitySpecificHandlesListTest extends \PHPUnit_Framework_TestCase
     /**
      * @var EntitySpecificHandlesList
      */
-    protected $entitySpecificHandlesList;
+    private $entitySpecificHandlesList;
 
     protected function setUp()
     {

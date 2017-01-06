@@ -14,25 +14,25 @@ use Magento\Framework\View\EntitySpecificHandlesList;
 class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\PageCache\Observer\ProcessLayoutRenderElement */
-    protected $_model;
+    private $_model;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|EntitySpecificHandlesList */
-    protected $entitySpecificHandlesListMock;
+    private $entitySpecificHandlesListMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Config */
-    protected $_configMock;
+    private $_configMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Element\AbstractBlock */
-    protected $_blockMock;
+    private $_blockMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout */
-    protected $_layoutMock;
+    private $_layoutMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer */
-    protected $_observerMock;
+    private $_observerMock;
 
     /** @var \Magento\Framework\DataObject */
-    protected $_transport;
+    private $_transport;
 
     /**
      * Set up all mocks and data for test

@@ -15,7 +15,7 @@ class MergePlugin
     /**
      * @var EntitySpecificHandlesList
      */
-    protected $entitySpecificHandlesList;
+    private $entitySpecificHandlesList;
 
     /**
      * Constructor

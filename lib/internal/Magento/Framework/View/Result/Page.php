@@ -31,42 +31,42 @@ class Page extends Layout
     /**
      * @var string
      */
-    protected $pageLayout;
+    private $pageLayout;
 
     /**
      * @var \Magento\Framework\View\Page\Config
      */
-    protected $pageConfig;
+    private $pageConfig;
 
     /**
      * @var \Magento\Framework\View\Page\Config\RendererInterface
      */
-    protected $pageConfigRenderer;
+    private $pageConfigRenderer;
 
     /**
      * @var \Magento\Framework\View\Page\Config\RendererFactory
      */
-    protected $pageConfigRendererFactory;
+    private $pageConfigRendererFactory;
 
     /**
      * @var \Magento\Framework\View\Page\Layout\Reader
      */
-    protected $pageLayoutReader;
+    private $pageLayoutReader;
 
     /**
      * @var \Magento\Framework\View\FileSystem
      */
-    protected $viewFileSystem;
+    private $viewFileSystem;
 
     /**
      * @var array
      */
-    protected $viewVars;
+    private $viewVars;
 
     /**
      * @var string
      */
-    protected $template;
+    private $template;
 
     /**
      * @var Framework\App\RequestInterface
@@ -78,22 +78,22 @@ class Page extends Layout
      *
      * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $assetRepo;
+    private $assetRepo;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var Framework\UrlInterface
      */
-    protected $urlBuilder;
+    private $urlBuilder;
 
     /**
      * @var View\EntitySpecificHandlesList
      */
-    protected $entitySpecificHandlesList;
+    private $entitySpecificHandlesList;
 
     /**
      * Constructor
@@ -153,7 +153,7 @@ class Page extends Layout
      *
      * @return void
      */
-    protected function initPageConfigReader()
+    private function initPageConfigReader()
     {
         $this->pageConfigRenderer = $this->pageConfigRendererFactory->create(['pageConfig' => $this->pageConfig]);
     }
@@ -270,7 +270,7 @@ class Page extends Layout
      *
      * @return $this
      */
-    protected function addDefaultBodyClasses()
+    private function addDefaultBodyClasses()
     {
         $this->pageConfig->addBodyClass($this->request->getFullActionName('-'));
         $pageLayout = $this->getPageLayout();
@@ -283,7 +283,7 @@ class Page extends Layout
     /**
      * @return string
      */
-    protected function getPageLayout()
+    private function getPageLayout()
     {
         return $this->pageConfig->getPageLayout() ?: $this->getLayout()->getUpdate()->getPageLayout();
     }
@@ -295,7 +295,7 @@ class Page extends Layout
      * @param   mixed $value
      * @return  $this
      */
-    protected function assign($key, $value = null)
+    private function assign($key, $value = null)
     {
         if (is_array($key)) {
             foreach ($key as $subKey => $subValue) {
@@ -313,7 +313,7 @@ class Page extends Layout
      * @return string
      * @throws \Exception
      */
-    protected function renderPage()
+    private function renderPage()
     {
         $fileName = $this->viewFileSystem->getTemplateFileName($this->template);
         if (!$fileName) {
@@ -339,7 +339,7 @@ class Page extends Layout
      * @param array $params
      * @return string
      */
-    protected function getViewFileUrl($fileId, array $params = [])
+    private function getViewFileUrl($fileId, array $params = [])
     {
         try {
             $params = array_merge(['_secure' => $this->request->isSecure()], $params);

@@ -16,26 +16,26 @@ class ProcessLayoutRenderElement implements ObserverInterface
      *
      * @var \Magento\PageCache\Model\Config
      */
-    protected $_config;
+    private $_config;
 
     /**
      * Is varnish enabled flag
      *
      * @var bool
      */
-    protected $isVarnishEnabled;
+    private $isVarnishEnabled;
 
     /**
      * Is full page cache enabled flag
      *
      * @var bool
      */
-    protected $isFullPageCacheEnabled;
+    private $isFullPageCacheEnabled;
 
     /**
      * @var EntitySpecificHandlesList
      */
-    protected $entitySpecificHandlesList;
+    private $entitySpecificHandlesList;
 
     /**
      * Class constructor
@@ -59,7 +59,7 @@ class ProcessLayoutRenderElement implements ObserverInterface
      * @param \Magento\Framework\View\Layout $layout
      * @return string
      */
-    protected function _wrapEsi(
+    private function _wrapEsi(
         \Magento\Framework\View\Element\AbstractBlock $block,
         \Magento\Framework\View\Layout $layout
     ) {
@@ -82,7 +82,7 @@ class ProcessLayoutRenderElement implements ObserverInterface
      *
      * @return bool
      */
-    protected function isFullPageCacheEnabled()
+    private function isFullPageCacheEnabled()
     {
         if ($this->isFullPageCacheEnabled === null) {
             $this->isFullPageCacheEnabled = $this->_config->isEnabled();
@@ -95,7 +95,7 @@ class ProcessLayoutRenderElement implements ObserverInterface
      *
      * @return bool
      */
-    protected function isVarnishEnabled()
+    private function isVarnishEnabled()
     {
         if ($this->isVarnishEnabled === null) {
             $this->isVarnishEnabled = ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH);
