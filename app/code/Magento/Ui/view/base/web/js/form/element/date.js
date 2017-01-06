@@ -53,13 +53,12 @@ define([
             pickerDefaultDateFormat: 'MM/dd/y', // ICU Date Format
             pickerDefaultTimeFormat: 'h:mm a', // ICU Time Format
 
-            /**
-             * Moment compatible format used for moment conversion
-             * of date from datePicker
-             */
-            momentFormat: 'MM/DD/YYYY',
-
             elementTmpl: 'ui/form/element/date',
+
+            /**
+             * Format needed by moment timezone for conversion
+             */
+            timezoneFormat: 'YYYY-MM-DD HH:mm',
 
             listens: {
                 'value': 'onValueChange',
@@ -141,15 +140,17 @@ define([
          */
         onShiftedValueChange: function (shiftedValue) {
             var value,
-                formattedValue;
+                formattedValue,
+                momentValue;
 
             if (shiftedValue) {
+                momentValue = moment(shiftedValue, this.pickerDateTimeFormat);
+
                 if (this.options.showsTime) {
-                    formattedValue = moment(shiftedValue).format('YYYY-MM-DD HH:mm');
+                    formattedValue = moment(momentValue).format(this.timezoneFormat);
                     value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
-                    value = moment(shiftedValue, this.momentFormat);
-                    value = value.format(this.outputDateFormat);
+                    value = momentValue.format(this.outputDateFormat);
                 }
             } else {
                 value = '';
@@ -166,8 +167,6 @@ define([
          */
         prepareDateTimeFormats: function () {
             this.pickerDateTimeFormat = this.options.dateFormat;
-            this.momentFormat = this.options.dateFormat ?
-                    utils.convertToMomentFormat(this.options.dateFormat) : this.momentFormat;
 
             if (this.options.showsTime) {
                 this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
