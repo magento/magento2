@@ -117,7 +117,8 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
         $phrase = __(
             'Case Update: New score for the order is %1. Previous score was %2.',
             self::$data['score'],
-            self::$data['score']);
+            self::$data['score']
+        );
 
         $message = $this->caseRescore->generate(self::$data);
 
@@ -142,7 +143,8 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
         $phrase = __(
             'Case Update: New score for the order is %1. Previous score was %2.',
             self::$data['score'],
-            null);
+            null
+        );
 
         $message = $this->caseRescore->generate(self::$data);
 
