@@ -64,7 +64,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "default" scope can’t include a scope code. Try again without entering a scope code.
+     * @expectedExceptionMessage The "default" scope can't include a scope code. Try again without entering a scope
      */
     public function testNotEmptyScopeCodeForDefaultScope()
     {
@@ -91,7 +91,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The scope code can include only lowercase letters (a-z), numbers (0-9) and underscores (_). Also, the first character must be a letter.
+     * @expectedExceptionMessage The scope code can include only lowercase letters (a-z), numbers (0-9) and underscores
      */
     public function testWrongScopeCodeFormat()
     {
@@ -100,7 +100,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "not_default_scope" value doesn’t exist. Enter another value.
+     * @expectedExceptionMessage The "not_default_scope" value doesn't exist. Enter another value.
      */
     public function testScopeNotExist()
     {
@@ -115,7 +115,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "not_exist_scope_code" value doesn’t exist. Enter another value.
+     * @expectedExceptionMessage The "not_exist_scope_code" value doesn't exist. Enter another value.
      */
     public function testScopeCodeNotExist()
     {

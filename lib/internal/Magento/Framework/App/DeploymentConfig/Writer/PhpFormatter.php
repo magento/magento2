@@ -25,7 +25,8 @@ class PhpFormatter implements FormatterInterface
             foreach ($data as $key => $value) {
                 $comment = '  ';
                 if (!empty($comments[$key])) {
-                    $comment = "  /**\n * " . str_replace("\n", "\n * ", var_export($comments[$key], true)) . "\n */\n";
+                    $exportedComment = trim(var_export($comments[$key], true), '\'');
+                    $comment = "  /**\n * " . str_replace("\n", "\n * ", $exportedComment) . "\n */\n";
                 }
                 $space = is_array($value) ? " \n" : ' ';
                 $elements[] = $comment . var_export($key, true) . ' =>' . $space . var_export($value, true);

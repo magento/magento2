@@ -41,7 +41,7 @@ class Validator implements ValidatorInterface
 
         if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT && !empty($scopeCode)) {
             throw new LocalizedException(__(
-                'The "%1" scope can’t include a scope code. Try again without entering a scope code.',
+                'The "%1" scope can\'t include a scope code. Try again without entering a scope code.',
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             ));
         }
@@ -56,9 +56,9 @@ class Validator implements ValidatorInterface
             $scopeResolver = $this->scopeResolverPool->get($scope);
             $scopeResolver->getScope($scopeCode)->getId();
         } catch (InvalidArgumentException $e) {
-            throw new LocalizedException(__('The "%1" value doesn’t exist. Enter another value.', $scope));
+            throw new LocalizedException(__('The "%1" value doesn\'t exist. Enter another value.', $scope));
         } catch (NoSuchEntityException $e) {
-            throw new LocalizedException(__('The "%1" value doesn’t exist. Enter another value."', $scopeCode));
+            throw new LocalizedException(__('The "%1" value doesn\'t exist. Enter another value."', $scopeCode));
         }
 
         return true;
