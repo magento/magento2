@@ -235,7 +235,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     private function getSystemConfigEditPage()
     {
         if (null === $this->configurationAdminPage) {
-            $this->configurationAdminPage = $this->testStepFactory->create(
+            $this->configurationAdminPage = \Magento\Mtf\ObjectManagerFactory::getObjectManager()->create(
                 \Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit::class
             );
         }
