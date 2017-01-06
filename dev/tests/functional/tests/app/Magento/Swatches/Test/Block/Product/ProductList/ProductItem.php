@@ -37,7 +37,7 @@ class ProductItem extends CatalogProductItem
 
         foreach ($options as $option) {
             if (!isset($attributes[$option['title']])
-                || stripos ($attributes[$option['title']]->getFrontendInput(), "swatch") === false
+                || stripos($attributes[$option['title']]->getFrontendInput(), "swatch") === false
             ) {
                 continue;
             }
