@@ -158,9 +158,7 @@ class CaseUpdatingServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->fakeObjectManager->expects(self::once())
             ->method('create')
-            ->with(
-                CaseUpdatingService::class, ['messageGenerator' => $messageGenerator]
-            )
+            ->with(CaseUpdatingService::class, ['messageGenerator' => $messageGenerator])
             ->willReturn($service);
 
         $result = $this->factory->create($type);

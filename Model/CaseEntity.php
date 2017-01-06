@@ -31,20 +31,20 @@ class CaseEntity extends AbstractModel implements CaseInterface
     /**
      * CaseEntity constructor.
      *
-     * @param SerializerInterface $serializer
      * @param Context $context
      * @param Registry $registry
+     * @param SerializerInterface $serializer
+     * @param array $data
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
-     * @param array $data
      */
     public function __construct(
-        SerializerInterface $serializer,
         Context $context,
         Registry $registry,
+        SerializerInterface $serializer,
+        array $data = [],
         AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
-        array $data = []
+        AbstractDb $resourceCollection = null
     ) {
         $this->serializer = $serializer;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
