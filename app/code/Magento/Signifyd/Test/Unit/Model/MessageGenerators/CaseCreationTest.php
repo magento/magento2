@@ -8,6 +8,7 @@ namespace Magento\Signifyd\Test\Unit\Model\MessageGenerators;
 use Magento\Signifyd\Model\MessageGenerators\CaseCreation;
 use Magento\Signifyd\Model\Validators\CaseDataValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Phrase;
 
 /**
  * Tests for Signifyd CaseCreation message generator.
@@ -53,21 +54,26 @@ class CaseCreationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Checks interface generated message.
+     *
+     * @return Phrase
      */
     public function testGenerateMessageInterface()
     {
         $message = $this->caseCreation->generate(self::$data);
 
-        $this->assertInstanceOf(\Magento\Framework\Phrase::class, $message);
+        $this->assertInstanceOf(Phrase::class, $message);
+
+        return $message;
     }
 
     /**
      * Generates case creation message for created Signifyd properly.
+     *
+     * @depends testGenerateMessageInterface
+     * @param Phrase $message
      */
-    public function testGenerate()
+    public function testGenerate(Phrase $message)
     {
-        $message = $this->caseCreation->generate(self::$data);
-
         $phrase = __('Signifyd Case %1 has been created for order.', self::$data['caseId']);
 
         $this->assertEquals($phrase, $message);
