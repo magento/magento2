@@ -6,9 +6,9 @@
 
 namespace Magento\Analytics\Test\Unit\Model\Config\Backend;
 
-
 use Magento\Analytics\Model\Config\Backend\Enabled;
 use Magento\Config\Model\ResourceModel\Config\Data;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\Flag;
@@ -46,6 +46,11 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
      * @var Data|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configValueResourceMock;
+
+    /**
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configMock;
 
     /**
      * @var ObjectManagerHelper
@@ -92,6 +97,10 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->enabledModel = $this->objectManagerHelper->getObject(
@@ -102,6 +111,7 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
                 'flagResource' => $this->flagResourceMock,
                 'configValueResource' => $this->configValueResourceMock,
                 'attemptsInitValue' => $this->attemptsInitValue,
+                'config' => $this->configMock,
             ]
         );
     }
@@ -109,9 +119,13 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testAfterSaveSuccess()
+    public function testAfterSaveSuccessWithEnabledTrue()
     {
-        $this->enabledModel->setValue('new');
+        $this->enabledModel->setValue(1);
+        $this->configMock
+            ->expects($this->atLeastOnce())
+            ->method('getValue')
+            ->willReturn(0);
 
         $this->configValueFactoryMock
             ->expects($this->once())
@@ -155,6 +169,39 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
         $this->flagResourceMock
             ->expects($this->once())
             ->method('save')
+            ->with($this->flagMock)
+            ->willReturnSelf();
+
+        $this->assertInstanceOf(
+            Value::class,
+            $this->enabledModel->afterSave()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterSaveSuccessWithEnabledFalse()
+    {
+        $this->enabledModel->setValue(0);
+        $this->configMock
+            ->expects($this->atLeastOnce())
+            ->method('getValue')
+            ->willReturn(1);
+
+        $this->flagFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(['data' => ['flag_code' => Enabled::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE]])
+            ->willReturn($this->flagMock);
+        $this->flagMock
+            ->expects($this->once())
+            ->method('loadSelf')
+            ->willReturnSelf();
+
+        $this->flagResourceMock
+            ->expects($this->once())
+            ->method('delete')
             ->with($this->flagMock)
             ->willReturnSelf();
 
