@@ -15,7 +15,7 @@ use Magento\Mtf\TestStep\TestStepInterface;
 class ProceedToCheckoutFromMiniShoppingCartStep implements TestStepInterface
 {
     /**
-     * Mini shopping cart block
+     * Mini shopping cart block.
      *
      * @var \Magento\Checkout\Test\Block\Cart\Sidebar
      */
@@ -30,7 +30,7 @@ class ProceedToCheckoutFromMiniShoppingCartStep implements TestStepInterface
     }
 
     /**
-     * Proceed to checkout
+     * Proceed to checkout.
      *
      * @return void
      */
