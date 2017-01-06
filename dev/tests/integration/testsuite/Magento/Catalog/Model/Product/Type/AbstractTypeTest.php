@@ -35,6 +35,9 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Serialize\Serializer\Json::class
+        );
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\Product\Type\AbstractType::class,
             [
@@ -46,7 +49,8 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
                 $filesystem,
                 $registry,
                 $logger,
-                $productRepository
+                $productRepository,
+                $serializer
             ]
         );
     }
@@ -186,7 +190,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $buyRequest);
         $this->assertEquals($product->getId(), $buyRequest->getProductId());
         $this->assertSame($product, $buyRequest->getProduct());
-        $this->assertEquals(serialize($requestData), $buyRequest->getValue());
+        $this->assertEquals(json_encode($requestData), $buyRequest->getValue());
     }
 
     /**
