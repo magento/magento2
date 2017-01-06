@@ -85,6 +85,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
      * @param TypeHandler\TypeHandlerInterface $typeHandler
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -104,7 +105,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Downloadable\Model\SampleFactory $sampleFactory,
         \Magento\Downloadable\Model\LinkFactory $linkFactory,
         \Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface $typeHandler,
-        JoinProcessorInterface $extensionAttributesJoinProcessor
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_sampleResFactory = $sampleResFactory;
         $this->_linkResource = $linkResource;
@@ -123,7 +125,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
             $filesystem,
             $coreRegistry,
             $logger,
-            $productRepository
+            $productRepository,
+            $serializer
         );
     }
 
@@ -249,14 +252,17 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         parent::checkProductBuyState($product);
         $option = $product->getCustomOption('info_buyRequest');
         if ($option instanceof \Magento\Quote\Model\Quote\Item\Option) {
-            $buyRequest = new \Magento\Framework\DataObject(unserialize($option->getValue()));
+            $buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($option->getValue()));
             if (!$buyRequest->hasLinks()) {
                 if (!$product->getLinksPurchasedSeparately()) {
                     $allLinksIds = $this->_linksFactory->create()->addProductToFilter(
                         $product->getEntityId()
                     )->getAllIds();
                     $buyRequest->setLinks($allLinksIds);
-                    $product->addCustomOption('info_buyRequest', serialize($buyRequest->getData()));
+                    $product->addCustomOption(
+                        'info_buyRequest',
+                        $this->serializer->serialize($buyRequest->getData())
+                    );
                 } else {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Please specify product link(s).'));
                 }

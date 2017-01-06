@@ -53,6 +53,63 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @magentoDataFixture Magento/Downloadable/_files/order_with_downloadable_product_with_additional_options.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testInitFromOrderAndCreateOrderFromQuoteWithAdditionalOptions()
+    {
+        /** @var $serializer \Magento\Framework\Serialize\Serializer\Json */
+        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\Serializer\Json::class);
+
+        /** @var $order \Magento\Sales\Model\Order */
+        $order = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
+        $order->loadByIncrementId('100000001');
+
+        /** @var $orderCreate \Magento\Sales\Model\AdminOrder\Create */
+        $orderCreate = $this->_model->initFromOrder($order);
+
+        $quoteItems = $orderCreate->getQuote()->getItemsCollection();
+
+        $this->assertEquals(1, $quoteItems->count());
+
+        $quoteItem = $quoteItems->getFirstItem();
+        $quoteItemOptions = $quoteItem->getOptionsByCode();
+
+        $this->assertEquals(
+            $serializer->serialize(['additional_option_key' => 'additional_option_value']),
+            $quoteItemOptions['additional_options']->getValue()
+        );
+
+        $session = Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session\Quote::class);
+        $session->setCustomerId(1);
+
+        $customer = Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Customer::class);
+        $customer->load(1)->setDefaultBilling(null)->setDefaultShipping(null)->save();
+
+        $rate = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote\Address\Rate::class);
+        $rate->setCode('freeshipping_freeshipping');
+
+        $this->_model->getQuote()->getShippingAddress()->addShippingRate($rate);
+        $this->_model->setShippingAsBilling(0);
+        $this->_model->setPaymentData(['method' => 'checkmo']);
+
+        $newOrder = $this->_model->createOrder();
+        $newOrderItems = $newOrder->getItemsCollection();
+
+        $this->assertEquals(1, $newOrderItems->count());
+
+        $newOrderItem = $newOrderItems->getFirstItem();
+
+        $this->assertEquals(
+            ['additional_option_key' => 'additional_option_value'],
+            $newOrderItem->getProductOptionByCode('additional_options')
+        );
+    }
+
+    /**
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
      * @magentoDataFixture Magento/Downloadable/_files/order_with_downloadable_product.php
      * @magentoDataFixture Magento/Sales/_files/order_shipping_address_same_as_billing.php
@@ -451,9 +508,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
      */
     public function testGetCustomerCartExistingCart()
     {
@@ -475,6 +532,32 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         /** Try to load quote once again to ensure that caching works correctly */
         $customerQuoteFromCache = $this->_model->getCustomerCart();
         $this->assertSame($customerQuote, $customerQuoteFromCache, 'Customer quote caching does not work correctly.');
+    }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
+     */
+    public function testMoveQuoteItemToCart()
+    {
+        $fixtureCustomerId = 1;
+
+        /** Preconditions */
+        /** @var \Magento\Backend\Model\Session\Quote $session */
+        $session = Bootstrap::getObjectManager()->create(\Magento\Backend\Model\Session\Quote::class);
+        $session->setCustomerId($fixtureCustomerId);
+        /** @var $quoteFixture \Magento\Quote\Model\Quote */
+        $quoteFixture = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
+        $quoteFixture->load('test01', 'reserved_order_id');
+        $quoteFixture->setCustomerIsGuest(false)->setCustomerId($fixtureCustomerId)->save();
+
+        $customerQuote = $this->_model->getCustomerCart();
+        $item = $customerQuote->getAllVisibleItems()[0];
+
+        $this->_model->moveQuoteItem($item, 'cart', 3);
+        $this->assertEquals(4, $item->getQty(), 'Number of Qty isn\'t correct for Quote item.');
+        $this->assertEquals(3, $item->getQtyToAdd(), 'Number of added qty isn\'t correct for Quote item.');
     }
 
     /**

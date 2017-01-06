@@ -28,6 +28,16 @@ class Context
     protected $default = [];
 
     /**
+     * @param array $data
+     * @param array $default
+     */
+    public function __construct(array $data = [], array $default = [])
+    {
+        $this->data = $data;
+        $this->default = $default;
+    }
+
+    /**
      * Data setter
      *
      * @param string $name
@@ -98,5 +108,18 @@ class Context
             return sha1(serialize($data));
         }
         return null;
+    }
+
+    /**
+     * Get data and default data in "key-value" format
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'data' => $this->data,
+            'default' => $this->default
+        ];
     }
 }

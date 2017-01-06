@@ -1214,4 +1214,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\DB\Select\QueryModifierFactory">
+        <arguments>
+            <argument name="queryModifiers" xsi:type="array">
+                <item name="in" xsi:type="string">Magento\Framework\DB\Select\InQueryModifier</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

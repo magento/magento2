@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 
@@ -37,20 +39,28 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     protected $string;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Framework\Filter\FilterManager $filter
      * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Framework\Filter\FilterManager $filter,
-        \Magento\Framework\Stdlib\StringUtils $string
+        \Magento\Framework\Stdlib\StringUtils $string,
+        Json $serializer = null
     ) {
         $this->_productOptionFactory = $productOptionFactory;
         $this->filter = $filter;
         $this->string = $string;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context);
     }
 
@@ -105,7 +115,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
 
         $addOptions = $item->getOptionByCode('additional_options');
         if ($addOptions) {
-            $options = array_merge($options, unserialize($addOptions->getValue()));
+            $options = array_merge($options, $this->serializer->unserialize($addOptions->getValue()));
         }
 
         return $options;

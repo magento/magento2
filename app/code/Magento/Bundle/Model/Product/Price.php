@@ -40,6 +40,13 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     protected $_catalogData = null;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * Price constructor.
      *
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory
@@ -52,7 +59,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Helper\Data $catalogData
-     *
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -65,9 +72,12 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         GroupManagementInterface $groupManagement,
         \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Catalog\Helper\Data $catalogData
+        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_catalogData = $catalogData;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct(
             $ruleFactory,
             $storeManager,
@@ -154,7 +164,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     {
         $customOption = $product->getCustomOption('bundle_selection_ids');
         if ($customOption) {
-            $selectionIds = unserialize($customOption->getValue());
+            $selectionIds = $this->serializer->unserialize($customOption->getValue());
             if (!empty($selectionIds) && is_array($selectionIds)) {
                 return $selectionIds;
             }

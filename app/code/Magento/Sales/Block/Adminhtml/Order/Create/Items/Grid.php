@@ -425,6 +425,8 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @param Item $item
      * @return string
+     *
+     * @deprecated
      */
     public function getCustomOptions(Item $item)
     {

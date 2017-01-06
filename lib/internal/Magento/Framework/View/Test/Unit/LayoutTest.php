@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Test\Unit;
 
+use Magento\Framework\Serialize\SerializerInterface;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -82,6 +84,16 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     protected $readerContextMock;
 
     /**
+     * @var \Magento\Framework\View\Page\Config\Structure|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $pageConfigStructure;
+
+    /**
+     * @var \Magento\Framework\View\Layout\ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $layoutScheduledSructure;
+
+    /**
      * @var \Magento\Framework\View\Layout\Generator\ContextFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $generatorContextFactoryMock;
@@ -95,6 +107,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $loggerMock;
+
+    /**
+     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
 
     protected function setUp()
     {
@@ -141,9 +158,22 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->readerContextFactoryMock = $this->getMockBuilder(
             \Magento\Framework\View\Layout\Reader\ContextFactory::class
         )->disableOriginalConstructor()->getMock();
+
+        $this->pageConfigStructure = $this->getMockBuilder(\Magento\Framework\View\Page\Config\Structure::class)
+            ->setMethods(['__toArray', 'populateWithArray'])
+            ->getMock();
+        $this->layoutScheduledSructure = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure::class)
+            ->setMethods(['__toArray', 'populateWithArray'])
+            ->getMock();
         $this->readerContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
+            ->setMethods(['getPageConfigStructure', 'getScheduledStructure'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->readerContextMock->expects($this->any())->method('getPageConfigStructure')
+            ->willReturn($this->pageConfigStructure);
+        $this->readerContextMock->expects($this->any())->method('getScheduledStructure')
+            ->willReturn($this->layoutScheduledSructure);
+
         $this->generatorContextFactoryMock = $this->getMockBuilder(
             \Magento\Framework\View\Layout\Generator\ContextFactory::class
         )
@@ -154,6 +184,15 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMock();
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializer->expects($this->any())->method('serialize')
+            ->willReturnCallback(function ($value) {
+                return json_encode($value);
+            });
+        $this->serializer->expects($this->any())->method('unserialize')
+            ->willReturnCallback(function ($value) {
+                return json_decode($value, true);
+            });
 
         $this->model = new \Magento\Framework\View\Layout(
             $this->processorFactoryMock,
@@ -168,7 +207,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             $this->generatorContextFactoryMock,
             $this->appStateMock,
             $this->loggerMock,
-            true
+            true,
+            $this->serializer
         );
     }
 
@@ -735,9 +775,32 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->with($this->readerContextMock, $xml)
             ->willReturnSelf();
 
+        $pageConfigStructureData = [
+            'field_1' => 123,
+            'field_2' => 'text',
+            'field_3' => [
+                'field_3_1' => '1244',
+                'field_3_2' => null,
+                'field_3_3' => false,
+            ]
+        ];
+        $this->pageConfigStructure->expects($this->any())->method('__toArray')
+            ->willReturn($pageConfigStructureData);
+
+        $layoutScheduledStructureData = [
+            'field_1' => 1283,
+            'field_2' => 'text_qwertyuiop[]asdfghjkl;'
+        ];
+        $this->layoutScheduledSructure->expects($this->any())->method('__toArray')
+            ->willReturn($layoutScheduledStructureData);
+        $data = [
+            'pageConfigStructure' => $pageConfigStructureData,
+            'scheduledStructure' => $layoutScheduledStructureData
+        ];
+
         $this->cacheMock->expects($this->once())
             ->method('save')
-            ->with(serialize($this->readerContextMock), 'structure_' . $layoutCacheId, $handles)
+            ->with(json_encode($data), 'structure_' . $layoutCacheId, $handles)
             ->willReturn(true);
 
         $generatorContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Generator\Context::class)
@@ -774,6 +837,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $xml = simplexml_load_string('<layout/>', \Magento\Framework\View\Layout\Element::class);
         $this->model->setXml($xml);
 
+        $this->readerContextFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->readerContextMock);
         $themeMock = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $this->themeResolverMock->expects($this->once())
             ->method('get')
@@ -787,14 +853,33 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->method('getCacheId')
             ->willReturn($layoutCacheId);
 
-        $readerContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $pageConfigStructureData = [
+            'field_1' => 123,
+            'field_2' => 'text',
+            'field_3' => [
+                'field_3_1' => '1244',
+                'field_3_2' => null,
+                'field_3_3' => false,
+            ]
+        ];
+        $this->pageConfigStructure->expects($this->once())->method('populateWithArray')
+            ->with($pageConfigStructureData);
+
+        $layoutScheduledStructureData = [
+            'field_1' => 1283,
+            'field_2' => 'text_qwertyuiop[]asdfghjkl;'
+        ];
+        $this->layoutScheduledSructure->expects($this->once())->method('populateWithArray')
+            ->with($layoutScheduledStructureData);
+        $data = [
+            'pageConfigStructure' => $pageConfigStructureData,
+            'scheduledStructure' => $layoutScheduledStructureData
+        ];
 
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->with('structure_' . $layoutCacheId)
-            ->willReturn(serialize($readerContextMock));
+            ->willReturn(json_encode($data));
 
         $this->readerPoolMock->expects($this->never())
             ->method('interpret');
@@ -811,7 +896,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
         $this->generatorPoolMock->expects($this->once())
             ->method('process')
-            ->with($readerContextMock, $generatorContextMock)
+            ->with($this->readerContextMock, $generatorContextMock)
             ->willReturn(true);
 
         $elements = [
