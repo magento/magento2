@@ -40,7 +40,7 @@
         </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Analytics/js/form/provider</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
     </dataSource>
@@ -48,7 +48,8 @@
     <modal name="analytics_subscription_modal">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="onCancel" xsi:type="string">closeModal</item>
+                <item name="component" xsi:type="string">Magento_Analytics/js/modal/modal-component</item>
+                <item name="onCancel" xsi:type="string">actionCancel</item>
                 <item name="state" xsi:type="boolean">true</item>
                 <item name="options" xsi:type="array">
                     <item name="title" xsi:type="string" translate="true">Subscription Confirmation</item>
@@ -58,21 +59,16 @@
                     <item name="autoOpen" xsi:type="boolean">true</item>
                     <item name="buttons" xsi:type="array">
                         <item name="0" xsi:type="array">
-                            <item name="text" xsi:type="string">Cancel</item>
+                            <item name="text" xsi:type="string" translate="true">Cancel</item>
                             <item name="class" xsi:type="string">action-secondary</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">${ $.provider }</item>
-                                    <item name="actionName" xsi:type="string">postponeRequest</item>
-                                </item>
-                                <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">${ $.name }</item>
-                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                    <item name="actionName" xsi:type="string">actionCancel</item>
                                 </item>
                             </item>
                         </item>
                         <item name="1" xsi:type="array">
-                            <item name="text" xsi:type="string">Ok</item>
+                            <item name="text" xsi:type="string" translate="true">Ok</item>
                             <item name="class" xsi:type="string">action-primary</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
