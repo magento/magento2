@@ -59,7 +59,9 @@ class AssertUrlRewriteProductInGrid extends AbstractConstraint
         $rootCategoryArray = [];
         foreach ($categories as $index => $category) {
             $parentName = $category->getDataFieldConfig('parent_id')['source']->getParentCategory()->getName();
-            $rootCategoryArray[$parentName]['name'] = strtolower($category->getUrlKey());
+            $rootCategoryArray[$parentName]['name'] = !empty($category->getUrlKey())
+                ? strtolower($category->getUrlKey())
+                : strtolower($category->getName());
             $rootCategoryArray[$parentName]['index'] = $index;
         }
 
