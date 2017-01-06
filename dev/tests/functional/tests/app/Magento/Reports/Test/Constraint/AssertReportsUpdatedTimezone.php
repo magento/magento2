@@ -24,12 +24,12 @@ class AssertReportsUpdatedTimezone extends AbstractConstraint
     {
         $reportStatistics->open();
         $dates = $reportStatistics->getGridBlock()->getRowsData(['updated_at']);
-        $currentDate = new \DateTime('now', new \DateTimeZone($_ENV['magento_timezone']));
-        $currentDate = date('M j, Y, H:i:s A', $currentDate->getTimestamp());
+        $currentDate  = new \DateTime();
+        $currentDate->setTimezone(new \DateTimeZone($_ENV['magento_timezone']));
         foreach ($dates as $date) {
             \PHPUnit_Framework_Assert::assertContains(
-                $currentDate,
-                $date['updated_at'],
+                $currentDate->format('M j, Y, g'),
+                date('M j, Y, g', strtotime($date['updated_at'])),
                 "Reports 'Updated' column values are displayed in an incorrect timezone."
             );
         }
