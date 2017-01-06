@@ -46,7 +46,7 @@ class CaseRescore implements MessageGeneratorInterface
             throw new MessageGeneratorException(__('The "%1" should not be empty.', 'caseId'));
         }
 
-        $caseEntity = $this->caseRepository->getByCaseId($data['caseId']));
+        $caseEntity = $this->caseRepository->getByCaseId($data['caseId']);
 
         if ($caseEntity === null) {
             throw new MessageGeneratorException(__('Case entity not found.'));

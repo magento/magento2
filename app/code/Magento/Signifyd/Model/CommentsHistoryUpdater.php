@@ -32,10 +32,12 @@ class CommentsHistoryUpdater
 
     /**
      * Adds comment to case related order.
+     * Throws an exception if cannot save history comment.
      *
      * @param CaseInterface $case
      * @param Phrase $message
      * @return void
+     * @throws \Exception
      */
     public function addComment(CaseInterface $case, Phrase $message)
     {

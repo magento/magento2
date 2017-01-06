@@ -13,7 +13,7 @@ interface MessageGeneratorInterface
 {
     /**
      * Creates new localized message based on Signifyd Case/Guarantee data.
-     * @param $data
+     * @param array $data
      * @return \Magento\Framework\Phrase
      * @throws MessageGeneratorException
      */
