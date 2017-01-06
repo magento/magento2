@@ -6,6 +6,7 @@
 namespace Magento\Signifyd\Test\Unit\Model\MessageGenerators;
 
 use Magento\Signifyd\Model\MessageGenerators\CaseReview;
+use \Magento\Framework\Phrase;
 
 /**
  * Tests for Signifyd CaseReview message generator.
@@ -42,21 +43,26 @@ class CaseReviewTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Checks interface generated message.
+     *
+     * @return \Magento\Framework\Phrase
      */
     public function testGenerateMessageInterface()
     {
         $message = $this->caseReview->generate(self::$data);
 
-        $this->assertInstanceOf(\Magento\Framework\Phrase::class, $message);
+        $this->assertInstanceOf(Phrase::class, $message);
+
+        return $message;
     }
 
     /**
      * Generates Case Review message for created Signifyd properly.
+     *
+     * @depends testGenerateMessageInterface
+     * @param Phrase $message
      */
-    public function testGenerate()
+    public function testGenerate(Phrase $message)
     {
-        $message = $this->caseReview->generate(self::$data);
-
         $phrase = __(
             'Case Update: Case Review was completed. Review Deposition is %1.',
             __(self::$data['reviewDisposition'])

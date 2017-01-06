@@ -10,6 +10,7 @@ use Magento\Signifyd\Model\Validators\CaseDataValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Tests for Signifyd CaseRescore message generator.
@@ -29,17 +30,17 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var CaseRepository|MockObject
+     * @var CaseRepositoryInterface|MockObject
      */
     private $caseRepository;
 
     /**
-     * @var CaseRescore|MocObject
+     * @var CaseRescore|MockObject
      */
     private $caseRescore;
 
     /**
-     * @var Case|MockObject
+     * @var CaseInterface|MockObject
      */
     private $case;
 
@@ -49,12 +50,12 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->case = $this->getMockBuilder(CaseInterface::class)
-                           ->disableOriginalConstructor()
-                           ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->objectManager = new ObjectManager($this);
         $this->caseRepository = $this->getMockBuilder(CaseRepositoryInterface::class)
-                                     ->disableOriginalConstructor()
-                                     ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
             'caseDataValidator' => new CaseDataValidator(),
@@ -83,9 +84,9 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
     public function testGenerateNotFoundException()
     {
         $this->caseRepository->expects($this->once())
-                             ->method('getByCaseId')
-                             ->with(self::$data['caseId'])
-                             ->willReturn(null);
+            ->method('getByCaseId')
+            ->with(self::$data['caseId'])
+            ->willReturn(null);
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
             'caseDataValidator' => new CaseDataValidator(),
@@ -101,13 +102,13 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
     public function testGenerateWithPreviousScore()
     {
         $this->case->expects($this->once())
-                   ->method('getScore')
-                   ->willReturn(self::$data['score']);
+            ->method('getScore')
+            ->willReturn(self::$data['score']);
 
         $this->caseRepository->expects($this->once())
-                             ->method('getByCaseId')
-                             ->with(self::$data['caseId'])
-                             ->willReturn($this->case);
+            ->method('getByCaseId')
+            ->with(self::$data['caseId'])
+            ->willReturn($this->case);
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
             'caseDataValidator' => new CaseDataValidator(),
@@ -131,9 +132,9 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
     public function testGenerateWithoutPreviousScore()
     {
         $this->caseRepository->expects($this->once())
-                             ->method('getByCaseId')
-                             ->with(self::$data['caseId'])
-                             ->willReturn($this->case);
+            ->method('getByCaseId')
+            ->with(self::$data['caseId'])
+            ->willReturn($this->case);
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
             'caseDataValidator' => new CaseDataValidator(),
