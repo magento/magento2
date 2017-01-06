@@ -7,7 +7,7 @@
 namespace Magento\Analytics\Model;
 
 use Magento\Framework\FlagFactory;
-use \Magento\Framework\Flag\FlagResource;
+use Magento\Framework\Flag\FlagResource;
 
 /**
  * Class NotificationTime
@@ -18,27 +18,19 @@ class NotificationTime
     const NOTIFICATION_TIME = 'notification_time';
 
     /**
-     * @var FlagFactory
+     * @var FlagManager
      */
-    private $flagFactory;
-
-    /**
-     * @var FlagResource
-     */
-    private $flagResource;
+    private $flagManager;
 
     /**
      * NotificationTime constructor.
      *
-     * @param FlagFactory $flagFactory
-     * @param FlagResource $flagResource
+     * @param \Magento\Analytics\Model\FlagManager $flagManager
      */
     public function __construct(
-        FlagFactory $flagFactory,
-        FlagResource $flagResource
+        FlagManager $flagManager
     ) {
-        $this->flagFactory = $flagFactory;
-        $this->flagResource = $flagResource;
+        $this->flagManager = $flagManager;
     }
 
     /**
@@ -49,17 +41,7 @@ class NotificationTime
      */
     public function storeLastTimeNotification($value)
     {
-        $flag = $this->flagFactory->create(
-            [
-                'data' => [
-                    'flag_code' => self::NOTIFICATION_TIME
-                ]
-            ]
-        );
-        $this->flagResource->load($flag, self::NOTIFICATION_TIME, 'flag_code');
-        $flag->setFlagData($value);
-        $this->flagResource->save($flag);
-        return true;
+        return $this->flagManager->saveFlag(self::NOTIFICATION_TIME, $value);
     }
 
     /**
@@ -69,9 +51,6 @@ class NotificationTime
      */
     public function getLastTimeNotification()
     {
-        /** @var \Magento\Framework\Flag $flag */
-        $flag = $this->flagFactory->create();
-        $this->flagResource->load($flag, self::NOTIFICATION_TIME, 'flag_code');
-        return $flag->getFlagData();
+        return $this->flagManager->getFlagData(self::NOTIFICATION_TIME);
     }
 }
