@@ -47,7 +47,7 @@ class SignifydOrderSessionIdTest extends \PHPUnit_Framework_TestCase
         $quoteId = 1;
         $signifydOrderSessionId = 'asdfzxcv';
 
-        $this->identityGenerator->expects(static::once())
+        $this->identityGenerator->expects(self::once())
             ->method('generateIdForData')
             ->with($quoteId)
             ->willReturn($signifydOrderSessionId);
