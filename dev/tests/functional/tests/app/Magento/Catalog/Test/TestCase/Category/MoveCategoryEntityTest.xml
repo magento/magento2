@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Catalog\Test\TestCase\Category\MoveCategoryEntityTest" summary="Move category from one to another" ticketId="MAGETWO-27319">
+        <variation name="MoveCategoryEntityTestVariation1">
+            <data name="childCategory/dataset" xsi:type="string">three_nested_categories</data>
+            <data name="parentCategory/dataset" xsi:type="string">default</data>
+            <data name="nestingLevel" xsi:type="string">3</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryMovedMessage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid" />
+        </variation>
+    </testCase>
+</config>

@@ -112,7 +112,7 @@ class FillBillingInformationStep implements TestStepInterface
      */
     public function run()
     {
-        $billingAddress = null;
+        $billingAddress = $this->billingAddress;
         if ($this->billingCheckboxState) {
             $this->assertBillingAddressCheckbox->processAssert($this->checkoutOnepage, $this->billingCheckboxState);
         }

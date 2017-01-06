@@ -201,7 +201,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -239,7 +240,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -281,7 +283,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -323,7 +326,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -365,7 +369,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -422,7 +427,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -479,7 +485,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -536,7 +543,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         return [
@@ -578,7 +586,8 @@ class DynamicBundleWithTierPriceCalculatorTest extends BundlePriceAbstract
         $tierPriceData = [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 1,
-            'value' => 50
+            'value' => 50,
+            'extension_attributes' => new \Magento\Framework\DataObject(['percentage_value' => 50])
         ];
 
         $tierPriceSimpleProductData = [

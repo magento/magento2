@@ -68,9 +68,8 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
 
         /** @var OrderInjectable $fixture */
         $this->createQuote($fixture);
-
         $url = $this->isCustomerGuest ? 'guest-carts/' . $this->quote  : 'carts/' . (int)$this->quote;
-        $this->url = $_ENV['app_frontend_url'] . 'rest/V1/' . $url;
+        $this->url = $_ENV['app_frontend_url'] . $this->prepareWebsiteUrl($fixture) . '/V1/' . $url;
 
         $this->setProducts($fixture);
         $this->setCoupon($fixture);
@@ -78,8 +77,9 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         $this->setShippingInformation($fixture);
         $this->setPaymentMethod($fixture);
         $orderId = $this->placeOrder();
+        $orderIncrementId = $this->getOrderIncrementId($orderId);
 
-        return ['id' => sprintf("%09d", $orderId)];
+        return ['id' => $orderIncrementId];
     }
 
     /**
@@ -92,7 +92,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
     protected function createQuote(OrderInjectable $order)
     {
         if ($this->isCustomerGuest) {
-            $url = $_ENV['app_frontend_url'] . 'rest/V1/guest-carts';
+            $url = $_ENV['app_frontend_url'] . $this->prepareWebsiteUrl($order) . '/V1/guest-carts';
             $this->webapiTransport->write($url);
             $response = json_decode($this->webapiTransport->read(), true);
             $this->webapiTransport->close();
@@ -102,7 +102,8 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
             }
             $this->quote = $response;
         } else {
-            $url = $_ENV['app_frontend_url'] . 'rest/V1/customers/' . $order->getCustomerId()->getId() . '/carts';
+            $url = $_ENV['app_frontend_url'] . $this->prepareWebsiteUrl($order)
+                . '/V1/customers/' . $order->getCustomerId()->getId() . '/carts';
             $data = '{"customerId": "' . $order->getCustomerId()->getId() . '"}';
             $this->webapiTransport->write($url, $data);
             $response = json_decode($this->webapiTransport->read(), true);
@@ -356,5 +357,42 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         }
 
         return ['extension_attributes' => ['downloadable_option' => ['downloadable_links' => $links]]];
+    }
+
+    /**
+     * Prepare url for placing order in custom website.
+     *
+     * @param OrderInjectable $order
+     * @return string
+     */
+    private function prepareWebsiteUrl(OrderInjectable $order)
+    {
+        $url = 'rest';
+        if ($website = $order->getDataFieldConfig('store_id')['source']->getWebsite()) {
+            $store = $order->getDataFieldConfig('store_id')['source']->getStore();
+            $url = 'websites/' . $website->getCode() . '/rest/' . $store->getCode();
+        }
+        return $url;
+    }
+
+    /**
+     * Retrieve order increment id.
+     *
+     * @param int $orderId
+     * @return string
+     * @throws \Exception
+     */
+    private function getOrderIncrementId($orderId)
+    {
+        $url = $_ENV['app_frontend_url'] . 'rest/V1/orders/' . $orderId;
+        $this->webapiTransport->write($url, [], WebapiDecorator::GET);
+        $response = json_decode($this->webapiTransport->read(), true);
+        $this->webapiTransport->close();
+
+        if (!$response['increment_id']) {
+            $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
+            throw new \Exception('Could not get order details using web API.');
+        }
+        return $response['increment_id'];
     }
 }

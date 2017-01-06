@@ -12,4 +12,14 @@
             <argument name="fullModuleList" xsi:type="object">Magento\Framework\Module\FullModuleList</argument>
         </arguments>
     </type>
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="newrelicreporting/general/account_id" xsi:type="string">1</item>
+                <item name="newrelicreporting/general/app_id" xsi:type="string">1</item>
+                <item name="newrelicreporting/general/api" xsi:type="string">1</item>
+                <item name="newrelicreporting/general/insights_insert_key" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

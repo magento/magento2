@@ -33,6 +33,62 @@
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+        </dataset>
+
+        <dataset name="withSimpleProduct">
+            <field name="name" xsi:type="string">Test grouped product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_grouped_product_%isolation%</field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="associated" xsi:type="array">
+                <item name="dataset" xsi:type="string">one_simple_product</item>
+            </field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">test-grouped-product-%isolation%</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+        </dataset>
+
+        <dataset name="withSimpleProduct_without_category">
+            <field name="name" xsi:type="string">Test grouped product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_grouped_product_%isolation%</field>
+            <field name="associated" xsi:type="array">
+                <item name="dataset" xsi:type="string">one_simple_product</item>
+            </field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">test-grouped-product-%isolation%</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
         </dataset>
 
         <dataset name="grouped_product_out_of_stock">
@@ -123,6 +179,65 @@
             </field>
             <field name="checkout_data" xsi:type="array">
                 <item name="dataset" xsi:type="string">grouped_three_simple_products</item>
+            </field>
+        </dataset>
+
+        <dataset name="three_simple_products_buy_all">
+            <field name="name" xsi:type="string">Grouped product %isolation%</field>
+            <field name="sku" xsi:type="string">grouped_product_%isolation%</field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="associated" xsi:type="array">
+                <item name="dataset" xsi:type="string">three_simple_products_buy_all</item>
+            </field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">test-grouped-product-%isolation%</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">grouped_three_simple_products</item>
+            </field>
+        </dataset>
+
+        <dataset name="grouped_product_with_special_price">
+            <field name="name" xsi:type="string">Test grouped product with special price %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_grouped_product_with_special_price_%isolation%</field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="associated" xsi:type="array">
+                <item name="dataset" xsi:type="string">defaultSimpleProduct_with_specialPrice</item>
+            </field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">test-grouped-product-with-special-price-%isolation%</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
             </field>
         </dataset>
     </repository>

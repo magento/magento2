@@ -417,6 +417,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         if ($this->getAttributeCode() == 'price') {
             return false;
         }
+        if ($this->getAttributeCode() == 'visibility') {
+            return true;
+        }
 
         if (!$this->getIsFilterableInSearch() && !$this->getIsVisibleInAdvancedSearch() && !$this->getIsFilterable()) {
             return false;

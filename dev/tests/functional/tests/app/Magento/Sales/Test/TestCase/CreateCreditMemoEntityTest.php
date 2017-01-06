@@ -62,7 +62,7 @@ class CreateCreditMemoEntityTest extends Injectable
      * @param FixtureFactory $fixtureFactory
      * @param OrderInjectable $order
      * @param array $data
-     * @param string $configData
+     * @param string|null $configData [optional]
      * @return array
      */
     public function test(
@@ -70,7 +70,7 @@ class CreateCreditMemoEntityTest extends Injectable
         FixtureFactory $fixtureFactory,
         OrderInjectable $order,
         array $data,
-        $configData
+        $configData = null
     ) {
         // Preconditions
         $this->fixtureFactory = $fixtureFactory;

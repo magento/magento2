@@ -95,7 +95,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Msrp\Helper\Data $msrpData
-     *
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -112,7 +112,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Framework\App\State $appState,
-        \Magento\Msrp\Helper\Data $msrpData
+        \Magento\Msrp\Helper\Data $msrpData,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->productLinks = $catalogProductLink;
         $this->_storeManager = $storeManager;
@@ -128,7 +129,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $filesystem,
             $coreRegistry,
             $logger,
-            $productRepository
+            $productRepository,
+            $serializer
         );
     }
 
@@ -202,7 +204,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $collection = $this->getAssociatedProductCollection(
                 $product
             )->addAttributeToSelect(
-                ['name', 'price',  'special_price', 'special_from_date', 'special_to_date']
+                ['name', 'price', 'special_price', 'special_from_date', 'special_to_date', 'tax_class_id']
             )->addFilterByRequiredOptions()->setPositionOrder()->addStoreFilter(
                 $this->getStoreFilter($product)
             )->addAttributeToFilter(
@@ -384,7 +386,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $_result[0]->addCustomOption('product_type', self::TYPE_CODE, $product);
                 $_result[0]->addCustomOption(
                     'info_buyRequest',
-                    serialize(
+                    $this->serializer->serialize(
                         [
                             'super_product_config' => [
                                 'product_type' => self::TYPE_CODE,
@@ -402,7 +404,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         if (!$isStrictProcessMode || count($associatedProductsInfo)) {
             $product->addCustomOption('product_type', self::TYPE_CODE, $product);
-            $product->addCustomOption('info_buyRequest', serialize($buyRequest->getData()));
+            $product->addCustomOption('info_buyRequest', $this->serializer->serialize($buyRequest->getData()));
 
             $products[] = $product;
         }
