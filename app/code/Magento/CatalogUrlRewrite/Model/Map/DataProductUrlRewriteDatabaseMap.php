@@ -7,20 +7,21 @@ namespace Magento\CatalogUrlRewrite\Model\Map;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\TemporaryTableService;
-use \Magento\Framework\DB\Select;
+use Magento\Framework\DB\Select;
+use Magento\UrlRewrite\Model\UrlRewritesSet;
 
 /**
  * Map that holds data for category url rewrites entity
  * @SuppressWarnings(PHPCPD)
  */
-class DataProductUrlRewriteMap implements DataMapInterface
+class DataProductUrlRewriteDatabaseMap implements DatabaseMapInterface
 {
     const ENTITY_TYPE = 'product';
 
     /** @var string[] */
-    private $tableNames = [];
+    private $createdTableAdapters = [];
 
-    /** @var DataMapPoolInterface */
+    /** @var HashMapPool */
     private $dataMapPool;
 
     /** @var ResourceConnection */
@@ -31,12 +32,12 @@ class DataProductUrlRewriteMap implements DataMapInterface
 
     /**
      * @param ResourceConnection $connection
-     * @param DataMapPoolInterface $dataMapPool,
-     * @param TemporaryTableService $temporaryTableService,
+     * @param HashMapPool $dataMapPool,
+     * @param TemporaryTableService $temporaryTableService
      */
     public function __construct(
         ResourceConnection $connection,
-        DataMapPoolInterface $dataMapPool,
+        HashMapPool $dataMapPool,
         TemporaryTableService $temporaryTableService
     ) {
         $this->connection = $connection;
@@ -45,14 +46,16 @@ class DataProductUrlRewriteMap implements DataMapInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Generates data from categoryId and stores it into a temporary table
+     *
+     * @param $categoryId
+     * @return void
      */
-    public function getAllData($categoryId)
+    private function generateTableAdapter($categoryId)
     {
-        if (empty($this->tableNames[$categoryId])) {
-            $this->tableNames[$categoryId] = $this->generateData($categoryId);
+        if (!isset($this->createdTableAdapters[$categoryId])) {
+            $this->createdTableAdapters[$categoryId] = $this->generateData($categoryId);
         }
-        return $this->tableNames[$categoryId];
     }
 
     /**
@@ -60,10 +63,10 @@ class DataProductUrlRewriteMap implements DataMapInterface
      */
     public function getData($categoryId, $key)
     {
-        $this->getAllData($categoryId);
+        $this->generateTableAdapter($categoryId);
         $urlRewritesConnection = $this->connection->getConnection();
         $select = $urlRewritesConnection->select()
-            ->from(['e' => $this->tableNames[$categoryId]])
+            ->from(['e' => $this->createdTableAdapters[$categoryId]])
             ->where('hash_key = ?', $key);
         return $urlRewritesConnection->fetchAll($select);
     }
@@ -80,14 +83,17 @@ class DataProductUrlRewriteMap implements DataMapInterface
         $select = $urlRewritesConnection->select()
             ->from(
                 ['e' => $this->connection->getTableName('url_rewrite')],
-                ['e.*', 'hash_key' => new \Zend_Db_Expr('CONCAT(e.store_id,\'_\', e.entity_id)')]
+                ['e.*', 'hash_key' => new \Zend_Db_Expr(
+                    "CONCAT(e.store_id,'" . UrlRewritesSet::SEPARATOR . "', e.entity_id)"
+                )
+                ]
             )
             ->where('entity_type = ?', self::ENTITY_TYPE)
             ->where(
                 $urlRewritesConnection->prepareSqlCondition(
                     'entity_id',
                     [
-                        'in' => $this->dataMapPool->getDataMap(DataProductMap::class, $categoryId)
+                        'in' => $this->dataMapPool->getDataMap(DataProductHashMap::class, $categoryId)
                             ->getAllData($categoryId)
                     ]
                 )
@@ -107,13 +113,12 @@ class DataProductUrlRewriteMap implements DataMapInterface
     /**
      * {@inheritdoc}
      */
-    public function resetData($categoryId)
+    public function destroyTableAdapter($categoryId)
     {
-        $this->dataMapPool->resetDataMap(DataProductMap::class, $categoryId);
-        $this->temporaryTableService->dropTable($this->tableNames[$categoryId]);
-        unset($this->tableNames[$categoryId]);
-        if (empty($this->tableNames)) {
-            $this->tableNames = [];
+        $this->dataMapPool->resetMap(DataProductHashMap::class, $categoryId);
+        if (isset($this->createdTableAdapters[$categoryId])) {
+            $this->temporaryTableService->dropTable($this->createdTableAdapters[$categoryId]);
+            unset($this->createdTableAdapters[$categoryId]);
         }
     }
 }

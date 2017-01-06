@@ -6,23 +6,23 @@
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
 
 use Magento\Framework\DB\Select;
-use Magento\CatalogUrlRewrite\Model\Map\DataMapPoolInterface;
-use Magento\CatalogUrlRewrite\Model\Map\DataProductMap;
-use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteMap;
+use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
+use Magento\CatalogUrlRewrite\Model\Map\DataProductHashMap;
+use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\TemporaryTableService;
 
 /**
- * Class DataProductUrlRewriteMapTest
+ * Class DataProductUrlRewriteDatabaseMapTest
  */
-class DataProductUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
+class DataProductUrlRewriteDatabaseMapTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var DataMapPoolInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
     private $dataMapPoolMock;
 
-    /** @var DataProductMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataProductHashMap|\PHPUnit_Framework_MockObject_MockObject */
     private $dataProductMapMock;
 
     /** @var TemporaryTableService|\PHPUnit_Framework_MockObject_MockObject */
@@ -31,13 +31,13 @@ class DataProductUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
     /** @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     private $connectionMock;
 
-    /** @var DataProductMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataProductUrlRewriteDatabaseMap|\PHPUnit_Framework_MockObject_MockObject */
     private $model;
 
     protected function setUp()
     {
-        $this->dataMapPoolMock = $this->getMock(DataMapPoolInterface::class);
-        $this->dataProductMapMock = $this->getMock(DataProductMap::class, [], [], '', false);
+        $this->dataMapPoolMock = $this->getMock(HashMapPool::class, [], [], '', false);
+        $this->dataProductMapMock = $this->getMock(DataProductHashMap::class, [], [], '', false);
         $this->temporaryTableServiceMock = $this->getMock(TemporaryTableService::class, [], [], '', false);
         $this->connectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
 
@@ -46,12 +46,11 @@ class DataProductUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->dataProductMapMock);
 
         $this->model = (new ObjectManager($this))->getObject(
-            DataCategoryUrlRewriteMap::class,
+            DataProductUrlRewriteDatabaseMap::class,
             [
                 'connection' => $this->connectionMock,
                 'dataMapPool' => $this->dataMapPoolMock,
-                'temporaryTableService' => $this->temporaryTableServiceMock,
-                'mapData' => [],
+                'temporaryTableService' => $this->temporaryTableServiceMock
             ]
         );
     }
@@ -69,11 +68,6 @@ class DataProductUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
             '5' => ['store_id' => 2, 'product_id' => 2],
         ];
 
-        $productStoreIdsExpectedMap = [
-            '1' => [1, 2, 3],
-            '2' => [1, 2],
-        ];
-
         $connectionMock = $this->getMock(AdapterInterface::class);
         $selectMock = $this->getMock(Select::class, [], [], '', false);
 
@@ -85,7 +79,7 @@ class DataProductUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
             ->willReturn($selectMock);
         $connectionMock->expects($this->any())
             ->method('fetchAll')
-            ->willReturnOnConsecutiveCalls($productStoreIds, $productStoreIdsExpectedMap);
+            ->willReturn($productStoreIds[3]);
         $selectMock->expects($this->any())
             ->method('from')
             ->willReturnSelf();
@@ -113,7 +107,6 @@ class DataProductUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn('tempTableName');
 
-        $this->assertEquals($productStoreIds, $this->model->getAllData(1));
-        $this->assertEquals($productStoreIdsExpectedMap, $this->model->getData(1, '3_1'));
+        $this->assertEquals($productStoreIds[3], $this->model->getData(1, '3_1'));
     }
 }

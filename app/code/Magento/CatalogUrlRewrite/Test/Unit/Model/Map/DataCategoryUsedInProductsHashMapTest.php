@@ -6,39 +6,39 @@
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
 
 use Magento\Framework\DB\Select;
-use Magento\CatalogUrlRewrite\Model\Map\DataMapPoolInterface;
-use Magento\CatalogUrlRewrite\Model\Map\DataProductMap;
-use Magento\CatalogUrlRewrite\Model\Map\DataCategoryMap;
-use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUsedInProductsMap;
+use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
+use Magento\CatalogUrlRewrite\Model\Map\DataProductHashMap;
+use Magento\CatalogUrlRewrite\Model\Map\DataCategoryHashMap;
+use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUsedInProductsHashMap;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * Class DataCategoryUsedInProductsMapTest
+ * Class DataCategoryUsedInProductsHashMapTest
  */
-class DataCategoryUsedInProductsMapTest extends \PHPUnit_Framework_TestCase
+class DataCategoryUsedInProductsHashMapTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var DataMapPoolInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
     private $dataMapPoolMock;
 
-    /** @var DataCategoryMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
     private $dataCategoryMapMock;
 
-    /** @var DataProductMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataProductHashMap|\PHPUnit_Framework_MockObject_MockObject */
     private $dataProductMapMock;
 
     /** @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     private $connectionMock;
 
-    /** @var DataCategoryUsedInProductsMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryUsedInProductsHashMap|\PHPUnit_Framework_MockObject_MockObject */
     private $model;
 
     protected function setUp()
     {
-        $this->dataMapPoolMock = $this->getMock(DataMapPoolInterface::class);
-        $this->dataCategoryMapMock = $this->getMock(DataCategoryMap::class, [], [], '', false);
-        $this->dataProductMapMock = $this->getMock(DataProductMap::class, [], [], '', false);
+        $this->dataMapPoolMock = $this->getMock(HashMapPool::class, [], [], '', false);
+        $this->dataCategoryMapMock = $this->getMock(DataCategoryHashMap::class, [], [], '', false);
+        $this->dataProductMapMock = $this->getMock(DataProductHashMap::class, [], [], '', false);
         $this->connectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
 
         $this->dataMapPoolMock->expects($this->any())
@@ -53,11 +53,10 @@ class DataCategoryUsedInProductsMapTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->model = (new ObjectManager($this))->getObject(
-            DataCategoryUsedInProductsMap::class,
+            DataCategoryUsedInProductsHashMap::class,
             [
                 'connection' => $this->connectionMock,
-                'dataMapPool' => $this->dataMapPoolMock,
-                'mapData' => [],
+                'hashMapPool' => $this->dataMapPoolMock
             ]
         );
     }
@@ -93,10 +92,10 @@ class DataCategoryUsedInProductsMapTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->dataMapPoolMock->expects($this->at(4))
             ->method('resetDataMap')
-            ->with(DataProductMap::class, 1);
+            ->with(DataProductHashMap::class, 1);
         $this->dataMapPoolMock->expects($this->at(5))
             ->method('resetDataMap')
-            ->with(DataCategoryMap::class, 1);
+            ->with(DataCategoryHashMap::class, 1);
 
         $this->assertEquals($categoryIds, $this->model->getAllData(1));
         $this->assertEquals($categoryIds[2], $this->model->getData(1, 2));

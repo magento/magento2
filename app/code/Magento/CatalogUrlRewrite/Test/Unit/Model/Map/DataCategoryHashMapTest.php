@@ -10,14 +10,14 @@ use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Framework\DB\Select;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\CatalogUrlRewrite\Model\Map\DataCategoryMap;
+use Magento\CatalogUrlRewrite\Model\Map\DataCategoryHashMap;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
- * Class DataCategoryMapTest
+ * Class DataCategoryHashMapTest
  */
-class DataCategoryMapTest extends \PHPUnit_Framework_TestCase
+class DataCategoryHashMapTest extends \PHPUnit_Framework_TestCase
 {
     /** @var CategoryRepository|\PHPUnit_Framework_MockObject_MockObject */
     private $categoryRepository;
@@ -28,7 +28,7 @@ class DataCategoryMapTest extends \PHPUnit_Framework_TestCase
     /** @var CategoryResource|\PHPUnit_Framework_MockObject_MockObject */
     private $categoryResource;
 
-    /** @var DataCategoryMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
     private $model;
 
     protected function setUp()
@@ -44,7 +44,7 @@ class DataCategoryMapTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = (new ObjectManager($this))->getObject(
-            DataCategoryMap::class,
+            DataCategoryHashMap::class,
             [
                 'categoryRepository' => $this->categoryRepository,
                 'collection' => $this->collection,

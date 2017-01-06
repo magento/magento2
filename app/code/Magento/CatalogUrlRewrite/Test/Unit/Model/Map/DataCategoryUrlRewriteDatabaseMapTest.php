@@ -6,28 +6,28 @@
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
 
 use Magento\Framework\DB\Select;
-use Magento\CatalogUrlRewrite\Model\Map\DataMapPoolInterface;
-use Magento\CatalogUrlRewrite\Model\Map\DataProductMap;
-use Magento\CatalogUrlRewrite\Model\Map\DataCategoryMap;
-use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUsedInProductsMap;
-use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteMap;
+use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
+use Magento\CatalogUrlRewrite\Model\Map\DataProductHashMap;
+use Magento\CatalogUrlRewrite\Model\Map\DataCategoryHashMap;
+use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUsedInProductsHashMap;
+use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\TemporaryTableService;
 
 /**
- * Class DataCategoryUrlRewriteMapTest
+ * Class DataCategoryUrlRewriteDatabaseMapTest
  */
-class DataCategoryUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
+class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var DataMapPoolInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
     private $dataMapPoolMock;
 
-    /** @var DataCategoryMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
     private $dataCategoryMapMock;
 
-    /** @var DataCategoryUsedInProductsMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryUsedInProductsHashMap|\PHPUnit_Framework_MockObject_MockObject */
     private $dataCategoryUsedInProductsMapMock;
 
     /** @var TemporaryTableService|\PHPUnit_Framework_MockObject_MockObject */
@@ -36,15 +36,15 @@ class DataCategoryUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
     /** @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     private $connectionMock;
 
-    /** @var DataCategoryUrlRewriteMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryUrlRewriteDatabaseMap|\PHPUnit_Framework_MockObject_MockObject */
     private $model;
 
     protected function setUp()
     {
-        $this->dataMapPoolMock = $this->getMock(DataMapPoolInterface::class);
-        $this->dataCategoryMapMock = $this->getMock(DataProductMap::class, [], [], '', false);
+        $this->dataMapPoolMock = $this->getMock(HashMapPool::class, [], [], '', false);
+        $this->dataCategoryMapMock = $this->getMock(DataProductHashMap::class, [], [], '', false);
         $this->dataCategoryUsedInProductsMapMock = $this->getMock(
-            DataCategoryUsedInProductsMap::class,
+            DataCategoryUsedInProductsHashMap::class,
             [],
             [],
             '',
@@ -58,12 +58,11 @@ class DataCategoryUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
             ->willReturnOnConsecutiveCalls($this->dataCategoryUsedInProductsMapMock, $this->dataCategoryMapMock);
 
         $this->model = (new ObjectManager($this))->getObject(
-            DataCategoryUrlRewriteMap::class,
+            DataCategoryUrlRewriteDatabaseMap::class,
             [
                 'connection' => $this->connectionMock,
                 'dataMapPool' => $this->dataMapPoolMock,
-                'temporaryTableService' => $this->temporaryTableServiceMock,
-                'mapData' => [],
+                'temporaryTableService' => $this->temporaryTableServiceMock
             ]
         );
     }
@@ -92,7 +91,7 @@ class DataCategoryUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
             ->willReturn($selectMock);
         $connectionMock->expects($this->any())
             ->method('fetchAll')
-            ->willReturnOnConsecutiveCalls($productStoreIds, $productStoreIds[3]);
+            ->willReturn($productStoreIds[3]);
         $selectMock->expects($this->any())
             ->method('from')
             ->willReturnSelf();
@@ -121,7 +120,6 @@ class DataCategoryUrlRewriteMapTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn('tempTableName');
 
-        $this->assertEquals($productStoreIds, $this->model->getAllData(1));
         $this->assertEquals($productStoreIds[3], $this->model->getData(1, '3_1'));
     }
 }

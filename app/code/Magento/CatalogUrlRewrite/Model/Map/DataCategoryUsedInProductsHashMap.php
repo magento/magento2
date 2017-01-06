@@ -10,27 +10,27 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * Map that holds data for categories used by products found in root category
  */
-class DataCategoryUsedInProductsMap implements DataMapInterface
+class DataCategoryUsedInProductsHashMap implements HashMapInterface
 {
-    /** @var array */
-    private $data = [];
+    /** @var int[] */
+    private $hashMap = [];
 
-    /** @var DataMapPoolInterface */
-    private $dataMapPool;
+    /** @var HashMapPool */
+    private $hashMapPool;
 
     /** @var ResourceConnection */
     private $connection;
 
     /**
      * @param ResourceConnection $connection
-     * @param DataMapPoolInterface $dataMapPool
+     * @param HashMapPool $hashMapPool
      */
     public function __construct(
         ResourceConnection $connection,
-        DataMapPoolInterface $dataMapPool
+        HashMapPool $hashMapPool
     ) {
         $this->connection = $connection;
-        $this->dataMapPool = $dataMapPool;
+        $this->hashMapPool = $hashMapPool;
     }
 
     /**
@@ -38,10 +38,10 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
      */
     public function getAllData($categoryId)
     {
-        if (empty($this->data[$categoryId])) {
-            $this->data[$categoryId] = $this->generateData($categoryId);
+        if (!isset($this->hashMap[$categoryId])) {
+            $this->hashMap[$categoryId] = $this->generateData($categoryId);
         }
-        return $this->data[$categoryId];
+        return $this->hashMap[$categoryId];
     }
 
     /**
@@ -50,7 +50,7 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
     public function getData($categoryId, $key)
     {
         $this->getAllData($categoryId);
-        return $this->data[$categoryId][$key];
+        return $this->hashMap[$categoryId][$key];
     }
 
     /**
@@ -68,8 +68,8 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
                 $productsLinkConnection->prepareSqlCondition(
                     'product_id',
                     [
-                        'in' => $this->dataMapPool->getDataMap(
-                            DataProductMap::class,
+                        'in' => $this->hashMapPool->getDataMap(
+                            DataProductHashMap::class,
                             $categoryId
                         )->getAllData($categoryId)
                     ]
@@ -79,8 +79,8 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
                 $productsLinkConnection->prepareSqlCondition(
                     'category_id',
                     [
-                        'nin' => $this->dataMapPool->getDataMap(
-                            DataCategoryMap::class,
+                        'nin' => $this->hashMapPool->getDataMap(
+                            DataCategoryHashMap::class,
                             $categoryId
                         )->getAllData($categoryId)
                     ]
@@ -95,11 +95,8 @@ class DataCategoryUsedInProductsMap implements DataMapInterface
      */
     public function resetData($categoryId)
     {
-        $this->dataMapPool->resetDataMap(DataProductMap::class, $categoryId);
-        $this->dataMapPool->resetDataMap(DataCategoryMap::class, $categoryId);
-        unset($this->data[$categoryId]);
-        if (empty($this->data)) {
-            $this->data = [];
-        }
+        $this->hashMapPool->resetMap(DataProductHashMap::class, $categoryId);
+        $this->hashMapPool->resetMap(DataCategoryHashMap::class, $categoryId);
+        unset($this->hashMap[$categoryId]);
     }
 }

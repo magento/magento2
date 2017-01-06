@@ -11,15 +11,16 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
 /**
- * Allows query to DataCategoryUrlRewriteMap and DataProductUrlRewriteMap class or UrlFinderInterface by identifiers
+ * Allows query to Category and Product UrlRewrite Database Map or UrlFinderInterface by identifiers
+ *
  */
-class UrlRewriteMap
+class UrlRewriteFinder
 {
     const ENTITY_TYPE_CATEGORY = 'category';
     const ENTITY_TYPE_PRODUCT = 'product';
 
-    /** @var DataMapPoolInterface */
-    private $dataMapPool;
+    /** @var DatabaseMapPool */
+    private $databaseMapPool;
 
     /** @var UrlFinderInterface */
     private $urlFinder;
@@ -27,18 +28,27 @@ class UrlRewriteMap
     /** @var UrlRewrite */
     private $urlRewritePrototype;
 
+    /** @var array */
+    private $urlRewriteClassNames;
+
     /**
-     * @param DataMapPoolInterface $dataMapPool
+     * @param DatabaseMapPool $databaseMapPool
      * @param UrlFinderInterface $urlFinder
      * @param UrlRewriteFactory $urlRewriteFactory
+     * @param string[] $urlRewriteClassNames
      */
     public function __construct(
-        DataMapPoolInterface $dataMapPool,
+        DatabaseMapPool $databaseMapPool,
         UrlFinderInterface $urlFinder,
-        UrlRewriteFactory $urlRewriteFactory
+        UrlRewriteFactory $urlRewriteFactory,
+        array $urlRewriteClassNames = [
+            self::ENTITY_TYPE_PRODUCT => DataProductUrlRewriteDatabaseMap::class,
+            self::ENTITY_TYPE_CATEGORY => DataCategoryUrlRewriteDatabaseMap::class
+        ]
     ) {
-        $this->dataMapPool = $dataMapPool;
+        $this->databaseMapPool = $databaseMapPool;
         $this->urlFinder = $urlFinder;
+        $this->urlRewriteClassNames = $urlRewriteClassNames;
         $this->urlRewritePrototype = $urlRewriteFactory->create();
     }
 
@@ -51,16 +61,15 @@ class UrlRewriteMap
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    public function getByIdentifiers($entityId, $storeId, $entityType, $rootCategoryId = null)
+    public function findAllByData($entityId, $storeId, $entityType, $rootCategoryId = null)
     {
-        if ($rootCategoryId && is_numeric($entityId) && is_numeric($storeId) && is_string($entityType)) {
-            $map = null;
-            if ($entityType === self::ENTITY_TYPE_PRODUCT) {
-                $map = $this->dataMapPool->getDataMap(DataProductUrlRewriteMap::class, $rootCategoryId);
-            } elseif ($entityType === self::ENTITY_TYPE_CATEGORY) {
-                $map = $this->dataMapPool->getDataMap(DataCategoryUrlRewriteMap::class, $rootCategoryId);
-            }
-
+        if ($rootCategoryId
+            && is_numeric($entityId)
+            && is_numeric($storeId)
+            && is_string($entityType)
+            && isset($this->urlRewriteClassNames[$entityType])
+        ) {
+            $map = $this->databaseMapPool->getDataMap($this->urlRewriteClassNames[$entityType], $rootCategoryId);
             if ($map) {
                 $key = $storeId . '_' . $entityId;
                 return $this->arrayToUrlRewriteObject($map->getData($rootCategoryId, $key));
@@ -77,12 +86,12 @@ class UrlRewriteMap
     }
 
     /**
-     * Transform array values to url rewrite object values
+     * Transfer array values to url rewrite object values
      *
      * @param array $data
      * @return UrlRewrite[]
      */
-    private function arrayToUrlRewriteObject($data)
+    private function arrayToUrlRewriteObject(array $data)
     {
         foreach ($data as $key => $array) {
             $data[$key] = $this->createUrlRewrite($array);
@@ -91,12 +100,12 @@ class UrlRewriteMap
     }
 
     /**
-     * Clone url rewrite object
+     * Creates url rewrite object and sets $data to its properties by key->value
      *
      * @param array $data
      * @return UrlRewrite
      */
-    private function createUrlRewrite($data)
+    private function createUrlRewrite(array $data)
     {
         $dataObject = clone $this->urlRewritePrototype;
         $dataObject->setUrlRewriteId($data['url_rewrite_id']);

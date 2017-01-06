@@ -8,12 +8,12 @@ namespace Magento\CatalogUrlRewrite\Model\Map;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Pool for all data maps
+ * Pool for hash maps
  */
-class DataMapPool implements DataMapPoolInterface
+class HashMapPool
 {
     /**
-     * @var DataMapInterface[]
+     * @var HashMapInterface[]
      */
     private $dataArray = [];
 
@@ -34,11 +34,20 @@ class DataMapPool implements DataMapPoolInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets a map by instance and category Id
+     *
+     * @param string $instanceName
+     * @param int $categoryId
+     * @return HashMapInterface
+     * @throws \Exception
      */
     public function getDataMap($instanceName, $categoryId)
     {
         $key = $instanceName . '-' . $categoryId;
+        $reflectionClass = new \ReflectionClass($instanceName);
+        if (!$reflectionClass->implementsInterface(HashMapInterface::class)) {
+           throw new \Exception($instanceName . ' does not implement interface ' . HashMapInterface::class);
+        }
         if (!isset($this->dataArray[$key])) {
             $this->dataArray[$key] = $this->objectManager->create(
                 $instanceName,
@@ -51,9 +60,13 @@ class DataMapPool implements DataMapPoolInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Resets data in a hash map by instance name and category Id
+     *
+     * @param string $instanceName
+     * @param int $categoryId
+     * @return void
      */
-    public function resetDataMap($instanceName, $categoryId)
+    public function resetMap($instanceName, $categoryId)
     {
         $key = $instanceName . '-' . $categoryId;
         if (isset($this->dataArray[$key])) {

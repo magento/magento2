@@ -55,7 +55,7 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->objectRegistry = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Model\ObjectRegistry::class)
             ->disableOriginalConstructor()->getMock();
-        $this->urlRewriteMap = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap::class)
+        $this->urlRewriteMap = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder::class)
             ->disableOriginalConstructor()->getMock();
         $this->urlRewriteFactory->expects($this->once())->method('create')
             ->willReturn($this->urlRewrite);

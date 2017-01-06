@@ -11,12 +11,12 @@ use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
- * Map that holds data for category ids and it's subcategories ids
+ * Map that holds data for category ids and its subcategories ids
  */
-class DataCategoryMap implements DataMapInterface
+class DataCategoryHashMap implements HashMapInterface
 {
-    /** @var array */
-    private $data = [];
+    /** @var int[] */
+    private $hashMap = [];
 
     /** @var CategoryRepository */
     private $categoryRepository;
@@ -47,10 +47,10 @@ class DataCategoryMap implements DataMapInterface
      */
     public function getAllData($categoryId)
     {
-        if (empty($this->data[$categoryId])) {
-            $this->data[$categoryId] = $this->generateData($categoryId);
+        if (!isset($this->hashMap[$categoryId])) {
+            $this->hashMap[$categoryId] = $this->generateData($categoryId);
         }
-        return $this->data[$categoryId];
+        return $this->hashMap[$categoryId];
     }
 
     /**
@@ -59,7 +59,7 @@ class DataCategoryMap implements DataMapInterface
     public function getData($categoryId, $key)
     {
         $this->getAllData($categoryId);
-        return $this->data[$categoryId][$key];
+        return $this->hashMap[$categoryId][$key];
     }
 
     /**
@@ -81,7 +81,7 @@ class DataCategoryMap implements DataMapInterface
      * @param CategoryInterface $category
      * @return int[]
      */
-    private function getAllCategoryChildrenIds($category)
+    private function getAllCategoryChildrenIds(CategoryInterface $category)
     {
         $connection = $this->categoryResource->getConnection();
         $select = $connection->select()
@@ -96,9 +96,6 @@ class DataCategoryMap implements DataMapInterface
      */
     public function resetData($categoryId)
     {
-        unset($this->data[$categoryId]);
-        if (empty($this->data)) {
-            $this->data = [];
-        }
+        unset($this->hashMap[$categoryId]);
     }
 }

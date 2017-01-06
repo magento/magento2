@@ -56,20 +56,6 @@ class UrlRewritesSetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Run test getData method when data is not empty
-     *
-     * @return void
-     */
-    public function testGetDataWhenNotEmpty()
-    {
-        $data = new \ReflectionProperty($this->urlRewritesSet, 'data');
-        $data->setAccessible(true);
-        $data->setValue($this->urlRewritesSet, [new UrlRewrite()]);
-        $data->setAccessible(false);
-        $this->assertNotEmpty($this->urlRewritesSet->getData());
-    }
-
-    /**
      * Data provider  for testMerge
      *
      * @return array

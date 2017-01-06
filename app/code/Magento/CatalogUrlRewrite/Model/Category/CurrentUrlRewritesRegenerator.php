@@ -31,7 +31,7 @@ class CurrentUrlRewritesRegenerator
      */
     protected $urlFinder;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap */
+    /** @var \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder */
     private $urlRewriteMap;
 
     /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
@@ -41,14 +41,14 @@ class CurrentUrlRewritesRegenerator
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory
      * @param \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder
-     * @param \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap|null $urlRewriteMap
+     * @param \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder|null $urlRewriteMap
      * @param \Magento\UrlRewrite\Model\UrlRewritesSetFactory|null $urlRewritesSetFactory
      */
     public function __construct(
         \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
         \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory,
         \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder,
-        \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap $urlRewriteMap = null,
+        \Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder $urlRewriteMap = null,
         \Magento\UrlRewrite\Model\UrlRewritesSetFactory $urlRewritesSetFactory = null
     ) {
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
@@ -56,7 +56,7 @@ class CurrentUrlRewritesRegenerator
         $this->urlRewritePrototype = $urlRewriteFactory->create();
         $this->urlFinder = $urlFinder;
         $this->urlRewriteMap = $urlRewriteMap ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\CatalogUrlRewrite\Model\Map\UrlRewriteMap::class);
+            ->get(\Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder::class);
         $urlRewritesSetFactory = $urlRewritesSetFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\UrlRewrite\Model\UrlRewritesSetFactory::class);
         $this->urlRewritesSetPrototype = $urlRewritesSetFactory->create();
@@ -73,7 +73,7 @@ class CurrentUrlRewritesRegenerator
     public function generate($storeId, \Magento\Catalog\Model\Category $category, $rootCategoryId = null)
     {
         $urlRewritesSet = clone $this->urlRewritesSetPrototype;
-        $currentUrlRewrites = $this->urlRewriteMap->getByIdentifiers(
+        $currentUrlRewrites = $this->urlRewriteMap->findAllByData(
             $category->getEntityId(),
             $storeId,
             CategoryUrlRewriteGenerator::ENTITY_TYPE,

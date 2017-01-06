@@ -24,7 +24,7 @@ class TemporaryTableService
     /**
      * @var AdapterInterface[]
      */
-    private $createdTables = [];
+    private $createdTableAdapters = [];
 
     /**
      * @param \Magento\Framework\Math\Random $random
@@ -46,9 +46,10 @@ class TemporaryTableService
      *           [
      *              'PRIMARY' => ['primary_id'],
      *              'some_single_field_index' => ['field'],
-     *              'some_multiple_field_index' => ['field1', 'field2'],
+     *              'UNQ_some_multiple_field_index' => ['field1', 'field2'],
      *           ]
      *          )
+     * Note that indexes names with UNQ_ prefix, will be created as unique
      *
      * @param Select $select
      * @param AdapterInterface $adapter
@@ -70,7 +71,7 @@ class TemporaryTableService
         foreach ($indexes as $indexName => $columns) {
             $renderedColumns = implode(',', array_map([$adapter, 'quoteIdentifier'], $columns));
 
-            $indexType = sprintf('INDEX %s USING %s', $adapter->quoteIdentifier($indexName), $indexMethod);
+            $indexType = sprintf('INDEX %s USING %s', $adapter->quoteIdentifier($indexName), "{$indexMethod}");
 
             if ($indexName === 'PRIMARY') {
                 $indexType = 'PRIMARY KEY';
@@ -85,8 +86,8 @@ class TemporaryTableService
             'CREATE TEMPORARY TABLE %s %s ENGINE=%s IGNORE (%s)',
             $adapter->quoteIdentifier($name),
             $indexStatements ? '(' . implode(',', $indexStatements) . ')' : '',
-            $engine,
-            (string)$select
+            "{$engine}",
+            "{$select}"
         );
 
         $adapter->query(
@@ -94,28 +95,30 @@ class TemporaryTableService
             $select->getBind()
         );
 
-        $this->createdTables[$name] = $adapter;
+        $this->createdTableAdapters[$name] = $adapter;
 
         return $name;
     }
 
     /**
      * Method used to drop a table by name
-     * This class will hold all temporary table names in createdTables array so we can dispose them once we're finished
+     * This class will hold all temporary table names in createdTableAdapters array
+     * so we can dispose them once we're finished
      *
-     * Example: dropTable($previouslySavedTableName)
-     * where $previouslySavedTableName is a variable that you have to save when you use "createFromSelect" method
+     * Example: dropTable($name)
+     * where $name is a variable that holds the name for a previously created temporary  table
+     * by using "createFromSelect" method
      *
      * @param string $name
      * @return bool
      */
     public function dropTable($name)
     {
-        if (!empty($this->createdTables)) {
-            if (isset($this->createdTables[$name]) && !empty($name)) {
-                $adapter = $this->createdTables[$name];
+        if (!empty($this->createdTableAdapters)) {
+            if (isset($this->createdTableAdapters[$name]) && !empty($name)) {
+                $adapter = $this->createdTableAdapters[$name];
                 $adapter->dropTemporaryTable($name);
-                unset($this->createdTables[$name]);
+                unset($this->createdTableAdapters[$name]);
                 return true;
             }
         }

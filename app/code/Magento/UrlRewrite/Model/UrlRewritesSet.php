@@ -14,6 +14,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  */
 class UrlRewritesSet
 {
+    const SEPARATOR = '_';
     /**
      * @var $rewritesArray[]
      */
@@ -27,10 +28,9 @@ class UrlRewritesSet
      */
     public function merge(array $urlRewritesArray)
     {
-        $separator = '_';
         foreach ($urlRewritesArray as $urlRewrite) {
-            $key = $urlRewrite->getRequestPath() . $separator . $urlRewrite->getStoreId();
-            if ($key !== $separator) {
+            $key = $urlRewrite->getRequestPath() . self::SEPARATOR . $urlRewrite->getStoreId();
+            if ($key !== self::SEPARATOR) {
                 $this->data[$key] = $urlRewrite;
             } else {
                 $this->data[] = $urlRewrite;
