@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Model;
@@ -12,6 +12,7 @@ use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Model\SignifydGateway\ApiClient;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -199,6 +200,13 @@ class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->service->createForOrder($order->getEntityId());
         static::assertTrue($result);
+
+        /** @var CaseRepositoryInterface $caseRepository */
+        $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
+        $caseEntity = $caseRepository->getByCaseId(123123);
+
+        static::assertNotEmpty($caseEntity);
+        static::assertEquals($order->getEntityId(), $caseEntity->getOrderId());
     }
 
     /**

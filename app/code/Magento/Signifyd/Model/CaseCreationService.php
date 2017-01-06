@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Model;
 
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Api\CaseManagementInterface;
+use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
@@ -35,20 +36,28 @@ class CaseCreationService implements CaseCreationServiceInterface
     private $logger;
 
     /**
+     * @var CaseRepositoryInterface
+     */
+    private $caseRepository;
+
+    /**
      * CaseCreationService constructor.
      *
      * @param CaseManagementInterface $caseManagement
      * @param Gateway $signifydGateway
      * @param LoggerInterface $logger
+     * @param CaseRepositoryInterface $caseRepository
      */
     public function __construct(
         CaseManagementInterface $caseManagement,
         Gateway $signifydGateway,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        CaseRepositoryInterface $caseRepository
     ) {
         $this->caseManagement = $caseManagement;
         $this->signifydGateway = $signifydGateway;
         $this->logger = $logger;
+        $this->caseRepository = $caseRepository;
     }
 
     /**
@@ -56,10 +65,12 @@ class CaseCreationService implements CaseCreationServiceInterface
      */
     public function createForOrder($orderId)
     {
-        $this->caseManagement->create($orderId);
+        $case = $this->caseManagement->create($orderId);
 
         try {
-            $this->signifydGateway->createCase($orderId);
+            $caseId = $this->signifydGateway->createCase($orderId);
+            $case->setCaseId($caseId);
+            $this->caseRepository->save($case);
         } catch (ApiCallException $e) {
             $this->logger->error($e->getMessage());
         } catch (GatewayException $e) {
