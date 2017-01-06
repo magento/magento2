@@ -145,7 +145,7 @@ class SensitiveConfigSetCommand extends Command
                 sprintf(
                     '<error>%s</error>',
                     'File app/etc/' . $configFilePath . ' can\'t be read. '
-                    . 'Please check if it exists and has correct permissions.'
+                    . 'Please check if it exists and has read permissions.'
                 )
             );
             return Cli::RETURN_FAILURE;

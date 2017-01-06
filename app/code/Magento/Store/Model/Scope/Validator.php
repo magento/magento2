@@ -41,13 +41,13 @@ class Validator implements ValidatorInterface
 
         if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT && !empty($scopeCode)) {
             throw new LocalizedException(__(
-                'Scope code shouldn\'t be passed for scope "%1"',
+                'The "%1" scope can’t include a scope code. Try again without entering a scope code.',
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             ));
         }
 
         if (empty($scope)) {
-            throw new LocalizedException(__('Scope can\'t be empty'));
+            throw new LocalizedException(__('Enter a scope before proceeding.'));
         }
 
         $this->validateScopeCode($scopeCode);
@@ -56,9 +56,9 @@ class Validator implements ValidatorInterface
             $scopeResolver = $this->scopeResolverPool->get($scope);
             $scopeResolver->getScope($scopeCode)->getId();
         } catch (InvalidArgumentException $e) {
-            throw new LocalizedException(__('Scope "%1" doesn\'t exist', $scope));
+            throw new LocalizedException(__('The "%1" value doesn’t exist. Enter another value.', $scope));
         } catch (NoSuchEntityException $e) {
-            throw new LocalizedException(__('Scope code "%1" doesn\'t exist in scope "%2"', $scopeCode, $scope));
+            throw new LocalizedException(__('The "%1" value doesn’t exist. Enter another value."', $scopeCode));
         }
 
         return true;
@@ -68,18 +68,21 @@ class Validator implements ValidatorInterface
      * Validate scope code
      * Throw exception if not valid.
      *
-     * @param $scopeCode
+     * @param string $scopeCode
      * @return void
      * @throws LocalizedException if scope code is empty or has a wrong format
      */
     private function validateScopeCode($scopeCode)
     {
         if (empty($scopeCode)) {
-            throw new LocalizedException(__('Scope code can\'t be empty'));
+            throw new LocalizedException(__('Enter a scope code before proceeding.'));
         }
 
         if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $scopeCode)) {
-            throw new LocalizedException(__('Wrong scope code format'));
+            throw new LocalizedException(__(
+                'The scope code can include only lowercase letters (a-z), numbers (0-9) and underscores (_). '
+                . 'Also, the first character must be a letter.'
+            ));
         }
     }
 }

@@ -64,7 +64,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Scope code shouldn't be passed for scope "default"
+     * @expectedExceptionMessage The "default" scope can’t include a scope code. Try again without entering a scope code.
      */
     public function testNotEmptyScopeCodeForDefaultScope()
     {
@@ -73,7 +73,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Scope can't be empty
+     * @expectedExceptionMessage Enter a scope before proceeding.
      */
     public function testEmptyScope()
     {
@@ -82,7 +82,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Scope code can't be empty
+     * @expectedExceptionMessage Enter a scope code before proceeding.
      */
     public function testEmptyScopeCode()
     {
@@ -91,7 +91,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Wrong scope code format
+     * @expectedExceptionMessage The scope code can include only lowercase letters (a-z), numbers (0-9) and underscores (_). Also, the first character must be a letter.
      */
     public function testWrongScopeCodeFormat()
     {
@@ -100,7 +100,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Scope "not_default_scope" doesn't exist
+     * @expectedExceptionMessage The "not_default_scope" value doesn’t exist. Enter another value.
      */
     public function testScopeNotExist()
     {
@@ -115,7 +115,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Scope code "not_exist_scope_code" doesn't exist in scope "not_default_scope"
+     * @expectedExceptionMessage The "not_exist_scope_code" value doesn’t exist. Enter another value.
      */
     public function testScopeCodeNotExist()
     {

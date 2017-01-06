@@ -18,7 +18,6 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Symfony\Component\Console\Question\QuestionFactory;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
@@ -106,7 +105,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertContains(
             'File app/etc/config.local.php can\'t be read. '
-            . 'Please check if it exists and has correct permissions.',
+            . 'Please check if it exists and has read permissions.',
             $tester->getDisplay()
         );
     }
