@@ -22,11 +22,11 @@ class ThemeId implements \Magento\Framework\Option\ArrayInterface
     protected $_resourceModel;
 
     /**
-     * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $widgetResourceModel
+     * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $widgetResourceModel
      */
-    public function __construct(\Magento\Theme\Model\ResourceModel\Theme\Collection $widgetResourceModel)
+    public function __construct(\Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $widgetResourceModel)
     {
-        $this->_resourceModel = $widgetResourceModel;
+        $this->_resourceModel = $widgetResourceModel->create();
     }
 
     /**
