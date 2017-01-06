@@ -53,8 +53,6 @@ class Items extends DataSource
      *
      * @param null|string $key
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getData($key = null)
     {
@@ -65,7 +63,7 @@ class Items extends DataSource
             $this->data[] = $item;
         }
 
-        return $this->data;
+        return parent::getData($key);
     }
 
     /**

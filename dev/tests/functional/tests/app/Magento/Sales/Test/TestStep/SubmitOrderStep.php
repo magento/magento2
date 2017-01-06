@@ -61,7 +61,6 @@ class SubmitOrderStep implements TestStepInterface
     private $products;
 
     /**
-     * @constructor
      * @param OrderCreateIndex $orderCreateIndex
      * @param SalesOrderView $salesOrderView
      * @param FixtureFactory $fixtureFactory

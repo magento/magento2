@@ -43,7 +43,7 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
         $comments = $infoTab->getCommentsHistoryBlock()->getComments();
 
         foreach ($comments as $key => $comment) {
-            if (stristr($comment['comment'], 'captured') === false) {
+            if (strstr($comment['comment'], 'Captured') === false) {
                 unset($comments[$key]);
             }
         }

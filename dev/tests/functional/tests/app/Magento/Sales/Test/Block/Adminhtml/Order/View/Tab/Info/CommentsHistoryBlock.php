@@ -70,8 +70,11 @@ class CommentsHistoryBlock extends Block
                 'time' => $item->find($this->commentHistoryTime)->getText(),
                 'status' => $item->find($this->commentHistoryStatus)->getText(),
                 'is_customer_notified' => $item->find($this->commentHistoryNotifiedStatus)->getText(),
-                'comment' => $item->find($this->comment)->getText()
+                'comment' => '',
             ];
+            if ($item->find($this->comment)->isVisible()) {
+                $result[$key]['comment'] = $item->find($this->comment)->getText();
+            }
         }
 
         return $result;

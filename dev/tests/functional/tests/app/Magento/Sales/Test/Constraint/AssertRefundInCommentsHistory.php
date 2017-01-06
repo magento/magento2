@@ -48,7 +48,7 @@ class AssertRefundInCommentsHistory extends AbstractConstraint
                 unset($comments[$key]);
             }
         }
-        $comments = array_values($comments);
+        $comments = array_reverse(array_values($comments));
 
         $refundedPrices = $order->getPrice()['refund'];
         foreach ($refundedPrices as $key => $refundedPrice) {

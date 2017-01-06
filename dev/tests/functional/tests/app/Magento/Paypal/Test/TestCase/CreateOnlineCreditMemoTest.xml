@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CreateOnlineCreditMemoTest" summary="Create online credit memo for order placed with online payment method">
         <variation name="CreateOnlineCreditMemoPaymentsProTestVariation1" summary="Create Refund for Order Paid with PayPal Payments Pro" ticketId="MAGETWO-13059">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
@@ -38,7 +39,6 @@
                 <item name="transactionType" xsi:type="string">Capture</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
@@ -46,11 +46,19 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus" />
         </variation>
         <variation name="CreateOnlineCreditMemoPayflowProVariation1" summary="Create Refund for Order Paid with PayPal Payflow Pro" ticketId="MAGETWO-13063">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
-            <data name="refundedPrices" xsi:type="array">
-                <item name="0" xsi:type="string">15.00</item>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                </item>
+            </data>
+            <data name="order/data/price/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">15.00</item>
+                </item>
             </data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
@@ -58,7 +66,6 @@
             <data name="payment/method" xsi:type="string">payflowpro</data>
             <data name="configData" xsi:type="string">payflowpro</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
-            <data name="data/items_data/0/qty" xsi:type="string">-</data>
             <data name="status" xsi:type="string">Closed</data>
             <data name="transactions/Authorization" xsi:type="array">
                 <item name="transactionType" xsi:type="string">Authorization</item>
@@ -72,7 +79,6 @@
                 <item name="transactionType" xsi:type="string">Capture</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
