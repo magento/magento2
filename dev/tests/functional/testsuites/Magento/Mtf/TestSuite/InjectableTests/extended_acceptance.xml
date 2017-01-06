@@ -16,5 +16,9 @@
         <allow>
             <tag group="test_type" value="extended_acceptance_test" />
         </allow>
+        <deny>
+            <tag group="stable" value="no" />
+            <tag group="to_maintain" value="yes" />
+        </deny>
     </rule>
 </config>

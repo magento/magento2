@@ -110,7 +110,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation6">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Dropdown</data>

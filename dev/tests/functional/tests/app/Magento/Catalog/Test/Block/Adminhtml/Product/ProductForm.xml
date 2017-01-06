@@ -153,11 +153,6 @@
             <url_key/>
         </fields>
     </search-engine-optimization>
-    <related>
-        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>[data-index='related']</selector>
-        <strategy>css selector</strategy>
-    </related>
     <websites>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
         <selector>[data-index='websites']</selector>
