@@ -56,6 +56,7 @@ class NotificationTime
                 ]
             ]
         );
+        $this->flagResource->load($flag, self::NOTIFICATION_TIME, 'flag_code');
         $flag->setFlagData($value);
         $this->flagResource->save($flag);
         return true;
@@ -69,7 +70,8 @@ class NotificationTime
     public function getLastTimeNotification()
     {
         /** @var \Magento\Framework\Flag $flag */
-        $flag = $this->flagResource->load($this->flagFactory->create(), self::NOTIFICATION_TIME);
+        $flag = $this->flagFactory->create();
+        $this->flagResource->load($flag, self::NOTIFICATION_TIME, 'flag_code');
         return $flag->getFlagData();
     }
 }

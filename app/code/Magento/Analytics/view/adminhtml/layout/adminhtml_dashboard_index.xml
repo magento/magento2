@@ -9,7 +9,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <uiComponent acl="Magento_Analytics::analytics_settings" name="analytics_subscription_form"/>
+            <uiComponent name="analytics_subscription_form" acl="Magento_Analytics::analytics_settings" condition="analytics::can-view-notification" />
         </referenceContainer>
     </body>
 </page>

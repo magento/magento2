@@ -9,8 +9,14 @@ namespace Magento\Backend\Model\View\Layout\Filter;
 
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Backend\Model\View\Layout\FilterInterface;
+use Magento\Backend\Model\View\Layout\StructureManager;
+use Magento\Framework\App\ObjectManager;
 
-class Acl
+/**
+ * Class Acl
+ */
+class Acl implements FilterInterface
 {
     /**
      * Authorization
@@ -20,11 +26,27 @@ class Acl
     protected $authorization;
 
     /**
+     * @var StructureManager
+     */
+    private $structureManager;
+
+    /**
      * @param \Magento\Framework\AuthorizationInterface $authorization
      */
     public function __construct(\Magento\Framework\AuthorizationInterface $authorization)
     {
         $this->authorization = $authorization;
+    }
+
+    /**
+     * @return StructureManager
+     */
+    private function getStructureManager()
+    {
+        if (!$this->structureManager) {
+            $this->structureManager = ObjectManager::getInstance()->get(StructureManager::class);
+        }
+        return $this->structureManager;
     }
 
     /**
@@ -61,14 +83,18 @@ class Acl
         $elementName,
         $isChild = false
     ) {
-        $elementsToRemove = array_keys($structure->getChildren($elementName));
-        $scheduledStructure->unsetElement($elementName);
-        foreach ($elementsToRemove as $element) {
-            $this->removeElement($scheduledStructure, $structure, $element, true);
-        }
-        if (!$isChild) {
-            $structure->unsetElement($elementName);
-        }
+        $this->getStructureManager()->removeElement($scheduledStructure, $structure, $elementName, $isChild);
         return $this;
+    }
+
+    /**
+     * @param ScheduledStructure $scheduledStructure
+     * @param Structure $structure
+     * @return bool
+     */
+    public function filterElement(ScheduledStructure $scheduledStructure, Structure $structure)
+    {
+        $this->filterAclElements($scheduledStructure, $structure);
+        return true;
     }
 }
