@@ -6,14 +6,12 @@
 namespace Magento\Analytics\Cron;
 
 use Magento\Analytics\Model\AnalyticsConnector;
-use Magento\Framework\FlagFactory;
 use Magento\Analytics\Model\Config\Backend\Enabled;
 use Magento\Framework\App\Config\Storage\WriterInterface;
-use Magento\Framework\Flag\FlagResource;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Flag;
 use Magento\AdminNotification\Model\InboxFactory;
 use Magento\AdminNotification\Model\ResourceModel\Inbox as InboxResource;
+use Magento\Analytics\Model\FlagManager;
 
 /**
  * Class SignUp
@@ -24,51 +22,55 @@ class SignUp
      * @var AnalyticsConnector
      */
     private $analyticsConnector;
-    /**
-     * @var FlagFactory
-     */
-    private $flagFactory;
+
     /**
      * @var WriterInterface
      */
     private $configWriter;
-    /**
-     * @var FlagResource
-     */
-    private $flagResource;
+
     /**
      * @var LoggerInterface
      */
     private $logger;
+
     /**
      * @var InboxFactory
      */
     private $inboxFactory;
+
     /**
      * @var InboxResource
      */
     private $inboxResource;
 
     /**
+     * @var FlagManager
+     */
+    private $flagManager;
+
+    /**
      * SignUp constructor.
      * @param AnalyticsConnector $analyticsConnector
+     * @param WriterInterface $configWriter
+     * @param LoggerInterface $logger
+     * @param InboxFactory $inboxFactory
+     * @param InboxResource $inboxResource
+     * @param FlagManager $flagManager
      */
     public function __construct(
         AnalyticsConnector $analyticsConnector,
-        FlagFactory $flagFactory,
         WriterInterface $configWriter,
-        FlagResource $flagResource,
         LoggerInterface $logger,
         InboxFactory $inboxFactory,
-        InboxResource $inboxResource
+        InboxResource $inboxResource,
+        FlagManager $flagManager
     ) {
         $this->analyticsConnector = $analyticsConnector;
-        $this->flagFactory = $flagFactory;
         $this->configWriter = $configWriter;
-        $this->flagResource = $flagResource;
         $this->logger = $logger;
         $this->inboxFactory = $inboxFactory;
         $this->inboxResource = $inboxResource;
+        $this->flagManager = $flagManager;
     }
 
     /**
@@ -77,18 +79,15 @@ class SignUp
      */
     public function execute()
     {
-        $attemptsFlag = $this->flagFactory
-            ->create(['data' => ['flag_code' => Enabled::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE]])
-            ->loadSelf();
-
-        if ($attemptsFlag->getFlagData() === null) {
+        $attemptsCount = $this->flagManager->getFlagData(Enabled::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
+        if ($attemptsCount === null) {
             $this->deleteAnalyticsCronExpr();
             return false;
         }
 
-        if ($attemptsFlag->getFlagData() <= 0) {
+        if ($attemptsCount <= 0) {
             $this->deleteAnalyticsCronExpr();
-            $this->deleteFlag($attemptsFlag);
+            $this->flagManager->delete(Enabled::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
             $inboxNotification = $this->inboxFactory->create();
             $inboxNotification->addNotice(
                 "Analytics subscription error",
@@ -97,7 +96,8 @@ class SignUp
             $this->inboxResource->save($inboxNotification);
             return false;
         }
-        $this->decrementFlag($attemptsFlag);
+        $attemptsCount -= 1;
+        $this->flagManager->updateFlag(Enabled::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);
         $generateTokenResult = $this->analyticsConnector->execute('generateTokenCommand');
         if ($generateTokenResult === false) {
             $this->writeErrorLog("The attempt of subscription was unsuccessful on step generate token.");
@@ -111,29 +111,8 @@ class SignUp
         }
 
         $this->deleteAnalyticsCronExpr();
-        $this->deleteFlag($attemptsFlag);
+        $this->flagManager->deleteFlag(Enabled::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
         return true;
-    }
-
-    /**
-     * Decrement attempts flag value
-     * @param Flag $attemptsFlag
-     * @return void
-     */
-    private function decrementFlag($attemptsFlag)
-    {
-        $attemptsFlag->setFlagData($attemptsFlag->getFlagData() - 1);
-        $this->flagResource->save($attemptsFlag);
-    }
-
-    /**
-     * Delete Analytics attempts flag
-     * @param Flag $attemptsFlag
-     * @return void
-     */
-    private function deleteFlag($attemptsFlag)
-    {
-        $this->flagResource->delete($attemptsFlag);
     }
 
     /**

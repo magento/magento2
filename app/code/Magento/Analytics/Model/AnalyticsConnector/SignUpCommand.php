@@ -89,7 +89,6 @@ class SignUpCommand implements AnalyticsCommandInterface
                 $this->config->getConfigDataValue(InstallData::MAGENTO_API_USER_NAME_PATH)
             );
         $store = $this->storeManager->getStore();
-        echo $this->oauthService->getAccessToken($integration->getConsumerId())->getToken();
         $requestData = json_encode(
             [
                 "token" => $this->oauthService->getAccessToken($integration->getConsumerId())->getToken(),
