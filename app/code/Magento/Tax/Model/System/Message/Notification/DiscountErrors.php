@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\System\Message\Notification;
@@ -32,7 +32,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      *
      * @var array
      */
-    private $storesWithInvalidDiscountSettings;
+    private $storesWithInvalidSettings;
 
     /**
      * Initialize dependencies
@@ -56,7 +56,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      */
     public function getIdentity()
     {
-        return md5('TAX_NOTIFICATION');
+        return 'TAX_NOTIFICATION_DISCOUNT_ERRORS';
     }
 
     /**
@@ -69,10 +69,10 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
             return false;
         }
 
-        $this->storesWithInvalidDiscountSettings = $this->getStoresWithWrongDiscountSettings();
+        $this->storesWithInvalidSettings = $this->getStoresWithWrongSettings();
 
         // Check if we have valid tax notifications
-        if ((!empty($this->storesWithInvalidDiscountSettings) && !$this->taxConfig->isWrongDiscountSettingsIgnored())) {
+        if ((!empty($this->storesWithInvalidSettings) && !$this->taxConfig->isWrongDiscountSettingsIgnored())) {
             return true;
         }
 
@@ -86,7 +86,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     {
         $messageDetails = '';
 
-        if (!empty($this->storesWithInvalidDiscountSettings) && !$this->taxConfig->isWrongDiscountSettingsIgnored()) {
+        if (!empty($this->storesWithInvalidSettings) && !$this->taxConfig->isWrongDiscountSettingsIgnored()) {
             $messageDetails .= '<strong>';
             $messageDetails .= __(
                 'Warning tax discount configuration might result in different discounts
@@ -94,7 +94,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
             );
             $messageDetails .= '</strong><p>';
             $messageDetails .= __('Store(s) affected: ');
-            $messageDetails .= implode(', ', $this->storesWithInvalidDiscountSettings);
+            $messageDetails .= implode(', ', $this->storesWithInvalidSettings);
             $messageDetails .= '</p><p>';
             $messageDetails .= __(
                 'Click on the link to <a href="%1">ignore this notification</a>',
@@ -135,7 +135,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      *
      * @return array
      */
-    private function getStoresWithWrongDiscountSettings()
+    private function getStoresWithWrongSettings()
     {
         $storeNames = [];
         $storeCollection = $this->storeManager->getStores(true);

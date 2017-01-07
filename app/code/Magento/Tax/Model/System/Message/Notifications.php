@@ -35,7 +35,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *
      * @var array
      * @deprecated
-     * @see \Magento\Tax\Model\System\Message\RoundingErrors
+     * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors
      */
     protected $storesWithInvalidDisplaySettings;
 
@@ -44,7 +44,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *
      * @var array
      * @deprecated
-     * @see \Magento\Tax\Model\System\Message\DiscountErrors
+     * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors
      */
     protected $storesWithInvalidDiscountSettings;
 
@@ -156,7 +156,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
      * @deprecated
-     * @see \Magento\Tax\Model\System\Message\RoundingErrors::checkDisplaySettings
+     * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors::checkDisplaySettings
      */
     public function checkDisplaySettings($store = null)
     {
@@ -183,7 +183,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
      * @deprecated
-     * @see \Magento\Tax\Model\System\Message\DiscountErrors::checkDiscountSettings
+     * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors::checkDiscountSettings
      */
     public function checkDiscountSettings($store = null)
     {
@@ -208,7 +208,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *
      * @return array
      * @deprecated
-     * @see \Magento\Tax\Model\System\Message\RoundingErrors::getStoresWithWrongDisplaySettings
+     * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors::getStoresWithWrongSettings
      */
     public function getStoresWithWrongDisplaySettings()
     {
@@ -229,7 +229,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      *
      * @return array
      * @deprecated
-     * @see \Magento\Tax\Model\System\Message\DiscountErrors::getStoresWithWrongDiscountSettings
+     * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors::getStoresWithWrongSettings
      */
     public function getStoresWithWrongDiscountSettings()
     {

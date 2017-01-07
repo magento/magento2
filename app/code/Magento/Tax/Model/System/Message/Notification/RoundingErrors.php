@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\System\Message\Notification;
@@ -32,7 +32,7 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      *
      * @var array
      */
-    private $storesWithInvalidDisplaySettings;
+    private $storesWithInvalidSettings;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -54,7 +54,7 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      */
     public function getIdentity()
     {
-        return md5('TAX_NOTIFICATION');
+        return 'TAX_NOTIFICATION_ROUNDING_ERRORS';
     }
 
     /**
@@ -67,10 +67,10 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
             return false;
         }
 
-        $this->storesWithInvalidDisplaySettings = $this->getStoresWithWrongDisplaySettings();
+        $this->storesWithInvalidSettings = $this->getStoresWithWrongSettings();
 
         // Check if we have valid tax notifications
-        if ((!empty($this->storesWithInvalidDisplaySettings) && !$this->taxConfig->isWrongDisplaySettingsIgnored())) {
+        if ((!empty($this->storesWithInvalidSettings) && !$this->taxConfig->isWrongDisplaySettingsIgnored())) {
             return true;
         }
 
@@ -84,12 +84,12 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     {
         $messageDetails = '';
 
-        if (!empty($this->storesWithInvalidDisplaySettings) && !$this->taxConfig->isWrongDisplaySettingsIgnored()) {
+        if (!empty($this->storesWithInvalidSettings) && !$this->taxConfig->isWrongDisplaySettingsIgnored()) {
             $messageDetails .= '<strong>';
             $messageDetails .= __('Warning tax configuration can result in rounding errors. ');
             $messageDetails .= '</strong><p>';
             $messageDetails .= __('Store(s) affected: ');
-            $messageDetails .= implode(', ', $this->storesWithInvalidDisplaySettings);
+            $messageDetails .= implode(', ', $this->storesWithInvalidSettings);
             $messageDetails .= '</p><p>';
             $messageDetails .= __(
                 'Click on the link to <a href="%1">ignore this notification</a>',
@@ -140,7 +140,7 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      *
      * @return array
      */
-    private function getStoresWithWrongDisplaySettings()
+    private function getStoresWithWrongSettings()
     {
         $storeNames = [];
         $storeCollection = $this->storeManager->getStores(true);

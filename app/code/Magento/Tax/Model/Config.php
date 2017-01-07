@@ -23,6 +23,8 @@ class Config
 
     const XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY = 'tax/notification/ignore_price_display';
 
+    const XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_EXCLUDING_TAX_SETTINGS = 'tax/notification/ignore_price_excluding_tax';
+
     const XML_PATH_TAX_NOTIFICATION_INFO_URL = 'tax/notification/info_url';
 
     // tax classes
@@ -748,6 +750,24 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
+
+    /**
+     * Check if admin notification about possible issues related to tax display settings should be ignored.
+     *
+     * For the case when prices under "Calculation Settings" are set to "Excluding Tax"
+     * and at the same time some of price display settings are set to "Including Tax"
+     *
+     * @param null|string|Store $store
+     * @return bool
+     */
+    public function isWrongPriceExcludingTaxSettingsIgnored($store = null)
+    {
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_EXCLUDING_TAX_SETTINGS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );

@@ -16,8 +16,9 @@
     <type name="Magento\Tax\Model\System\Message\Notifications">
         <arguments>
             <argument name="notifications" xsi:type="array">
-                <item name="roundingErrors" xsi:type="object">\Magento\Tax\Model\System\Message\Notification\RoundingErrors</item>
-                <item name="discountErrors" xsi:type="object">\Magento\Tax\Model\System\Message\Notification\DiscountErrors</item>
+                <item name="roundingErrors" xsi:type="object">Magento\Tax\Model\System\Message\Notification\RoundingErrors</item>
+                <item name="discountErrors" xsi:type="object">Magento\Tax\Model\System\Message\Notification\DiscountErrors</item>
+                <item name="priceExcludingTaxErrors" xsi:type="object">Magento\Tax\Model\System\Message\Notification\AdminPriceExcludingTax</item>
             </argument>
         </arguments>
     </type>
