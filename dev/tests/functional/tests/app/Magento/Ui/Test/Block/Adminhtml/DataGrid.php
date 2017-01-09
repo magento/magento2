@@ -81,6 +81,20 @@ class DataGrid extends Grid
     protected $actionButton = '.action-select';
 
     /**
+     * Action button (located on sticky header).
+     *
+     * @var string
+     */
+    protected $activeActionButton = '.sticky-header .action-select';
+
+    /**
+     * Action list (located on sticky header).
+     *
+     * @var string
+     */
+    protected $activeActionList = './/*[@class="sticky-header"]//span[contains(@class, "action-menu-item") and .= "%s"]';
+
+    /**
      * Action list.
      *
      * @var string
@@ -341,15 +355,26 @@ class DataGrid extends Grid
     {
         $actionType = is_array($action) ? key($action) : $action;
         $this->getGridHeaderElement()->find($this->actionButton)->click();
-        $this->getGridHeaderElement()
-            ->find(sprintf($this->actionList, $actionType), Locator::SELECTOR_XPATH)
-            ->click();
-        if (is_array($action)) {
+        $this->_rootElement->find(sprintf($this->actionList, $actionType), Locator::SELECTOR_XPATH)->hover();
+        if ($this->browser->find('.sticky-header')->isVisible() &&
+            !$this->browser->find(sprintf($this->activeActionList, $actionType), Locator::SELECTOR_XPATH)
+        ->isVisible()) {
+            $this->browser->find($this->activeActionButton)->click();
+            $this->browser->find(sprintf($this->activeActionList, $actionType), Locator::SELECTOR_XPATH)->click();
+        } else {
+            $this->getGridHeaderElement()
+                ->find(sprintf($this->actionList, $actionType), Locator::SELECTOR_XPATH)
+                ->click();
+        }
+        if (is_array($action) && !$this->browser->find('.sticky-header')->isVisible()) {
             $this->waitForElementVisible(sprintf($this->actionList, end($action)), Locator::SELECTOR_XPATH);
             $this->_rootElement->find(sprintf($this->actionList, end($action)), Locator::SELECTOR_XPATH)->hover();
             $this->getGridHeaderElement()
                 ->find(sprintf($this->actionList, end($action)), Locator::SELECTOR_XPATH)
                 ->click();
+        } elseif (is_array($action)) {
+            $this->browser->find(sprintf($this->activeActionList, end($action)), Locator::SELECTOR_XPATH)->hover();
+            $this->browser->find(sprintf($this->activeActionList, end($action)), Locator::SELECTOR_XPATH)->click();
         }
     }
 
