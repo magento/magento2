@@ -8,6 +8,7 @@ namespace Magento\Braintree\Test\Unit\Gateway\Config;
 
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -27,11 +28,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     private $scopeConfigMock;
 
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->scopeConfigMock = $this->getMock(ScopeConfigInterface::class);
+        $this->serializerMock = $this->getMock(Json::class);
 
-        $this->model = new Config($this->scopeConfigMock, self::METHOD_CODE);
+        $this->model = new Config($this->scopeConfigMock, $this->serializerMock, self::METHOD_CODE);
     }
 
     /**
@@ -46,6 +53,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with($this->getPath(Config::KEY_COUNTRY_CREDIT_CARD), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($value);
 
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->will($this->returnArgument(0));
+
         static::assertEquals(
             $expected,
             $this->model->getCountrySpecificCardTypeConfig()
@@ -59,7 +70,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                serialize(['GB' => ['VI', 'AE'], 'US' => ['DI', 'JCB']]),
+                ['GB' => ['VI', 'AE'], 'US' => ['DI', 'JCB']],
                 ['GB' => ['VI', 'AE'], 'US' => ['DI', 'JCB']]
             ],
             [
@@ -153,6 +164,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with($this->getPath(Config::KEY_COUNTRY_CREDIT_CARD), ScopeInterface::SCOPE_STORE, null)
             ->willReturn($data);
+
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->will($this->returnArgument(0));
 
         foreach ($countryData as $countryId => $types) {
             $result = $this->model->getCountryAvailableCardTypes($countryId);
