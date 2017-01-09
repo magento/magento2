@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
@@ -20,7 +20,7 @@ use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
 class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var DatabaseMapPool|\PHPUnit_Framework_MockObject_MockObject */
-    private $dataMapPoolMock;
+    private $databaseMapPoolMock;
 
     /** @var UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject */
     private $urlRewriteFactoryMock;
@@ -36,7 +36,7 @@ class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dataMapPoolMock = $this->getMock(DatabaseMapPool::class, [], [], '', false);
+        $this->databaseMapPoolMock = $this->getMock(DatabaseMapPool::class, [], [], '', false);
         $this->urlFinderMock = $this->getMock(UrlFinderInterface::class);
         $this->urlRewriteFactoryMock = $this->getMock(UrlRewriteFactory::class, ['create'], [], '', false);
         $this->urlRewritePrototypeMock = new UrlRewrite();
@@ -48,7 +48,7 @@ class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
         $this->model = (new ObjectManager($this))->getObject(
             UrlRewriteFinder::class,
             [
-                'databaseMapPool' => $this->dataMapPoolMock,
+                'databaseMapPool' => $this->databaseMapPoolMock,
                 'urlFinder' => $this->urlFinderMock,
                 'urlRewriteFactory' => $this->urlRewriteFactoryMock
             ]
@@ -56,12 +56,12 @@ class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test getByIdentifiers using findAllByData
+     * test findAllByData using urlFinder
      */
     public function testGetByIdentifiersFallback()
     {
         $expected = [1, 2, 3];
-        $this->dataMapPoolMock->expects($this->never())
+        $this->databaseMapPoolMock->expects($this->never())
             ->method('getDataMap');
 
         $this->urlFinderMock->expects($this->exactly(7))
@@ -78,7 +78,7 @@ class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test getByIdentifiers Product URL rewrites
+     * test findAllByData Product URL rewrites
      */
     public function testGetByIdentifiersProduct()
     {
@@ -98,7 +98,7 @@ class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $dataProductMapMock = $this->getMock(DataProductUrlRewriteDatabaseMap::class, [], [], '', false);
-        $this->dataMapPoolMock->expects($this->once())
+        $this->databaseMapPoolMock->expects($this->once())
             ->method('getDataMap')
             ->with(DataProductUrlRewriteDatabaseMap::class, 1)
             ->willReturn($dataProductMapMock);
@@ -116,7 +116,7 @@ class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test getByIdentifiers Category URL rewrites
+     * test findAllByData Category URL rewrites
      */
     public function testGetByIdentifiersCategory()
     {
@@ -136,7 +136,7 @@ class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $dataCategoryMapMock = $this->getMock(DataCategoryUrlRewriteDatabaseMap::class, [], [], '', false);
-        $this->dataMapPoolMock->expects($this->once())
+        $this->databaseMapPoolMock->expects($this->once())
             ->method('getDataMap')
             ->with(DataCategoryUrlRewriteDatabaseMap::class, 1)
             ->willReturn($dataCategoryMapMock);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
@@ -46,7 +46,7 @@ class HashMapPool
         $key = $instanceName . '-' . $categoryId;
         $reflectionClass = new \ReflectionClass($instanceName);
         if (!$reflectionClass->implementsInterface(HashMapInterface::class)) {
-           throw new \Exception($instanceName . ' does not implement interface ' . HashMapInterface::class);
+            throw new \Exception($instanceName . ' does not implement interface ' . HashMapInterface::class);
         }
         if (!isset($this->dataArray[$key])) {
             $this->dataArray[$key] = $this->objectManager->create(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
@@ -24,7 +24,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 class DataProductHashMapTest extends \PHPUnit_Framework_TestCase
 {
     /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
-    private $dataMapPoolMock;
+    private $hashMapPoolMock;
 
     /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
     private $dataCategoryMapMock;
@@ -44,7 +44,7 @@ class DataProductHashMapTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dataMapPoolMock = $this->getMock(HashMapPool::class, [], [], '', false);
+        $this->hashMapPoolMock = $this->getMock(HashMapPool::class, [], [], '', false);
         $this->dataCategoryMapMock = $this->getMock(DataCategoryHashMap::class, [], [], '', false);
         $this->collectionFactoryMock = $this->getMock(CollectionFactory::class, ['create'], [], '', false);
         $this->productCollectionMock = $this->getMock(
@@ -59,7 +59,7 @@ class DataProductHashMapTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->productCollectionMock);
 
-        $this->dataMapPoolMock->expects($this->any())
+        $this->hashMapPoolMock->expects($this->any())
             ->method('getDataMap')
             ->willReturn($this->dataCategoryMapMock);
 
@@ -67,7 +67,7 @@ class DataProductHashMapTest extends \PHPUnit_Framework_TestCase
             DataProductHashMap::class,
             [
                 'collectionFactory' => $this->collectionFactoryMock,
-                'hashMapPool' => $this->dataMapPoolMock
+                'hashMapPool' => $this->hashMapPoolMock
             ]
         );
     }
@@ -107,8 +107,8 @@ class DataProductHashMapTest extends \PHPUnit_Framework_TestCase
         $this->dataCategoryMapMock->expects($this->any())
             ->method('getAllData')
             ->willReturn([]);
-        $this->dataMapPoolMock->expects($this->any())
-            ->method('resetDataMap')
+        $this->hashMapPoolMock->expects($this->any())
+            ->method('resetMap')
             ->with(DataCategoryHashMap::class, 1);
         $this->assertEquals($productIds, $this->model->getAllData(1));
         $this->assertEquals($productIds[2], $this->model->getData(1, 2));

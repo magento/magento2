@@ -110,8 +110,8 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
      */
     private $product;
 
-    /** @var \Magento\UrlRewrite\Model\UrlRewritesSet|\PHPUnit_Framework_MockObject_MockObject */
-    private $urlRewritesSet;
+    /** @var \Magento\UrlRewrite\Model\MergeDataProvider|\PHPUnit_Framework_MockObject_MockObject */
+    private $mergeDataProvider;
 
     /**
      * Test products returned by getBunch method of event object.
@@ -276,15 +276,15 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getCategoryProcessor')
             ->willReturn($categoryProcessor);
-        $urlRewritesSetFactory = $this->getMock(
-            \Magento\UrlRewrite\Model\UrlRewritesSetFactory::class,
+        $mergeDataProviderFactory = $this->getMock(
+            \Magento\UrlRewrite\Model\MergeDataProviderFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->urlRewritesSet = new \Magento\UrlRewrite\Model\UrlRewritesSet;
-        $urlRewritesSetFactory->expects($this->once())->method('create')->willReturn($this->urlRewritesSet);
+        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider;
+        $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
 
         $this->objectManager = new ObjectManager($this);
         $this->import = $this->objectManager->getObject(
@@ -298,7 +298,7 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
                 'urlPersist' => $this->urlPersist,
                 'urlRewriteFactory' => $this->urlRewriteFactory,
                 'urlFinder' => $this->urlFinder,
-                'urlRewritesSetFactory' => $urlRewritesSetFactory
+                'mergeDataProviderFactory' => $mergeDataProviderFactory
             ]
         );
     }
@@ -448,7 +448,7 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
         $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
 
         $productUrls = [
-            'requestPath_' => $this->urlRewrite,
+            'requestPath_0' => $this->urlRewrite,
             'requestPath_not global' => $this->urlRewrite
         ];
 

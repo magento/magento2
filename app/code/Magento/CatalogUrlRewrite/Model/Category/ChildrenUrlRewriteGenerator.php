@@ -8,7 +8,7 @@ namespace Magento\CatalogUrlRewrite\Model\Category;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\UrlRewrite\Model\UrlRewritesSetFactory;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 use Magento\Framework\App\ObjectManager;
 
 class ChildrenUrlRewriteGenerator
@@ -19,24 +19,24 @@ class ChildrenUrlRewriteGenerator
     /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory */
     protected $categoryUrlRewriteGeneratorFactory;
 
-    /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
-    private $urlRewritesSetPrototype;
+    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    private $mergeDataProviderPrototype;
 
     /**
      * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory $categoryUrlRewriteGeneratorFactory
-     * @param \Magento\UrlRewrite\Model\UrlRewritesSetFactory|null $urlRewritesSetFactory
+     * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      */
     public function __construct(
         ChildrenCategoriesProvider $childrenCategoriesProvider,
         CategoryUrlRewriteGeneratorFactory $categoryUrlRewriteGeneratorFactory,
-        UrlRewritesSetFactory $urlRewritesSetFactory = null
+        MergeDataProviderFactory $mergeDataProviderFactory = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGeneratorFactory = $categoryUrlRewriteGeneratorFactory;
-        $urlRewritesSetFactory = $urlRewritesSetFactory ?: ObjectManager::getInstance()
-            ->get(UrlRewritesSetFactory::class);
-        $this->urlRewritesSetPrototype = $urlRewritesSetFactory->create();
+        $mergeDataProviderFactory = $mergeDataProviderFactory ?: ObjectManager::getInstance()
+            ->get(MergeDataProviderFactory::class);
+        $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }
 
     /**
@@ -49,17 +49,17 @@ class ChildrenUrlRewriteGenerator
      */
     public function generate($storeId, Category $category, $rootCategoryId = null)
     {
-        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
+        $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
             $childCategory->setStoreId($storeId);
             $childCategory->setData('save_rewrites_history', $category->getData('save_rewrites_history'));
             /** @var CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator */
             $categoryUrlRewriteGenerator = $this->categoryUrlRewriteGeneratorFactory->create();
-            $urlRewritesSet->merge(
+            $mergeDataProvider->merge(
                 $categoryUrlRewriteGenerator->generate($childCategory, false, $rootCategoryId)
             );
         }
 
-        return $urlRewritesSet->getData();
+        return $mergeDataProvider->getData();
     }
 }

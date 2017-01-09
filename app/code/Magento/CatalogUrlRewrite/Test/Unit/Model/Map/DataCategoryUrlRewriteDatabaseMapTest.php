@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
@@ -22,7 +22,7 @@ use Magento\Framework\DB\TemporaryTableService;
 class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit_Framework_TestCase
 {
     /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
-    private $dataMapPoolMock;
+    private $hashMapPoolMock;
 
     /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
     private $dataCategoryMapMock;
@@ -41,7 +41,7 @@ class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dataMapPoolMock = $this->getMock(HashMapPool::class, [], [], '', false);
+        $this->hashMapPoolMock = $this->getMock(HashMapPool::class, [], [], '', false);
         $this->dataCategoryMapMock = $this->getMock(DataProductHashMap::class, [], [], '', false);
         $this->dataCategoryUsedInProductsMapMock = $this->getMock(
             DataCategoryUsedInProductsHashMap::class,
@@ -53,7 +53,7 @@ class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit_Framework_TestCase
         $this->temporaryTableServiceMock = $this->getMock(TemporaryTableService::class, [], [], '', false);
         $this->connectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
 
-        $this->dataMapPoolMock->expects($this->any())
+        $this->hashMapPoolMock->expects($this->any())
             ->method('getDataMap')
             ->willReturnOnConsecutiveCalls($this->dataCategoryUsedInProductsMapMock, $this->dataCategoryMapMock);
 
@@ -61,7 +61,7 @@ class DataCategoryUrlRewriteDatabaseMapTest extends \PHPUnit_Framework_TestCase
             DataCategoryUrlRewriteDatabaseMap::class,
             [
                 'connection' => $this->connectionMock,
-                'dataMapPool' => $this->dataMapPoolMock,
+                'hashMapPool' => $this->hashMapPoolMock,
                 'temporaryTableService' => $this->temporaryTableServiceMock
             ]
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
@@ -8,7 +8,7 @@ namespace Magento\CatalogUrlRewrite\Model\Map;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\TemporaryTableService;
 use Magento\Framework\DB\Select;
-use Magento\UrlRewrite\Model\UrlRewritesSet;
+use Magento\UrlRewrite\Model\MergeDataProvider;
 
 /**
  * Map that holds data for category url rewrites entity
@@ -21,7 +21,7 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
     private $createdTableAdapters = [];
 
     /** @var HashMapPool */
-    private $dataMapPool;
+    private $hashMapPool;
 
     /** @var ResourceConnection */
     private $connection;
@@ -31,23 +31,23 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
 
     /**
      * @param ResourceConnection $connection
-     * @param HashMapPool $dataMapPool,
+     * @param HashMapPool $hashMapPool,
      * @param TemporaryTableService $temporaryTableService
      */
     public function __construct(
         ResourceConnection $connection,
-        HashMapPool $dataMapPool,
+        HashMapPool $hashMapPool,
         TemporaryTableService $temporaryTableService
     ) {
         $this->connection = $connection;
-        $this->dataMapPool = $dataMapPool;
+        $this->hashMapPool = $hashMapPool;
         $this->temporaryTableService = $temporaryTableService;
     }
 
     /**
      * Generates data from categoryId and stores it into a temporary table
      *
-     * @param $categoryId
+     * @param int $categoryId
      * @return void
      */
     private function generateTableAdapter($categoryId)
@@ -70,7 +70,7 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
             ->from(
                 ['e' => $this->connection->getTableName('url_rewrite')],
                 ['e.*', 'hash_key' => new \Zend_Db_Expr(
-                    "CONCAT(e.store_id,'" . UrlRewritesSet::SEPARATOR . "', e.entity_id)"
+                    "CONCAT(e.store_id,'" . MergeDataProvider::SEPARATOR . "', e.entity_id)"
                 )
                 ]
             )
@@ -80,9 +80,9 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
                     'entity_id',
                     [
                         'in' => array_merge(
-                            $this->dataMapPool->getDataMap(DataCategoryUsedInProductsHashMap::class, $categoryId)
+                            $this->hashMapPool->getDataMap(DataCategoryUsedInProductsHashMap::class, $categoryId)
                                 ->getAllData($categoryId),
-                            $this->dataMapPool->getDataMap(DataCategoryHashMap::class, $categoryId)
+                            $this->hashMapPool->getDataMap(DataCategoryHashMap::class, $categoryId)
                                 ->getAllData($categoryId)
                         )
                     ]
@@ -105,8 +105,8 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
      */
     public function destroyTableAdapter($categoryId)
     {
-        $this->dataMapPool->resetMap(DataCategoryUsedInProductsHashMap::class, $categoryId);
-        $this->dataMapPool->resetMap(DataCategoryHashMap::class, $categoryId);
+        $this->hashMapPool->resetMap(DataCategoryUsedInProductsHashMap::class, $categoryId);
+        $this->hashMapPool->resetMap(DataCategoryHashMap::class, $categoryId);
         if (isset($this->createdTableAdapters[$categoryId])) {
             $this->temporaryTableService->dropTable($this->createdTableAdapters[$categoryId]);
             unset($this->createdTableAdapters[$categoryId]);

@@ -13,7 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\UrlRewrite\Model\UrlRewritesSetFactory;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
 class UrlRewriteHandler
 {
@@ -40,8 +40,8 @@ class UrlRewriteHandler
      */
     private $categoryBasedProductRewriteGenerator;
 
-    /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
-    private $urlRewritesSetPrototype;
+    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    private $mergeDataProviderPrototype;
 
     /**
      * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider
@@ -49,7 +49,7 @@ class UrlRewriteHandler
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\UrlRewrite\Model\UrlRewritesSetFactory|null $urlRewritesSetFactory
+     * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      */
     public function __construct(
         \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider,
@@ -57,16 +57,16 @@ class UrlRewriteHandler
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         UrlPersistInterface $urlPersist,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        UrlRewritesSetFactory $urlRewritesSetFactory = null
+        MergeDataProviderFactory $mergeDataProviderFactory = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
         $this->productCollectionFactory = $productCollectionFactory;
-        $urlRewritesSetFactory = $urlRewritesSetFactory ?: ObjectManager::getInstance()
-            ->get(UrlRewritesSetFactory::class);
-        $this->urlRewritesSetPrototype = $urlRewritesSetFactory->create();
+        $mergeDataProviderFactory = $mergeDataProviderFactory ?: ObjectManager::getInstance()
+            ->get(MergeDataProviderFactory::class);
+        $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }
 
     /**
@@ -77,7 +77,7 @@ class UrlRewriteHandler
      */
     public function generateProductUrlRewrites(Category $category)
     {
-        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
+        $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $this->isSkippedProduct = [];
         $saveRewriteHistory = $category->getData('save_rewrites_history');
         $storeId = $category->getStoreId();
@@ -93,12 +93,12 @@ class UrlRewriteHandler
             foreach ($collection as $product) {
                 $product->setStoreId($storeId);
                 $product->setData('save_rewrites_history', $saveRewriteHistory);
-                $urlRewritesSet->merge(
+                $mergeDataProvider->merge(
                     $this->productUrlRewriteGenerator->generate($product, $category->getEntityId())
                 );
             }
         } else {
-            $urlRewritesSet->merge(
+            $mergeDataProvider->merge(
                 $this->getCategoryProductsUrlRewrites(
                     $category,
                     $storeId,
@@ -108,7 +108,7 @@ class UrlRewriteHandler
             );
         }
         foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
-            $urlRewritesSet->merge(
+            $mergeDataProvider->merge(
                 $this->getCategoryProductsUrlRewrites(
                     $childCategory,
                     $storeId,
@@ -118,7 +118,7 @@ class UrlRewriteHandler
             );
         }
 
-        return $urlRewritesSet->getData();
+        return $mergeDataProvider->getData();
     }
 
     /**
@@ -134,7 +134,7 @@ class UrlRewriteHandler
         $saveRewriteHistory,
         $rootCategoryId = null
     ) {
-        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
+        $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $category->getProductCollection()
             ->addAttributeToSelect('name')
@@ -148,12 +148,12 @@ class UrlRewriteHandler
             $this->isSkippedProduct[] = $product->getId();
             $product->setStoreId($storeId);
             $product->setData('save_rewrites_history', $saveRewriteHistory);
-            $urlRewritesSet->merge(
+            $mergeDataProvider->merge(
                 $this->getCategoryBasedProductRewriteGenerator()->generate($product, $category, $rootCategoryId)
             );
         }
 
-        return $urlRewritesSet->getData();
+        return $mergeDataProvider->getData();
     }
 
     /**

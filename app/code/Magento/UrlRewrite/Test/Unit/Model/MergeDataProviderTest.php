@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Test\Unit\Model;
 
-use Magento\UrlRewrite\Model\UrlRewritesSet;
+use Magento\UrlRewrite\Model\MergeDataProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class UrlRewritesSetTest extends \PHPUnit_Framework_TestCase
+class MergeDataProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var UrlRewritesSet|\PHPUnit_Framework_MockObject_MockObject
+     * @var MergeDataProvider|\PHPUnit_Framework_MockObject_MockObject
      */
     private $urlRewritesSet;
 
@@ -24,7 +24,7 @@ class UrlRewritesSetTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->urlRewritesSet = (new ObjectManager($this))->getObject(
-            UrlRewritesSet::class,
+            MergeDataProvider::class,
             []
         );
     }

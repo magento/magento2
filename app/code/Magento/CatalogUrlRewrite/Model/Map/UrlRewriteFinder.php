@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
@@ -41,9 +41,9 @@ class UrlRewriteFinder
         DatabaseMapPool $databaseMapPool,
         UrlFinderInterface $urlFinder,
         UrlRewriteFactory $urlRewriteFactory,
-        array $urlRewriteClassNames = [
-            self::ENTITY_TYPE_PRODUCT => DataProductUrlRewriteDatabaseMap::class,
-            self::ENTITY_TYPE_CATEGORY => DataCategoryUrlRewriteDatabaseMap::class
+        $urlRewriteClassNames = [
+        self::ENTITY_TYPE_PRODUCT => DataProductUrlRewriteDatabaseMap::class,
+        self::ENTITY_TYPE_CATEGORY => DataCategoryUrlRewriteDatabaseMap::class
         ]
     ) {
         $this->databaseMapPool = $databaseMapPool;

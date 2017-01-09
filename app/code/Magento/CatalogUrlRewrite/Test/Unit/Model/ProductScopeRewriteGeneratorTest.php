@@ -42,7 +42,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     private $productScopeGenerator;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    private $urlRewritesSet;
+    private $mergeDataProvider;
 
     public function setUp()
     {
@@ -64,15 +64,15 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->storeViewService = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Service\V1\StoreViewService::class)
             ->disableOriginalConstructor()->getMock();
         $this->storeManager = $this->getMock(StoreManagerInterface::class);
-        $urlRewritesSetFactory = $this->getMock(
-            \Magento\UrlRewrite\Model\UrlRewritesSetFactory::class,
+        $mergeDataProviderFactory = $this->getMock(
+            \Magento\UrlRewrite\Model\MergeDataProviderFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->urlRewritesSet = new \Magento\UrlRewrite\Model\UrlRewritesSet;
-        $urlRewritesSetFactory->expects($this->once())->method('create')->willReturn($this->urlRewritesSet);
+        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider;
+        $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
 
         $this->productScopeGenerator = (new ObjectManager($this))->getObject(
             \Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator::class,
@@ -84,7 +84,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                 'objectRegistryFactory' => $this->objectRegistryFactory,
                 'storeViewService' => $this->storeViewService,
                 'storeManager' => $this->storeManager,
-                'urlRewritesSetFactory' => $urlRewritesSetFactory
+                'mergeDataProviderFactory' => $mergeDataProviderFactory
             ]
         );
     }

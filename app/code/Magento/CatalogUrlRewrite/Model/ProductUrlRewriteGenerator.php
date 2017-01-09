@@ -161,11 +161,11 @@ class ProductUrlRewriteGenerator
      *
      * @deprecated
      * @param \Magento\Framework\Data\Collection $productCategories
-     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\Product|null $product
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    protected function generateForGlobalScope($productCategories, Product $product, $rootCategoryId = null)
+    protected function generateForGlobalScope($productCategories, $product = null, $rootCategoryId = null)
     {
         return $this->getProductScopeRewriteGenerator()->generateForGlobalScope(
             $productCategories,
@@ -180,14 +180,14 @@ class ProductUrlRewriteGenerator
      * @deprecated
      * @param int $storeId
      * @param \Magento\Framework\Data\Collection $productCategories
-     * @param Product $product
+     * @param Product|null $product
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
     protected function generateForSpecificStoreView(
         $storeId,
         $productCategories,
-        Product $product,
+        $product = null,
         $rootCategoryId = null
     ) {
         return $this->getProductScopeRewriteGenerator()

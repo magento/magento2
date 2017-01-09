@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Model;
@@ -12,9 +12,10 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * Removes duplicates for a set/array of Url Rewrites based on the unique key of the url_rewrites table
  *
  */
-class UrlRewritesSet
+class MergeDataProvider
 {
     const SEPARATOR = '_';
+
     /**
      * @var $rewritesArray[]
      */

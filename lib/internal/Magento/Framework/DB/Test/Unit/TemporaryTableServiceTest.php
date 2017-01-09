@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit;
@@ -120,10 +120,10 @@ class TemporaryTableServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDropTableWhenCreatedTablesArrayNotEmpty($tableName, $assertion)
     {
-        $createdTables = new \ReflectionProperty($this->temporaryTableService, 'createdTables');
-        $createdTables->setAccessible(true);
-        $createdTables->setValue($this->temporaryTableService, ['tmp_select_table' => $this->adapterMock]);
-        $createdTables->setAccessible(false);
+        $createdTableAdapters = new \ReflectionProperty($this->temporaryTableService, 'createdTableAdapters');
+        $createdTableAdapters->setAccessible(true);
+        $createdTableAdapters->setValue($this->temporaryTableService, ['tmp_select_table' => $this->adapterMock]);
+        $createdTableAdapters->setAccessible(false);
 
         $this->adapterMock->expects($this->any())
             ->method('dropTemporaryTable')

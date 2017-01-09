@@ -21,7 +21,7 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\App\ObjectManager;
-use Magento\UrlRewrite\Model\UrlRewritesSetFactory;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
 /**
  * Class AfterImportDataObserver
@@ -99,8 +99,8 @@ class AfterImportDataObserver implements ObserverInterface
         'visibility',
     ];
 
-    /** @var \Magento\UrlRewrite\Model\UrlRewritesSet */
-    private $urlRewritesSetPrototype;
+    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    private $mergeDataProviderPrototype;
 
     /**
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
@@ -111,7 +111,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param UrlPersistInterface $urlPersist
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param UrlFinderInterface $urlFinder
-     * @param \Magento\UrlRewrite\Model\UrlRewritesSetFactory|null $urlRewritesSetFactory
+     * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -124,7 +124,7 @@ class AfterImportDataObserver implements ObserverInterface
         UrlPersistInterface $urlPersist,
         UrlRewriteFactory $urlRewriteFactory,
         UrlFinderInterface $urlFinder,
-        UrlRewritesSetFactory $urlRewritesSetFactory = null
+        MergeDataProviderFactory $mergeDataProviderFactory = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;
@@ -134,9 +134,9 @@ class AfterImportDataObserver implements ObserverInterface
         $this->storeManager = $storeManager;
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->urlFinder = $urlFinder;
-        $urlRewritesSetFactory = $urlRewritesSetFactory ?: ObjectManager::getInstance()
-            ->get(UrlRewritesSetFactory::class);
-        $this->urlRewritesSetPrototype = $urlRewritesSetFactory->create();
+        $mergeDataProviderFactory = $mergeDataProviderFactory ?: ObjectManager::getInstance()
+            ->get(MergeDataProviderFactory::class);
+        $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }
 
     /**
@@ -269,16 +269,16 @@ class AfterImportDataObserver implements ObserverInterface
      */
     protected function generateUrls()
     {
-        $urlRewritesSet = clone $this->urlRewritesSetPrototype;
-        $urlRewritesSet->merge($this->canonicalUrlRewriteGenerate());
-        $urlRewritesSet->merge($this->categoriesUrlRewriteGenerate());
-        $urlRewritesSet->merge($this->currentUrlRewritesRegenerate());
+        $mergeDataProvider = clone $this->mergeDataProviderPrototype;
+        $mergeDataProvider->merge($this->canonicalUrlRewriteGenerate());
+        $mergeDataProvider->merge($this->categoriesUrlRewriteGenerate());
+        $mergeDataProvider->merge($this->currentUrlRewritesRegenerate());
         $this->productCategories = null;
 
         unset($this->products);
         $this->products = [];
 
-        return $urlRewritesSet->getData();
+        return $mergeDataProvider->getData();
     }
 
     /**

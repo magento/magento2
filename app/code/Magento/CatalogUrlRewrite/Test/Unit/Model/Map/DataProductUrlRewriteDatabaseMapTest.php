@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
@@ -20,7 +20,7 @@ use Magento\Framework\DB\TemporaryTableService;
 class DataProductUrlRewriteDatabaseMapTest extends \PHPUnit_Framework_TestCase
 {
     /** @var HashMapPool|\PHPUnit_Framework_MockObject_MockObject */
-    private $dataMapPoolMock;
+    private $hashMapPoolMock;
 
     /** @var DataProductHashMap|\PHPUnit_Framework_MockObject_MockObject */
     private $dataProductMapMock;
@@ -36,12 +36,12 @@ class DataProductUrlRewriteDatabaseMapTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dataMapPoolMock = $this->getMock(HashMapPool::class, [], [], '', false);
+        $this->hashMapPoolMock = $this->getMock(HashMapPool::class, [], [], '', false);
         $this->dataProductMapMock = $this->getMock(DataProductHashMap::class, [], [], '', false);
         $this->temporaryTableServiceMock = $this->getMock(TemporaryTableService::class, [], [], '', false);
         $this->connectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
 
-        $this->dataMapPoolMock->expects($this->any())
+        $this->hashMapPoolMock->expects($this->any())
             ->method('getDataMap')
             ->willReturn($this->dataProductMapMock);
 
@@ -49,7 +49,7 @@ class DataProductUrlRewriteDatabaseMapTest extends \PHPUnit_Framework_TestCase
             DataProductUrlRewriteDatabaseMap::class,
             [
                 'connection' => $this->connectionMock,
-                'dataMapPool' => $this->dataMapPoolMock,
+                'hashMapPool' => $this->hashMapPoolMock,
                 'temporaryTableService' => $this->temporaryTableServiceMock
             ]
         );
