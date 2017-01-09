@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model\Product;
@@ -65,6 +65,13 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     private $groupManagement;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * Set up.
      *
      * @return void
@@ -97,6 +104,16 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
@@ -111,7 +128,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                 'groupManagement' => $this->groupManagement,
                 'tierPriceFactory' => $tpFactory,
                 'config' => $scopeConfig,
-                'catalogData' => $this->catalogHelperMock
+                'catalogData' => $this->catalogHelperMock,
+                'serializer' => $this->serializer
             ]
         );
     }
@@ -222,7 +240,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function dataProviderWithEmptyOptions()
     {
         return [
-            ['a:0:{}'],
+            ['{}'],
             [''],
             [null],
         ];
@@ -268,8 +286,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->method('getStoreId')
             ->willReturn($storeId);
 
-        $customOptionValue = 'a:1:{i:0;s:1:"1";}';
-        $dataObjectMock->expects($this->once())->method('getValue')->willReturn($customOptionValue);
+        $dataObjectMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn('{"0":1}');
+
         $productTypeMock->expects($this->once())
             ->method('getSelectionsByIds')
             ->with([1], $productMock)

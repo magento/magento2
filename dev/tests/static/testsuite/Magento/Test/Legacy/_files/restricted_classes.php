@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,11 +48,6 @@ return [
             [
                 'type' => 'library',
                 'name' => 'magento/framework',
-                'path' => 'DB/Adapter/Pdo/Mysql.php'
-            ],
-            [
-                'type' => 'library',
-                'name' => 'magento/framework',
                 'path' => 'App/ObjectManager/ConfigLoader/Compiled.php'
             ],
             [
@@ -68,6 +63,21 @@ return [
                 'type' => 'library',
                 'name' => 'magento/framework',
                 'path' => 'App/ObjectManager/ConfigLoader.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'DB/Adapter/Pdo/Mysql.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'DB/DataConverter/SerializedToJson.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'DB/Test/Unit/DataConverter/SerializedToJsonTest.php'
             ],
             [
                 'type' => 'library',
@@ -97,6 +107,16 @@ return [
             [
                 'type' => 'setup',
                 'path' => 'src/Magento/Setup/Module/Di/Compiler/Config/Writer/Filesystem.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Sales',
+                'path' => 'Setup/SerializedDataConverter.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Sales',
+                'path' => 'Test/Unit/Setup/SerializedDataConverterTest.php'
             ],
         ]
     ]
