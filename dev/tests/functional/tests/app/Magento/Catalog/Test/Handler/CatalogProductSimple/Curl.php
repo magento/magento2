@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -488,7 +488,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         if (!isset($this->fields['product']['custom_options'])) {
             return;
         }
-
         $options = [];
         foreach ($this->fields['product']['custom_options'] as $key => $customOption) {
             $options[$key] = [
@@ -510,7 +509,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         }
 
         $this->fields['product']['options'] = $options;
-        $this->fields['affect_product_custom_options'] = 1;
+        $this->fields['product']['affect_product_custom_options'] = 1;
         unset($this->fields['product']['custom_options']);
     }
 

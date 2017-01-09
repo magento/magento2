@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,12 +15,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertProductSaveMessage extends AbstractConstraint
 {
     /**
-     * Text value to be checked
+     * Text value to be checked.
      */
     const SUCCESS_MESSAGE = 'You saved the product.';
 
     /**
-     * Assert that success message is displayed after product save
+     * Assert that success message is displayed after product save.
      *
      * @param CatalogProductEdit $productPage
      * @return void
