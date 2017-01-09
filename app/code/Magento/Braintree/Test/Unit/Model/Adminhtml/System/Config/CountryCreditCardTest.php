@@ -37,12 +37,18 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
      */
     protected $mathRandomMock;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->resourceMock = $this->getMockForAbstractClass(AbstractResource::class);
         $this->mathRandomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
@@ -50,6 +56,7 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
             [
                 'mathRandom' => $this->mathRandomMock,
                 'resource' => $this->resourceMock,
+                'serializer' => $this->serializerMock
             ]
         );
     }
@@ -60,6 +67,11 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
     public function testBeforeSave($value, $expectedValue)
     {
         $this->model->setValue($value);
+
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->will($this->returnArgument(0));
+
         $this->model->beforeSave();
         $this->assertEquals($expectedValue, $this->model->getValue());
     }
@@ -73,11 +85,11 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
         return [
             'empty_value' => [
                 'value' => [],
-                'expected' => serialize([]),
+                'expected' => [],
             ],
             'not_array' => [
                 'value' => ['US'],
-                'expected' => serialize([]),
+                'expected' => [],
             ],
             'array_with_invalid_format' => [
                 'value' => [
@@ -85,7 +97,7 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
                         'country_id' => 'US',
                     ],
                 ],
-                'expected' => serialize([]),
+                'expected' => [],
             ],
             'array_with_two_countries' => [
                 'value' => [
@@ -99,12 +111,10 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
                     ],
                     '__empty' => "",
                 ],
-                'expected' => serialize(
-                    [
-                        'AF' => ['AE', 'VI'],
-                        'US' => ['AE', 'VI', 'MA'],
-                    ]
-                ),
+                'expected' => [
+                    'AF' => ['AE', 'VI'],
+                    'US' => ['AE', 'VI', 'MA'],
+                ],
             ],
             'array_with_two_same_countries' => [
                 'value' => [
@@ -122,12 +132,10 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
                     ],
                     '__empty' => "",
                 ],
-                'expected' => serialize(
-                    [
-                        'AF' => ['AE', 'VI'],
-                        'US' => ['AE', 'VI', 'MA', 'OT'],
-                    ]
-                ),
+                'expected' => [
+                    'AF' => ['AE', 'VI'],
+                    'US' => ['AE', 'VI', 'MA', 'OT'],
+                ],
             ],
         ];
     }
@@ -143,8 +151,13 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
             $this->mathRandomMock->expects(static::at($index))
                 ->method('getUniqueHash')
                 ->willReturn($hash);
-            $index ++;
+            $index++;
         }
+
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->will($this->returnArgument(0));
+
         $this->model->afterLoad();
         $this->assertEquals($expected, $this->model->getValue());
     }
@@ -157,34 +170,32 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'empty' => [
-                'value' => serialize([]),
+                'value' => [],
                 'randomHash' => [],
-                'expected' => [],
+                'expected' => []
             ],
             'null' => [
                 'value' => null,
                 'randomHash' => [],
-                'expected' => null,
+                'expected' => null
             ],
             'valid_data' => [
-                'value' => serialize(
-                    [
-                        'US' => ['AE', 'VI', 'MA'],
-                        'AF' => ['AE', 'MA'],
-                    ]
-                ),
+                'value' => [
+                    'US' => ['AE', 'VI', 'MA'],
+                    'AF' => ['AE', 'MA']
+                ],
                 'randomHash' => ['hash_1', 'hash_2'],
                 'expected' => [
                     'hash_1' => [
                         'country_id' => 'US',
-                        'cc_types' => ['AE', 'VI', 'MA'],
+                        'cc_types' => ['AE', 'VI', 'MA']
                     ],
                     'hash_2' => [
                         'country_id' => 'AF',
-                        'cc_types' => ['AE', 'MA'],
-                    ],
+                        'cc_types' => ['AE', 'MA']
+                    ]
                 ]
-            ],
+            ]
         ];
     }
 }
