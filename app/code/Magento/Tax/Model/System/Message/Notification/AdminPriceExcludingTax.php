@@ -68,7 +68,6 @@ class AdminPriceExcludingTax implements \Magento\Tax\Model\System\Message\Notifi
         if (!$this->taxConfig->isWrongPriceExcludingTaxSettingsIgnored() && $this->getStoresWithWrongSettings()) {
             return true;
         }
-
         return false;
     }
 
@@ -119,7 +118,7 @@ class AdminPriceExcludingTax implements \Magento\Tax\Model\System\Message\Notifi
         foreach ($storeCollection as $store) {
             if (!$this->checkSettings($store)) {
                 $website = $store->getWebsite();
-                $this->storesWithInvalidSettings[] = $website->getName() . '(' . $store->getName() . ')';
+                $this->storesWithInvalidSettings[] = $website->getName() . ' (' . $store->getName() . ')';
             }
         }
         return $this->storesWithInvalidSettings;

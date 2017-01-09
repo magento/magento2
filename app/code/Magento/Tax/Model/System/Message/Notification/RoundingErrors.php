@@ -147,7 +147,7 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
         foreach ($storeCollection as $store) {
             if (!$this->checkDisplaySettings($store)) {
                 $website = $store->getWebsite();
-                $storeNames[] = $website->getName() . '(' . $store->getName() . ')';
+                $storeNames[] = $website->getName() . ' (' . $store->getName() . ')';
             }
         }
         return $storeNames;
