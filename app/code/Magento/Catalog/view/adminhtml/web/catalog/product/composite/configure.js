@@ -3,8 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/* eslint-disable */
-/* jscs:disable */
 define([
     "Magento_Ui/js/lib/view/utils/async",
     "jquery/ui",

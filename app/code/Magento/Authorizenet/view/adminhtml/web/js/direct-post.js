@@ -3,8 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/*eslint-disable*/
-/*jscs:disable*/
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
         define([

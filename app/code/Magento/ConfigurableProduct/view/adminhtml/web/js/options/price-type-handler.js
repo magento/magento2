@@ -3,7 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/* jscs:disable */
 /*
 define([
     'jquery',

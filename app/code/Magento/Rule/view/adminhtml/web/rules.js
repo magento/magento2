@@ -3,8 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/* eslint-disable */
-/* jscs:disable */
 define([
     "jquery",
     'Magento_Ui/js/modal/alert',

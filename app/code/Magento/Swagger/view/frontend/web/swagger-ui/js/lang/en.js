@@ -1,5 +1,3 @@
-/* eslint-disable */
-/* jscs:disable */
 'use strict';
 
 /* jshint quotmark: double */
