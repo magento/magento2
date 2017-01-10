@@ -7,7 +7,6 @@ namespace Magento\Signifyd\Test\Unit\Model\SignifydGateway;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface;
@@ -40,11 +39,10 @@ class GatewayTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $om = new ObjectManager($this);
-        $this->gateway = $om->getObject(Gateway::class, [
-            'createCaseBuilder' => $this->createCaseBuilder,
-            'apiClient' => $this->apiClient,
-        ]);
+        $this->gateway = new Gateway(
+            $this->createCaseBuilder,
+            $this->apiClient
+        );
     }
 
     public function testCreateCaseForSpecifiedOrder()
