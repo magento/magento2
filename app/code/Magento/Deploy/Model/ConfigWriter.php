@@ -46,7 +46,7 @@ class ConfigWriter
      * @param string|null $scopeCode
      * @return void
      */
-    public function save(array $values, $scope = 'default', $scopeCode = null)
+    public function save(array $values, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
     {
         $config = [];
         $pathPrefix = $this->getPathPrefix($scope, $scopeCode);
