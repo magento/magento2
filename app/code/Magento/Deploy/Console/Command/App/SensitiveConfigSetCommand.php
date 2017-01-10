@@ -22,6 +22,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for set sensitive variable through deploy process.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SensitiveConfigSetCommand extends Command
 {

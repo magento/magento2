@@ -20,6 +20,9 @@ use Magento\Framework\Phrase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
