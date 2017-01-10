@@ -5,8 +5,10 @@
  */
 namespace Magento\PageCache\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Model is responsible for replacing default vcl template
@@ -74,21 +76,29 @@ class Config
     protected $reader;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param Filesystem\Directory\ReadFactory $readFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param Dir\Reader $reader
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
-        \Magento\Framework\Module\Dir\Reader $reader
+        \Magento\Framework\Module\Dir\Reader $reader,
+        Json $serializer = null
     ) {
         $this->readFactory = $readFactory;
         $this->_scopeConfig = $scopeConfig;
         $this->_cacheState = $cacheState;
         $this->reader = $reader;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -209,7 +219,7 @@ class Config
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if ($expressions) {
-            $rules = array_values(unserialize($expressions));
+            $rules = array_values($this->serializer->unserialize($expressions));
             foreach ($rules as $i => $rule) {
                 if (preg_match('/^[\W]{1}(.*)[\W]{1}(\w+)?$/', $rule['regexp'], $matches)) {
                     if (!empty($matches[2])) {
