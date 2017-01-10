@@ -183,7 +183,7 @@ class Create extends Block
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\Totals
      */
-    protected function getTotalsBlock()
+    public function getTotalsBlock()
     {
         return $this->blockFactory->create(
             'Magento\Sales\Test\Block\Adminhtml\Order\Create\Totals',
