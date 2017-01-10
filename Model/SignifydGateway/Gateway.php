@@ -68,6 +68,8 @@ class Gateway
     }
 
     /**
+     * @see https://www.signifyd.com/docs/api/#/reference/cases/create-a-case
+     *
      * @param int $orderId
      * @return int Signifyd case (investigation) identifier
      * @throws GatewayException
@@ -90,6 +92,8 @@ class Gateway
     }
 
     /**
+     * @see https://www.signifyd.com/docs/api/#/reference/guarantees/submit-a-case-for-guarantee
+     *
      * @param int $signifydCaseId
      * @return array
      * @throws GatewayException
