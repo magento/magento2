@@ -134,31 +134,7 @@ class SensitiveConfigSetCommand extends Command
 
         try {
             $this->scopeValidator->isValid($scope, $scopeCode);
-        } catch (LocalizedException $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-            return Cli::RETURN_FAILURE;
-        }
-
-        $configFilePath = $this->configFilePool->getPathsByPool(ConfigFilePool::LOCAL)[ConfigFilePool::APP_CONFIG];
-        try {
-            $configPaths = $this->commentParser->execute($configFilePath);
-        } catch (FileSystemException $e) {
-            $output->writeln(
-                sprintf(
-                    '<error>%s</error>',
-                    'File app/etc/' . $configFilePath . ' can\'t be read. '
-                    . 'Please check if it exists and has read permissions.'
-                )
-            );
-            return Cli::RETURN_FAILURE;
-        }
-
-        if (empty($configPaths)) {
-            $output->writeln('<error>There are no sensitive configurations to fill</error>');
-            return Cli::RETURN_FAILURE;
-        }
-
-        try {
+            $configPaths = $this->getConfigPaths();
             $isInteractive = $input->getOption(self::INPUT_OPTION_INTERACTIVE);
             $collector = $this->collectorFactory->create(
                 $isInteractive ? CollectorFactory::TYPE_INTERACTIVE : CollectorFactory::TYPE_SIMPLE
@@ -189,5 +165,32 @@ class SensitiveConfigSetCommand extends Command
             $isInteractive ? 's' : '',
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG)
         ));
+    }
+
+    /**
+     * Get sensitive configuration paths.
+     *
+     * @return array
+     * @throws LocalizedException if configuration file not exists or sensitive configuration is empty
+     */
+    private function getConfigPaths()
+    {
+        $configFilePath = $this->configFilePool->getPathsByPool(ConfigFilePool::LOCAL)[ConfigFilePool::APP_CONFIG];
+        try {
+            $configPaths = $this->commentParser->execute($configFilePath);
+        } catch (FileSystemException $e) {
+            throw new LocalizedException(__(
+                'File app/etc/%1 can\'t be read. Please check if it exists and has read permissions.',
+                [
+                    $configFilePath
+                ]
+            ));
+        }
+
+        if (empty($configPaths)) {
+            throw new LocalizedException(__('There are no sensitive configurations to fill'));
+        }
+
+        return $configPaths;
     }
 }
