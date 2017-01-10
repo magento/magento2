@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,6 +34,16 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
     private $productIdLocator;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Price\Validation\Result
+     */
+    private $validationResult;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Price\InvalidSkuChecker
+     */
+    private $invalidSkuChecker;
+
+    /**
      * Allowed product types.
      *
      * @var array
@@ -57,19 +67,25 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
      * @param \Magento\Catalog\Api\Data\CostInterfaceFactory $costInterfaceFactory
      * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
-     * @param array $allowedProductTypes
+     * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
+     * @param \Magento\Catalog\Model\Product\Price\InvalidSkuChecker $invalidSkuChecker
+     * @param array $allowedProductTypes [optional]
      */
     public function __construct(
         PricePersistenceFactory $pricePersistenceFactory,
         \Magento\Catalog\Api\Data\CostInterfaceFactory $costInterfaceFactory,
         \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator,
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
+        \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult,
+        \Magento\Catalog\Model\Product\Price\InvalidSkuChecker $invalidSkuChecker,
         array $allowedProductTypes = []
     ) {
         $this->pricePersistenceFactory = $pricePersistenceFactory;
         $this->costInterfaceFactory = $costInterfaceFactory;
         $this->productIdLocator = $productIdLocator;
         $this->storeRepository = $storeRepository;
+        $this->validationResult = $validationResult;
+        $this->invalidSkuChecker = $invalidSkuChecker;
         $this->allowedProductTypes = $allowedProductTypes;
     }
 
@@ -78,7 +94,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
      */
     public function get(array $skus)
     {
-        $this->validateSkus($skus);
+        $this->invalidSkuChecker->isSkuListValid($skus, $this->allowedProductTypes);
         $rawPrices = $this->getPricePersistence()->get($skus);
         $prices = [];
         foreach ($rawPrices as $rawPrice) {
@@ -99,12 +115,13 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
      */
     public function update(array $prices)
     {
-        $this->validate($prices);
+        $prices = $this->retrieveValidPrices($prices);
         $formattedPrices = [];
 
         foreach ($prices as $price) {
-            $ids = array_keys($this->productIdLocator->retrieveProductIdsBySkus([$price->getSku()])[$price->getSku()]);
-            foreach ($ids as $id) {
+            $productIdsBySkus = $this->productIdLocator->retrieveProductIdsBySkus([$price->getSku()]);
+            $productIds = array_keys($productIdsBySkus[$price->getSku()]);
+            foreach ($productIds as $id) {
                 $formattedPrices[] = [
                     'store_id' => $price->getStoreId(),
                     $this->getPricePersistence()->getEntityLinkField() => $id,
@@ -115,7 +132,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
 
         $this->getPricePersistence()->update($formattedPrices);
 
-        return true;
+        return $this->validationResult->getFailedItems();
     }
 
     /**
@@ -123,7 +140,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
      */
     public function delete(array $skus)
     {
-        $this->validateSkus($skus);
+        $this->invalidSkuChecker->isSkuListValid($skus, $this->allowedProductTypes);
         $this->getPricePersistence()->delete($skus);
 
         return true;
@@ -144,75 +161,55 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
     }
 
     /**
-     * Validate that prices have appropriate values.
+     * Retrieve valid prices that do not contain any errors.
      *
      * @param array $prices
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return void
+     * @return array
      */
-    private function validate(array $prices)
+    private function retrieveValidPrices(array $prices)
     {
         $skus = array_unique(
             array_map(function ($price) {
-                if (!$price->getSku()) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __(
-                            'Invalid attribute %fieldName: %fieldValue.',
-                            [
-                                'fieldName' => 'sku',
-                                'fieldValue' => $price->getSku()
-                            ]
-                        )
-                    );
-                }
                 return $price->getSku();
             }, $prices)
         );
-        $this->validateSkus($skus);
+        $invalidSkus = $this->invalidSkuChecker->retrieveInvalidSkuList($skus, $this->allowedProductTypes);
 
-        foreach ($prices as $price) {
-            if (null === $price->getCost() || $price->getCost() < 0) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+        foreach ($prices as $id => $price) {
+            if (!$price->getSku() || in_array($price->getSku(), $invalidSkus)) {
+                $this->validationResult->addFailedItem(
+                    $id,
                     __(
-                        'Invalid attribute %fieldName: %fieldValue.',
-                        [
-                            'fieldName' => 'Cost',
-                            'fieldValue' => $price->getCost()
-                        ]
-                    )
+                        'Invalid attribute %fieldName = %fieldValue.',
+                        ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                    ),
+                    ['fieldName' => 'SKU', 'fieldValue' => $price->getSku()]
                 );
             }
-            $this->storeRepository->getById($price->getStoreId());
-        }
-    }
-
-    /**
-     * Validate SKU, check product types and skip not existing products.
-     *
-     * @param array $skus
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return void
-     */
-    private function validateSkus(array $skus)
-    {
-        $idsBySku = $this->productIdLocator->retrieveProductIdsBySkus($skus);
-        $skuDiff = array_diff($skus, array_keys($idsBySku));
-
-        foreach ($idsBySku as $sku => $ids) {
-            foreach (array_values($ids) as $type) {
-                if (!in_array($type, $this->allowedProductTypes)) {
-                    $skuDiff[] = $sku;
-                    break;
-                }
+            if (null === $price->getCost() || $price->getCost() < 0) {
+                $this->validationResult->addFailedItem(
+                    $id,
+                    __(
+                        'Invalid attribute %fieldName = %fieldValue.',
+                        ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                    ),
+                    ['fieldName' => 'Cost', 'fieldValue' => $price->getCost()]
+                );
+            }
+            try {
+                $this->storeRepository->getById($price->getStoreId());
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->validationResult->addFailedItem(
+                    $id,
+                    __('Requested store is not found.')
+                );
             }
         }
 
-        if (!empty($skuDiff)) {
-            $values = implode(', ', $skuDiff);
-            $description = count($skuDiff) == 1
-                ? __('Requested product doesn\'t exist: %1', $values)
-                : __('Requested products don\'t exist: %1', $values);
-            throw new \Magento\Framework\Exception\NoSuchEntityException($description);
+        foreach ($this->validationResult->getFailedRowIds() as $id) {
+            unset($prices[$id]);
         }
+
+        return $prices;
     }
 }
