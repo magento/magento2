@@ -43,8 +43,8 @@ class DesignExceptions
      * DesignExceptions constructor
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param $exceptionConfigPath
-     * @param $scopeType
+     * @param string $exceptionConfigPath
+     * @param string $scopeType
      * @param Json|null $serializer
      */
     public function __construct(

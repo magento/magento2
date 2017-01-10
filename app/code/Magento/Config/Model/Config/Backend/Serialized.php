@@ -15,6 +15,18 @@ class Serialized extends \Magento\Framework\App\Config\Value
      */
     private $serializer;
 
+    /**
+     * Serialized constructor
+     *
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
+     * @param Json|null $serializer
+     */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
