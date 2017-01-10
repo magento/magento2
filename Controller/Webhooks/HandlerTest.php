@@ -68,6 +68,8 @@ class HandlerTest extends AbstractController
             "Case Update: New score for the order is 384. Previous score was 553.",
             $caseComment->getComment()
         );
+
+        $this->_objectManager->removeSharedInstance(WebhookRequest::class);
     }
 
     /**
