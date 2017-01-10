@@ -284,12 +284,12 @@ class GatewayTest extends TestCase
     public function supportedGuaranteeDispositionsProvider()
     {
         return [
-            ['APPROVED'],
-            ['DECLINED'],
-            ['PENDING'],
-            ['CANCELED'],
-            ['IN_REVIEW'],
-            ['UNREQUESTED'],
+            'APPROVED' => ['APPROVED'],
+            'DECLINED' => ['DECLINED'],
+            'PENDING' => ['PENDING'],
+            'CANCELED' => ['CANCELED'],
+            'IN_REVIEW' => ['IN_REVIEW'],
+            'UNREQUESTED' => ['UNREQUESTED'],
         ];
     }
 }
