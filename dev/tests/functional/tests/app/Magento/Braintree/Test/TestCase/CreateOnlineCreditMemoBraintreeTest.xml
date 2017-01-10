@@ -89,14 +89,6 @@
                     <item name="grand_creditmemo_total" xsi:type="string">1.08</item>
                 </item>
             </data>
-            <data name="transactions/refund" xsi:type="array">
-                <item name="transactionType" xsi:type="string">Refund</item>
-                <item name="statusIsClosed" xsi:type="string">Yes</item>
-            </data>
-            <data name="transactions/capture" xsi:type="array">
-                <item name="transactionType" xsi:type="string">Capture</item>
-                <item name="statusIsClosed" xsi:type="string">Yes</item>
-            </data>
             <data name="data/items_data" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="qty" xsi:type="string">0</item>
@@ -105,7 +97,6 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertTransactionStatus" />
         </variation>
     </testCase>
 </config>
