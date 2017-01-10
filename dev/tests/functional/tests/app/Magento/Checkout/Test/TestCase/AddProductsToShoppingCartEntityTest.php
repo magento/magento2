@@ -211,6 +211,8 @@ class AddProductsToShoppingCartEntityTest extends Injectable
             $this->getSystemConfigEditPage()->getForm()
                 ->getGroup('web', 'secure')->setValue('web', 'secure', 'base_link_url', $this->getBaseUrl());
             $this->getSystemConfigEditPage()->getPageActions()->save();
+            $_ENV['app_backend_url'] = mb_ereg_replace ("(http[s]?)", 'http', $_ENV['app_backend_url']);
+            $_ENV['app_frontend_url'] = mb_ereg_replace ("(http[s]?)", 'http', $_ENV['app_frontend_url']);
             $this->cache->flush();
         }
     }
