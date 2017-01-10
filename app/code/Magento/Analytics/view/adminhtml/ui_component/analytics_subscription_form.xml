@@ -63,6 +63,7 @@
                             <item name="class" xsi:type="string">action-secondary</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">${ $.name }</item>
                                     <item name="actionName" xsi:type="string">actionCancel</item>
                                 </item>
                             </item>
