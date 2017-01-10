@@ -31,11 +31,11 @@
             <data name="data/items_data/0/qty" xsi:type="string">-</data>
             <data name="data/form_data/do_shipment" xsi:type="string">Yes</data>
             <data name="status" xsi:type="string">Closed</data>
-            <data name="transactions/Refund" xsi:type="array">
+            <data name="transactions/refund" xsi:type="array">
                 <item name="transactionType" xsi:type="string">Refund</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
-            <data name="transactions/Capture" xsi:type="array">
+            <data name="transactions/capture" xsi:type="array">
                 <item name="transactionType" xsi:type="string">Capture</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
@@ -67,15 +67,15 @@
             <data name="configData" xsi:type="string">payflowpro</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="status" xsi:type="string">Closed</data>
-            <data name="transactions/Authorization" xsi:type="array">
+            <data name="transactions/authorization" xsi:type="array">
                 <item name="transactionType" xsi:type="string">Authorization</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
-            <data name="transactions/Refund" xsi:type="array">
+            <data name="transactions/refund" xsi:type="array">
                 <item name="transactionType" xsi:type="string">Refund</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
-            <data name="transactions/Capture" xsi:type="array">
+            <data name="transactions/capture" xsi:type="array">
                 <item name="transactionType" xsi:type="string">Capture</item>
                 <item name="statusIsClosed" xsi:type="string">Yes</item>
             </data>
