@@ -6,7 +6,7 @@
 namespace Magento\Signifyd\Test\Unit\Model\MessageGenerators;
 
 use Magento\Signifyd\Model\MessageGenerators\CaseRescore;
-use Magento\Signifyd\Model\Validators\CaseDataValidator;
+use Magento\Signifyd\Model\Validators\CaseIdValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
@@ -58,7 +58,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
-            'caseDataValidator' => new CaseDataValidator(),
+            'caseIdValidator' => new CaseIdValidator(),
             'caseRepository'    => $this->caseRepository
         ]);
 
@@ -89,7 +89,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
-            'caseDataValidator' => new CaseDataValidator(),
+            'caseIdValidator' => new CaseIdValidator(),
             'caseRepository'    => $this->caseRepository
         ]);
 
@@ -111,8 +111,8 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->case);
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
-            'caseDataValidator' => new CaseDataValidator(),
-            'caseRepository'    => $this->caseRepository
+            'caseIdValidator' => new CaseIdValidator(),
+            'caseRepository' => $this->caseRepository
         ]);
 
         $phrase = __(
@@ -137,8 +137,8 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->case);
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
-            'caseDataValidator' => new CaseDataValidator(),
-            'caseRepository'    => $this->caseRepository
+            'caseIdValidator' => new CaseIdValidator(),
+            'caseRepository' => $this->caseRepository
         ]);
 
         $phrase = __(

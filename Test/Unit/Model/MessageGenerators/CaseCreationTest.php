@@ -6,7 +6,7 @@
 namespace Magento\Signifyd\Test\Unit\Model\MessageGenerators;
 
 use Magento\Signifyd\Model\MessageGenerators\CaseCreation;
-use Magento\Signifyd\Model\Validators\CaseDataValidator;
+use Magento\Signifyd\Model\Validators\CaseIdValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Phrase;
 
@@ -37,7 +37,7 @@ class CaseCreationTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->caseCreation = $this->objectManager->getObject(CaseCreation::class, [
-            'caseDataValidator' => new CaseDataValidator()
+            'caseIdValidator' => new CaseIdValidator()
         ]);
     }
 

@@ -7,7 +7,7 @@ namespace Magento\Signifyd\Model\MessageGenerators;
 
 use Magento\Signifyd\Model\MessageGeneratorException;
 use Magento\Signifyd\Model\MessageGeneratorInterface;
-use Magento\Signifyd\Model\Validators\CaseDataValidator;
+use Magento\Signifyd\Model\Validators\CaseIdValidator;
 
 /**
  * Generates message for created Signifyd case.
@@ -15,18 +15,18 @@ use Magento\Signifyd\Model\Validators\CaseDataValidator;
 class CaseCreation implements MessageGeneratorInterface
 {
     /**
-     * @var CaseDataValidator
+     * @var CaseIdValidator
      */
-    private $caseDataValidator;
+    private $caseIdValidator;
 
     /**
      * CaseCreation constructor.
      *
-     * @param CaseDataValidator $caseDataValidator
+     * @param CaseIdValidator $caseIdValidator
      */
-    public function __construct(CaseDataValidator $caseDataValidator)
+    public function __construct(CaseIdValidator $caseIdValidator)
     {
-        $this->caseDataValidator = $caseDataValidator;
+        $this->caseIdValidator = $caseIdValidator;
     }
 
     /**
@@ -34,7 +34,7 @@ class CaseCreation implements MessageGeneratorInterface
      */
     public function generate(array $data)
     {
-        if (!$this->caseDataValidator->validate($data)) {
+        if (!$this->caseIdValidator->validate($data)) {
             throw new MessageGeneratorException(__('The "%1" should not be empty.', 'caseId'));
         }
 

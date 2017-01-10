@@ -12,7 +12,7 @@ use Magento\Signifyd\Model\CaseUpdatingService;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
 use Magento\Signifyd\Model\MessageGeneratorException;
 use Magento\Signifyd\Model\MessageGeneratorInterface;
-use Magento\Signifyd\Model\Validators\CaseDataValidator;
+use Magento\Signifyd\Model\Validators\CaseIdValidator;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -41,9 +41,9 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     private $caseRepository;
 
     /**
-     * @var CaseDataValidator|MockObject
+     * @var CaseIdValidator|MockObject
      */
-    private $caseDataValidator;
+    private $caseIdValidator;
 
     /**
      * @var CommentsHistoryUpdater|MockObject
@@ -67,7 +67,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getByCaseId'])
             ->getMockForAbstractClass();
 
-        $this->caseDataValidator = $this->getMockBuilder(CaseDataValidator::class)
+        $this->caseIdValidator = $this->getMockBuilder(CaseIdValidator::class)
             ->disableOriginalConstructor()
             ->setMethods(['validate'])
             ->getMock();
@@ -80,7 +80,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $this->service = $this->objectManager->getObject(CaseUpdatingService::class, [
             'messageGenerator' => $this->messageGenerator,
             'caseRepository' => $this->caseRepository,
-            'caseDataValidator' => $this->caseDataValidator,
+            'caseIdValidator' => $this->caseIdValidator,
             'commentsHistoryUpdater' => $this->commentsHistoryUpdater
         ]);
     }
@@ -95,7 +95,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     public function testUpdateWithFailedValidation()
     {
         $data = [];
-        $this->caseDataValidator->expects(self::once())
+        $this->caseIdValidator->expects(self::once())
             ->method('validate')
             ->with($data)
             ->willReturn(false);
@@ -117,7 +117,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
             'caseId' => $caseId
         ];
 
-        $this->caseDataValidator->expects(self::once())
+        $this->caseIdValidator->expects(self::once())
             ->method('validate')
             ->with($data)
             ->willReturn(true);
@@ -147,7 +147,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
             'score' => 500
         ];
 
-        $this->caseDataValidator->expects(self::once())
+        $this->caseIdValidator->expects(self::once())
             ->method('validate')
             ->with($data)
             ->willReturn(true);
@@ -198,7 +198,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
             'caseId' => $caseId
         ];
 
-        $this->caseDataValidator->expects(self::once())
+        $this->caseIdValidator->expects(self::once())
             ->method('validate')
             ->with($data)
             ->willReturn(true);
@@ -245,7 +245,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
             'caseId' => $caseId
         ];
 
-        $this->caseDataValidator->expects(self::once())
+        $this->caseIdValidator->expects(self::once())
             ->method('validate')
             ->with($data)
             ->willReturn(true);
@@ -296,7 +296,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
             'caseId' => $caseId
         ];
 
-        $this->caseDataValidator->expects(self::once())
+        $this->caseIdValidator->expects(self::once())
             ->method('validate')
             ->with($data)
             ->willReturn(true);
