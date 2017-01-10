@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,14 +15,14 @@ use Magento\Backend\Test\Block\Widget\Grid as AbstractGrid;
 class Grid extends AbstractGrid
 {
     /**
-     * Locator value for link in action column
+     * Locator value for link in action column.
      *
      * @var string
      */
     protected $editLink = 'td.col-frontend_label';
 
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */
