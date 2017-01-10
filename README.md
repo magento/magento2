@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a38b863e2d5f452c812e9e46dc051dfd)](https://www.codacy.com/app/antonkril/magento2?utm_source=github.com&utm_medium=referral&utm_content=magento/magento2&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/magento/magento2.svg?branch=develop)](https://travis-ci.org/magento/magento2)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 <h2>Welcome</h2>
