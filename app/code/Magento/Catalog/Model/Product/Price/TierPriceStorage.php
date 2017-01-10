@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     /**
      * Tier price validator.
      *
-     * @var \Magento\Catalog\Model\Product\Price\TierPriceValidator
+     * @var \Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator
      */
     private $tierPriceValidator;
 
@@ -70,10 +70,8 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     private $indexerChunkValue = 500;
 
     /**
-     * TierPriceStorage constructor.
-     *
      * @param TierPricePersistence $tierPricePersistence
-     * @param TierPriceValidator $tierPriceValidator
+     * @param \Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator $tierPriceValidator
      * @param TierPriceFactory $tierPriceFactory
      * @param \Magento\Catalog\Model\Indexer\Product\Price $priceIndexer
      * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
@@ -82,7 +80,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
      */
     public function __construct(
         TierPricePersistence $tierPricePersistence,
-        TierPriceValidator $tierPriceValidator,
+        \Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator $tierPriceValidator,
         TierPriceFactory $tierPriceFactory,
         \Magento\Catalog\Model\Indexer\Product\Price $priceIndexer,
         \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator,
@@ -104,16 +102,8 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     public function get(array $skus)
     {
         $this->tierPriceValidator->validateSkus($skus);
-        $ids = $this->retrieveAffectedIds($skus);
-        $rawPrices = $this->tierPricePersistence->get($ids);
-        $prices = [];
 
-        foreach ($rawPrices as $rawPrice) {
-            $sku = $this->retrieveSkuById($rawPrice[$this->tierPricePersistence->getEntityLinkField()], $skus);
-            $prices[] = $this->tierPriceFactory->create($rawPrice, $sku);
-        }
-
-        return $prices;
+        return $this->getExistingPrices($skus);
     }
 
     /**
@@ -127,13 +117,14 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
                 return $price->getSku();
             }, $prices)
         );
-        $this->tierPriceValidator->validatePrices($prices, $this->get($skus));
+        $result = $this->tierPriceValidator->retrieveValidationResult($prices, $this->getExistingPrices($skus));
+        $prices = $this->removeIncorrectPrices($prices, $result->getFailedRowIds());
         $formattedPrices = $this->retrieveFormattedPrices($prices);
         $this->tierPricePersistence->update($formattedPrices);
         $this->reindexPrices($affectedIds);
         $this->invalidateFullPageCache();
 
-        return true;
+        return $result->getFailedItems();
     }
 
     /**
@@ -141,14 +132,15 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
      */
     public function replace(array $prices)
     {
-        $this->tierPriceValidator->validatePrices($prices);
+        $result = $this->tierPriceValidator->retrieveValidationResult($prices);
+        $prices = $this->removeIncorrectPrices($prices, $result->getFailedRowIds());
         $affectedIds = $this->retrieveAffectedProductIdsForPrices($prices);
         $formattedPrices = $this->retrieveFormattedPrices($prices);
         $this->tierPricePersistence->replace($formattedPrices, $affectedIds);
         $this->reindexPrices($affectedIds);
         $this->invalidateFullPageCache();
 
-        return true;
+        return $result->getFailedItems();
     }
 
     /**
@@ -157,13 +149,34 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     public function delete(array $prices)
     {
         $affectedIds = $this->retrieveAffectedProductIdsForPrices($prices);
-        $this->tierPriceValidator->validatePrices($prices);
+        $result = $this->tierPriceValidator->retrieveValidationResult($prices);
+        $prices = $this->removeIncorrectPrices($prices, $result->getFailedRowIds());
         $priceIds = $this->retrieveAffectedPriceIds($prices);
         $this->tierPricePersistence->delete($priceIds);
         $this->reindexPrices($affectedIds);
         $this->invalidateFullPageCache();
 
-        return true;
+        return $result->getFailedItems();
+    }
+
+    /**
+     * Get existing prices by SKUs.
+     *
+     * @param array $skus
+     * @return array
+     */
+    private function getExistingPrices(array $skus)
+    {
+        $ids = $this->retrieveAffectedIds($skus);
+        $rawPrices = $this->tierPricePersistence->get($ids);
+        $prices = [];
+
+        foreach ($rawPrices as $rawPrice) {
+            $sku = $this->retrieveSkuById($rawPrice[$this->tierPricePersistence->getEntityLinkField()], $skus);
+            $prices[] = $this->tierPriceFactory->create($rawPrice, $sku);
+        }
+
+        return $prices;
     }
 
     /**
@@ -242,11 +255,11 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     }
 
     /**
-     * Retrieve price ID.
+     * Look through provided price in list of existing prices and retrieve it's Id.
      *
      * @param array $price
      * @param array $existingPrices
-     * @return int
+     * @return int|void
      */
     private function retrievePriceId(array $price, array $existingPrices)
     {
@@ -265,7 +278,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
     }
 
     /**
-     * Check is correct price value
+     * Check that price value or price percentage value is not equal to 0 and is not similar with existing value.
      *
      * @param array $existingPrice
      * @param array $price
@@ -319,5 +332,21 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
         foreach (array_chunk($ids, $this->indexerChunkValue) as $affectedIds) {
             $this->priceIndexer->execute($affectedIds);
         }
+    }
+
+    /**
+     * Remove prices from price list by id list.
+     *
+     * @param array $prices
+     * @param array $ids
+     * @return array
+     */
+    private function removeIncorrectPrices(array $prices, array $ids)
+    {
+        foreach ($ids as $id) {
+            unset($prices[$id]);
+        }
+
+        return $prices;
     }
 }
