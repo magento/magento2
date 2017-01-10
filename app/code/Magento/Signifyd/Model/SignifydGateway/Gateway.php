@@ -15,6 +15,34 @@ use Magento\Signifyd\Model\SignifydGateway\ApiClient;
  */
 class Gateway
 {
+    /**#@+
+     * Constants for case available statuses
+     */
+    const STATUS_OPEN = 'OPEN';
+    const STATUS_PROCESSING = 'PROCESSING';
+    const STATUS_FLAGGED = 'FLAGGED';
+    const STATUS_DISMISSED = 'DISMISSED';
+    /**#@-*/
+
+    /**#@+
+     * Constants for guarantee available statuses
+     * @see https://www.signifyd.com/resources/manual/signifyd-guarantee/signifyd-guarantee/
+     */
+    const GUARANTEE_APPROVED = 'APPROVED';
+    const GUARANTEE_DECLINED = 'DECLINED';
+    const GUARANTEE_PENDING = 'PENDING';
+    const GUARANTEE_CANCELED = 'CANCELED';
+    const GUARANTEE_IN_REVIEW = 'IN_REVIEW';
+    const GUARANTEE_UNREQUESTED = 'UNREQUESTED';
+    /**#@-*/
+
+    /**#@+
+     * Constants for case available review dispositions
+     */
+    const DISPOSITION_GOOD = 'GOOD';
+    const DISPOSITION_FRAUDULENT = 'FRAUDULENT';
+    const DISPOSITION_UNSET = 'UNSET';
+
     /**
      * @var CreateCaseBuilderInterface
      */
@@ -76,6 +104,25 @@ class Gateway
             ]
         );
 
-        return $guaranteeCreationResult;
+        if (!isset($guaranteeCreationResult['disposition'])) {
+            throw new GatewayException('Expected field "disposition" missed.');
+        }
+
+        $disposition = strtoupper($guaranteeCreationResult['disposition']);
+
+        if (!in_array($disposition, [
+            self::GUARANTEE_APPROVED,
+            self::GUARANTEE_DECLINED,
+            self::GUARANTEE_PENDING,
+            self::GUARANTEE_CANCELED,
+            self::GUARANTEE_IN_REVIEW,
+            self::GUARANTEE_UNREQUESTED
+        ])) {
+            throw new GatewayException(
+                sprintf('API returns unknown guaranty disposition "%s".', $disposition)
+            );
+        }
+
+        return $disposition;
     }
 }
