@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogRule\Test\TestCase\ApplySeveralCatalogPriceRuleEntityTest" summary="Apply Several Catalog Price Rules " ticketId="MAGETWO-24780">
         <variation name="ApplySeveralCatalogRules_Sequentially">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, to_maintain:yes</data>
             <data name="catalogRulesOriginal/priority_0" xsi:type="string">catalog_price_rule_priority_0</data>
             <data name="catalogRulesOriginal/priority_1" xsi:type="string">-</data>
             <data name="catalogRulesOriginal/priority_2" xsi:type="string">catalog_price_rule_priority_2</data>

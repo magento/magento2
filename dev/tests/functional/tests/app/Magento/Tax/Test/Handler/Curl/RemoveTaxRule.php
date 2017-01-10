@@ -39,9 +39,9 @@ class RemoveTaxRule extends Curl
     public function persist(FixtureInterface $fixture = null)
     {
         $this->taxRuleGridUrl = $_ENV['app_backend_url'] . 'tax/rule/index/';
-        $curl = $this->_getCurl($this->taxRuleGridUrl);
+        $curl = $this->getCurl($this->taxRuleGridUrl);
         $response = $curl->read();
-        $this->_removeTaxRules($response);
+        $this->removeTaxRules($response);
         $curl->close();
         return $response;
     }
@@ -72,7 +72,7 @@ class RemoveTaxRule extends Curl
             return null;
         }
         foreach ($result[1] as $taxRuleId) {
-            $this->_deleteTaxRuleRequest((int)$taxRuleId);
+            $this->deleteTaxRuleRequest((int)$taxRuleId);
             break;
         }
 
