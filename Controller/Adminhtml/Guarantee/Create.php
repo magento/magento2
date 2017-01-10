@@ -10,7 +10,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Signifyd\Model\Guarantee\CreationService;
 
 /**
- * Responsible for submitting case for Guarantee.
+ * Responsible for submitting order for Guarantee.
  *
  * @see https://www.signifyd.com/docs/api/#/reference/guarantees/create-guarantee
  */
@@ -33,6 +33,11 @@ class Create extends Action
         $this->creationService = $creationService;
     }
 
+    /**
+     * Submits order for Guarantee and redirects user to order page with result message
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
     public function execute()
     {
         $orderId = $this->getRequest()->getParam('orderId');
