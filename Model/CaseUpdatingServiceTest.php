@@ -69,7 +69,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->service->update($data);
 
-        /** @var CaseRepositoryInterface $caseManagement */
+        /** @var CaseRepositoryInterface $caseRepository */
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         /** @var CaseInterface $caseEntity */
         $caseEntity = $caseRepository->getByCaseId($caseId);
