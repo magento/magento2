@@ -38,6 +38,12 @@ class GeneratorFactory
     private static $guaranteeCompletion = 'guarantees/completion';
 
     /**
+     * Type of message of Signifyd guarantee creation
+     * @var string
+     */
+    private static $guaranteeCreation = 'guarantees/creation';
+
+    /**
      * CaseUpdatingServiceFactory constructor.
      *
      * @param ObjectManagerInterface $objectManager
@@ -69,6 +75,9 @@ class GeneratorFactory
                 break;
             case self::$guaranteeCompletion:
                 $className = GuaranteeCompletion::class;
+                break;
+            case self::$guaranteeCreation:
+                $className = GuaranteeCreation::class;
                 break;
             default:
                 throw new \InvalidArgumentException('Specified message type does not supported.');
