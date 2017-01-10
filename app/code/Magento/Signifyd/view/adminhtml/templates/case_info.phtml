@@ -36,7 +36,7 @@
             <tbody class="even">
             <tr>
                 <td class="col-case-status"><?php echo $block->escapeHtml($case->getStatus()); ?></td>
-                <td class="col-case-score-<?php echo $block->getScoreClass($case); ?>"><?php echo $block->escapeHtml($case->getScore()); ?></td>
+                <td class="col-case-score-<?php echo $block->escapeHtml($block->getScoreClass($case)); ?>"><?php echo $block->escapeHtml($case->getScore()); ?></td>
                 <td class="col-guarantee-eligible"><?php echo $block->escapeHtml($block->getGuaranteeEligible($case)); ?></td>
                 <td class="col-guarantee-disposition"><?php echo $block->escapeHtml($case->getGuaranteeDisposition()); ?></td>
                 <td class="col-case-team"><?php echo $block->escapeHtml($block->getAssociatedTeam($case)); ?></td>

@@ -112,7 +112,8 @@ class CaseInfo extends AbstractOrder
      * @param CaseInterface $caseEntity
      * @return \Magento\Framework\Phrase
      */
-    public function getGuaranteeEligible(CaseInterface $caseEntity) {
+    public function getGuaranteeEligible(CaseInterface $caseEntity)
+    {
         return $caseEntity->isGuaranteeEligible() ? __('Yes') : __('No');
     }
 
@@ -122,7 +123,8 @@ class CaseInfo extends AbstractOrder
      * @param CaseInterface $caseEntity
      * @return string
      */
-    public function getAssociatedTeam(CaseInterface $caseEntity) {
+    public function getAssociatedTeam(CaseInterface $caseEntity)
+    {
 
         $result = 'unknown';
         $team = $caseEntity->getAssociatedTeam();
