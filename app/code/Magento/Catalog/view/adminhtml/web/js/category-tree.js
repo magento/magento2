@@ -39,7 +39,12 @@ define([
                                 success: $.proxy(function (node) {
                                     return this._convertData(node[0]);
                                 }, this),
-                                data: function (node) { //jscs:ignore jsDoc
+
+                                /**
+                                 * @param {HTMLElement} node
+                                 * @return {Object}
+                                 */
+                                data: function (node) {
                                     return {
                                         id: $(node).data('id'),
                                         'form_key': window.FORM_KEY

@@ -19,7 +19,11 @@ define([
         },
         dataScope: 'global',
         currentCaptcha: null,
-        captchaValue: function () {//jscs:ignore jsDoc
+
+        /**
+         * @return {*}
+         */
+        captchaValue: function () {
             return this.currentCaptcha.getCaptchaValue();
         },
 

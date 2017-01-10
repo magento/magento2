@@ -51,7 +51,10 @@ define([
 
             this.element.decorate('list', this.options.isRecursive);
 
-            events['click ' + this.options.button.close] = function (event) { //jscs:ignore jsDoc
+            /**
+             * @param {jQuery.Event} event
+             */
+            events['click ' + this.options.button.close] = function (event) {
                 event.stopPropagation();
                 $(self.options.targetElement).dropdownDialog('close');
             };
@@ -73,7 +76,11 @@ define([
                 }
                 location.href = this.options.url.checkout;
             }, this);
-            events['click ' + this.options.button.remove] =  function (event) { //jscs:ignore jsDoc
+
+            /**
+             * @param {jQuery.Event} event
+             */
+            events['click ' + this.options.button.remove] =  function (event) {
                 event.stopPropagation();
                 confirm({
                     content: self.options.confirmMessage,
@@ -90,14 +97,26 @@ define([
                     }
                 });
             };
-            events['keyup ' + this.options.item.qty] = function (event) { //jscs:ignore jsDoc
+
+            /**
+             * @param {jQuery.Event} event
+             */
+            events['keyup ' + this.options.item.qty] = function (event) {
                 self._showItemButton($(event.target));
             };
-            events['click ' + this.options.item.button] = function (event) { //jscs:ignore jsDoc
+
+            /**
+             * @param {jQuery.Event} event
+             */
+            events['click ' + this.options.item.button] = function (event) {
                 event.stopPropagation();
                 self._updateItemQty($(event.currentTarget));
             };
-            events['focusout ' + this.options.item.qty] = function (event) { //jscs:ignore jsDoc
+
+            /**
+             * @param {jQuery.Event} event
+             */
+            events['focusout ' + this.options.item.qty] = function (event) {
                 self._validateQty($(event.currentTarget));
             };
 

@@ -13,7 +13,8 @@ define([
 ], function (jQuery) {
     'use strict';
 
-    var categorySubmit = function () {//jscs:ignore jsDoc
+    /** Category submit. */
+    var categorySubmit = function () {
         var activeTab = $('active_tab_id'),
             params = {},
             fields, i,categoryId, isCreating, path, parentId, currentNode, oldClass, newClass;

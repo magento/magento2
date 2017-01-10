@@ -14,7 +14,8 @@ define([
 ], function ($) {
     'use strict';
 
-    var clearParentCategory = function () {//jscs:ignore jsDoc
+    /** Clear parent category. */
+    var clearParentCategory = function () {
         $('#new_category_parent').find('option').each(function () {
             $('#new_category_parent-suggest').treeSuggest('removeOption', null, this);
         });
@@ -42,7 +43,11 @@ define([
             }, $.mage.__('Choose existing category.'));
             newCategoryForm = $('#new_category_form');
             newCategoryForm.mage('validation', {
-                errorPlacement: function (error, element) {//jscs:ignore jsDoc
+                /**
+                 * @param {jQuery} error
+                 * @param {*} element
+                 */
+                errorPlacement: function (error, element) {
                     error.insertAfter(element.is('#new_category_parent') ?
                         $('#new_category_parent-suggest').closest('.mage-suggest') :
                         element);

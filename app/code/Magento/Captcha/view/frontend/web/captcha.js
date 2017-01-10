@@ -45,12 +45,18 @@ define([
                 data: {
                     'formId': this.options.type
                 },
-                success: function (response) {//jscs:ignore jsDoc
+
+                /**
+                 * @param {Object} response
+                 */
+                success: function (response) {
                     if (response.imgSrc) {
                         this.element.find(this.options.imageSelector).attr('src', response.imgSrc);
                     }
                 },
-                complete: function () {//jscs:ignore jsDoc
+
+                /** Complete callback. */
+                complete: function () {
                     this.element.removeClass(this.options.refreshClass);
                 }
             });

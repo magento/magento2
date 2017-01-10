@@ -43,7 +43,10 @@ define([
                 tolerance: 'pointer'
             });
 
-            syncOptionTitle = function (event) {//jscs:ignore jsDoc
+            /**
+             * @param {jQuery.Event} event
+             */
+            syncOptionTitle = function (event) {
                 var originalValue = $(event.target).attr('data-original-value'),
                     currentValue = $(event.target).val(),
                     optionBoxTitle = $('.title > span', $(event.target).closest('.option-box')),
@@ -68,7 +71,13 @@ define([
             this.element.find('.option-box .form-list tbody').sortable({
                 axis: 'y',
                 handle: '[data-role=draggable-handle]',
-                helper: function (event, ui) {//jscs:ignore jsDoc
+
+                /**
+                 * @param {jQuery.Event} event
+                 * @param {jQuery} ui
+                 * @return {jQuery}
+                 */
+                helper: function (event, ui) {
                     ui.children().each(function () {
                         $(this).width($(this).width());
                     });
@@ -106,7 +115,10 @@ define([
             var widget = this;
 
             this._on({
-                'click .add-selection': function (event) {//jscs:ignore jsDoc
+                /**
+                 * @param {jQuery.Event} event
+                 */
+                'click .add-selection': function (event) {
                     var $optionBox = $(event.target).closest('.option-box'),
                         $selectionGrid = $optionBox.find('.selection-search').clone(),
                         optionIndex = $optionBox.attr('id').replace('bundle_option_', ''),
@@ -152,13 +164,20 @@ define([
                             ),
                         modalClass: 'bundle',
                         type: 'slide',
-                        closed: function (e, modalWindow) {//jscs:ignore jsDoc
+
+                        /**
+                         * @param {jQuery.Event} e
+                         * @param {Object} modalWindow
+                         */
+                        closed: function (e, modalWindow) {
                             modalWindow.modal.remove();
                         },
                         buttons: [{
                             text: $.mage.__('Add Selected Products'),
                             'class': 'action-primary action-add',
-                            click: function () {//jscs:ignore jsDoc
+
+                            /** Click action. */
+                            click: function () {
                                 $.each(selectedProductList, function () {
                                     window.bSelection.addRow(optionIndex, this);
                                 });
@@ -182,7 +201,11 @@ define([
                             'selected_products': productIds,
                             'form_key': FORM_KEY
                         },
-                        success: function (data) {//jscs:ignore jsDoc
+
+                        /**
+                         * @param {*} data
+                         */
+                        success: function (data) {
                             $selectionGrid.html(data).modal('openModal');
                         },
                         context: $('body'),
@@ -207,12 +230,19 @@ define([
          */
         _bindCheckboxHandlers: function () {
             this._on({
-                'change .is-required': function (event) {//jscs:ignore jsDoc
+                /**
+                 * @param {jQuery.Event} event
+                 */
+                'change .is-required': function (event) {
                     var $this = $(event.target);
 
                     $this.closest('.option-box').find('[name$="[required]"]').val($this.is(':checked') ? 1 : 0);
                 },
-                'change .is-user-defined-qty': function (event) {//jscs:ignore jsDoc
+
+                /**
+                 * @param {jQuery.Event} event
+                 */
+                'change .is-user-defined-qty': function (event) {
                     var $this = $(event.target);
 
                     $this.closest('.qty-box').find('.select').val($this.is(':checked') ? 1 : 0);

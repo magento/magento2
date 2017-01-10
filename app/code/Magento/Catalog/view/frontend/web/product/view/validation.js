@@ -21,7 +21,12 @@
     $.widget('mage.validation', $.mage.validation, {
         options: {
             radioCheckboxClosest: 'ul, ol',
-            errorPlacement: function (error, element) { //jscs:ignore jsDoc
+
+            /**
+             * @param {*} error
+             * @param {HTMLElement} element
+             */
+            errorPlacement: function (error, element) {
                 var messageBox,
                     dataValidate;
 
@@ -50,7 +55,12 @@
                     element.after(error);
                 }
             },
-            highlight: function (element, errorClass) { //jscs:ignore jsDoc
+
+            /**
+             * @param {HTMLElement} element
+             * @param {String} errorClass
+             */
+            highlight: function (element, errorClass) {
                 var dataValidate = $(element).attr('data-validate');
 
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
@@ -67,7 +77,12 @@
                     $(element).addClass(errorClass);
                 }
             },
-            unhighlight: function (element, errorClass) { //jscs:ignore jsDoc
+
+            /**
+             * @param {HTMLElement} element
+             * @param {String} errorClass
+             */
+            unhighlight: function (element, errorClass) {
                 var dataValidate = $(element).attr('data-validate');
 
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {

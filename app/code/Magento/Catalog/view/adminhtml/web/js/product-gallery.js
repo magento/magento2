@@ -81,7 +81,11 @@ define([
                 setImageType: '_setImageType',
                 setPosition: '_setPosition',
                 resort: '_resort',
-                'mouseup [data-role=delete-button]': function (event) {//jscs:ignore jsDoc
+
+                /**
+                 * @param {jQuery.Event} event
+                 */
+                'mouseup [data-role=delete-button]': function (event) {
                     var $imageContainer;
 
                     event.preventDefault();
@@ -89,7 +93,11 @@ define([
                     this.element.find('[data-role=dialog]').trigger('close');
                     this.element.trigger('removeItem', $imageContainer.data('imageData'));
                 },
-                'mouseup [data-role=make-base-button]': function (event) {//jscs:ignore jsDoc
+
+                /**
+                 * @param {jQuery.Event} event
+                 */
+                'mouseup [data-role=make-base-button]': function (event) {
                     var $imageContainer,
                         imageData;
 
@@ -431,7 +439,11 @@ define([
             events['click [data-role=close-panel]'] = $.proxy(function () {
                 this.element.find('[data-role=dialog]').trigger('close');
             }, this);
-            events['click ' + this.options.imageSelector] = function (event) { //jscs:ignore jsDoc
+
+            /**
+             * @param {jQuery.Event} event
+             */
+            events['click ' + this.options.imageSelector] = function (event) {
                 var imageData, $imageContainer;
 
                 if (!$(event.currentTarget).is('.ui-sortable-helper')) {

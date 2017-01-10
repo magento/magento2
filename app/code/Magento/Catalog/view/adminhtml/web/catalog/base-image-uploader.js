@@ -40,7 +40,10 @@ define([
                 $fieldCheckBox.trigger('click');
             }
 
-            findElement = function (data) {//jscs:ignore jsDoc
+            /**
+             * @param {Object} data
+             */
+            findElement = function (data) {
                 return $container.find('.image:not(.image-placeholder)').filter(function () {
                     if (!$(this).data('image')) {
                         return false;
@@ -49,7 +52,9 @@ define([
                     return $(this).data('image').file === data.file;
                 }).first();
             };
-            updateVisibility = function () {//jscs:ignore jsDoc
+
+            /** Update visibility. */
+            updateVisibility = function () {
                 var elementsList = $container.find('.image:not(.removed-item)');
 
                 elementsList.each(function (index) {
@@ -117,7 +122,12 @@ define([
                 items: '.image:not(.image-placeholder)',
                 distance: 8,
                 tolerance: 'pointer',
-                stop: function (event, data) {//jscs:ignore jsDoc
+
+                /**
+                 * @param {jQuery.Event} event
+                 * @param {Object} data
+                 */
+                stop: function (event, data) {
                     $galleryContainer.trigger('setPosition', {
                         imageData: data.item.data('image'),
                         position: $container.find('.image').index(data.item)
@@ -131,7 +141,12 @@ define([
                 dropZone: $dropPlaceholder.closest('[data-attribute-code]'),
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
                 maxFileSize: this.element.data('maxFileSize'),
-                done: function (event, data) {//jscs:ignore jsDoc
+
+                /**
+                 * @param {jQuery.Event} event
+                 * @param {Object} data
+                 */
+                done: function (event, data) {
                     $dropPlaceholder.find('.progress-bar').text('').removeClass('in-progress');
 
                     if (!data.result) {
@@ -152,7 +167,11 @@ define([
                             error: true,
                             message: $.mage.__('You can\'t upload more than ' + this.options.maxImageUploadCount +
                                 ' images in one time'),
-                            insertMethod: function (message) {//jscs:ignore jsDoc
+
+                            /**
+                             * @param {*} message
+                             */
+                            insertMethod: function (message) {
                                 $('.page-main-actions').after(message);
                             }
                         });
@@ -160,22 +179,40 @@ define([
                         return false;
                     }
                 }.bind(this),
-                add: function (event, data) {//jscs:ignore jsDoc
+
+                /**
+                 * @param {jQuery.Event} event
+                 * @param {*} data
+                 */
+                add: function (event, data) {
                     $(this).fileupload('process', data).done(function () {
                         data.submit();
                     });
                 },
-                progress: function (e, data) {//jscs:ignore jsDoc
+
+                /**
+                 * @param {jQuery.Event} e
+                 * @param {Object} data
+                 */
+                progress: function (e, data) {
                     var progress = parseInt(data.loaded / data.total * 100, 10);
 
                     $dropPlaceholder.find('.progress-bar').addClass('in-progress').text(progress + '%');
                 },
-                start: function (event) {//jscs:ignore jsDoc
+
+                /**
+                 * @param {jQuery.Event} event
+                 */
+                start: function (event) {
                     var uploaderContainer = $(event.target).closest('.image-placeholder');
 
                     uploaderContainer.addClass('loading');
                 },
-                stop: function (event) {//jscs:ignore jsDoc
+
+                /**
+                 * @param {jQuery.Event} event
+                 */
+                stop: function (event) {
                     var uploaderContainer = $(event.target).closest('.image-placeholder');
 
                     uploaderContainer.removeClass('loading');

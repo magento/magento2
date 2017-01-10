@@ -73,7 +73,11 @@ define([
                     tolerance: 'pointer'
                 });
             }
-            syncOptionTitle = function (event) { //jscs:ignore jsDoc
+
+            /**
+             * @param {jQuery.Event} event
+             */
+            syncOptionTitle = function (event) {
                 var currentValue = $(event.target).val(),
                     optionBoxTitle = $(
                         '.admin__collapsible-title > span',
@@ -303,7 +307,10 @@ define([
          */
         _bindCheckboxHandlers: function () {
             this._on({
-                'change [id^=product_option_][id$=_required]': function (event) { //jscs:ignore jsDoc
+                /**
+                 * @param {jQuery.Event} event
+                 */
+                'change [id^=product_option_][id$=_required]': function (event) {
                     var $this = $(event.target);
 
                     $this.closest('#product_options_container_top > div')

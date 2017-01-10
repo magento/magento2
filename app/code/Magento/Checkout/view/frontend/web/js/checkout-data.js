@@ -18,7 +18,7 @@ define([
         /**
          * @return {*}
          */
-        getData = function () { //jscs:ignore jsDoc
+        getData = function () {
             return storage.get(cacheKey)();
         },
 
