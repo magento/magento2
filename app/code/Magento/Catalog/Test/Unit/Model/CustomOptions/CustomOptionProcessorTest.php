@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\CustomOptions;
@@ -51,6 +51,9 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var CustomOptionProcessor */
     protected $processor;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json */
+    private $serializer;
+
     protected function setUp()
     {
         $this->objectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
@@ -90,12 +93,16 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $this->buyRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->setMethods(['unserialize'])
+            ->getMockForAbstractClass();
 
         $this->processor = new CustomOptionProcessor(
             $this->objectFactory,
             $this->productOptionFactory,
             $this->extensionFactory,
-            $this->customOptionFactory
+            $this->customOptionFactory,
+            $this->serializer
         );
 
     }
@@ -126,6 +133,9 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->buyRequest, $this->processor->convertToBuyRequest($this->cartItem));
     }
 
+    /**
+     * @covers \Magento\Catalog\Model\CustomOptions\CustomOptionProcessor::getOptions()
+     */
     public function testProcessCustomOptions()
     {
         $optionId = 23;
@@ -136,9 +146,12 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getOptionByCode')
             ->with('info_buyRequest')
             ->willReturn($quoteItemOption);
-        $quoteItemOption->expects($this->once())
+        $quoteItemOption->expects($this->any())
             ->method('getValue')
-            ->willReturn('a:1:{s:7:"options";a:1:{i:' . $optionId . ';a:2:{i:0;s:1:"5";i:1;s:1:"6";}}} ');
+            ->willReturn('{"options":{"' . $optionId . '":["5","6"]}}');
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturn(json_decode($quoteItemOption->getValue(), true));
         $this->customOptionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->customOption);
