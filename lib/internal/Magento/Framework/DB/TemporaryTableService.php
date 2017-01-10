@@ -17,7 +17,7 @@ use Magento\Framework\DB\Select;
 class TemporaryTableService
 {
     const INDEX_METHOD_HASH = 'HASH';
-    const INDEX_METHOD_INNODB = 'INNODB';
+    const DB_ENGINE_INNODB = 'INNODB';
 
     /**
      * @var string[]
@@ -84,7 +84,7 @@ class TemporaryTableService
         AdapterInterface $adapter,
         array $indexes = [],
         $indexMethod = self::INDEX_METHOD_HASH,
-        $dbEngine = self::INDEX_METHOD_INNODB
+        $dbEngine = self::DB_ENGINE_INNODB
     ) {
         if (!in_array($indexMethod, $this->allowedIndexMethods)) {
             throw new \InvalidArgumentException(
