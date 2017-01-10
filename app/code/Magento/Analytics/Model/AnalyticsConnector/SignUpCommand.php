@@ -14,6 +14,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Psr\Log\LoggerInterface;
 
 class SignUpCommand implements AnalyticsCommandInterface
 {
@@ -48,6 +49,10 @@ class SignUpCommand implements AnalyticsCommandInterface
      * #@var WriterInterface
      */
     private $configWriter;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * SignUpCommand constructor.
@@ -57,6 +62,7 @@ class SignUpCommand implements AnalyticsCommandInterface
      * @param OauthServiceInterface $oauthService
      * @param ZendClientFactory $zendClientFactory
      * @param WriterInterface $configWriter
+     * @param LoggerInterface $logger
      */
     public function __construct(
         IntegrationServiceInterface $integrationService,
@@ -64,7 +70,8 @@ class SignUpCommand implements AnalyticsCommandInterface
         StoreManagerInterface $storeManager,
         OauthServiceInterface $oauthService,
         ZendClientFactory $zendClientFactory,
-        WriterInterface $configWriter
+        WriterInterface $configWriter,
+        LoggerInterface $logger
     ) {
         $this->integrationService = $integrationService;
         $this->config = $config;
@@ -72,14 +79,11 @@ class SignUpCommand implements AnalyticsCommandInterface
         $this->oauthService = $oauthService;
         $this->httpClientFactory = $zendClientFactory;
         $this->configWriter = $configWriter;
+        $this->logger = $logger;
     }
 
     /**
-     * This method execute sign-up command
-     * 1) Generate or get exists access token for MA integration
-     * 2) Get base URL
-     * 3) Send data to MA service
-     * 4) Save ma token to Magento config
+     * This method execute sign-up command and send request to MA api
      * @return bool
      */
     public function execute()
@@ -112,8 +116,9 @@ class SignUpCommand implements AnalyticsCommandInterface
                 }
                 return true;
             }
-        } catch (\Exception $e) {
-
+        } catch (\Zend_Http_Client_Exception $e) {
+            $this->logger->critical($e);
+            return false;
         }
         return false;
     }
