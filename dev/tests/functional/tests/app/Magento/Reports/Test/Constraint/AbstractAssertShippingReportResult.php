@@ -61,17 +61,24 @@ abstract class AbstractAssertShippingReportResult extends AbstractConstraint
     }
 
     /**
-     * Prepare expected result.
+     * Prepare expected and initial results.
      *
      * @param array $expectedShippingData
+     * @param array $shipmentResult
      * @return array
      */
-    protected function prepareExpectedResult(array $expectedShippingData)
+    protected function prepareExpectedResult(array $expectedShippingData, array $shipmentResult)
     {
         $totalShipping = $this->order->getPrice()[0]['grand_shipment_total'];
         $expectedShippingData['qty'] += 1;
         $expectedShippingData['total-sales-shipping'] += $totalShipping;
 
-        return $expectedShippingData;
+        $preparedResult = [$expectedShippingData, $shipmentResult];
+        foreach ($preparedResult as &$result) {
+            $result = array_map(function ($rowData) {
+                return (int)$rowData;
+            }, $result);
+        }
+        return $preparedResult;
     }
 }

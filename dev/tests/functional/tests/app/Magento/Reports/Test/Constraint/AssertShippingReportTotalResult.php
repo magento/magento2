@@ -26,7 +26,8 @@ class AssertShippingReportTotalResult extends AbstractAssertShippingReportResult
         $this->order = $order;
         $this->searchInShippingReportGrid($shippingReport);
         $shipmentResult = $this->salesShippingReport->getGridBlock()->getTotalResult();
-        $prepareInitialResult = $this->prepareExpectedResult($initialShippingTotalResult);
+        $prepareInitialResults = $this->prepareExpectedResult($initialShippingTotalResult, $shipmentResult);
+        list($prepareInitialResult, $shipmentResult) = $prepareInitialResults;
         \PHPUnit_Framework_Assert::assertEquals(
             $prepareInitialResult,
             $shipmentResult,

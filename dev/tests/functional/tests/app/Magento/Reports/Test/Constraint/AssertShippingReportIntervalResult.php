@@ -26,7 +26,8 @@ class AssertShippingReportIntervalResult extends AbstractAssertShippingReportRes
         $this->order = $order;
         $this->searchInShippingReportGrid($shippingReport);
         $shipmentResult = $this->salesShippingReport->getGridBlock()->getLastResult();
-        $prepareInitialResult = $this->prepareExpectedResult($initialShippingResult);
+        $prepareInitialResults = $this->prepareExpectedResult($initialShippingResult, $shipmentResult);
+        list($prepareInitialResult, $shipmentResult) = $prepareInitialResults;
         \PHPUnit_Framework_Assert::assertEquals(
             $prepareInitialResult,
             $shipmentResult,
