@@ -356,12 +356,7 @@ class DataGrid extends Grid
         $actionType = is_array($action) ? key($action) : $action;
         $this->getGridHeaderElement()->find($this->actionButton)->click();
         $this->_rootElement->find(sprintf($this->actionList, $actionType), Locator::SELECTOR_XPATH)->hover();
-        if ($this->browser->find('.sticky-header')->isVisible() &&
-            !$this->browser->find(sprintf($this->activeActionList, $actionType), Locator::SELECTOR_XPATH)
-        ->isVisible()) {
-            $this->browser->find($this->activeActionButton)->click();
-            $this->browser->find(sprintf($this->activeActionList, $actionType), Locator::SELECTOR_XPATH)->click();
-        } else {
+        if (!$this->isStickyHeader($actionType)) {
             $this->getGridHeaderElement()
                 ->find(sprintf($this->actionList, $actionType), Locator::SELECTOR_XPATH)
                 ->click();
@@ -376,6 +371,24 @@ class DataGrid extends Grid
             $this->browser->find(sprintf($this->activeActionList, end($action)), Locator::SELECTOR_XPATH)->hover();
             $this->browser->find(sprintf($this->activeActionList, end($action)), Locator::SELECTOR_XPATH)->click();
         }
+    }
+
+    /**
+     * Peform action using the dropdown in sticky header.
+     *
+     * @param string $actionType
+     * @return bool
+     */
+    private function isStickyHeader(string $actionType)
+    {
+        if ($this->browser->find('.sticky-header')->isVisible() &&
+            !$this->browser->find(sprintf($this->activeActionList, $actionType), Locator::SELECTOR_XPATH)
+                ->isVisible()) {
+            $this->browser->find($this->activeActionButton)->click();
+            $this->browser->find(sprintf($this->activeActionList, $actionType), Locator::SELECTOR_XPATH)->click();
+            return true;
+        }
+        return false;
     }
 
     /**
