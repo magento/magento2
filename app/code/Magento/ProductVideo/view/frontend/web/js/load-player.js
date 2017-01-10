@@ -317,7 +317,7 @@ define(['jquery', 'jquery/ui'], function ($) {
             if (this._loop) {
                 additionalParams += '&loop=1';
             }
-            src = 'http://player.vimeo.com/video/' +
+            src = window.location.protocol + '//player.vimeo.com/video/' +
                 this._code + '?api=1&player_id=vimeo' +
                 this._code +
                 timestamp +
