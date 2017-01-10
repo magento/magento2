@@ -8,7 +8,7 @@ namespace Magento\Signifyd\Model\MessageGenerators;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Model\MessageGeneratorException;
 use Magento\Signifyd\Model\MessageGeneratorInterface;
-use Magento\Signifyd\Model\Validators\CaseDataValidator;
+use Magento\Signifyd\Model\Validators\CaseIdValidator;
 
 /**
  * Generates message based on previous and current Case scores.
@@ -21,20 +21,20 @@ class CaseRescore implements MessageGeneratorInterface
     private $caseRepository;
 
     /**
-     * @var CaseDataValidator
+     * @var CaseIdValidator
      */
-    private $caseDataValidator;
+    private $caseIdValidator;
 
     /**
      * CaseRescore constructor.
      *
      * @param CaseRepositoryInterface $caseRepository
-     * @param CaseDataValidator $caseDataValidator
+     * @param CaseIdValidator $caseIdValidator
      */
-    public function __construct(CaseRepositoryInterface $caseRepository, CaseDataValidator $caseDataValidator)
+    public function __construct(CaseRepositoryInterface $caseRepository, CaseIdValidator $caseIdValidator)
     {
         $this->caseRepository = $caseRepository;
-        $this->caseDataValidator = $caseDataValidator;
+        $this->caseIdValidator = $caseIdValidator;
     }
 
     /**
@@ -42,7 +42,7 @@ class CaseRescore implements MessageGeneratorInterface
      */
     public function generate(array $data)
     {
-        if (!$this->caseDataValidator->validate($data)) {
+        if (!$this->caseIdValidator->validate($data)) {
             throw new MessageGeneratorException(__('The "%1" should not be empty.', 'caseId'));
         }
 

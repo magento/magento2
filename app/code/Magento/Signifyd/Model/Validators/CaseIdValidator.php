@@ -8,7 +8,7 @@ namespace Magento\Signifyd\Model\Validators;
 /**
  * Validates Signifyd Case id field.
  */
-class CaseDataValidator
+class CaseIdValidator
 {
     /**
      * Checks if data object contains Signifyd Case id.
