@@ -6,6 +6,8 @@
 namespace Magento\Signifyd\Model\Guarantee;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
@@ -159,6 +161,18 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
         self::assertEquals(CaseInterface::GUARANTEE_IN_REVIEW, $updatedCase->getGuaranteeDisposition());
         self::assertTrue((bool) $updatedCase->isGuaranteeEligible());
         self::assertEquals(CaseInterface::STATUS_PROCESSING, $updatedCase->getStatus());
+
+        /** @var OrderRepositoryInterface $orderRepository */
+        $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
+        $order = $orderRepository->get($updatedCase->getOrderId());
+        $histories = $order->getStatusHistories();
+        static::assertNotEmpty($histories);
+
+
+        /** @var OrderStatusHistoryInterface $caseCreationComment */
+        $caseCreationComment = array_pop($histories);
+        static::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
+        static::assertEquals('Case Update: Case is submitted for guarantee.', $caseCreationComment->getComment());
     }
 
     /**
