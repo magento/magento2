@@ -70,6 +70,7 @@ class Config
 
     const XML_PATH_DISPLAY_CART_SHIPPING = 'tax/cart_display/shipping';
 
+    /** @deprecated */
     const XML_PATH_DISPLAY_CART_DISCOUNT = 'tax/cart_display/discount';
 
     const XML_PATH_DISPLAY_CART_GRANDTOTAL = 'tax/cart_display/grandtotal';
@@ -87,6 +88,7 @@ class Config
 
     const XML_PATH_DISPLAY_SALES_SHIPPING = 'tax/sales_display/shipping';
 
+    /** @deprecated */
     const XML_PATH_DISPLAY_SALES_DISCOUNT = 'tax/sales_display/discount';
 
     const XML_PATH_DISPLAY_SALES_GRANDTOTAL = 'tax/sales_display/grandtotal';
@@ -470,6 +472,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated
      */
     public function displayCartDiscountInclTax($store = null)
     {
@@ -483,6 +486,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated
      */
     public function displayCartDiscountExclTax($store = null)
     {
@@ -496,6 +500,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated
      */
     public function displayCartDiscountBoth($store = null)
     {
@@ -665,6 +670,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated
      */
     public function displaySalesDiscountInclTax($store = null)
     {
@@ -678,6 +684,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated
      */
     public function displaySalesDiscountExclTax($store = null)
     {
@@ -691,6 +698,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @deprecated
      */
     public function displaySalesDiscountBoth($store = null)
     {

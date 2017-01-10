@@ -54,6 +54,7 @@ class AdminPriceExcludingTax implements \Magento\Tax\Model\System\Message\Notifi
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getIdentity()
     {
@@ -97,6 +98,7 @@ class AdminPriceExcludingTax implements \Magento\Tax\Model\System\Message\Notifi
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getSeverity()
     {
@@ -134,49 +136,47 @@ class AdminPriceExcludingTax implements \Magento\Tax\Model\System\Message\Notifi
     {
         $adminCatalogPricesExcludeTax = !$this->taxConfig->priceIncludesTax($store)
             || !$this->taxConfig->shippingPriceIncludesTax($store);
-        $displayPricesWhichIncludeTax = $this->hasCatalogDisplaySettingsNotIncludingTax($store)
-            || $this->hasCartDisplaySettingsNotIncludingTax($store)
-            || $this->hasSalesDisplaySettingsNotIncludingTax($store);
+        $displayPricesWhichIncludeTax = $this->hasCatalogDisplaySettingsWhichIncludeTax($store)
+            || $this->hasCartDisplaySettingsWhichIncludeTax($store)
+            || $this->hasSalesDisplaySettingsWhichIncludeTax($store);
         return !($adminCatalogPricesExcludeTax && $displayPricesWhichIncludeTax);
     }
 
     /**
-     * Check if there are any price display settings for catalog with values other than "Including tax"
+     * Check if there are any price display settings for catalog with values other than "Excluding tax"
      *
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
      */
-    private function hasCatalogDisplaySettingsNotIncludingTax($store = null)
+    private function hasCatalogDisplaySettingsWhichIncludeTax($store = null)
     {
         return $this->taxConfig->getPriceDisplayType($store) !== Config::DISPLAY_TYPE_EXCLUDING_TAX
             || $this->taxConfig->getShippingPriceDisplayType($store) !== Config::DISPLAY_TYPE_EXCLUDING_TAX;
     }
 
     /**
-     * Check if there are any price display settings for cart with values other than "Including tax"
+     * Check if there are any price display settings for cart with values other than "Excluding tax"
      *
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
      */
-    private function hasCartDisplaySettingsNotIncludingTax($store = null)
+    private function hasCartDisplaySettingsWhichIncludeTax($store = null)
     {
-        return !$this->taxConfig->displayCartPricesInclTax($store)
-            || !$this->taxConfig->displayCartSubtotalInclTax($store)
-            || !$this->taxConfig->displayCartShippingInclTax($store)
-            || !$this->taxConfig->displayCartDiscountInclTax($store);
+        return !$this->taxConfig->displayCartPricesExclTax($store)
+            || !$this->taxConfig->displayCartSubtotalExclTax($store)
+            || !$this->taxConfig->displayCartShippingExclTax($store);
     }
 
     /**
-     * Check if there are any price display settings for orders, invoices, credit memos with values not "Including tax"
+     * Check if there are any price display settings for orders, invoices, credit memos with values not "Excluding tax"
      *
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
      */
-    private function hasSalesDisplaySettingsNotIncludingTax($store = null)
+    private function hasSalesDisplaySettingsWhichIncludeTax($store = null)
     {
-        return !$this->taxConfig->displaySalesPricesInclTax($store)
-            || !$this->taxConfig->displaySalesSubtotalInclTax($store)
-            || !$this->taxConfig->displaySalesShippingInclTax($store)
-            || !$this->taxConfig->displaySalesDiscountInclTax($store);
+        return !$this->taxConfig->displaySalesPricesExclTax($store)
+            || !$this->taxConfig->displaySalesSubtotalExclTax($store)
+            || !$this->taxConfig->displaySalesShippingExclTax($store);
     }
 }
