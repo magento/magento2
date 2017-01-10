@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Signifyd\Setup;
@@ -52,10 +52,20 @@ class InstallSchema implements InstallSchemaInterface
             $setup->getIdxName(
                 $setup->getTable(static::$table),
                 'order_id',
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                AdapterInterface::INDEX_TYPE_UNIQUE
             ),
             'order_id',
-            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+            ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
+        );
+
+        $table->addIndex(
+            $setup->getIdxName(
+                $setup->getTable(static::$table),
+                'case_id',
+                AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            'case_id',
+            ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
         );
 
         $table->addForeignKey(
@@ -70,6 +80,7 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             Table::ACTION_SET_NULL
         );
+
         $connection->createTable($table);
     }
 }

@@ -12,6 +12,7 @@ use Magento\Signifyd\Model\MessageGenerators\CaseRescore;
 use Magento\Signifyd\Model\MessageGenerators\CaseReview;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
 use Magento\Signifyd\Model\MessageGenerators\GuaranteeCompletion;
+use Magento\Signifyd\Model\MessageGenerators\GuaranteeCreation;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -81,6 +82,7 @@ class GeneratorFactoryTest extends \PHPUnit_Framework_TestCase
             ['cases/rescore', CaseRescore::class],
             ['cases/review', CaseReview::class],
             ['guarantees/completion', GuaranteeCompletion::class],
+            ['guarantees/creation', GuaranteeCreation::class],
         ];
     }
 
