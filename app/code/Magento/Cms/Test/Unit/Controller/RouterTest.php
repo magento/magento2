@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -123,7 +126,6 @@ class RouterTest extends \PHPUnit_Framework_TestCase
                 [
                     'router' => $this->router,
                     'condition' => $condition,
-                    'request' => $requestMock,
                 ]
             )
             ->willReturnSelf();
