@@ -5,6 +5,8 @@
  */
 namespace Magento\Signifyd\Api\Data;
 
+use Magento\Signifyd\Model\SignifydGateway\Gateway;
+
 /**
  * Signifyd Case entity interface
  *
@@ -16,29 +18,30 @@ interface CaseInterface
     /**#@+
      * Constants for case available statuses
      */
-    const STATUS_OPEN = 'OPEN';
+    const STATUS_OPEN = Gateway::STATUS_OPEN;
     const STATUS_PENDING = 'PENDING';
-    const STATUS_PROCESSING = 'PROCESSING';
-    const STATUS_FLAGGED = 'FLAGGED';
-    const STATUS_DISMISSED = 'DISMISSED';
+    const STATUS_PROCESSING = Gateway::STATUS_PROCESSING;
+    const STATUS_FLAGGED = Gateway::STATUS_FLAGGED;
+    const STATUS_DISMISSED = Gateway::STATUS_DISMISSED;
     /**#@-*/
 
     /**#@+
      * Constants for guarantee available statuses
      */
-    const GUARANTEE_APPROVED = 'APPROVED';
-    const GUARANTEE_DECLINED = 'DECLINED';
-    const GUARANTEE_PENDING = 'PENDING';
-    const GUARANTEE_CANCELED = 'CANCELED';
-    const GUARANTEE_IN_REVIEW = 'IN_REVIEW';
+    const GUARANTEE_APPROVED = Gateway::GUARANTEE_APPROVED;
+    const GUARANTEE_DECLINED = Gateway::GUARANTEE_DECLINED;
+    const GUARANTEE_PENDING = Gateway::GUARANTEE_PENDING;
+    const GUARANTEE_CANCELED = Gateway::GUARANTEE_CANCELED;
+    const GUARANTEE_IN_REVIEW = Gateway::GUARANTEE_IN_REVIEW;
+    const GUARANTEE_UNREQUESTED = Gateway::GUARANTEE_UNREQUESTED;
     /**#@-*/
 
     /**#@+
      * Constants for case available review dispositions
      */
-    const DISPOSITION_GOOD = 'GOOD';
-    const DISPOSITION_FRAUDULENT = 'FRAUDULENT';
-    const DISPOSITION_UNSET = 'UNSET';
+    const DISPOSITION_GOOD = Gateway::DISPOSITION_GOOD;
+    const DISPOSITION_FRAUDULENT = Gateway::DISPOSITION_FRAUDULENT;
+    const DISPOSITION_UNSET = Gateway::DISPOSITION_UNSET;
     /**#@-*/
 
     /**

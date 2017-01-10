@@ -167,9 +167,10 @@ class GatewayTest extends TestCase
         );
     }
 
-    public function testCreateGuaranteeCallsValidApiMethod()
+    public function testSubmitCaseForGuaranteeCallsValidApiMethod()
     {
         $dummySygnifydCaseId = 42;
+        $dummyDisposition = 'APPROVED';
 
         $this->apiClient
             ->expects($this->atLeastOnce())
@@ -180,9 +181,115 @@ class GatewayTest extends TestCase
                 $this->equalTo([
                     'caseId' => $dummySygnifydCaseId
                 ])
-            );
+            )->willReturn([
+                'disposition' => $dummyDisposition
+            ]);
 
         $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
 
+    }
+
+    public function testSubmitCaseForGuaranteeWithFailedApiCall()
+    {
+        $dummySygnifydCaseId = 42;
+        $apiCallFailureMessage = 'Api call failed';
+
+        $this->apiClient
+            ->method('makeApiCall')
+            ->willThrowException(new ApiCallException($apiCallFailureMessage));
+
+        $this->setExpectedException(
+            GatewayException::class,
+            $apiCallFailureMessage
+        );
+        $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+    }
+
+    public function testSubmitCaseForGuaranteeReturnsDisposition()
+    {
+        $dummySygnifydCaseId = 42;
+        $dummyDisposition = 'APPROVED';
+        $dummyGuaranteeId = 123;
+        $dummyRereviewCount = 0;
+
+        $this->apiClient
+            ->method('makeApiCall')
+            ->willReturn([
+                'guaranteeId' => $dummyGuaranteeId,
+                'disposition' => $dummyDisposition,
+                'rereviewCount' => $dummyRereviewCount,
+            ]);
+
+        $actualDisposition = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+        $this->assertEquals(
+            $dummyDisposition,
+            $actualDisposition,
+            'Method must return guarantee disposition retrieved in Signifyd API response as a result'
+        );
+    }
+
+    public function testSubmitCaseForGuaranteeWithMissedDisposition()
+    {
+        $dummySygnifydCaseId = 42;
+        $dummyGuaranteeId = 123;
+        $dummyRereviewCount = 0;
+
+        $this->apiClient
+            ->method('makeApiCall')
+            ->willReturn([
+                'guaranteeId' => $dummyGuaranteeId,
+                'rereviewCount' => $dummyRereviewCount,
+            ]);
+
+        $this->setExpectedException(GatewayException::class);
+        $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+    }
+
+    public function testSubmitCaseForGuaranteeWithUnexpectedDisposition()
+    {
+        $dummySygnifydCaseId = 42;
+        $dummyUnexpectedDisposition = 'UNEXPECTED';
+
+        $this->apiClient
+            ->method('makeApiCall')
+            ->willReturn([
+                'disposition' => $dummyUnexpectedDisposition,
+            ]);
+
+        $this->setExpectedException(GatewayException::class);
+        $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+    }
+
+    /**
+     * @dataProvider supportedGuaranteeDispositionsProvider
+     */
+    public function testSubmitCaseForGuaranteeWithExpectedDisposition($dummyExpectedDisposition)
+    {
+        $dummySygnifydCaseId = 42;
+
+        $this->apiClient
+            ->method('makeApiCall')
+            ->willReturn([
+                'disposition' => $dummyExpectedDisposition,
+            ]);
+
+        $actualDisposition = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+        $this->assertEquals(
+            $dummyExpectedDisposition,
+            $actualDisposition,
+            'Expected disposition should be return from method'
+        );
+    }
+
+    public function supportedGuaranteeDispositionsProvider()
+    {
+        return [
+            ['APPROVED'],
+            ['DECLINED'],
+            ['PENDING'],
+            ['CANCELED'],
+            ['IN_REVIEW'],
+            ['UNREQUESTED'],
+        ];
     }
 }
