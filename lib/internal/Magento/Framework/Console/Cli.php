@@ -187,14 +187,11 @@ class Cli extends Console\Application
             GenerationDirectoryAccess::class,
             ['serviceManager' => $this->serviceManager]
         );
-        /** @var DeploymentConfig $deploymentConfig */
-        $deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
         /** @var State $state */
         $state = $this->objectManager->get(State::class);
 
         if (
-            $deploymentConfig->isAvailable()
-            && $state->getMode() !== State::MODE_PRODUCTION
+            $state->getMode() !== State::MODE_PRODUCTION
             && !$generationDirectoryAccess->check()
         ) {
             $this->writeGenerationDirectoryReadError();
