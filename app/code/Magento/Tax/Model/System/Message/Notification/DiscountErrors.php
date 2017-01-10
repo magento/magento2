@@ -116,7 +116,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
      */
-    private function checkDiscountSettings($store = null)
+    private function checkSettings($store = null)
     {
         return $this->taxConfig->applyTaxAfterDiscount($store);
     }
@@ -135,7 +135,7 @@ class DiscountErrors implements \Magento\Tax\Model\System\Message\NotificationIn
         $this->storesWithInvalidSettings = [];
         $storeCollection = $this->storeManager->getStores(true);
         foreach ($storeCollection as $store) {
-            if (!$this->checkDiscountSettings($store)) {
+            if (!$this->checkSettings($store)) {
                 $website = $store->getWebsite();
                 $this->storesWithInvalidSettings[] = $website->getName() . ' (' . $store->getName() . ')';
             }

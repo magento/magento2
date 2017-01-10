@@ -11,7 +11,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use \Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
 
 /**
  * Test class for @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors

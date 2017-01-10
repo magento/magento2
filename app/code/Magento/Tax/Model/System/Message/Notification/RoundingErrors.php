@@ -51,6 +51,7 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getIdentity()
     {
@@ -62,18 +63,9 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      */
     public function isDisplayed()
     {
-        // Check if we are ignoring all notifications
-        if ($this->taxConfig->isWrongDisplaySettingsIgnored()) {
-            return false;
-        }
-
-        $this->storesWithInvalidSettings = $this->getStoresWithWrongSettings();
-
-        // Check if we have valid tax notifications
-        if ((!empty($this->storesWithInvalidSettings) && !$this->taxConfig->isWrongDisplaySettingsIgnored())) {
+        if (!$this->taxConfig->isWrongDisplaySettingsIgnored() && $this->getStoresWithWrongSettings()) {
             return true;
         }
-
         return false;
     }
 
@@ -84,12 +76,12 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     {
         $messageDetails = '';
 
-        if (!empty($this->storesWithInvalidSettings) && !$this->taxConfig->isWrongDisplaySettingsIgnored()) {
+        if (!empty($this->getStoresWithWrongSettings()) && !$this->taxConfig->isWrongDisplaySettingsIgnored()) {
             $messageDetails .= '<strong>';
             $messageDetails .= __('Warning tax configuration can result in rounding errors. ');
             $messageDetails .= '</strong><p>';
             $messageDetails .= __('Store(s) affected: ');
-            $messageDetails .= implode(', ', $this->storesWithInvalidSettings);
+            $messageDetails .= implode(', ', $this->getStoresWithWrongSettings());
             $messageDetails .= '</p><p>';
             $messageDetails .= __(
                 'Click on the link to <a href="%1">ignore this notification</a>',
@@ -103,6 +95,7 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getSeverity()
     {
@@ -119,7 +112,7 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
      */
-    private function checkDisplaySettings($store = null)
+    private function checkSettings($store = null)
     {
         if ($this->taxConfig->getAlgorithm($store) == \Magento\Tax\Model\Calculation::CALC_UNIT_BASE) {
             return true;
@@ -142,14 +135,17 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
      */
     private function getStoresWithWrongSettings()
     {
-        $storeNames = [];
+        if (null !== $this->storesWithInvalidSettings) {
+            return $this->storesWithInvalidSettings;
+        }
+        $this->storesWithInvalidSettings = [];
         $storeCollection = $this->storeManager->getStores(true);
         foreach ($storeCollection as $store) {
-            if (!$this->checkDisplaySettings($store)) {
+            if (!$this->checkSettings($store)) {
                 $website = $store->getWebsite();
-                $storeNames[] = $website->getName() . ' (' . $store->getName() . ')';
+                $this->storesWithInvalidSettings[] = $website->getName() . ' (' . $store->getName() . ')';
             }
         }
-        return $storeNames;
+        return $this->storesWithInvalidSettings;
     }
 }

@@ -156,7 +156,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
      * @deprecated
-     * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors::checkDisplaySettings
+     * @see \Magento\Tax\Model\System\Message\Notification\RoundingErrors::checkSettings
      */
     public function checkDisplaySettings($store = null)
     {
@@ -183,7 +183,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
      * @deprecated
-     * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors::checkDiscountSettings
+     * @see \Magento\Tax\Model\System\Message\Notification\DiscountErrors::checkSettings
      */
     public function checkDiscountSettings($store = null)
     {
