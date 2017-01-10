@@ -34,30 +34,13 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getAllData($categoryId)
-    {
-        return $this->generateData($categoryId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getData($categoryId, $key)
-    {
-        $categorySpecificData = $this->generateData($categoryId);
-        return $categorySpecificData[$key];
-    }
-
-    /**
      * Returns an array of product ids for all DataProductHashMap list,
      * that occur in other categories not part of DataCategoryHashMap list
      *
      * @param int $categoryId
      * @return array
      */
-    private function generateData($categoryId)
+    public function getAllData($categoryId)
     {
         if (!isset($this->hashMap[$categoryId])) {
             $productsLinkConnection = $this->connection->getConnection();
@@ -89,6 +72,18 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface
             $this->hashMap[$categoryId] = $productsLinkConnection->fetchCol($select);
         }
         return $this->hashMap[$categoryId];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData($categoryId, $key)
+    {
+        $categorySpecificData = $this->getAllData($categoryId);
+        if (isset($categorySpecificData[$key])) {
+            return $categorySpecificData[$key];
+        }
+        return [];
     }
 
     /**

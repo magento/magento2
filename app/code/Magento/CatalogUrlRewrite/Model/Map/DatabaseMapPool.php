@@ -44,17 +44,18 @@ class DatabaseMapPool
     {
         $key = $instanceName . '-' . $categoryId;
         if (!isset($this->dataArray[$key])) {
-            $this->dataArray[$key] = $this->objectManager->create(
+            $instance = $this->objectManager->create(
                 $instanceName,
                 [
                     'category' => $categoryId
                 ]
             );
-            if (!$this->dataArray[$key] instanceof DatabaseMapInterface) {
+            if (!$instance instanceof DatabaseMapInterface) {
                 throw new \InvalidArgumentException(
                     $instanceName . ' does not implement interface ' . DatabaseMapInterface::class
                 );
             }
+            $this->dataArray[$key] = $instance;
         }
         return $this->dataArray[$key];
     }

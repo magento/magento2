@@ -9,6 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\CatalogUrlRewrite\Model\Map\HashMapPool;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryHashMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductHashMap;
+use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUsedInProductsHashMap;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -41,15 +42,35 @@ class HashMapPoolTest extends \PHPUnit_Framework_TestCase
     {
         $dataCategoryMapMock = $this->getMock(DataCategoryHashMap::class, [], [], '', false);
         $dataProductMapMock = $this->getMock(DataProductHashMap::class, [], [], '', false);
-        $dataProductMapMockOtherCategory = $this->getMock(DataProductHashMap::class, [], [], '', false);
+        $dataProductMapMockOtherCategory = $this->getMock(DataCategoryUsedInProductsHashMap::class, [], [], '', false);
 
         $this->objectManagerMock->expects($this->any())
             ->method('create')
-            ->willReturnOnConsecutiveCalls($dataCategoryMapMock, $dataProductMapMock, $dataProductMapMockOtherCategory);
-        $this->assertEquals($dataCategoryMapMock, $this->model->getDataMap(DataCategoryHashMap::class, 1));
+            ->willReturnMap(
+                [
+                   [
+                       DataCategoryHashMap::class,
+                       ['category' => 1],
+                       $dataCategoryMapMock
+                   ],
+                    [
+                        DataProductHashMap::class,
+                        ['category' => 1],
+                        $dataProductMapMock
+                    ],
+                   [
+                       DataCategoryUsedInProductsHashMap::class,
+                       ['category' => 2],
+                       $dataProductMapMockOtherCategory
+                   ]
+               ]
+           );
         $this->assertSame($dataCategoryMapMock, $this->model->getDataMap(DataCategoryHashMap::class, 1));
-        $this->assertEquals($dataProductMapMock, $this->model->getDataMap(DataProductHashMap::class, 1));
-        $this->assertEquals($dataProductMapMockOtherCategory, $this->model->getDataMap(DataCategoryHashMap::class, 2));
+        $this->assertSame($dataProductMapMock, $this->model->getDataMap(DataProductHashMap::class, 1));
+        $this->assertSame(
+            $dataProductMapMockOtherCategory,
+            $this->model->getDataMap(DataCategoryUsedInProductsHashMap::class, 2)
+        );
     }
 
     /**

@@ -54,9 +54,36 @@ class TemporaryTableServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Run test createFromSelect method
      *
+     * @return void
+     */
+    public function testCreateFromSelectWithException()
+    {
+        $this->setExpectedException(\InvalidArgumentException::class);
+        $random = 'random_table';
+        $indexes = [
+            ['PRIMARY' => ['primary_column_name']],
+            'CREATE TEMPORARY TABLE random_table (PRIMARY KEY(primary_column_name)) ENGINE=INNODB IGNORE '
+            . '(select * from sometable)'
+        ];
+
+        $this->assertEquals(
+            $random,
+            $this->temporaryTableService->createFromSelect(
+                $this->selectMock,
+                $this->adapterMock,
+                $indexes,
+                TemporaryTableService::HASH . "Other",
+                TemporaryTableService::INNODB . "Other"
+            )
+        );
+    }
+
+    /**
+     * Run test createFromSelect method
+     *
      * @param array $indexes
      * @param string $expectedSelect
-     * @dataProvider getCreateFromSelectTestParameters
+     * @dataProvider createFromSelectDataProvider
      * @return void
      */
     public function testCreateFromSelect($indexes, $expectedSelect)
@@ -115,7 +142,7 @@ class TemporaryTableServiceTest extends \PHPUnit_Framework_TestCase
      * @param string $tableName
      * @param bool $assertion
      *
-     * @dataProvider getDropTableTestParameters
+     * @dataProvider dropTableWhenCreatedTablesArrayNotEmptyDataProvider
      * @return void
      */
     public function testDropTableWhenCreatedTablesArrayNotEmpty($tableName, $assertion)
@@ -135,7 +162,7 @@ class TemporaryTableServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getCreateFromSelectTestParameters()
+    public function createFromSelectDataProvider()
     {
         return [
             [
@@ -170,7 +197,7 @@ class TemporaryTableServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getDropTableTestParameters()
+    public function dropTableWhenCreatedTablesArrayNotEmptyDataProvider()
     {
         return [
             ['tmp_select_table_1', false],

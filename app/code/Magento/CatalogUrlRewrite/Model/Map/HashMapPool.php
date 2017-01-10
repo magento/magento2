@@ -45,17 +45,18 @@ class HashMapPool
     {
         $key = $instanceName . '-' . $categoryId;
         if (!isset($this->dataArray[$key])) {
-            $this->dataArray[$key] = $this->objectManager->create(
+            $instance = $this->objectManager->create(
                 $instanceName,
                 [
                     'category' => $categoryId
                 ]
             );
-            if (!$this->dataArray[$key] instanceof HashMapInterface) {
+            if (!$instance instanceof HashMapInterface) {
                 throw new \InvalidArgumentException(
                     $instanceName . ' does not implement interface ' . HashMapInterface::class
                 );
             }
+            $this->dataArray[$key] = $instance;
         }
         return $this->dataArray[$key];
     }

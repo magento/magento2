@@ -41,29 +41,12 @@ class DataProductHashMap implements HashMapInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getAllData($categoryId)
-    {
-        return $this->generateData($categoryId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getData($categoryId, $key)
-    {
-        $categorySpecificData = $this->generateData($categoryId);
-        return $categorySpecificData[$key];
-    }
-
-    /**
      * Returns an array of ids of all visible products and assigned to a category and all its subcategories
      *
      * @param int $categoryId
      * @return array
      */
-    private function generateData($categoryId)
+    public function getAllData($categoryId)
     {
         if (!isset($this->hashMap[$categoryId])) {
             $productsCollection = $this->collectionFactory->create();
@@ -87,6 +70,18 @@ class DataProductHashMap implements HashMapInterface
             $this->hashMap[$categoryId] = $productsCollection->getAllIds();
         }
         return $this->hashMap[$categoryId];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData($categoryId, $key)
+    {
+        $categorySpecificData = $this->getAllData($categoryId);
+        if (isset($categorySpecificData[$key])) {
+            return $categorySpecificData[$key];
+        }
+        return [];
     }
 
     /**

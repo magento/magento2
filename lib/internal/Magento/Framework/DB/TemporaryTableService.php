@@ -16,8 +16,21 @@ use Magento\Framework\DB\Select;
  */
 class TemporaryTableService
 {
+    CONST HASH = 'HASH';
+    CONST INNODB = 'INNODB';
+
     /**
-     * @var $random
+     * @var string[]
+     */
+    private $allowedIndexMethods;
+
+    /**
+     * @var string[]
+     */
+    private $allowedEngines;
+
+    /**
+     * @var \Magento\Framework\Math\Random
      */
     private $random;
 
@@ -28,10 +41,17 @@ class TemporaryTableService
 
     /**
      * @param \Magento\Framework\Math\Random $random
+     * @param string[] $allowedIndexMethods
+     * @param string[] $allowedEngines
      */
-    public function __construct(\Magento\Framework\Math\Random $random)
-    {
+    public function __construct(
+        \Magento\Framework\Math\Random $random,
+        $allowedIndexMethods = [self::HASH],
+        $allowedEngines = [self::INNODB]
+    ) {
         $this->random = $random;
+        $this->allowedIndexMethods = $allowedIndexMethods;
+        $this->allowedEngines = $allowedEngines;
     }
 
     /**
@@ -55,16 +75,29 @@ class TemporaryTableService
      * @param AdapterInterface $adapter
      * @param array $indexes
      * @param string $indexMethod
-     * @param string $engine
+     * @param string $dbEngine
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function createFromSelect(
         Select $select,
         AdapterInterface $adapter,
         array $indexes = [],
-        $indexMethod = 'HASH',
-        $engine = 'INNODB'
+        $indexMethod = self::HASH,
+        $dbEngine = self::INNODB
     ) {
+        if (!in_array($indexMethod, $this->allowedIndexMethods)) {
+            throw new \InvalidArgumentException(
+                sprintf('indexMethod must be of type %s', implode(',', $this->allowedIndexMethods))
+            );
+        }
+
+        if (!in_array($dbEngine, $this->allowedEngines)) {
+            throw new \InvalidArgumentException(
+                sprintf('dbEngine must be of type %s', implode(',', $this->allowedEngines))
+            );
+        }
+
         $name = $this->random->getUniqueHash('tmp_select_');
 
         $indexStatements = [];
@@ -90,7 +123,7 @@ class TemporaryTableService
             'CREATE TEMPORARY TABLE %s %s ENGINE=%s IGNORE (%s)',
             $adapter->quoteIdentifier($name),
             $indexStatements ? '(' . implode(',', $indexStatements) . ')' : '',
-            $adapter->quoteIdentifier($engine),
+            $adapter->quoteIdentifier($dbEngine),
             "{$select}"
         );
 

@@ -43,29 +43,12 @@ class DataCategoryHashMap implements HashMapInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getAllData($categoryId)
-    {
-        return $this->generateData($categoryId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getData($categoryId, $key)
-    {
-        $categorySpecificData = $this->generateData($categoryId);
-        return $categorySpecificData[$key];
-    }
-
-    /**
      * Returns an array of categories ids that includes category identified by $categoryId and all its subcategories
      *
      * @param int $categoryId
      * @return array
      */
-    private function generateData($categoryId)
+    public function getAllData($categoryId)
     {
         if (!isset($this->hashMap[$categoryId])) {
             $category = $this->categoryRepository->get($categoryId);
@@ -73,6 +56,18 @@ class DataCategoryHashMap implements HashMapInterface
                 ->getAllIds();
         }
         return $this->hashMap[$categoryId];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData($categoryId, $key)
+    {
+        $categorySpecificData = $this->getAllData($categoryId);
+        if (isset($categorySpecificData[$key])) {
+            return $categorySpecificData[$key];
+        }
+        return [];
     }
 
     /**
