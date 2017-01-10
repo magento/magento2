@@ -21,4 +21,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Analytics\Model\Subscription">
+        <arguments>
+            <argument name="configValueResource" xsi:type="object">Magento\Config\Model\ResourceModel\Config\Data</argument>
+        </arguments>
+    </type>
 </config>

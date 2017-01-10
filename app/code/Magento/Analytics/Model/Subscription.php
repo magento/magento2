@@ -8,9 +8,9 @@ namespace Magento\Analytics\Model;
 
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Config\Model\Config\Structure\SearchInterface;
-use Magento\Config\Model\ResourceModel\Config\Data;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory as ConfigValueFactory;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class Subscription
 {
@@ -45,19 +45,19 @@ class Subscription
     /**
      * Resource model for config values.
      *
-     * @var Data
+     * @var AbstractDb
      */
     private $configValueResource;
 
     /**
      * @param ConfigValueFactory $configValueFactory
      * @param SearchInterface $configStructure
-     * @param Data $configValueResource
+     * @param AbstractDb $configValueResource
      */
     public function __construct(
         ConfigValueFactory $configValueFactory,
         SearchInterface $configStructure,
-        Data $configValueResource
+        AbstractDb $configValueResource
     ) {
         $this->configValueFactory = $configValueFactory;
         $this->configStructure = $configStructure;

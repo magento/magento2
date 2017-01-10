@@ -9,9 +9,9 @@ namespace Magento\Analytics\Test\Unit\Model;
 use Magento\Analytics\Model\Subscription as SubscriptionModel;
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Config\Model\Config\Structure\SearchInterface;
-use Magento\Config\Model\ResourceModel\Config\Data;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class SubscriptionTest extends \PHPUnit_Framework_TestCase
@@ -32,7 +32,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     private $configStructureMock;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configValueResourceMock;
 
@@ -84,7 +84,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->configValueResourceMock = $this->getMockBuilder(Data::class)
+        $this->configValueResourceMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
 

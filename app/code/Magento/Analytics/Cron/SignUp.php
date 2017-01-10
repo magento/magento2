@@ -6,7 +6,7 @@
 namespace Magento\Analytics\Cron;
 
 use Magento\Analytics\Model\AnalyticsConnector;
-use Magento\Analytics\Model\Config\Backend\Enabled;
+use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Psr\Log\LoggerInterface;
 use Magento\AdminNotification\Model\InboxFactory;
@@ -79,7 +79,7 @@ class SignUp
      */
     public function execute()
     {
-        $attemptsCount = $this->flagManager->getFlagData(Enabled::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
+        $attemptsCount = $this->flagManager->getFlagData(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
         if ($attemptsCount === null) {
             $this->deleteAnalyticsCronExpr();
             return false;
@@ -87,7 +87,7 @@ class SignUp
 
         if ($attemptsCount <= 0) {
             $this->deleteAnalyticsCronExpr();
-            $this->flagManager->delete(Enabled::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
+            $this->flagManager->deleteFlag(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
             $inboxNotification = $this->inboxFactory->create();
             $inboxNotification->addNotice(
                 "Analytics subscription error",
@@ -97,7 +97,7 @@ class SignUp
             return false;
         }
         $attemptsCount -= 1;
-        $this->flagManager->saveFlag(Enabled::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);
+        $this->flagManager->saveFlag(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);
         $generateTokenResult = $this->analyticsConnector->execute('generateTokenCommand');
         if ($generateTokenResult === false) {
             $this->writeErrorLog("The attempt of subscription was unsuccessful on step generate token.");
@@ -111,7 +111,7 @@ class SignUp
         }
 
         $this->deleteAnalyticsCronExpr();
-        $this->flagManager->deleteFlag(Enabled::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
+        $this->flagManager->deleteFlag(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
         return true;
     }
 
@@ -121,7 +121,7 @@ class SignUp
      */
     private function deleteAnalyticsCronExpr()
     {
-        $this->configWriter->delete(Enabled::CRON_STRING_PATH);
+        $this->configWriter->delete(SubscriptionHandler::CRON_STRING_PATH);
         return true;
     }
 
