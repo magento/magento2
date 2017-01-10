@@ -16,8 +16,8 @@ use Magento\Framework\DB\Select;
  */
 class TemporaryTableService
 {
-    CONST HASH = 'HASH';
-    CONST INNODB = 'INNODB';
+    const INDEX_METHOD_HASH = 'HASH';
+    const INDEX_METHOD_INNODB = 'INNODB';
 
     /**
      * @var string[]
@@ -46,8 +46,8 @@ class TemporaryTableService
      */
     public function __construct(
         \Magento\Framework\Math\Random $random,
-        $allowedIndexMethods = [self::HASH],
-        $allowedEngines = [self::INNODB]
+        $allowedIndexMethods = [],
+        $allowedEngines = []
     ) {
         $this->random = $random;
         $this->allowedIndexMethods = $allowedIndexMethods;
@@ -83,18 +83,18 @@ class TemporaryTableService
         Select $select,
         AdapterInterface $adapter,
         array $indexes = [],
-        $indexMethod = self::HASH,
-        $dbEngine = self::INNODB
+        $indexMethod = self::INDEX_METHOD_HASH,
+        $dbEngine = self::INDEX_METHOD_INNODB
     ) {
         if (!in_array($indexMethod, $this->allowedIndexMethods)) {
             throw new \InvalidArgumentException(
-                sprintf('indexMethod must be of type %s', implode(',', $this->allowedIndexMethods))
+                sprintf('indexMethod must be one of %s', implode(',', $this->allowedIndexMethods))
             );
         }
 
         if (!in_array($dbEngine, $this->allowedEngines)) {
             throw new \InvalidArgumentException(
-                sprintf('dbEngine must be of type %s', implode(',', $this->allowedEngines))
+                sprintf('dbEngine must be one of %s', implode(',', $this->allowedEngines))
             );
         }
 

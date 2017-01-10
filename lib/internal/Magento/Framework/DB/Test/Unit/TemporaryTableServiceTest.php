@@ -46,7 +46,9 @@ class TemporaryTableServiceTest extends \PHPUnit_Framework_TestCase
         $this->temporaryTableService = (new ObjectManager($this))->getObject(
             TemporaryTableService::class,
             [
-                'random' => $this->randomMock
+                'random' => $this->randomMock,
+                'allowedIndexMethods' => ['HASH'],
+                'allowedEngines' => ['INNODB']
             ]
         );
     }
@@ -72,8 +74,8 @@ class TemporaryTableServiceTest extends \PHPUnit_Framework_TestCase
                 $this->selectMock,
                 $this->adapterMock,
                 $indexes,
-                TemporaryTableService::HASH . "Other",
-                TemporaryTableService::INNODB . "Other"
+                TemporaryTableService::INDEX_METHOD_HASH . "Other",
+                TemporaryTableService::INDEX_METHOD_INNODB . "Other"
             )
         );
     }
