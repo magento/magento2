@@ -3,7 +3,6 @@
  * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\Model\Config\Backend;
 
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
@@ -16,6 +15,9 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 
+/**
+ * Config value backend model.
+ */
 class Enabled extends Value
 {
     /**
