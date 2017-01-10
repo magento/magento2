@@ -64,7 +64,8 @@
             2,
             {
                 "args": "after-used",
-                "vars": "all"
+                "vars": "all",
+                "varsIgnorePattern": "config"
             }
         ],
         "no-use-before-define": 2,

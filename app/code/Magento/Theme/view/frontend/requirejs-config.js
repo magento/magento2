@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-var config = { //eslint-disable-line no-unused-vars
+var config = {
     map: {
         '*': {
             'rowBuilder':             'Magento_Theme/js/row-builder',

@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-var config = { //eslint-disable-line no-unused-vars
+var config = {
     config: {
         mixins: {
             'Magento_Checkout/js/action/place-order': {
