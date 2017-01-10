@@ -53,6 +53,6 @@ class WebhookRequest
      */
     public function getBody()
     {
-        return (string)@file_get_contents("php://input");
+        return (string)$this->request->getContent();
     }
 }
