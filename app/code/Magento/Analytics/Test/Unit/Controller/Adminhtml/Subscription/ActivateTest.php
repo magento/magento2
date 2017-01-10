@@ -7,7 +7,9 @@
 namespace Magento\Analytics\Test\Unit\Controller\Adminhtml\Subscription;
 
 use Magento\Analytics\Controller\Adminhtml\Subscription\Activate;
+use Magento\Analytics\Model\NotificationTime;
 use Magento\Analytics\Model\Subscription;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -38,6 +40,16 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
     private $loggerMock;
 
     /**
+     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $requestMock;
+
+    /**
+     * @var NotificationTime|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $notificationTimeMock;
+
+    /**
      * @var ObjectManagerHelper
      */
     private $objectManagerHelper;
@@ -46,6 +58,11 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
      * @var Activate
      */
     private $activateController;
+
+    /**
+     * @var string
+     */
+    private $subscriptionApprovedField = 'analytics_subscription_checkbox';
 
     /**
      * @return void
@@ -68,6 +85,14 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->notificationTimeMock = $this->getMockBuilder(NotificationTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->activateController = $this->objectManagerHelper->getObject(
@@ -76,6 +101,9 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
                 'resultFactory' => $this->resultFactoryMock,
                 'subscription'  => $this->subscriptionModelMock,
                 'logger' => $this->loggerMock,
+                'notificationTime' => $this->notificationTimeMock,
+                '_request' => $this->requestMock,
+                'subscriptionApprovedFiled' => $this->subscriptionApprovedField,
             ]
         );
     }
@@ -90,10 +118,22 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
             'error_message' => '',
         ];
 
+        $this->requestMock
+            ->expects($this->once())
+            ->method('getParam')
+            ->with($this->subscriptionApprovedField)
+            ->willReturn(true);
+
         $this->subscriptionModelMock
             ->expects($this->once())
             ->method('enable')
             ->willReturn(true);
+
+        $this->notificationTimeMock
+            ->expects($this->once())
+            ->method('unsetLastTimeNotificationValue')
+            ->willReturn(true);
+
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_JSON)
@@ -109,12 +149,18 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider executeExeptionsDataProvider
+     * @dataProvider executeExceptionsDataProvider
      *
      * @param \Exception $exception
      */
     public function testExecuteWithException(\Exception $exception)
     {
+        $this->requestMock
+            ->expects($this->once())
+            ->method('getParam')
+            ->with($this->subscriptionApprovedField)
+            ->willReturn(true);
+
         $this->subscriptionModelMock
             ->expects($this->once())
             ->method('enable')
@@ -155,10 +201,10 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function executeExeptionsDataProvider()
+    public function executeExceptionsDataProvider()
     {
         return [
-            [new LocalizedException(new Phrase('TestMessage'))],
+            [new LocalizedException(__('TestMessage'))],
             [new \Exception('TestMessage')],
         ];
     }

@@ -6,6 +6,7 @@
 
 namespace Magento\Analytics\Controller\Adminhtml\Subscription;
 
+use Magento\Analytics\Model\NotificationTime;
 use Magento\Analytics\Model\Subscription;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -29,17 +30,34 @@ class Activate extends Action
     private $logger;
 
     /**
+     * Resource for managing last notification time about subscription to Magento Analytics.
+     *
+     * @var NotificationTime
+     */
+    private $notificationTime;
+
+    /**
+     * Agreement on subscription value into request.
+     *
+     * @var string
+     */
+    private $subscriptionApprovedField = 'analytics_subscription_checkbox';
+
+    /**
      * @param Context $context
      * @param Subscription $subscription
      * @param LoggerInterface $logger
+     * @param NotificationTime $notificationTime
      */
     public function __construct(
         Context $context,
         Subscription $subscription,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        NotificationTime $notificationTime
     ) {
         $this->subscription = $subscription;
         $this->logger = $logger;
+        $this->notificationTime = $notificationTime;
         parent::__construct($context);
     }
 
@@ -61,7 +79,10 @@ class Activate extends Action
     public function execute()
     {
         try {
-            $this->subscription->enable();
+            if ($this->getRequest()->getParam($this->subscriptionApprovedField)) {
+                $this->subscription->enable();
+            }
+            $this->notificationTime->unsetLastTimeNotificationValue();
             $responseContent = [
                 'success' => true,
                 'error_message' => '',

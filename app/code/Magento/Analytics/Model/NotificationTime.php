@@ -6,9 +6,6 @@
 
 namespace Magento\Analytics\Model;
 
-use Magento\Framework\FlagFactory;
-use Magento\Framework\Flag\FlagResource;
-
 /**
  * Class NotificationTime
  *
@@ -52,5 +49,15 @@ class NotificationTime
     public function getLastTimeNotification()
     {
         return $this->flagManager->getFlagData(self::NOTIFICATION_TIME);
+    }
+
+    /**
+     * Remove last notification time flag.
+     *
+     * @return bool
+     */
+    public function unsetLastTimeNotificationValue()
+    {
+        return $this->flagManager->deleteFlag(self::NOTIFICATION_TIME);
     }
 }

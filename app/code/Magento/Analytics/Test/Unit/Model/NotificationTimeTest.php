@@ -6,9 +6,7 @@
 
 namespace Magento\Analytics\Test\Unit\Model;
 
-use Magento\Framework\FlagFactory;
-use Magento\Framework\Flag\FlagResource;
-use Magento\Framework\Flag;
+use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -18,19 +16,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class NotificationTimeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FlagFactory
+     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $flagFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FlagResource
-     */
-    private $flagResourceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Flag
-     */
-    private $flagMock;
+    private $flagManagerMock;
 
     /**
      * @var NotificationTime
@@ -39,59 +27,50 @@ class NotificationTimeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->flagFactoryMock = $this->getMockBuilder(FlagFactory::class)
+        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->flagResourceMock = $this->getMockBuilder(FlagResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flagMock = $this->getMockBuilder(Flag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->notificationTime = $objectManagerHelper->getObject(
             NotificationTime::class,
             [
-                'flagFactory' => $this->flagFactoryMock,
-                'flagResource' => $this->flagResourceMock
+                'flagManager' => $this->flagManagerMock,
             ]
         );
     }
 
     public function testStoreLastTimeNotification()
     {
-        $this->flagFactoryMock->expects($this->once())
-            ->method('create')
-            ->with(
-                [
-                    'data' => [
-                        'flag_code' => NotificationTime::NOTIFICATION_TIME
-                    ]
-                ]
-            )->willReturn($this->flagMock);
-        $this->flagMock->expects($this->once())
-            ->method('setFlagData')
-            ->with(100500)
-            ->willReturnSelf();
-        $this->flagResourceMock->expects($this->once())
-            ->method('save')
-            ->with($this->flagMock)
-            ->willReturnSelf();
-        $this->assertTrue($this->notificationTime->storeLastTimeNotification(100500));
+        $value = 100500;
+
+        $this->flagManagerMock
+            ->expects($this->once())
+            ->method('saveFlag')
+            ->with(NotificationTime::NOTIFICATION_TIME, $value)
+            ->willReturn(true);
+        $this->assertTrue($this->notificationTime->storeLastTimeNotification($value));
     }
 
     public function testGetLastTimeNotification()
     {
-        $this->flagFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->flagMock);
-        $this->flagResourceMock->expects($this->once())
-            ->method('load')
-            ->with($this->flagMock, NotificationTime::NOTIFICATION_TIME)
-            ->willReturn($this->flagMock);
-        $this->flagMock->expects($this->once())
+        $value = 100500;
+
+        $this->flagManagerMock
+            ->expects($this->once())
             ->method('getFlagData')
-            ->willReturn(100500);
-        $this->assertEquals(100500, $this->notificationTime->getLastTimeNotification());
+            ->with(NotificationTime::NOTIFICATION_TIME)
+            ->willReturn(true);
+        $this->assertEquals($value, $this->notificationTime->getLastTimeNotification());
+    }
+
+    public function testUnsetLastTimeNotificationValue()
+    {
+        $this->flagManagerMock
+            ->expects($this->once())
+            ->method('deleteFlag')
+            ->with(NotificationTime::NOTIFICATION_TIME)
+            ->willReturn(true);
+        $this->assertTrue($this->notificationTime->unsetLastTimeNotificationValue());
     }
 }
