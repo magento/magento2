@@ -134,8 +134,9 @@ class AfterImportDataObserver implements ObserverInterface
         $this->storeManager = $storeManager;
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->urlFinder = $urlFinder;
-        $mergeDataProviderFactory = $mergeDataProviderFactory ?: ObjectManager::getInstance()
-            ->get(MergeDataProviderFactory::class);
+        if (!isset($mergeDataProviderFactory)) {
+            $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
+        }
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }
 

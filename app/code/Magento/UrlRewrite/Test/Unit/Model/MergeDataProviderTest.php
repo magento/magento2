@@ -35,7 +35,7 @@ class MergeDataProviderTest extends \PHPUnit_Framework_TestCase
      * @param array $urlRewriteMockArray
      * @param String $expectedData
      * @param int $arrayCount
-     * @dataProvider getMergeTestParameters
+     * @dataProvider mergeDataProvider
      * @return void
      */
     public function testMerge($urlRewriteMockArray, $expectedData, $arrayCount)
@@ -56,11 +56,11 @@ class MergeDataProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider  for testMerge
+     * Data provider for testMerge
      *
      * @return array
      */
-    public function getMergeTestParameters()
+    public function mergeDataProvider()
     {
         $urlRewriteMock1 = $this->getMock(UrlRewrite::class, [], [], '', false);
 

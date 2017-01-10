@@ -57,8 +57,11 @@ class CurrentUrlRewritesRegenerator
         $this->urlFinder = $urlFinder;
         $this->urlRewriteFinder = $urlRewriteFinder ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder::class);
-        $mergeDataProviderFactory = $mergeDataProviderFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\UrlRewrite\Model\MergeDataProviderFactory::class);
+        if (!isset($mergeDataProviderFactory)) {
+            $mergeDataProviderFactory =  \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\UrlRewrite\Model\MergeDataProviderFactory::class
+            );
+        }
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }
 

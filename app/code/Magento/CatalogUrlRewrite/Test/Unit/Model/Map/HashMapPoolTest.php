@@ -47,8 +47,22 @@ class HashMapPoolTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturnOnConsecutiveCalls($dataCategoryMapMock, $dataProductMapMock, $dataProductMapMockOtherCategory);
         $this->assertEquals($dataCategoryMapMock, $this->model->getDataMap(DataCategoryHashMap::class, 1));
-        $this->assertEquals($dataCategoryMapMock, $this->model->getDataMap(DataCategoryHashMap::class, 1));
+        $this->assertSame($dataCategoryMapMock, $this->model->getDataMap(DataCategoryHashMap::class, 1));
         $this->assertEquals($dataProductMapMock, $this->model->getDataMap(DataProductHashMap::class, 1));
         $this->assertEquals($dataProductMapMockOtherCategory, $this->model->getDataMap(DataCategoryHashMap::class, 2));
+    }
+
+    /**
+     * Tests getDataMap with exception
+     */
+    public function testGetDataMapException()
+    {
+        $nonInterface = $this->getMock(HashMapPool::class, [], [], '', false);
+
+        $this->objectManagerMock->expects($this->any())
+            ->method('create')
+            ->willReturn($nonInterface);
+        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->model->getDataMap(HashMapPool::class, 1);
     }
 }

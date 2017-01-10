@@ -34,8 +34,9 @@ class ChildrenUrlRewriteGenerator
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGeneratorFactory = $categoryUrlRewriteGeneratorFactory;
-        $mergeDataProviderFactory = $mergeDataProviderFactory ?: ObjectManager::getInstance()
-            ->get(MergeDataProviderFactory::class);
+        if (!isset($mergeDataProviderFactory)) {
+            $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
+        }
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }
 

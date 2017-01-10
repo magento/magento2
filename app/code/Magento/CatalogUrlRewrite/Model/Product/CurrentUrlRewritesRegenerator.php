@@ -75,8 +75,9 @@ class CurrentUrlRewritesRegenerator
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->urlRewritePrototype = $urlRewriteFactory->create();
         $this->urlRewriteFinder = $urlRewriteFinder ?: ObjectManager::getInstance()->get(UrlRewriteFinder::class);
-        $mergeDataProviderFactory = $mergeDataProviderFactory ?: ObjectManager::getInstance()
-            ->get(MergeDataProviderFactory::class);
+        if (!isset($mergeDataProviderFactory)) {
+            $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
+        }
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }
 

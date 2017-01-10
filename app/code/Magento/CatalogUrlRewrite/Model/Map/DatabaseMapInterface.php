@@ -5,10 +5,11 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
-use \Magento\Framework\DB\Select;
+use Magento\Framework\DB\Select;
 
 /**
  * Interface for a mysql data type of a map
+ *
  * Is used to get data by a unique key from a temporary table in mysql to prevent memory usage
  * It internally holds the knowledge the creation of the actual data and it initializes itself when we call getData
  * We should always call destroyTableAdapter when we don't need anymore the temporary tables
@@ -17,6 +18,7 @@ interface DatabaseMapInterface
 {
     /**
      * Gets data by key from a map identified by a category Id
+     *
      * The key is a unique identifier that matches the values of the index used to build the temporary table
      *
      * Example "1_2" where ids would correspond to store_id entity_id

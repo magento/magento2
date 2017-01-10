@@ -45,10 +45,7 @@ class DataProductHashMap implements HashMapInterface
      */
     public function getAllData($categoryId)
     {
-        if (!isset($this->hashMap[$categoryId])) {
-            $this->hashMap[$categoryId] = $this->generateData($categoryId);
-        }
-        return $this->hashMap[$categoryId];
+        return $this->generateData($categoryId);
     }
 
     /**
@@ -56,38 +53,40 @@ class DataProductHashMap implements HashMapInterface
      */
     public function getData($categoryId, $key)
     {
-        $this->getAllData($categoryId);
-        return $this->hashMap[$categoryId][$key];
+        $categorySpecificData = $this->generateData($categoryId);
+        return $categorySpecificData[$key];
     }
 
     /**
-     * Queries the database and returns results
+     * Returns an array of ids of all visible products and assigned to a category and all its subcategories
      *
      * @param int $categoryId
      * @return array
      */
     private function generateData($categoryId)
     {
-        $productsCollection = $this->collectionFactory->create();
-        $productsCollection->getSelect()
-            ->joinInner(
-                ['cp' => $this->connection->getTableName('catalog_category_product')],
-                'cp.product_id = e.entity_id',
-                []
-            )
-            ->where(
-                $productsCollection->getConnection()->prepareSqlCondition(
-                    'cp.category_id',
-                    [
-                        'in' => $this->hashMapPool->getDataMap(
-                            DataCategoryHashMap::class,
-                            $categoryId
-                        )->getAllData($categoryId)
-                    ]
+        if (!isset($this->hashMap[$categoryId])) {
+            $productsCollection = $this->collectionFactory->create();
+            $productsCollection->getSelect()
+                ->joinInner(
+                    ['cp' => $this->connection->getTableName('catalog_category_product')],
+                    'cp.product_id = e.entity_id',
+                    []
                 )
-            )->group('e.entity_id');
-
-        return $productsCollection->getAllIds();
+                ->where(
+                    $productsCollection->getConnection()->prepareSqlCondition(
+                        'cp.category_id',
+                        [
+                            'in' => $this->hashMapPool->getDataMap(
+                                DataCategoryHashMap::class,
+                                $categoryId
+                            )->getAllData($categoryId)
+                        ]
+                    )
+                )->group('e.entity_id');
+            $this->hashMap[$categoryId] = $productsCollection->getAllIds();
+        }
+        return $this->hashMap[$categoryId];
     }
 
     /**

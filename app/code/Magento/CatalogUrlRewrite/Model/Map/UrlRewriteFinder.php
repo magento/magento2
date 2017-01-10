@@ -11,8 +11,11 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
 /**
- * Allows query to Category and Product UrlRewrite Database Map or UrlFinderInterface by identifiers
+ * Finds specific queried url rewrites identified by specific fields
  *
+ * A group of identifiers specifies a query consumed by the client to retrieve existing url rewrites from the database
+ * Clients will query a map of DatabaseMapInterface type through this class resulting into a set of url rewrites results
+ * Each map type will fallback to a UrlFinderInterface by identifiers for unmapped values
  */
 class UrlRewriteFinder
 {
@@ -29,7 +32,7 @@ class UrlRewriteFinder
     private $urlRewritePrototype;
 
     /** @var array */
-    private $urlRewriteClassNames;
+    private $urlRewriteClassNames = [];
 
     /**
      * @param DatabaseMapPool $databaseMapPool
@@ -41,10 +44,7 @@ class UrlRewriteFinder
         DatabaseMapPool $databaseMapPool,
         UrlFinderInterface $urlFinder,
         UrlRewriteFactory $urlRewriteFactory,
-        $urlRewriteClassNames = [
-        self::ENTITY_TYPE_PRODUCT => DataProductUrlRewriteDatabaseMap::class,
-        self::ENTITY_TYPE_CATEGORY => DataCategoryUrlRewriteDatabaseMap::class
-        ]
+        array $urlRewriteClassNames = []
     ) {
         $this->databaseMapPool = $databaseMapPool;
         $this->urlFinder = $urlFinder;
@@ -53,7 +53,8 @@ class UrlRewriteFinder
     }
 
     /**
-     * Queries by identifiers from maps or falls-back to UrlFinderInterface
+     * Retrieves existing url rewrites filtered by identifiers from prebuild database maps
+     * This method will fall-back to by using UrlFinderInterface when map type is not found in configured list
      *
      * @param int $entityId
      * @param int $storeId
@@ -86,7 +87,7 @@ class UrlRewriteFinder
     }
 
     /**
-     * Transfer array values to url rewrite object values
+     * Transfers an array values to url rewrite object values
      *
      * @param array $data
      * @return UrlRewrite[]

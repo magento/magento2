@@ -44,10 +44,6 @@ class HashMapPool
     public function getDataMap($instanceName, $categoryId)
     {
         $key = $instanceName . '-' . $categoryId;
-        $reflectionClass = new \ReflectionClass($instanceName);
-        if (!$reflectionClass->implementsInterface(HashMapInterface::class)) {
-            throw new \Exception($instanceName . ' does not implement interface ' . HashMapInterface::class);
-        }
         if (!isset($this->dataArray[$key])) {
             $this->dataArray[$key] = $this->objectManager->create(
                 $instanceName,
@@ -55,6 +51,11 @@ class HashMapPool
                     'category' => $categoryId
                 ]
             );
+            if (!$this->dataArray[$key] instanceof HashMapInterface) {
+                throw new \InvalidArgumentException(
+                    $instanceName . ' does not implement interface ' . HashMapInterface::class
+                );
+            }
         }
         return $this->dataArray[$key];
     }

@@ -71,7 +71,11 @@ class TemporaryTableService
         foreach ($indexes as $indexName => $columns) {
             $renderedColumns = implode(',', array_map([$adapter, 'quoteIdentifier'], $columns));
 
-            $indexType = sprintf('INDEX %s USING %s', $adapter->quoteIdentifier($indexName), "{$indexMethod}");
+            $indexType = sprintf(
+                'INDEX %s USING %s',
+                $adapter->quoteIdentifier($indexName),
+                $indexMethod
+            );
 
             if ($indexName === 'PRIMARY') {
                 $indexType = 'PRIMARY KEY';
@@ -86,7 +90,7 @@ class TemporaryTableService
             'CREATE TEMPORARY TABLE %s %s ENGINE=%s IGNORE (%s)',
             $adapter->quoteIdentifier($name),
             $indexStatements ? '(' . implode(',', $indexStatements) . ')' : '',
-            "{$engine}",
+            $adapter->quoteIdentifier($engine),
             "{$select}"
         );
 

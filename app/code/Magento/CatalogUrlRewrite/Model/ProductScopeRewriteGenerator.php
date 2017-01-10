@@ -88,8 +88,9 @@ class ProductScopeRewriteGenerator
         $this->categoriesUrlRewriteGenerator = $categoriesUrlRewriteGenerator;
         $this->currentUrlRewritesRegenerator = $currentUrlRewritesRegenerator;
         $this->anchorUrlRewriteGenerator = $anchorUrlRewriteGenerator;
-        $mergeDataProviderFactory = $mergeDataProviderFactory ?: ObjectManager::getInstance()
-            ->get(MergeDataProviderFactory::class);
+        if (!isset($mergeDataProviderFactory)) {
+            $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
+        }
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }
 

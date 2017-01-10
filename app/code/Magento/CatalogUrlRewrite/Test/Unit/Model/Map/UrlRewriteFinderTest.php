@@ -45,12 +45,18 @@ class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->urlRewritePrototypeMock);
 
+        $urlRewriteClassesNamesArray = [
+            UrlRewriteFinder::ENTITY_TYPE_PRODUCT => DataProductUrlRewriteDatabaseMap::class,
+            UrlRewriteFinder::ENTITY_TYPE_CATEGORY => DataCategoryUrlRewriteDatabaseMap::class
+        ];
+
         $this->model = (new ObjectManager($this))->getObject(
             UrlRewriteFinder::class,
             [
                 'databaseMapPool' => $this->databaseMapPoolMock,
                 'urlFinder' => $this->urlFinderMock,
-                'urlRewriteFactory' => $this->urlRewriteFactoryMock
+                'urlRewriteFactory' => $this->urlRewriteFactoryMock,
+                'urlRewriteClassNames' => $urlRewriteClassesNamesArray
             ]
         );
     }

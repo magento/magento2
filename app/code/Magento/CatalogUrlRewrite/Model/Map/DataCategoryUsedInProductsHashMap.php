@@ -38,10 +38,7 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface
      */
     public function getAllData($categoryId)
     {
-        if (!isset($this->hashMap[$categoryId])) {
-            $this->hashMap[$categoryId] = $this->generateData($categoryId);
-        }
-        return $this->hashMap[$categoryId];
+        return $this->generateData($categoryId);
     }
 
     /**
@@ -49,45 +46,49 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface
      */
     public function getData($categoryId, $key)
     {
-        $this->getAllData($categoryId);
-        return $this->hashMap[$categoryId][$key];
+        $categorySpecificData = $this->generateData($categoryId);
+        return $categorySpecificData[$key];
     }
 
     /**
-     * Queries the database and returns results
+     * Returns an array of product ids for all DataProductHashMap list,
+     * that occur in other categories not part of DataCategoryHashMap list
      *
      * @param int $categoryId
      * @return array
      */
     private function generateData($categoryId)
     {
-        $productsLinkConnection = $this->connection->getConnection();
-        $select = $productsLinkConnection->select()
-            ->from($this->connection->getTableName('catalog_category_product'), ['category_id'])
-            ->where(
-                $productsLinkConnection->prepareSqlCondition(
-                    'product_id',
-                    [
-                        'in' => $this->hashMapPool->getDataMap(
-                            DataProductHashMap::class,
-                            $categoryId
-                        )->getAllData($categoryId)
-                    ]
+        if (!isset($this->hashMap[$categoryId])) {
+            $productsLinkConnection = $this->connection->getConnection();
+            $select = $productsLinkConnection->select()
+                ->from($this->connection->getTableName('catalog_category_product'), ['category_id'])
+                ->where(
+                    $productsLinkConnection->prepareSqlCondition(
+                        'product_id',
+                        [
+                            'in' => $this->hashMapPool->getDataMap(
+                                DataProductHashMap::class,
+                                $categoryId
+                            )->getAllData($categoryId)
+                        ]
+                    )
                 )
-            )
-            ->where(
-                $productsLinkConnection->prepareSqlCondition(
-                    'category_id',
-                    [
-                        'nin' => $this->hashMapPool->getDataMap(
-                            DataCategoryHashMap::class,
-                            $categoryId
-                        )->getAllData($categoryId)
-                    ]
-                )
-            )->group('category_id');
+                ->where(
+                    $productsLinkConnection->prepareSqlCondition(
+                        'category_id',
+                        [
+                            'nin' => $this->hashMapPool->getDataMap(
+                                DataCategoryHashMap::class,
+                                $categoryId
+                            )->getAllData($categoryId)
+                        ]
+                    )
+                )->group('category_id');
 
-        return $productsLinkConnection->fetchCol($select);
+            $this->hashMap[$categoryId] = $productsLinkConnection->fetchCol($select);
+        }
+        return $this->hashMap[$categoryId];
     }
 
     /**

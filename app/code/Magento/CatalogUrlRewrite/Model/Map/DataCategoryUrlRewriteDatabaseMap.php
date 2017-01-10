@@ -58,7 +58,8 @@ class DataCategoryUrlRewriteDatabaseMap implements DatabaseMapInterface
     }
 
     /**
-     * Queries the database and returns the name of the temporary table where data is stored
+     * Queries the database for all category url rewrites that are affected by the category identified by $categoryId
+     * It returns the name of the temporary table where the resulting data is stored
      *
      * @param int $categoryId
      * @return string

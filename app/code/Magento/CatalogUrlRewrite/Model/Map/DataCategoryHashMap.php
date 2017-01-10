@@ -47,10 +47,7 @@ class DataCategoryHashMap implements HashMapInterface
      */
     public function getAllData($categoryId)
     {
-        if (!isset($this->hashMap[$categoryId])) {
-            $this->hashMap[$categoryId] = $this->generateData($categoryId);
-        }
-        return $this->hashMap[$categoryId];
+        return $this->generateData($categoryId);
     }
 
     /**
@@ -58,25 +55,28 @@ class DataCategoryHashMap implements HashMapInterface
      */
     public function getData($categoryId, $key)
     {
-        $this->getAllData($categoryId);
-        return $this->hashMap[$categoryId][$key];
+        $categorySpecificData = $this->generateData($categoryId);
+        return $categorySpecificData[$key];
     }
 
     /**
-     * Queries the database and returns results
+     * Returns an array of categories ids that includes category identified by $categoryId and all its subcategories
      *
      * @param int $categoryId
      * @return array
      */
     private function generateData($categoryId)
     {
-        $category = $this->categoryRepository->get($categoryId);
-        return $this->collection->addIdFilter($this->getAllCategoryChildrenIds($category))
-            ->getAllIds();
+        if (!isset($this->hashMap[$categoryId])) {
+            $category = $this->categoryRepository->get($categoryId);
+            $this->hashMap[$categoryId] = $this->collection->addIdFilter($this->getAllCategoryChildrenIds($category))
+                ->getAllIds();
+        }
+        return $this->hashMap[$categoryId];
     }
 
     /**
-     * Queries sub-categories ids from a category
+     * Queries the database for sub-categories ids from a category
      *
      * @param CategoryInterface $category
      * @return int[]

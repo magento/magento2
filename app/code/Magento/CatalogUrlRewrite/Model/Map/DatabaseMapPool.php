@@ -50,6 +50,11 @@ class DatabaseMapPool
                     'category' => $categoryId
                 ]
             );
+            if (!$this->dataArray[$key] instanceof DatabaseMapInterface) {
+                throw new \InvalidArgumentException(
+                    $instanceName . ' does not implement interface ' . DatabaseMapInterface::class
+                );
+            }
         }
         return $this->dataArray[$key];
     }

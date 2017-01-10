@@ -71,30 +71,15 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
             || $category->dataHasChangedFor('is_anchor')
             || $category->getIsChangedProductList()
         ) {
-            $this->initializeUrlRewritesDataMaps($category);
-
             $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category);
             $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
 
             $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
             $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
 
+            //frees memory for maps that are self-initialized in multiple classes that were called by the generators
             $this->resetUrlRewritesDataMaps($category);
         }
-    }
-
-    /**
-     * Initializes data maps to be further used
-     *
-     * @param Category $category
-     * @return void
-     */
-    private function initializeUrlRewritesDataMaps($category)
-    {
-        foreach ($this->dataUrlRewriteClassNames as $className) {
-            $this->databaseMapPool->getDataMap($className, $category->getEntityId());
-        }
-
     }
 
     /**
