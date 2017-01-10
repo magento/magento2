@@ -58,7 +58,7 @@ class Validator implements ValidatorInterface
         } catch (InvalidArgumentException $e) {
             throw new LocalizedException(__('The "%1" value doesn\'t exist. Enter another value.', $scope));
         } catch (NoSuchEntityException $e) {
-            throw new LocalizedException(__('The "%1" value doesn\'t exist. Enter another value."', $scopeCode));
+            throw new LocalizedException(__('The "%1" value doesn\'t exist. Enter another value.', $scopeCode));
         }
 
         return true;
