@@ -65,7 +65,7 @@ class UrlRewriteHandler
         $this->urlPersist = $urlPersist;
         $this->productCollectionFactory = $productCollectionFactory;
         if (!isset($mergeDataProviderFactory)) {
-            $mergeDataProviderFactory = $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
+            $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
         }
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }

@@ -48,21 +48,21 @@ class HashMapPoolTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturnMap(
                 [
-                   [
-                       DataCategoryHashMap::class,
-                       ['category' => 1],
-                       $dataCategoryMapMock
-                   ],
+                    [
+                        DataCategoryHashMap::class,
+                        ['category' => 1],
+                        $dataCategoryMapMock
+                    ],
                     [
                         DataProductHashMap::class,
                         ['category' => 1],
                         $dataProductMapMock
                     ],
-                   [
-                       DataCategoryUsedInProductsHashMap::class,
-                       ['category' => 2],
-                       $dataProductMapMockOtherCategory
-                   ]
+                    [
+                        DataCategoryUsedInProductsHashMap::class,
+                        ['category' => 2],
+                        $dataProductMapMockOtherCategory
+                    ]
                ]
            );
         $this->assertSame($dataCategoryMapMock, $this->model->getDataMap(DataCategoryHashMap::class, 1));
