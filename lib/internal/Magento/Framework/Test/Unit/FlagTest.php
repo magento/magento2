@@ -17,6 +17,11 @@ class FlagTest extends \PHPUnit_Framework_TestCase
      */
     protected $flag;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $data = ['flag_code' => 'synchronize'];
@@ -71,13 +76,17 @@ class FlagTest extends \PHPUnit_Framework_TestCase
         $resourceCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->setMethods(null)
+            ->getMock();
 
         $this->flag = new \Magento\Framework\Flag(
             $context,
             $registry,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $this->serializer
         );
     }
 
@@ -98,17 +107,17 @@ class FlagTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->flag->getFlagData();
         $this->assertNull($result);
-        $flagData = serialize('data');
+        $flagData = json_encode('data');
         $this->flag->setData('flag_data', $flagData);
         $result = $this->flag->getFlagData();
-        $this->assertEquals(unserialize($flagData), $result);
+        $this->assertEquals(json_decode($flagData), $result);
     }
 
     public function testSetFlagData()
     {
         $flagData = 'data';
         $this->flag->setFlagData($flagData);
-        $result = unserialize($this->flag->getData('flag_data'));
+        $result = json_decode($this->flag->getData('flag_data'));
         $this->assertEquals($flagData, $result);
     }
 

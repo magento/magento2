@@ -27,6 +27,40 @@ class Flag extends Model\AbstractModel
     protected $_flagCode = null;
 
     /**
+     * Serializer for encode/decode string/data.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+    ) {
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        parent::__construct(
+            $context,
+            $registry,
+            $resource,
+            $resourceCollection,
+            $data
+        );
+    }
+
+    /**
      * Init resource model
      * Set flag_code if it is specified in arguments
      *
@@ -68,7 +102,7 @@ class Flag extends Model\AbstractModel
     public function getFlagData()
     {
         if ($this->hasFlagData()) {
-            return unserialize($this->getData('flag_data'));
+            return $this->serializer->unserialize($this->getData('flag_data'));
         } else {
             return null;
         }
@@ -82,7 +116,7 @@ class Flag extends Model\AbstractModel
      */
     public function setFlagData($value)
     {
-        return $this->setData('flag_data', serialize($value));
+        return $this->setData('flag_data', $this->serializer->serialize($value));
     }
 
     /**
