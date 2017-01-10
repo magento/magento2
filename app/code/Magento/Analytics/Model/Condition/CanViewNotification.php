@@ -46,10 +46,13 @@ class CanViewNotification implements ConditionInterface
      */
     public function validate()
     {
+        $lastNotificationTime = $this->notificationTime->getLastTimeNotification();
+        if (!$lastNotificationTime) {
+            return false;
+        }
         $datetime = $this->dateTimeFactory->create();
         return (
-            $datetime->getTimestamp() >=
-                $this->notificationTime->getLastTimeNotification() + self::NOTIFICATION_INTERVAL
+            $datetime->getTimestamp() >= $lastNotificationTime + self::NOTIFICATION_INTERVAL
         );
     }
 }
