@@ -62,8 +62,8 @@ define([
             if (element.multiple) {
                 previousSelectedValues = ko.utils.arrayMap(
                     selectedOptions(),//eslint-disable-line no-use-before-define
-                    ko.selectExtensions.readValue)
-                ;
+                    ko.selectExtensions.readValue
+                );
             } else {
                 previousSelectedValues = element.selectedIndex >= 0 ?
                     [ko.selectExtensions.readValue(element.options[element.selectedIndex])] :
@@ -90,7 +90,6 @@ define([
             }
 
             /**
-             *
              * @param {*} option
              */
             arrayToDomNodeChildrenOptions.beforeRemove = function (option) {
@@ -166,7 +165,6 @@ define([
             }
 
             /**
-             *
              * @returns {*}
              */
             function selectedOptions() {
@@ -176,7 +174,6 @@ define([
             }
 
             /**
-             *
              * @param {*} object
              * @param {*} predicate
              * @param {*} defaultValue
@@ -195,7 +192,6 @@ define([
             }
 
             /**
-             *
              * @param {*} obj
              */
             function recursivePathBuilder(obj) {
@@ -208,7 +204,6 @@ define([
             }
 
             /**
-             *
              * @param {Array} arrayEntry
              * @param {*} oldOptions
              * @returns {*[]}
@@ -244,7 +239,6 @@ define([
             }
 
             /**
-             *
              * @param {*} newOptions
              */
             function setSelectionCallback(newOptions) {
@@ -268,9 +262,8 @@ define([
             }
 
             /**
-             *
              * @param {*} string
-             * @param {*} times
+             * @param {Number} times
              * @returns {Array}
              */
             function strPad(string, times) {

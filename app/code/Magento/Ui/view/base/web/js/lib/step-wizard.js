@@ -67,7 +67,7 @@ define([
         /**
          * Move wizard to next step.
          *
-         * @return {*}
+         * @return {String}
          */
         this.next = function () {
             this.move(this.index + 1);
@@ -78,7 +78,7 @@ define([
         /**
          * Move wizard to previous step.
          *
-         * @return {*}
+         * @return {String}
          */
         this.prev = function () {
             this.move(this.index - 1);

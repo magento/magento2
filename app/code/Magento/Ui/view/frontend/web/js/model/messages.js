@@ -96,7 +96,7 @@ define([
         },
 
         /**
-         * CHeck if has messages.
+         * Checks if an instance has stored messages.
          *
          * @return {Boolean}
          */
@@ -105,7 +105,7 @@ define([
         },
 
         /**
-         * Cleat messages.
+         * Removes stored messages.
          */
         clear: function () {
             this.errorMessages.removeAll();

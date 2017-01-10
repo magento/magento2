@@ -53,7 +53,6 @@ define([
          *
          * @param {*} value
          * @param {String} field
-         *
          */
         filter: function (value, field) {
             var country = registry.get(this.parentName + '.' + 'country_id'),

@@ -54,6 +54,7 @@ define([
 
     /**
      * Update value for linked component.
+     *
      * @param {Object} data
      * @param {Object} owner
      * @param {Object} target
@@ -182,7 +183,7 @@ define([
      * @param {String} owner
      * @param {Object} data
      * @param {String} property
-     * @param {Boolean}immediate
+     * @param {Boolean} immediate
      */
     function setLink(target, owner, data, property, immediate) {
         var direction = data.direction,

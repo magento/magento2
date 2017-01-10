@@ -600,7 +600,7 @@ define([
          *
          * @param {Object} elem - cur column element
          * @param {Boolean} returned - need return column object or not
-         * @return {Boolean} if returned param is false, returned boolean value, else return current object data
+         * @return {Boolean|Object} if returned param is false, returned boolean value, else return current object data
          */
         hasRow: function (elem, returned) {
             var i = 0,

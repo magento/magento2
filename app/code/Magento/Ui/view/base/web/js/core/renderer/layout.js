@@ -21,7 +21,7 @@ define([
      *
      * @param {Object} parent
      * @param {Object} node
-     * @param {String} name
+     * @param {String} [name]
      * @returns {String}
      */
     function getNodeName(parent, node, name) {
@@ -46,7 +46,7 @@ define([
     }
 
     /**
-     * Get data scope base on parent data scope and node data scope.
+     * Get data scope based on parent data scope and node data scope.
      *
      * @param {Object} parent
      * @param {Object} node
@@ -98,7 +98,7 @@ define([
     }
 
     /**
-     * Creating new instance and set it to registry.
+     * Create a new component instance and set it to the registry.
      *
      * @param {Object} node
      * @param {Function} Constr
@@ -116,7 +116,7 @@ define([
      * @param {Object} parent
      * @param {Boolean} cached
      * @param {Boolean} merge
-     * @returns {Boolean}
+     * @returns {Boolean|undefined}
      */
     function run(nodes, parent, cached, merge) {
         if (_.isBoolean(merge) && merge) {
@@ -137,7 +137,7 @@ define([
          * Determines if node ready to be added or process it.
          *
          * @param {Object} parent
-         * @param {Object} node
+         * @param {Object|String} node
          */
         iterator: function (parent, node) {
             var action = _.isString(node) ?
@@ -334,6 +334,7 @@ define([
     _.extend(layout, {
         /**
          * Determines inserting strategy.
+         *
          * @param {Object} node
          * @returns {Object}
          */
@@ -358,7 +359,7 @@ define([
         /**
          * Insert component to provide target and position.
          *
-         * @param {Object} item
+         * @param {Object|String} item
          * @param {Object} target
          * @param {Number} position
          * @returns {Object}
@@ -372,7 +373,7 @@ define([
         },
 
         /**
-         * Insert component in to multiple targets.
+         * Insert component into multiple targets.
          *
          * @param {Object} item
          * @param {Array} targets
@@ -390,7 +391,7 @@ define([
          * Add provided child to parent.
          *
          * @param {Object} parent
-         * @param {Object} child
+         * @param {Object|String} child
          * @returns {Object}
          */
         addChild: function (parent, child) {

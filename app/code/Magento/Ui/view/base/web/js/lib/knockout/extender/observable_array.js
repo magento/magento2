@@ -79,7 +79,7 @@ define([
         /**
          * Wrapper for underscore contains function.
          *
-         * @param {Object} value
+         * @param {*} value
          * @return {Boolean}
          */
         contains: function (value) {
@@ -88,6 +88,7 @@ define([
 
         /**
          * Inverse contains call.
+         *
          * @return {Boolean}
          */
         hasNo: function () {
@@ -96,7 +97,8 @@ define([
 
         /**
          * Getter for length property.
-         * @returns {Number}
+         *
+         * @return {Number}
          */
         getLength: function () {
             return this().length;
@@ -104,14 +106,16 @@ define([
 
         /**
          * Create object with keys that gets from each object property.
-         * @returns {Object}
+         *
+         * @return {Object}
          */
         indexBy: function (key) {
             return _.indexBy(this(), key);
         },
 
         /**
-         * Returns a copy of the array with all instances of the values removed
+         * Returns a copy of the array with all instances of the values removed.
+         *
          * @return {Array}
          */
         without: function () {

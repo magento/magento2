@@ -16,7 +16,7 @@ define([
      *
      * @param {String} ns
      * @param {String} path
-     * @returns {*}
+     * @returns {String}
      */
     function removeNs(ns, path) {
         return path.replace(ns + '.', '');

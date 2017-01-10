@@ -17,7 +17,8 @@ define(function () {
         },
 
         /**
-         * Check if string is empty no trim
+         * Check if string is empty no trim.
+         *
          * @param {String} value
          * @return {Boolean}
          */
@@ -27,10 +28,11 @@ define(function () {
 
         /**
          * Checks if {value} is between numbers {from} and {to}.
+         *
          * @param {String} value
          * @param {String} from
          * @param {String} to
-         * @returns {Boolean}
+         * @return {Boolean}
          */
         isBetween: function (value, from, to) {
             return (from === null || from === '' || value >= utils.parseNumber(from)) &&
@@ -69,7 +71,7 @@ define(function () {
          * Removes HTML tags and space characters, numbers and punctuation.
          *
          * @param {String} value -  Value being stripped.
-         * @return {*}
+         * @return {String}
          */
         stripHtml: function (value) {
             return value.replace(/<.[^<>]*?>/g, ' ').replace(/&nbsp;|&#160;/gi, ' ')
