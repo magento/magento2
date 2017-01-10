@@ -90,8 +90,8 @@ class SignUp
             $this->flagManager->deleteFlag(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
             $inboxNotification = $this->inboxFactory->create();
             $inboxNotification->addNotice(
-                "Analytics subscription error",
-                "Analytics subscription error"
+                "Analytics subscription unsuccessful",
+                "Ask Illia about message."
             );
             $this->inboxResource->save($inboxNotification);
             return false;
