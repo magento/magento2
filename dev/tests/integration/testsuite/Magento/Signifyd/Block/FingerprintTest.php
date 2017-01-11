@@ -8,7 +8,6 @@ namespace Magento\Signifyd\Block;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
-use Magento\Signifyd\Block\Fingerprint;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class FingerprintTest extends \PHPUnit_Framework_TestCase

@@ -8,11 +8,9 @@
 ?>
 <?php /** @var $block Magento\Signifyd\Block\Adminhtml\CaseInfo */ ?>
 <?php
-    if (!$block->isModuleActive()) {
+    if (!$block->isModuleActive() || !($case = $block->getCaseEntity())) {
         return '';
     }
-
-    $case = $block->getCaseEntity();
 ?>
 <section class="admin__page-section order-case-info">
     <div class="admin__page-section-title">
@@ -32,7 +30,6 @@
                 <th class="col-case-updated"><?php /* @escapeNotVerified */ echo __('Case Updated'); ?></th>
             </tr>
             </thead>
-            <?php if (!empty($case)): ?>
             <tbody class="even">
             <tr>
                 <td class="col-case-status"><?php echo $block->escapeHtml($case->getStatus()); ?></td>
@@ -45,10 +42,6 @@
                 <td class="col-case-updated"><?php echo $block->escapeHtml($case->getUpdatedAt()); ?></td>
             </tr>
             </tbody>
-            <?php endif; ?>
         </table>
-        <?php if (empty($case)): ?>
-        <div class="order-case-empty"><?php /* @escapeNotVerified */ echo __('Signifyd Case is not created for order'); ?></div>
-        <?php endif; ?>
     </div>
 </section>
