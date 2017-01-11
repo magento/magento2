@@ -271,12 +271,15 @@ class GatewayTest extends TestCase
                 'disposition' => $dummyExpectedDisposition,
             ]);
 
-        $actualDisposition = $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
-        $this->assertEquals(
-            $dummyExpectedDisposition,
-            $actualDisposition,
-            'Expected disposition should be return from method'
-        );
+        try {
+            $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
+        } catch (GatewayException $e) {
+            $this->fail(sprintf(
+                'Expected disposition "%s" was not accepted with message "%s"',
+                $dummyExpectedDisposition,
+                $e->getMessage()
+            ));
+        }
     }
 
     public function supportedGuaranteeDispositionsProvider()
