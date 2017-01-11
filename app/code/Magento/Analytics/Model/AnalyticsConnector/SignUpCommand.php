@@ -42,6 +42,7 @@ class SignUpCommand implements AnalyticsCommandInterface
      * @var AnalyticsApiUserProvider
      */
     private $analyticsApiUserProvider;
+
     /**
      * @var TokenGenerator
      */
@@ -53,7 +54,7 @@ class SignUpCommand implements AnalyticsCommandInterface
      * @param ZendClientFactory $zendClientFactory
      * @param AnalyticsToken $analyticsToken
      * @param LoggerInterface $logger
-     * @param AnalyticsApiUserProvider $analyticsApiUser
+     * @param AnalyticsApiUserProvider $analyticsApiUserProvider
      * @param TokenGenerator $tokenGenerator
      */
     public function __construct(
@@ -61,14 +62,14 @@ class SignUpCommand implements AnalyticsCommandInterface
         ZendClientFactory $zendClientFactory,
         AnalyticsToken $analyticsToken,
         LoggerInterface $logger,
-        AnalyticsApiUserProvider $analyticsApiUser,
+        AnalyticsApiUserProvider $analyticsApiUserProvider,
         TokenGenerator $tokenGenerator
     ) {
         $this->config = $config;
         $this->httpClientFactory = $zendClientFactory;
         $this->analyticsToken = $analyticsToken;
         $this->logger = $logger;
-        $this->analyticsApiUserProvider = $analyticsApiUser;
+        $this->analyticsApiUserProvider = $analyticsApiUserProvider;
         $this->tokenGenerator = $tokenGenerator;
     }
 
@@ -78,7 +79,7 @@ class SignUpCommand implements AnalyticsCommandInterface
      */
     public function execute()
     {
-        $apiUserToken = $this->getToken();
+        $apiUserToken = $this->getApiUserToken();
         if (!$apiUserToken) {
             $this->logger->warning("The attempt of subscription was unsuccessful on step generate token.");
             return false;
@@ -96,27 +97,17 @@ class SignUpCommand implements AnalyticsCommandInterface
             $this->logger->warning("The attempt of subscription was unsuccessful on step sign-up.");
             return false;
         }
-        $this->saveToken($token);
 
+        $this->analyticsToken->setToken($token);
         return true;
     }
 
     /**
-     * Save token to Magento config
-     * @param string $token
-     * @return void
-     */
-    private function saveToken($token)
-    {
-        $this->analyticsToken->setToken($token);
-    }
-
-    /**
      * Get MA Token from MA Api
-     * @param array $requestData
+     * @param string $requestData
      * @return bool|string
      */
-    private function getMAToken(array $requestData)
+    private function getMAToken($requestData)
     {
         $maEndPoint = $this->config->getConfigDataValue(self::MA_SIGNUP_URL_PATH);
         /** @var ZendClient $httpClient */
@@ -141,7 +132,7 @@ class SignUpCommand implements AnalyticsCommandInterface
     /**
      * @return string|false
      */
-    private function getToken()
+    private function getApiUserToken()
     {
         $apiUserToken = $this->analyticsApiUserProvider->getToken();
         if (!$apiUserToken) {

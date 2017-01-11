@@ -25,24 +25,24 @@ class TokenGenerator
      */
     private $oauthService;
     /**
-     * @var MagentoAnalyticsApiUser
+     * @var AnalyticsApiUserProvider
      */
-    private $analyticsApiUser;
+    private $analyticsApiUserProvider;
 
     /**
      * GenerateTokenCommand constructor.
      * @param IntegrationServiceInterface $integrationService
      * @param OauthServiceInterface $oauthService
-     * @param MagentoAnalyticsApiUser $analyticsApiUser
+     * @param AnalyticsApiUserProvider $analyticsApiUser
      */
     public function __construct(
         IntegrationServiceInterface $integrationService,
         OauthServiceInterface $oauthService,
-        MagentoAnalyticsApiUser $analyticsApiUser
+        AnalyticsApiUserProvider $analyticsApiUser
     ) {
         $this->integrationService = $integrationService;
         $this->oauthService = $oauthService;
-        $this->analyticsApiUser = $analyticsApiUser;
+        $this->analyticsApiUserProvider = $analyticsApiUser;
     }
 
     /**
@@ -51,9 +51,9 @@ class TokenGenerator
      */
     public function execute()
     {
-        $creationResult = $this->oauthService->createAccessToken($this->analyticsApiUser->getConsumerId(), true);
+        $creationResult = $this->oauthService->createAccessToken($this->analyticsApiUserProvider->getConsumerId(), true);
         if ($creationResult === true) {
-            $integrationData = $this->analyticsApiUser->getData();
+            $integrationData = $this->analyticsApiUserProvider->getData();
             $integrationData['status'] = Integration::STATUS_ACTIVE;
             $this->integrationService->update($integrationData);
             return true;
