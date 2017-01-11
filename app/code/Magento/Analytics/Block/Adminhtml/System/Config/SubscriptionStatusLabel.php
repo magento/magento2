@@ -10,9 +10,9 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
- * Class StatusLabel.
+ * Class SubscriptionStatusLabel.
  */
-class StatusLabel extends \Magento\Config\Block\System\Config\Form\Field
+class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @var SubscriptionStatusProvider
@@ -20,7 +20,7 @@ class StatusLabel extends \Magento\Config\Block\System\Config\Form\Field
     private $subscriptionStatusProvider;
 
     /**
-     * StatusLabel constructor.
+     * SubscriptionStatusLabel constructor.
      *
      * @param SubscriptionStatusProvider $labelStatusProvider
      * @param Context $context

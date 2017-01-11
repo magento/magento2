@@ -23,7 +23,7 @@ class SubscriptionStatusProvider
     private $analyticsToken;
 
     /**
-     * StatusLabel constructor.
+     * SubscriptionStatusProvider constructor.
      *
      * @param System $systemConfig
      * @param AnalyticsToken $analyticsToken
