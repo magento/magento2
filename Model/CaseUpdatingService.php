@@ -76,7 +76,7 @@ class CaseUpdatingService implements CaseUpdatingServiceInterface
         }
 
         try {
-            $this->prepareCaseData($case, $data);
+            $this->setCaseData($case, $data);
             $orderHistoryComment = $this->messageGenerator->generate($data);
             $this->caseRepository->save($case);
             $this->commentsHistoryUpdater->addComment($case, $orderHistoryComment);
@@ -92,7 +92,7 @@ class CaseUpdatingService implements CaseUpdatingServiceInterface
      * @param array $data
      * @return void
      */
-    private function prepareCaseData(CaseInterface $case, array $data)
+    private function setCaseData(CaseInterface $case, array $data)
     {
         // list of keys which should not be replaced, like order id
         $notResolvedKeys = [
