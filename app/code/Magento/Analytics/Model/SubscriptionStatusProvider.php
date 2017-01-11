@@ -8,7 +8,7 @@ namespace Magento\Analytics\Model;
 use Magento\Config\App\Config\Type\System;
 
 /**
- * Class SubscriptionStatusProvider
+ * Provider of subscription status.
  */
 class SubscriptionStatusProvider
 {
@@ -23,8 +23,6 @@ class SubscriptionStatusProvider
     private $analyticsToken;
 
     /**
-     * SubscriptionStatusProvider constructor.
-     *
      * @param System $systemConfig
      * @param AnalyticsToken $analyticsToken
      */
@@ -37,31 +35,26 @@ class SubscriptionStatusProvider
     }
 
     /**
-     * "Enabled" status if Dropdown is Yes and if MA token was received
-     * "Pending" status if Dropdown is Yes and if MA token was not received
-     * "Disabled" status if Dropdown is No
+     * Statuses:
+     *
+     * Enabled - if subscription is enabled and MA token was received;
+     * Pending - if subscription is enabled and MA token was not received;
+     * Disabled - if subscription is not enabled.
      *
      * @return string
      */
     public function getStatus()
     {
         $status = "Disabled";
-        $isSubscriptionEnabled = $this->isSubscriptionEnabled();
-        $hasToken = $this->analyticsToken->isTokenExist();
-        if ($isSubscriptionEnabled && $hasToken) {
+
+        if ($this->systemConfig->get('default/analytics/subscription/enabled')) {
             $status = "Enabled";
-        } elseif ($isSubscriptionEnabled && !$hasToken) {
-            $status = "Pending";
+
+            if (!$this->analyticsToken->isTokenExist()) {
+                $status = "Pending";
+            }
         }
 
         return $status;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isSubscriptionEnabled()
-    {
-        return (bool)$this->systemConfig->get('default/analytics/subscription/enabled');
     }
 }
