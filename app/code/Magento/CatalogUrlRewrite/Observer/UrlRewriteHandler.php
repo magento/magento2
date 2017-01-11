@@ -110,8 +110,7 @@ class UrlRewriteHandler
         \Magento\Catalog\Model\Category $category,
         $storeId,
         $saveRewriteHistory
-    )
-    {
+    ) {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $category->getProductCollection()
             ->addAttributeToSelect('name')
