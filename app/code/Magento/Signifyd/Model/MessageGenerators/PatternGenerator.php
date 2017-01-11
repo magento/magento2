@@ -18,7 +18,7 @@ use Magento\Signifyd\Model\MessageGeneratorInterface;
  * Message is 'Case Update: New score for the order is %1. Previous score was %2.', then the required params order
  * should be ['new_score', 'prev_score'].
  */
-class BaseGenerator implements MessageGeneratorInterface
+class PatternGenerator implements MessageGeneratorInterface
 {
     /**
      * @var string
@@ -31,8 +31,9 @@ class BaseGenerator implements MessageGeneratorInterface
     private $requiredParams;
 
     /**
-     * BaseGenerator constructor.
-     * @param $template
+     * PatternGenerator constructor.
+     *
+     * @param string $template
      * @param array $requiredParams
      */
     public function __construct($template, array $requiredParams = [])

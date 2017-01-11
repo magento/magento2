@@ -7,7 +7,7 @@ namespace Magento\Signifyd\Test\Unit\Model\MessageGenerators;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Signifyd\Model\MessageGenerators\BaseGenerator;
+use Magento\Signifyd\Model\MessageGenerators\PatternGenerator;
 use Magento\Signifyd\Model\MessageGenerators\CaseRescore;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -75,11 +75,11 @@ class GeneratorFactoryTest extends \PHPUnit_Framework_TestCase
     public function typeDataProvider()
     {
         return [
-            ['cases/creation', BaseGenerator::class],
-            ['cases/review', BaseGenerator::class],
+            ['cases/creation', PatternGenerator::class],
+            ['cases/review', PatternGenerator::class],
             ['cases/rescore', CaseRescore::class],
-            ['guarantees/completion', BaseGenerator::class],
-            ['guarantees/creation', BaseGenerator::class],
+            ['guarantees/completion', PatternGenerator::class],
+            ['guarantees/creation', PatternGenerator::class],
         ];
     }
 

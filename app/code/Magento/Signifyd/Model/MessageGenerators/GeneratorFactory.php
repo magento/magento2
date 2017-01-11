@@ -63,7 +63,7 @@ class GeneratorFactory
      */
     public function create($type)
     {
-        $className = BaseGenerator::class;
+        $className = PatternGenerator::class;
         switch ($type) {
             case self::$caseCreation:
                 $classConfig = [
