@@ -11,6 +11,7 @@ use Magento\Framework\Flag;
 
 /**
  * Class FlagManager
+ * Service need for working with the flag object as the scalar value.
  */
 class FlagManager
 {

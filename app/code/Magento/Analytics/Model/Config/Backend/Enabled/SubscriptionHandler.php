@@ -3,23 +3,27 @@
  * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\Model\Config\Backend\Enabled;
 
 use Magento\Analytics\Model\FlagManager;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Config\Value;
 
+/**
+ * Add additional handling on config value change.
+ */
 class SubscriptionHandler
 {
     /**
      * Flag code for reserve counter of attempts to subscribe.
      */
     const ATTEMPTS_REVERSE_COUNTER_FLAG_CODE = 'analytics_link_attempts_reverse_counter';
+
     /**
      * Config path for schedule setting of subscription handler.
      */
     const CRON_STRING_PATH = 'crontab/default/jobs/analytics_generate/schedule/cron_expr';
+
     /**
      * Max value for reserve counter of attempts to subscribe.
      *
@@ -35,7 +39,7 @@ class SubscriptionHandler
     private $configWriter;
 
     /**
-     * Flag factory.
+     * Flag Manager.
      *
      * @var FlagManager
      */
@@ -53,6 +57,13 @@ class SubscriptionHandler
         $this->flagManager = $flagManager;
     }
 
+    /**
+     * Performs change subscription environment on config value change.
+     *
+     * @param Value $configValue
+     *
+     * @return bool
+     */
     public function process(Value $configValue)
     {
         if ($configValue->isValueChanged()) {
