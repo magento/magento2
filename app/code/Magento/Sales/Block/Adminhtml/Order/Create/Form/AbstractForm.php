@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
@@ -11,7 +11,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Sales Order Create Form Abstract Block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -69,19 +69,19 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
 
         \Magento\Framework\Data\Form::setElementRenderer(
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Renderer\Element',
+                \Magento\Backend\Block\Widget\Form\Renderer\Element::class,
                 $this->getNameInLayout() . '_element'
             )
         );
         \Magento\Framework\Data\Form::setFieldsetRenderer(
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Renderer\Fieldset',
+                \Magento\Backend\Block\Widget\Form\Renderer\Fieldset::class,
                 $this->getNameInLayout() . '_fieldset'
             )
         );
         \Magento\Framework\Data\Form::setFieldsetElementRenderer(
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element',
+                \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element::class,
                 $this->getNameInLayout() . '_fieldset_element'
             )
         );
@@ -118,9 +118,9 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
     protected function _getAdditionalFormElementTypes()
     {
         return [
-            'file' => 'Magento\Customer\Block\Adminhtml\Form\Element\File',
-            'image' => 'Magento\Customer\Block\Adminhtml\Form\Element\Image',
-            'boolean' => 'Magento\Customer\Block\Adminhtml\Form\Element\Boolean'
+            'file' => \Magento\Customer\Block\Adminhtml\Form\Element\File::class,
+            'image' => \Magento\Customer\Block\Adminhtml\Form\Element\Image::class,
+            'boolean' => \Magento\Customer\Block\Adminhtml\Form\Element\Boolean::class
         ];
     }
 
@@ -132,7 +132,9 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
     protected function _getAdditionalFormElementRenderers()
     {
         return [
-            'region' => $this->getLayout()->createBlock('Magento\Customer\Block\Adminhtml\Edit\Renderer\Region')
+            'region' => $this->getLayout()->createBlock(
+                \Magento\Customer\Block\Adminhtml\Edit\Renderer\Region::class
+            )
         ];
     }
 
@@ -192,12 +194,17 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
                 if ($inputType == 'select' || $inputType == 'multiselect') {
                     $options = [];
                     foreach ($attribute->getOptions() as $optionData) {
-                        $options[] = ConvertArray::toFlatArray(
-                            $this->dataObjectProcessor->buildOutputDataArray(
-                                $optionData,
-                                '\Magento\Customer\Api\Data\OptionInterface'
-                            )
+                        $data = $this->dataObjectProcessor->buildOutputDataArray(
+                            $optionData,
+                            \Magento\Customer\Api\Data\OptionInterface::class
                         );
+                        foreach ($data as $key => $value) {
+                            if (is_array($value)) {
+                                unset($data[$key]);
+                                $data['value'] = $value;
+                            }
+                        }
+                        $options[] = $data;
                     }
                     $element->setValues($options);
                 } elseif ($inputType == 'date') {

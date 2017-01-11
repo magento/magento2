@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Model;
@@ -34,12 +34,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $readFactoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
-        $this->_coreConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_cacheState = $this->getMockForAbstractClass('Magento\Framework\App\Cache\StateInterface');
+        $readFactoryMock = $this->getMock(
+            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->_coreConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_cacheState = $this->getMockForAbstractClass(\Magento\Framework\App\Cache\StateInterface::class);
 
         $modulesDirectoryMock = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Write',
+            \Magento\Framework\Filesystem\Directory\Write::class,
             [],
             [],
             '',
@@ -94,7 +100,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->moduleReader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
+        $this->moduleReader = $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false);
         $this->_model = new \Magento\PageCache\Model\Config(
             $readFactoryMock,
             $this->_coreConfigMock,

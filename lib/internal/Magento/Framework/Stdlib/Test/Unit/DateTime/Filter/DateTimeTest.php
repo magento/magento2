@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Filter;
@@ -17,7 +17,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
      */
     public function testFilter($inputData, $expectedDate)
     {
-        $localeMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $localeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $localeMock->expects(
             $this->once()
         )->method(
@@ -52,7 +52,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('\Exception');
 
-        $localeMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $localeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $localeMock->expects(
             $this->once()
         )->method(

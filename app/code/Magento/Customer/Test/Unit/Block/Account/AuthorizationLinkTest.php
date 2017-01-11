@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Account;
@@ -33,18 +33,18 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->httpContext = $this->getMockBuilder('\Magento\Framework\App\Http\Context')
+        $this->httpContext = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
-        $this->_customerUrl = $this->getMockBuilder('Magento\Customer\Model\Url')
+        $this->_customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLogoutUrl', 'getLoginUrl'])
             ->getMock();
 
-        $context = $this->_objectManager->getObject('Magento\Framework\View\Element\Template\Context');
+        $context = $this->_objectManager->getObject(\Magento\Framework\View\Element\Template\Context::class);
         $this->_block = $this->_objectManager->getObject(
-            'Magento\Customer\Block\Account\AuthorizationLink',
+            \Magento\Customer\Block\Account\AuthorizationLink::class,
             [
                 'context' => $context,
                 'httpContext' => $this->httpContext,

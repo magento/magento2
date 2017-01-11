@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,24 +45,24 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
             ->getMockForAbstractClass();
 
-        $this->layer = $this->getMockBuilder('\Magento\Catalog\Model\Layer')
+        $this->layer = $this->getMockBuilder(\Magento\Catalog\Model\Layer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getState', 'getProductCollection'])
             ->getMock();
         $this->filterItemFactory = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Layer\Filter\ItemFactory'
+            \Magento\Catalog\Model\Layer\Filter\ItemFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->filterItem = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Layer\Filter\Item'
+            \Magento\Catalog\Model\Layer\Filter\Item::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
@@ -75,7 +75,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->filterItem));
 
         $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
-            '\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection'
+            \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -85,11 +85,11 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->fulltextCollection));
 
         $filterDecimalFactory =
-            $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory')
+            $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resource = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal')
+        $resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -97,12 +97,12 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($resource));
 
-        $this->attribute = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute')
+        $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeCode', 'getFrontend', 'getIsFilterable'])
             ->getMock();
 
-        $this->state = $this->getMockBuilder('\Magento\Catalog\Model\Layer\State')
+        $this->state = $this->getMockBuilder(\Magento\Catalog\Model\Layer\State::class)
             ->disableOriginalConstructor()
             ->setMethods(['addFilter'])
             ->getMock();
@@ -112,7 +112,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
-            'Magento\CatalogSearch\Model\Layer\Filter\Decimal',
+            \Magento\CatalogSearch\Model\Layer\Filter\Decimal::class,
             [
                 'filterItemFactory' => $this->filterItemFactory,
                 'layer' => $this->layer,

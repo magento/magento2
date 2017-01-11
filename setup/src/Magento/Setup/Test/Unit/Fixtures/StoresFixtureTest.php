@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+        $this->fixtureModelMock = $this->getMock(\Magento\Setup\Fixtures\FixtureModel::class, [], [], '', false);
 
         $this->model = new StoresFixture($this->fixtureModelMock);
     }
@@ -34,21 +34,21 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $websiteMock = $this->getMock('\Magento\Store\Model\Website', [], [], '', false);
+        $websiteMock = $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
         $websiteMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn('website_id');
         $websiteMock->expects($this->once())
             ->method('save');
 
-        $groupMock = $this->getMock('\Magento\Store\Model\Group', [], [], '', false);
+        $groupMock = $this->getMock(\Magento\Store\Model\Group::class, [], [], '', false);
         $groupMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn('group_id');
         $groupMock->expects($this->once())
             ->method('save');
 
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $storeMock->expects($this->once())
             ->method('getRootCategoryId')
             ->willReturn(1);
@@ -58,7 +58,7 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
         $storeMock->expects($this->once())
             ->method('save');
 
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $storeManagerMock->expects($this->once())
             ->method('getWebsite')
             ->willReturn($websiteMock);
@@ -73,7 +73,7 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
             ->willReturn($storeMock);
 
         $categoryMock = $this->getMock(
-            'Magento\Catalog\Model\Category',
+            \Magento\Catalog\Model\Category::class,
             [
                 'setName',
                 'setPath',
@@ -112,11 +112,11 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
             ->willReturn('category_id');
 
         $valueMap = [
-            ['Magento\Store\Model\StoreManager', [], $storeManagerMock],
-            ['Magento\Catalog\Model\Category', [], $categoryMock]
+            [\Magento\Store\Model\StoreManager::class, [], $storeManagerMock],
+            [\Magento\Catalog\Model\Category::class, [], $categoryMock]
         ];
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValueMap($valueMap));
@@ -135,18 +135,18 @@ class StoresFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $storeMock->expects($this->never())->method('save');
 
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $storeManagerMock->expects($this->never())
             ->method('getDefaultStoreView')
             ->willReturn($storeMock);
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
         $objectManagerMock->expects($this->never())
             ->method('create')
-            ->with($this->equalTo('Magento\Store\Model\StoreManager'))
+            ->with($this->equalTo(\Magento\Store\Model\StoreManager::class))
             ->willReturn($storeManagerMock);
 
         $this->fixtureModelMock

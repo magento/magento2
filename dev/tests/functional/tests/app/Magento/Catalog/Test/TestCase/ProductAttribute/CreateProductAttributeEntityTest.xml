@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\CreateProductAttributeEntityTest" summary="Create Product Attribute" ticketId="MAGETWO-24767">
         <variation name="CreateProductAttributeEntityTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Text Field</data>
@@ -18,7 +19,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
         </variation>
-        <variation name="CreateProductAttributeEntityTestVariation2">
+        <variation name="CreateProductAttributeEntityTestVariation2"  summary="Create custom text attribute product field" ticketId="MAGETWO-17475">
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Text Area</data>
@@ -35,6 +36,7 @@
             <data name="sectionName" xsi:type="string">product-details</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
@@ -57,6 +59,7 @@
             <data name="productAttribute/data/used_in_product_listing" xsi:type="string">Yes</data>
             <data name="productAttribute/data/is_used_for_promo_rules" xsi:type="string">Yes</data>
             <data name="productAttribute/data/used_for_sort_by" xsi:type="string">Yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
@@ -65,6 +68,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertProductAttributeIsUsedPromoRules" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation4">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Yes/No_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Yes/No</data>
@@ -97,6 +101,7 @@
             <data name="productAttribute/data/is_html_allowed_on_front" xsi:type="string">Yes</data>
             <data name="productAttribute/data/is_visible_on_front" xsi:type="string">Yes</data>
             <data name="productAttribute/data/used_in_product_listing" xsi:type="string">Yes</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
@@ -109,7 +114,7 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
-        <variation name="CreateProductAttributeEntityTestVariation6">
+        <variation name="CreateProductAttributeEntityTestVariation6" summary="Create custom dropdown attribute product field" ticketId="MAGETWO-17475">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
@@ -134,6 +139,7 @@
             <data name="sectionName" xsi:type="string">product-details</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsGlobal" />
@@ -147,7 +153,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
-        <variation name="CreateProductAttributeEntityTestVariation7">
+        <variation name="CreateProductAttributeEntityTestVariation7" summary="Create custom price attribute product field" ticketId="MAGETWO-17475">
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Price_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Price</data>
@@ -163,22 +169,31 @@
             <data name="attributeValue" xsi:type="number">15</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation8">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Fixed_Product_Tax_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Fixed Product Tax</data>
             <data name="productAttribute/data/attribute_code" xsi:type="string">attr_fpt_code_%isolation%</data>
             <data name="productAttribute/data/manage_frontend_label" xsi:type="string">Fixed_Product_Tax_Storeview</data>
+            <data name="attributeValue" xsi:type="array">
+                <item name="country" xsi:type="string">United States</item>
+                <item name="tax" xsi:type="string">10</item>
+                <item name="website" xsi:type="string">All Websites USD</item>
+                <item name="state" xsi:type="string">*</item>
+            </data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation9">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Text Field</data>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\View;
@@ -19,12 +19,12 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->adminHelperMock = $this->getMockBuilder('Magento\Sales\Helper\Admin')
+        $this->adminHelperMock = $this->getMockBuilder(\Magento\Sales\Helper\Admin::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->viewHistory = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Sales\Block\Adminhtml\Order\View\History',
+            \Magento\Sales\Block\Adminhtml\Order\View\History::class,
             [
                 'adminHelper' => $this->adminHelperMock
             ]

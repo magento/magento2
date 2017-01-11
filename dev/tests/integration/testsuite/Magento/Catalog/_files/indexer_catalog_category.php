@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /** @var $category \Magento\Catalog\Model\Category */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$categoryFirst = $objectManager->create('Magento\Catalog\Model\Category');
+$categoryFirst = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $categoryFirst->setName('Category 1')
     ->setPath('1/2')
     ->setLevel(2)
@@ -17,7 +17,7 @@ $categoryFirst->setName('Category 1')
     ->setPosition(1)
     ->save();
 
-$categorySecond = $objectManager->create('Magento\Catalog\Model\Category');
+$categorySecond = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $categorySecond->setName('Category 2')
     ->setPath('1/2')
     ->setLevel(2)
@@ -27,7 +27,7 @@ $categorySecond->setName('Category 2')
     ->setPosition(2)
     ->save();
 
-$categoryThird = $objectManager->create('Magento\Catalog\Model\Category');
+$categoryThird = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $categoryThird->setName('Category 3')
     ->setPath($categoryFirst->getPath())
     ->setLevel(3)
@@ -37,7 +37,7 @@ $categoryThird->setName('Category 3')
     ->setPosition(2)
     ->save();
 
-$categoryFourth = $objectManager->create('Magento\Catalog\Model\Category');
+$categoryFourth = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $categoryFourth->setName('Category 4')
     ->setPath($categoryThird->getPath())
     ->setLevel(4)
@@ -47,7 +47,7 @@ $categoryFourth->setName('Category 4')
     ->setPosition(1)
     ->save();
 
-$categoryFifth = $objectManager->create('Magento\Catalog\Model\Category');
+$categoryFifth = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $categoryFifth->setName('Category 5')
     ->setPath($categorySecond->getPath())
     ->setLevel(3)
@@ -58,7 +58,7 @@ $categoryFifth->setName('Category 5')
     ->save();
 
 /** @var $productFirst \Magento\Catalog\Model\Product */
-$productFirst = $objectManager->create('Magento\Catalog\Model\Product');
+$productFirst = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productFirst->setTypeId('simple')
     ->setId(1)
     ->setAttributeSetId(4)
@@ -75,7 +75,7 @@ $productFirst->setTypeId('simple')
     ->save();
 
 /** @var $productSecond \Magento\Catalog\Model\Product */
-$productSecond = $objectManager->create('Magento\Catalog\Model\Product');
+$productSecond = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productSecond->setTypeId('simple')
     ->setId(2)
     ->setAttributeSetId(4)
@@ -92,7 +92,7 @@ $productSecond->setTypeId('simple')
     ->save();
 
 /** @var $productThird \Magento\Catalog\Model\Product */
-$productThird = $objectManager->create('Magento\Catalog\Model\Product');
+$productThird = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productThird->setTypeId('simple')
     ->setId(3)
     ->setAttributeSetId(4)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,7 @@ use Magento\Catalog\Helper\DefaultCategory;
 
 /**
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallData implements InstallDataInterface
 {
@@ -281,7 +282,7 @@ class InstallData implements InstallDataInterface
                 $newGeneralTabName => 100,
                 'is_required' => 0,
                 'default_value' => 1,
-                'frontend_input_renderer' => 'Magento\Framework\Data\Form\Element\Hidden',
+                'frontend_input_renderer' => \Magento\Framework\Data\Form\Element\Hidden::class,
             ],
             //Autosettings tab
             'short_description' => [$autosettingsTabName => 0, 'is_required' => 0],
@@ -327,13 +328,13 @@ class InstallData implements InstallDataInterface
             \Magento\Catalog\Model\Category::ENTITY,
             'custom_design_from',
             'attribute_model',
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
         );
         $categorySetup->updateAttribute(
             \Magento\Catalog\Model\Category::ENTITY,
             'custom_design_from',
             'frontend_model',
-            'Magento\Eav\Model\Entity\Attribute\Frontend\Datetime'
+            \Magento\Eav\Model\Entity\Attribute\Frontend\Datetime::class
         );
     }
 }

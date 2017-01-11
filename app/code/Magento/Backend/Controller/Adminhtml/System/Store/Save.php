@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
@@ -27,7 +27,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                 switch ($postData['store_type']) {
                     case 'website':
                         $postData['website']['name'] = $this->filterManager->removeTags($postData['website']['name']);
-                        $websiteModel = $this->_objectManager->create('Magento\Store\Model\Website');
+                        $websiteModel = $this->_objectManager->create(\Magento\Store\Model\Website::class);
                         if ($postData['website']['website_id']) {
                             $websiteModel->load($postData['website']['website_id']);
                         }
@@ -43,7 +43,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                     case 'group':
                         $postData['group']['name'] = $this->filterManager->removeTags($postData['group']['name']);
                         /** @var \Magento\Store\Model\Group $groupModel */
-                        $groupModel = $this->_objectManager->create('Magento\Store\Model\Group');
+                        $groupModel = $this->_objectManager->create(\Magento\Store\Model\Group::class);
                         if ($postData['group']['group_id']) {
                             $groupModel->load($postData['group']['group_id']);
                         }
@@ -64,7 +64,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                     case 'store':
                         $eventName = 'store_edit';
                         /** @var \Magento\Store\Model\Store $storeModel */
-                        $storeModel = $this->_objectManager->create('Magento\Store\Model\Store');
+                        $storeModel = $this->_objectManager->create(\Magento\Store\Model\Store::class);
                         $postData['store']['name'] = $this->filterManager->removeTags($postData['store']['name']);
                         if ($postData['store']['store_id']) {
                             $storeModel->load($postData['store']['store_id']);
@@ -75,7 +75,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                             $eventName = 'store_add';
                         }
                         $groupModel = $this->_objectManager->create(
-                            'Magento\Store\Model\Group'
+                            \Magento\Store\Model\Group::class
                         )->load(
                             $storeModel->getGroupId()
                         );
@@ -86,7 +86,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                             );
                         }
                         $storeModel->save();
-                        $this->_objectManager->get('Magento\Store\Model\StoreManager')->reinitStores();
+                        $this->_objectManager->get(\Magento\Store\Model\StoreManager::class)->reinitStores();
                         $this->_eventManager->dispatch($eventName, ['store' => $storeModel]);
                         $this->messageManager->addSuccess(__('You saved the store view.'));
                         break;

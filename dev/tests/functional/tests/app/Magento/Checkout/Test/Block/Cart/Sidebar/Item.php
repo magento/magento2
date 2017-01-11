@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,20 +9,19 @@ namespace Magento\Checkout\Test\Block\Cart\Sidebar;
 use Magento\Checkout\Test\Block\Cart\Sidebar;
 
 /**
- * Class MiniCartItem
- * Product item block on mini Cart
+ * Product item block on mini Cart.
  */
 class Item extends Sidebar
 {
     /**
-     * Selector for "Remove item" button
+     * Selector for "Remove item" button.
      *
      * @var string
      */
     protected $removeItem = '.action.delete';
 
     /**
-     * Selector for "Edit item" button
+     * Selector for "Edit item" button.
      *
      * @var string
      */
@@ -40,7 +39,14 @@ class Item extends Sidebar
      *
      * @var string
      */
-    private $qty = 'input.cart-item-qty';
+    protected $qty = 'input.cart-item-qty';
+
+    /**
+     * CSS selector for price field.
+     *
+     * @var string
+     */
+    protected $price = '.minicart-price .price';
 
     /**
      * CSS selector for update button.
@@ -50,7 +56,7 @@ class Item extends Sidebar
     private $updateButton = 'button.update-cart-item';
 
     /**
-     * Remove product item from mini cart
+     * Remove product item from mini cart.
      *
      * @return void
      */
@@ -59,13 +65,13 @@ class Item extends Sidebar
         $this->_rootElement->find($this->removeItem)->click();
         $element = $this->browser->find($this->confirmModal);
         /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
         $modal->acceptAlert();
         $modal->waitModalWindowToDisappear();
     }
 
     /**
-     * Click "Edit item" button
+     * Click "Edit item" button.
      *
      * @return void
      */
@@ -86,5 +92,26 @@ class Item extends Sidebar
             $this->_rootElement->find($this->qty)->setValue($checkoutData['qty']);
             $this->_rootElement->find($this->updateButton)->click();
         }
+    }
+
+    /**
+     * Get product quantity.
+     *
+     * @return string
+     */
+    public function getQty()
+    {
+        return $this->_rootElement->find($this->qty)->getValue();
+    }
+
+    /**
+     * Get product price.
+     *
+     * @return string
+     */
+    public function getPrice()
+    {
+        $price = $this->_rootElement->find($this->price)->getText();
+        return parent::escapeCurrency($price);
     }
 }

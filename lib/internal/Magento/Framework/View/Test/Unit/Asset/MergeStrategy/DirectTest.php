@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset\MergeStrategy;
@@ -33,14 +33,14 @@ class DirectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cssUrlResolver = $this->getMock('\Magento\Framework\View\Url\CssResolver');
-        $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
-        $this->writeDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
+        $this->cssUrlResolver = $this->getMock(\Magento\Framework\View\Url\CssResolver::class);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->writeDir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::STATIC_VIEW)
             ->will($this->returnValue($this->writeDir));
-        $this->resultAsset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
+        $this->resultAsset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
         $this->object = new Direct($filesystem, $this->cssUrlResolver);
     }
 
@@ -87,7 +87,7 @@ class DirectTest extends \PHPUnit_Framework_TestCase
     {
         $result = [];
         foreach ($data as $content) {
-            $asset = $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface');
+            $asset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
             $asset->expects($this->once())->method('getContent')->will($this->returnValue($content));
             $result[] = $asset;
         }

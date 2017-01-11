@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -93,40 +93,40 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->orderManagementMock = $this->getMockBuilder('Magento\Sales\Api\OrderManagementInterface')
+        $this->orderManagementMock = $this->getMockBuilder(\Magento\Sales\Api\OrderManagementInterface::class)
             ->getMockForAbstractClass();
-        $this->contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
         $resultRedirectFactory = $this->getMock(
-            'Magento\Backend\Model\View\Result\RedirectFactory',
+            \Magento\Backend\Model\View\Result\RedirectFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->responseMock = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false);
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->responseMock = $this->getMock(\Magento\Framework\App\ResponseInterface::class, [], [], '', false);
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->messageManagerMock = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
-        $this->orderCollectionMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Collection')
+        $this->messageManagerMock = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
+        $this->orderCollectionMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $orderCollection = 'Magento\Sales\Model\ResourceModel\Order\CollectionFactory';
+        $orderCollection = \Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class;
         $this->orderCollectionFactoryMock = $this->getMockBuilder($orderCollection)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $redirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $redirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultFactoryMock->expects($this->any())
@@ -134,10 +134,16 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($redirectMock);
 
-        $this->sessionMock = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
-        $this->actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', ['get', 'set'], [], '', false);
-        $this->helperMock = $this->getMock('\Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
-        $this->resultRedirectMock = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
+        $this->sessionMock = $this->getMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice'], [], '', false);
+        $this->actionFlagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, ['get', 'set'], [], '', false);
+        $this->helperMock = $this->getMock(\Magento\Backend\Helper\Data::class, ['getUrl'], [], '', false);
+        $this->resultRedirectMock = $this->getMock(
+            \Magento\Backend\Model\View\Result\Redirect::class,
+            [],
+            [],
+            '',
+            false
+        );
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirectMock);
 
         $this->contextMock->expects($this->once())->method('getMessageManager')->willReturn($this->messageManagerMock);
@@ -155,7 +161,7 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
             ->method('getResultFactory')
             ->willReturn($resultFactoryMock);
 
-        $this->filterMock = $this->getMock('Magento\Ui\Component\MassAction\Filter', [], [], '', false);
+        $this->filterMock = $this->getMock(\Magento\Ui\Component\MassAction\Filter::class, [], [], '', false);
         $this->filterMock->expects($this->once())
             ->method('getCollection')
             ->with($this->orderCollectionMock)
@@ -165,7 +171,7 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->orderCollectionMock);
 
         $this->massAction = $objectManagerHelper->getObject(
-            'Magento\Sales\Controller\Adminhtml\Order\MassHold',
+            \Magento\Sales\Controller\Adminhtml\Order\MassHold::class,
             [
                 'context' => $this->contextMock,
                 'filter' => $this->filterMock,
@@ -177,10 +183,10 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteOneOrderPutOnHold()
     {
-        $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $order1 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $order2 = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $order2 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -222,10 +228,10 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteNoOrdersPutOnHold()
     {
-        $order1 = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $order1 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $order2 = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $order2 = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
 

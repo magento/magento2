@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Index\Render;
@@ -41,22 +41,22 @@ class HandleTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
         $this->componentFactoryMock = $this->getMock(
-            'Magento\Framework\View\Element\UiComponentFactory',
+            \Magento\Framework\View\Element\UiComponentFactory::class,
             [],
             [],
             '',
             false
         );
 
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getRequest')->willReturn($this->requestMock);
 
-        $this->responseMock = $this->getMock('Magento\Framework\HTTP\PhpEnvironment\Response', [], [], '', false);
+        $this->responseMock = $this->getMock(\Magento\Framework\HTTP\PhpEnvironment\Response::class, [], [], '', false);
         $this->contextMock->expects($this->atLeastOnce())->method('getResponse')->willReturn($this->responseMock);
 
-        $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
+        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getView')->willReturn($this->viewMock);
 
         $this->controller = new Handle($this->contextMock, $this->componentFactoryMock);
@@ -71,7 +71,7 @@ class HandleTest extends \PHPUnit_Framework_TestCase
         $this->viewMock->expects($this->once())
             ->method('loadLayout')
             ->with(['default', $result], true, true, false);
-        $layoutMock = $this->getMock('\Magento\Framework\View\LayoutInterface');
+        $layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
         $this->viewMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
 
         $layoutMock->expects($this->once())->method('getBlock');
@@ -89,7 +89,7 @@ class HandleTest extends \PHPUnit_Framework_TestCase
             ->method('loadLayout')
             ->with(['default', $result], true, true, false);
 
-        $layoutMock = $this->getMock('\Magento\Framework\View\LayoutInterface');
+        $layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
         $this->viewMock->expects($this->exactly(2))->method('getLayout')->willReturn($layoutMock);
 
         $layoutMock->expects($this->exactly(2))->method('getBlock');

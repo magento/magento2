@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Controller\Adminhtml\Email;
@@ -45,7 +45,7 @@ abstract class Template extends \Magento\Backend\App\Action
     protected function _initTemplate($idFieldName = 'template_id')
     {
         $id = (int)$this->getRequest()->getParam($idFieldName);
-        $model = $this->_objectManager->create('Magento\Email\Model\BackendTemplate');
+        $model = $this->_objectManager->create(\Magento\Email\Model\BackendTemplate::class);
         if ($id) {
             $model->load($id);
         }

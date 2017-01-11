@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,9 +49,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var $this->_themeMock \Magento\Theme\Model\Theme */
-        $this->_themeMock = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $this->_themeMock = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
         $this->_storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            \Magento\Store\Model\StoreManagerInterface::class,
             [],
             '',
             true,
@@ -60,17 +60,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ['getStores', 'isSingleStoreMode']
         );
         $this->_configData = $this->getMock(
-            'Magento\Framework\App\Config\Value',
+            \Magento\Framework\App\Config\Value::class,
             ['getCollection', 'addFieldToFilter', '__wakeup'],
             [],
             '',
             false
         );
-        $this->_configCacheMock = $this->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface');
-        $this->_layoutCacheMock = $this->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface');
+        $this->_configCacheMock = $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->_layoutCacheMock = $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
 
         $this->_scopeConfigWriter = $this->getMock(
-            'Magento\Framework\App\Config\Storage\WriterInterface',
+            \Magento\Framework\App\Config\Storage\WriterInterface::class,
             ['save', 'delete']
         );
 
@@ -78,7 +78,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->_configData,
             $this->_scopeConfigWriter,
             $this->_storeManagerMock,
-            $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false),
+            $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false),
             $this->_configCacheMock,
             $this->_layoutCacheMock
         );

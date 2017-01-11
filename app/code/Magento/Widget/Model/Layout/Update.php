@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\Layout;
@@ -46,6 +46,6 @@ class Update extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Widget\Model\ResourceModel\Layout\Update');
+        $this->_init(\Magento\Widget\Model\ResourceModel\Layout\Update::class);
     }
 }

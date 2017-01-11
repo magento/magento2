@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -242,7 +242,7 @@
                         </argument>
                         <field name="customer_group_id">
                             <argument name="data" xsi:type="array">
-                                <item name="options" xsi:type="object">Magento\Customer\Model\Customer\Source\Group</item>
+                                <item name="options" xsi:type="object">Magento\Customer\Model\Customer\Source\GroupSourceInterface</item>
                                 <item name="config" xsi:type="array">
                                     <item name="dataType" xsi:type="string">text</item>
                                     <item name="formElement" xsi:type="string">select</item>

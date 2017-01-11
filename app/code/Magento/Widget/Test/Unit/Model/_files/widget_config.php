@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
     'sales_widget_guestform' => [
-        '@' => ['type' => 'Magento\Sales\Block\Widget\Guest\Form'],
+        '@' => ['type' => \Magento\Sales\Block\Widget\Guest\Form::class],
         'is_email_compatible' => '1',
         'name' => 'Orders and Returns',
         'description' => 'Orders and Returns Search Form',
@@ -27,7 +27,7 @@ return [
                 'visible' => '0',
             ],
             'link_display' => [
-                'source_model' => 'Magento\Config\Model\Config\Source\Yesno',
+                'source_model' => \Magento\Config\Model\Config\Source\Yesno::class,
                 'type' => 'select',
                 'visible' => '1',
                 'sort_order' => '10',
@@ -48,7 +48,7 @@ return [
                 'type' => 'label',
                 '@' => ['type' => 'complex'],
                 'helper_block' => [
-                    'type' => 'Magento\Backend\Block\Catalog\Product\Widget\Chooser',
+                    'type' => \Magento\Backend\Block\Catalog\Product\Widget\Chooser::class,
                     'data' => ['button' => ['open' => 'Select Product...']],
                 ],
                 'visible' => '1',
@@ -57,7 +57,7 @@ return [
                 'label' => 'Product',
             ],
             'condition' => [
-                'type' => 'Magento\CatalogWidget\Block\Product\Widget\Conditions',
+                'type' => \Magento\CatalogWidget\Block\Product\Widget\Conditions::class,
                 'visible' => '1',
                 'required' => '1',
                 'sort_order' => '10',

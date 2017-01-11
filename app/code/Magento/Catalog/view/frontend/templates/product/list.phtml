@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\App\Action\Action;
@@ -89,7 +89,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                                             </button>
                                         </form>
                                     <?php else: ?>
-                                        <?php if ($_product->getIsSalable()): ?>
+                                        <?php if ($_product->isAvailable()): ?>
                                             <div class="stock available"><span><?php /* @escapeNotVerified */ echo __('In stock') ?></span></div>
                                         <?php else: ?>
                                             <div class="stock unavailable"><span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span></div>

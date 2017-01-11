@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -93,36 +93,37 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMockBuilder('Magento\Framework\Data\Collection\EntityFactory')
+        $this->entityFactoryMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\EntityFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMock();
-        $this->fetchStrategyMock = $this->getMockBuilder('Magento\Framework\Data\Collection\Db\FetchStrategyInterface')
+        $this->fetchStrategyMock = $this->getMockBuilder(
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
+        )->getMock();
+        $this->managerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->getMock();
-        $this->managerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
-            ->getMock();
-        $snapshotClassName = 'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot';
+        $snapshotClassName = \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class;
         $this->entitySnapshotMock = $this->getMockBuilder($snapshotClassName)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->helperMock = $this->getMockBuilder('Magento\Framework\DB\Helper')
+        $this->helperMock = $this->getMockBuilder(\Magento\Framework\DB\Helper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMock();
-        $this->timezoneMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
+        $this->timezoneMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->getMock();
-        $this->configMock = $this->getMockBuilder('Magento\Sales\Model\Order\Config')
+        $this->configMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->orderFactoryMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\OrderFactory')
+        $this->orderFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Report\OrderFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock
@@ -146,7 +147,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getPart')
             ->willReturn([]);
 
-        $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->setMethods(['select', 'getIfNullSql', 'getDateFormatSql', 'prepareSqlCondition', 'getCheckSql'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -155,7 +156,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->willReturn($this->selectMock);
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock
@@ -220,7 +221,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn($useAggregatedData);
 
-        $orderMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\Order')
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Report\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -354,7 +355,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn($useAggregatedData);
 
-        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 

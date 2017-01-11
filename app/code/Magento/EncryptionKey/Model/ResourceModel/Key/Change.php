@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\EncryptionKey\Model\ResourceModel\Key;
@@ -13,6 +13,8 @@ use Magento\Framework\Config\File\ConfigFilePool;
 /**
  * Encryption key changer resource model
  * The operation must be done in one transaction
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -137,7 +139,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $configStructure = $this->structure;
         $paths = $configStructure->getFieldPathsByAttribute(
             'backend_model',
-            'Magento\Config\Model\Config\Backend\Encrypted'
+            \Magento\Config\Model\Config\Backend\Encrypted::class
         );
 
         // walk through found data and re-encrypt it

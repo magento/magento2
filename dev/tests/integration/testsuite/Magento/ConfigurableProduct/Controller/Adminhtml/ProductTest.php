@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml;
@@ -20,10 +20,11 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionAssociatedProductIds()
     {
         $associatedProductIds = [3, 14, 15, 92];
+        $associatedProductIdsJSON = json_encode($associatedProductIds);
         $this->getRequest()->setPostValue(
             [
                 'attributes' => [$this->_getConfigurableAttribute()->getId()],
-                'associated_product_ids' => $associatedProductIds,
+                'associated_product_ids_serialized' => $associatedProductIdsJSON,
             ]
         );
 
@@ -46,10 +47,10 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     protected function _getConfigurableAttribute()
     {
         return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Entity\Attribute'
+            \Magento\Catalog\Model\Entity\Attribute::class
         )->loadByCode(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Eav\Model\Config'
+                \Magento\Eav\Model\Config::class
             )->getEntityType(
                 'catalog_product'
             )->getId(),

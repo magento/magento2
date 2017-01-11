@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Test\Unit;
@@ -31,7 +31,7 @@ class StrategyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_resourceMock = $this->getMock(
-            '\Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',

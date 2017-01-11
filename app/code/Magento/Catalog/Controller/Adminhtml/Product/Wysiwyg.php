@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -44,21 +44,22 @@ class Wysiwyg extends \Magento\Catalog\Controller\Adminhtml\Product
     {
         $elementId = $this->getRequest()->getParam('element_id', md5(microtime()));
         $storeId = $this->getRequest()->getParam('store_id', 0);
-        $storeMediaUrl = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+        $storeMediaUrl = $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
             ->getStore($storeId)
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
 
-        $content = $this->layoutFactory->create()->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg\Content',
-            '',
-            [
-                'data' => [
-                    'editor_element_id' => $elementId,
-                    'store_id' => $storeId,
-                    'store_media_url' => $storeMediaUrl,
+        $content = $this->layoutFactory->create()
+            ->createBlock(
+                \Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg\Content::class,
+                '',
+                [
+                    'data' => [
+                        'editor_element_id' => $elementId,
+                        'store_id' => $storeId,
+                        'store_media_url' => $storeMediaUrl,
+                    ]
                 ]
-            ]
-        );
+            );
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,7 +14,7 @@
         </dataset>
 
         <dataset name="quantity_and_stock_status">
-            <field name="attribute_id" xsi:type="number">113</field>
+            <field name="attribute_id" xsi:type="string">%id%</field>
             <field name="frontend_label" xsi:type="string">Quantity</field>
             <field name="attribute_code" xsi:type="string">quantity_and_stock_status</field>
             <field name="frontend_input" xsi:type="string">Dropdown</field>
@@ -34,7 +34,7 @@
         </dataset>
 
         <dataset name="tax_class_id">
-            <field name="attribute_id" xsi:type="number">172</field>
+            <field name="attribute_id" xsi:type="string">%id%</field>
             <field name="frontend_label" xsi:type="string">Tax Class%isolation%</field>
             <field name="attribute_code" xsi:type="string">tax_class_id%isolation%</field>
             <field name="frontend_input" xsi:type="string">Dropdown</field>
@@ -201,6 +201,56 @@
                     <item name="is_default" xsi:type="string">No</item>
                     <item name="admin" xsi:type="string">white</item>
                     <item name="view" xsi:type="string">option_1_%isolation%</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="sizes_S_M_L">
+            <field name="frontend_label" xsi:type="string">size_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">size_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_S</item>
+                    <item name="view" xsi:type="string">SIZE_S</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_M</item>
+                    <item name="view" xsi:type="string">SIZE_M</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_L</item>
+                    <item name="view" xsi:type="string">SIZE_L</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="sizes_for_promo_rules">
+            <field name="frontend_label" xsi:type="string">size_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">size_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_used_for_promo_rules" xsi:type="string">Yes</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">SIZE_S_%isolation%</item>
+                    <item name="view" xsi:type="string">SIZE_S</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_M_%isolation%</item>
+                    <item name="view" xsi:type="string">SIZE_M</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">SIZE_L_%isolation%</item>
+                    <item name="view" xsi:type="string">SIZE_L</item>
+                    <item name="promo" xsi:type="string">Yes</item>
                 </item>
             </field>
         </dataset>

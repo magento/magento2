@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -198,7 +198,6 @@
 //            <td>Font style</td>
 //        </tr>
 //        <tr>
-//            <th nowrap="nowrap">@font-style__emphasis</th>
 //            <th nowrap="nowrap">@font-style__emphasis</th>
 //            <td class="vars_value">italic</td>
 //            <td>Emphasis font style</td>
@@ -1040,7 +1039,7 @@
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
 //            <th class="vars_head">Default value</th>
-//            <th class="vars_head">Allowable values</th>
+//            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
@@ -1113,7 +1112,7 @@
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
 //            <th class="vars_head">Default value</th>
-//            <th class="vars_head">Allowable values</th>
+//            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
@@ -1181,7 +1180,7 @@
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
 //            <th class="vars_head">Default value</th>
-//            <th class="vars_head">Allowable values</th>
+//            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
@@ -1283,6 +1282,131 @@
 
 .lib-typography__base();
 
+//  # Base typography mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_abbr-border-color</th>
+//            <td class="vars_value">@abbr__border-color</td>
+//            <td class="vars_value">@border-color__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;abbr&gt; border color</td>
+//        </tr>
+//        <tr>
+//            <th>@_dfn-font-style</th>
+//            <td class="vars_value">@font-style__emphasis</td>
+//            <td class="vars_value">italic</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;dfn&gt; font style</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_emphasis-font-style</th>
+//            <td class="vars_value">@font-style__emphasis</td>
+//            <td class="vars_value">italic</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;em&gt; font style</td>
+//        </tr>
+//        <tr>
+//            <th>@_hr-border-color</th>
+//            <td class="vars_value">@hr__border-color</td>
+//            <td class="vars_value">@border-color__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>HR border color</td>
+//        </tr>
+//        <tr>
+//            <th>@_hr-border-style</th>
+//            <td class="vars_value">@hr__border-style</td>
+//            <td class="vars_value">solid</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>HR border style</td>
+//        </tr>
+//        <tr>
+//            <th>@_hr-border-width</th>
+//            <td class="vars_value">@hr__border-width</td>
+//            <td class="vars_value">@border-width__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>HR border width</td>
+//        </tr>
+//        <tr>
+//            <th>@_hr-margin-bottom</th>
+//            <td class="vars_value">@line-height__computed</td>
+//            <td class="vars_value">floor(@font-size__base * @line-height__base)</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>HR margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@_hr-margin-top</th>
+//            <td class="vars_value">@line-height__computed</td>
+//            <td class="vars_value">floor(@font-size__base * @line-height__base)</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>HR margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@_mark-background-color</th>
+//            <td class="vars_value">@mark__background-color</td>
+//            <td class="vars_value">@panel__background-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;mark&gt; background color</td>
+//        </tr>
+//        <tr>
+//            <th>@_mark-color</th>
+//            <td class="vars_value">@mark__color</td>
+//            <td class="vars_value">@primary__color__dark</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;mark&gt; color</td>
+//        </tr>
+//        <tr>
+//            <th>@_p-margin-bottom</th>
+//            <td class="vars_value">@p__margin-bottom</td>
+//            <td class="vars_value">@indent__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Paragraph margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@_p-margin-top</th>
+//            <td class="vars_value">@p__margin-top</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Paragraph margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@_root-font-size</th>
+//            <td class="vars_value">@root__font-size</td>
+//            <td class="vars_value">62.5%</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Setting font-size for HTML tag</td>
+//        </tr>
+//        <tr>
+//            <th>@_small-font-size</th>
+//            <td class="vars_value">@font-size__s</td>
+//            <td class="vars_value">ceil(.85 * @font-size__base) // 12</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;small&gt; tag font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_strong-font-weight</th>
+//            <td class="vars_value">@font-weight__bold</td>
+//            <td class="vars_value">700</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;strong&gt; tag font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_sub-sup-font-size</th>
+//            <td class="vars_value">-</td>
+//            <td class="vars_value">(@font-size__xs / @font-size__base) * 100%</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;sup&gt; an &lt;sup&gt; tags font size</td>
+//        </tr>
+//    </table>
+//  </pre>
+
 //  # Headings typography mixin
 //
 //  The <code>.lib-typography-headings()</code> mixin is used to style all H1-H6 headings. This mixin uses settings from global variables list.
@@ -1297,6 +1421,40 @@
 //  ```
 
 .lib-typography-headings();
+
+//  # Headings typography mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_heading-small-size</th>
+//            <td class="vars_value">@heading__small-size</td>
+//            <td class="vars_value">(@font-size__xs/@font-size__base) * 100%</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;small&gt; and .small heading element font-size</td>
+//        </tr>
+//        <tr>
+//            <th>@_heading-small-color</th>
+//            <td class="vars_value">@heading__small-color</td>
+//            <td class="vars_value">@primary__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;small&gt; and .small heading element color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_heading-small-line-height</th>
+//            <td class="vars_value">@heading__small-line-height</td>
+//            <td class="vars_value">1</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>&lt;small&gt; and .small heading element line height</td>
+//        </tr>
+//    </table>
+//  </pre>
 
 //  # Typography links mixin
 //
@@ -1345,6 +1503,96 @@
 
 .lib-typography-lists();
 
+//  # Typography lists mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_list-margin-top</th>
+//            <td class="vars_value">@list__margin-top</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>List margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@_list-margin-bottom</th>
+//            <td class="vars_value">@list__margin-bottom</td>
+//            <td class="vars_value">@indent__m</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>List margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_list-item-margin-top</th>
+//            <td class="vars_value">@list-item__margin-top</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>List item margin top</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_list-item-margin-bottom</th>
+//            <td class="vars_value">@list-item__margin-bottom</td>
+//            <td class="vars_value">@indent__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>List item margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dl-margin-bottom</th>
+//            <td class="vars_value">@dl__margin-bottom</td>
+//            <td class="vars_value">@indent__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Definition list margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dl-margin-top</th>
+//            <td class="vars_value">@dl__margin-top</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Definition list margin top</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dt-font-weight</th>
+//            <td class="vars_value">@dt__font-weight</td>
+//            <td class="vars_value">@font-weight__bold</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Description term font weight</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dt-margin-bottom</th>
+//            <td class="vars_value">@dt__margin-bottom</td>
+//            <td class="vars_value">@indent__xs</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Description term margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dt-margin-top</th>
+//            <td class="vars_value">@dt__margin-top</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Description term margin top</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dd-margin-bottom</th>
+//            <td class="vars_value">@dd__margin-bottom</td>
+//            <td class="vars_value">@indent__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Description margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_dd-margin-top</th>
+//            <td class="vars_value">@dd__margin-top</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Description margin top</td>
+//        </tr>
+//    </table>
+//  </pre>
+
 //  # Typography code elements mixin
 //
 //  <code>.lib-typography-code()</code> mixin is used to apply styles to the following code elements:
@@ -1370,6 +1618,138 @@
 
 .lib-typography-code();
 
+//  # Typography code mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_font-family-monospace</th>
+//            <td class="vars_value">@font-family__monospace</td>
+//            <td class="vars_value">Menlo, Monaco, Consolas, 'Courier New', monospace</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Monospace font family</td>
+//        </tr>
+//        <tr>
+//            <th>@_code-background-color</th>
+//            <td class="vars_value">@code__background-color</td>
+//            <td class="vars_value">@panel__background-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Code block background</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_code-color</th>
+//            <td class="vars_value">@code__color</td>
+//            <td class="vars_value">@primary__color__darker</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Code text color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_code-padding</th>
+//            <td class="vars_value">@code__padding</td>
+//            <td class="vars_value">2px 4px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Code block padding</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_code-font-size</th>
+//            <td class="vars_value">@code__font-size</td>
+//            <td class="vars_value">@font-size__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Code block font size</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_kbd-background-color</th>
+//            <td class="vars_value">@kbd__background-color</td>
+//            <td class="vars_value">@panel__background-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Keyboard input background</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_kbd-color</th>
+//            <td class="vars_value">@kbd__color</td>
+//            <td class="vars_value">@primary__color__darker</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Keyboard input text color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_kbd-padding</th>
+//            <td class="vars_value">@code__padding</td>
+//            <td class="vars_value">2px 4px</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Keyboard input padding</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_kbd-font-size</th>
+//            <td class="vars_value">@code__font-size</td>
+//            <td class="vars_value">@font-size__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Keyboard input font size</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-background-color</th>
+//            <td class="vars_value">@pre__background-color</td>
+//            <td class="vars_value">@primary__color__light</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text background color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-border-width</th>
+//            <td class="vars_value">@pre__border-width</td>
+//            <td class="vars_value">@border-width__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text border width</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-border-color</th>
+//            <td class="vars_value">@pre__border-color</td>
+//            <td class="vars_value">@border-color__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text border color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-color</th>
+//            <td class="vars_value">@pre__color</td>
+//            <td class="vars_value">@primary__color__darker</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Text color of preformatted text</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-line-height</th>
+//            <td class="vars_value">@line-height__base</td>
+//            <td class="vars_value">1.428571429</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text line height</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-margin</th>
+//            <td class="vars_value">-</td>
+//            <td class="vars_value">0 0 @indent__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text margin</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-padding</th>
+//            <td class="vars_value">-</td>
+//            <td class="vars_value">@indent__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text padding</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_pre-font-size</th>
+//            <td class="vars_value">@code__font-size</td>
+//            <td class="vars_value">@font-size__s</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Preformatted text font size</td>
+//        </tr>
+//    </table>
+//  </pre>
+
 //  # Typography blockquote
 //
 //  The <code>.lib-typography-blockquote()</code> mixin is used to apply styles to blockquote elements. This mixin uses settings from global variables list.
@@ -1382,3 +1762,100 @@
 //  ```
 
 .lib-typography-blockquote();
+
+//  # Typography blockquote mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-border-width</th>
+//            <td class="vars_value">@blockquote__border-width</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote border width</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-border-color</th>
+//            <td class="vars_value">@blockquote__border-color</td>
+//            <td class="vars_value">@border-color__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote border color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-margin</th>
+//            <td class="vars_value">@blockquote__margin</td>
+//            <td class="vars_value">0 0 @indent__base @indent__xl</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote margin</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-padding</th>
+//            <td class="vars_value">@blockquote__padding</td>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote padding</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-font-size</th>
+//            <td class="vars_value">@blockquote__font-size</td>
+//            <td class="vars_value">@font-size__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote font size</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-font-style</th>
+//            <td class="vars_value">@blockquote__font-style</td>
+//            <td class="vars_value">@font-style__emphasis</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote font style</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-small-color</th>
+//            <td class="vars_value">@blockquote-small__color</td>
+//            <td class="vars_value">@primary__color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote &lt;small&gt; and .small text color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-small-line-height</th>
+//            <td class="vars_value">@line-height__base</td>
+//            <td class="vars_value">1.428571429</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote &lt;small&gt; and .small line height</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-small-font-size</th>
+//            <td class="vars_value">@blockquote-small__font-size</td>
+//            <td class="vars_value">@font-size__xs</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote &lt;small&gt; and .small text font size</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-small-before-content</th>
+//            <td class="vars_value">@blockquote__content-before</td>
+//            <td class="vars_value">'\2014 \00A0'</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote &lt;small&gt; and .small before pseudo element content</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_blockquote-cite</th>
+//            <td class="vars_value">@cite__font-style</td>
+//            <td class="vars_value">@font-style__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Blockquote cite font style</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_cite</th>
+//            <td class="vars_value">@cite__font-style</td>
+//            <td class="vars_value">@font-style__base</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Cite font style</td>
+//        </tr>
+//    </table>
+//  </pre>

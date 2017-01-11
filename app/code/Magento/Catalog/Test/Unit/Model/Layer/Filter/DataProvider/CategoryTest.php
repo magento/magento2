@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,26 +40,26 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var \Magento\Framework\Registry $var */
-        $this->coreRegistry = $var = $this->getMockBuilder('\Magento\Framework\Registry')
+        $this->coreRegistry = $var = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->setMethods(['register'])
             ->getMock();
-        $this->category = $this->getMockBuilder('Magento\Catalog\Model\Category')
+        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'setStoreId', 'load', 'getPathIds'])
             ->getMock();
-        $this->categoryFactory = $this->getMockBuilder('Magento\Catalog\Model\CategoryFactory')
+        $this->categoryFactory = $this->getMockBuilder(\Magento\Catalog\Model\CategoryFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->categoryFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->category));
-        $this->store = $this->getMockBuilder('\Magento\Store\Model\Store')
+        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
-        $this->layer = $this->getMockBuilder('Magento\Catalog\Model\Layer')
+        $this->layer = $this->getMockBuilder(\Magento\Catalog\Model\Layer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCurrentStore', 'getCurrentCategory'])
             ->getMock();
@@ -68,7 +68,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->store));
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Layer\Filter\DataProvider\Category',
+            \Magento\Catalog\Model\Layer\Filter\DataProvider\Category::class,
             [
                 'coreRegistry' => $this->coreRegistry,
                 'categoryFactory' => $this->categoryFactory,

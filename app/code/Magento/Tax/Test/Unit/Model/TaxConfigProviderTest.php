@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model;
@@ -41,17 +41,17 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->taxHelperMock = $this->getMock('Magento\Tax\Helper\Data', [], [], '', false);
-        $this->taxConfigMock = $this->getMock('Magento\Tax\Model\Config', [], [], '', false);
-        $this->checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
+        $this->taxHelperMock = $this->getMock(\Magento\Tax\Helper\Data::class, [], [], '', false);
+        $this->taxConfigMock = $this->getMock(\Magento\Tax\Model\Config::class, [], [], '', false);
+        $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
         $this->scopeConfigMock = $this->getMock(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
         $this->model = new \Magento\Tax\Model\TaxConfigProvider(
             $this->taxHelperMock,
@@ -299,6 +299,35 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
                     Config::CONFIG_XML_PATH_BASED_ON => 'shipping',
                     Config::CONFIG_XML_PATH_DEFAULT_COUNTRY => 'US',
                     Config::CONFIG_XML_PATH_DEFAULT_REGION => 12,
+                    Config::CONFIG_XML_PATH_DEFAULT_POSTCODE => '*',
+                ],
+            ],
+            'zeroRegionToNull' => [
+                'expectedResult' => [
+                    'isDisplayShippingPriceExclTax' => 1,
+                    'isDisplayShippingBothPrices' => 1,
+                    'reviewShippingDisplayMode' => 'excluding',
+                    'reviewItemPriceDisplayMode' => 'including',
+                    'reviewTotalsDisplayMode' => 'both',
+                    'includeTaxInGrandTotal' => 1,
+                    'isFullTaxSummaryDisplayed' => 1,
+                    'isZeroTaxDisplayed' => 1,
+                    'reloadOnBillingAddress' => false,
+                    'defaultCountryId' => 'US',
+                    'defaultRegionId' => null,
+                    'defaultPostcode' => '*',
+                ],
+                'cartShippingBoth' => 0,
+                'cartShippingExclTax' => 1,
+                'cartBothPrices' => 0,
+                'cartPriceExclTax' => 0,
+                'cartSubTotalBoth' => 1,
+                'cartSubTotalExclTax' => 0,
+                'isQuoteVirtual' => false,
+                'config' => [
+                    Config::CONFIG_XML_PATH_BASED_ON => 'shipping',
+                    Config::CONFIG_XML_PATH_DEFAULT_COUNTRY => 'US',
+                    Config::CONFIG_XML_PATH_DEFAULT_REGION => 0,
                     Config::CONFIG_XML_PATH_DEFAULT_POSTCODE => '*',
                 ],
             ],

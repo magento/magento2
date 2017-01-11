@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,13 +12,19 @@ class ItemCollectionProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetCollection()
     {
-        $categoryMock = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
 
-        $collectionMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false);
+        $collectionMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
         $collectionMock->expects($this->once())->method('addCategoryFilter')->with($categoryMock);
 
         $collectionFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
+            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -28,7 +34,7 @@ class ItemCollectionProviderTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $provider = $objectManager->getObject(
-            'Magento\CatalogSearch\Model\Layer\Category\ItemCollectionProvider',
+            \Magento\CatalogSearch\Model\Layer\Category\ItemCollectionProvider::class,
             ['collectionFactory' => $collectionFactoryMock]
         );
 

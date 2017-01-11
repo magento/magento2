@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product;
@@ -44,7 +44,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         if (!self::$isStubClass) {
             $this->getMockForAbstractClass(
-                'Magento\Catalog\Block\Product\AbstractProduct',
+                \Magento\Catalog\Block\Product\AbstractProduct::class,
                 [],
                 self::STUB_CLASS,
                 false
@@ -54,10 +54,12 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-        $objectManager->get('Magento\Framework\View\DesignInterface')->setDefaultDesignTheme();
-        $this->block = $objectManager->get('Magento\Framework\View\LayoutInterface')->createBlock(self::STUB_CLASS);
-        $this->productRepository = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface');
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
+        $objectManager->get(\Magento\Framework\View\DesignInterface::class)->setDefaultDesignTheme();
+        $this->block = $objectManager->get(
+            \Magento\Framework\View\LayoutInterface::class
+        )->createBlock(self::STUB_CLASS);
+        $this->productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
         $this->product = $this->productRepository->get('simple');
         $this->product->addData(
@@ -116,7 +118,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testGetReviewsSummaryHtml()
     {
         $this->block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get(\Magento\Framework\View\LayoutInterface::class)
         );
         $html = $this->block->getReviewsSummaryHtml($this->product, false, true);
         $this->assertNotEmpty($html);
@@ -146,7 +149,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testLayoutDependColumnCount()
     {
         $this->block->setLayout(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get(\Magento\Framework\View\LayoutInterface::class)
         );
         $this->assertEquals(3, $this->block->getColumnCount());
         /* default column count */

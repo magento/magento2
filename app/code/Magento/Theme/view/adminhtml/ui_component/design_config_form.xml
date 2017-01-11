@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -67,7 +67,7 @@
                         <item name="componentType" xsi:type="string">fileUploader</item>
                         <item name="notice" xsi:type="string" translate="true">Allowed file types: ico, png, gif, jpg, jpeg, apng, svg. Not all browsers support all these formats!</item>
                         <item name="maxFileSize" xsi:type="number">2097152</item>
-                        <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>
+                        <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg ico</item>
                         <item name="uploaderConfig" xsi:type="array">
                             <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>
                         </item>
@@ -188,7 +188,7 @@
             <field name="header_logo_width">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Logo Image Width</item>
+                        <item name="label" xsi:type="string" translate="true">Logo Attribute Width</item>
                         <item name="dataType" xsi:type="string">number</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">header_logo_width</item>
@@ -201,7 +201,7 @@
             <field name="header_logo_height">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Logo Image Height</item>
+                        <item name="label" xsi:type="string" translate="true">Logo Attribute Height</item>
                         <item name="dataType" xsi:type="string">number</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">header_logo_height</item>
@@ -267,6 +267,50 @@
                         <item name="validation" xsi:type="array">
                             <item name="validate-no-html-tags" xsi:type="boolean">true</item>
                         </item>
+                    </item>
+                </argument>
+            </field>
+        </fieldset>
+        <fieldset name="search_engine_robots">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Search Engine Robots</item>
+                    <item name="sortOrder" xsi:type="string">120</item>
+                    <item name="collapsible" xsi:type="boolean">true</item>
+                    <item name="level" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <field name="default_robots">
+                <argument name="data" xsi:type="array">
+                    <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Design\Robots</item>
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Default Robots</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">select</item>
+                        <item name="dataScope" xsi:type="string">default_robots</item>
+                        <item name="notice" xsi:type="string" translate="true">This will be included before head closing tag in page HTML.</item>
+                    </item>
+                </argument>
+            </field>
+            <field name="custom_instructions">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Edit custom instruction of robots.txt File</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">textarea</item>
+                        <item name="dataScope" xsi:type="string">custom_instructions</item>
+                    </item>
+                </argument>
+            </field>
+            <field name="reset_to_defaults" class="Magento\Theme\Ui\Component\Design\Config\SearchRobots\ResetButton">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="title" xsi:type="string">Reset To Defaults</item>
+                        <item name="formElement" xsi:type="string">button</item>
+                        <item name="dataScope" xsi:type="string">reset_to_defaults</item>
+                        <item name="component" xsi:type="string">Magento_Theme/js/form/component/robots-reset-button</item>
+                        <item name="template" xsi:type="string">Magento_Theme/form/button-field</item>
+                        <item name="notice" xsi:type="string" translate="true">This action will delete your custom instructions and reset robots.txt file to system's default settings.</item>
                     </item>
                 </argument>
             </field>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,10 @@ namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * A service for preprocessing content of assets
@@ -45,6 +47,7 @@ class Source
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
+     * @deprecated
      */
     private $themeList;
 
@@ -57,6 +60,11 @@ class Source
      * @var ReadFactory
      */
     private $readFactory;
+
+    /**
+     * @var ThemeProviderInterface
+     */
+    private $themeProvider;
 
     /**
      * Constructor
@@ -151,9 +159,19 @@ class Source
         if (empty($path)) {
             $result = false;
         } else {
-            $result = [$dir, $path];
+            $result = [$dir, $path, $chain->getContentType()];
         }
         return $result;
+    }
+
+    /**
+     * @param LocalInterface $asset
+     * @return string
+     */
+    public function getSourceContentType(LocalInterface $asset)
+    {
+        list(,,$type) = $this->preProcess($asset);
+        return $type;
     }
 
     /**
@@ -208,7 +226,9 @@ class Source
         LocalInterface $asset,
         \Magento\Framework\View\Asset\File\FallbackContext $context
     ) {
-        $themeModel = $this->themeList->getThemeByFullPath($context->getAreaCode() . '/' . $context->getThemePath());
+        $themeModel = $this->getThemeProvider()->getThemeByFullPath(
+            $context->getAreaCode() . '/' . $context->getThemePath()
+        );
         $sourceFile = $this->fallback->getFile(
             $context->getAreaCode(),
             $themeModel,
@@ -217,6 +237,18 @@ class Source
             $asset->getModule()
         );
         return $sourceFile;
+    }
+
+    /**
+     * @return ThemeProviderInterface
+     */
+    private function getThemeProvider()
+    {
+        if (null === $this->themeProvider) {
+            $this->themeProvider = ObjectManager::getInstance()->get(ThemeProviderInterface::class);
+        }
+
+        return $this->themeProvider;
     }
 
     /**

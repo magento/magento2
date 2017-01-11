@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -8,11 +8,18 @@ namespace Magento\Catalog\Api;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Store\Model\Store;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Store\Model\Website;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductRepositoryInterfaceTest extends WebapiAbstract
 {
@@ -21,6 +28,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/products';
 
     const KEY_TIER_PRICES = 'tier_prices';
+    const KEY_CATEGORY_LINKS = 'category_links';
 
     /**
      * @var array
@@ -46,11 +54,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testGet()
     {
         $productData = $this->productData[0];
-
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
             $this->assertEquals($productData[$key], $response[$key]);
         }
+        $this->assertEquals([1], $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]);
     }
 
     /**
@@ -127,6 +135,90 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test removing association between product and website 1
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     */
+    public function testUpdateWithDeleteWebsites()
+    {
+        $productBuilder[ProductInterface::SKU] = 'unique-simple-azaza';
+        /** @var Website $website */
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Website::class);
+        $website->load('second_website', 'code');
+
+        if (!$website->getId()) {
+            $this->fail("Couldn`t load website");
+        }
+
+        $websitesData = [
+            'website_ids' => [
+                $website->getId(),
+            ]
+        ];
+        $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
+        $response = $this->updateProduct($productBuilder);
+        $this->assertEquals(
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
+            $websitesData["website_ids"]
+        );
+    }
+
+    /**
+     * Test removing all website associations
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     */
+    public function testDeleteAllWebsiteAssociations()
+    {
+        $productBuilder[ProductInterface::SKU] = 'unique-simple-azaza';
+        /** @var Website $website */
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Website::class);
+        $website->load('second_website', 'code');
+
+        if (!$website->getId()) {
+            $this->fail("Couldn`t load website");
+        }
+
+        $websitesData = [
+            'website_ids' => []
+        ];
+        $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
+        $response = $this->updateProduct($productBuilder);
+        $this->assertEquals(
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
+            $websitesData["website_ids"]
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/second_website.php
+     */
+    public function testCreateWithMultipleWebsites()
+    {
+        $productBuilder = $this->getSimpleProductData();
+        $productBuilder[ProductInterface::SKU] = 'test-test-sku';
+        $productBuilder[ProductInterface::TYPE_ID] = 'simple';
+
+        /** @var Website $website */
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Website::class);
+        $website->load('test_website', 'code');
+
+        if (!$website->getId()) {
+            $this->fail("Couldn`t load website");
+        }
+        $websitesData = [
+            'website_ids' => [
+                1,
+                (int) $website->getId(),
+            ]
+        ];
+        $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
+        $response = $this->saveProduct($productBuilder);
+        $this->assertEquals(
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
+            $websitesData["website_ids"]
+        );
+    }
+
+    /**
      * @dataProvider productCreationProvider
      */
     public function testCreate($product)
@@ -149,7 +241,36 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $storeManager = \Magento\TestFramework\ObjectManager::getInstance()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
+        );
+
+        foreach ($storeManager->getStores(true) as $store) {
+            $code = $store->getCode();
+            if ($code === Store::ADMIN_CODE) {
+                continue;
+            }
+            $this->assertArrayHasKey(
+                ProductInterface::SKU,
+                $this->getProduct($fixtureProduct[ProductInterface::SKU], $code)
+            );
+        }
+        $this->deleteProduct($fixtureProduct[ProductInterface::SKU]);
+    }
+
+    /**
+     * Test creating product with all store code on single store
+     *
+     * @param array $fixtureProduct
+     * @dataProvider productCreationProvider
+     */
+    public function testCreateAllStoreCodeForSingleWebsite($fixtureProduct)
+    {
+        $response = $this->saveProduct($fixtureProduct, 'all');
+        $this->assertArrayHasKey(ProductInterface::SKU, $response);
+
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $storeManager = \Magento\TestFramework\ObjectManager::getInstance()->get(
+            \Magento\Store\Model\StoreManagerInterface::class
         );
 
         foreach ($storeManager->getStores(true) as $store) {
@@ -194,7 +315,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->setExpectedException('Exception', 'Requested product doesn\'t exist');
 
         // Delete all with 'all' store code
-        $this->deleteProduct($sku, 'all');
+        $this->deleteProduct($sku);
         $this->getProduct($sku);
     }
 
@@ -217,10 +338,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->saveProduct($productData);
 
-        $productLinkData = ["sku" => "product_simple_with_related_500", "link_type" => "related",
-                            "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
-                            "position" => 0, "extension_attributes" => []];
-        $productWithRelatedData =  [
+        $productLinkData = [
+            "sku" => "product_simple_with_related_500",
+            "link_type" => "related",
+            "linked_product_sku" => "product_simple_500",
+            "linked_product_type" => "simple",
+            "position" => 0,
+            "extension_attributes" => []
+        ];
+        $productWithRelatedData = [
             ProductInterface::SKU => "product_simple_with_related_500",
             ProductInterface::NAME => "Product Simple with Related 500",
             ProductInterface::VISIBILITY => 4,
@@ -241,10 +367,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($productLinkData, $links[0]);
 
         // update link information
-        $productLinkData = ["sku" => "product_simple_with_related_500", "link_type" => "upsell",
-                            "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
-                            "position" => 0, "extension_attributes" => []];
-        $productWithUpsellData =  [
+        $productLinkData = [
+            "sku" => "product_simple_with_related_500",
+            "link_type" => "upsell",
+            "linked_product_sku" => "product_simple_500",
+            "linked_product_type" => "simple",
+            "position" => 0,
+            "extension_attributes" => []
+        ];
+        $productWithUpsellData = [
             ProductInterface::SKU => "product_simple_with_related_500",
             ProductInterface::NAME => "Product Simple with Related 500",
             ProductInterface::VISIBILITY => 4,
@@ -264,7 +395,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($productLinkData, $links[0]);
 
         // Remove link
-        $productWithNoLinkData =  [
+        $productWithNoLinkData = [
             ProductInterface::SKU => "product_simple_with_related_500",
             ProductInterface::NAME => "Product Simple with Related 500",
             ProductInterface::VISIBILITY => 4,
@@ -394,32 +525,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $filename1 = 'tiny1' . time() . '.jpg';
         $filename2 = 'tiny2' . time() . '.jpeg';
         $productData = $this->getSimpleProductData();
-        $productData['media_gallery_entries'] = [
-            [
-                'position' => 1,
-                'media_type' => 'image',
-                'disabled' => true,
-                'label' => 'tiny1',
-                'types' => [],
-                'content' => [
-                    'type' => 'image/jpeg',
-                    'name' => $filename1,
-                    'base64_encoded_data' => $encodedImage,
-                ]
-            ],
-            [
-                'position' => 2,
-                'media_type' => 'image',
-                'disabled' => false,
-                'label' => 'tiny2',
-                'types' => ['image', 'small_image'],
-                'content' => [
-                    'type' => 'image/jpeg',
-                    'name' => $filename2,
-                    'base64_encoded_data' => $encodedImage,
-                ]
-            ],
-        ];
+        $productData['media_gallery_entries'] = $this->getMediaGalleryData($filename1, $encodedImage, $filename2);
         $response = $this->saveProduct($productData);
         $this->assertArrayHasKey('media_gallery_entries', $response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
@@ -463,14 +569,16 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(1, count($mediaGalleryEntries));
         unset($mediaGalleryEntries[0]['id']);
-        $expectedValue = [[
-            'label' => 'tiny1_new_label',
-            'media_type' => 'image',
-            'position' => 1,
-            'disabled' => false,
-            'types' => ['image', 'small_image'],
-            'file' => '/t/i/' . $filename1,
-        ]];
+        $expectedValue = [
+            [
+                'label' => 'tiny1_new_label',
+                'media_type' => 'image',
+                'position' => 1,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'file' => '/t/i/' . $filename1,
+            ]
+        ];
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
         //don't set the media_gallery_entries field, existing entry should not be touched
         unset($response['media_gallery_entries']);
@@ -496,7 +604,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::SKU => 'simple', //sku from fixture
         ];
         $product = $this->getSimpleProductData($productData);
-        $response =  $this->updateProduct($product);
+        $response = $this->updateProduct($product);
 
         $this->assertArrayHasKey(ProductInterface::SKU, $response);
         $this->assertArrayHasKey(ProductInterface::NAME, $response);
@@ -527,7 +635,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
         $requestData = ['product' => $product];
-        $response =  $this->_webApiCall($serviceInfo, $requestData);
+        $response = $this->_webApiCall($serviceInfo, $requestData);
         return $response;
     }
 
@@ -587,6 +695,84 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertNotNull($response['items'][0]['sku']);
         $this->assertEquals('simple', $response['items'][0]['sku']);
+
+        $index = null;
+        foreach ($response['items'][0]['custom_attributes'] as $key => $customAttribute) {
+            if ($customAttribute['attribute_code'] == 'category_ids') {
+                $index = $key;
+                break;
+            }
+        }
+        $this->assertNotNull($index, 'Category information wasn\'t set');
+
+        $expectedResult = (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ? ['string' => '2'] : ['2'];
+        $this->assertEquals($expectedResult, $response['items'][0]['custom_attributes'][$index]['value']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     */
+    public function testGetListWithMultipleFilterGroupsAndSortingAndPagination()
+    {
+        /** @var FilterBuilder $filterBuilder */
+        $filterBuilder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
+
+        $filter1 = $filterBuilder->setField(ProductInterface::NAME)
+            ->setValue('search product 2')
+            ->create();
+        $filter2 = $filterBuilder->setField(ProductInterface::NAME)
+            ->setValue('search product 3')
+            ->create();
+        $filter3 = $filterBuilder->setField(ProductInterface::NAME)
+            ->setValue('search product 4')
+            ->create();
+        $filter4 = $filterBuilder->setField(ProductInterface::NAME)
+            ->setValue('search product 5')
+            ->create();
+        $filter5 = $filterBuilder->setField(ProductInterface::PRICE)
+            ->setValue(35)
+            ->setConditionType('lt')
+            ->create();
+        $filter6 = $filterBuilder->setField('category_id')
+            ->setValue(333)
+            ->create();
+
+        /**@var SortOrderBuilder $sortOrderBuilder */
+        $sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);
+
+        /** @var SortOrder $sortOrder */
+        $sortOrder = $sortOrderBuilder->setField('meta_title')->setDirection(SortOrder::SORT_DESC)->create();
+
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder =  Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+
+        $searchCriteriaBuilder->addFilters([$filter1, $filter2, $filter3, $filter4]);
+        $searchCriteriaBuilder->addFilters([$filter5]);
+        $searchCriteriaBuilder->addFilters([$filter6]);
+        $searchCriteriaBuilder->setSortOrders([$sortOrder]);
+
+        $searchCriteriaBuilder->setPageSize(2);
+        $searchCriteriaBuilder->setCurrentPage(2);
+
+        $searchData = $searchCriteriaBuilder->create()->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+
+        $searchResult = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertEquals(3, $searchResult['total_count']);
+        $this->assertEquals(1, count($searchResult['items']));
+        $this->assertEquals('search_product_4', $searchResult['items'][0][ProductInterface::SKU]);
     }
 
     /**
@@ -826,6 +1012,114 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             StockItemInterface::LOW_STOCK_DATE => null,
             StockItemInterface::IS_DECIMAL_DIVIDED => 0,
             StockItemInterface::STOCK_STATUS_CHANGED_AUTO => 0,
+        ];
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testProductCategoryLinks()
+    {
+        // Create simple product
+        $productData = $this->getSimpleProductData();
+        $productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = [
+            self::KEY_CATEGORY_LINKS => [['category_id' => 333, 'position' => 0]]
+        ];
+        $response = $this->saveProduct($productData);
+        $this->assertEquals(
+            [['category_id' => 333, 'position' => 0]],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
+        );
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $this->assertArrayHasKey(ProductInterface::EXTENSION_ATTRIBUTES_KEY, $response);
+        $extensionAttributes = $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY];
+        $this->assertArrayHasKey(self::KEY_CATEGORY_LINKS, $extensionAttributes);
+        $this->assertEquals([['category_id' => 333, 'position' => 0]], $extensionAttributes[self::KEY_CATEGORY_LINKS]);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testUpdateProductCategoryLinksNullOrNotExists()
+    {
+        $response = $this->getProduct('simple333');
+        // update product without category_link or category_link is null
+        $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = null;
+        $response = $this->updateProduct($response);
+        $this->assertEquals(
+            [['category_id' => 333, 'position' => 0]],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
+        );
+        unset($response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]);
+        $response = $this->updateProduct($response);
+        $this->assertEquals(
+            [['category_id' => 333, 'position' => 0]],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testUpdateProductCategoryLinksPosistion()
+    {
+        $response = $this->getProduct('simple333');
+        // update category_link position
+        $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = [
+            ['category_id' => 333, 'position' => 10]
+        ];
+        $response = $this->updateProduct($response);
+        $this->assertEquals(
+            [['category_id' => 333, 'position' => 10]],
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testUpdateProductCategoryLinksUnassign()
+    {
+        $response = $this->getProduct('simple333');
+        // unassign category_links from product
+        $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = [];
+        $response = $this->updateProduct($response);
+        $this->assertArrayNotHasKey(self::KEY_CATEGORY_LINKS, $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]);
+    }
+
+    /**
+     * @param $filename1
+     * @param $encodedImage
+     * @param $filename2
+     * @return array
+     */
+    private function getMediaGalleryData($filename1, $encodedImage, $filename2)
+    {
+        return [
+            [
+                'position' => 1,
+                'media_type' => 'image',
+                'disabled' => true,
+                'label' => 'tiny1',
+                'types' => [],
+                'content' => [
+                    'type' => 'image/jpeg',
+                    'name' => $filename1,
+                    'base64_encoded_data' => $encodedImage,
+                ]
+            ],
+            [
+                'position' => 2,
+                'media_type' => 'image',
+                'disabled' => false,
+                'label' => 'tiny2',
+                'types' => ['image', 'small_image'],
+                'content' => [
+                    'type' => 'image/jpeg',
+                    'name' => $filename2,
+                    'base64_encoded_data' => $encodedImage,
+                ]
+            ],
         ];
     }
 }

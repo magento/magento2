@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent\Config;
@@ -12,7 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class ReaderFactory
 {
-    const INSTANCE_NAME = 'Magento\Framework\View\Element\UiComponent\Config\Reader';
+    const INSTANCE_NAME = \Magento\Framework\View\Element\UiComponent\Config\Reader::class;
 
     /**
      * @var ObjectManagerInterface

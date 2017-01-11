@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,9 +27,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->string = $this->getMock('Magento\Framework\Stdlib\StringUtils');
-        $this->dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime');
-        $this->selectFactory = $this->getMockBuilder('Magento\Framework\DB\SelectFactory')
+        $this->string = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->dateTime = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
+        $this->selectFactory = $this->getMockBuilder(\Magento\Framework\DB\SelectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -96,7 +96,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     {
         $config = ['host' => 'localhost', 'active' => false];
         $object = new Mysql($this->string, $this->dateTime, $this->selectFactory, $config);
-        $logger = $this->getMockForAbstractClass('Magento\Framework\DB\LoggerInterface');
+        $logger = $this->getMockForAbstractClass(\Magento\Framework\DB\LoggerInterface::class);
         $this->assertNull($object->getConnection($logger));
     }
 }

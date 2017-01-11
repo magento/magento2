@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Model\Session;
@@ -20,7 +20,7 @@ class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
     public function testIsValid()
     {
         $checkoutSession = $this->getMockBuilder(
-            '\Magento\Checkout\Model\Session'
+            \Magento\Checkout\Model\Session::class
         )->disableOriginalConstructor()->getMock();
         $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
@@ -28,7 +28,7 @@ class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
     public function testIsValidWithNotEmptyGetLastSuccessQuoteId()
     {
         $checkoutSession = $this->getMockBuilder(
-            'Magento\Checkout\Model\Session'
+            \Magento\Checkout\Model\Session::class
         )->disableOriginalConstructor()->getMock();
 
         $checkoutSession->expects(
@@ -49,7 +49,7 @@ class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
     public function testIsValidWithEmptyQuoteAndOrder()
     {
         $checkoutSession = $this->getMockBuilder(
-            'Magento\Checkout\Model\Session'
+            \Magento\Checkout\Model\Session::class
         )->disableOriginalConstructor()->getMock();
         $checkoutSession->expects(
             $this->at(0)
@@ -71,7 +71,7 @@ class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
     public function testIsValidTrue()
     {
         $checkoutSession = $this->getMockBuilder(
-            'Magento\Checkout\Model\Session'
+            \Magento\Checkout\Model\Session::class
         )->disableOriginalConstructor()->getMock();
         $checkoutSession->expects(
             $this->at(0)
@@ -93,7 +93,8 @@ class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
     protected function createSuccessValidator(\PHPUnit_Framework_MockObject_MockObject $checkoutSession)
     {
         return $this->objectManagerHelper->getObject(
-            'Magento\Checkout\Model\Session\SuccessValidator', ['checkoutSession' => $checkoutSession]
+            \Magento\Checkout\Model\Session\SuccessValidator::class,
+            ['checkoutSession' => $checkoutSession]
         );
     }
 }

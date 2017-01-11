@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -27,21 +27,12 @@
 & when (@media-common = true) {
     .gift-message {
         .field {
+            &:extend(.abs-clearfix all);
+            margin-bottom: @indent__base;
+
             .label {
                 .lib-css(color, @gift-message-field-label__color);
                 .lib-css(font-weight, @font-weight__regular);
-            }
-        }
-    }
-
-    .cart.table-wrapper {
-        .item-gift {
-            &._active {
-                .lib-css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
-            }
-
-            .action {
-                margin-right: 0;
             }
         }
     }
@@ -70,6 +61,8 @@
 
     .gift-summary {
         position: relative;
+        margin-top: @indent__s;
+
         .actions-toolbar {
             > .secondary {
                 .action {
@@ -92,10 +85,33 @@
             @_icon-font-color-active: @minicart-icons-color
             );
         }
+
         .action-delete {
             .lib-icon-font-symbol(
             @_icon-font-content: @icon-trash
             );
+        }
+    }
+
+    .action-gift {
+        &:extend(.abs-action-button-as-link all);
+
+        .lib-icon-font(
+            @icon-down,
+            @_icon-font-size: 1.2rem,
+            @_icon-font-line-height: 20px,
+            @_icon-font-color: @minicart-icons-color,
+            @_icon-font-color-hover: @primary__color,
+            @_icon-font-color-active: @minicart-icons-color,
+            @_icon-font-margin: 0 0 0 @indent__s,
+            @_icon-font-position: after
+        );
+
+        &.active,
+        &._active {
+            &:after {
+                content: @icon-up;
+            }
         }
     }
 
@@ -113,18 +129,30 @@
     //  In-table block
     //  ---------------------------------------------
 
-    .cart.table-wrapper {
-        .gift-content {
-            box-sizing: border-box;
-            clear: left;
-            display: none;
-            float: left;
-            margin-right: -100%;
-            padding: @indent__base 0;
-            width: 100%;
+    .cart {
+        &.table-wrapper {
+            .gift-content {
+                box-sizing: border-box;
+                clear: left;
+                display: none;
+                float: left;
+                margin-right: -100%;
+                padding: @indent__base 0;
+                width: 100%;
 
-            &._active {
-                display: block;
+                &._active {
+                    display: block;
+                }
+            }
+
+            .item-gift {
+                &._active {
+                    .lib-css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
+                }
+
+                .action {
+                    margin-right: 0;
+                }
             }
         }
     }
@@ -148,6 +176,10 @@
         .title {
             .lib-css(color, @gift-item-block-title__color);
             cursor: pointer;
+            margin: 0;
+            padding: @indent__s @indent__xl @indent__s 15px;
+            position: relative;
+
             .lib-icon-font(
             @gift-item-block-title-icon__content,
             @_icon-font-size: @gift-item-block-title-icon__font-size,
@@ -158,9 +190,6 @@
             @_icon-font-position: after,
             @_icon-font-display: block
             );
-            margin: 0;
-            padding: @indent__s @indent__xl @indent__s 15px;
-            position: relative;
         }
 
         .content {
@@ -200,9 +229,7 @@
                 }
             }
         }
-    }
 
-    .order-details-items {
         .order-items {
             .order-gift-message {
                 &:not(.expanded-content) {
@@ -214,11 +241,6 @@
                 }
             }
         }
-    }
-
-    .options-order-container,
-    .options-items-container {
-        margin-bottom: @indent__s;
     }
 
     .gift-messages-order {
@@ -242,8 +264,8 @@
     }
 
     .gift-item-block {
-        border-bottom: 0;
         .lib-css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
+        border-bottom: 0;
 
         .title {
             &:after {
@@ -264,7 +286,21 @@
         padding-right: 7rem;
     }
 
-    .cart.table-wrapper {
+    //
+    //  In-table block
+    //  ---------------------------------------------
+
+    .cart {
+        &.table-wrapper {
+            .gift-content {
+                border-top: @border-width__base solid @color-gray-light5;
+                margin-right: -@mobile-cart-padding;
+                overflow: hidden;
+                padding-left: @mobile-cart-padding;
+                padding-right: @mobile-cart-padding;
+            }
+        }
+
         .action-gift {
             .lib-icon-font(
             @icon-present,
@@ -274,6 +310,7 @@
             @_icon-font-color: @minicart-icons-color,
             @_icon-font-color-hover: @primary__color,
             @_icon-font-color-active: @minicart-icons-color,
+            @_icon-font-margin: 0,
             @_icon-font-position: after
             );
 
@@ -287,14 +324,6 @@
                     color: @primary__color;
                 }
             }
-        }
-
-        .gift-content {
-            border-top: @border-width__base solid @color-gray-light5;
-            margin-right: -@mobile-cart-padding;
-            overflow: hidden;
-            padding-left: @mobile-cart-padding;
-            padding-right: @mobile-cart-padding;
         }
     }
 
@@ -311,16 +340,6 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .gift-message {
-        .field {
-            &:extend(.abs-clearfix all);
-            .lib-form-field-type-revert(
-            @_type: inline,
-            @_type-inline-label-align: left
-            );
-        }
-    }
-
     .gift-options {
         position: relative;
         z-index: 1;
@@ -369,6 +388,7 @@
 
     .gift-item-block {
         .title {
+            font-size: 1.6rem;
             padding: @indent__base 0;
         }
     }
@@ -384,33 +404,19 @@
     //  In-table block
     //  ---------------------------------------------
 
-    .cart.table-wrapper {
-        .action-gift {
-            float: left;
-            .lib-icon-font(
-            @icon-down,
-            @_icon-font-size: 1.2rem,
-            @_icon-font-line-height: 20px,
-            @_icon-font-color: @minicart-icons-color,
-            @_icon-font-color-hover: @primary__color,
-            @_icon-font-color-active: @minicart-icons-color,
-            @_icon-font-margin: 0 0 0 @indent__s,
-            @_icon-font-position: after
-            );
-
-            &._active {
-                &:after {
-                    content: @icon-up;
+    .cart {
+        &.table-wrapper {
+            .gift-options {
+                .actions-toolbar {
+                    clear: both;
+                    padding: 0;
+                    position: static;
                 }
             }
         }
 
-        .gift-options {
-            .actions-toolbar {
-                clear: both;
-                padding: 0;
-                position: static;
-            }
+        .action-gift {
+            float: left;
         }
     }
 

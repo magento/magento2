@@ -1,17 +1,21 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\Download;
 
-use Magento\Sales\Model\Download;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Action\Context;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\Controller\Result\ForwardFactory;
-use \Magento\Framework\Unserialize\Unserialize;
 
+/**
+ * Class DownloadCustomOption
+ * @package Magento\Sales\Controller\Download
+ */
 class DownloadCustomOption extends \Magento\Framework\App\Action\Action
 {
     /**
@@ -20,31 +24,42 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
     protected $resultForwardFactory;
 
     /**
-     * @var Download
+     * @var \Magento\Sales\Model\Download
      */
     protected $download;
 
     /**
-     * @var Unserialize
+     * @var \Magento\Framework\Unserialize\Unserialize
+     * @deprecated
      */
     protected $unserialize;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param Context $context
      * @param ForwardFactory $resultForwardFactory
-     * @param Download $download
-     * @param Unserialize $unserialize
+     * @param \Magento\Sales\Model\Download $download
+     * @param \Magento\Framework\Unserialize\Unserialize $unserialize
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         Context $context,
         ForwardFactory $resultForwardFactory,
-        Download $download,
-        Unserialize $unserialize
+        \Magento\Sales\Model\Download $download,
+        \Magento\Framework\Unserialize\Unserialize $unserialize,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
         $this->download = $download;
         $this->unserialize = $unserialize;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Serialize\Serializer\Json::class
+        );
     }
 
     /**
@@ -58,7 +73,9 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
     {
         $quoteItemOptionId = $this->getRequest()->getParam('id');
         /** @var $option \Magento\Quote\Model\Quote\Item\Option */
-        $option = $this->_objectManager->create('Magento\Quote\Model\Quote\Item\Option')->load($quoteItemOptionId);
+        $option = $this->_objectManager->create(
+            \Magento\Quote\Model\Quote\Item\Option::class
+        )->load($quoteItemOptionId);
         /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
 
@@ -76,7 +93,9 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
         $productOption = null;
         if ($optionId) {
             /** @var $productOption \Magento\Catalog\Model\Product\Option */
-            $productOption = $this->_objectManager->create('Magento\Catalog\Model\Product\Option')->load($optionId);
+            $productOption = $this->_objectManager->create(
+                \Magento\Catalog\Model\Product\Option::class
+            )->load($optionId);
         }
 
         if (!$productOption || !$productOption->getId() || $productOption->getType() != 'file') {
@@ -84,7 +103,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
         }
 
         try {
-            $info = $this->unserialize->unserialize($option->getValue());
+            $info = $this->serializer->unserialize($option->getValue());
             if ($this->getRequest()->getParam('key') != $info['secret_key']) {
                 return $resultForward->forward('noroute');
             }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Plugin;
@@ -33,21 +33,22 @@ class CustomerNotificationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->session = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->notificationStorage = $this->getMockBuilder('Magento\Customer\Model\Customer\NotificationStorage')
+        $this->notificationStorage = $this->getMockBuilder(\Magento\Customer\Model\Customer\NotificationStorage::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerRepository = $this->getMockBuilder('Magento\Customer\Api\CustomerRepositoryInterface')
+        $this->customerRepository = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $this->abstractAction = $this->getMockBuilder('Magento\Backend\App\AbstractAction')
+        $this->abstractAction = $this->getMockBuilder(\Magento\Backend\App\AbstractAction::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->setMethods(['isPost'])
             ->getMockForAbstractClass();
-        $this->appState = $this->getMockBuilder('Magento\Framework\App\State')->disableOriginalConstructor()->getMock();
+        $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
+            ->disableOriginalConstructor()->getMock();
         $this->plugin = new CustomerNotification(
             $this->session,
             $this->notificationStorage,
@@ -64,7 +65,8 @@ class CustomerNotificationTest extends \PHPUnit_Framework_TestCase
             ->method('getAreaCode')
             ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
         $this->request->expects($this->any())->method('isPost')->willReturn(true);
-        $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMockForAbstractClass();
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+            ->getMockForAbstractClass();
         $customerMock->expects($this->any())->method('getGroupId')->willReturn($customerGroupId);
         $this->customerRepository->expects($this->any())
             ->method('getById')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\User\Edit;
@@ -35,7 +35,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
             [
                 'label' => __('User Info'),
                 'title' => __('User Info'),
-                'content' => $this->getLayout()->createBlock('Magento\User\Block\User\Edit\Tab\Main')->toHtml(),
+                'content' => $this->getLayout()->createBlock(\Magento\User\Block\User\Edit\Tab\Main::class)->toHtml(),
                 'active' => true
             ]
         );
@@ -46,7 +46,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
                 'label' => __('User Role'),
                 'title' => __('User Role'),
                 'content' => $this->getLayout()->createBlock(
-                    'Magento\User\Block\User\Edit\Tab\Roles',
+                    \Magento\User\Block\User\Edit\Tab\Roles::class,
                     'user.roles.grid'
                 )->toHtml()
             ]

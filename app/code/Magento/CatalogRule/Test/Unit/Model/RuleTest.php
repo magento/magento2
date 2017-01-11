@@ -1,16 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogRule\Test\Unit\Model;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-
 /**
- * Class RuleTest
- * @package Magento\CatalogRule\Test\Unit\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RuleTest extends \PHPUnit_Framework_TestCase
@@ -18,8 +13,8 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\CatalogRule\Model\Rule */
     protected $rule;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManager;
 
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
@@ -63,10 +58,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->storeModel = $this->getMock('Magento\Store\Model\Store', ['__wakeup', 'getId'], [], '', false);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeModel = $this->getMock(\Magento\Store\Model\Store::class, ['__wakeup', 'getId'], [], '', false);
         $this->combineFactory = $this->getMock(
-            'Magento\CatalogRule\Model\Rule\Condition\CombineFactory',
+            \Magento\CatalogRule\Model\Rule\Condition\CombineFactory::class,
             [
                 'create'
             ],
@@ -75,7 +71,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->productModel = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [
                 '__wakeup', 'getId', 'setData'
             ],
@@ -84,7 +80,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->condition = $this->getMock(
-            'Magento\Rule\Model\Condition\Combine',
+            \Magento\Rule\Model\Condition\Combine::class,
             [
                 'setRule',
                 'validate'
@@ -94,7 +90,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->websiteModel = $this->getMock(
-            'Magento\Store\Model\Website',
+            \Magento\Store\Model\Website::class,
             [
                 '__wakeup',
                 'getId',
@@ -105,7 +101,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_ruleProductProcessor = $this->getMock(
-            '\Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor',
+            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class,
             [],
             [],
             '',
@@ -113,7 +109,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_productCollectionFactory = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
+            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -121,34 +117,38 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_resourceIterator = $this->getMock(
-            '\Magento\Framework\Model\ResourceModel\Iterator',
+            \Magento\Framework\Model\ResourceModel\Iterator::class,
             ['walk'],
             [],
             '',
             false
         );
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $extensionFactoryMock = $this->getMock(
+            \Magento\Framework\Api\ExtensionAttributesFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $attributeValueFactoryMock = $this->getMock(
+            \Magento\Framework\Api\AttributeValueFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
 
-        $this->prepareObjectManager([
-            [
-                'Magento\Framework\Api\ExtensionAttributesFactory',
-                $this->getMock('Magento\Framework\Api\ExtensionAttributesFactory', [], [], '', false)
-            ],
-            [
-                'Magento\Framework\Api\AttributeValueFactory',
-                $this->getMock('Magento\Framework\Api\AttributeValueFactory', [], [], '', false)
-            ],
-        ]);
-
-        $this->rule = $this->objectManagerHelper->getObject(
-            'Magento\CatalogRule\Model\Rule',
+        $this->rule = $this->objectManager->getObject(
+            \Magento\CatalogRule\Model\Rule::class,
             [
                 'storeManager' => $this->storeManager,
                 'combineFactory' => $this->combineFactory,
                 'ruleProductProcessor' => $this->_ruleProductProcessor,
                 'productCollectionFactory' => $this->_productCollectionFactory,
                 'resourceIterator' => $this->_resourceIterator,
+                'extensionFactory' => $extensionFactoryMock,
+                'customAttributeFactory' => $attributeValueFactoryMock,
             ]
         );
     }
@@ -300,7 +300,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterDelete()
     {
-        $indexer = $this->getMock('\Magento\Framework\Indexer\IndexerInterface');
+        $indexer = $this->getMock(\Magento\Framework\Indexer\IndexerInterface::class);
         $indexer->expects($this->once())->method('invalidate');
         $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->will($this->returnValue($indexer));
         $this->rule->afterDelete();
@@ -314,7 +314,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     public function testAfterUpdate()
     {
         $this->rule->isObjectNew(false);
-        $indexer = $this->getMock('\Magento\Framework\Indexer\IndexerInterface');
+        $indexer = $this->getMock(\Magento\Framework\Indexer\IndexerInterface::class);
         $indexer->expects($this->once())->method('invalidate');
         $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->will($this->returnValue($indexer));
         $this->rule->afterSave();
@@ -336,7 +336,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->rule->setData('website_ids', []);
         $this->rule->isObjectNew($isObjectNew);
-        $indexer = $this->getMock('\Magento\Framework\Indexer\IndexerInterface');
+        $indexer = $this->getMock(\Magento\Framework\Indexer\IndexerInterface::class);
         $indexer->expects($this->any())->method('invalidate');
         $this->_ruleProductProcessor->expects($this->any())->method('getIndexer')->will($this->returnValue($indexer));
 
@@ -374,21 +374,5 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->rule->setId(100);
         $expectedResult = 'form_namerule_conditions_fieldset_100';
         $this->assertEquals($expectedResult, $this->rule->getConditionsFieldSetId($formName));
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

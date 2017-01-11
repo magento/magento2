@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -88,7 +88,7 @@ class Related extends Section
     {
         $element = $element ?: $this->_rootElement;
         return $this->blockFactory->create(
-            '\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Related\Grid',
+            \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Related\Grid::class,
             ['element' => $element]
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Request\Config;
@@ -13,10 +13,10 @@ class FileSystemReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $fileResolver = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Search\Request\Config\FileResolverStub'
+            \Magento\Framework\Search\Request\Config\FileResolverStub::class
         );
         $this->object = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Search\Request\Config\FilesystemReader',
+            \Magento\Framework\Search\Request\Config\FilesystemReader::class,
             ['fileResolver' => $fileResolver]
         );
     }

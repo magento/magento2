@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Ui\Adminhtml;
@@ -8,11 +8,15 @@ namespace Magento\Vault\Model\Ui\Adminhtml;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Payment\Helper\Data;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
@@ -66,6 +70,16 @@ final class TokensConfigProvider
     private $paymentDataHelper;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var PaymentTokenManagementInterface
+     */
+    private $paymentTokenManagement;
+
+    /**
      * Constructor
      *
      * @param SessionManagerInterface $session
@@ -103,9 +117,6 @@ final class TokensConfigProvider
         $result = [];
 
         $customerId = $this->session->getCustomerId();
-        if (!$customerId) {
-            return $result;
-        }
 
         $vaultPayment = $this->getVaultPayment($vaultPaymentCode);
         if ($vaultPayment === null) {
@@ -118,26 +129,58 @@ final class TokensConfigProvider
             return $result;
         }
 
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
-            ->setValue($customerId)
-            ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
-            ->setValue($vaultProviderCode)
-            ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_ACTIVE)
-            ->setValue(1)
-            ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
-            ->setConditionType('gt')
-            ->setValue(
-                $this->dateTimeFactory->create(
-                    'now',
-                    new \DateTimeZone('UTC')
-                )->format('Y-m-d 00:00:00')
-            )
-            ->create();
-        $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
-            ->create();
+        if ($customerId) {
+            $this->searchCriteriaBuilder->addFilters(
+                [
+                    $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
+                    ->setValue($customerId)
+                    ->create(),
+                ]
+            );
+        } else {
+            try {
+                $this->searchCriteriaBuilder->addFilters(
+                    [
+                        $this->filterBuilder->setField(PaymentTokenInterface::ENTITY_ID)
+                            ->setValue($this->getPaymentTokenEntityId())
+                            ->create(),
+                    ]
+                );
+            } catch (InputException $e) {
+                return $result;
+            } catch (NoSuchEntityException $e) {
+                return $result;
+            }
+        }
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
+                    ->setValue($vaultProviderCode)
+                    ->create(),
+                ]
+        );
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::IS_ACTIVE)
+                    ->setValue(1)
+                    ->create(),
+                ]
+        );
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
+                    ->setConditionType('gt')
+                    ->setValue(
+                        $this->dateTimeFactory->create(
+                            'now',
+                            new \DateTimeZone('UTC')
+                        )->format('Y-m-d 00:00:00')
+                    )
+                    ->create(),
+                ]
+        );
+
+        $searchCriteria = $this->searchCriteriaBuilder->create();
 
         foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $token) {
             $result[] = $componentProvider->getComponentForToken($token);
@@ -162,7 +205,7 @@ final class TokensConfigProvider
 
     /**
      * Get active vault payment by code
-     * @param $vaultPaymentCode
+     * @param string $vaultPaymentCode
      * @return VaultPaymentInterface|null
      */
     private function getVaultPayment($vaultPaymentCode)
@@ -170,6 +213,34 @@ final class TokensConfigProvider
         $storeId = $this->storeManager->getStore()->getId();
         $vaultPayment = $this->getPaymentDataHelper()->getMethodInstance($vaultPaymentCode);
         return $vaultPayment->isActive($storeId) ? $vaultPayment : null;
+    }
+
+    /**
+     * Returns payment token entity id by order payment id
+     * @return int|null
+     */
+    private function getPaymentTokenEntityId()
+    {
+        $paymentToken = $this->getPaymentTokenManagement()->getByPaymentId($this->getOrderPaymentEntityId());
+        if ($paymentToken === null) {
+            throw new NoSuchEntityException(__('No available payment tokens for specified order payment.'));
+        }
+        return $paymentToken->getEntityId();
+    }
+
+    /**
+     * Returns order payment entity id
+     * Using 'getReordered' for Reorder action
+     * Using 'getOrder' for Edit action
+     * @return int
+     */
+    private function getOrderPaymentEntityId()
+    {
+        $orderId = $this->session->getReordered()
+            ?: $this->session->getOrder()->getEntityId();
+        $order = $this->getOrderRepository()->get($orderId);
+
+        return (int) $order->getPayment()->getEntityId();
     }
 
     /**
@@ -183,5 +254,35 @@ final class TokensConfigProvider
             $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
         }
         return $this->paymentDataHelper;
+    }
+
+    /**
+     * Returns order repository instance
+     * @return OrderRepositoryInterface
+     * @deprecated
+     */
+    private function getOrderRepository()
+    {
+        if ($this->orderRepository === null) {
+            $this->orderRepository = ObjectManager::getInstance()
+                ->get(OrderRepositoryInterface::class);
+        }
+
+        return $this->orderRepository;
+    }
+
+    /**
+     * Returns payment token management instance
+     * @return PaymentTokenManagementInterface
+     * @deprecated
+     */
+    private function getPaymentTokenManagement()
+    {
+        if ($this->paymentTokenManagement === null) {
+            $this->paymentTokenManagement = ObjectManager::getInstance()
+                ->get(PaymentTokenManagementInterface::class);
+        }
+
+        return $this->paymentTokenManagement;
     }
 }

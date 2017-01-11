@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model;
@@ -40,10 +40,10 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->composerInfo = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
-        $this->phpInfo = $this->getMock('Magento\Setup\Model\PhpInformation', [], [], '', false);
-        $this->versionParser = $this->getMock('Composer\Package\Version\VersionParser', [], [], '', false);
-        $this->dataSize = $this->getMock('Magento\Framework\Convert\DataSize', [], [], '', false);
+        $this->composerInfo = $this->getMock(\Magento\Framework\Composer\ComposerInformation::class, [], [], '', false);
+        $this->phpInfo = $this->getMock(\Magento\Setup\Model\PhpInformation::class, [], [], '', false);
+        $this->versionParser = $this->getMock(\Composer\Package\Version\VersionParser::class, [], [], '', false);
+        $this->dataSize = $this->getMock(\Magento\Framework\Convert\DataSize::class, [], [], '', false);
         $this->phpReadinessCheck = new PhpReadinessCheck(
             $this->composerInfo,
             $this->phpInfo,
@@ -71,7 +71,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
         $multipleConstraints = $this->getMockForAbstractClass(
-            'Composer\Semver\Constraint\ConstraintInterface',
+            \Composer\Semver\Constraint\ConstraintInterface::class,
             [],
             '',
             false
@@ -82,7 +82,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \UnexpectedValueException());
         $this->versionParser->expects($this->at(2))->method('normalize')->willReturn('1.0');
         $currentPhpVersion = $this->getMockForAbstractClass(
-            'Composer\Semver\Constraint\ConstraintInterface',
+            \Composer\Semver\Constraint\ConstraintInterface::class,
             [],
             '',
             false
@@ -103,7 +103,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
         $multipleConstraints = $this->getMockForAbstractClass(
-            'Composer\Semver\Constraint\ConstraintInterface',
+            \Composer\Semver\Constraint\ConstraintInterface::class,
             [],
             '',
             false
@@ -114,7 +114,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \UnexpectedValueException());
         $this->versionParser->expects($this->at(2))->method('normalize')->willReturn('1.0');
         $currentPhpVersion = $this->getMockForAbstractClass(
-            'Composer\Semver\Constraint\ConstraintInterface',
+            \Composer\Semver\Constraint\ConstraintInterface::class,
             [],
             '',
             false
@@ -134,7 +134,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     private function setUpNoPrettyVersionParser()
     {
         $multipleConstraints = $this->getMockForAbstractClass(
-            'Composer\Semver\Constraint\ConstraintInterface',
+            \Composer\Semver\Constraint\ConstraintInterface::class,
             [],
             '',
             false
@@ -142,7 +142,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->versionParser->expects($this->at(0))->method('parseConstraints')->willReturn($multipleConstraints);
         $this->versionParser->expects($this->at(1))->method('normalize')->willReturn('1.0');
         $currentPhpVersion = $this->getMockForAbstractClass(
-            'Composer\Semver\Constraint\ConstraintInterface',
+            \Composer\Semver\Constraint\ConstraintInterface::class,
             [],
             '',
             false
@@ -170,7 +170,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
         $multipleConstraints = $this->getMockForAbstractClass(
-            'Composer\Semver\Constraint\ConstraintInterface',
+            \Composer\Semver\Constraint\ConstraintInterface::class,
             [],
             '',
             false
@@ -178,7 +178,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->versionParser->expects($this->at(0))->method('parseConstraints')->willReturn($multipleConstraints);
         $this->versionParser->expects($this->at(1))->method('normalize')->willReturn('1.0');
         $currentPhpVersion = $this->getMockForAbstractClass(
-            'Composer\Semver\Constraint\ConstraintInterface',
+            \Composer\Semver\Constraint\ConstraintInterface::class,
             [],
             '',
             false
@@ -222,7 +222,12 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                     'message' => $xdebugMessage,
                     'error' => false,
                 ],
-            ]
+                'missed_function_imagecreatefromjpeg' => [
+                    'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
+                    'helpUrl' => 'http://php.net/manual/en/image.installation.php',
+                    'error' => false,
+                ],
+            ],
         ];
         if (!$this->isPhp7OrHhvm()) {
             $this->setUpNoPrettyVersionParser();
@@ -261,8 +266,13 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 'xdebug_max_nesting_level' => [
                     'message' => $xdebugMessage,
                     'error' => true,
-                ]
-            ]
+                ],
+                'missed_function_imagecreatefromjpeg' => [
+                    'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
+                    'helpUrl' => 'http://php.net/manual/en/image.installation.php',
+                    'error' => false,
+                ],
+            ],
         ];
         if (!$this->isPhp7OrHhvm()) {
             $this->setUpNoPrettyVersionParser();
@@ -301,6 +311,13 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 ]
             ];
         }
+
+        $expected['data']['missed_function_imagecreatefromjpeg'] = [
+            'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
+            'helpUrl' => 'http://php.net/manual/en/image.installation.php',
+            'error' => false,
+        ];
+
         $this->assertEquals($expected, $this->phpReadinessCheck->checkPhpSettings());
     }
 
@@ -319,8 +336,8 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $rawPostMessage =
                 'Your current PHP memory limit is 512M.
                  Magento 2 requires it to be set to 756M or more.
-                 As a user with root privileges, edit your php.ini file to increase memory_limit. 
-                 (The command php --ini tells you where it is located.) 
+                 As a user with root privileges, edit your php.ini file to increase memory_limit.
+                 (The command php --ini tells you where it is located.)
                  After that, restart your web server and try again.';
 
         $expected['memory_limit'] = [

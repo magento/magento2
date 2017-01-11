@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -12,6 +12,11 @@
 @braintree-error__color: @color-red10;
 @braintree-focus__color: @color-blue2;
 @braintree-success__color: @color-dark-green1;
+
+@braintree-paypal-icon__height: 16px;
+@braintree-paypal-icon__width: 16px;
+@braintree-paypal-account__padding-right: 50px;
+@braintree-paypal-account__padding-vertical: 15px;
 
 //
 //  Common
@@ -86,6 +91,80 @@
             opacity: 0;
         }
     }
+
+    .braintree-paypal-logo {
+        margin-top: @indent__s;
+        text-align: center;
+    }
+
+    .braintree-paypal-account {
+        padding: @braintree-paypal-account__padding-vertical 0 @braintree-paypal-account__padding-vertical @braintree-paypal-account__padding-right;
+        position: relative;
+
+        .lib-icon-image(
+            @_icon-image: '@{baseDir}Magento_Braintree/images/paypal-small.png',
+            @_icon-image-position: before,
+            @_icon-image-width: @braintree-paypal-icon__width,
+            @_icon-image-height: @braintree-paypal-icon__height
+        );
+
+        &:before {
+            left: @braintree-paypal-account__padding-right/2 - @braintree-paypal-icon__width/2;
+            margin-top: -@braintree-paypal-icon__height/2;
+            position: absolute;
+            top: 50%;
+        }
+
+        .payment-method-type {
+            font-weight: @font-weight__bold;
+        }
+
+        .payment-method-description {
+            color: @color-gray34;
+        }
+    }
+
+    .braintree-paypal-fieldset {
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .action-braintree-paypal-logo {
+        .lib-button-reset();
+
+        img {
+            margin: 0;
+            width: 114px;
+        }
+    }
+
+    .payment-method {
+        .payment-method-content {
+            .actions-toolbar {
+                &.braintree-paypal-actions {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+
+    //  My Account > Stored Payment Methods
+    .account {
+        .table {
+            .col {
+                &.paypal-account {
+                    img {
+                        vertical-align: middle;
+                    }
+
+                    + .actions {
+                        vertical-align: middle;
+                    }
+                }
+            }
+        }
+    }
 }
 
 //
@@ -97,6 +176,25 @@
         .cvv {
             .field-tooltip {
                 left: 6rem;
+            }
+        }
+    }
+
+    .braintree-paypal-account {
+        border-color: @color-gray80;
+        border-style: solid;
+        border-width: 1px 0;
+        display: inline-block;
+        width: 50%;
+    }
+
+    //  My Account > Stored Payment Methods
+    .account {
+        .table-credit-cards {
+            .col {
+                &.actions {
+                    width: 100px;
+                }
             }
         }
     }

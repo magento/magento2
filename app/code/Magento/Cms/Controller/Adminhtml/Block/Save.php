@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
@@ -55,7 +55,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
             }
 
             /** @var \Magento\Cms\Model\Block $model */
-            $model = $this->_objectManager->create('Magento\Cms\Model\Block')->load($id);
+            $model = $this->_objectManager->create(\Magento\Cms\Model\Block::class)->load($id);
             if (!$model->getId() && $id) {
                 $this->messageManager->addError(__('This block no longer exists.'));
                 return $resultRedirect->setPath('*/*/');

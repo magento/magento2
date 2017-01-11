@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Filters;
@@ -37,12 +37,12 @@ class FilterModifierTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
+        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
         $this->dataProvider = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface'
+            \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class
         );
         $this->filterBuilder = $this->getMock(
-            'Magento\Framework\Api\FilterBuilder',
+            \Magento\Framework\Api\FilterBuilder::class,
             [],
             [],
             '',
@@ -50,7 +50,7 @@ class FilterModifierTest extends \PHPUnit_Framework_TestCase
         );
         $this->unit = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
-                'Magento\Ui\Component\Filters\FilterModifier',
+                \Magento\Ui\Component\Filters\FilterModifier::class,
                 [
                     'request' => $this->request,
                     'filterBuilder' => $this->filterBuilder,
@@ -97,7 +97,7 @@ class FilterModifierTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplyFilterModifierWith($filterModifier, $filterName, $conditionType, $value)
     {
-        $filter = $this->getMock('Magento\Framework\Api\Filter');
+        $filter = $this->getMock(\Magento\Framework\Api\Filter::class);
 
         $this->request->expects($this->once())->method('getParam')
             ->with(\Magento\Ui\Component\Filters\FilterModifier::FILTER_MODIFIER)

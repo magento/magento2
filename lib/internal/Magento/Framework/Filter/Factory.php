@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter;
@@ -16,22 +16,22 @@ class Factory extends AbstractFactory
      * @var array
      */
     protected $invokableClasses = [
-        'email' => 'Magento\Framework\Filter\Email',
-        'money' => 'Magento\Framework\Filter\Money',
-        'simple' => 'Magento\Framework\Filter\Template\Simple',
-        'object' => 'Magento\Framework\Filter\DataObject',
-        'sprintf' => 'Magento\Framework\Filter\Sprintf',
-        'template' => 'Magento\Framework\Filter\Template',
-        'arrayFilter' => 'Magento\Framework\Filter\ArrayFilter',
-        'removeAccents' => 'Magento\Framework\Filter\RemoveAccents',
-        'splitWords' => 'Magento\Framework\Filter\SplitWords',
-        'removeTags' => 'Magento\Framework\Filter\RemoveTags',
-        'stripTags' => 'Magento\Framework\Filter\StripTags',
-        'truncate' => 'Magento\Framework\Filter\Truncate',
-        'encrypt' => 'Magento\Framework\Filter\Encrypt',
-        'decrypt' => 'Magento\Framework\Filter\Decrypt',
-        'translit' => 'Magento\Framework\Filter\Translit',
-        'translitUrl' => 'Magento\Framework\Filter\TranslitUrl',
+        'email' => \Magento\Framework\Filter\Email::class,
+        'money' => \Magento\Framework\Filter\Money::class,
+        'simple' => \Magento\Framework\Filter\Template\Simple::class,
+        'object' => \Magento\Framework\Filter\DataObject::class,
+        'sprintf' => \Magento\Framework\Filter\Sprintf::class,
+        'template' => \Magento\Framework\Filter\Template::class,
+        'arrayFilter' => \Magento\Framework\Filter\ArrayFilter::class,
+        'removeAccents' => \Magento\Framework\Filter\RemoveAccents::class,
+        'splitWords' => \Magento\Framework\Filter\SplitWords::class,
+        'removeTags' => \Magento\Framework\Filter\RemoveTags::class,
+        'stripTags' => \Magento\Framework\Filter\StripTags::class,
+        'truncate' => \Magento\Framework\Filter\Truncate::class,
+        'encrypt' => \Magento\Framework\Filter\Encrypt::class,
+        'decrypt' => \Magento\Framework\Filter\Decrypt::class,
+        'translit' => \Magento\Framework\Filter\Translit::class,
+        'translitUrl' => \Magento\Framework\Filter\TranslitUrl::class,
     ];
 
     /**
@@ -40,11 +40,11 @@ class Factory extends AbstractFactory
      * @var array
      */
     protected $shared = [
-        'Magento\Framework\Filter\Sprintf' => false,
-        'Magento\Framework\Filter\Money' => false,
-        'Magento\Framework\Filter\RemoveAccents' => false,
-        'Magento\Framework\Filter\SplitWords' => false,
-        'Magento\Framework\Filter\StripTags' => false,
-        'Magento\Framework\Filter\Truncate' => false,
+        \Magento\Framework\Filter\Sprintf::class => false,
+        \Magento\Framework\Filter\Money::class => false,
+        \Magento\Framework\Filter\RemoveAccents::class => false,
+        \Magento\Framework\Filter\SplitWords::class => false,
+        \Magento\Framework\Filter\StripTags::class => false,
+        \Magento\Framework\Filter\Truncate::class => false,
     ];
 }

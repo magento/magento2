@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Rss;
@@ -113,7 +113,7 @@ class NewOrder implements DataProviderInterface
             ->addAttributeToSort('created_at', 'desc');
         $this->eventManager->dispatch('rss_order_new_collection_select', ['collection' => $collection]);
 
-        $detailBlock = $this->layout->getBlockSingleton('Magento\Sales\Block\Adminhtml\Order\Details');
+        $detailBlock = $this->layout->getBlockSingleton(\Magento\Sales\Block\Adminhtml\Order\Details::class);
         foreach ($collection as $item) {
             $title = __('Order #%1 created at %2', $item->getIncrementId(), $this->localeDate->formatDate(
                 $item->getCreatedAt()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,10 +45,14 @@ class EditTest extends AbstractController
     public function setUp()
     {
         parent::setUp();
-        $this->layout = Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface');
-        $this->groupRepository = Bootstrap::getObjectManager()->create('Magento\Customer\Api\GroupRepositoryInterface');
-        $this->groupManagement = Bootstrap::getObjectManager()->create('Magento\Customer\Api\GroupManagementInterface');
-        $this->registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+        $this->layout = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class);
+        $this->groupRepository = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Api\GroupRepositoryInterface::class
+        );
+        $this->groupManagement = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Api\GroupManagementInterface::class
+        );
+        $this->registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
     }
 
     /**
@@ -70,7 +74,7 @@ class EditTest extends AbstractController
         $this->getRequest()->setParam('id', $groupId);
 
         /** @var $block Edit */
-        $block = $this->layout->createBlock('Magento\Customer\Block\Adminhtml\Group\Edit', 'block');
+        $block = $this->layout->createBlock(\Magento\Customer\Block\Adminhtml\Group\Edit::class, 'block');
         $buttonsHtml = $block->getButtonsHtml();
 
         $this->assertNotContains('delete', $buttonsHtml);
@@ -81,17 +85,17 @@ class EditTest extends AbstractController
      */
     public function testDeleteButtonExistInCustomGroup()
     {
-        $builder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
+        $builder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteria */
         $searchCriteria = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Api\SearchCriteriaBuilder')
+            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class)
             ->addFilters([$builder->setField('code')->setValue('custom_group')->create()])->create();
         $customerGroup = $this->groupRepository->getList($searchCriteria)->getItems()[0];
         $this->getRequest()->setParam('id', $customerGroup->getId());
         $this->registry->register(RegistryConstants::CURRENT_GROUP_ID, $customerGroup->getId());
 
         /** @var $block Edit */
-        $block = $this->layout->createBlock('Magento\Customer\Block\Adminhtml\Group\Edit', 'block');
+        $block = $this->layout->createBlock(\Magento\Customer\Block\Adminhtml\Group\Edit::class, 'block');
         $buttonsHtml = $block->getButtonsHtml();
 
         $this->assertContains('delete', $buttonsHtml);

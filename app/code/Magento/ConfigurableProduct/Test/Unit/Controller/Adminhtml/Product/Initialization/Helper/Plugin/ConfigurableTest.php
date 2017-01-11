@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
@@ -101,7 +101,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         ];
         $valueMap = [
             ['new-variations-attribute-set-id', null, 24],
-            ['associated_product_ids', [], []],
+            ['associated_product_ids_serialized', '[]', []],
             ['product', [], ['configurable_attributes_data' => $attributes]],
         ];
         $simpleProductsIds = [1, 2, 3];
@@ -150,7 +150,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $paramValueMap = [
-            ['configurable-matrix', [], $simpleProducts],
+            ['configurable-matrix-serialized', '[]', json_encode($simpleProducts)],
             ['attributes', null, $attributes],
         ];
 
@@ -212,11 +212,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         ];
         $valueMap = [
             ['new-variations-attribute-set-id', null, 24],
-            ['associated_product_ids', [], []],
+            ['associated_product_ids_serialized', '[]', []],
             ['product', [], ['configurable_attributes_data' => $attributes]],
         ];
         $paramValueMap = [
-            ['configurable-matrix', [], []],
+            ['configurable-matrix-serialized', '[]', []],
             ['attributes', null, $attributes],
         ];
 

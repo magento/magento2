@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->groupManagement = $this->objectManager->get('Magento\Customer\Api\GroupManagementInterface');
+        $this->groupManagement = $this->objectManager->get(\Magento\Customer\Api\GroupManagementInterface::class);
     }
 
     /**
@@ -47,11 +47,11 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultGroupWithNonDefaultStoreId()
     {
         /** @var \Magento\Store\Model\StoreManagerInterface  $storeManager */
-        $storeManager = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class);
         $nonDefaultStore = $storeManager->getStore('secondstore');
         $nonDefaultStoreId = $nonDefaultStore->getId();
         /** @var \Magento\Framework\App\MutableScopeConfig $scopeConfig */
-        $scopeConfig = $this->objectManager->get('Magento\Framework\App\MutableScopeConfig');
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\MutableScopeConfig::class);
         $scopeConfig->setValue(
             \Magento\Customer\Model\GroupManagement::XML_PATH_DEFAULT_ID,
             2,
@@ -113,7 +113,7 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
     public function getDefaultGroupDataProvider()
     {
         /** @var \Magento\Store\Model\StoreManagerInterface  $storeManager */
-        $storeManager = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class);
         $defaultStoreId = $storeManager->getStore()->getId();
         return [
             'no store id' => [

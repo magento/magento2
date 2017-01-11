@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,11 +36,11 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Persistent\Helper\Session $persistentSessionHelper */
-        $this->_persistentSessionHelper = $this->_objectManager->create('Magento\Persistent\Helper\Session');
+        $this->_persistentSessionHelper = $this->_objectManager->create(\Magento\Persistent\Helper\Session::class);
 
-        $this->_customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
+        $this->_customerSession = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
 
-        $this->_block = $this->_objectManager->create('Magento\Persistent\Block\Header\Additional');
+        $this->_block = $this->_objectManager->create(\Magento\Persistent\Block\Header\Additional::class);
     }
 
     /**

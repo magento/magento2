@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_collection = Bootstrap::getObjectManager()
-            ->create('Magento\Newsletter\Model\ResourceModel\Problem\Collection');
+            ->create(\Magento\Newsletter\Model\ResourceModel\Problem\Collection::class);
     }
 
     /**
@@ -28,14 +28,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Api\CustomerRepositoryInterface');
+            ->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customer = $customerRepository->getById(1);
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
         $subscriber = Bootstrap::getObjectManager()
-            ->create('Magento\Newsletter\Model\Subscriber')->loadByEmail($customer->getEmail());
+            ->create(\Magento\Newsletter\Model\Subscriber::class)->loadByEmail($customer->getEmail());
         /** @var \Magento\Newsletter\Model\Problem $problem */
         $problem = Bootstrap::getObjectManager()
-            ->create('Magento\Newsletter\Model\Problem')->addSubscriberData($subscriber);
+            ->create(\Magento\Newsletter\Model\Problem::class)->addSubscriberData($subscriber);
 
         $item = $this->_collection->addSubscriberInfo()->load()->getFirstItem();
 

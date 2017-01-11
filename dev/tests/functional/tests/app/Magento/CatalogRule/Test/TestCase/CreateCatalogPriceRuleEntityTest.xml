@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -13,7 +13,6 @@
             <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
             <data name="catalogPriceRule/data/website_ids/option_0" xsi:type="string">Main Website</data>
             <data name="catalogPriceRule/data/customer_group_ids/option_0" xsi:type="string">Wholesale</data>
-            <data name="catalogPriceRule/data/condition" xsi:type="string">-</data>
             <data name="catalogPriceRule/data/simple_action" xsi:type="string">Apply as percentage of original</data>
             <data name="catalogPriceRule/data/discount_amount" xsi:type="string">50</data>
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessSaveMessage" />
@@ -34,6 +33,49 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNoticeMessage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleForm" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid" />
+        </variation>
+        <variation name="CatalogRule_Create_ForGuestUsers_AdjustPriceToPercentage">
+            <data name="product" xsi:type="string">MAGETWO-23036</data>
+            <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>
+            <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
+            <data name="catalogPriceRule/data/website_ids/option_0" xsi:type="string">Main Website</data>
+            <data name="catalogPriceRule/data/customer_group_ids/option_0" xsi:type="string">NOT LOGGED IN</data>
+            <data name="conditionEntity" xsi:type="string">category</data>
+            <data name="catalogPriceRule/data/conditions" xsi:type="string">[Category|is|%category_id%]</data>
+            <data name="catalogPriceRule/data/simple_action" xsi:type="string">Adjust final price to this percentage</data>
+            <data name="catalogPriceRule/data/discount_amount" xsi:type="string">90</data>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessSaveMessage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNoticeMessage" />
+        </variation>
+        <variation name="CatalogRule_Create_ForNewCustomerGroup_ApplyAsPercentage" summary="Create Catalog Price Rules to Specific Customer Group" ticketId="MAGETWO-12908">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="customer/dataset" xsi:type="string">customer_with_new_customer_group</data>
+            <data name="product" xsi:type="string">simple_10_dollar</data>
+            <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>
+            <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
+            <data name="catalogPriceRule/data/website_ids/option_0" xsi:type="string">Main Website</data>
+            <data name="conditionEntity" xsi:type="string">category</data>
+            <data name="catalogPriceRule/data/conditions" xsi:type="string">[Category|is|%category_id%]</data>
+            <data name="catalogPriceRule/data/simple_action" xsi:type="string">Apply as percentage of original</data>
+            <data name="catalogPriceRule/data/discount_amount" xsi:type="string">50</data>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessSaveMessage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNoticeMessage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleForm" />
+        </variation>
+        <variation name="CatalogRule_Create_ForGuestUsers_ByProductAttribute_AdjustPriceToValue" summary="Create Catalog Price Rule with Product Attribute in Condition" ticketId="MAGETWO-30095">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="product" xsi:type="string">product_with_custom_color_attribute</data>
+            <data name="catalogPriceRule/data/name" xsi:type="string">Catalog Price Rule %isolation%</data>
+            <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
+            <data name="catalogPriceRule/data/website_ids/option_0" xsi:type="string">Main Website</data>
+            <data name="catalogPriceRule/data/customer_group_ids/option_0" xsi:type="string">NOT LOGGED IN</data>
+            <data name="conditionEntity" xsi:type="string">attribute</data>
+            <data name="catalogPriceRule/data/conditions" xsi:type="string">[%attribute_name%|is|%attribute_value%]</data>
+            <data name="catalogPriceRule/data/simple_action" xsi:type="string">Adjust final price to discount value</data>
+            <data name="catalogPriceRule/data/discount_amount" xsi:type="string">99.99</data>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessSaveMessage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNoticeMessage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleForm" />
         </variation>
     </testCase>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model;
@@ -128,26 +128,37 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      */
     public function getVisibleAvailableTokens($customerId)
     {
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
-            ->setValue($customerId)
-            ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_VISIBLE)
-            ->setValue(1)
-            ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_ACTIVE)
-            ->setValue(1)
-            ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
-            ->setConditionType('gt')
-            ->setValue(
-                $this->dateTimeFactory->create(
-                    'now',
-                    new \DateTimeZone('UTC')
-                )->format('Y-m-d 00:00:00')
-            )
-            ->create();
-        $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
-            ->create();
+        $customerFilter = [
+            $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
+                ->setValue($customerId)
+                ->create()
+            ];
+        $visibleFilter = [
+            $this->filterBuilder->setField(PaymentTokenInterface::IS_VISIBLE)
+                ->setValue(1)
+                ->create()
+            ];
+        $isActiveFilter = [
+            $this->filterBuilder->setField(PaymentTokenInterface::IS_ACTIVE)
+                ->setValue(1)
+                ->create()
+            ];
+        $expiresAtFilter = [
+            $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
+                ->setConditionType('gt')
+                ->setValue(
+                    $this->dateTimeFactory->create(
+                        'now',
+                        new \DateTimeZone('UTC')
+                    )->format('Y-m-d 00:00:00')
+                )
+                ->create()
+            ];
+        $this->searchCriteriaBuilder->addFilters($customerFilter);
+        $this->searchCriteriaBuilder->addFilters($visibleFilter);
+        $this->searchCriteriaBuilder->addFilters($isActiveFilter);
+        // add filters to different filter groups in order to filter by AND expression
+        $searchCriteria = $this->searchCriteriaBuilder->addFilters($expiresAtFilter)->create();
 
         return $this->paymentTokenRepository->getList($searchCriteria)->getItems();
     }

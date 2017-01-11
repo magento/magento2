@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\ResourceModel\Group;
@@ -18,7 +18,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->setFlag('load_default_store_group', false);
-        $this->_init('Magento\Store\Model\Group', 'Magento\Store\Model\ResourceModel\Group');
+        $this->_init(\Magento\Store\Model\Group::class, \Magento\Store\Model\ResourceModel\Group::class);
     }
 
     /**

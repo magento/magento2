@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Test\Unit\Model;
@@ -41,7 +41,7 @@ class BackupFactoryTest extends \PHPUnit_Framework_TestCase
             'name' => '',
             'type' => 'snapshot',
         ];
-        $this->_fsCollection = $this->getMock('Magento\Backup\Model\Fs\Collection', [], [], '', false);
+        $this->_fsCollection = $this->getMock(\Magento\Backup\Model\Fs\Collection::class, [], [], '', false);
         $this->_fsCollection->expects(
             $this->at(0)
         )->method(
@@ -50,15 +50,15 @@ class BackupFactoryTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(new \ArrayIterator([new \Magento\Framework\DataObject($this->_data)]))
         );
 
-        $this->_backupModel = $this->getMock('Magento\Backup\Model\Backup', [], [], '', false);
+        $this->_backupModel = $this->getMock(\Magento\Backup\Model\Backup::class, [], [], '', false);
 
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->at(0)
         )->method(
             'get'
         )->with(
-            'Magento\Backup\Model\Fs\Collection'
+            \Magento\Backup\Model\Fs\Collection::class
         )->will(
             $this->returnValue($this->_fsCollection)
         );
@@ -67,7 +67,7 @@ class BackupFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'get'
         )->with(
-            'Magento\Backup\Model\Backup'
+            \Magento\Backup\Model\Backup::class
         )->will(
             $this->returnValue($this->_backupModel)
         );

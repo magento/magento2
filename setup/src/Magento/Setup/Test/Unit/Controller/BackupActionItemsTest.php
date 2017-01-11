@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@ namespace Magento\Setup\Test\Unit\Controller;
 use \Magento\Setup\Controller\BackupActionItems;
 use \Magento\Setup\Controller\ResponseTypeInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -45,20 +48,22 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $this->directoryList =
+            $this->getMock(\Magento\Framework\App\Filesystem\DirectoryList::class, [], [], '', false);
+        $this->objectManagerProvider =
+            $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
         $this->backupRollback = $this->getMock(
-            'Magento\Setup\Model\BackupRollback',
+            \Magento\Setup\Model\BackupRollback::class,
             ['getDBDiskSpace', 'dbBackup'],
             [],
             '',
             false
         );
-        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
+        $objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
         $objectManager->expects($this->once())->method('create')->willReturn($this->backupRollback);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
-        $this->log = $this->getMock('Magento\Setup\Model\WebLogger', [], [], '', false);
-        $this->filesystem = $this->getMock('Magento\Framework\Backup\Filesystem', [], [], '', false);
+        $this->log = $this->getMock(\Magento\Setup\Model\WebLogger::class, [], [], '', false);
+        $this->filesystem = $this->getMock(\Magento\Framework\Backup\Filesystem::class, [], [], '', false);
 
         $this->controller = new BackupActionItems(
             $this->objectManagerProvider,
@@ -67,11 +72,11 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
             $this->filesystem
         );
 
-        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
-        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
+        $request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
+        $response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
+        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
 
-        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
         $mvcEvent->expects($this->any())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
@@ -89,7 +94,7 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
         $this->directoryList->expects($this->once())->method('getPath')->willReturn(__DIR__);
         $this->filesystem->expects($this->once())->method('validateAvailableDiscSpace');
         $jsonModel = $this->controller->checkAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
@@ -104,7 +109,7 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
             $this->throwException(new \Exception("Test error message"))
         );
         $jsonModel = $this->controller->checkAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
@@ -116,7 +121,7 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
     {
         $this->backupRollback->expects($this->once())->method('dbBackup')->willReturn('backup/path/');
         $jsonModel = $this->controller->createAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
@@ -127,6 +132,6 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $model = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $model);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $model);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
@@ -40,7 +40,7 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $childCategory = $this->getMockBuilder('Magento\Catalog\Model\Category')
+        $childCategory = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->getMock();
         $childCategory->method('getId')->will($this->returnValue(self::CHILD_CATEGORY_ID));
@@ -50,7 +50,7 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
             . self::CHILD_CATEGORY_ID
         ));
 
-        $parentCategory = $this->getMockBuilder('Magento\Catalog\Model\Category')
+        $parentCategory = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->getMock();
         $parentCategory->method('getId')->will($this->returnValue(self::PARENT_CATEGORY_ID));
@@ -59,7 +59,7 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
 
         $categoryCollection =
             $this->objectManagerHelper->getCollectionMock(
-                'Magento\Catalog\Model\ResourceModel\Category\Collection',
+                \Magento\Catalog\Model\ResourceModel\Category\Collection::class,
                 [
                     self::PARENT_CATEGORY_ID => $parentCategory,
                     self::CHILD_CATEGORY_ID => $childCategory,
@@ -82,7 +82,7 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $categoryColFactory = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Category\CollectionFactory',
+            \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -92,7 +92,7 @@ class CategoryProcessorTest extends \PHPUnit_Framework_TestCase
         $categoryColFactory->method('create')->will($this->returnValue($categoryCollection));
 
         $categoryFactory = $this->getMock(
-            'Magento\Catalog\Model\CategoryFactory',
+            \Magento\Catalog\Model\CategoryFactory::class,
             ['create'],
             [],
             '',

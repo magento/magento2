@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Helper;
@@ -25,12 +25,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+            \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Helper\Data'
+            \Magento\Backend\Helper\Data::class
         );
     }
 
@@ -39,7 +39,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_helper = null;
         $this->_auth = null;
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+            \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
             null
         );
@@ -51,9 +51,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function _login()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         )->turnOffSecretKey();
-        $this->_auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Auth');
+        $this->_auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Backend\Model\Auth::class
+        );
         $this->_auth->login(
             \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
@@ -67,7 +69,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->_auth->logout();
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         )->turnOnSecretKey();
     }
 
@@ -79,7 +81,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testPageHelpUrl()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\RequestInterface'
+            \Magento\Framework\App\RequestInterface::class
         )->setControllerModule(
             'dummy'
         )->setControllerName(
@@ -107,10 +109,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
          * perform login
          */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         )->turnOffSecretKey();
 
-        $auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Backend\Model\Auth');
+        $auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Backend\Model\Auth::class);
         $auth->login(\Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
         $this->assertEquals(1, $this->_helper->getCurrentUserId());
 
@@ -119,7 +121,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
          */
         $auth->logout();
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         )->turnOnSecretKey();
 
         $this->assertFalse($this->_helper->getCurrentUserId());

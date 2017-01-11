@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -114,7 +114,7 @@ interface TotalInterface extends ExtensibleDataInterface
     /**
      * Gets the base shipping discount tax compensation amount.
      *
-     * @return float Base shipping discount tax compensation amount.
+     * @return float|null Base shipping discount tax compensation amount.
      */
     public function getBaseShippingDiscountTaxCompensationAmnt();
 
@@ -177,7 +177,7 @@ interface TotalInterface extends ExtensibleDataInterface
     /**
      * Gets the shipping discount tax compensation amount.
      *
-     * @return float Shipping discount tax compensation amount.
+     * @return float|null Shipping discount tax compensation amount.
      */
     public function getShippingDiscountTaxCompensationAmount();
 

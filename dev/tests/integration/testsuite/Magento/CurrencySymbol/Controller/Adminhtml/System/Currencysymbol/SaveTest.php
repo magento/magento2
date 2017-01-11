@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
@@ -20,7 +20,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         /** @var \Magento\CurrencySymbol\Model\System\Currencysymbol $currencySymbol */
         $currencySymbol = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CurrencySymbol\Model\System\Currencysymbol'
+            \Magento\CurrencySymbol\Model\System\Currencysymbol::class
         );
 
         $currencySymbolOriginal = $currencySymbol->getCurrencySymbol($currencyCode);

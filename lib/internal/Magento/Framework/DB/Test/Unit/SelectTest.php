@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit;
@@ -114,7 +114,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     protected function _getConnectionMockWithMockedQuote($callCount, $returnValue = null)
     {
         $connection = $this->getMock(
-            '\Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['supportStraightJoin', 'quote'],
             [],
             '',

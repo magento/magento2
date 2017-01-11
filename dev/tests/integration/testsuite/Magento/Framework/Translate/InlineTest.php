@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Translate;
@@ -24,10 +24,10 @@ class InlineTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
             ->setAreaCode('frontend');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\DesignInterface'
+            \Magento\Framework\View\DesignInterface::class
         )->setDesignTheme(
             'Magento/blank'
         );
@@ -36,21 +36,21 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Translate\Inline'
+            \Magento\Framework\Translate\Inline::class
         );
         $this->state = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Translate\Inline\StateInterface'
+            \Magento\Framework\Translate\Inline\StateInterface::class
         );
         /* Called getConfig as workaround for setConfig bug */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
         )->getStore(
             $this->_storeId
         )->getConfig(
             'dev/translate_inline/active'
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Config\MutableScopeConfigInterface'
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         )->setValue(
             'dev/translate_inline/active',
             true,
@@ -66,7 +66,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             $this->_model->isAllowed(
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    \Magento\Store\Model\StoreManagerInterface::class
                 )->getStore(
                     $this->_storeId
                 )
@@ -78,7 +78,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(
             $this->_model->isAllowed(
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    \Magento\Store\Model\StoreManagerInterface::class
                 )->getStore(
                     $this->_storeId
                 )
@@ -117,7 +117,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $expectedText = file_get_contents(__DIR__ . '/_files/_inline_page_expected.html');
 
         $package = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\DesignInterface'
+            \Magento\Framework\View\DesignInterface::class
         )->getDesignTheme()->getPackageCode();
         $expectedText = str_replace('{{design_package}}', $package, $expectedText);
         return [

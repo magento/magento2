@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 
 /** @var $model \Magento\User\Model\User */
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\User\Model\User');
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
 $userName = 'webapi_user';
 $model->load($userName, 'username');
 $model->delete();

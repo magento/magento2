@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Page\Config;
@@ -236,19 +236,7 @@ class Renderer implements RendererInterface
      */
     protected function renderAssetGroup(\Magento\Framework\View\Asset\PropertyGroup $group)
     {
-        $groupAssets = $this->processMerge($group->getAll(), $group);
-
-        $attributes = $this->getGroupAttributes($group);
-        $attributes = $this->addDefaultAttributes(
-            $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
-            $attributes
-        );
-
-        $groupTemplate = $this->getAssetTemplate(
-            $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
-            $attributes
-        );
-        $groupHtml = $this->renderAssetHtml($groupTemplate, $groupAssets);
+        $groupHtml = $this->renderAssetHtml($group);
         $groupHtml = $this->processIeCondition($groupHtml, $group);
         return $groupHtml;
     }
@@ -346,16 +334,22 @@ class Renderer implements RendererInterface
     /**
      * Render HTML tags referencing corresponding URLs
      *
-     * @param string $template
-     * @param array $assets
+     * @param \Magento\Framework\View\Asset\PropertyGroup $group
      * @return string
      */
-    protected function renderAssetHtml($template, $assets)
+    protected function renderAssetHtml(\Magento\Framework\View\Asset\PropertyGroup $group)
     {
+        $assets = $this->processMerge($group->getAll(), $group);
+        $attributes = $this->getGroupAttributes($group);
+
         $result = '';
         try {
             /** @var $asset \Magento\Framework\View\Asset\AssetInterface */
             foreach ($assets as $asset) {
+                $template = $this->getAssetTemplate(
+                    $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
+                    $this->addDefaultAttributes($this->getAssetContentType($asset), $attributes)
+                );
                 $result .= sprintf($template, $asset->getUrl());
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -363,6 +357,17 @@ class Renderer implements RendererInterface
             $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
         }
         return $result;
+    }
+
+    /**
+     * Get asset content type
+     * 
+     * @param \Magento\Framework\View\Asset\AssetInterface $asset
+     * @return string
+     */
+    protected function getAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset)
+    {
+        return $asset->getContentType();
     }
 
     /**

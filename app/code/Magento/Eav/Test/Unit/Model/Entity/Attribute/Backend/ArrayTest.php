@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
@@ -20,13 +20,13 @@ class ArrayTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute',
+            \Magento\Eav\Model\Entity\Attribute::class,
             ['getAttributeCode', '__wakeup'],
             [],
             '',
             false
         );
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->_model = new \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend($logger);
         $this->_model->setAttribute($this->_attribute);
     }

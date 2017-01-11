@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 require([
@@ -22,7 +22,13 @@ require([
     }
 
     function disableFieldEditMode(fieldId) {
-        byId(fieldId).prop('disabled', true);
+        var field = byId(fieldId);
+
+        field.prop('disabled', true);
+
+        if (field.next().hasClass('addafter')) {
+            field.parent().addClass('_update-attributes-disabled');
+        }
 
         if (byId(fieldId + '_hidden').length) {
             byId(fieldId + '_hidden').prop('disabled', true);
@@ -30,7 +36,13 @@ require([
     }
 
     function enableFieldEditMode(fieldId) {
-        byId(fieldId).prop('disabled', false);
+        var field = byId(fieldId);
+
+        field.prop('disabled', false);
+
+        if (field.parent().hasClass('_update-attributes-disabled')) {
+            field.parent().removeClass('_update-attributes-disabled');
+        }
 
         if (byId(fieldId + '_hidden').length) {
             byId(fieldId + '_hidden').prop('disabled', false);

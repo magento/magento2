@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -242,4 +242,21 @@
             <argument name="subDir" xsi:type="string">web</argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Framework\View\Asset\PreProcessor\Chain">
+        <arguments>
+            <argument name="compatibleTypes" xsi:type="array">
+                <item name="css" xsi:type="array">
+                    <item name="less" xsi:type="boolean">true</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="dev/restrict/allow_ips" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

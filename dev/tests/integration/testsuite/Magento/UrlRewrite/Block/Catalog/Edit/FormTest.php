@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Catalog\Edit;
@@ -31,11 +31,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = $this->objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\UrlRewrite\Block\Catalog\Edit\Form */
         $block = $layout->createBlock(
-            'Magento\UrlRewrite\Block\Catalog\Edit\Form',
+            \Magento\UrlRewrite\Block\Catalog\Edit\Form::class,
             'block',
             ['data' => $args]
         );
@@ -64,13 +64,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $args = [];
         if ($productData) {
             $args['product'] = $this->objectManager->create(
-                'Magento\Catalog\Model\Product',
+                \Magento\Catalog\Model\Product::class,
                 ['data' => $productData]
             );
         }
         if ($categoryData) {
             $args['category'] = $this->objectManager->create(
-                'Magento\Catalog\Model\Category',
+                \Magento\Catalog\Model\Category::class,
                 ['data' => $categoryData]
             );
         }
@@ -99,13 +99,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $args = [];
         if ($productData) {
             $args['product'] = $this->objectManager->create(
-                'Magento\Catalog\Model\Product',
+                \Magento\Catalog\Model\Product::class,
                 ['data' => $productData]
             );
         }
         if ($categoryData) {
             $args['category'] = $this->objectManager->create(
-                'Magento\Catalog\Model\Category',
+                \Magento\Catalog\Model\Category::class,
                 ['data' => $categoryData]
             );
         }
@@ -123,7 +123,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $args = [
             'product' => $this->objectManager->create(
-                'Magento\Catalog\Model\Product',
+                \Magento\Catalog\Model\Product::class,
                 ['data' => ['entity_id' => 1, 'name' => 'product1', 'url_key' => 'product2']]
             ),
         ];
@@ -146,11 +146,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $args = [
             'product' => $this->objectManager->create(
-                'Magento\Catalog\Model\Product',
+                \Magento\Catalog\Model\Product::class,
                 ['data' => ['entity_id' => 1, 'name' => 'product1', 'url_key' => 'product1', 'store_ids' => [1]]]
             ),
             'category' => $this->objectManager->create(
-                'Magento\Catalog\Model\Category',
+                \Magento\Catalog\Model\Category::class,
                 ['data' => ['entity_id' => 1, 'name' => 'category1', 'url_key' => 'category1', 'store_ids' => [3]]]
             ),
         ];
@@ -171,7 +171,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityStoresCategoryStoresException()
     {
         $args = ['category' => $this->objectManager->create(
-            'Magento\Catalog\Model\Category',
+            \Magento\Catalog\Model\Category::class,
             ['data' => ['entity_id' => 1, 'name' => 'product1', 'url_key' => 'product', 'initial_setup_flag' => true]]
         )];
         $form = $this->_getFormInstance($args);

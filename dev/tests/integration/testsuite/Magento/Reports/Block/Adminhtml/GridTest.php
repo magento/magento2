@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml;
@@ -15,7 +15,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $block \Magento\Reports\Block\Adminhtml\Grid */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Reports\Block\Adminhtml\Grid'
+            \Magento\Reports\Block\Adminhtml\Grid::class
         );
         $this->assertNotEmpty($block->getDateFormat());
     }

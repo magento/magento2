@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Framework\View\Element\Template $block */
+
 ?>
-<p><?php /* @escapeNotVerified */ echo __('Your current currency is: %1.', $currency->getCode()) ?></p>
-<p><a href="<?php /* @escapeNotVerified */ echo $block->getBaseUrl(); ?>" class="action continue"><span><?php /* @escapeNotVerified */ echo __('Continue') ?></span></a></p>
+<p><?php echo $block->escapeHtml(__('Your current currency is: %1.', $currency->getCode())) ?></p>
+<p><a href="<?php echo $block->escapeUrl($block->getBaseUrl()); ?>" class="action continue"><span><?php echo $block->escapeHtml(__('Continue')) ?></span></a></p>

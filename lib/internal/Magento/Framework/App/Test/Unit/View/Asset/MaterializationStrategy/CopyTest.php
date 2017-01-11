@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,9 +22,9 @@ class CopyTest extends \PHPUnit_Framework_TestCase
 
     public function testPublishFile()
     {
-        $rootDir = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $rootDir = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMock();
-        $targetDir = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $targetDir = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMock();
         $sourcePath = 'source/path/file';
         $destinationPath = 'destination/path/file';
@@ -42,7 +42,7 @@ class CopyTest extends \PHPUnit_Framework_TestCase
 
     public function testIsSupported()
     {
-        $asset = $this->getMockBuilder('Magento\Framework\View\Asset\LocalInterface')
+        $asset = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
             ->getMock();
         $this->assertTrue($this->copyPublisher->isSupported($asset));
     }

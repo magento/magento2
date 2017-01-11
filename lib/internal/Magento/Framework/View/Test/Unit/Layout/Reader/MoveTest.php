@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,16 +37,16 @@ class MoveTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->scheduledStructureMock = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure')
+        $this->scheduledStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure::class)
             ->disableOriginalConstructor()->getMock();
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->contextMock->expects($this->any())
             ->method('getScheduledStructure')
             ->willReturn($this->scheduledStructureMock);
 
-        $this->move = $this->objectManagerHelper->getObject('Magento\Framework\View\Layout\Reader\Move');
+        $this->move = $this->objectManagerHelper->getObject(\Magento\Framework\View\Layout\Reader\Move::class);
     }
 
     /**

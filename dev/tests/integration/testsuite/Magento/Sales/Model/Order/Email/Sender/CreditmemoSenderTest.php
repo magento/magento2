@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
@@ -17,19 +17,19 @@ class CreditmemoSenderTest extends \PHPUnit_Framework_TestCase
         Bootstrap::getInstance()
             ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         $order = Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order');
+            ->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $order->setCustomerEmail('customer@example.com');
 
         $creditmemo = Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Order\Creditmemo'
+            \Magento\Sales\Model\Order\Creditmemo::class
         );
         $creditmemo->setOrder($order);
 
         $this->assertEmpty($creditmemo->getEmailSent());
 
         $creditmemoSender = Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order\Email\Sender\CreditmemoSender');
+            ->create(\Magento\Sales\Model\Order\Email\Sender\CreditmemoSender::class);
         $result = $creditmemoSender->send($creditmemo, true);
 
         $this->assertTrue($result);

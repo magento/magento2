@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,16 +29,19 @@ class DownloadsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repo
     {
         parent::setUp();
 
-        $this->dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\Filter\Date')
+        $this->dateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\Filter\Date::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->downloads = $objectManager->getObject('Magento\Reports\Controller\Adminhtml\Report\Product\Downloads', [
-            'context' => $this->contextMock,
-            'fileFactory' => $this->fileFactoryMock,
-            'dateFilter' => $this->dateMock,
-        ]);
+        $this->downloads = $objectManager->getObject(
+            \Magento\Reports\Controller\Adminhtml\Report\Product\Downloads::class,
+            [
+                'context' => $this->contextMock,
+                'fileFactory' => $this->fileFactoryMock,
+                'dateFilter' => $this->dateMock,
+            ]
+        );
     }
 
     /**
@@ -46,7 +49,7 @@ class DownloadsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repo
      */
     public function testExecute()
     {
-        $titleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $titleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -83,7 +86,7 @@ class DownloadsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repo
         $this->layoutMock
             ->expects($this->once())
             ->method('createBlock')
-            ->with('Magento\Reports\Block\Adminhtml\Product\Downloads')
+            ->with(\Magento\Reports\Block\Adminhtml\Product\Downloads::class)
             ->willReturn($this->abstractBlockMock);
 
         $this->downloads->execute();

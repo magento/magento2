@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,17 +10,17 @@
 <?=  $block->getTitle();?>
 <?php echo $object->getSomeMethod($block->getHtmlId());?>
 <?php echo "Title: $title";?>
-<?php echo $block->escapeUrl($var) . $var . 'bla';?>
+<?php echo $block->escapeUrl($var) . $var . 'value';?>
 <?php echo $var;?>
 <?= $someVar?>
-<?php echo __("bla");?>
+<?php echo __("value");?>
 
 <?php echo $object->methodHtml() .
     $var .
     $block->getSomeData();
 ?>
-<?php echo '\'' . $code . '\',\'' . $block->escapeQuote($data['parentSymbol']) . '\''; ?>
-<?php echo "\"" . $code . "\",\"" . $block->escapeQuote($data['parentSymbol']) . "\""; ?>
+<?php echo '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\''; ?>
+<?php echo "\"" . $code . "\",\"" . $block->escapeHtml($data['parentSymbol']) . "\""; ?>
 
 <?php
 /* This part is commented to remove all <col> tags from the code. */

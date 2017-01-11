@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,7 +52,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->sessionsManager =  $this->getMock(
-            '\Magento\Security\Model\AdminSessionsManager',
+            \Magento\Security\Model\AdminSessionsManager::class,
             ['processLogin', 'processLogout', 'getCurrentSession'],
             [],
             '',
@@ -60,14 +60,14 @@ class AuthTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->messageManager = $this->getMockForAbstractClass(
-            '\Magento\Framework\Message\ManagerInterface',
+            \Magento\Framework\Message\ManagerInterface::class,
             ['addWarning'],
             '',
             false
         );
 
         $this->currentSession =  $this->getMock(
-            '\Magento\Security\Model\AdminSessionInfo',
+            \Magento\Security\Model\AdminSessionInfo::class,
             ['isOtherSessionsTerminated'],
             [],
             '',
@@ -75,7 +75,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->authMock =  $this->getMock(
-            '\Magento\Backend\Model\Auth',
+            \Magento\Backend\Model\Auth::class,
             [],
             [],
             '',
@@ -83,7 +83,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Security\Model\Plugin\Auth',
+            \Magento\Security\Model\Plugin\Auth::class,
             [
                 'sessionsManager' => $this->sessionsManager,
                 'messageManager' =>$this->messageManager

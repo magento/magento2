@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -27,7 +27,7 @@ class GuestCartRepositoryTest extends WebapiAbstract
             $cartId = $cart->getId();
             $cart->delete();
             /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-            $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMask');
+            $quoteIdMask = $this->objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
             $quoteIdMask->load($cartId, 'quote_id');
             $quoteIdMask->delete();
         } catch (\InvalidArgumentException $e) {
@@ -46,7 +46,7 @@ class GuestCartRepositoryTest extends WebapiAbstract
     protected function getCart($reservedOrderId)
     {
         /** @var $cart \Magento\Quote\Model\Quote */
-        $cart = $this->objectManager->get('Magento\Quote\Model\Quote');
+        $cart = $this->objectManager->get(\Magento\Quote\Model\Quote::class);
         $cart->load($reservedOrderId, 'reserved_order_id');
         if (!$cart->getId()) {
             throw new \InvalidArgumentException('There is no quote with provided reserved order ID.');
@@ -64,7 +64,7 @@ class GuestCartRepositoryTest extends WebapiAbstract
 
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
 

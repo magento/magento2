@@ -2,7 +2,7 @@
 /**
  * Integration test for \Magento\Framework\Filesystem\FileResolver
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem;
@@ -33,7 +33,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->model = Bootstrap::getObjectManager()->create('Magento\Framework\Filesystem\FileResolver');
+        $this->model = Bootstrap::getObjectManager()->create(\Magento\Framework\Filesystem\FileResolver::class);
         $this->originalPath = get_include_path();
         set_include_path('/pre/existing/paths/');
     }

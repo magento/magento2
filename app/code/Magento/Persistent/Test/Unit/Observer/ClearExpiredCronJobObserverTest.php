@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,18 +42,24 @@ class ClearExpiredCronJobObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collectionFactoryMock =
-            $this->getMock('Magento\Store\Model\ResourceModel\Website\CollectionFactory', ['create'], [], '', false);
+            $this->getMock(
+                \Magento\Store\Model\ResourceModel\Website\CollectionFactory::class,
+                ['create'],
+                [],
+                '',
+                false
+            );
         $this->sessionFactoryMock = $this->getMock(
-            'Magento\Persistent\Model\SessionFactory',
+            \Magento\Persistent\Model\SessionFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->scheduleMock = $this->getMock('\Magento\Cron\Model\Schedule', [], [], '', false);
-        $this->sessionMock = $this->getMock('\Magento\Persistent\Model\Session', [], [], '', false);
+        $this->scheduleMock = $this->getMock(\Magento\Cron\Model\Schedule::class, [], [], '', false);
+        $this->sessionMock = $this->getMock(\Magento\Persistent\Model\Session::class, [], [], '', false);
         $this->websiteCollectionMock
-            = $this->getMock('\Magento\Store\Model\ResourceModel\Website\Collection', [], [], '', false);
+            = $this->getMock(\Magento\Store\Model\ResourceModel\Website\Collection::class, [], [], '', false);
 
         $this->model = new \Magento\Persistent\Observer\ClearExpiredCronJobObserver(
             $this->collectionFactoryMock,

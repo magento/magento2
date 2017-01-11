@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 require __DIR__ . '/../../../Magento/Sales/_files/order.php';
@@ -8,5 +8,5 @@ require __DIR__ . '/../../../Magento/Sales/_files/order.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$order = $objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId('100000001');
+$order = $objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
 $order->setIsVirtual(1)->save();

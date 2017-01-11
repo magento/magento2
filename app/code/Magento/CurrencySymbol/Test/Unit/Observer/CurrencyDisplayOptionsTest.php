@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Test\Unit\Observer;
@@ -40,7 +40,7 @@ class CurrencyDisplayOptionsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockSymbolFactory = $this->getMock(
-            'Magento\CurrencySymbol\Model\System\CurrencysymbolFactory',
+            \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory::class,
             ['create'],
             [],
             '',
@@ -48,7 +48,7 @@ class CurrencyDisplayOptionsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->mockSymbol = $this->getMock(
-            'Magento\CurrencySymbol\Model\System\Currencysymbol',
+            \Magento\CurrencySymbol\Model\System\Currencysymbol::class,
             ['getCurrencySymbol'],
             [],
             '',
@@ -56,7 +56,7 @@ class CurrencyDisplayOptionsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->mockEventObserver = $this->getMock(
-            'Magento\Framework\Event\Observer',
+            \Magento\Framework\Event\Observer::class,
             ['getEvent'],
             [],
             '',
@@ -64,7 +64,7 @@ class CurrencyDisplayOptionsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->mockEvent = $this->getMock(
-            'Magento\Framework\Event',
+            \Magento\Framework\Event::class,
             ['getBaseCode', 'getCurrencyOptions'],
             [],
             '',

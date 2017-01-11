@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
@@ -38,7 +38,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
     public function execute()
     {
         $option = $this->_objectManager->create(
-            'Magento\Wishlist\Model\Item\Option'
+            \Magento\Wishlist\Model\Item\Option::class
         )->load(
             $this->getRequest()->getParam('id')
         );
@@ -61,7 +61,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex
                 return $resultForward;
             }
         }
-        $productOption = $this->_objectManager->create('Magento\Catalog\Model\Product\Option')->load($optionId);
+        $productOption = $this->_objectManager->create(\Magento\Catalog\Model\Product\Option::class)->load($optionId);
 
         if (!$productOption ||
             !$productOption->getId() ||

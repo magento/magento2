@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\Unit\Model\Plugin\Catalog\Product\Gallery;
@@ -40,7 +40,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->product = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [],
             [],
             '',
@@ -48,7 +48,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute',
+            \Magento\Eav\Model\Entity\Attribute::class,
             [],
             [],
             '',
@@ -59,7 +59,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn('media_gallery');
 
         $this->resourceModel = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Gallery',
+            \Magento\Catalog\Model\ResourceModel\Product\Gallery::class,
             [],
             [],
             '',
@@ -67,7 +67,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->mediaGalleryCreateHandler = $this->getMock(
-            'Magento\Catalog\Model\Product\Gallery\CreateHandler',
+            \Magento\Catalog\Model\Product\Gallery\CreateHandler::class,
             [],
             [],
             '',
@@ -77,7 +77,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->subject = $objectManager->getObject(
-            'Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery\CreateHandler',
+            \Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery\CreateHandler::class,
             [
                 'resourceModel' => $this->resourceModel
             ]

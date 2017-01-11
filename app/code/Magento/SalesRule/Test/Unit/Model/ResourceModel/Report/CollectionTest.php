@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -58,17 +58,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->entityFactory = $this->getMock(
-            'Magento\Framework\Data\Collection\EntityFactory',
+            \Magento\Framework\Data\Collection\EntityFactory::class,
             [],
             [],
             '',
             false
         );
 
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
 
         $this->fetchStrategy = $this->getMock(
-            'Magento\Framework\Data\Collection\Db\FetchStrategyInterface',
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class,
             [],
             [],
             '',
@@ -76,7 +76,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->eventManager = $this->getMock(
-            'Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             [],
             '',
@@ -84,7 +84,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->reportResource = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Report',
+            \Magento\Sales\Model\ResourceModel\Report::class,
             ['getConnection', 'getMainTable'],
             [],
             '',
@@ -92,7 +92,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'getDateFormatSql', 'quoteInto'],
             [],
             '',
@@ -100,7 +100,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->selectMock = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             ['from', 'where', 'group'],
             [],
             '',
@@ -119,7 +119,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('test_main_table'));
 
         $this->ruleFactory = $this->getMock(
-            'Magento\SalesRule\Model\ResourceModel\Report\RuleFactory',
+            \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory::class,
             ['create'],
             [],
             '',
@@ -219,7 +219,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function getRuleMock()
     {
         return $this->getMock(
-            'Magento\SalesRule\Model\ResourceModel\Report\Rule',
+            \Magento\SalesRule\Model\ResourceModel\Report\Rule::class,
             ['getUniqRulesNamesList'],
             [],
             '',

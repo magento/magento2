@@ -1,5 +1,5 @@
 ﻿// /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -221,9 +221,7 @@
             }
 
             input[type='checkbox'] {
-                -moz-appearance: none;
-                -webkit-appearance: none;
-                appearance: none;
+                .lib-css(appearance, none, 1);
                 background: @color-white;
                 border: 1px solid @color-gray68;
                 border-radius: 2px;

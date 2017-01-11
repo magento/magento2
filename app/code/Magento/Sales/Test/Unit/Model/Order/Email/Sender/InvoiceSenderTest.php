@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
@@ -29,7 +29,7 @@ class InvoiceSenderTest extends AbstractSenderTest
         $this->stepMockSetup();
 
         $this->invoiceResourceMock = $this->getMock(
-            '\Magento\Sales\Model\ResourceModel\Order\Invoice',
+            \Magento\Sales\Model\ResourceModel\Order\Invoice::class,
             ['saveAttribute'],
             [],
             '',
@@ -37,7 +37,7 @@ class InvoiceSenderTest extends AbstractSenderTest
         );
 
         $this->invoiceMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Invoice',
+            \Magento\Sales\Model\Order\Invoice::class,
             [
                 'getStore', '__wakeup', 'getOrder',
                 'setSendEmail', 'setEmailSent', 'getCustomerNoteNotify',
@@ -55,7 +55,7 @@ class InvoiceSenderTest extends AbstractSenderTest
             ->will($this->returnValue($this->orderMock));
 
         $this->identityContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\InvoiceIdentity',
+            \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::class,
             ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
             [],
             '',
@@ -104,7 +104,7 @@ class InvoiceSenderTest extends AbstractSenderTest
 
         if (!$configValue || $forceSyncMode) {
             $addressMock = $this->getMock(
-                'Magento\Sales\Model\Order\Address',
+                \Magento\Sales\Model\Order\Address::class,
                 [],
                 [],
                 '',
@@ -181,7 +181,10 @@ class InvoiceSenderTest extends AbstractSenderTest
                 );
             }
         } else {
-            $this->invoiceResourceMock->expects($this->once())
+            $this->invoiceResourceMock->expects($this->at(0))
+                ->method('saveAttribute')
+                ->with($this->invoiceMock, 'email_sent');
+            $this->invoiceResourceMock->expects($this->at(1))
                 ->method('saveAttribute')
                 ->with($this->invoiceMock, 'send_email');
 
@@ -227,7 +230,7 @@ class InvoiceSenderTest extends AbstractSenderTest
             ->with('sales_email/general/async_sending')
             ->willReturn(false);
 
-        $addressMock = $this->getMock('Magento\Sales\Model\Order\Address', [], [], '', false);
+        $addressMock = $this->getMock(\Magento\Sales\Model\Order\Address::class, [], [], '', false);
 
         $this->addressRenderer->expects($this->exactly($formatCallCount))
             ->method('format')
@@ -258,7 +261,6 @@ class InvoiceSenderTest extends AbstractSenderTest
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
             ->willReturn(false);
-
 
         $this->invoiceResourceMock->expects($this->once())
             ->method('saveAttribute')

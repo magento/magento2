@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element;
@@ -15,12 +15,12 @@ class TextTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->elementText = $objectManagerHelper->getObject('Magento\Framework\View\Element\Text');
+        $this->elementText = $objectManagerHelper->getObject(\Magento\Framework\View\Element\Text::class);
     }
 
     public function testSetText()
     {
-        $this->assertInstanceOf('Magento\Framework\View\Element\Text', $this->elementText->setText('example'));
+        $this->assertInstanceOf(\Magento\Framework\View\Element\Text::class, $this->elementText->setText('example'));
     }
 
     public function testGetText()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
@@ -26,13 +26,13 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new Options($this->_objectManager);
     }
 
     public function testEvaluate()
     {
-        $modelClass = 'Magento\Framework\Data\OptionSourceInterface';
+        $modelClass = \Magento\Framework\Data\OptionSourceInterface::class;
         $model = $this->getMockForAbstractClass($modelClass);
         $model->expects(
             $this->once()
@@ -76,7 +76,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         return [
             'no model' => [[], '\InvalidArgumentException', 'Options source model class is missing'],
             'wrong model class' => [
-                ['model' => 'Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\OptionsTest'],
+                ['model' => \Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\OptionsTest::class],
                 '\UnexpectedValueException',
                 'Instance of the options source model is expected',
             ]

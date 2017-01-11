@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,7 +36,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
             $require = $_option->getIsRequire() ? ' required' : '';
             $extraParams = '';
             $select = $this->getLayout()->createBlock(
-                'Magento\Framework\View\Element\Html\Select'
+                \Magento\Framework\View\Element\Html\Select::class
             )->setData(
                 [
                     'id' => 'select_' . $_option->getId(),

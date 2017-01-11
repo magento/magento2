@@ -33,11 +33,10 @@
     DirectoryIndex index.php
 
 <IfModule mod_php5.c>
-
 ############################################
 ## Adjust memory limit
 
-    php_value memory_limit 256M
+    php_value memory_limit 768M
     php_value max_execution_time 18000
 
 ############################################
@@ -55,15 +54,12 @@
 # Disable user agent verification to not break multiple image upload
 
     php_flag suhosin.session.cryptua off
-
 </IfModule>
-
 <IfModule mod_php7.c>
-
 ############################################
 ## Adjust memory limit
 
-    php_value memory_limit 256M
+    php_value memory_limit 768M
     php_value max_execution_time 18000
 
 ############################################
@@ -81,8 +77,8 @@
 # Disable user agent verification to not break multiple image upload
 
     php_flag suhosin.session.cryptua off
-
 </IfModule>
+
 
 <IfModule mod_security.c>
 ###########################################

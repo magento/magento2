@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,8 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
      */
     protected function _prepareLayout()
     {
-        $accordion = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Accordion')->setId('productAlerts');
+        $accordion = $this->getLayout()->createBlock(
+            \Magento\Backend\Block\Widget\Accordion::class)->setId('productAlerts');
         /* @var $accordion \Magento\Backend\Block\Widget\Accordion */
 
         $alertPriceAllow = $this->_scopeConfig->getValue('catalog/productalert/allow_price', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
@@ -37,7 +38,7 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
                 [
                     'title' => __('Price Alert Subscriptions'),
                     'content' => $this->getLayout()->createBlock(
-                        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Price'
+                        \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Price::class
                     )->toHtml() . '<br />',
                     'open' => true
                 ]
@@ -49,7 +50,7 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
                 [
                     'title' => __('Stock Alert Subscriptions'),
                     'content' => $this->getLayout()->createBlock(
-                        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Stock'
+                        \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Stock::class
                     ),
                     'open' => true
                 ]

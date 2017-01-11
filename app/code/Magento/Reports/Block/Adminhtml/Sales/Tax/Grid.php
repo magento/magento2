@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,8 +69,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     public function getResourceCollectionName()
     {
         return $this->getFilterData()->getData('report_type') == 'updated_at_order'
-            ? 'Magento\Tax\Model\ResourceModel\Report\Updatedat\Collection'
-            : 'Magento\Tax\Model\ResourceModel\Report\Collection';
+            ? \Magento\Tax\Model\ResourceModel\Report\Updatedat\Collection::class
+            : \Magento\Tax\Model\ResourceModel\Report\Collection::class;
     }
 
     /**
@@ -85,7 +85,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'period',
                 'sortable' => false,
                 'period_type' => $this->getPeriodType(),
-                'renderer' => 'Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date',
+                'renderer' => \Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date::class,
                 'totals_label' => __('Total'),
                 'subtotals_label' => __('Subtotal'),
                 'html_decorators' => ['nobr'],

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\TaxClass;
@@ -41,10 +41,10 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->taxClassRepository = $this->objectManager->create('Magento\Tax\Api\TaxClassRepositoryInterface');
-        $this->taxClassManagement = $this->objectManager->create('Magento\Tax\Api\TaxClassManagementInterface');
-        $this->taxClassFactory = $this->objectManager->create('Magento\Tax\Api\Data\TaxClassInterfaceFactory');
-        $this->dataObjectHelper = $this->objectManager->create('Magento\Framework\Api\DataObjectHelper');
+        $this->taxClassRepository = $this->objectManager->create(\Magento\Tax\Api\TaxClassRepositoryInterface::class);
+        $this->taxClassManagement = $this->objectManager->create(\Magento\Tax\Api\TaxClassManagementInterface::class);
+        $this->taxClassFactory = $this->objectManager->create(\Magento\Tax\Api\Data\TaxClassInterfaceFactory::class);
+        $this->dataObjectHelper = $this->objectManager->create(\Magento\Framework\Api\DataObjectHelper::class);
     }
 
     /**
@@ -59,7 +59,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
         $taxClassId = $this->taxClassRepository->save($taxClassDataObject);
         /** @var \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyFactory */
-        $taxClassKeyFactory = $this->objectManager->create('Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory');
+        $taxClassKeyFactory = $this->objectManager->create(\Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory::class);
         $taxClassKeyTypeId = $taxClassKeyFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $taxClassKeyTypeId,
@@ -67,7 +67,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
                 Key::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
                 Key::KEY_VALUE => $taxClassId,
             ],
-            '\Magento\Tax\Api\Data\TaxClassKeyInterface'
+            \Magento\Tax\Api\Data\TaxClassKeyInterface::class
         );
         $this->assertEquals(
             $taxClassId,
@@ -80,7 +80,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
                 Key::KEY_TYPE => TaxClassKeyInterface::TYPE_NAME,
                 Key::KEY_VALUE => $taxClassName,
             ],
-            '\Magento\Tax\Api\Data\TaxClassKeyInterface'
+            \Magento\Tax\Api\Data\TaxClassKeyInterface::class
         );
         $this->assertEquals(
             $taxClassId,

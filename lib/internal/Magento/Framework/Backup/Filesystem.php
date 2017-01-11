@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Backup;
-use Magento\Framework\Filesystem\DriverInterface;
+
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class to work with filesystem backups
@@ -59,6 +60,16 @@ class Filesystem extends AbstractBackup
     protected $_ftpPath;
 
     /**
+     * @var \Magento\Framework\Backup\Filesystem\Rollback\Ftp
+     */
+    protected $rollBackFtp;
+
+    /**
+     * @var \Magento\Framework\Backup\Filesystem\Rollback\Fs
+     */
+    protected $rollBackFs;
+
+    /**
      * Implementation Rollback functionality for Filesystem
      *
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -71,11 +82,7 @@ class Filesystem extends AbstractBackup
         set_time_limit(0);
         ignore_user_abort(true);
 
-        $rollbackWorker = $this->_useFtp ? new \Magento\Framework\Backup\Filesystem\Rollback\Ftp(
-            $this
-        ) : new \Magento\Framework\Backup\Filesystem\Rollback\Fs(
-            $this
-        );
+        $rollbackWorker = $this->_useFtp ? $this->getRollBackFtp() : $this->getRollBackFs();
         $rollbackWorker->run();
 
         $this->_lastOperationSucceed = true;
@@ -155,8 +162,8 @@ class Filesystem extends AbstractBackup
         if ($requiredSpace > $freeSpace) {
             throw new \Magento\Framework\Backup\Exception\NotEnoughFreeSpace(
                 new \Magento\Framework\Phrase(
-                'Warning: necessary space for backup is ' . (ceil($requiredSpace)/1024)
-                . 'MB, but your free disc space is ' . (ceil($freeSpace)/1024) . 'MB.'
+                'Warning: necessary space for backup is ' . (ceil($requiredSpace) / 1024)
+                . 'MB, but your free disc space is ' . (ceil($freeSpace) / 1024) . 'MB.'
                 )
             );
         }
@@ -298,5 +305,37 @@ class Filesystem extends AbstractBackup
     {
         $tmpName = '~tmp-' . microtime(true) . '.tar';
         return $this->getBackupsDir() . '/' . $tmpName;
+    }
+
+    /**
+     * @return \Magento\Framework\Backup\Filesystem\Rollback\Ftp
+     * @deprecated
+     */
+    protected function getRollBackFtp()
+    {
+        if (!$this->rollBackFtp) {
+            $this->rollBackFtp = ObjectManager::getInstance()->create(
+                \Magento\Framework\Backup\Filesystem\Rollback\Ftp::class,
+                ['snapshotObject' => $this]
+            );
+        }
+
+        return $this->rollBackFtp;
+    }
+
+    /**
+     * @return \Magento\Framework\Backup\Filesystem\Rollback\Fs
+     * @deprecated
+     */
+    protected function getRollBackFs()
+    {
+        if (!$this->rollBackFs) {
+            $this->rollBackFs = ObjectManager::getInstance()->create(
+                \Magento\Framework\Backup\Filesystem\Rollback\Fs::class,
+                ['snapshotObject' => $this]
+            );
+        }
+
+        return $this->rollBackFs;
     }
 }

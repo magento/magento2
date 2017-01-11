@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /* @var $block \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts */
@@ -46,9 +46,9 @@
 </script>
 <div class="grid-container no-display">
     <table class="admin__control-table" data-role="grouped-product-grid"
-        data-products="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
-                $block->getAssociatedProducts()
-        )); ?>">
+        data-products="<?php echo $block->escapeHtml(
+            $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getAssociatedProducts())
+        ); ?>">
         <thead>
             <tr class="headings">
                 <th data-column="info" class="col-draggable no-link col-info">

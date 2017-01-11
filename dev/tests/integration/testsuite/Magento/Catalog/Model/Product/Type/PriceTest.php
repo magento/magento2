@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
@@ -20,7 +20,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product\Type\Price'
+            \Magento\Catalog\Model\Product\Type\Price::class
         );
     }
 
@@ -32,7 +32,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function testGetFinalPrice()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         $product = $repository->get('simple');
         // fixture
@@ -56,7 +56,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function testGetFormatedPrice()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         $product = $repository->get('simple');
         // fixture

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,6 +18,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 /**
  * Interface StockItemCriteriaMapper
  * @package Magento\CatalogInventory\Model\ResourceModel\Stock\Status
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockItemCriteriaMapper extends GenericMapper
 {
@@ -57,7 +58,7 @@ class StockItemCriteriaMapper extends GenericMapper
      */
     protected function init()
     {
-        $this->initResource('Magento\CatalogInventory\Model\ResourceModel\Stock\Item');
+        $this->initResource(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
         $this->map['qty'] = ['main_table', 'qty', 'qty'];
     }
 
@@ -172,7 +173,7 @@ class StockItemCriteriaMapper extends GenericMapper
     {
         if ($this->stockConfiguration === null) {
             $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogInventory\Api\StockConfigurationInterface');
+                ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
         }
         return $this->stockConfiguration;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Helper;
@@ -9,6 +9,7 @@ use Magento\Weee\Helper\Data as WeeeHelper;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,14 +44,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $weeeConfig = $this->getMock('Magento\Weee\Model\Config', [], [], '', false);
+        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $weeeConfig = $this->getMock(\Magento\Weee\Model\Config::class, [], [], '', false);
         $weeeConfig->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
         $weeeConfig->expects($this->any())->method('getListPriceDisplayType')->will($this->returnValue(1));
-        $this->weeeTax = $this->getMock('Magento\Weee\Model\Tax', [], [], '', false);
+        $this->weeeTax = $this->getMock(\Magento\Weee\Model\Tax::class, [], [], '', false);
         $this->weeeTax->expects($this->any())->method('getWeeeAmount')->will($this->returnValue('11.26'));
         $this->taxData = $this->getMock(
-            'Magento\Tax\Helper\Data',
+            \Magento\Tax\Helper\Data::class,
             ['getPriceDisplayType', 'priceIncludesTax'],
             [],
             '',
@@ -62,7 +63,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'taxData' => $this->taxData
         ];
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->helperData = $helper->getObject('Magento\Weee\Helper\Data', $arguments);
+        $this->helperData = $helper->getObject(\Magento\Weee\Helper\Data::class, $arguments);
     }
 
     public function testGetAmount()
@@ -78,7 +79,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     private function setupOrderItem()
     {
-        $orderItem = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
+        $orderItem = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
             ->getMock();
@@ -226,7 +227,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('priceIncludesTax')
             ->willReturn($priceIncludesTax);
 
-        $productSimple = $this->getMock('\Magento\Catalog\Model\Product\Type\Simple', ['getId'], [], '', false);
+        $productSimple = $this->getMock(\Magento\Catalog\Model\Product\Type\Simple::class, ['getId'], [], '', false);
         $productSimple->expects($this->at(0))
             ->method('getId')
             ->will($this->returnValue($prodId1));
@@ -234,15 +235,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($prodId2));
 
-        $productInstance = $this->getMock('\Magento\Bundle\Model\Product\Type', [], [], '', false);
+        $productInstance = $this->getMock(\Magento\Bundle\Model\Product\Type::class, [], [], '', false);
         $productInstance->expects($this->any())
             ->method('getSelectionsCollection')
             ->will($this->returnValue([$productSimple]));
 
-        $store=$this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $store=$this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->getMock(
-            '\Magento\Bundle\Model\Product',
+            \Magento\Bundle\Model\Product::class,
             ['getTypeInstance', 'getStoreId', 'getStore', 'getTypeId'],
             [],
             '',
@@ -261,7 +262,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeId')
             ->will($this->returnValue('bundle'));
 
-        $registry=$this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $registry=$this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $registry->expects($this->any())
             ->method('registry')
             ->with('current_product')
@@ -289,7 +290,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetAppliedSimple()
     {
         $testArray = ['key' => 'value'];
-        $itemProductSimple=$this->getMock('\Magento\Quote\Model\Quote\Item', ['getWeeeTaxApplied'], [], '', false);
+        $itemProductSimple=$this->getMock(\Magento\Quote\Model\Quote\Item::class, ['getWeeeTaxApplied'], [], '', false);
         $itemProductSimple->expects($this->any())
             ->method('getHasChildren')
             ->will($this->returnValue(false));
@@ -308,8 +309,20 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $testArray = array_merge($testArray1, $testArray2);
 
-        $itemProductSimple1=$this->getMock('\Magento\Quote\Model\Quote\Item', ['getWeeeTaxApplied'], [], '', false);
-        $itemProductSimple2=$this->getMock('\Magento\Quote\Model\Quote\Item', ['getWeeeTaxApplied'], [], '', false);
+        $itemProductSimple1=$this->getMock(
+            \Magento\Quote\Model\Quote\Item::class,
+            ['getWeeeTaxApplied'],
+            [],
+            '',
+            false
+        );
+        $itemProductSimple2=$this->getMock(
+            \Magento\Quote\Model\Quote\Item::class,
+            ['getWeeeTaxApplied'],
+            [],
+            '',
+            false
+        );
 
         $itemProductSimple1->expects($this->any())
             ->method('getWeeeTaxApplied')
@@ -320,7 +333,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(\Zend_Json::encode($testArray2)));
 
         $itemProductBundle=$this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getHasChildren', 'isChildrenCalculated', 'getChildren'],
             [],
             '',
@@ -345,7 +358,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $testAmountRow = 34;
 
         $itemProductSimple=$this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'],
             [],
             '',
@@ -377,14 +390,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $testTotalRow = $testAmountRow1 + $testAmountRow2;
 
         $itemProductSimple1=$this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'],
             [],
             '',
             false
         );
         $itemProductSimple2=$this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getWeeeTaxAppliedAmount', 'getWeeeTaxAppliedRowAmount'],
             [],
             '',
@@ -406,7 +419,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($testAmountRow2));
 
         $itemProductBundle=$this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getHasChildren', 'isChildrenCalculated', 'getChildren'],
             [],
             '',
@@ -428,7 +441,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProductWeeeAttributesForDisplay()
     {
-        $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->product->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($store));
@@ -439,13 +452,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetTaxDisplayConfig()
     {
         $expected = 1;
-        $taxData = $this->getMock('\Magento\Tax\Helper\Data', ['getPriceDisplayType'], [], '', false);
+        $taxData = $this->getMock(\Magento\Tax\Helper\Data::class, ['getPriceDisplayType'], [], '', false);
         $taxData->expects($this->any())->method('getPriceDisplayType')->will($this->returnValue($expected));
         $arguments = [
             'taxData' => $taxData,
         ];
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $helperData = $helper->getObject('Magento\Weee\Helper\Data', $arguments);
+        $helperData = $helper->getObject(\Magento\Weee\Helper\Data::class, $arguments);
 
         $this->assertEquals($expected, $helperData->getTaxDisplayConfig());
     }
@@ -456,14 +469,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $item2Weee = 7;
         $expected = $item1Weee + $item2Weee;
         $itemProductSimple1 = $this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getWeeeTaxAppliedRowAmount'],
             [],
             '',
             false
         );
         $itemProductSimple2 = $this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getWeeeTaxAppliedRowAmount'],
             [],
             '',
@@ -487,14 +500,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $item2BaseWeee = 3;
         $expected = $item1BaseWeee + $item2BaseWeee;
         $itemProductSimple1 = $this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getBaseWeeeTaxAppliedRowAmount'],
             [],
             '',
             false
         );
         $itemProductSimple2 = $this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getBaseWeeeTaxAppliedRowAmount'],
             [],
             '',

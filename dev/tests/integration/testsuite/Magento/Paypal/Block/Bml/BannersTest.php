@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Bml;
@@ -31,7 +31,7 @@ class BannersTest extends \PHPUnit_Framework_TestCase
         $methodWppPeBml
     ) {
         /** @var \Magento\Paypal\Model\Config|\PHPUnit_Framework_MockObject_MockObject $paypalConfig */
-        $paypalConfig = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
+        $paypalConfig = $this->getMock(\Magento\Paypal\Model\Config::class, [], [], '', false);
         $paypalConfig->expects($this->any())->method('getBmlPublisherId')->will($this->returnValue($publisherId));
         $paypalConfig->expects($this->any())->method('getBmlDisplay')->will($this->returnValue($display));
         $paypalConfig->expects($this->any())->method('getBmlPosition')->will($this->returnValue($configPosition));
@@ -52,9 +52,9 @@ class BannersTest extends \PHPUnit_Framework_TestCase
             );
 
         /** @var \Magento\Framework\View\LayoutInterface $layout */
-        $layout = Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface');
+        $layout = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class);
         $block = $layout->createBlock(
-            'Magento\Paypal\Block\Bml\Banners',
+            \Magento\Paypal\Block\Bml\Banners::class,
             '',
             [
                 'paypalConfig' => $paypalConfig,

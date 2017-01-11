@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,52 +38,56 @@ class Curl extends Conditions implements SalesRuleInterface
      */
     protected $mapTypeParams = [
         'Subtotal' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
             'attribute' => 'base_subtotal',
         ],
         'Total Items Quantity' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
             'attribute' => 'total_qty',
         ],
         'Conditions combination' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Combine',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
             'aggregator' => 'all',
             'value' => '1',
         ],
         'Products subselection' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Product\Subselect',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Subselect::class,
             'attribute' => 'qty',
             'operator' => '==',
             'value' => '1',
             'aggregator' => 'all',
         ],
         'Product attribute combination' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Product\Found',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
             'value' => '1',
             'aggregator' => 'all',
         ],
         'Shipping Country' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
             'attribute' => 'country_id',
         ],
         'Shipping Postcode' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
             'attribute' => 'postcode',
         ],
+        'Total Weight' => [
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
+            'attribute' => 'weight',
+        ],
         'Category' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
             'attribute' => 'category_ids',
         ],
         'Price in cart' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
             'attribute' => 'quote_item_price',
         ],
         'Quantity in cart' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
             'attribute' => 'quote_item_qty',
         ],
         'Row total in cart' => [
-            'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+            'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
             'attribute' => 'quote_item_row_total',
         ]
     ];
@@ -207,7 +211,7 @@ class Curl extends Conditions implements SalesRuleInterface
 
         if (isset($this->data['actions_serialized'])) {
             $this->mapTypeParams['Conditions combination']['type'] =
-                'Magento\SalesRule\Model\Rule\Condition\Product\Combine';
+                \Magento\SalesRule\Model\Rule\Condition\Product\Combine::class;
             $this->data['rule']['actions'] = $this->prepareCondition($this->data['actions_serialized']);
             unset($this->data['actions_serialized']);
         }

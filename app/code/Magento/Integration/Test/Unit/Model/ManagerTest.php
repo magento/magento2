@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model;
@@ -39,7 +39,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->integrationServiceMock = $this->getMockBuilder(
-            '\Magento\Integration\Api\IntegrationServiceInterface'
+            \Magento\Integration\Api\IntegrationServiceInterface::class
         )->disableOriginalConstructor()->setMethods(
             [
                 'findByName',
@@ -53,19 +53,19 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ]
         )->getMock();
 
-        $this->aclRetriever = $this->getMockBuilder('Magento\Authorization\Model\Acl\AclRetriever')
+        $this->aclRetriever = $this->getMockBuilder(\Magento\Authorization\Model\Acl\AclRetriever::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->configMock = $this->getMockBuilder('Magento\Integration\Model\Config')
+        $this->configMock = $this->getMockBuilder(\Magento\Integration\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->integrationManager = $objectManagerHelper->getObject(
-            'Magento\Integration\Model\ConfigBasedIntegrationManager',
+            \Magento\Integration\Model\ConfigBasedIntegrationManager::class,
             [
                 'integrationService' => $this->integrationServiceMock,
                 'aclRetriever' => $this->aclRetriever,
@@ -104,12 +104,12 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
-        $intLookupData1 = $this->getMockBuilder('Magento\Integration\Model\Integration')
+        $intLookupData1 = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $intLookupData1->expects($this->any())->method('getId')->willReturn(1);
-        $intLookupData2 = $this->getMockBuilder('Magento\Integration\Model\Integration')
+        $intLookupData2 = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -180,7 +180,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'Magento_Customer::customer'
         ];
 
-        $integrationObject = $this->getMockBuilder('Magento\Integration\Model\Integration')
+        $integrationObject = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -221,7 +221,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $integrationObject = $this->getMockBuilder('Magento\Integration\Model\Integration')
+        $integrationObject = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

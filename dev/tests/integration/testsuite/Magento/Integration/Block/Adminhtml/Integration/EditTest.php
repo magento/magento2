@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -26,14 +26,14 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->editBlock = Bootstrap::getObjectManager()
-            ->create('Magento\Integration\Block\Adminhtml\Integration\Edit');
+            ->create(\Magento\Integration\Block\Adminhtml\Integration\Edit::class);
     }
 
     public function testGetHeaderTextNewIntegration()
     {
         $this->assertEquals('New Integration', $this->editBlock->getHeaderText()->getText());
         $buttonList = Bootstrap::getObjectManager()
-            ->get('Magento\Backend\Block\Widget\Context')
+            ->get(\Magento\Backend\Block\Widget\Context::class)
             ->getButtonList()
             ->getItems();
 
@@ -66,7 +66,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var \Magento\Framework\Registry $registry */
-        $registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
         $registry->register(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION, $integrationData);
 
         $headerText = $this->editBlock->getHeaderText();
@@ -89,19 +89,19 @@ class EditTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var \Magento\Framework\Registry $registry */
-        $registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
         $registry->register(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION, $integrationData);
 
         /** @var \Magento\Integration\Block\Adminhtml\Integration\Edit $editBlock */
         $editBlock = Bootstrap::getObjectManager()
-            ->create('Magento\Integration\Block\Adminhtml\Integration\Edit');
+            ->create(\Magento\Integration\Block\Adminhtml\Integration\Edit::class);
 
         $headerText = $editBlock->getHeaderText();
         $this->assertEquals("Edit Integration '%1'", $headerText->getText());
         $this->assertEquals($integrationName, $headerText->getArguments()[0]);
 
         $buttonList = Bootstrap::getObjectManager()
-            ->get('Magento\Backend\Block\Widget\Context')
+            ->get(\Magento\Backend\Block\Widget\Context::class)
             ->getButtonList()
             ->getItems();
 
@@ -116,7 +116,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFormActionUrl()
     {
-        $baseUrl = Bootstrap::getObjectManager()->get('Magento\Framework\Url')->getBaseUrl();
+        $baseUrl = Bootstrap::getObjectManager()->get(\Magento\Framework\Url::class)->getBaseUrl();
         $this->assertContains($baseUrl, $this->editBlock->getFormActionUrl());
 
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Request;
@@ -121,7 +121,7 @@ class Mapper
         switch ($query['type']) {
             case QueryInterface::TYPE_MATCH:
                 $query = $this->objectManager->create(
-                    'Magento\Framework\Search\Request\Query\Match',
+                    \Magento\Framework\Search\Request\Query\Match::class,
                     [
                         'name' => $query['name'],
                         'value' => $query['value'],
@@ -141,7 +141,7 @@ class Mapper
                     throw new \Exception('Reference is not provided');
                 }
                 $query = $this->objectManager->create(
-                    'Magento\Framework\Search\Request\Query\Filter',
+                    \Magento\Framework\Search\Request\Query\Filter::class,
                     [
                         'name' => $query['name'],
                         'boost' => isset($query['boost']) ? $query['boost'] : 1,
@@ -153,7 +153,7 @@ class Mapper
             case QueryInterface::TYPE_BOOL:
                 $aggregatedByType = $this->aggregateQueriesByType($query['queryReference']);
                 $query = $this->objectManager->create(
-                    'Magento\Framework\Search\Request\Query\BoolExpression',
+                    \Magento\Framework\Search\Request\Query\BoolExpression::class,
                     array_merge(
                         ['name' => $query['name'], 'boost' => isset($query['boost']) ? $query['boost'] : 1],
                         $aggregatedByType
@@ -190,7 +190,7 @@ class Mapper
         switch ($filter['type']) {
             case FilterInterface::TYPE_TERM:
                 $filter = $this->objectManager->create(
-                    'Magento\Framework\Search\Request\Filter\Term',
+                    \Magento\Framework\Search\Request\Filter\Term::class,
                     [
                         'name' => $filter['name'],
                         'field' => $filter['field'],
@@ -200,7 +200,7 @@ class Mapper
                 break;
             case FilterInterface::TYPE_RANGE:
                 $filter = $this->objectManager->create(
-                    'Magento\Framework\Search\Request\Filter\Range',
+                    \Magento\Framework\Search\Request\Filter\Range::class,
                     [
                         'name' => $filter['name'],
                         'field' => $filter['field'],
@@ -211,7 +211,7 @@ class Mapper
                 break;
             case FilterInterface::TYPE_WILDCARD:
                 $filter = $this->objectManager->create(
-                    'Magento\Framework\Search\Request\Filter\Wildcard',
+                    \Magento\Framework\Search\Request\Filter\Wildcard::class,
                     [
                         'name' => $filter['name'],
                         'field' => $filter['field'],
@@ -222,7 +222,7 @@ class Mapper
             case FilterInterface::TYPE_BOOL:
                 $aggregatedByType = $this->aggregateFiltersByType($filter['filterReference']);
                 $filter = $this->objectManager->create(
-                    'Magento\Framework\Search\Request\Filter\BoolExpression',
+                    \Magento\Framework\Search\Request\Filter\BoolExpression::class,
                     array_merge(
                         ['name' => $filter['name']],
                         $aggregatedByType
@@ -327,13 +327,13 @@ class Mapper
             switch ($bucketData['type']) {
                 case BucketInterface::TYPE_TERM:
                     $bucket = $this->objectManager->create(
-                        'Magento\Framework\Search\Request\Aggregation\TermBucket',
+                        \Magento\Framework\Search\Request\Aggregation\TermBucket::class,
                         $arguments
                     );
                     break;
                 case BucketInterface::TYPE_RANGE:
                     $bucket = $this->objectManager->create(
-                        'Magento\Framework\Search\Request\Aggregation\RangeBucket',
+                        \Magento\Framework\Search\Request\Aggregation\RangeBucket::class,
                         array_merge(
                             $arguments,
                             ['ranges' => $this->mapRanges($bucketData)]
@@ -342,7 +342,7 @@ class Mapper
                     break;
                 case BucketInterface::TYPE_DYNAMIC:
                     $bucket = $this->objectManager->create(
-                        'Magento\Framework\Search\Request\Aggregation\DynamicBucket',
+                        \Magento\Framework\Search\Request\Aggregation\DynamicBucket::class,
                         array_merge(
                             $arguments,
                             ['method' => $bucketData['method']]
@@ -371,7 +371,7 @@ class Mapper
             $metrics = $bucketData['metric'];
             foreach ($metrics as $metric) {
                 $metricObjects[] = $this->objectManager->create(
-                    'Magento\Framework\Search\Request\Aggregation\Metric',
+                    \Magento\Framework\Search\Request\Aggregation\Metric::class,
                     [
                         'type' => $metric['type']
                     ]
@@ -394,7 +394,7 @@ class Mapper
             $ranges = $bucketData['range'];
             foreach ($ranges as $range) {
                 $rangeObjects[] = $this->objectManager->create(
-                    'Magento\Framework\Search\Request\Aggregation\Range',
+                    \Magento\Framework\Search\Request\Aggregation\Range::class,
                     [
                         'from' => $range['from'],
                         'to' => $range['to']

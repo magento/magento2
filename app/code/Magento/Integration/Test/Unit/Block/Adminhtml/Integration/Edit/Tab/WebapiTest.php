@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,23 +51,23 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->rootResource = $this->getMockBuilder('Magento\Framework\Acl\RootResource')
+        $this->rootResource = $this->getMockBuilder(\Magento\Framework\Acl\RootResource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->aclResourceProvider = $this->getMockBuilder('Magento\Framework\Acl\AclResource\ProviderInterface')
+        $this->aclResourceProvider = $this->getMockBuilder(\Magento\Framework\Acl\AclResource\ProviderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->integrationHelper = $this->getMockBuilder('Magento\Integration\Helper\Data')
+        $this->integrationHelper = $this->getMockBuilder(\Magento\Integration\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->integrationService = $this->getMockBuilder('Magento\Integration\Model\IntegrationService')
+        $this->integrationService = $this->getMockBuilder(\Magento\Integration\Model\IntegrationService::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -155,7 +155,8 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     {
         $this->webapiBlock = $this->getWebapiBlock();
         $resources = [
-            1 => [ 'children' => [1, 2, 3] ]
+            ['id' => 'Magento_Backend::admin', 'children' => ['resource1', 'resource2', 'resource3']],
+            ['id' => 'Invalid_Node', 'children' => ['resource4', 'resource5', 'resource6']]
         ];
         $this->aclResourceProvider->expects($this->once())
             ->method('getAclResources')
@@ -163,7 +164,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         $rootArray = "rootArrayValue";
         $this->integrationHelper->expects($this->once())
             ->method('mapResources')
-            ->with([1, 2, 3])
+            ->with(['resource1', 'resource2', 'resource3'])
             ->will($this->returnValue($rootArray));
         $this->assertEquals($rootArray, $this->webapiBlock->getTree());
     }
@@ -197,7 +198,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         return [
             'root resource in array' => [
                 2,
-                ['all_resources' => 0, 'resource'=>[2, 3]],
+                ['all_resources' => 0, 'resource' => [2, 3]],
                 true
             ],
             'root resource not in array' => [
@@ -233,7 +234,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
             ->willReturnOnConsecutiveCalls(false, $integrationData, $integrationData);
 
         return $this->objectManager->getObject(
-            'Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Webapi',
+            \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Webapi::class,
             [
                 'registry' => $this->registry,
                 'rootResource' => $this->rootResource,

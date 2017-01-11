@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter;
@@ -30,7 +30,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
         $this->_testFile = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/email.html';
         $this->_stringsCount = count(file($this->_testFile));
 
-        $this->_adapter = (new ObjectManager($this))->getObject('Magento\Setup\Module\I18n\Parser\Adapter\Html');
+        $this->_adapter = (new ObjectManager($this))->getObject(\Magento\Setup\Module\I18n\Parser\Adapter\Html::class);
     }
 
     public function testParse()

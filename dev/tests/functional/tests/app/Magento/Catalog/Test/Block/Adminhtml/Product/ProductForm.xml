@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -50,6 +50,17 @@
                 <selector>[name="product[news_to_date]"]</selector>
                 <strategy>css selector</strategy>
             </news_to_date>
+            <country_of_manufacture>
+                <input>select</input>
+            </country_of_manufacture>
+            <use_default_name>
+                <selector>[name="use_default[name]"]</selector>
+                <input>checkbox</input>
+            </use_default_name>
+            <use_default_price>
+                <selector>[name="use_default[price]"]</selector>
+                <input>checkbox</input>
+            </use_default_price>
         </fields>
     </product-details>
     <advanced-pricing>
@@ -140,7 +151,7 @@
         </fields>
     </attributes>
     <gallery>
-        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\BlockGallery</class>
         <selector>[data-index='block_gallery']</selector>
         <strategy>css selector</strategy>
     </gallery>

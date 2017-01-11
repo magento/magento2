@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,10 +32,9 @@ class Review extends AbstractReview
         $shippingElement = $this->_rootElement->find(
             $this->shippingMethod,
             Locator::SELECTOR_CSS,
-            'Magento\Paypal\Test\Block\Express\Review\ShippingoptgroupElement'
+            \Magento\Paypal\Test\Block\Express\Review\ShippingoptgroupElement::class
         );
         $shippingElement->setValue($shippingMethod['shipping_service'] . '/' . $shippingMethod['shipping_method']);
-        $this->waitForElementVisible('#review-please-wait');
         $this->waitForElementNotVisible('#review-please-wait');
     }
 

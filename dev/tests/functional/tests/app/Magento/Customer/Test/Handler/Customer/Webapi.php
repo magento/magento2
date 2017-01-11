@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,8 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         ],
         'country_id' => [
             'United States' => 'US',
-            'United Kingdom' => 'GB'
+            'United Kingdom' => 'GB',
+            'Germany' => 'DE'
         ],
         'region_id' => [
             'California' => 12,
@@ -78,6 +79,7 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         $data['customer'] = $this->replaceMappingData($customer->getData());
         $data['customer']['group_id'] = $this->getCustomerGroup($customer);
         $data['password'] = $data['customer']['password'];
+        $data['customer']['website_id'] = $this->getCustomerWebsite($customer);
         unset($data['customer']['password']);
         unset($data['customer']['password_confirmation']);
         $data = $this->prepareAddressData($data);
@@ -180,5 +182,16 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         }
 
         return $addressData;
+    }
+
+    /**
+     * Prepare customer website data.
+     *
+     * @param Customer $customer
+     * @return int
+     */
+    private function getCustomerWebsite(Customer $customer)
+    {
+        return $customer->getDataFieldConfig('website_id')['source']->getWebsite()->getWebsiteId();
     }
 }

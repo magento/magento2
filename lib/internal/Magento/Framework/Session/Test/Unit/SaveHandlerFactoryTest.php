@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session\Test\Unit;
@@ -16,7 +16,7 @@ class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $saveHandler = $this->getMock($saveClass);
         $objectManager = $this->getMock(
-            '\Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create'],
             [],
             '',
@@ -35,7 +35,7 @@ class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $model = new SaveHandlerFactory($objectManager, $handlers);
         $result = $model->create($saveMethod);
         $this->assertInstanceOf($saveClass, $result);
-        $this->assertInstanceOf('\Magento\Framework\Session\SaveHandler\Native', $result);
+        $this->assertInstanceOf(\Magento\Framework\Session\SaveHandler\Native::class, $result);
         $this->assertInstanceOf('\SessionHandlerInterface', $result);
     }
 
@@ -44,7 +44,7 @@ class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function createDataProvider()
     {
-        return [[[], 'Magento\Framework\Session\SaveHandler\Native', 'files']];
+        return [[[], \Magento\Framework\Session\SaveHandler\Native::class, 'files']];
     }
 
     /**
@@ -54,7 +54,7 @@ class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateInvalid()
     {
         $invalidSaveHandler = new \Magento\Framework\DataObject();
-        $objectManager = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
+        $objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager->expects($this->once())

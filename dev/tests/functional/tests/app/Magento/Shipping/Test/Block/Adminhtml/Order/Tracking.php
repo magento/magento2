@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,7 @@ class Tracking extends Block
     protected function getItemTrackingBlock($index)
     {
         return $this->blockFactory->create(
-            'Magento\Shipping\Test\Block\Adminhtml\Order\Tracking\Item',
+            \Magento\Shipping\Test\Block\Adminhtml\Order\Tracking\Item::class,
             ['element' => $this->_rootElement->find(sprintf($this->itemTracking, $index), Locator::SELECTOR_XPATH)]
         );
     }

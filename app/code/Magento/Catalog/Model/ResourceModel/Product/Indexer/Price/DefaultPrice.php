@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
@@ -368,7 +368,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                 'select' => $select,
                 'entity_field' => new \Zend_Db_Expr('e.entity_id'),
                 'website_field' => new \Zend_Db_Expr('cw.website_id'),
-                'store_field' => new \Zend_Db_Expr('cs.store_id')
+                'store_field' => new \Zend_Db_Expr('cs.store_id'),
             ]
         );
 

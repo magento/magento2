@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Product;
@@ -12,7 +12,7 @@ class ListTest extends \PHPUnit_Framework_TestCase
         $childBlock = new \Magento\Framework\DataObject();
 
         $block = $this->getMock(
-            'Magento\Catalog\Block\Product\ListProduct',
+            \Magento\Catalog\Block\Product\ListProduct::class,
             ['getChildBlock'],
             [],
             '',

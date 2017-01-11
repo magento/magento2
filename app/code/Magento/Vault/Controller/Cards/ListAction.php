@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Controller\Cards;
@@ -41,7 +41,7 @@ class ListAction extends CardsManagement
     public function execute()
     {
         $resultPage = $this->pageFactory->create();
-        $resultPage->getConfig()->getTitle()->set(__('My Credit Cards'));
+        $resultPage->getConfig()->getTitle()->set(__('Stored Payment Methods'));
 
         return $resultPage;
     }

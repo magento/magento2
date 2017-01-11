@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Cart;
@@ -15,7 +15,7 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
     {
         $orderItemIds = $this->getRequest()->getParam('order_items', []);
         if (is_array($orderItemIds)) {
-            $itemsCollection = $this->_objectManager->create('Magento\Sales\Model\Order\Item')
+            $itemsCollection = $this->_objectManager->create(\Magento\Sales\Model\Order\Item::class)
                 ->getCollection()
                 ->addIdFilter($orderItemIds)
                 ->load();
@@ -34,7 +34,7 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
                         $e,
                         __('We can\'t add this item to your shopping cart right now.')
                     );
-                    $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                    $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                     return $this->_goBack();
                 }
             }

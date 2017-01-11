@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model;
@@ -102,7 +102,8 @@ class PhpReadinessCheck
 
         $settings = array_merge(
             $this->checkXDebugNestedLevel(),
-            $this->checkPopulateRawPostSetting()
+            $this->checkPopulateRawPostSetting(),
+            $this->checkFunctionsExistence()
         );
 
         foreach ($settings as $setting) {
@@ -202,8 +203,8 @@ class PhpReadinessCheck
             $message = sprintf(
                 'Your current PHP memory limit is %s.
                  Magento 2 requires it to be set to %s or more.
-                 As a user with root privileges, edit your php.ini file to increase memory_limit. 
-                 (The command php --ini tells you where it is located.) 
+                 As a user with root privileges, edit your php.ini file to increase memory_limit.
+                 (The command php --ini tells you where it is located.)
                  After that, restart your web server and try again.',
                 $currentMemoryLimit,
                 $minimumRequiredMemoryLimit
@@ -217,8 +218,8 @@ class PhpReadinessCheck
             $message = sprintf(
                 'Your current PHP memory limit is %s.
                  We recommend it to be set to %s or more to use Setup Wizard.
-                 As a user with root privileges, edit your php.ini file to increase memory_limit. 
-                 (The command php --ini tells you where it is located.) 
+                 As a user with root privileges, edit your php.ini file to increase memory_limit.
+                 (The command php --ini tells you where it is located.)
                  After that, restart your web server and try again.',
                 $currentMemoryLimit,
                 $recommendedForUpgradeMemoryLimit
@@ -312,6 +313,33 @@ class PhpReadinessCheck
             'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
             'error' => $error
         ];
+
+        return $data;
+    }
+
+    /**
+     * Check whether all special functions exists
+     *
+     * @return array
+     */
+    private function checkFunctionsExistence()
+    {
+        $data = [];
+        $requiredFunctions = [
+            [
+                'name' => 'imagecreatefromjpeg',
+                'message' => 'You must have installed GD library with --with-jpeg-dir=DIR option.',
+                'helpUrl' => 'http://php.net/manual/en/image.installation.php',
+            ],
+        ];
+
+        foreach ($requiredFunctions as $function) {
+            $data['missed_function_' . $function['name']] = [
+                'message' => $function['message'],
+                'helpUrl' => $function['helpUrl'],
+                'error' => !function_exists($function['name']),
+            ];
+        }
 
         return $data;
     }

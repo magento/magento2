@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,12 +18,12 @@ class XssProtectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValue($userAgent, $expectedHeader)
     {
-        $headerServiceMock = $this->getMockBuilder('Magento\Framework\HTTP\Header')
+        $headerServiceMock = $this->getMockBuilder(\Magento\Framework\HTTP\Header::class)
             ->disableOriginalConstructor()
             ->getMock();
         $headerServiceMock->expects($this->once())->method('getHttpUserAgent')->willReturn($userAgent);
         $model = (new ObjectManager($this))->getObject(
-            'Magento\Framework\App\Response\HeaderProvider\XssProtection',
+            \Magento\Framework\App\Response\HeaderProvider\XssProtection::class,
             ['headerService' => $headerServiceMock]
         );
         $this->assertSame($expectedHeader, $model->getValue());

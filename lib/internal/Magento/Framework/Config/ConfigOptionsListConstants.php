@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,6 @@ class ConfigOptionsListConstants
      */
     const INPUT_KEY_ENCRYPTION_KEY = 'key';
     const INPUT_KEY_SESSION_SAVE = 'session-save';
-    const INPUT_KEY_DEFINITION_FORMAT = 'definition-format';
     const INPUT_KEY_DB_HOST = 'db-host';
     const INPUT_KEY_DB_NAME = 'db-name';
     const INPUT_KEY_DB_USER = 'db-user';
@@ -50,6 +49,9 @@ class ConfigOptionsListConstants
     const INPUT_KEY_SKIP_DB_VALIDATION = 'skip-db-validation';
     const INPUT_KEY_CACHE_HOSTS = 'http-cache-hosts';
     /**#@-*/
+
+    /** @deprecated */
+    const INPUT_KEY_DEFINITION_FORMAT = 'definition-format';
 
     /**#@+
      * Values for session-save

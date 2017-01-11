@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
+use Magento\Framework\App\ObjectManager;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -17,6 +19,11 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
 
     /** @var UrlPersistInterface */
     protected $urlPersist;
+
+    /**
+     * @var UrlRewriteBunchReplacer
+     */
+    private $urlRewriteBunchReplacer;
 
     /** @var UrlRewriteHandler */
     protected $urlRewriteHandler;
@@ -34,6 +41,21 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
         $this->urlRewriteHandler = $urlRewriteHandler;
+    }
+
+    /**
+     * Retrieve Url Rewrite Replacer based on bunches
+     *
+     * @deprecated
+     * @return UrlRewriteBunchReplacer
+     */
+    private function getUrlRewriteBunchReplacer()
+    {
+        if (!$this->urlRewriteBunchReplacer) {
+            $this->urlRewriteBunchReplacer = ObjectManager::getInstance()->get(UrlRewriteBunchReplacer::class);
+        }
+
+        return $this->urlRewriteBunchReplacer;
     }
 
     /**
@@ -57,7 +79,8 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
                 $this->categoryUrlRewriteGenerator->generate($category),
                 $this->urlRewriteHandler->generateProductUrlRewrites($category)
             );
-            $this->urlPersist->replace($urlRewrites);
+
+            $this->getUrlRewriteBunchReplacer()->doBunchReplace($urlRewrites);
         }
     }
 }

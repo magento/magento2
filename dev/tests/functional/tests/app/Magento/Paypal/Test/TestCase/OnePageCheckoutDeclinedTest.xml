@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutDeclinedTest" summary="Error message during OnePageCheckout">
+        <variation name="OnePageCheckoutPayflowProWithAVSStreetDoesNotMatch" summary="Place Order via Payflow Pro with AVS Street verification fail" ticketId="MAGETWO-37480">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">AVS_street_does_not_match_address</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">payflowpro</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="configData" xsi:type="string">payflowpro, payflowpro_avs_street_does_not_match</data>
+            <data name="expectedErrorMessage" xsi:type="string">An error occurred on the server. Please try to place the order again.</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
+        </variation>
+    </testCase>
+</config>

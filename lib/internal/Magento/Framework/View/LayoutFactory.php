@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View;
@@ -32,7 +32,7 @@ class LayoutFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\View\LayoutInterface'
+        $instanceName = \Magento\Framework\View\LayoutInterface::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

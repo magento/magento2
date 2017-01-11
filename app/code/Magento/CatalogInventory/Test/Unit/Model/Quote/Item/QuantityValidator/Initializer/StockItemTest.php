@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer;
 
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StockItemTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -32,21 +35,21 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->quoteItemQtyList = $this
-            ->getMockBuilder('Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList')
+            ->getMockBuilder(\Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->typeConfig = $this
-            ->getMockBuilder('Magento\Catalog\Model\ProductTypes\ConfigInterface')
+            ->getMockBuilder(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->stockStateMock = $this->getMockBuilder('Magento\CatalogInventory\Api\StockStateInterface')
+        $this->stockStateMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\StockStateInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $objectManagerHelper->getObject(
-            'Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem',
+            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem::class,
             [
                 'quoteItemQtyList' => $this->quoteItemQtyList,
                 'typeConfig' => $this->typeConfig,
@@ -65,13 +68,13 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
         $websiteId = 1;
 
         $stockItem = $this->getMock(
-            'Magento\CatalogInventory\Model\Stock\Item',
+            \Magento\CatalogInventory\Model\Stock\Item::class,
             ['checkQuoteItemQty', 'setProductName', 'setIsChildItem', 'hasIsChildItem', 'unsIsChildItem', '__wakeup'],
             [],
             '',
             false
         );
-        $quoteItem = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $quoteItem = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->setMethods(
                 [
                     'getParentItem',
@@ -88,29 +91,31 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $parentItem = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $parentItem = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->setMethods(['getQty', 'setIsQtyDecimal', 'getProduct', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $parentProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $parentProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productTypeInstance = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
+        $productTypeInstance = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $storeMock->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
-        $productTypeCustomOption = $this->getMockBuilder('Magento\Catalog\Model\Product\Configuration\Item\Option')
+        $productTypeCustomOption = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product\Configuration\Item\Option::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
-        $result = $this->getMockBuilder('Magento\Framework\DataObject')
+        $result = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 [
                     'getItemIsQtyDecimal',
@@ -186,27 +191,29 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
         $websiteId = 1;
         $productId = 1;
 
-        $stockItem = $this->getMockBuilder('Magento\CatalogInventory\Model\Stock\Item')
+        $stockItem = $this->getMockBuilder(\Magento\CatalogInventory\Model\Stock\Item::class)
             ->setMethods(['checkQuoteItemQty', 'setProductName', 'setIsChildItem', 'hasIsChildItem', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
-        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $storeMock->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
-        $quoteItem = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $quoteItem = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->setMethods(['getProduct', 'getParentItem', 'getQtyToAdd', 'getId', 'getQuoteId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productTypeCustomOption = $this->getMockBuilder('Magento\Catalog\Model\Product\Configuration\Item\Option')
+        $productTypeCustomOption = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product\Configuration\Item\Option::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
-        $result = $this->getMockBuilder('Magento\Framework\DataObject')
+        $result = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 ['getItemIsQtyDecimal', 'getHasQtyOptionUpdate', 'getItemUseOldQty', 'getMessage', 'getItemBackorders']
             )

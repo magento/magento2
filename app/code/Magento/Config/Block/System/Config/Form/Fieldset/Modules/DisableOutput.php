@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -97,7 +97,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     {
         if (empty($this->_fieldRenderer)) {
             $this->_fieldRenderer = $this->_layout->getBlockSingleton(
-                'Magento\Config\Block\System\Config\Form\Field'
+                \Magento\Config\Block\System\Config\Form\Field::class
             );
         }
         return $this->_fieldRenderer;

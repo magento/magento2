@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,11 +21,11 @@ class LayoutFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->layoutFactory = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\LayoutFactory',
+            \Magento\Framework\View\LayoutFactory::class,
             [
                 'objectManager' => $this->objectManagerMock
             ]
@@ -34,7 +34,7 @@ class LayoutFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $instance = 'Magento\Framework\View\LayoutInterface';
+        $instance = \Magento\Framework\View\LayoutInterface::class;
         $layoutMock = $this->getMock($instance, [], [], '', false);
         $data = ['some' => 'data'];
         $this->objectManagerMock->expects($this->once())

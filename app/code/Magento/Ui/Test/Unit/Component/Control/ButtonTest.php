@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Control;
@@ -38,15 +38,15 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contextMock = $this->getMock(
-            '\Magento\Framework\View\Element\Template\Context',
+            \Magento\Framework\View\Element\Template\Context::class,
             ['getPageLayout', 'getUrlBuilder', 'getEscaper'],
             [],
             '',
             false
         );
-        $this->urlBuilderMock = $this->getMockForAbstractClass('Magento\Framework\UrlInterface');
+        $this->urlBuilderMock = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
         $this->contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
-        $this->escaperMock = $this->getMock('Magento\Framework\Escaper', ['escapeHtml'], [], '', false);
+        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class, ['escapeHtml'], [], '', false);
         $this->contextMock->expects($this->any())->method('getEscaper')->willReturn($this->escaperMock);
         $this->button = new Button($this->contextMock);
     }

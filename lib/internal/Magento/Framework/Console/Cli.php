@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Console;
@@ -127,15 +127,15 @@ class Cli extends SymfonyApplication
             $bootstrap = Bootstrap::create(BP, $params);
             $objectManager = $bootstrap->getObjectManager();
             /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
-            $omProvider = $this->serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
+            $omProvider = $this->serviceManager->get(\Magento\Setup\Model\ObjectManagerProvider::class);
             $omProvider->setObjectManager($objectManager);
 
-            if (class_exists('Magento\Setup\Console\CommandList')) {
+            if (class_exists(\Magento\Setup\Console\CommandList::class)) {
                 $setupCommandList = new \Magento\Setup\Console\CommandList($this->serviceManager);
                 $commands = array_merge($commands, $setupCommandList->getCommands());
             }
 
-            if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+            if ($objectManager->get(\Magento\Framework\App\DeploymentConfig::class)->isAvailable()) {
                 /** @var \Magento\Framework\Console\CommandListInterface */
                 $commandList = $objectManager->create(\Magento\Framework\Console\CommandListInterface::class);
                 $commands = array_merge($commands, $commandList->getCommands());

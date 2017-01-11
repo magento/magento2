@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model;
@@ -26,7 +26,7 @@ class ScopeTreeProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMockForAbstractClass();
 
         $this->model = new ScopeTreeProvider($this->storeManagerMock);
@@ -59,7 +59,7 @@ class ScopeTreeProviderTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var Website|\PHPUnit_Framework_MockObject_MockObject $websiteMock */
-        $websiteMock = $this->getMockBuilder('Magento\Store\Model\Website')
+        $websiteMock = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->disableOriginalConstructor()
             ->getMock();
         $websiteMock->expects($this->any())
@@ -67,7 +67,7 @@ class ScopeTreeProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($websiteId);
 
         /** @var Group|\PHPUnit_Framework_MockObject_MockObject $groupMock */
-        $groupMock = $this->getMockBuilder('Magento\Store\Model\Group')
+        $groupMock = $this->getMockBuilder(\Magento\Store\Model\Group::class)
             ->disableOriginalConstructor()
             ->getMock();
         $groupMock->expects($this->any())
@@ -75,7 +75,7 @@ class ScopeTreeProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($groupId);
 
         /** @var Store|\PHPUnit_Framework_MockObject_MockObject $storeMock */
-        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $storeMock->expects($this->any())

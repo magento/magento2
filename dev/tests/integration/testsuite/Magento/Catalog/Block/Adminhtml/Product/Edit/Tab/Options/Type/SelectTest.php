@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type;
@@ -14,11 +14,11 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Select */
         $block = $layout->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Select',
+            \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Select::class,
             'select'
         );
         $html = $block->getPriceTypeSelectHtml();

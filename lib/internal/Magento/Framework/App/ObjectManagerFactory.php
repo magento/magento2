@@ -1,8 +1,6 @@
 <?php
 /**
- * Initialize application object manager.
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -10,22 +8,15 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
-use Magento\Framework\ObjectManager\Definition\Compiled\Serialized;
 use Magento\Framework\App\ObjectManager\Environment;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Code\GeneratedFiles;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * Class ObjectManagerFactory
  */
 class ObjectManagerFactory
 {
-    /**
-     * Path to definitions format in deployment configuration
-     */
-    const CONFIG_PATH_DEFINITION_FORMAT = 'definition/format';
-
     /**
      * Initialization parameter for a custom deployment configuration file
      */
@@ -41,21 +32,21 @@ class ObjectManagerFactory
      *
      * @var string
      */
-    protected $_locatorClassName = 'Magento\Framework\ObjectManager\ObjectManager';
+    protected $_locatorClassName = \Magento\Framework\ObjectManager\ObjectManager::class;
 
     /**
      * Config class name
      *
      * @var string
      */
-    protected $_configClassName = 'Magento\Framework\Interception\ObjectManager\ConfigInterface';
+    protected $_configClassName = \Magento\Framework\Interception\ObjectManager\ConfigInterface::class;
 
     /**
      * Environment factory class name
      *
      * @var string
      */
-    protected $envFactoryClassName = 'Magento\Framework\App\EnvironmentFactory';
+    protected $envFactoryClassName = \Magento\Framework\App\EnvironmentFactory::class;
 
     /**
      * Filesystem directory list
@@ -117,18 +108,16 @@ class ObjectManagerFactory
         $arguments = array_merge($deploymentConfig->get(), $arguments);
         $definitionFactory = new \Magento\Framework\ObjectManager\DefinitionFactory(
             $this->driverPool->getDriver(DriverPool::FILE),
-            $this->directoryList->getPath(DirectoryList::DI),
-            $this->directoryList->getPath(DirectoryList::GENERATION),
-            $deploymentConfig->get(self::CONFIG_PATH_DEFINITION_FORMAT, Serialized::MODE_NAME)
+            $this->directoryList->getPath(DirectoryList::GENERATION)
         );
 
-        $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'));
+        $definitions = $definitionFactory->createClassDefinition();
         $relations = $definitionFactory->createRelations();
 
         /** @var EnvironmentFactory $envFactory */
         $envFactory = new $this->envFactoryClassName($relations, $definitions);
         /** @var EnvironmentInterface $env */
-        $env =  $envFactory->createEnvironment();
+        $env = $envFactory->createEnvironment();
 
         /** @var ConfigInterface $diConfig */
         $diConfig = $env->getDiConfig();
@@ -147,30 +136,30 @@ class ObjectManagerFactory
 
         // set cache profiler decorator if enabled
         if (\Magento\Framework\Profiler::isEnabled()) {
-            $cacheFactoryArguments = $diConfig->getArguments('Magento\Framework\App\Cache\Frontend\Factory');
+            $cacheFactoryArguments = $diConfig->getArguments(\Magento\Framework\App\Cache\Frontend\Factory::class);
             $cacheFactoryArguments['decorators'][] = [
-                'class' => 'Magento\Framework\Cache\Frontend\Decorator\Profiler',
+                'class' => \Magento\Framework\Cache\Frontend\Decorator\Profiler::class,
                 'parameters' => ['backendPrefixes' => ['Zend_Cache_Backend_', 'Cm_Cache_Backend_']],
             ];
             $cacheFactoryConfig = [
-                'Magento\Framework\App\Cache\Frontend\Factory' => ['arguments' => $cacheFactoryArguments]
+                \Magento\Framework\App\Cache\Frontend\Factory::class => ['arguments' => $cacheFactoryArguments]
             ];
             $diConfig->extend($cacheFactoryConfig);
         }
 
         $sharedInstances = [
-            'Magento\Framework\App\DeploymentConfig' => $deploymentConfig,
-            'Magento\Framework\App\Filesystem\DirectoryList' => $this->directoryList,
-            'Magento\Framework\Filesystem\DirectoryList' => $this->directoryList,
-            'Magento\Framework\Filesystem\DriverPool' => $this->driverPool,
-            'Magento\Framework\ObjectManager\RelationsInterface' => $relations,
-            'Magento\Framework\Interception\DefinitionInterface' => $definitionFactory->createPluginDefinition(),
-            'Magento\Framework\ObjectManager\ConfigInterface' => $diConfig,
-            'Magento\Framework\Interception\ObjectManager\ConfigInterface' => $diConfig,
-            'Magento\Framework\ObjectManager\DefinitionInterface' => $definitions,
-            'Magento\Framework\Stdlib\BooleanUtils' => $booleanUtils,
-            'Magento\Framework\ObjectManager\Config\Mapper\Dom' => $argumentMapper,
-            'Magento\Framework\ObjectManager\ConfigLoaderInterface' => $env->getObjectManagerConfigLoader(),
+            \Magento\Framework\App\DeploymentConfig::class => $deploymentConfig,
+            \Magento\Framework\App\Filesystem\DirectoryList::class => $this->directoryList,
+            \Magento\Framework\Filesystem\DirectoryList::class => $this->directoryList,
+            \Magento\Framework\Filesystem\DriverPool::class => $this->driverPool,
+            \Magento\Framework\ObjectManager\RelationsInterface::class => $relations,
+            \Magento\Framework\Interception\DefinitionInterface::class => $definitionFactory->createPluginDefinition(),
+            \Magento\Framework\ObjectManager\ConfigInterface::class => $diConfig,
+            \Magento\Framework\Interception\ObjectManager\ConfigInterface::class => $diConfig,
+            \Magento\Framework\ObjectManager\DefinitionInterface::class => $definitions,
+            \Magento\Framework\Stdlib\BooleanUtils::class => $booleanUtils,
+            \Magento\Framework\ObjectManager\Config\Mapper\Dom::class => $argumentMapper,
+            \Magento\Framework\ObjectManager\ConfigLoaderInterface::class => $env->getObjectManagerConfigLoader(),
             $this->_configClassName => $diConfig,
         ];
         $arguments['shared_instances'] = &$sharedInstances;
@@ -182,7 +171,7 @@ class ObjectManagerFactory
         $this->factory->setObjectManager($objectManager);
         ObjectManager::setInstance($objectManager);
 
-        $generatorParams = $diConfig->getArguments('Magento\Framework\Code\Generator');
+        $generatorParams = $diConfig->getArguments(\Magento\Framework\Code\Generator::class);
         /** Arguments are stored in different format when DI config is compiled, thus require custom processing */
         $generatedEntities = isset($generatorParams['generatedEntities']['_v_'])
             ? $generatorParams['generatedEntities']['_v_']
@@ -298,6 +287,8 @@ class ObjectManagerFactory
      * @param \Magento\Framework\ObjectManager\Config\Config $diConfig
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
      * @return \Magento\Framework\Interception\PluginList\PluginList
+     * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _createPluginList(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -307,13 +298,12 @@ class ObjectManagerFactory
         \Magento\Framework\ObjectManager\DefinitionInterface $definitions
     ) {
         return $objectManager->create(
-            'Magento\Framework\Interception\PluginList\PluginList',
+            \Magento\Framework\Interception\PluginList\PluginList::class,
             [
                 'relations' => $relations,
                 'definitions' => $definitionFactory->createPluginDefinition(),
                 'omConfig' => $diConfig,
-                'classDefinitions' => $definitions instanceof
-                \Magento\Framework\ObjectManager\Definition\Compiled ? $definitions : null
+                'classDefinitions' => null
             ]
         );
     }

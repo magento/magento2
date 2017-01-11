@@ -2,7 +2,7 @@
 /**
  * Parser factory
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Translate\Inline;
@@ -12,7 +12,7 @@ class ParserFactory
     /**
      * Default instance type
      */
-    const DEFAULT_INSTANCE_TYPE = 'Magento\Framework\Translate\Inline\ParserInterface';
+    const DEFAULT_INSTANCE_TYPE = \Magento\Framework\Translate\Inline\ParserInterface::class;
 
     /**
      * Object Manager

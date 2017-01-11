@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Items;
@@ -21,14 +21,14 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $rendererType = 'some-type';
         $renderer = $this->getMock(
-            'Magento\Framework\View\Element\AbstractBlock',
+            \Magento\Framework\View\Element\AbstractBlock::class,
             ['setRenderedBlock'],
             [],
             '',
             false
         );
 
-        $rendererList = $this->getMock('Magento\Framework\View\Element\RendererList', [], [], '', false);
+        $rendererList = $this->getMock(\Magento\Framework\View\Element\RendererList::class, [], [], '', false);
         $rendererList->expects(
             $this->once()
         )->method(
@@ -41,7 +41,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         );
 
         $layout = $this->getMock(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['getChildName', 'getBlock'],
             [],
             '',
@@ -62,10 +62,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\Sales\Block\Items\AbstractItems */
         $block = $this->_objectManager->getObject(
-            'Magento\Sales\Block\Items\AbstractItems',
+            \Magento\Sales\Block\Items\AbstractItems::class,
             [
                 'context' => $this->_objectManager->getObject(
-                    'Magento\Backend\Block\Template\Context',
+                    \Magento\Backend\Block\Template\Context::class,
                     ['layout' => $layout]
                 )
             ]
@@ -83,7 +83,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
         $layout = $this->getMock(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['getChildName', 'getBlock'],
             [],
             '',
@@ -93,10 +93,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\Sales\Block\Items\AbstractItems */
         $block = $this->_objectManager->getObject(
-            'Magento\Sales\Block\Items\AbstractItems',
+            \Magento\Sales\Block\Items\AbstractItems::class,
             [
                 'context' => $this->_objectManager->getObject(
-                    'Magento\Backend\Block\Template\Context',
+                    \Magento\Backend\Block\Template\Context::class,
                     ['layout' => $layout]
                 )
             ]

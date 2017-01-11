@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Test\Unit;
@@ -19,7 +19,7 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->model = new \Magento\Framework\Indexer\ActionFactory($this->objectManagerMock);
     }
 
@@ -40,16 +40,16 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $actionInterfaceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\ActionInterface',
+            \Magento\Framework\Indexer\ActionInterface::class,
             [],
             '',
             false
         );
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\Indexer\ActionInterface', [])
+            ->with(\Magento\Framework\Indexer\ActionInterface::class, [])
             ->willReturn($actionInterfaceMock);
-        $this->model->create('Magento\Framework\Indexer\ActionInterface');
-        $this->assertInstanceOf('Magento\Framework\Indexer\ActionInterface', $actionInterfaceMock);
+        $this->model->create(\Magento\Framework\Indexer\ActionInterface::class);
+        $this->assertInstanceOf(\Magento\Framework\Indexer\ActionInterface::class, $actionInterfaceMock);
     }
 }

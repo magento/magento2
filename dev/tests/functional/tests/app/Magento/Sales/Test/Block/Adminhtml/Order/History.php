@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,6 +22,27 @@ class History extends Block
     protected $commentHistory = '.note-list-comment';
 
     /**
+     * Comment history status.
+     *
+     * @var string
+     */
+    protected $commentHistoryStatus = '.note-list-status';
+
+    /**
+     * Comment history notified status.
+     *
+     * @var string
+     */
+    protected $commentHistoryNotifiedStatus = '.note-list-customer';
+
+    /**
+     * Authorized Amount.
+     *
+     * @var string
+     */
+    protected $authorizedAmount = '//div[@class="note-list-comment"][contains(text(), "Authorized amount of")]';
+
+    /**
      * Captured Amount from IPN.
      *
      * @var string
@@ -34,6 +55,13 @@ class History extends Block
      * @var string
      */
     protected $refundedAmount = '//div[@class="note-list-comment"][contains(text(), "We refunded")]';
+
+    /**
+     * Voided Amount.
+     *
+     * @var string
+     */
+    protected $voidedAmount = '//div[@class="note-list-comment"][contains(text(), "Voided authorization")]';
 
     /**
      * Note list locator.
@@ -51,6 +79,17 @@ class History extends Block
     {
         $this->waitCommentsHistory();
         return $this->_rootElement->find($this->commentHistory, Locator::SELECTOR_CSS)->getText();
+    }
+
+    /**
+     * Get the authorized amount from the comments history.
+     *
+     * @return string
+     */
+    public function getAuthorizedAmount()
+    {
+        $this->waitCommentsHistory();
+        return $this->_rootElement->find($this->authorizedAmount, Locator::SELECTOR_XPATH)->getText();
     }
 
     /**
@@ -83,6 +122,39 @@ class History extends Block
             $result[] = $refundedComment->getText();
         }
         return $result;
+    }
+
+    /**
+     * Get the voided amount from the comments history.
+     *
+     * @return string
+     */
+    public function getVoidedAmount()
+    {
+        $this->waitCommentsHistory();
+        return $this->_rootElement->find($this->voidedAmount, Locator::SELECTOR_XPATH)->getText();
+    }
+
+    /**
+     * Gets the status which presented in comment
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        $this->waitCommentsHistory();
+        return $this->_rootElement->find($this->commentHistoryStatus, Locator::SELECTOR_CSS)->getText();
+    }
+
+    /**
+     * Gets the is customer notified status which presented in comment
+     *
+     * @return string
+     */
+    public function getNotifiedStatus()
+    {
+        $this->waitCommentsHistory();
+        return $this->_rootElement->find($this->commentHistoryNotifiedStatus, Locator::SELECTOR_CSS)->getText();
     }
 
     /**

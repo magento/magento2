@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $codes = ['entity_type_id', 'attribute_set_id', 'created_at', 'updated_at', 'parent_id', 'increment_id'];
         foreach ($codes as $code) {
             $mock = $this->getMock(
-                'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+                \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
                 ['isInSet', 'getBackend', '__wakeup'],
                 [],
                 '',
@@ -48,7 +48,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $code = 'test_attr';
         $set = 10;
 
-        $object = $this->getMock('Magento\Catalog\Model\Product', ['__wakeup'], [], '', false);
+        $object = $this->getMock(\Magento\Catalog\Model\Product::class, ['__wakeup'], [], '', false);
 
         $object->setData('test_attr', 'test_attr');
         $object->setData('attribute_set_id', $set);
@@ -61,7 +61,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $attributes = $this->_getAttributes();
 
         $attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             ['isInSet', 'getBackend', '__wakeup'],
             [],
             '',
@@ -83,9 +83,11 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $attributes[$code] = $attribute;
 
         /** @var $model \Magento\Catalog\Model\ResourceModel\AbstractResource */
-        $arguments = $objectManager->getConstructArguments('Magento\Catalog\Model\ResourceModel\AbstractResource');
+        $arguments = $objectManager->getConstructArguments(
+            \Magento\Catalog\Model\ResourceModel\AbstractResource::class
+        );
         $model = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\AbstractResource',
+            \Magento\Catalog\Model\ResourceModel\AbstractResource::class,
             ['getAttributesByCode'],
             $arguments
         );

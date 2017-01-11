@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -44,9 +44,9 @@ define([
                 if (_.isUndefined(caption)) {
                     caption = node.label;
                 }
-            } else {
-                return node;
             }
+
+            return node;
         });
 
         return {
@@ -105,7 +105,9 @@ define([
     return Abstract.extend({
         defaults: {
             customName: '${ $.parentName }.${ $.index }_input',
-            elementTmpl: 'ui/form/element/select'
+            elementTmpl: 'ui/form/element/select',
+            caption: '',
+            options: []
         },
 
         /**
@@ -128,28 +130,6 @@ define([
         },
 
         /**
-         * Parses options and merges the result with instance
-         *
-         * @param  {Object} config
-         * @returns {Object} Chainable.
-         */
-        initConfig: function (config) {
-            var options = config.options,
-                captionValue = config.captionValue || '',
-                result = parseOptions(options, captionValue);
-
-            if (config.caption) {
-                delete result.caption;
-            }
-
-            _.extend(config, result);
-
-            this._super();
-
-            return this;
-        },
-
-        /**
          * Calls 'initObservable' of parent, initializes 'options' and 'initialOptions'
          *     properties, calls 'setOptions' passing options to it
          *
@@ -160,7 +140,7 @@ define([
 
             this.initialOptions = this.options;
 
-            this.observe('options')
+            this.observe('options caption')
                 .setOptions(this.options());
 
             return this;
@@ -194,7 +174,7 @@ define([
         },
 
         /**
-         * Matches specfied value with existing options
+         * Matches specified value with existing options
          * or, if value is not specified, returns value of the first option.
          *
          * @returns {*}
@@ -209,7 +189,7 @@ define([
                 return option && option.value;
             }
 
-            if (!this.caption) {
+            if (!this.caption()) {
                 return findFirst(this.options);
             }
         },
@@ -254,14 +234,20 @@ define([
          * @returns {Object} Chainable
          */
         setOptions: function (data) {
-            var isVisible;
+            var captionValue = this.captionValue || '',
+                result = parseOptions(data, captionValue),
+                isVisible;
 
-            this.indexedOptions = indexOptions(data);
+            this.indexedOptions = indexOptions(result.options);
 
-            this.options(data);
+            this.options(result.options);
+
+            if (!this.caption()) {
+                this.caption(result.caption);
+            }
 
             if (this.customEntry) {
-                isVisible = !!data.length;
+                isVisible = !!result.options.length;
 
                 this.setVisible(isVisible);
                 this.toggleInput(!isVisible);
@@ -286,6 +272,11 @@ define([
             return preview;
         },
 
+        /**
+         *
+         * @param {Number} value
+         * @returns {Object} Chainable
+         */
         getOption: function (value) {
             return this.indexedOptions[value];
         },
@@ -296,11 +287,24 @@ define([
          * @returns {Object} Chainable.
          */
         clear: function () {
-            var value = this.caption ? '' : findFirst(this.options);
+            var value = this.caption() ? '' : findFirst(this.options);
 
             this.value(value);
 
             return this;
+        },
+
+        /**
+         * Initializes observable properties of instance
+         *
+         * @returns {Object} Chainable.
+         */
+        setInitialValue: function () {
+            if (_.isUndefined(this.value()) && !this.default) {
+                this.clear();
+            }
+
+            return this._super();
         }
     });
 });

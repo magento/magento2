@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -23,12 +23,12 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
          */
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test01', 'reserved_order_id');
 
         /** Execute SUT */
         /** @var \Magento\Quote\Api\CartManagementInterface $model */
-        $model = $objectManager->create('\Magento\Quote\Api\CartManagementInterface');
+        $model = $objectManager->create(\Magento\Quote\Api\CartManagementInterface::class);
         $order = $model->submit($quote);
 
         /** Check if SUT caused expected effects */

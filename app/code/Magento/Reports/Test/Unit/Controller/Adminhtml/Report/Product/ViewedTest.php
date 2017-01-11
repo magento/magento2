@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,9 @@ use Magento\Reports\Controller\Adminhtml\Report\Product\Viewed;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
 {
     /**
@@ -44,11 +47,11 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
     {
         parent::setUp();
 
-        $this->dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\Filter\Date')
+        $this->dateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\Filter\Date::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $flagMock = $this->getMockBuilder('Magento\Reports\Model\Flag')
+        $flagMock = $this->getMockBuilder(\Magento\Reports\Model\Flag::class)
             ->disableOriginalConstructor()
             ->getMock();
         $flagMock
@@ -60,28 +63,28 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
             ->method('loadSelf')
             ->willReturnSelf();
 
-        $this->helperMock = $this->getMockBuilder('Magento\Backend\Helper\Data')
+        $this->helperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerMock
             ->expects($this->any())
             ->method('create')
-            ->with('Magento\Reports\Model\Flag')
+            ->with(\Magento\Reports\Model\Flag::class)
             ->willReturn($flagMock);
 
-        $this->messageManagerMock = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
+        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $flagMock = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
+        $flagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $responseMock = $this->getMockBuilder('Magento\Framework\App\ResponseInterface')
+        $responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRedirect', 'sendResponse'])
             ->getMock();
@@ -94,7 +97,7 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->viewed = $objectManager->getObject(
-            'Magento\Reports\Controller\Adminhtml\Report\Product\Viewed',
+            \Magento\Reports\Controller\Adminhtml\Report\Product\Viewed::class,
             [
                 'context' => $this->contextMock,
                 'fileFactory' => $this->fileFactoryMock,
@@ -113,7 +116,7 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
             ->method('get')
             ->willReturn($this->helperMock);
 
-        $titleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $titleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -164,11 +167,11 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
             'Please review the log and try again.'
         );
 
-        $logMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $logMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session')
+        $sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
             ->setMethods(['setIsUrlNotice'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -179,8 +182,8 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
             ->will(
                 $this->returnValueMap(
                     [
-                        ['Psr\Log\LoggerInterface', $logMock],
-                        ['Magento\Backend\Model\Auth\Session', $sessionMock]
+                        [\Psr\Log\LoggerInterface::class, $logMock],
+                        [\Magento\Backend\Model\Auth\Session::class, $sessionMock]
                     ]
                 )
             );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote;
@@ -20,7 +20,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_attributeConfig = $this->getMock(
-            'Magento\Catalog\Model\Attribute\Config',
+            \Magento\Catalog\Model\Attribute\Config::class,
             [],
             [],
             '',

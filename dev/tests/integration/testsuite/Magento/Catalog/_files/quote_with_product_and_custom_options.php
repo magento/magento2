@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 require __DIR__ . '/product_simple.php';
@@ -23,21 +23,21 @@ $optionValue = [
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
 $product = $productRepository->get('simple');
 
 /** @var \Magento\Quote\Model\Quote $quote */
-$quote = $objectManager->create('Magento\Quote\Model\Quote');
+$quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
 /** @var \Magento\Quote\Api\CartItemRepositoryInterface  $quoteItemRepository */
-$quoteItemRepository = $objectManager->create('\Magento\Quote\Api\CartItemRepositoryInterface');
+$quoteItemRepository = $objectManager->create(\Magento\Quote\Api\CartItemRepositoryInterface::class);
 /** @var \Magento\Quote\Api\Data\CartItemInterface $cartItem */
-$cartItem = $objectManager->create('Magento\Quote\Api\Data\CartItemInterface');
+$cartItem = $objectManager->create(\Magento\Quote\Api\Data\CartItemInterface::class);
 /** @var \Magento\Quote\Model\Quote\ProductOption $productOption */
-$productOption = $objectManager->create('Magento\Quote\Model\Quote\ProductOptionFactory')->create();
+$productOption = $objectManager->create(\Magento\Quote\Model\Quote\ProductOptionFactory::class)->create();
 /** @var  \Magento\Quote\Api\Data\ProductOptionExtensionInterface $extensionAttributes */
-$extensionAttributes = $objectManager->create('Magento\Quote\Api\Data\ProductOptionExtensionFactory')->create();
-$customOptionFactory = $objectManager->create('Magento\Catalog\Model\CustomOptions\CustomOptionFactory');
+$extensionAttributes = $objectManager->create(\Magento\Quote\Api\Data\ProductOptionExtensionFactory::class)->create();
+$customOptionFactory = $objectManager->create(\Magento\Catalog\Model\CustomOptions\CustomOptionFactory::class);
 $options = [];
 /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $option */
 foreach ($product->getOptions() as $option) {

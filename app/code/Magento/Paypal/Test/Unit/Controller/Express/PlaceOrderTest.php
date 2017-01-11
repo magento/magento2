@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Controller\Express;
@@ -55,9 +55,9 @@ class PlaceOrderTest extends \Magento\Paypal\Test\Unit\Controller\ExpressTest
         $oldCallback = &$this->objectManagerCallback;
         $this->objectManagerCallback = function ($className) use ($code, $oldCallback) {
             $instance = call_user_func($oldCallback, $className);
-            if ($className == '\Magento\CheckoutAgreements\Model\AgreementsValidator') {
+            if ($className == \Magento\CheckoutAgreements\Model\AgreementsValidator::class) {
                 $exception = $this->getMock(
-                    'Magento\Paypal\Model\Api\ProcessableException',
+                    \Magento\Paypal\Model\Api\ProcessableException::class,
                     ['getUserMessage'],
                     ['message', $code]
                 );

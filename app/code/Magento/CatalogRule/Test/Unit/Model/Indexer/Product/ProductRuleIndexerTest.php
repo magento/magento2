@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer\Product;
@@ -26,10 +26,10 @@ class ProductRuleIndexerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->indexBuilder = $this->getMock('Magento\CatalogRule\Model\Indexer\IndexBuilder', [], [], '', false);
+        $this->indexBuilder = $this->getMock(\Magento\CatalogRule\Model\Indexer\IndexBuilder::class, [], [], '', false);
 
         $this->indexer = (new ObjectManager($this))->getObject(
-            'Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer',
+            \Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer::class,
             [
                 'indexBuilder' => $this->indexBuilder,
             ]

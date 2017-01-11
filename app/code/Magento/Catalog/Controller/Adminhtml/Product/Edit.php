@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -42,7 +42,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
     public function execute()
     {
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
         $storeId = (int) $this->getRequest()->getParam('store', 0);
         $store = $storeManager->getStore($storeId);
         $storeManager->setCurrentStore($store->getCode());
@@ -70,7 +70,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
         $resultPage->getConfig()->getTitle()->prepend(__('Products'));
         $resultPage->getConfig()->getTitle()->prepend($product->getName());
 
-        if (!$this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->isSingleStoreMode()
+        if (!$this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->isSingleStoreMode()
             &&
             ($switchBlock = $resultPage->getLayout()->getBlock('store_switcher'))
         ) {

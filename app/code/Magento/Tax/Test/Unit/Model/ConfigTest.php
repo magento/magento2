@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         // Need a mocked object with only dummy methods.  It is just needed for construction.
         // The setter/getter methods do not use this object (for this set of tests).
-        $scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
+        $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         /** @var \Magento\Tax\Model\Config */
         $model = new Config($scopeConfigMock);
@@ -61,7 +61,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCalculationSequence($applyTaxAfterDiscount, $discountTaxIncl, $expectedValue)
     {
-        $scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
+        $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $scopeConfigMock->expects(
             $this->at(0))->method('getValue')->will($this->returnValue($applyTaxAfterDiscount));
         $scopeConfigMock->expects(
@@ -96,7 +96,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testScopeConfigMethods($method, $path, $configValue, $expectedValue)
     {
-        $scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
+        $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)

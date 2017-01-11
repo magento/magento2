@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,9 +32,9 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->setUpMock = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
+        $this->setUpMock = $this->getMock(\Magento\Setup\Module\Setup::class, [], [], '', false);
 
-        $this->dbAdapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $this->dbAdapterMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
 
         $this->setUpMock
             ->expects($this->any())
@@ -50,7 +50,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
                 }
             ));
 
-        $this->encryptor = $this->getMockBuilder('Magento\Framework\Encryption\EncryptorInterface')
+        $this->encryptor = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
             ->getMockForAbstractClass();
 
         $data = [

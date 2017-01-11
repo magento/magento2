@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
 
+use Magento\Framework\App\State;
 use Magento\Framework\Phrase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MergeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -67,62 +71,62 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         foreach (glob(__DIR__ . '/_mergeFiles/layout/*.xml') as $filename) {
             $files[] = new \Magento\Framework\View\File($filename, 'Magento_Widget');
         }
-        $fileSource = $this->getMockForAbstractClass('Magento\Framework\View\File\CollectorInterface');
+        $fileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
         $fileSource->expects($this->any())->method('getFiles')->will($this->returnValue($files));
 
-        $pageLayoutFileSource = $this->getMockForAbstractClass('Magento\Framework\View\File\CollectorInterface');
+        $pageLayoutFileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
         $pageLayoutFileSource->expects($this->any())->method('getFiles')->willReturn([]);
 
-        $design = $this->getMockForAbstractClass('Magento\Framework\View\DesignInterface');
+        $design = $this->getMockForAbstractClass(\Magento\Framework\View\DesignInterface::class);
 
-        $this->scope = $this->getMock('Magento\Framework\Url\ScopeInterface', [], [], '', false);
+        $this->scope = $this->getMock(\Magento\Framework\Url\ScopeInterface::class, [], [], '', false);
         $this->scope->expects($this->any())->method('getId')->will($this->returnValue(20));
-        $scopeResolver = $this->getMockForAbstractClass('Magento\Framework\Url\ScopeResolverInterface');
+        $scopeResolver = $this->getMockForAbstractClass(\Magento\Framework\Url\ScopeResolverInterface::class);
         $scopeResolver->expects($this->once())->method('getScope')->with(null)->will($this->returnValue($this->scope));
 
-        $this->_resource = $this->getMock('Magento\Widget\Model\ResourceModel\Layout\Update', [], [], '', false);
+        $this->_resource = $this->getMock(\Magento\Widget\Model\ResourceModel\Layout\Update::class, [], [], '', false);
 
-        $this->_appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->_appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
 
-        $this->_logger = $this->getMock('Psr\Log\LoggerInterface');
+        $this->_logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
         $this->_layoutValidator = $this->getMock(
-            'Magento\Framework\View\Model\Layout\Update\Validator',
+            \Magento\Framework\View\Model\Layout\Update\Validator::class,
             [],
             [],
             '',
             false
         );
 
-        $this->_cache = $this->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface');
+        $this->_cache = $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
 
-        $this->_theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false, false);
+        $this->_theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false, false);
         $this->_theme->expects($this->any())->method('isPhysical')->will($this->returnValue(true));
         $this->_theme->expects($this->any())->method('getArea')->will($this->returnValue('area'));
         $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(100));
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+        $this->pageConfig = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $readFactory = $this->getMock('Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false, false);
-        $fileReader = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false, false);
+        $readFactory = $this->getMock(\Magento\Framework\Filesystem\File\ReadFactory::class, [], [], '', false, false);
+        $fileReader = $this->getMock(\Magento\Framework\Filesystem\File\Read::class, [], [], '', false, false);
         $readFactory->expects($this->any())->method('create')->willReturn($fileReader);
 
-        $fileDriver = $objectHelper->getObject('Magento\Framework\Filesystem\Driver\File');
+        $fileDriver = $objectHelper->getObject(\Magento\Framework\Filesystem\Driver\File::class);
 
         $fileReader->expects($this->any())->method('readAll')->will(
             $this->returnCallback(
                 function ($filename) use ($fileDriver) {
-                    return $fileDriver->fileGetContents(__DIR__ . '/_mergeFiles/layout/'. $filename);
+                    return $fileDriver->fileGetContents(__DIR__ . '/_mergeFiles/layout/' . $filename);
                 }
             )
         );
 
         $this->_model = $objectHelper->getObject(
-            'Magento\Framework\View\Model\Layout\Merge',
+            \Magento\Framework\View\Model\Layout\Merge::class,
             [
                 'design' => $design,
                 'scopeResolver' => $scopeResolver,
@@ -135,7 +139,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
                 'validator' => $this->_layoutValidator,
                 'logger' => $this->_logger,
                 'readFactory' => $readFactory,
-                'pageConfig' => $this->pageConfig
+                'pageConfig' => $this->pageConfig,
             ]
         );
     }
@@ -212,7 +216,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'non-existing handle' => ['non_existing_handle', false],
-            'existing page type' => ['default', true]
+            'existing page type' => ['default', true],
         ];
     }
 
@@ -393,17 +397,23 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test loading invalid layout
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Layout is invalid.
      */
     public function testLoadWithInvalidLayout()
     {
         $this->_model->addPageHandles(['default']);
 
-        $this->_appState->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
+        $this->_appState->expects($this->once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
 
-        $this->_layoutValidator->expects($this->any())->method('getMessages')
-            ->will($this->returnValue(['testMessage1', 'testMessage2']));
+        $this->_layoutValidator->expects($this->any())
+            ->method('getMessages')
+            ->willReturn(['testMessage1', 'testMessage2']);
 
-        $this->_layoutValidator->expects($this->any())->method('isValid')->will($this->returnValue(false));
+        $this->_layoutValidator->expects($this->any())
+            ->method('isValid')
+            ->willThrowException(new \Exception('Layout is invalid.'));
 
         $suffix = md5(implode('|', $this->_model->getHandles()));
         $cacheId = "LAYOUT_{$this->_theme->getArea()}_STORE{$this->scope->getId()}_{$this->_theme->getId()}{$suffix}";
@@ -416,5 +426,16 @@ class MergeTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->_model->load();
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Config\Dom\ValidationException
+     * @expectedExceptionMessageRegExp /_mergeFiles\/layout\/file_wrong\.xml\' is not valid/
+     */
+    public function testLayoutUpdateFileIsNotValid()
+    {
+        $this->_appState->expects($this->once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
+
+        $this->_model->addPageHandles(['default']);
     }
 }

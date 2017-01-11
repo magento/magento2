@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /**
  * @var \Magento\Catalog\Model\Product $product
  */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product
     ->setTypeId(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
     ->setId(1)
@@ -29,7 +29,7 @@ $product
  * @var \Magento\Downloadable\Api\Data\LinkInterfaceFactory $linkFactory
  */
 $linkFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Downloadable\Api\Data\LinkInterfaceFactory');
+    ->get(\Magento\Downloadable\Api\Data\LinkInterfaceFactory::class);
 $links = [];
 $linkData = [
     'title' => 'Downloadable Product Link',

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,4 +26,27 @@
     <preference for="Magento\Checkout\Api\GuestTotalsInformationManagementInterface" type="Magento\Checkout\Model\GuestTotalsInformationManagement" />
     <preference for="Magento\Checkout\Api\TotalsInformationManagementInterface" type="Magento\Checkout\Model\TotalsInformationManagement" />
     <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\Checkout\Model\AgreementsValidator" />
+    <preference for="Magento\Checkout\Model\Cart\RequestInfoFilterInterface"
+                type="Magento\Checkout\Model\Cart\RequestInfoFilterComposite"/>
+    <type name="Magento\Checkout\Model\Cart\RequestInfoFilter">
+        <arguments>
+            <argument name="filterList" xsi:type="array">
+                <item name="form_key" xsi:type="string">form_key</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Model\Cart\RequestInfoFilterComposite">
+        <arguments>
+            <argument name="filters" xsi:type="array">
+                <item name="filter" xsi:type="object">Magento\Checkout\Model\Cart\RequestInfoFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="checkout/payment_failed/copy_to" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

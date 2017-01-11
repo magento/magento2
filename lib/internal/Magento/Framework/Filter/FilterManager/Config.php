@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\FilterManager;
@@ -13,7 +13,7 @@ class Config implements ConfigInterface
     /**
      * @var string[]
      */
-    protected $factories = ['Magento\Framework\Filter\Factory', 'Magento\Framework\Filter\ZendFactory'];
+    protected $factories = [\Magento\Framework\Filter\Factory::class, \Magento\Framework\Filter\ZendFactory::class];
 
     /**
      * @param string[] $factories

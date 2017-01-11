@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block\Widget;
@@ -28,7 +28,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $this->prepareContext();
 
-        $this->dataForm = $this->getMockBuilder('Magento\Framework\Data\Form')
+        $this->dataForm = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'setParent',
@@ -44,10 +44,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareContext()
     {
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMock();
 
-        $this->context = $this->getMockBuilder('Magento\Backend\Block\Template\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\Block\Template\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())

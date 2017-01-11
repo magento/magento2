@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Helper;
@@ -15,6 +15,7 @@ class DataFactory
 {
     const AREA_FRONTEND = 'frontend';
     const AREA_BACKEND = 'adminhtml';
+
     /**
      * @var ObjectManagerInterface
      */
@@ -24,8 +25,8 @@ class DataFactory
      * @var array
      */
     protected $helperMap = [
-        self::AREA_FRONTEND => 'Magento\Authorizenet\Helper\Data',
-        self::AREA_BACKEND => 'Magento\Authorizenet\Helper\Backend\Data'
+        self::AREA_FRONTEND => \Magento\Authorizenet\Helper\Data::class,
+        self::AREA_BACKEND => \Magento\Authorizenet\Helper\Backend\Data::class
     ];
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Test\Unit\Model\Config\Source;
@@ -21,14 +21,17 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_collectionMock = $this->getMock(
-            'Magento\Directory\Model\ResourceModel\Country\Collection',
+            \Magento\Directory\Model\ResourceModel\Country\Collection::class,
             [],
             [],
             '',
             false
         );
         $arguments = ['countryCollection' => $this->_collectionMock];
-        $this->_model = $objectManagerHelper->getObject('Magento\Directory\Model\Config\Source\Country', $arguments);
+        $this->_model = $objectManagerHelper->getObject(
+            \Magento\Directory\Model\Config\Source\Country::class,
+            $arguments
+        );
     }
 
     /**

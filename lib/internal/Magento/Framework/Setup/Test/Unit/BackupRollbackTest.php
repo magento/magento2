@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\Test\Unit;
@@ -9,6 +9,9 @@ use Magento\Framework\Backup\Factory;
 use Magento\Framework\Setup\BackupRollback;
 use Magento\Framework\Setup\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BackupRollbackTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -58,9 +61,15 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
-        $this->log = $this->getMock('Magento\Framework\Setup\LoggerInterface', [], [], '', false);
-        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
+        $this->log = $this->getMock(\Magento\Framework\Setup\LoggerInterface::class, [], [], '', false);
+        $this->directoryList = $this->getMock(
+            \Magento\Framework\App\Filesystem\DirectoryList::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->path = realpath(__DIR__);
         $this->directoryList->expects($this->any())
             ->method('getRoot')
@@ -68,29 +77,37 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->directoryList->expects($this->any())
             ->method('getPath')
             ->willReturn($this->path);
-        $this->file = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
-        $this->filesystem = $this->getMock('Magento\Framework\Backup\Filesystem', [], [], '', false);
-        $this->database = $this->getMock('Magento\Framework\Backup\Db', [], [], '', false);
-        $this->helper = $this->getMock('Magento\Framework\Backup\Filesystem\Helper', [], [], '', false);
+        $this->file = $this->getMock(\Magento\Framework\Filesystem\Driver\File::class, [], [], '', false);
+        $this->filesystem = $this->getMock(\Magento\Framework\Backup\Filesystem::class, [], [], '', false);
+        $this->database = $this->getMock(\Magento\Framework\Backup\Db::class, [], [], '', false);
+        $this->helper = $this->getMock(\Magento\Framework\Backup\Filesystem\Helper::class, [], [], '', false);
         $this->helper->expects($this->any())
             ->method('getInfo')
             ->willReturn(['writable' => true, 'size' => 100]);
-        $configLoader = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
+        $configLoader = $this->getMock(\Magento\Framework\App\ObjectManager\ConfigLoader::class, [], [], '', false);
         $configLoader->expects($this->any())
             ->method('load')
             ->willReturn([]);
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
-                ['Magento\Framework\App\State', $this->getMock('Magento\Framework\App\State', [], [], '', false)],
-                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader],
+                [
+                    \Magento\Framework\App\State::class, $this->getMock(
+                        \Magento\Framework\App\State::class,
+                        [],
+                        [],
+                        '',
+                        false
+                    )
+                ],
+                [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
             ]));
         $this->objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
-                ['Magento\Framework\Backup\Filesystem\Helper', [], $this->helper],
-                ['Magento\Framework\Backup\Filesystem', [], $this->filesystem],
-                ['Magento\Framework\Backup\Db', [], $this->database],
+                [\Magento\Framework\Backup\Filesystem\Helper::class, [], $this->helper],
+                [\Magento\Framework\Backup\Filesystem::class, [], $this->filesystem],
+                [\Magento\Framework\Backup\Db::class, [], $this->database],
             ]));
         $this->model = new BackupRollback(
             $this->objectManager,

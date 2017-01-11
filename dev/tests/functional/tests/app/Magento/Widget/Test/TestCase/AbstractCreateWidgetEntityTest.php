@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Widget\Test\TestCase;
 
-use Magento\Widget\Test\Fixture\Widget;
 use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceEdit;
 use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceIndex;
 use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceNew;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Util\Command\Cli\Cache;
+use Magento\Cms\Test\Page\CmsIndex;
 
 /**
  * Test Creation for New Instance of WidgetEntity.
@@ -39,21 +40,41 @@ abstract class AbstractCreateWidgetEntityTest extends Injectable
     protected $widgetInstanceEdit;
 
     /**
+     * CmsIndex page.
+     *
+     * @var WidgetInstanceIndex
+     */
+    protected $cmsIndex;
+
+    /**
+     * Handle cache for tests executions.
+     *
+     * @var Cache
+     */
+    protected $cache;
+
+    /**
      * Injection data.
      *
      * @param WidgetInstanceIndex $widgetInstanceIndex
      * @param WidgetInstanceNew $widgetInstanceNew
      * @param WidgetInstanceEdit $widgetInstanceEdit
+     * @param CmsIndex $cmsIndex
+     * @param Cache $cache
      * @return void
      */
     public function __inject(
         WidgetInstanceIndex $widgetInstanceIndex,
         WidgetInstanceNew $widgetInstanceNew,
-        WidgetInstanceEdit $widgetInstanceEdit
+        WidgetInstanceEdit $widgetInstanceEdit,
+        CmsIndex $cmsIndex,
+        Cache $cache
     ) {
         $this->widgetInstanceIndex = $widgetInstanceIndex;
         $this->widgetInstanceNew = $widgetInstanceNew;
         $this->widgetInstanceEdit = $widgetInstanceEdit;
+        $this->cmsIndex = $cmsIndex;
+        $this->cache = $cache;
     }
 
     /**
@@ -63,6 +84,6 @@ abstract class AbstractCreateWidgetEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create('Magento\Widget\Test\TestStep\DeleteAllWidgetsStep')->run();
+        $this->objectManager->create(\Magento\Widget\Test\TestStep\DeleteAllWidgetsStep::class)->run();
     }
 }

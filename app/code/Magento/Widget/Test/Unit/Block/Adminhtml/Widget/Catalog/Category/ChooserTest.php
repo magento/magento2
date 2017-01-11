@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,7 +61,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collection = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Category\Collection',
+            \Magento\Catalog\Model\ResourceModel\Category\Collection::class,
             [],
             [],
             '',
@@ -69,26 +69,32 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->childNode = $this->getMock(
-            'Magento\Framework\Data\Tree\Node',
+            \Magento\Framework\Data\Tree\Node::class,
             ['getLevel', 'hasChildren'],
             [],
             '',
             false
         );
         $this->rootNode = $this->getMock(
-            'Magento\Framework\Data\Tree\Node',
+            \Magento\Framework\Data\Tree\Node::class,
             ['getLevel', 'hasChildren', 'getChildren'],
             [],
             '',
             false
         );
-        $this->categoryTree = $this->getMock('Magento\Catalog\Model\ResourceModel\Category\Tree', [], [], '', false);
-        $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
-        $this->escaper = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
-        $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $this->context = $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false);
+        $this->categoryTree = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Category\Tree::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
+        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
+        $this->escaper = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
+        $this->eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $this->context = $this->getMock(\Magento\Backend\Block\Template\Context::class, [], [], '', false);
     }
 
     public function testGetTreeHasLevelField()
@@ -132,7 +138,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser $chooser */
         $chooser = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
-                'Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser',
+                \Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser::class,
                 [
                     'categoryTree' => $this->categoryTree,
                     'context' => $this->context

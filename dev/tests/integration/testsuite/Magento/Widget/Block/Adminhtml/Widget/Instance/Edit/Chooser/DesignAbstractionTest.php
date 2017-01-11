@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
@@ -22,10 +22,10 @@ class DesignAbstractionTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $layoutUtility = new \Magento\Framework\View\Utility\Layout($this);
-        $appState = $objectManager->get('Magento\Framework\App\State');
+        $appState = $objectManager->get(\Magento\Framework\App\State::class);
         $appState->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $processorMock = $this->getMock(
-            'Magento\Framework\View\Layout\Processor',
+            \Magento\Framework\View\Layout\Processor::class,
             ['isPageLayoutDesignAbstraction'],
             [],
             '',
@@ -39,7 +39,7 @@ class DesignAbstractionTest extends \PHPUnit_Framework_TestCase
             )
         );
         $processorFactoryMock = $this->getMock(
-            'Magento\Framework\View\Layout\ProcessorFactory',
+            \Magento\Framework\View\Layout\ProcessorFactory::class,
             ['create'],
             [],
             '',
@@ -56,9 +56,9 @@ class DesignAbstractionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_block = new DesignAbstraction(
-            $objectManager->get('Magento\Framework\View\Element\Template\Context'),
+            $objectManager->get(\Magento\Framework\View\Element\Template\Context::class),
             $processorFactoryMock,
-            $objectManager->get('Magento\Theme\Model\ResourceModel\Theme\CollectionFactory'),
+            $objectManager->get(\Magento\Theme\Model\ResourceModel\Theme\CollectionFactory::class),
             $appState,
             [
                 'name' => 'design_abstractions',

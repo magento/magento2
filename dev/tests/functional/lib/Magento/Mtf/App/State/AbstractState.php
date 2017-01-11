@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,13 +42,13 @@ abstract class AbstractState implements StateInterface
     public function clearInstance()
     {
         $dirList = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
-            ->get('Magento\Framework\Filesystem\DirectoryList');
+            ->get(\Magento\Framework\Filesystem\DirectoryList::class);
 
         $configFilePool = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
-            ->get('\Magento\Framework\Config\File\ConfigFilePool');
+            ->get(\Magento\Framework\Config\File\ConfigFilePool::class);
 
         $driverPool = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
-            ->get('\Magento\Framework\Filesystem\DriverPool');
+            ->get(\Magento\Framework\Filesystem\DriverPool::class);
 
         $reader = new Reader($dirList, $driverPool, $configFilePool);
         $deploymentConfig = new DeploymentConfig($reader);

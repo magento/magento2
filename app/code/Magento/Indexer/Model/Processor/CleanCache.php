@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model\Processor;
+
+use \Magento\Framework\App\CacheInterface;
 
 class CleanCache
 {
@@ -16,6 +18,11 @@ class CleanCache
      * @var \Magento\Framework\Event\Manager
      */
     protected $eventManager;
+
+    /**
+     * @var \Magento\Framework\App\CacheInterface
+     */
+    private $cache;
 
     /**
      * @param \Magento\Framework\Indexer\CacheContext $context
@@ -39,6 +46,9 @@ class CleanCache
     public function afterUpdateMview(\Magento\Indexer\Model\Processor $subject)
     {
         $this->eventManager->dispatch('clean_cache_after_reindex', ['object' => $this->context]);
+        if (!empty($this->context->getIdentities())) {
+            $this->getCache()->clean($this->context->getIdentities());
+        }
     }
 
     /**
@@ -51,5 +61,22 @@ class CleanCache
     public function afterReindexAllInvalid(\Magento\Indexer\Model\Processor $subject)
     {
         $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->context]);
+        if (!empty($this->context->getIdentities())) {
+            $this->getCache()->clean($this->context->getIdentities());
+        }
+    }
+
+    /**
+     * Get cache interface
+     *
+     * @return \Magento\Framework\App\CacheInterface
+     * @deprecated
+     */
+    private function getCache()
+    {
+        if ($this->cache === null) {
+            $this->cache = \Magento\Framework\App\ObjectManager::getInstance()->get(CacheInterface::class);
+        }
+        return $this->cache;
     }
 }

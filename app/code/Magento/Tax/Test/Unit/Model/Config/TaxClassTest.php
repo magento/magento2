@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ class TaxClassTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterSave()
     {
-        $attributeMock = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadByCode', 'getId', 'setData', 'save', '__wakeup'])
             ->getMock();
@@ -28,7 +28,7 @@ class TaxClassTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue(1));
 
-        $attributeFactoryMock = $this->getMockBuilder('\Magento\Eav\Model\Entity\AttributeFactory')
+        $attributeFactoryMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AttributeFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create', '__wakeup'])
             ->getMock();
@@ -37,7 +37,7 @@ class TaxClassTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($attributeMock));
 
-        $resourceMock = $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+        $resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['beginTransaction', '_construct', 'getIdFieldName', 'addCommitCallback', 'commit',
                           'save', '__wakeup', ])
@@ -57,7 +57,7 @@ class TaxClassTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $taxClass = $objectManager->getObject(
-            'Magento\Tax\Model\Config\TaxClass',
+            \Magento\Tax\Model\Config\TaxClass::class,
             [
                 'resource' => $resourceMock,
                 'attributeFactory' => $attributeFactoryMock

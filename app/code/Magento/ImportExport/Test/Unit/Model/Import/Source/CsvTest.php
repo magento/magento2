@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\Source;
@@ -22,9 +22,9 @@ class CsvTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->_filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->_directoryMock = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Write',
+            \Magento\Framework\Filesystem\Directory\Write::class,
             [],
             [],
             '',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
@@ -39,7 +39,7 @@ class TaxClassProcessorTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $taxClass = $this->getMockBuilder('Magento\Tax\Model\ClassModel')
+        $taxClass = $this->getMockBuilder(\Magento\Tax\Model\ClassModel::class)
             ->disableOriginalConstructor()
             ->getMock();
         $taxClass->method('getClassName')->will($this->returnValue(self::TEST_TAX_CLASS_NAME));
@@ -47,12 +47,12 @@ class TaxClassProcessorTest extends \PHPUnit_Framework_TestCase
 
         $taxClassCollection =
             $this->objectManagerHelper->getCollectionMock(
-                'Magento\Tax\Model\ResourceModel\TaxClass\Collection',
+                \Magento\Tax\Model\ResourceModel\TaxClass\Collection::class,
                 [$taxClass]
             );
 
         $taxClassCollectionFactory = $this->getMock(
-            'Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory',
+            \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -61,14 +61,14 @@ class TaxClassProcessorTest extends \PHPUnit_Framework_TestCase
 
         $taxClassCollectionFactory->method('create')->will($this->returnValue($taxClassCollection));
 
-        $anotherTaxClass = $this->getMockBuilder('Magento\Tax\Model\ClassModel')
+        $anotherTaxClass = $this->getMockBuilder(\Magento\Tax\Model\ClassModel::class)
             ->disableOriginalConstructor()
             ->getMock();
         $anotherTaxClass->method('getClassName')->will($this->returnValue(self::TEST_TAX_CLASS_NAME));
         $anotherTaxClass->method('getId')->will($this->returnValue(self::TEST_JUST_CREATED_TAX_CLASS_ID));
 
         $taxClassFactory = $this->getMock(
-            'Magento\Tax\Model\ClassModelFactory',
+            \Magento\Tax\Model\ClassModelFactory::class,
             ['create'],
             [],
             '',
@@ -85,7 +85,7 @@ class TaxClassProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->product =
             $this->getMockForAbstractClass(
-                'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType',
+                \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class,
                 [],
                 '',
                 false

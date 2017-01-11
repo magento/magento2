@@ -2,7 +2,7 @@
 /**
  * Import entity configurable product type model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Importing configurable products
@@ -140,6 +141,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Instance of database adapter.
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @deprecated
      */
     protected $_connection;
 
@@ -200,6 +202,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -208,12 +211,12 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         array $params,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac,
+        MetadataPool $metadataPool = null
     ) {
-        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
+        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->_productTypesConfig = $productTypesConfig;
         $this->_resourceHelper = $resourceHelper;
-        $this->_resource = $resource;
         $this->_productColFac = $_productColFac;
         $this->_connection = $this->_entityModel->getConnection();
     }
@@ -379,14 +382,14 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         if (!empty($productIds)) {
             $mainTable = $this->_resource->getTableName('catalog_product_super_attribute');
             $optionTable = $this->_resource->getTableName('eav_attribute_option');
-            $select = $this->_connection->select()->from(
+            $select = $this->connection->select()->from(
                 ['m' => $mainTable],
                 ['product_id', 'attribute_id', 'product_super_attribute_id']
             )->joinLeft(
                 ['o' => $optionTable],
-                $this->_connection->quoteIdentifier(
+                $this->connection->quoteIdentifier(
                     'o.attribute_id'
-                ) . ' = ' . $this->_connection->quoteIdentifier(
+                ) . ' = ' . $this->connection->quoteIdentifier(
                     'o.attribute_id'
                 ),
                 ['option_id']
@@ -395,7 +398,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $productIds
             );
 
-            foreach ($this->_connection->fetchAll($select) as $row) {
+            foreach ($this->connection->fetchAll($select) as $row) {
                 $attrId = $row['attribute_id'];
                 $productId = $row['product_id'];
                 if ($row['option_id']) {
@@ -448,8 +451,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     'product_id' => $this->_productSuperData['assoc_entity_ids'][$assocId],
                     'parent_id' => $this->_productSuperData['product_id'],
                 ];
-                $subEntityId = $this->_connection->fetchOne(
-                    $this->_connection->select()->from(
+                $subEntityId = $this->connection->fetchOne(
+                    $this->connection->select()->from(
                         ['cpe' => $this->_resource->getTableName('catalog_product_entity')], ['entity_id']
                     )->where($metadata->getLinkField() . ' = ?', $assocId)
                 );
@@ -557,10 +560,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             && !empty($this->_productSuperData['product_id'])
             && !empty($this->_simpleIdsToDelete)
         ) {
-            $quoted = $this->_connection->quoteInto('IN (?)', [$this->_productSuperData['product_id']]);
-            $quotedChildren = $this->_connection->quoteInto('IN (?)', $this->_simpleIdsToDelete);
-            $this->_connection->delete($linkTable, "parent_id {$quoted} AND product_id {$quotedChildren}");
-            $this->_connection->delete($relationTable, "parent_id {$quoted} AND child_id {$quotedChildren}");
+            $quoted = $this->connection->quoteInto('IN (?)', [$this->_productSuperData['product_id']]);
+            $quotedChildren = $this->connection->quoteInto('IN (?)', $this->_simpleIdsToDelete);
+            $this->connection->delete($linkTable, "parent_id {$quoted} AND product_id {$quotedChildren}");
+            $this->connection->delete($relationTable, "parent_id {$quoted} AND child_id {$quotedChildren}");
         }
         return $this;
     }
@@ -587,16 +590,16 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             }
         }
         if ($mainData) {
-            $this->_connection->insertOnDuplicate($mainTable, $mainData);
+            $this->connection->insertOnDuplicate($mainTable, $mainData);
         }
         if ($this->_superAttributesData['labels']) {
-            $this->_connection->insertOnDuplicate($labelTable, $this->_superAttributesData['labels']);
+            $this->connection->insertOnDuplicate($labelTable, $this->_superAttributesData['labels']);
         }
         if ($this->_superAttributesData['super_link']) {
-            $this->_connection->insertOnDuplicate($linkTable, $this->_superAttributesData['super_link']);
+            $this->connection->insertOnDuplicate($linkTable, $this->_superAttributesData['super_link']);
         }
         if ($this->_superAttributesData['relation']) {
-            $this->_connection->insertOnDuplicate($relationTable, $this->_superAttributesData['relation']);
+            $this->connection->insertOnDuplicate($relationTable, $this->_superAttributesData['relation']);
         }
         return $this;
     }

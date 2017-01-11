@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,20 +25,21 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Framework\Pricing\Price\Factory', [
-            'objectManager' => $this->objectManagerMock
-        ]);
+        $this->model = $objectManager->getObject(
+            \Magento\Framework\Pricing\Price\Factory::class,
+            ['objectManager' => $this->objectManagerMock]
+        );
     }
 
     public function testCreate()
     {
         $quantity = 2.2;
-        $className = 'Magento\Framework\Pricing\Price\PriceInterface';
+        $className = \Magento\Framework\Pricing\Price\PriceInterface::class;
         $priceMock = $this->getMock($className);
-        $saleableItem = $this->getMock('Magento\Framework\Pricing\SaleableInterface');
+        $saleableItem = $this->getMock(\Magento\Framework\Pricing\SaleableInterface::class);
         $arguments = [];
 
         $argumentsResult = array_merge($arguments, ['saleableItem' => $saleableItem, 'quantity' => $quantity]);
@@ -60,9 +61,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithException()
     {
         $quantity = 2.2;
-        $className = 'Magento\Framework\Pricing\PriceInfo\Base';
+        $className = \Magento\Framework\Pricing\PriceInfo\Base::class;
         $priceMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
-        $saleableItem = $this->getMock('Magento\Framework\Pricing\SaleableInterface');
+        $saleableItem = $this->getMock(\Magento\Framework\Pricing\SaleableInterface::class);
         $arguments = [];
 
         $argumentsResult = array_merge($arguments, ['saleableItem' => $saleableItem, 'quantity' => $quantity]);

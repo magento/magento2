@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
@@ -31,9 +31,9 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->reader = $this->getMock('Magento\Setup\Model\Cron\Queue\Reader', [], [], '', false);
-        $this->writer = $this->getMock('Magento\Setup\Model\Cron\Queue\Writer', [], [], '', false);
-        $this->jobFactory = $this->getMock('Magento\Setup\Model\Cron\JobFactory', [], [], '', false);
+        $this->reader = $this->getMock(\Magento\Setup\Model\Cron\Queue\Reader::class, [], [], '', false);
+        $this->writer = $this->getMock(\Magento\Setup\Model\Cron\Queue\Writer::class, [], [], '', false);
+        $this->jobFactory = $this->getMock(\Magento\Setup\Model\Cron\JobFactory::class, [], [], '', false);
         $this->queue = new Queue($this->reader, $this->writer, $this->jobFactory);
     }
 
@@ -82,7 +82,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"jobs": [{"name": "job A", "params" : []}, {"name": "job B", "params" : []}]}');
-        $job = $this->getMockForAbstractClass('Magento\Setup\Model\Cron\AbstractJob', [], '', false);
+        $job = $this->getMockForAbstractClass(\Magento\Setup\Model\Cron\AbstractJob::class, [], '', false);
         $this->jobFactory->expects($this->once())->method('create')->with('job A', [])->willReturn($job);
         $rawData = ['jobs' => [['name' => 'job B', 'params' => []]]];
         $this->writer->expects($this->once())->method('write')->with(json_encode($rawData, JSON_PRETTY_PRINT));
@@ -94,7 +94,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"jobs": [{"name": "job A", "params" : []}]}');
-        $job = $this->getMockForAbstractClass('Magento\Setup\Model\Cron\AbstractJob', [], '', false);
+        $job = $this->getMockForAbstractClass(\Magento\Setup\Model\Cron\AbstractJob::class, [], '', false);
         $this->jobFactory->expects($this->once())->method('create')->with('job A', [])->willReturn($job);
         $this->writer->expects($this->once())->method('write')->with('');
         $this->assertEquals($job, $this->queue->popQueuedJob());

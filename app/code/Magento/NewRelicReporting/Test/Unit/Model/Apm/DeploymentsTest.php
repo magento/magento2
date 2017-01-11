@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Apm;
@@ -40,21 +40,21 @@ class DeploymentsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->zendClientFactoryMock = $this->getMockBuilder('Magento\Framework\HTTP\ZendClientFactory')
+        $this->zendClientFactoryMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->zendClientMock = $this->getMockBuilder('Magento\Framework\HTTP\ZendClient')
+        $this->zendClientMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClient::class)
             ->setMethods(['request', 'setUri', 'setMethod', 'setHeaders', 'setParameterPost'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->configMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\Config')
+        $this->configMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
             ->setMethods(['getNewRelicApiUrl', 'getNewRelicApiKey', 'getNewRelicAppName', 'getNewRelicAppId'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -113,7 +113,9 @@ class DeploymentsTest extends \PHPUnit_Framework_TestCase
             ->method('getNewRelicAppId')
             ->willReturn($data['app_id']);
 
-        $zendHttpResponseMock = $this->getMockBuilder('Zend_Http_Response')->disableOriginalConstructor()->getMock();
+        $zendHttpResponseMock = $this->getMockBuilder(
+            \Zend_Http_Response::class
+        )->disableOriginalConstructor()->getMock();
         $zendHttpResponseMock->expects($this->any())->method('getStatus')->willReturn($data['status_ok']);
         $zendHttpResponseMock->expects($this->once())->method('getBody')->willReturn($data['response_body']);
 
@@ -174,7 +176,9 @@ class DeploymentsTest extends \PHPUnit_Framework_TestCase
             ->method('getNewRelicAppId')
             ->willReturn($data['app_id']);
 
-        $zendHttpResponseMock = $this->getMockBuilder('Zend_Http_Response')->disableOriginalConstructor()->getMock();
+        $zendHttpResponseMock = $this->getMockBuilder(
+            \Zend_Http_Response::class
+        )->disableOriginalConstructor()->getMock();
         $zendHttpResponseMock->expects($this->any())->method('getStatus')->willReturn($data['status_bad']);
 
         $this->zendClientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);

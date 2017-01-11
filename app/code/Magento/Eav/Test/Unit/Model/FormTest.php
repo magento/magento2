@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,7 +42,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = $this->getMockBuilder(
-            'Magento\Eav\Model\Form'
+            \Magento\Eav\Model\Form::class
         )->setMethods(
             ['_getFilteredFormAttributeCollection', '_getValidator', 'getEntity']
         )->disableOriginalConstructor()->getMock();
@@ -125,7 +125,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testValidateDataPassed($isValid, $expected, $messages = null)
     {
         $validator = $this->getMockBuilder(
-            'Magento\Eav\Model\Validator\Attribute\Data'
+            \Magento\Eav\Model\Validator\Attribute\Data::class
         )->disableOriginalConstructor()->setMethods(
             ['isValid', 'getMessages']
         )->getMock();

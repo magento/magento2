@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,22 +34,28 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
-        $this->registryMock = $this->getMock('Magento\Framework\Registry');
-        $this->paymentHelperMock = $this->getMock('Magento\Payment\Helper\Data', ['getMethodInstance'], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class);
+        $this->paymentHelperMock = $this->getMock(
+            \Magento\Payment\Helper\Data::class,
+            ['getMethodInstance'],
+            [],
+            '',
+            false
+        );
         $this->encryptorInterfaceMock = $this->getMock(
-            'Magento\Framework\Encryption\EncryptorInterface',
+            \Magento\Framework\Encryption\EncryptorInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->methodInstanceMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $this->methodInstanceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->info = $this->objectManagerHelper->getObject(
-            'Magento\Sales\Model\Order\Payment\Info',
+            \Magento\Sales\Model\Order\Payment\Info::class,
             [
                 'context' => $this->contextMock,
                 'registry' => $this->registryMock,
@@ -89,7 +95,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             ['cc_cid', 'cc_cid_enc']
         ];
     }
-    
+
     public function testGetMethodInstanceWithRealMethod()
     {
         $method = 'real_method';

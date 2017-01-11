@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Store;
@@ -14,9 +14,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->unregister('store_type');
-        $objectManager->get('Magento\Framework\Registry')->unregister('store_data');
-        $objectManager->get('Magento\Framework\Registry')->unregister('store_action');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('store_type');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('store_data');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('store_action');
     }
 
     /**
@@ -30,7 +30,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             if ($key == 'store_data') {
                 $value = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($value);
             }
-            $objectManager->get('Magento\Framework\Registry')->register($key, $value);
+            $objectManager->get(\Magento\Framework\Registry::class)->register($key, $value);
         }
     }
 
@@ -46,10 +46,10 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\Backend\Block\System\Store\Edit */
-        $block = $layout->createBlock('Magento\Backend\Block\System\Store\Edit', 'block');
+        $block = $layout->createBlock(\Magento\Backend\Block\System\Store\Edit::class, 'block');
         $block->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
         $this->assertInstanceOf($expected, $block->getChildBlock('form'));
@@ -62,16 +62,16 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                ['store_type' => 'website', 'store_data' => 'Magento\Store\Model\Website'],
-                'Magento\Backend\Block\System\Store\Edit\Form\Website',
+                ['store_type' => 'website', 'store_data' => \Magento\Store\Model\Website::class],
+                \Magento\Backend\Block\System\Store\Edit\Form\Website::class,
             ],
             [
-                ['store_type' => 'group', 'store_data' => 'Magento\Store\Model\Store'],
-                'Magento\Backend\Block\System\Store\Edit\Form\Group'
+                ['store_type' => 'group', 'store_data' => \Magento\Store\Model\Store::class],
+                \Magento\Backend\Block\System\Store\Edit\Form\Group::class
             ],
             [
-                ['store_type' => 'store', 'store_data' => 'Magento\Store\Model\Store'],
-                'Magento\Backend\Block\System\Store\Edit\Form\Store'
+                ['store_type' => 'store', 'store_data' => \Magento\Store\Model\Store::class],
+                \Magento\Backend\Block\System\Store\Edit\Form\Store::class
             ]
         ];
     }
@@ -88,10 +88,10 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\Backend\Block\System\Store\Edit */
-        $block = $layout->createBlock('Magento\Backend\Block\System\Store\Edit', 'block');
+        $block = $layout->createBlock(\Magento\Backend\Block\System\Store\Edit::class, 'block');
         $block->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
         $this->assertEquals($expected, $block->getHeaderText());
@@ -106,7 +106,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'store_type' => 'website',
-                    'store_data' => 'Magento\Store\Model\Website',
+                    'store_data' => \Magento\Store\Model\Website::class,
                     'store_action' => 'add',
                 ],
                 'New Web Site',
@@ -114,25 +114,25 @@ class EditTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'store_type' => 'website',
-                    'store_data' => 'Magento\Store\Model\Website',
+                    'store_data' => \Magento\Store\Model\Website::class,
                     'store_action' => 'edit',
                 ],
                 'Edit Web Site'
             ],
             [
-                ['store_type' => 'group', 'store_data' => 'Magento\Store\Model\Store', 'store_action' => 'add'],
+                ['store_type' => 'group', 'store_data' => \Magento\Store\Model\Store::class, 'store_action' => 'add'],
                 'New Store'
             ],
             [
-                ['store_type' => 'group', 'store_data' => 'Magento\Store\Model\Store', 'store_action' => 'edit'],
+                ['store_type' => 'group', 'store_data' => \Magento\Store\Model\Store::class, 'store_action' => 'edit'],
                 'Edit Store'
             ],
             [
-                ['store_type' => 'store', 'store_data' => 'Magento\Store\Model\Store', 'store_action' => 'add'],
+                ['store_type' => 'store', 'store_data' => \Magento\Store\Model\Store::class, 'store_action' => 'add'],
                 'New Store View'
             ],
             [
-                ['store_type' => 'store', 'store_data' => 'Magento\Store\Model\Store', 'store_action' => 'edit'],
+                ['store_type' => 'store', 'store_data' => \Magento\Store\Model\Store::class, 'store_action' => 'edit'],
                 'Edit Store View'
             ]
         ];

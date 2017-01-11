@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Convert\Test\Unit;
@@ -22,7 +22,7 @@ class ExcelFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->setMethods(['create'])
             ->getMockForAbstractClass();
 
@@ -33,15 +33,15 @@ class ExcelFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $excel = $this->getMockBuilder('Magento\Framework\Convert\Excel')
+        $excel = $this->getMockBuilder(\Magento\Framework\Convert\Excel::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with('\\Magento\\Framework\\Convert\\Excel', [])
+            ->with(\Magento\Framework\Convert\Excel::class, [])
             ->willReturn($excel);
 
-        $this->assertInstanceOf('Magento\Framework\Convert\Excel', $this->model->create());
+        $this->assertInstanceOf(\Magento\Framework\Convert\Excel::class, $this->model->create());
     }
 }

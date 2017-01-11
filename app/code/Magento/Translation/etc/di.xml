@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,6 +26,12 @@
     <type name="Magento\Translation\Model\Inline\Parser">
         <arguments>
             <argument name="inputFilter" xsi:type="object">Magento\Framework\Filter\Input\MaliciousCode</argument>
+            <argument name="relatedCacheTypes" xsi:type="array">
+                <item name="blockCache" xsi:type="string">block_html</item>
+                <item name="layoutCache" xsi:type="string">layout</item>
+                <item name="translationCache" xsi:type="string">translate</item>
+                <item name="fullPageCache" xsi:type="string">full_page</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Translate\Inline\Provider">
@@ -64,7 +70,6 @@
             </argument>
         </arguments>
     </type>
-
     <virtualType name="AssetPreProcessorPool">
         <arguments>
             <argument name="preprocessors" xsi:type="array">
@@ -81,11 +86,53 @@
             </argument>
         </arguments>
     </virtualType>
-
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="uninstall_language" xsi:type="object">Magento\Translation\Console\Command\UninstallLanguageCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="translationConfigInitialDataProvider" type="Magento\Framework\App\Config\InitialConfigSource">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\App\DeploymentConfig\Reader</argument>
+            <argument name="configType" xsi:type="const">Magento\Translation\App\Config\Type\Translation::CONFIG_TYPE</argument>
+            <argument name="fileKey" xsi:type="const">Magento\Framework\Config\File\ConfigFilePool::APP_CONFIG</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="translationConfigSourceAggregated" type="Magento\Framework\App\Config\ConfigSourceAggregated">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="dynamic" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Translation\Model\Source\InitialTranslationSource\Proxy</item>
+                    <item name="sortOrder" xsi:type="string">100</item>
+                </item>
+                <item name="initial" xsi:type="array">
+                    <item name="source" xsi:type="object">translationConfigInitialDataProvider</item>
+                    <item name="sortOrder" xsi:type="string">1000</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Translation\App\Config\Type\Translation">
+        <arguments>
+            <argument name="source" xsi:type="object">translationConfigSourceAggregated</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="i18n" xsi:type="object">Magento\Translation\App\Config\Type\Translation</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Console\Command\App\ApplicationDumpCommand">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="i18n" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Translation\Model\Source\InitialTranslationSource</item>
+                    <item name="namespace" xsi:type="const">Magento\Translation\App\Config\Type\Translation::CONFIG_TYPE</item>
+                </item>
             </argument>
         </arguments>
     </type>

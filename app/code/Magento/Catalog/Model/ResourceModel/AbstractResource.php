@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,7 +54,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _getDefaultAttributeModel()
     {
-        return 'Magento\Catalog\Model\ResourceModel\Eav\Attribute';
+        return \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class;
     }
 
     /**

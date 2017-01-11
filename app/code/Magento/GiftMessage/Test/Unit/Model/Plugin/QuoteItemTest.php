@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
@@ -40,14 +40,14 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderItemMock = $this->getMock(
-            'Magento\Sales\Model\Order\Item',
+            \Magento\Sales\Model\Order\Item::class,
             ['setGiftMessageId', 'setGiftMessageAvailable', '__wakeup'],
             [],
             '',
             false
         );
         $this->quoteItemMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getGiftMessageId', 'getStoreId', '__wakeup'],
             [],
             '',
@@ -57,9 +57,9 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () use ($orderItems) {
             return $orderItems;
         };
-        $this->subjectMock = $this->getMock('Magento\Quote\Model\Quote\Item\ToOrderItem', [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Quote\Model\Quote\Item\ToOrderItem::class, [], [], '', false);
         $this->helperMock = $this->getMock(
-            'Magento\GiftMessage\Helper\Message',
+            \Magento\GiftMessage\Helper\Message::class,
             ['setGiftMessageId', 'isMessagesAllowed'],
             [],
             '',
@@ -68,7 +68,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         $this->model = new \Magento\GiftMessage\Model\Plugin\QuoteItem($this->helperMock);
     }
 
-    public function testAroundItemToOrderItem()
+    public function testAfterItemToOrderItem()
     {
         $storeId = 1;
         $giftMessageId = 1;
@@ -99,7 +99,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->orderItemMock,
-            $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock, [])
+            $this->model->afterConvert($this->subjectMock, $this->orderItemMock, $this->quoteItemMock, [])
         );
     }
 }

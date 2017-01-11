@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
@@ -14,9 +14,9 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $timezoneMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $loggerMock = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
-        $localeResolverMock = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
+        $timezoneMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $localeResolverMock = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class);
 
         $this->model = new \Magento\Eav\Model\Attribute\Data\Multiselect(
             $timezoneMock,
@@ -34,8 +34,8 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractValue($param, $expectedResult)
     {
-        $requestMock = $this->getMock('\Magento\Framework\App\RequestInterface');
-        $attributeMock = $this->getMock('\Magento\Eav\Model\Attribute', [], [], '', false);
+        $requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $attributeMock = $this->getMock(\Magento\Eav\Model\Attribute::class, [], [], '', false);
 
         $requestMock->expects($this->once())->method('getParam')->will($this->returnValue($param));
         $attributeMock->expects($this->once())->method('getAttributeCode')->will($this->returnValue('attributeCode'));
@@ -74,13 +74,19 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
      */
     public function testOutputValue($format, $expectedResult)
     {
-        $entityMock = $this->getMock('\Magento\Framework\Model\AbstractModel', [], [], '', false);
+        $entityMock = $this->getMock(\Magento\Framework\Model\AbstractModel::class, [], [], '', false);
         $entityMock->expects($this->once())->method('getData')->will($this->returnValue('value1,value2,'));
 
-        $sourceMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource', [], [], '', false);
+        $sourceMock = $this->getMock(
+            \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class,
+            [],
+            [],
+            '',
+            false
+        );
         $sourceMock->expects($this->any())->method('getOptionText')->will($this->returnArgument(0));
 
-        $attributeMock = $this->getMock('\Magento\Eav\Model\Attribute', [], [], '', false);
+        $attributeMock = $this->getMock(\Magento\Eav\Model\Attribute::class, [], [], '', false);
         $attributeMock->expects($this->any())->method('getSource')->will($this->returnValue($sourceMock));
 
         $this->model->setEntity($entityMock);

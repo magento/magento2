@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,18 +27,18 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->randomMock = $this->getMock('Magento\Framework\Math\Random');
+        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->randomMock = $this->getMock(\Magento\Framework\Math\Random::class);
         $this->randomMock->expects($this->any())
             ->method('getUniqueHash')
             ->with($this->equalTo('_'))
             ->will($this->returnValue('unique_hash'));
 
-        $groupManagement = $this->getMockBuilder('Magento\Customer\Api\GroupManagementInterface')
+        $groupManagement = $this->getMockBuilder(\Magento\Customer\Api\GroupManagementInterface::class)
             ->setMethods(['getAllCustomersGroup'])
             ->getMockForAbstractClass();
 
-        $allGroup = $this->getMockBuilder('Magento\Customer\Api\Data\GroupInterface')
+        $allGroup = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
 
@@ -52,7 +52,7 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->minsaleqty = $this->objectManagerHelper->getObject(
-            'Magento\CatalogInventory\Helper\Minsaleqty',
+            \Magento\CatalogInventory\Helper\Minsaleqty::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'mathRandom' => $this->randomMock,

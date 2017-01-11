@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Model\Layout;
 
+use Magento\Framework\App\State;
+use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
 use Magento\Framework\View\Model\Layout\Update\Validator;
@@ -201,7 +203,9 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     public function addUpdate($update)
     {
-        $this->updates[] = $update;
+        if (!in_array($update, $this->updates)) {
+            $this->updates[] = $update;
+        }
         return $this;
     }
 
@@ -447,20 +451,24 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param string $cacheId
      * @param string $layout
      * @return $this
+     * @throws \Exception
      */
     protected function _validateMergedLayout($cacheId, $layout)
     {
         $layoutStr = '<handle id="handle">' . $layout . '</handle>';
 
-        if ($this->appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
-            if (!$this->layoutValidator->isValid($layoutStr, Validator::LAYOUT_SCHEMA_MERGED, false)) {
-                $messages = $this->layoutValidator->getMessages();
-                //Add first message to exception
-                $message = reset($messages);
-                $this->logger->info(
-                    'Cache file with merged layout: ' . $cacheId
-                    . ' and handles ' . implode(', ', (array)$this->getHandles()) . ': ' . $message
-                );
+        try {
+            $this->layoutValidator->isValid($layoutStr, Validator::LAYOUT_SCHEMA_MERGED, false);
+        } catch (\Exception $e) {
+            $messages = $this->layoutValidator->getMessages();
+            //Add first message to exception
+            $message = reset($messages);
+            $this->logger->info(
+                'Cache file with merged layout: ' . $cacheId
+                . ' and handles ' . implode(', ', (array)$this->getHandles()) . ': ' . $message
+            );
+            if ($this->appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
+                throw $e;
             }
         }
 
@@ -490,7 +498,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     protected function _loadXmlString($xmlString)
     {
-        return simplexml_load_string($xmlString, 'Magento\Framework\View\Layout\Element');
+        return simplexml_load_string($xmlString, \Magento\Framework\View\Layout\Element::class);
     }
 
     /**
@@ -693,7 +701,19 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             /** @var $fileXml \Magento\Framework\View\Layout\Element */
             $fileXml = $this->_loadXmlString($fileStr);
             if (!$fileXml instanceof \Magento\Framework\View\Layout\Element) {
-                $this->_logXmlErrors($file->getFilename(), libxml_get_errors());
+                $xmlErrors = $this->getXmlErrors(libxml_get_errors());
+                $this->_logXmlErrors($file->getFilename(), $xmlErrors);
+                if ($this->appState->getMode() === State::MODE_DEVELOPER) {
+                    throw new ValidationException(
+                        new \Magento\Framework\Phrase(
+                            "Theme layout update file '%1' is not valid.\n%2",
+                            [
+                                $file->getFilename(),
+                                implode("\n", $xmlErrors)
+                            ]
+                        )
+                    );
+                }
                 libxml_clear_errors();
                 continue;
             }
@@ -721,21 +741,31 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Log xml errors to system log
      *
      * @param string $fileName
-     * @param array $libXmlErrors
+     * @param array $xmlErrors
      * @return void
      */
-    protected function _logXmlErrors($fileName, $libXmlErrors)
+    protected function _logXmlErrors($fileName, $xmlErrors)
+    {
+        $this->logger->info(
+            sprintf("Theme layout update file '%s' is not valid.\n%s", $fileName, implode("\n", $xmlErrors))
+        );
+    }
+
+    /**
+     * Get formatted xml errors
+     *
+     * @param array $libXmlErrors
+     * @return array
+     */
+    private function getXmlErrors($libXmlErrors)
     {
         $errors = [];
         if (count($libXmlErrors)) {
             foreach ($libXmlErrors as $error) {
                 $errors[] = "{$error->message} Line: {$error->line}";
             }
-
-            $this->logger->info(
-                sprintf("Theme layout update file '%s' is not valid.\n%s", $fileName, implode("\n", $errors))
-            );
         }
+        return $errors;
     }
 
     /**

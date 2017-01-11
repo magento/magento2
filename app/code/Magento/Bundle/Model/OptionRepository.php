@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model;
@@ -122,7 +122,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $this->dataObjectHelper->populateWithArray(
             $optionDataObject,
             $option->getData(),
-            '\Magento\Bundle\Api\Data\OptionInterface'
+            \Magento\Bundle\Api\Data\OptionInterface::class
         );
         $optionDataObject->setOptionId($option->getId())
             ->setTitle($option->getTitle() === null ? $option->getDefaultTitle() : $option->getTitle())

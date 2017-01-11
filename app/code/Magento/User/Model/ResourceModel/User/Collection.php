@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Model\ResourceModel\User;
@@ -19,6 +19,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\User\Model\User', 'Magento\User\Model\ResourceModel\User');
+        $this->_init(\Magento\User\Model\User::class, \Magento\User\Model\ResourceModel\User::class);
     }
 }

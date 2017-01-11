@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorization\Test\Unit\Model\Acl\Loader;
@@ -24,7 +24,14 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false, false);
+        $this->_resourceMock = $this->getMock(
+            \Magento\Framework\App\ResourceConnection::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
         $this->_rootResourceMock = new \Magento\Framework\Acl\RootResource('Magento_Backend::all');
         $this->_model = new \Magento\Authorization\Model\Acl\Loader\Rule(
             $this->_rootResourceMock,
@@ -36,10 +43,10 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->_resourceMock->expects($this->any())->method('getTable')->will($this->returnArgument(1));
 
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $selectMock->expects($this->any())->method('from')->will($this->returnValue($selectMock));
 
-        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
         $connectionMock->expects($this->once())->method('select')->will($this->returnValue($selectMock));
         $connectionMock->expects(
             $this->once()
@@ -59,7 +66,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->will($this->returnValue($connectionMock));
 
-        $aclMock = $this->getMock('Magento\Framework\Acl');
+        $aclMock = $this->getMock(\Magento\Framework\Acl::class);
         $aclMock->expects($this->any())->method('has')->will($this->returnValue(true));
         $aclMock->expects($this->at(1))->method('allow')->with('1', null, null);
         $aclMock->expects($this->at(2))->method('allow')->with('1', 'Magento_Backend::all', null);

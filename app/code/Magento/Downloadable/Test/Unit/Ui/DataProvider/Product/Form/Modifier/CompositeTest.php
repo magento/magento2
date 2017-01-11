@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -156,7 +156,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
      */
     protected function initModifiers()
     {
-        $this->modifierMock = $this->getMockBuilder('StdClass')
+        $this->modifierMock = $this->getMockBuilder(\StdClass::class)
             ->setMethods(['modifyData', 'modifyMeta'])
             ->getMock();
         $this->modifierFactoryMock->expects($this->once())

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -14,6 +14,7 @@
             <data name="category/data/description" xsi:type="string">Category Description Updated</data>
             <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
             <data name="category/data/meta_title" xsi:type="string">Category Title Updated</data>
+            <data name="redirectType" xsi:type="string">No</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCategoryInGrid" />

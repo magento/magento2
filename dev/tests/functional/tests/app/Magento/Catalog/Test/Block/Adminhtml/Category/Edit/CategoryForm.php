@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,7 +53,10 @@ class CategoryForm extends FormSections
             $storeSwitcherBlock->find($this->dropdownBlock, Locator::SELECTOR_CSS, 'liselectstore')->setValue($store);
             $modalElement = $this->browser->find($this->confirmModal);
             /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $modalElement]);
+            $modal = $this->blockFactory->create(
+                \Magento\Ui\Test\Block\Adminhtml\Modal::class,
+                ['element' => $modalElement]
+            );
             $modal->acceptAlert();
         }
         return parent::fill($fixture, $element);

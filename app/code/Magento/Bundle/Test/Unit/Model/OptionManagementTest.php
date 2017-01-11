@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,11 +39,11 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->optionRepositoryMock =
-            $this->getMock('Magento\Bundle\Api\ProductOptionRepositoryInterface', [], [], '', false);
+            $this->getMock(\Magento\Bundle\Api\ProductOptionRepositoryInterface::class, [], [], '', false);
         $this->productRepositoryMock =
-            $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
-        $this->optionMock = $this->getMock('Magento\Bundle\Api\Data\OptionInterface', [], [], '', false);
-        $this->productMock = $this->getMock('Magento\Catalog\Api\Data\ProductInterface', [], [], '', false);
+            $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class, [], [], '', false);
+        $this->optionMock = $this->getMock(\Magento\Bundle\Api\Data\OptionInterface::class, [], [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Api\Data\ProductInterface::class, [], [], '', false);
 
         $this->model = new OptionManagement($this->optionRepositoryMock, $this->productRepositoryMock);
     }

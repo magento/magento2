@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\Page\Source;
@@ -32,7 +32,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->listMock = $this->getMockBuilder('Magento\Framework\View\Design\Theme\Label\ListInterface')
+        $this->listMock = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Label\ListInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabels'])
             ->getMock();
@@ -47,7 +47,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     protected function getClassName()
     {
-        return 'Magento\Cms\Model\Page\Source\Theme';
+        return \Magento\Cms\Model\Page\Source\Theme::class;
     }
 
     /**

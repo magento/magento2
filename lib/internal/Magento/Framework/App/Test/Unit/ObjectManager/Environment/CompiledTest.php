@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\ObjectManager\Environment;
@@ -16,7 +16,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $envFactoryMock = $this->getMock('Magento\Framework\App\EnvironmentFactory', [], [], '', false);
+        $envFactoryMock = $this->getMock(\Magento\Framework\App\EnvironmentFactory::class, [], [], '', false);
         $this->_compiled = new CompiledTesting($envFactoryMock);
     }
 
@@ -28,7 +28,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     public function testGetObjectManagerFactory()
     {
         $this->assertInstanceOf(
-            'Magento\Framework\ObjectManager\Factory\Compiled',
+            \Magento\Framework\ObjectManager\Factory\Compiled::class,
             $this->_compiled->getObjectManagerFactory(['shared_instances' => []])
         );
     }

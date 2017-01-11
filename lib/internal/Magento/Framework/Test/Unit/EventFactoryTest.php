@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
@@ -24,9 +24,9 @@ class EventFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Framework\EventFactory($this->_objectManagerMock);
-        $this->_expectedObject = $this->getMockBuilder('Magento\Framework\Event')->getMock();
+        $this->_expectedObject = $this->getMockBuilder(\Magento\Framework\Event::class)->getMock();
     }
 
     public function testCreate()
@@ -37,7 +37,7 @@ class EventFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Framework\Event',
+            \Magento\Framework\Event::class,
             $arguments
         )->will(
             $this->returnValue($this->_expectedObject)

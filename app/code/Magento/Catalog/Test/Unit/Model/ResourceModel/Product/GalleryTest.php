@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
@@ -53,7 +53,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             [],
             [],
             '',
@@ -63,7 +63,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->method('setCacheAdapter');
 
         $metadata = $this->getMock(
-            'Magento\Framework\EntityManager\EntityMetadata',
+            \Magento\Framework\EntityManager\EntityMetadata::class,
             [],
             [],
             '',
@@ -77,7 +77,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->connection);
 
         $metadataPool = $this->getMock(
-            'Magento\Framework\EntityManager\MetadataPool',
+            \Magento\Framework\EntityManager\MetadataPool::class,
             [],
             [],
             '',
@@ -85,21 +85,27 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         );
         $metadataPool->expects($this->once())
             ->method('getMetadata')
-            ->with('Magento\Catalog\Api\Data\ProductInterface')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->willReturn($metadata);
 
-        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $resource->expects($this->any())->method('getTableName')->willReturn('table');
         $this->resource = $objectManager->getObject(
-            'Magento\Catalog\Model\ResourceModel\Product\Gallery',
+            \Magento\Catalog\Model\ResourceModel\Product\Gallery::class,
             [
                 'metadataPool' => $metadataPool,
                 'resource' => $resource
             ]
         );
-        $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $this->attribute = $this->getMock('Magento\Eav\Model\Entity\Attribute\AbstractAttribute', [], [], '', false);
+        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $this->attribute = $this->getMock(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     public function testLoadDataFromTableByValueId()
@@ -311,7 +317,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $attributeId = 6;
         $getTableReturnValue = 'table';
         $quoteInfoReturnValue =
-            'main.value_id = value.value_id AND value.store_id = ' . $storeId . ' AND value.entity_id = ' . $productId;
+            'main.value_id = value.value_id AND value.store_id = ' . $storeId;
         $positionCheckSql = 'testchecksql';
         $resultRow = [
             [
@@ -349,14 +355,12 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
         $this->product->expects($this->at(0))->method('getData')->with('entity_id')->willReturn($productId);
         $this->product->expects($this->at(1))->method('getStoreId')->will($this->returnValue($storeId));
-        $this->connection->expects($this->exactly(3))->method('quoteInto')->withConsecutive(
-            ['value.store_id = ?', 1],
-            ['value.entity_id = ?', 5],
-            ['default_value.entity_id = ?', 5]
+        $this->connection->expects($this->exactly(2))->method('quoteInto')->withConsecutive(
+            ['value.store_id = ?'],
+            ['default_value.store_id = ?']
         )->willReturnOnConsecutiveCalls(
             'value.store_id = ' . $storeId,
-            'value.entity_id = ' . $productId,
-            'default_value.entity_id = ' . $productId
+            'default_value.store_id = ' . 0
         );
         $this->select->expects($this->at(2))->method('joinLeft')->with(
             ['value' => $getTableReturnValue],
@@ -369,8 +373,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
         $this->select->expects($this->at(3))->method('joinLeft')->with(
             ['default_value' => $getTableReturnValue],
-            'main.value_id = default_value.value_id AND default_value.store_id = 0 AND default_value.entity_id = '
-            . $productId,
+            'main.value_id = default_value.value_id AND default_value.store_id = 0',
             ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
         )->willReturnSelf();
         $this->select->expects($this->at(4))->method('where')->with(
@@ -378,7 +381,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             $attributeId
         )->willReturnSelf();
         $this->select->expects($this->at(5))->method('where')->with('main.disabled = 0')->willReturnSelf();
-        $this->select->expects($this->at(6))->method('where')
+        $this->select->expects($this->at(7))->method('where')
                      ->with('entity.entity_id = ?', $productId)
                      ->willReturnSelf();
         $this->select->expects($this->once())->method('order')

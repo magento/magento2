@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create'],
             [],
             '',
@@ -176,8 +176,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function createExceptionInvalidArgumentDataProvider()
     {
         return [
-            'Magento\Framework\Data\Form\Element\Factory' => ['Magento\Framework\Data\Form\Element\Factory'],
-            'Magento\Framework\Data\Form\Element\Collection' => ['Magento\Framework\Data\Form\Element\Collection']
+            \Magento\Framework\Data\Form\Element\Factory::class => [
+                \Magento\Framework\Data\Form\Element\Factory::class
+            ],
+            \Magento\Framework\Data\Form\Element\Collection::class => [
+                \Magento\Framework\Data\Form\Element\Collection::class
+            ]
         ];
     }
 }

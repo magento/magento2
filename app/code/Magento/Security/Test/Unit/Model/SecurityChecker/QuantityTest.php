@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -68,7 +68,7 @@ class QuantityTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->collectionFactoryMock = $this->getMock(
-            '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory',
+            \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -76,7 +76,7 @@ class QuantityTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->collectionMock = $this->getMock(
-            '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection',
+            \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection::class,
             ['addFieldToFilter', 'filterByLifetime', 'count'],
             [],
             '',
@@ -88,7 +88,7 @@ class QuantityTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Security\Model\SecurityChecker\Quantity',
+            \Magento\Security\Model\SecurityChecker\Quantity::class,
             [
                 'securityConfig' => $this->securityConfigMock,
                 'collectionFactory' => $this->collectionFactoryMock,

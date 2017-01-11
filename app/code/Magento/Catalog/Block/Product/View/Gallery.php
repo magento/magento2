@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,15 +63,13 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 );
                 $image->setData(
                     'medium_image_url',
-                    $this->_imageHelper->init($product, 'product_page_image_medium')
-                        ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
+                    $this->_imageHelper->init($product, 'product_page_image_medium_no_frame')
                         ->setImageFile($image->getFile())
                         ->getUrl()
                 );
                 $image->setData(
                     'large_image_url',
-                    $this->_imageHelper->init($product, 'product_page_image_large')
-                        ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
+                    $this->_imageHelper->init($product, 'product_page_image_large_no_frame')
                         ->setImageFile($image->getFile())
                         ->getUrl()
                 );
@@ -121,9 +119,9 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         }
         if (empty($imagesItems)) {
             $imagesItems[] = [
-                'thumb' => $this->_imageHelper->getDefaultPlaceholderUrl('thumbnail'),
-                'img' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
-                'full' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
+                'thumb' => $this->getImage($this->getProduct(), 'product_thumbnail_image')->getImageUrl(),
+                'img' => $this->getImage($this->getProduct(), 'product_base_image')->getImageUrl(),
+                'full' => $this->getImage($this->getProduct(), 'product_page_image_large')->getImageUrl(),
                 'caption' => '',
                 'position' => '0',
                 'isMain' => true,

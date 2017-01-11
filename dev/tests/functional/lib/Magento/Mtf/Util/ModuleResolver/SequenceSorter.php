@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Mtf\Util\ModuleResolver;
@@ -48,7 +48,7 @@ class SequenceSorter implements SequenceSorterInterface
      */
     protected function getModuleSequence()
     {
-        return $this->magentoObjectManager->create('\Magento\Framework\Module\ModuleList\Loader')->load();
+        return $this->magentoObjectManager->create(\Magento\Framework\Module\ModuleList\Loader::class)->load();
     }
 
     /**

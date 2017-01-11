@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Controller\Adminhtml;
@@ -27,7 +27,7 @@ class TaxTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $jsonBody = $this->getResponse()->getBody();
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Json\Helper\Data'
+            \Magento\Framework\Json\Helper\Data::class
         )->jsonDecode(
             $jsonBody
         );
@@ -36,8 +36,9 @@ class TaxTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $classId = $result['class_id'];
         /** @var $class \Magento\Tax\Model\ClassModel */
-        $class = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Tax\Model\ClassModel')
-            ->load($classId, 'class_id');
+        $class = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Tax\Model\ClassModel::class
+        )->load($classId, 'class_id');
         $this->assertEquals($expectedData['class_name'], $class->getClassName());
     }
 
@@ -51,11 +52,11 @@ class TaxTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         /** @var \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassService */
         $taxClassService = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Tax\Api\TaxClassRepositoryInterface'
+            \Magento\Tax\Api\TaxClassRepositoryInterface::class
         );
 
         $taxClassFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Tax\Api\Data\TaxClassInterfaceFactory'
+            \Magento\Tax\Api\Data\TaxClassInterfaceFactory::class
         );
         $taxClass = $taxClassFactory->create();
         $taxClass->setClassName($taxClassData['class_name'])
@@ -64,8 +65,9 @@ class TaxTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $taxClassId = $taxClassService->save($taxClass);
 
         /** @var $class \Magento\Tax\Model\ClassModel */
-        $class = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Tax\Model\ClassModel')
-            ->load($taxClassId, 'class_id');
+        $class = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Tax\Model\ClassModel::class
+        )->load($taxClassId, 'class_id');
         $this->assertEquals($taxClassData['class_name'], $class->getClassName());
         $this->assertEquals($taxClassData['class_type'], $class->getClassType());
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,14 +18,17 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $connection;
+
     /**
      * @var Resource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
+
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     private $context;
+
     /**
      * @var Fulltext
      */
@@ -33,16 +36,16 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
+        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->once())
             ->method('getResources')
             ->willReturn($this->resource);
-        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->resource->expects($this->once())
@@ -51,7 +54,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $this->target = $objectManager->getObject(
-            '\Magento\CatalogSearch\Model\ResourceModel\Fulltext',
+            \Magento\CatalogSearch\Model\ResourceModel\Fulltext::class,
             [
                 'context' => $this->context,
             ]

@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Creditmemo\Create;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ItemsTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items */
@@ -37,14 +40,14 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false);
-        $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\StockRegistry')
+        $this->contextMock = $this->getMock(\Magento\Backend\Block\Template\Context::class, [], [], '', false);
+        $this->stockRegistry = $this->getMockBuilder(\Magento\CatalogInventory\Model\StockRegistry::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStockItem', '__wakeup'])
             ->getMock();
 
         $this->stockItemMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Stock\Item',
+            \Magento\CatalogInventory\Model\Stock\Item::class,
             ['getManageStock', '__wakeup'],
             [],
             '',
@@ -52,7 +55,7 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->stockConfiguration = $this->getMock(
-            'Magento\CatalogInventory\Model\Configuration',
+            \Magento\CatalogInventory\Model\Configuration::class,
             ['__wakeup', 'canSubtractQty'],
             [],
             '',
@@ -63,15 +66,15 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->will($this->returnValue($this->stockItemMock));
 
-        $this->registryMock = $this->getMock('Magento\Framework\Registry');
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class);
+        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getScopeConfig')
             ->will($this->returnValue($this->scopeConfig));
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->items = $this->objectManagerHelper->getObject(
-            'Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items',
+            \Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items::class,
             [
                 'context' => $this->contextMock,
                 'stockRegistry' => $this->stockRegistry,
@@ -99,13 +102,13 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
 
         if ($canReturnToStock) {
             $orderItem = $this->getMock(
-                'Magento\Sales\Model\Order\Item',
+                \Magento\Sales\Model\Order\Item::class,
                 ['getProductId', '__wakeup', 'getStore'],
                 [],
                 '',
                 false
             );
-            $store = $this->getMock('Magento\Store\Model\Store', ['getWebsiteId'], [], '', false);
+            $store = $this->getMock(\Magento\Store\Model\Store::class, ['getWebsiteId'], [], '', false);
             $store->expects($this->once())
                 ->method('getWebsiteId')
                 ->will($this->returnValue(10));
@@ -117,14 +120,14 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($productId));
 
             $creditMemoItem = $this->getMock(
-                'Magento\Sales\Model\Order\Creditmemo\Item',
+                \Magento\Sales\Model\Order\Creditmemo\Item::class,
                 ['setCanReturnToStock', 'getOrderItem', '__wakeup'],
                 [],
                 '',
                 false
             );
 
-            $creditMemo = $this->getMock('Magento\Sales\Model\Order\Creditmemo', [], [], '', false);
+            $creditMemo = $this->getMock(\Magento\Sales\Model\Order\Creditmemo::class, [], [], '', false);
             $creditMemo->expects($this->once())
                 ->method('getAllItems')
                 ->will($this->returnValue([$creditMemoItem]));
@@ -141,7 +144,13 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
                 ->with($this->equalTo($manageStock))
                 ->will($this->returnSelf());
 
-            $order = $this->getMock('Magento\Sales\Model\Order', ['setCanReturnToStock', '__wakeup'], [], '', false);
+            $order = $this->getMock(
+                \Magento\Sales\Model\Order::class,
+                ['setCanReturnToStock', '__wakeup'],
+                [],
+                '',
+                false
+            );
             $order->expects($this->once())
                 ->method('setCanReturnToStock')
                 ->with($this->equalTo($manageStock))

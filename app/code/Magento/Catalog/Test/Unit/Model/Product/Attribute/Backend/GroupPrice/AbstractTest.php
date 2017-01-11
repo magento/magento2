@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend\GroupPrice;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -21,18 +24,24 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = $this->getMock('Magento\Catalog\Helper\Data', ['isPriceGlobal'], [], '', false);
+        $this->_helper = $this->getMock(\Magento\Catalog\Helper\Data::class, ['isPriceGlobal'], [], '', false);
         $this->_helper->expects($this->any())->method('isPriceGlobal')->will($this->returnValue(true));
 
-        $currencyFactoryMock = $this->getMock('Magento\Directory\Model\CurrencyFactory', ['create'], [], '', false);
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
-        $productTypeMock = $this->getMock('Magento\Catalog\Model\Product\Type', [], [], '', false);
-        $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $localeFormatMock = $this->getMock('\Magento\Framework\Locale\FormatInterface', [], [], '', false);
-        $groupManagement = $this->getMock('Magento\Customer\Api\GroupManagementInterface', [], [], '', false);
-        $metadataPool = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
+        $currencyFactoryMock = $this->getMock(
+            \Magento\Directory\Model\CurrencyFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
+        $productTypeMock = $this->getMock(\Magento\Catalog\Model\Product\Type::class, [], [], '', false);
+        $configMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $localeFormatMock = $this->getMock(\Magento\Framework\Locale\FormatInterface::class, [], [], '', false);
+        $groupManagement = $this->getMock(\Magento\Customer\Api\GroupManagementInterface::class, [], [], '', false);
+        $metadataPool = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice',
+            \Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice::class,
             [
                 'currencyFactory' => $currencyFactoryMock,
                 'storeManager' => $storeManagerMock,
@@ -44,7 +53,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 'metadataPool' => $metadataPool
             ]
         );
-        $resource = $this->getMock('StdClass', ['getMainTable']);
+        $resource = $this->getMock(\StdClass::class, ['getMainTable']);
         $resource->expects($this->any())->method('getMainTable')->will($this->returnValue('table'));
 
         $this->_model->expects($this->any())->method('_getResource')->will($this->returnValue($resource));
@@ -56,20 +65,16 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $attributeId = 42;
 
         $attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             ['getBackendTable', 'isStatic', 'getAttributeId', 'getName', '__wakeup'],
             [],
             '',
             false
         );
         $attribute->expects($this->any())->method('getAttributeId')->will($this->returnValue($attributeId));
-
         $attribute->expects($this->any())->method('isStatic')->will($this->returnValue(false));
-
         $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
-
         $attribute->expects($this->any())->method('getName')->will($this->returnValue('tear_price'));
-
         $this->_model->setAttribute($attribute);
 
         $object = new \Magento\Framework\DataObject();

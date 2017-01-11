@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -154,6 +154,36 @@
     <type name="Magento\Catalog\Test\Constraint\AssertCategoryWithCustomStoreOnFrontend">
         <arguments>
             <argument name="severity" xsi:type="string">low</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute">
+        <arguments>
+            <argument name="classReferences" xsi:type="array">
+                <item name="admin__control-text" xsi:type="array">
+                    <item name="selector" xsi:type="string">[name="product[%code%]"]</item>
+                    <item name="type" xsi:type="string">null</item>
+                </item>
+                <item name="admin__control-textarea" xsi:type="array">
+                    <item name="selector" xsi:type="string">[name="product[%code%]"]</item>
+                    <item name="type" xsi:type="string">null</item>
+                </item>
+                <item name="admin__control-text _has-datepicker" xsi:type="array">
+                    <item name="selector" xsi:type="string">[name="product[%code%]"]</item>
+                    <item name="type" xsi:type="string">datepicker</item>
+                </item>
+                <item name="admin__control-select" xsi:type="array">
+                    <item name="selector" xsi:type="string">[name="product[%code%]"]</item>
+                    <item name="type" xsi:type="string">select</item>
+                </item>
+                <item name="admin__control-multiselect" xsi:type="array">
+                    <item name="selector" xsi:type="string">[name="product[%code%]"]</item>
+                    <item name="type" xsi:type="string">multiselect</item>
+                </item>
+                <item name="admin__actions-switch-checkbox" xsi:type="array">
+                    <item name="selector" xsi:type="string">[name="product[%code%]"]</item>
+                    <item name="type" xsi:type="string">switcher</item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

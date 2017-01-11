@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Config\Backend\Email;
@@ -37,15 +37,15 @@ class AsyncSendingTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->config = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
+        $this->config = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
 
-        $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
+        $this->eventManager = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
 
-        $this->context = $this->getMock('Magento\Framework\Model\Context', ['getEventDispatcher'], [], '', false);
+        $this->context = $this->getMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher'], [], '', false);
         $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManager);
 
         $this->object = $objectManager->getObject(
-            '\Magento\Sales\Model\Config\Backend\Email\AsyncSending',
+            \Magento\Sales\Model\Config\Backend\Email\AsyncSending::class,
             [
                 'config' => $this->config,
                 'context' => $this->context

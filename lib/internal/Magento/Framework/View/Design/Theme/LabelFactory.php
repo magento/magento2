@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class LabelFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\View\Design\Theme\Label'
+        $instanceName = \Magento\Framework\View\Design\Theme\Label::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

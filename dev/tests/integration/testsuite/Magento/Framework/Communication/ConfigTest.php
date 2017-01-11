@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Communication;
@@ -268,28 +268,28 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function getConfigInstance($configFilePath, $envConfigFilePath = null)
     {
-        $fileResolver = $this->getMockForAbstractClass('Magento\Framework\Config\FileResolverInterface');
+        $fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolver->expects($this->any())
             ->method('get')
             ->willReturn([file_get_contents($configFilePath)]);
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $xmlReader = $objectManager->create(
-            'Magento\Framework\Communication\Config\Reader\XmlReader',
+            \Magento\Framework\Communication\Config\Reader\XmlReader::class,
             ['fileResolver' => $fileResolver]
         );
-        $deploymentConfigReader = $this->getMockBuilder('Magento\Framework\App\DeploymentConfig\Reader')
+        $deploymentConfigReader = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig\Reader::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $envConfigData = include $envConfigFilePath ?: __DIR__ . '/_files/valid_communication_input.php';
         $deploymentConfigReader->expects($this->any())->method('load')->willReturn($envConfigData);
         $deploymentConfig = $objectManager->create(
-            'Magento\Framework\App\DeploymentConfig',
+            \Magento\Framework\App\DeploymentConfig::class,
             ['reader' => $deploymentConfigReader]
         );
-        $methodsMap = $objectManager->create('Magento\Framework\Reflection\MethodsMap');
+        $methodsMap = $objectManager->create(\Magento\Framework\Reflection\MethodsMap::class);
         $envReader = $objectManager->create(
-            'Magento\Framework\Communication\Config\Reader\EnvReader',
+            \Magento\Framework\Communication\Config\Reader\EnvReader::class,
             [
                 'deploymentConfig' => $deploymentConfig,
                 'methodsMap' => $methodsMap
@@ -301,18 +301,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         ];
         /** @var \Magento\Framework\Communication\Config\CompositeReader $reader */
         $reader = $objectManager->create(
-            'Magento\Framework\Communication\Config\CompositeReader',
+            \Magento\Framework\Communication\Config\CompositeReader::class,
             ['readers' => $readersConfig]
         );
         /** @var \Magento\Framework\Communication\Config $config */
         $configData = $objectManager->create(
-            'Magento\Framework\Communication\Config\Data',
+            \Magento\Framework\Communication\Config\Data::class,
             [
                 'reader' => $reader
             ]
         );
         return $objectManager->create(
-            'Magento\Framework\Communication\ConfigInterface',
+            \Magento\Framework\Communication\ConfigInterface::class,
             ['configData' => $configData]
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,8 +25,20 @@ class ImageProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->itemRepositoryMock = $this->getMock('Magento\Quote\Api\CartItemRepositoryInterface', [], [], '', false);
-        $this->itemPoolMock = $this->getMock('Magento\Checkout\CustomerData\ItemPoolInterface', [], [], '', false);
+        $this->itemRepositoryMock = $this->getMock(
+            \Magento\Quote\Api\CartItemRepositoryInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->itemPoolMock = $this->getMock(
+            \Magento\Checkout\CustomerData\ItemPoolInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new \Magento\Checkout\Model\Cart\ImageProvider(
             $this->itemRepositoryMock,
             $this->itemPoolMock
@@ -38,7 +50,7 @@ class ImageProviderTest extends \PHPUnit_Framework_TestCase
         $cartId = 42;
         $itemId = 74;
         $itemData = ['product_image' => 'Magento.png', 'random' => '3.1415926535'];
-        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $itemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
         $itemMock->expects($this->once())->method('getItemId')->willReturn($itemId);
 
         $expectedResult = [$itemId => $itemData['product_image']];

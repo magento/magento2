@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session\Test\Unit\SaveHandler\Redis;
@@ -37,16 +37,16 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->config = $this->getMock('Cm\RedisSession\Handler\ConfigInterface', [], [], '', false);
+        $this->config = $this->getMock(\Cm\RedisSession\Handler\ConfigInterface::class, [], [], '', false);
         $this->config->expects($this->once())
             ->method('getLogLevel')
             ->willReturn(LoggerInterface::DEBUG);
-        $this->psrLogger = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
-        $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->psrLogger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $this->request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         //$this->logger = new Logger($this->config, $this->psrLogger, $this->request);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->logger = $objectManager->getObject(
-            'Magento\Framework\Session\SaveHandler\Redis\Logger',
+            \Magento\Framework\Session\SaveHandler\Redis\Logger::class,
             [
                 'config' => $this->config,
                 'logger' => $this->psrLogger,

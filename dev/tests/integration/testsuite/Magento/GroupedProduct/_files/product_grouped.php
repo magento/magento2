@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,10 @@ require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_associated.php'
 require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_virtual_in_stock.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$productRepository = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface');
+$productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(
     \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
@@ -34,7 +34,7 @@ $product->setTypeId(
 );
 
 $newLinks = [];
-$productLinkFactory = $objectManager->get('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory');
+$productLinkFactory = $objectManager->get(\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory::class);
 
 /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
 $productLink = $productLinkFactory->create();

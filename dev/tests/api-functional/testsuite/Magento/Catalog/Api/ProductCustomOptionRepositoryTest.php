@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->productFactory = $this->objectManager->get('Magento\Catalog\Model\ProductFactory');
+        $this->productFactory = $this->objectManager->get(\Magento\Catalog\Model\ProductFactory::class);
     }
 
     /**
@@ -42,7 +42,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $sku = 'simple';
         /** @var ProductRepository $productRepository */
         $productRepository = $this->objectManager->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         /** @var  \Magento\Catalog\Model\Product $product */
         $product = $productRepository->get($sku, false, null, true);
@@ -75,7 +75,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $productSku = 'simple';
         /** @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface $service */
         $service = Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Api\ProductCustomOptionRepositoryInterface');
+            ->get(\Magento\Catalog\Api\ProductCustomOptionRepositoryInterface::class);
         $options = $service->getList('simple');
         $option = current($options);
         $optionId = $option->getOptionId();
@@ -243,7 +243,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $productSku = 'simple';
         /** @var ProductRepository $productRepository */
         $productRepository = $this->objectManager->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
 
         $options = $productRepository->get($productSku, true)->getOptions();
@@ -309,7 +309,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
 
         /** @var ProductRepository $productRepository */
         $productRepository = $this->objectManager->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         /** @var  \Magento\Catalog\Model\Product $product */
         $product = $productRepository->get('simple', false, null, true);
@@ -391,6 +391,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      */
     public function testUpdateNegative($optionData, $message)
     {
+        $this->_markTestAsRestOnly();
         $productSku = 'simple';
         /** @var ProductRepository $productRepository */
         $productRepository = $this->objectManager->create(ProductRepository::class);
@@ -403,18 +404,9 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 'resourcePath' => '/V1/products/options/' . $optionId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => 'V1',
-                'operation' => self::SERVICE_NAME . 'Save',
-            ],
         ];
 
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->setExpectedException('SoapFault');
-        } else {
-            $this->setExpectedException('Exception', $message, 400);
-        }
+        $this->setExpectedException('Exception', $message, 400);
         $this->_webApiCall($serviceInfo, ['option' => $optionData]);
     }
 

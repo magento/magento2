@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
@@ -73,7 +73,7 @@ class Edit extends \Magento\Customer\Controller\AbstractAccount
             $this->dataObjectHelper->populateWithArray(
                 $customerDataObject,
                 $data,
-                '\Magento\Customer\Api\Data\CustomerInterface'
+                \Magento\Customer\Api\Data\CustomerInterface::class
             );
         }
         $this->session->setCustomerData($customerDataObject);

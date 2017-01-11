@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl\Test\Unit\Loader;
@@ -19,7 +19,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
 
     public function testPopulateAclDoesntChangeAclObject()
     {
-        $aclMock = $this->getMock('Magento\Framework\Acl');
+        $aclMock = $this->getMock(\Magento\Framework\Acl::class);
         $aclMock->expects($this->never())->method('addRole');
         $aclMock->expects($this->never())->method('addResource');
         $aclMock->expects($this->never())->method('allow');

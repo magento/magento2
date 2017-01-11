@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -40,8 +40,8 @@
     </rule_information>
     <conditions>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::div[@class='rule-tree']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="conditions"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <conditions_serialized>
                 <selector>.fieldset[id^="sales_rule_formrule_conditions_fieldset_"]</selector>
@@ -51,8 +51,8 @@
     </conditions>
     <actions>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::select[@name='simple_action']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="actions"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <simple_action>
                 <input>select</input>
@@ -61,13 +61,9 @@
             <discount_qty />
             <discount_step />
             <apply_to_shipping>
-                <selector>//div[input[@name='apply_to_shipping']]/label</selector>
-                <strategy>xpath</strategy>
                 <input>switcher</input>
             </apply_to_shipping>
             <stop_rules_processing>
-                <selector>//div[input[@name='stop_rules_processing']]/label</selector>
-                <strategy>xpath</strategy>
                 <input>switcher</input>
             </stop_rules_processing>
             <simple_free_shipping>
@@ -81,7 +77,7 @@
     </actions>
     <labels>
         <class>\Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\Labels</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::input[@name='store_labels[0]']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="labels"]</selector>
+        <strategy>css selector</strategy>
     </labels>
 </sections>

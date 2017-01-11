@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\ScheduledStructure;
@@ -201,7 +201,7 @@ class Helper
                 $scheduledStructure->setElementToBrokenParentList($key);
 
                 if ($this->state->getMode() === State::MODE_DEVELOPER) {
-                    $this->logger->critical(
+                    $this->logger->info(
                         "Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', " .
                         'because the latter doesn\'t exist'
                     );

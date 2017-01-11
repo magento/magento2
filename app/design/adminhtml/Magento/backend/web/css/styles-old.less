@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -756,10 +756,6 @@
         display: none;
     }
 
-    label {
-        display: inline-block;
-    }
-
     label > input[type="radio"],
     label > input[type="checkbox"] {
         margin: -3px 3px 0 0;
@@ -862,20 +858,18 @@
 
     input[type="radio"],
     input[type="checkbox"] {
+        .lib-css(appearance, none, 1);
         background: #fff;
-        border: 1px solid #adadad;
         border-radius: 2px;
+        border: 1px solid #adadad;
         cursor: pointer;
         display: inline-block;
-        vertical-align: middle;
-        margin: 0 5px 0 0;
         height: 16px;
-        width: 16px;
+        margin: 0 5px 0 0;
         position: relative;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
         transition: all 0.1s ease-in;
+        vertical-align: middle;
+        width: 16px;
 
         &:focus {
             border-color: #007bdb;
@@ -1418,7 +1412,7 @@
 
         span {
             &:after {
-                color: #eb5202;
+                color: #e22626;
                 content: '*';
                 display: inline-block;
                 font-size: 1.6rem;
@@ -1706,10 +1700,6 @@
         }
     }
 
-    .field-price .addon input[type="text"] ~ .addafter strong {
-        font-size: 18px;
-    }
-
     .field-weight,
     .field-base_price {
         .addon {
@@ -1722,6 +1712,7 @@
     .field.type-price .addon,
     .field-price .addon,
     .field-special_price .addon,
+    .field-gift_wrapping_price .addon,
     .field-msrp .addon {
         direction: rtl;
     }
@@ -1729,6 +1720,7 @@
     .field.type-price .addon > *,
     .field-price .addon > *,
     .field-special_price .addon > *,
+    .field-gift_wrapping_price .addon > *,
     .field-msrp .addon > * {
         direction: ltr;
     }
@@ -1736,6 +1728,7 @@
     .field.type-price .addon .addafter,
     .field-price .addon .addafter,
     .field-special_price .addon .addafter,
+    .field-gift_wrapping_price .addon .addafter,
     .field-msrp .addon .addafter {
         border-width: 1px 0 1px 1px;
         border-radius: 1px 0 0 1px;
@@ -1744,6 +1737,7 @@
     .field.type-price .addon input[type=text]:first-child,
     .field-price .addon input[type=text]:first-child,
     .field-special_price .addon input[type=text]:first-child,
+    .field-gift_wrapping_price .addon input[type=text]:first-child,
     .field-msrp .addon input[type=text]:first-child {
         border-radius: 0 1px 1px 0;
     }
@@ -1751,6 +1745,7 @@
     .field.type-price input:focus,
     .field-price input:focus,
     .field-special_price input:focus,
+    .field-gift_wrapping_price input:focus,
     .field-msrp input:focus {
         border-color: #007bdb;
     }
@@ -1758,6 +1753,7 @@
     .field.type-price input:focus ~ label.addafter,
     .field-price input:focus ~ label.addafter,
     .field-special_price input:focus ~ label.addafter,
+    .field-gift_wrapping_price input:focus ~ label.addafter,
     .field-msrp input:focus ~ label.addafter {
         border-color: #007bdb;
     }
@@ -3791,6 +3787,14 @@
     .rule-tree .x-tree ul {
         padding-left: 0 !important;
         border-left: none !important;
+    }
+
+    .rule-tree {
+        ._has-datepicker {
+            + .ui-datepicker-trigger {
+                position: static;
+            }
+        }
     }
 
     .rule-param .label {

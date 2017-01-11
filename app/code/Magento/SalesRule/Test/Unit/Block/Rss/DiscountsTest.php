@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Block\Rss;
@@ -70,15 +70,15 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->requestInterface = $this->getMock('Magento\Framework\App\RequestInterface');
-        $this->rssBuilderInterface = $this->getMock('Magento\Framework\App\Rss\UrlBuilderInterface');
-        $this->urlBuilderInterface = $this->getMock('Magento\Framework\UrlInterface');
-        $this->scopeConfigInterface = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->timezoneInterface = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $this->discounts = $this->getMock('Magento\SalesRule\Model\Rss\Discounts', [], [], '', false);
+        $this->storeManagerInterface = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->requestInterface = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->rssBuilderInterface = $this->getMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
+        $this->urlBuilderInterface = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->scopeConfigInterface = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->timezoneInterface = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->discounts = $this->getMock(\Magento\SalesRule\Model\Rss\Discounts::class, [], [], '', false);
         $this->rssModel = $this->getMock(
-            'Magento\SalesRule\Model\Rss\Discounts',
+            \Magento\SalesRule\Model\Rss\Discounts::class,
             [
                 '__wakeup',
                 'getDiscountCollection'
@@ -88,7 +88,7 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->storeModel = $this->getMock(
-            'Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             [
                 '__wakeUp',
                 'getId',
@@ -107,7 +107,7 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
-            'Magento\SalesRule\Block\Rss\Discounts',
+            \Magento\SalesRule\Block\Rss\Discounts::class,
             [
                 'storeManager' => $this->storeManagerInterface,
                 'rssModel' => $this->discounts,
@@ -151,7 +151,7 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
         $url = 'http://rss.magento.com';
 
         $ruleModel =  $this->getMock(
-            'Magento\SalesRule\Model\Rule',
+            \Magento\SalesRule\Model\Rule::class,
             [
                 '__wakeup',
                 'getCouponCode',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\ErrorProcessing;
@@ -19,7 +19,9 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError');
+        $this->model = $objectManager->getObject(
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class
+        );
     }
 
     /**

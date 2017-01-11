@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\Unit\Model\Product\Attribute\Media;
@@ -22,7 +22,7 @@ class VideoEntryTest extends \PHPUnit_Framework_TestCase
     {
         $this->modelObject =
             $this->getMock(
-                '\Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry',
+                \Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry::class,
                 ['getData', 'setData'],
                 [],
                 '',

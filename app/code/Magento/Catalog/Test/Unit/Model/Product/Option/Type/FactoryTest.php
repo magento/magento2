@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Option\Type;
@@ -19,18 +19,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_factory = $objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Product\Option\Type\Factory',
+            \Magento\Catalog\Model\Product\Option\Type\Factory::class,
             ['objectManager' => $this->_objectManagerMock]
         );
     }
 
     public function testCreate()
     {
-        $className = 'Magento\Catalog\Model\Product\Option\Type\DefaultType';
+        $className = \Magento\Catalog\Model\Product\Option\Type\DefaultType::class;
 
         $filterMock = $this->getMock($className, [], [], '', false);
         $this->_objectManagerMock->expects(
@@ -49,7 +49,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateWithArguments()
     {
-        $className = 'Magento\Catalog\Model\Product\Option\Type\DefaultType';
+        $className = \Magento\Catalog\Model\Product\Option\Type\DefaultType::class;
         $arguments = ['foo', 'bar'];
 
         $filterMock = $this->getMock($className, [], [], '', false);

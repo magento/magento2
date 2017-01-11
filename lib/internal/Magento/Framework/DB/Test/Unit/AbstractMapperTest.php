@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,7 +63,7 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->resourceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -72,7 +72,7 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
             []
         );
         $this->connectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
@@ -81,15 +81,15 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
             []
         );
         $this->selectMock = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             [],
             [],
             '',
             false
         );
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->fetchStrategyMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Data\Collection\Db\FetchStrategyInterface',
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class,
             [],
             '',
             false,
@@ -98,14 +98,14 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
             []
         );
         $this->objectFactoryMock = $this->getMock(
-            'Magento\Framework\Data\ObjectFactory',
+            \Magento\Framework\Data\ObjectFactory::class,
             [],
             [],
             '',
             false
         );
         $this->mapperFactoryMock = $this->getMock(
-            'Magento\Framework\DB\MapperFactory',
+            \Magento\Framework\DB\MapperFactory::class,
             [],
             [],
             '',
@@ -126,7 +126,7 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject $mapper */
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\AbstractMapper',
+            \Magento\Framework\DB\AbstractMapper::class,
             [
                 'logger' => $this->loggerMock,
                 'fetchStrategy' => $this->fetchStrategyMock,
@@ -141,7 +141,7 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
             $mapperMethods
         );
         $criteriaMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Api\CriteriaInterface',
+            \Magento\Framework\Api\CriteriaInterface::class,
             [],
             '',
             false,
@@ -173,7 +173,7 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
         ];
         /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject $mapper */
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\AbstractMapper',
+            \Magento\Framework\DB\AbstractMapper::class,
             [
                 'logger' => $this->loggerMock,
                 'fetchStrategy' => $this->fetchStrategyMock,
@@ -210,7 +210,7 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject $mapper */
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\AbstractMapper',
+            \Magento\Framework\DB\AbstractMapper::class,
             [
                 'logger' => $this->loggerMock,
                 'fetchStrategy' => $this->fetchStrategyMock,
@@ -225,7 +225,7 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
             ['getConnection']
         );
         $connectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             true,

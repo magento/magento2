@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,19 +51,19 @@ class EditorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->factoryMock = $this->getMock('\Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
+        $this->factoryMock = $this->getMock(\Magento\Framework\Data\Form\Element\Factory::class, [], [], '', false);
         $this->collectionFactoryMock = $this->getMock(
-            '\Magento\Framework\Data\Form\Element\CollectionFactory',
+            \Magento\Framework\Data\Form\Element\CollectionFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
-        $this->configMock = $this->getMock('\Magento\Framework\DataObject', ['getData'], [], '', false);
+        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
+        $this->configMock = $this->getMock(\Magento\Framework\DataObject::class, ['getData'], [], '', false);
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Framework\Data\Form\Element\Editor',
+            \Magento\Framework\Data\Form\Element\Editor::class,
             [
                 'factoryElement' => $this->factoryMock,
                 'factoryCollection' => $this->collectionFactoryMock,
@@ -73,7 +73,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->formMock = $this->getMock(
-            'Magento\Framework\Data\Form',
+            \Magento\Framework\Data\Form::class,
             ['getHtmlIdPrefix', 'getHtmlIdSuffix'],
             [],
             '',
@@ -93,7 +93,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $this->configMock->expects($this->once())->method('getData')->with('enabled')->willReturn(true);
 
         $model = $this->objectManager->getObject(
-            'Magento\Framework\Data\Form\Element\Editor',
+            \Magento\Framework\Data\Form\Element\Editor::class,
             [
                 'factoryElement' => $this->factoryMock,
                 'factoryCollection' => $this->collectionFactoryMock,
@@ -190,7 +190,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfig()
     {
-        $config = $this->getMock('\Magento\Framework\DataObject', ['getData'], [], '', false);
+        $config = $this->getMock(\Magento\Framework\DataObject::class, ['getData'], [], '', false);
         $this->assertEquals($config, $this->model->getConfig());
 
         $this->configMock->expects($this->once())->method('getData')->with('test')->willReturn('test');

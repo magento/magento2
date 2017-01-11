@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // jscs:disable jsDoc
@@ -9,7 +9,8 @@ define([
     'jquery',
     'underscore',
     'ko',
-    'mage/backend/notification'
+    'mage/backend/notification',
+    'mage/translate'
 ], function (uiRegistry, Component, $, _, ko) {
     'use strict';
 
@@ -28,24 +29,13 @@ define([
         this.steps = steps;
         this.index = 0;
         this.data = {};
-        this.nextLabelText = 'Next';
-        this.prevLabelText = 'Back';
-        this.initSelectors = function (modalClass) {
-            var elementSelector = '[data-role=steps-wizard-main]';
-
-            this.nextLabel = '[data-role="step-wizard-next"]';
-            this.prevLabel = '[data-role="step-wizard-prev"]';
-
-            if (modalClass) {
-                this.nextLabel = '.' + modalClass + ' ' + this.nextLabel;
-                this.prevLabel = '.' + modalClass + ' ' + this.prevLabel;
-                elementSelector = '.' + modalClass + elementSelector;
-            }
-
-            this.element = $(elementSelector);
-            $(this.element).notification();
-        };
-        this.initSelectors(modalClass);
+        this.nextLabelText = $.mage.__('Next');
+        this.prevLabelText = $.mage.__('Back');
+        this.elementSelector = '[data-role=steps-wizard-main]';
+        this.element = modalClass ? $('.' + modalClass + this.elementSelector) : $(this.elementSelector);
+        this.nextLabel = '[data-role="step-wizard-next"]';
+        this.prevLabel = '[data-role="step-wizard-prev"]';
+        this.element.notification();
         this.move = function (newIndex) {
             if (!this.preventSwitch(newIndex)) {
                 if (newIndex > this.index) {
@@ -213,7 +203,7 @@ define([
                 modal.closeModal();
             }
         },
-        showSpecificStep: function () {
+        showSpecificStep: function (data, event) {
             var index = _.indexOf(this.stepsNames, event.target.hash.substr(1)),
                 stepName = this.wizard.move(index);
 

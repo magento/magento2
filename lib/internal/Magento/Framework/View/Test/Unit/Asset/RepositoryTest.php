@@ -1,15 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * Unit test for Magento\Framework\View\Asset\Repository
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,9 +33,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     private $designMock;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeProviderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $listMock;
+    private $themeProvider;
 
     /**
      * @var \Magento\Framework\View\Asset\Source|\PHPUnit_Framework_MockObject_MockObject
@@ -68,48 +72,48 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->urlMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->designMock = $this->getMockBuilder('Magento\Framework\View\DesignInterface')
+        $this->designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->listMock = $this->getMockBuilder('Magento\Framework\View\Design\Theme\ListInterface')
+        $this->themeProvider = $this->getMock(ThemeProviderInterface::class);
+        $this->sourceMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Source::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sourceMock = $this->getMockBuilder('Magento\Framework\View\Asset\Source')
+        $this->httpMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->httpMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->fileFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Asset\FileFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileFactoryMock = $this->getMockBuilder('Magento\Framework\View\Asset\FileFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->fallbackFactoryMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContextFactory')
+        $this->fallbackFactoryMock = $this->getMockBuilder(
+            \Magento\Framework\View\Asset\File\FallbackContextFactory::class
+        )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextFactoryMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\ContextFactory')
+        $this->contextFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\ContextFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->remoteFactoryMock = $this->getMockBuilder('Magento\Framework\View\Asset\RemoteFactory')
+        $this->remoteFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Asset\RemoteFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->repository = new Repository(
-            $this->urlMock,
-            $this->designMock,
-            $this->listMock,
-            $this->sourceMock,
-            $this->httpMock,
-            $this->fileFactoryMock,
-            $this->fallbackFactoryMock,
-            $this->contextFactoryMock,
-            $this->remoteFactoryMock
-        );
+        $this->repository = (new ObjectManager($this))->getObject(Repository::class, [
+            'baseUrl' => $this->urlMock,
+            'design' => $this->designMock,
+            'themeProvider' => $this->themeProvider,
+            'assetSource' => $this->sourceMock,
+            'request' => $this->httpMock,
+            'fileFactory' => $this->fileFactoryMock,
+            'fallbackContextFactory' => $this->fallbackFactoryMock,
+            'contextFactory' => $this->contextFactoryMock,
+            'remoteFactory' => $this->remoteFactoryMock
+        ]);
     }
 
     /**
@@ -120,7 +124,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     public function testUpdateDesignParamsWrongTheme()
     {
         $params = ['area' => 'area', 'theme' => 'nonexistent_theme'];
-        $this->listMock->expects($this->once())
+        $this->themeProvider->expects($this->once())
             ->method('getThemeByFullPath')
             ->with('area/nonexistent_theme')
             ->will($this->returnValue(null));
@@ -135,7 +139,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateDesignParams($params, $result)
     {
-        $this->listMock
+        $this->themeProvider
             ->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn('ThemeID');
@@ -165,12 +169,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateAsset()
     {
-        $this->listMock
+        $this->themeProvider
             ->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturnArgument(0);
 
-        $fallbackContextMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContex')
+        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContex::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->fallbackFactoryMock
@@ -187,7 +191,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn($fallbackContextMock);
 
-        $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+        $assetMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -216,7 +220,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStaticViewFileContext()
     {
-        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface', [], [], '', false);
+        $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false);
         $this->designMock
             ->expects($this->any())
             ->method('getDesignParams')
@@ -227,7 +231,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                     'locale' => 'locale'
                 ]
             );
-        $this->listMock
+        $this->themeProvider
             ->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturnArgument(0);
@@ -236,7 +240,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('isSecure')
             ->willReturn(false);
 
-        $fallbackContextMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContex')
+        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContex::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->fallbackFactoryMock
@@ -268,11 +272,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateRelated($filePath, $resultFilePath, $module)
     {
-        $originalContextMock = $this->getMockBuilder('Magento\Framework\View\Asset\ContextInterface')
+        $originalContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\ContextInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $originalAssetMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+        $originalAssetMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
             ->disableOriginalConstructor()
             ->setMethods(['getModule', 'getContext'])
             ->getMock();
@@ -281,7 +285,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getContext')
             ->willReturn($originalContextMock);
 
-        $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+        $assetMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -321,7 +325,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateArbitrary()
     {
-        $contextMock = $this->getMockBuilder('Magento\Framework\View\Asset\ContextInterface')
+        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\ContextInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -337,7 +341,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn($contextMock);
 
-        $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+        $assetMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -373,7 +377,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrl()
     {
-        $themeMock = $this->getMock('Magento\Framework\View\Design\ThemeInterface', [], [], '', false);
+        $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false);
         $this->designMock
             ->expects($this->any())
             ->method('getDesignParams')
@@ -385,7 +389,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+        $assetMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
             ->disableOriginalConstructor()
             ->getMock();
         $assetMock

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,6 @@ return Symfony\CS\Config\Config::create()
         'extra_empty_lines',
         'include',
         'join_function',
-        'multiline_array_trailing_comma',
         'namespace_no_leading_whitespace',
         'new_with_braces',
         'object_operator',

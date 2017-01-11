@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -326,7 +326,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         if ($this->stockConfiguration === null) {
             $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogInventory\Api\StockConfigurationInterface');
+                ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
         }
         return $this->stockConfiguration;
     }
@@ -338,7 +338,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         if (null === $this->queryProcessorComposite) {
             $this->queryProcessorComposite = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\QueryProcessorComposite');
+                ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\QueryProcessorComposite::class);
         }
         return $this->queryProcessorComposite;
     }

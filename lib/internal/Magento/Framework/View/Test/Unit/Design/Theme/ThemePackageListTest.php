@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme;
@@ -27,8 +27,16 @@ class ThemePackageListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registrar = $this->getMockForAbstractClass('\Magento\Framework\Component\ComponentRegistrarInterface');
-        $this->factory = $this->getMock('Magento\Framework\View\Design\Theme\ThemePackageFactory', [], [], '', false);
+        $this->registrar = $this->getMockForAbstractClass(
+            \Magento\Framework\Component\ComponentRegistrarInterface::class
+        );
+        $this->factory = $this->getMock(
+            \Magento\Framework\View\Design\Theme\ThemePackageFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->object = new ThemePackageList($this->registrar, $this->factory);
     }
 
@@ -56,7 +64,7 @@ class ThemePackageListTest extends \PHPUnit_Framework_TestCase
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, $themeKey)
             ->willReturn($themePath);
-        $themePackage = $this->getMock('\Magento\Framework\View\Design\Theme\ThemePackage', [], [], '', false);
+        $themePackage = $this->getMock(\Magento\Framework\View\Design\Theme\ThemePackage::class, [], [], '', false);
         $this->factory->expects($this->once())
             ->method('create')
             ->with($themeKey, $themePath)
@@ -70,7 +78,7 @@ class ThemePackageListTest extends \PHPUnit_Framework_TestCase
             ->method('getPaths')
             ->with(ComponentRegistrar::THEME)
             ->willReturn(['theme1' => 'path1', 'theme2' => 'path2']);
-        $themePackage = $this->getMock('\Magento\Framework\View\Design\Theme\ThemePackage', [], [], '', false);
+        $themePackage = $this->getMock(\Magento\Framework\View\Design\Theme\ThemePackage::class, [], [], '', false);
         $this->factory->expects($this->exactly(2))
             ->method('create')
             ->withConsecutive(

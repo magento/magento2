@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Observer\Frontend\Quote\Address;
@@ -44,8 +44,8 @@ class VatValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerAddressMock = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
-        $this->customerVatMock = $this->getMock('Magento\Customer\Model\Vat', [], [], '', false);
+        $this->customerAddressMock = $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false);
+        $this->customerVatMock = $this->getMock(\Magento\Customer\Model\Vat::class, [], [], '', false);
         $this->customerVatMock->expects($this->any())
             ->method('getMerchantCountryCode')
             ->willReturn('merchantCountryCode');
@@ -53,10 +53,10 @@ class VatValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('getMerchantVatNumber')
             ->willReturn('merchantVatNumber');
 
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
 
         $this->quoteAddressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             [
                 'getCountryId',
                 'getVatId',

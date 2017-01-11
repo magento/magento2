@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
@@ -24,13 +24,13 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_translator = $this->getMock('Magento\Framework\TranslateInterface', [], [], '', false);
-        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->_translator = $this->getMock(\Magento\Framework\TranslateInterface::class, [], [], '', false);
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMock();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_renderer = $objectManagerHelper->getObject(
-            'Magento\Framework\Phrase\Renderer\Translate',
+            \Magento\Framework\Phrase\Renderer\Translate::class,
             [
                 'translator' => $this->_translator,
                 'logger' => $this->loggerMock

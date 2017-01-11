@@ -2,7 +2,7 @@
 /**
  * Unit test for Magento\Framework\ValidatorFactory
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,15 +23,16 @@ class RedirectFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->model = $objectManager->getObject('Magento\Framework\Controller\Result\RedirectFactory',
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->model = $objectManager->getObject(
+            \Magento\Framework\Controller\Result\RedirectFactory::class,
             ['objectManager' => $this->objectManagerMock]
         );
     }
 
     public function testCreate()
     {
-        $redirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+        $redirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -39,7 +40,7 @@ class RedirectFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($redirect);
 
         $resultRedirect = $this->model->create();
-        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $resultRedirect);
+        $this->assertInstanceOf(\Magento\Framework\Controller\Result\Redirect::class, $resultRedirect);
         $this->assertSame($redirect, $resultRedirect);
     }
 }

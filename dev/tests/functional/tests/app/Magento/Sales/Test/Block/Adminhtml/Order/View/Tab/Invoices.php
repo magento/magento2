@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ class Invoices extends Tab
     public function getGridBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid',
+            \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid::class,
             ['element' => $this->_rootElement->find($this->grid)]
         );
     }

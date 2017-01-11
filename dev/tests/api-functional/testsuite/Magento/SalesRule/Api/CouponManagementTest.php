@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Api;
@@ -30,7 +30,7 @@ class CouponManagementTest extends WebapiAbstract
     public function testManagement($count, $length, $format, $regex)
     {
         /** @var $registry \Magento\Framework\Registry */
-        $registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 
         /** @var $salesRule \Magento\SalesRule\Model\Rule */
         $salesRule = $registry->registry('_fixture/Magento_SalesRule_Api_RuleRepository');

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -81,7 +81,7 @@ class CategoryManagementTest extends WebapiAbstract
             ];
         $this->assertTrue($this->_webApiCall($serviceInfo, $categoryData));
         /** @var \Magento\Catalog\Model\Category $model */
-        $readService = Bootstrap::getObjectManager()->create('Magento\Catalog\Api\CategoryRepositoryInterface');
+        $readService = Bootstrap::getObjectManager()->create(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $model = $readService->get($categoryId);
         $this->assertEquals($expectedPath, $model->getPath());
         $this->assertEquals($expectedPosition, $model->getPosition());

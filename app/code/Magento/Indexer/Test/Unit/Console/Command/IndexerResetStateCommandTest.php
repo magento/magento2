@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
@@ -27,8 +27,8 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecute()
     {
         $this->configureAdminArea();
-        $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
-        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $collection = $this->getMock(\Magento\Indexer\Model\Indexer\Collection::class, [], [], '', false);
+        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
 
         $indexerOne->expects($this->once())
             ->method('getTitle')

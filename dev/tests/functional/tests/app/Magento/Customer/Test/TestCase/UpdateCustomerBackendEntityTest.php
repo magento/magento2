@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,6 @@ class UpdateCustomerBackendEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -101,23 +100,45 @@ class UpdateCustomerBackendEntityTest extends Injectable
             : $initialCustomer->getData();
         $groupId = $customer->hasData('group_id') ? $customer : $initialCustomer;
         $data['group_id'] = ['customerGroup' => $groupId->getDataFieldConfig('group_id')['source']->getCustomerGroup()];
-
-        if ($initialCustomer->hasData('address')) {
-            $addressesList = $initialCustomer->getDataFieldConfig('address')['source']->getAddresses();
-            foreach ($addressesList as $key => $addressFixture) {
-                if ($addressToDelete === null || $addressFixture != $address) {
-                    $data['address'] = ['addresses' => [$key => $addressFixture]];
-                }
-            }
-        }
-        if ($address !== null) {
-            $data['address']['addresses'][] = $address;
+        $customerAddress = $this->prepareCustomerAddress($initialCustomer, $address, $addressToDelete);
+        if (!empty($customerAddress)) {
+            $data['address'] = $customerAddress;
         }
 
         return $this->fixtureFactory->createByCode(
             'customer',
             ['data' => $data]
         );
+    }
+
+    /**
+     * Prepare address for customer entity.
+     *
+     * @param Customer $initialCustomer
+     * @param Address|null $address
+     * @param Address|null $addressToDelete
+     * @return array
+     */
+    private function prepareCustomerAddress(
+        Customer $initialCustomer,
+        Address $address = null,
+        Address $addressToDelete = null
+    ) {
+        $customerAddress = [];
+
+        if ($initialCustomer->hasData('address')) {
+            $addressesList = $initialCustomer->getDataFieldConfig('address')['source']->getAddresses();
+            foreach ($addressesList as $key => $addressFixture) {
+                if ($addressToDelete === null || $addressFixture != $address) {
+                    $customerAddress = ['addresses' => [$key => $addressFixture]];
+                }
+            }
+        }
+        if ($address !== null) {
+            $customerAddress['addresses'][] = $address;
+        }
+
+        return $customerAddress;
     }
 
     /**

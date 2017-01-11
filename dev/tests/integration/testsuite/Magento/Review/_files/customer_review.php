@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 );
 
 $review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Review\Model\Review',
+    \Magento\Review\Model\Review::class,
     ['data' => [
         'customer_id' => $customer->getId(),
         'title' => 'Review Summary',
@@ -26,16 +26,18 @@ $review
     ->setEntityPkValue($product->getId())
     ->setStatusId(\Magento\Review\Model\Review::STATUS_PENDING)
     ->setStoreId(
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
-            ->getStore()->getId()
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Store\Model\StoreManagerInterface::class
+        )->getStore()->getId()
     )
     ->setStores([
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
-            ->getStore()->getId()
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Store\Model\StoreManagerInterface::class
+        )->getStore()->getId()
     ])
     ->save();
 
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry')->register(
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class)->register(
     'review_data',
     $review
 );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Adminhtml\Billing\Agreement;
@@ -27,7 +27,7 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         /** @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection $billingAgreementCollection */
         $billingAgreementCollection = Bootstrap::getObjectManager()->create(
-            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection'
+            \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection::class
         );
         $agreementId = $billingAgreementCollection->getFirstItem()->getId();
         $this->uri = $this->uri . '/agreement/' . $agreementId;

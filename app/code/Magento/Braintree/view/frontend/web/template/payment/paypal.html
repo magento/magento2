@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -21,20 +21,57 @@
 
     <div class="payment-method-content">
         <each args="getRegion('messages')" render=""></each>
-        <fieldset class="fieldset" data-bind='attr: {id: "payment_form_" + getCode()}'>
+        <fieldset class="braintree-paypal-fieldset" data-bind='attr: {id: "payment_form_" + getCode()}'>
             <div id="paypal-container"></div>
         </fieldset>
         <div class="checkout-agreements-block">
             <each args="$parent.getRegion('before-place-order')" render=""></each>
         </div>
-        <div class="actions-toolbar">
+        <!-- ko if: (vaultEnabler.isVaultEnabled())-->
+        <div class="field choice" data-bind="visible: !isReviewRequired()">
+            <input type="checkbox"
+                   name="vault[is_enabled]"
+                   class="checkbox"
+                   data-bind="attr: {'id': getCode() + '_enable_vault'}, checked: vaultEnabler.isActivePaymentTokenEnabler"/>
+            <label class="label" data-bind="attr: {'for': getCode() + '_enable_vault'}">
+                <span><!-- ko i18n: 'Save for later use.'--><!-- /ko --></span>
+            </label>
+            <div class="field-tooltip toggle">
+                            <span class="field-tooltip-action action-vault"
+                                  tabindex="0"
+                                  data-toggle="dropdown"
+                                  data-bind="attr: {title: $t('What is this?')}, mageInit: {'dropdown':{'activeClass': '_active'}}">
+                                <span translate="'What is this?'"></span>
+                            </span>
+                <div class="field-tooltip-content"
+                     data-target="dropdown"
+                     translate="'We store you payment information securely on Braintree servers via SSL.'"></div>
+            </div>
+        </div>
+        <!-- /ko -->
+        <div class="actions-toolbar braintree-paypal-actions" data-bind="visible: isReviewRequired()">
+            <div class="payment-method-item braintree-paypal-account">
+                <span class="payment-method-type">PayPal</span>
+                <span class="payment-method-description" text="customerEmail()"></span>
+            </div>
+            <div class="primary">
+                <button data-button="paypal-place" data-role="review-save"
+                        type="submit"
+                        data-bind="attr: {id: getCode() + '_place_order', title: $t('Place Order')}, enable: (isActive()), click: placeOrder"
+                        class="action primary checkout"
+                        disabled>
+                    <span translate="'Place Order'"></span>
+                </button>
+            </div>
+        </div>
+        <div class="actions-toolbar" data-bind="visible: !isReviewRequired()">
             <div class="primary">
                 <button data-button="place" data-role="review-save"
                         type="submit"
-                        data-bind="attr: {title: $t('Continue to PayPal')}, enable: (isActive()), click: payWithPayPal"
+                        data-bind="attr: {id: getButtonId(), title: $t(getButtonTitle())}, enable: (isActive()), click: payWithPayPal"
                         class="action primary checkout"
                         disabled>
-                    <span translate="'Continue to PayPal'"></span>
+                    <span translate="getButtonTitle()"></span>
                 </button>
             </div>
         </div>

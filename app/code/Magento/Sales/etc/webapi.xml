@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -133,6 +133,12 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/invoice/:invoiceId/refund" method="POST">
+        <service class="Magento\Sales\Api\RefundInvoiceInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
     <route url="/V1/creditmemo/:id/comments" method="GET">
         <service class="Magento\Sales\Api\CreditmemoManagementInterface" method="getCommentsList"/>
         <resources>
@@ -177,6 +183,12 @@
     </route>
     <route url="/V1/creditmemo" method="POST">
         <service class="Magento\Sales\Api\CreditmemoRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/:orderId/refund" method="POST">
+        <service class="Magento\Sales\Api\RefundOrderInterface" method="execute"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
@@ -235,6 +247,12 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/order/:orderId/ship" method="POST">
+        <service class="Magento\Sales\Api\ShipOrderInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
     <route url="/V1/orders/" method="POST">
         <service class="Magento\Sales\Api\OrderRepositoryInterface" method="save"/>
         <resources>
@@ -249,6 +267,12 @@
     </route>
     <route url="/V1/transactions" method="GET">
         <service class="Magento\Sales\Api\TransactionRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/:orderId/invoice" method="POST">
+        <service class="Magento\Sales\Api\InvoiceOrderInterface" method="execute"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>

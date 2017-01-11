@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -143,9 +143,13 @@
             <rule type="paypalExpressDisable" event="activate-rule"/>
             <rule type="paypalExpressLockConfiguration" event="activate-rule"/>
             <rule type="paypalExpressMarkDisable" event="deactivate-rule">
+                <argument name="wpp_ca">wpp_ca</argument>
+                <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
             <rule type="paypalExpressUnlockConfiguration" event="deactivate-rule">
+                <argument name="wpp_ca">wpp_ca</argument>
+                <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
         </relation>

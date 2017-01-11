@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <group id="paypal_payflowpro_with_express_checkout" translate="label comment" extends="payment_all_paypal/paypal_payflowpro">
-        <label>Payflow Pro (Includes Express Checkout)</label>
+        <label>Payflow Pro</label>
         <attribute type="paypal_ec_separate">0</attribute>
         <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
             <label>Required PayPal Settings</label>

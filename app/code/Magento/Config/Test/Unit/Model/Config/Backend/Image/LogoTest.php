@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Backend\Image;
@@ -30,11 +30,11 @@ class LogoTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->uploaderFactoryMock = $this->getMockBuilder('\Magento\MediaStorage\Model\File\UploaderFactory')
+        $this->uploaderFactoryMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->uploaderMock = $this->getMockBuilder('\Magento\MediaStorage\Model\File\Uploader')
+        $this->uploaderMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
             ->setMethods(['setAllowedExtensions', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -43,13 +43,13 @@ class LogoTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->uploaderMock));
         $this->requestDataMock = $this
-            ->getMockBuilder('\Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface')
+            ->getMockBuilder(\Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface::class)
             ->setMethods(['getTmpName'])
             ->getMockForAbstractClass();
-        $mediaDirectoryMock = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\WriteInterface')
+        $mediaDirectoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $filesystemMock = $this->getMockBuilder('\Magento\Framework\Filesystem')
+        $filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDirectoryWrite'])
             ->getMock();
@@ -57,7 +57,7 @@ class LogoTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryWrite')
             ->will($this->returnValue($mediaDirectoryMock));
         $this->model = $helper->getObject(
-            'Magento\Config\Model\Config\Backend\Image\Logo',
+            \Magento\Config\Model\Config\Backend\Image\Logo::class,
             [
                 'uploaderFactory' => $this->uploaderFactoryMock,
                 'requestData' => $this->requestDataMock,

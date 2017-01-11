@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
@@ -39,7 +39,7 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\Webapi\Rest\Request')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\Webapi\Rest\Request::class)
             ->setMethods(
                 [
                     'isSecure',
@@ -55,16 +55,16 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->any())
             ->method('getHttpHost')
             ->willReturn('testHostName.com');
-        $routerMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Router')->setMethods(['match'])
+        $routerMock = $this->getMockBuilder(\Magento\Webapi\Controller\Rest\Router::class)->setMethods(['match'])
             ->disableOriginalConstructor()->getMock();
-        $this->routeMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Router\Route')
+        $this->routeMock = $this->getMockBuilder(\Magento\Webapi\Controller\Rest\Router\Route::class)
             ->setMethods(['isSecure', 'getServiceMethod', 'getServiceClass', 'getAclResources', 'getParameters'])
             ->disableOriginalConstructor()->getMock();
-        $this->authorizationMock = $this->getMockBuilder('Magento\Framework\Webapi\Authorization')
+        $this->authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
             ->disableOriginalConstructor()->getMock();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->storeMock = $this->getMock('\Magento\Store\Api\Data\StoreInterface');
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
 
         $this->requestValidator =

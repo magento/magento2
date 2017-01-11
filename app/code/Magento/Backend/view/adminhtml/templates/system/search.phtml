@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@
                     class="search-global-input"
                     id="search-global"
                     name="query"
-                    data-mage-init='<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWidgetInitOptions()))?>'>
+                    data-mage-init='<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWidgetInitOptions()) ?>'>
             <button
                 type="submit"
                 class="search-global-action"

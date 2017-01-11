@@ -2,7 +2,7 @@
 /**
  * \Magento\Theme\Model\Layout\Config\Reader
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Layout\Config;
@@ -21,13 +21,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $cache \Magento\Framework\App\Cache */
-        $cache = $objectManager->create('Magento\Framework\App\Cache');
+        $cache = $objectManager->create(\Magento\Framework\App\Cache::class);
         $cache->clean();
         $this->_fileResolverMock = $this->getMockBuilder(
-            'Magento\Framework\Config\FileResolverInterface'
+            \Magento\Framework\Config\FileResolverInterface::class
         )->disableOriginalConstructor()->getMock();
         $this->_model = $objectManager->create(
-            'Magento\Theme\Model\Layout\Config\Reader',
+            \Magento\Theme\Model\Layout\Config\Reader::class,
             ['fileResolver' => $this->_fileResolverMock]
         );
     }

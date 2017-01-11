@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Parser\Adapter;
@@ -20,7 +20,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->xmlPhraseCollector = $objectManager->create(
-            'Magento\Setup\Module\I18n\Parser\Adapter\Xml'
+            \Magento\Setup\Module\I18n\Parser\Adapter\Xml::class
         );
     }
 

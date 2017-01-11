@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,6 +42,7 @@ class Factory
     public function create($fileName = null, $adapterName = null)
     {
         $adapter = $this->adapterFactory->create($adapterName);
-        return $this->objectManager->create('Magento\Framework\Image', ['adapter' => $adapter, 'fileName' => $fileName]);
+        return $this->objectManager->create(
+            \Magento\Framework\Image::class, ['adapter' => $adapter, 'fileName' => $fileName]);
     }
 }

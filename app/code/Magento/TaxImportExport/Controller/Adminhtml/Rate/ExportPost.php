@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
@@ -38,7 +38,7 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         $taxCalculationRateTitleDict = [];
 
         foreach ($this->_objectManager->create(
-            'Magento\Store\Model\Store'
+            \Magento\Store\Model\Store::class
         )->getCollection()->setLoadDefault(
             false
         ) as $store) {
@@ -52,7 +52,7 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         $content .= "\n";
 
         foreach ($this->_objectManager->create(
-            'Magento\Tax\Model\Calculation\Rate\Title'
+            \Magento\Tax\Model\Calculation\Rate\Title::class
         )->getCollection() as $title) {
             $rateId = $title->getTaxCalculationRateId();
 
@@ -65,7 +65,7 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         unset($title);
 
         $collection = $this->_objectManager->create(
-            'Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection'
+            \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection::class
         )->joinCountryTable()->joinRegionTable();
 
         while ($rate = $collection->fetchItem()) {

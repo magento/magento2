@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
@@ -45,7 +45,7 @@ abstract class Status extends \Magento\Backend\App\Action
     {
         $statusCode = $this->getRequest()->getParam('status');
         if ($statusCode) {
-            $status = $this->_objectManager->create('Magento\Sales\Model\Order\Status')->load($statusCode);
+            $status = $this->_objectManager->create(\Magento\Sales\Model\Order\Status::class)->load($statusCode);
         } else {
             $status = false;
         }

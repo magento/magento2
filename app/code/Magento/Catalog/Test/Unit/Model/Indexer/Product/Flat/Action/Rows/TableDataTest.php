@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action\Rows;
@@ -32,10 +32,10 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
-        $this->_resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->_connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->_resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $this->_productIndexerHelper = $this->getMock(
-            'Magento\Catalog\Helper\Product\Flat\Indexer',
+            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
             [],
             [],
             '',
@@ -77,7 +77,7 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
         );
 
         $model = $this->_objectManager->getObject(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData',
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData::class,
             ['resource' => $this->_resourceMock, 'productIndexerHelper' => $this->_productIndexerHelper]
         );
 
@@ -102,7 +102,7 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
             'column_3' => 'column_definition',
         ];
 
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $selectMock->expects(
             $this->once()
         )->method(
@@ -172,7 +172,7 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
         );
 
         $model = $this->_objectManager->getObject(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData',
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData::class,
             ['resource' => $this->_resourceMock, 'productIndexerHelper' => $this->_productIndexerHelper]
         );
 

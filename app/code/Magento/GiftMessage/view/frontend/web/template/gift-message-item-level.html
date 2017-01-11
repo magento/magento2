@@ -1,18 +1,17 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <!-- ko if: isActive() || hasActiveOptions() -->
-<a href="#"
-   class="action action-gift"
-   data-bind="
-   click: $data.toggleFormBlockVisibility.bind($data),
-   css: {_active: formBlockVisibility() || resultBlockVisibility()}
-   ">
+<button class="action action-gift"
+        data-bind="
+            click: $data.toggleFormBlockVisibility.bind($data),
+            css: {_active: formBlockVisibility() || resultBlockVisibility()}
+        ">
     <span data-bind="i18n: 'Gift options'"></span>
-</a>
+</button>
 <div class="gift-content" data-bind="css: {_active: formBlockVisibility() || resultBlockVisibility()}"> <!-- add class "active" to display the content -->
     <!-- ko ifnot: resultBlockVisibility() -->
         <div class="gift-options">

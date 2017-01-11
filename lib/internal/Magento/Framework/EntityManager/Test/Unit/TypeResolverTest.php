@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\EntityManager\Test\Unit;
@@ -25,7 +25,8 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->metadataPoolMock = $this->getMock('\Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
+        $this->metadataPoolMock =
+            $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
         $this->resolver = new \Magento\Framework\EntityManager\TypeResolver($this->metadataPoolMock);
     }
 

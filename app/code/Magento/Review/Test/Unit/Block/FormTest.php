@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Block;
@@ -39,9 +39,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->requestMock = $this->getMock('\Magento\Framework\App\RequestInterface');
-        $this->reviewDataMock = $this->getMockBuilder('\Magento\Review\Helper\Data')
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->reviewDataMock = $this->getMockBuilder(\Magento\Review\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -49,8 +49,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('getIsGuestAllowToWrite')
             ->willReturn(true);
 
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')->getMockForAbstractClass();
-        $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)->getMockForAbstractClass();
+        $this->context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
         $this->context->expects(
             $this->any()
         )->method(
@@ -62,11 +62,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('getRequest')
             ->willReturn($this->requestMock);
         $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
-        $this->productRepository = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
+        $this->productRepository = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->object = $this->objectManagerHelper->getObject(
-            'Magento\Review\Block\Form',
+            \Magento\Review\Block\Form::class,
             [
                 'context' => $this->context,
                 'reviewData' => $this->reviewDataMock,
@@ -93,7 +93,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->with('id', false)
             ->willReturn($productId);
 
-        $productMock = $this->getMock('Magento\Catalog\Api\Data\ProductInterface');
+        $productMock = $this->getMock(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->productRepository->expects($this->once())
             ->method('getById')
             ->with($productId, false, $storeId)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Test\Unit\Block\Stockqty\Type;
@@ -20,9 +20,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $this->registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $this->block = $objectManager->getObject(
-            'Magento\GroupedProduct\Block\Stockqty\Type\Grouped',
+            \Magento\GroupedProduct\Block\Stockqty\Type\Grouped::class,
             ['registry' => $this->registry]
         );
     }
@@ -35,10 +35,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities()
     {
         $productTags = ['catalog_product_1'];
-        $childProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $childProduct = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $childProduct->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
         $typeInstance = $this->getMock(
-            'Magento\GroupedProduct\Model\Product\Type\Grouped',
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
             [],
             [],
             '',
@@ -51,7 +51,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue([$childProduct])
         );
-        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $product->expects($this->once())->method('getTypeInstance')->will($this->returnValue($typeInstance));
         $this->registry->expects(
             $this->any()

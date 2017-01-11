@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_resourceModel = Bootstrap::getObjectManager()
-            ->create('Magento\Newsletter\Model\ResourceModel\Subscriber');
+            ->create(\Magento\Newsletter\Model\ResourceModel\Subscriber::class);
     }
 
     /**
@@ -28,7 +28,7 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Api\CustomerRepositoryInterface');
+            ->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customerData = $customerRepository->getById(1);
         $result = $this->_resourceModel->loadByCustomerData($customerData);
 
@@ -44,7 +44,7 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Api\CustomerRepositoryInterface');
+            ->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customerData = $customerRepository->getById(2);
         $result = $this->_resourceModel->loadByCustomerData($customerData);
 

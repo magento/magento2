@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,28 +38,28 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             [],
             [],
             '',
             false
         );
         $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             [],
             [],
             '',
             false
         );
         $this->regionFactoryMock = $this->getMock(
-            'Magento\Directory\Model\RegionFactory',
+            \Magento\Directory\Model\RegionFactory::class,
             [],
             [],
             '',
             false
         );
         $this->regionMock = $this->getMock(
-            'Magento\Directory\Model\Region',
+            \Magento\Directory\Model\Region::class,
             ['load', 'getCountryId', 'getCode'],
             [],
             '',
@@ -67,7 +67,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->address = $objectManager->getObject(
-            'Magento\Sales\Model\Order\Address',
+            \Magento\Sales\Model\Order\Address::class,
             [
                 'regionFactory' => $this->regionFactoryMock
             ]

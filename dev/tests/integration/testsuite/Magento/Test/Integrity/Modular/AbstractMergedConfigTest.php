@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
@@ -39,7 +39,13 @@ abstract class AbstractMergedConfigTest extends \PHPUnit_Framework_TestCase
         $invalidFiles = [];
 
         $files = $this->getConfigFiles();
-        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock = $this->getMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $validationStateMock->method('isValidationRequired')
             ->willReturn(false);
         $mergedConfig = new \Magento\Framework\Config\Dom(
@@ -52,7 +58,7 @@ abstract class AbstractMergedConfigTest extends \PHPUnit_Framework_TestCase
             $content = file_get_contents($file[0]);
             try {
                 $validationStateMock = $this->getMock(
-                    '\Magento\Framework\Config\ValidationStateInterface',
+                    \Magento\Framework\Config\ValidationStateInterface::class,
                     [],
                     [],
                     '',

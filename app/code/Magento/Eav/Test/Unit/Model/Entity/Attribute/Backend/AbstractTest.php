@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
@@ -15,7 +15,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend',
+            \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
             [],
             '',
             false
@@ -28,7 +28,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $attributeId = 42;
 
         $attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             ['getBackendTable', 'isStatic', 'getAttributeId', '__wakeup'],
             [],
             '',

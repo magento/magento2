@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\Unit\Model\Plugin\Catalog\Product\Gallery;
@@ -41,7 +41,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->product = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [],
             [],
             '',
@@ -49,7 +49,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute',
+            \Magento\Eav\Model\Entity\Attribute::class,
             [],
             [],
             '',
@@ -60,7 +60,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn('media_gallery');
 
         $this->resourceModel = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Gallery',
+            \Magento\Catalog\Model\ResourceModel\Product\Gallery::class,
             [],
             [],
             '',
@@ -68,7 +68,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->mediaGalleryReadHandler = $this->getMock(
-            'Magento\Catalog\Model\Product\Gallery\ReadHandler',
+            \Magento\Catalog\Model\Product\Gallery\ReadHandler::class,
             [],
             [],
             '',
@@ -78,7 +78,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->subject = $objectManager->getObject(
-            'Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery\ReadHandler',
+            \Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery\ReadHandler::class,
             [
                 'resourceModel' => $this->resourceModel
             ]
@@ -200,16 +200,12 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             'values' => []
         ];
 
-        $resourceEntryResult = [];
-
         $this->product->expects($this->once())
             ->method('getData')
             ->with('media_gallery')
             ->willReturn($mediaData);
 
-        $this->resourceModel->expects($this->once())
-            ->method('loadDataFromTableByValueId')
-            ->willReturn($resourceEntryResult);
+        $this->resourceModel->expects($this->never())->method('loadDataFromTableByValueId');
 
         $this->mediaGalleryReadHandler->expects($this->any())
             ->method('getAttribute')

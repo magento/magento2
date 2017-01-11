@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Rule;
@@ -43,7 +43,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogRule\Model\Rule', 'Magento\CatalogRule\Model\ResourceModel\Rule');
+        $this->_init(\Magento\CatalogRule\Model\Rule::class, \Magento\CatalogRule\Model\ResourceModel\Rule::class);
     }
 
     /**
@@ -138,7 +138,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     {
         if (!$this->_associatedEntitiesMap) {
             $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap')
+                ->get(\Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
                 ->getData();
         }
         return $this->_associatedEntitiesMap;

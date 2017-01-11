@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,12 +24,12 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testChangeEncryptionKeyConfigNotWritable()
     {
-        $writerMock = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
+        $writerMock = $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false);
         $writerMock->expects($this->once())->method('checkIfWritable')->will($this->returnValue(false));
 
         /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change $keyChangeModel */
         $keyChangeModel = $this->objectManager->create(
-            'Magento\EncryptionKey\Model\ResourceModel\Key\Change',
+            \Magento\EncryptionKey\Model\ResourceModel\Key\Change::class,
             ['writer' => $writerMock]
         );
         $keyChangeModel->changeEncryptionKey();
@@ -44,22 +44,22 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
         $testPath = 'test/config';
         $testValue = 'test';
 
-        $writerMock = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
+        $writerMock = $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false);
         $writerMock->expects($this->once())->method('checkIfWritable')->will($this->returnValue(true));
 
-        $structureMock = $this->getMock('Magento\Config\Model\Config\Structure', [], [], '', false);
+        $structureMock = $this->getMock(\Magento\Config\Model\Config\Structure::class, [], [], '', false);
         $structureMock->expects($this->once())
             ->method('getFieldPathsByAttribute')
             ->will($this->returnValue([$testPath]));
 
         /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change $keyChangeModel */
         $keyChangeModel = $this->objectManager->create(
-            'Magento\EncryptionKey\Model\ResourceModel\Key\Change',
+            \Magento\EncryptionKey\Model\ResourceModel\Key\Change::class,
             ['structure' => $structureMock, 'writer' => $writerMock]
         );
 
         $configModel = $this->objectManager->create(
-            'Magento\Config\Model\ResourceModel\Config'
+            \Magento\Config\Model\ResourceModel\Config::class
         );
         $configModel->saveConfig($testPath, 'test', 'default', 0);
         $this->assertNotNull($keyChangeModel->changeEncryptionKey());

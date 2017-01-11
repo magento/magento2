@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
@@ -62,7 +62,7 @@ class ResponseFactory
         /** @var \Magento\Framework\Search\Response\Aggregation $aggregations */
         $aggregations = $this->aggregationFactory->create($rawResponse['aggregations']);
         return $this->objectManager->create(
-            'Magento\Framework\Search\Response\QueryResponse',
+            \Magento\Framework\Search\Response\QueryResponse::class,
             [
                 'documents' => $documents,
                 'aggregations' => $aggregations

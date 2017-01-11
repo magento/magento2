@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Indexer\Design\Config;
@@ -53,7 +53,7 @@ class FieldsProvider implements FieldsetInterface
                 $fields[$itemName] = [
                     'name' => $itemName,
                     'origin' => 'value',
-                    'handler' => 'Magento\Framework\Indexer\Handler\DefaultHandler',
+                    'handler' => \Magento\Framework\Indexer\Handler\DefaultHandler::class,
                     'type' => 'searchable',
                 ];
             }

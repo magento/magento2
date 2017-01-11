@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -36,8 +36,8 @@
         <field name="gallery" is_required="0" />
         <field name="gift_message_available" is_required="0" />
         <field name="has_options" is_required="0" />
-        <field name="image" is_required="0" />
-        <field name="image_label" is_required="0" />
+        <field name="image" is_required="0" group="gallery" source="Magento\Catalog\Test\Fixture\Product\Image" />
+        <field name="image_label" group="gallery" is_required="0" />
         <field name="manufacturer" is_required="0" />
         <field name="media_gallery" is_required="0" />
         <field name="meta_description" is_required="0" group="search-engine-optimization" />
@@ -47,6 +47,8 @@
         <field name="msrp" is_required="0" />
         <field name="msrp_display_actual_price_type" is_required="0" />
         <field name="name" is_required="1" group="product-details" />
+        <field name="use_default_name" group="product-details" />
+        <field name="use_default_price" group="product-details" />
         <field name="old_id" is_required="0" />
         <field name="options_container" is_required="0" />
         <field name="page_layout" is_required="0" />
@@ -70,12 +72,13 @@
         <field name="url_path" is_required="0" />
         <field name="visibility" is_required="0" group="product-details" />
         <field name="weight" is_required="0" group="product-details" />
+        <field name="additional_attributes" is_required="0" group="product-details" />
         <field name="id" group="null" />
         <field name="type_id" />
         <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />
         <field name="custom_attribute" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomAttribute" />
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
-        <field name="website_ids" group="websites" />
+        <field name="website_ids" group="websites" source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
         <field name="is_returnable" is_required="0" group="product-details" />
         <field name="news_from_date" is_required="0" source="Magento\Backend\Test\Fixture\Source\Date" />
         <field name="news_to_date" is_required="0" source="Magento\Backend\Test\Fixture\Source\Date" />

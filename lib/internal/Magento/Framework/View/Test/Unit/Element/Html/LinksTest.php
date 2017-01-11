@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
@@ -27,7 +27,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManager($this);
 
         /** @var Context $context */
-        $this->context = $this->objectManagerHelper->getObject('Magento\Framework\View\Element\Template\Context');
+        $this->context = $this->objectManagerHelper->getObject(\Magento\Framework\View\Element\Template\Context::class);
         $this->block = new Links($this->context);
     }
 
@@ -46,7 +46,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     public function testSetActive()
     {
-        $link = $this->getMock('Magento\Framework\View\Element\Html\Link', [], [], '', false);
+        $link = $this->getMock(\Magento\Framework\View\Element\Html\Link::class, [], [], '', false);
         $link
             ->expects($this->at(1))
             ->method('__call')
@@ -79,7 +79,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
             ->willReturn($blockHtml);
 
         /** @var \Magento\Framework\View\Element\AbstractBlock $link */
-        $link = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
+        $link = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
             ->disableOriginalConstructor()
             ->getMock();
         $link

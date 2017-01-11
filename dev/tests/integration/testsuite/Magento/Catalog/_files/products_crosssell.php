@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setName('Simple Cross Sell')
@@ -20,13 +20,13 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->save();
 
 /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
-$productLink = $objectManager->create('Magento\Catalog\Api\Data\ProductLinkInterface');
+$productLink = $objectManager->create(\Magento\Catalog\Api\Data\ProductLinkInterface::class);
 $productLink->setSku('simple_with_cross');
 $productLink->setLinkedProductSku('simple');
 $productLink->setPosition(1);
 $productLink->setLinkType('crosssell');
 
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setName('Simple Product With Cross Sell')

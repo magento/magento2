@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Json\Test\Unit\Helper;
@@ -21,14 +21,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->jsonEncoderMock = $this->getMockBuilder('Magento\Framework\Json\EncoderInterface')
+        $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->jsonDecoderMock = $this->getMockBuilder('Magento\Framework\Json\DecoderInterface')
+        $this->jsonDecoderMock = $this->getMockBuilder(\Magento\Framework\Json\DecoderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->helper = $objectManager->getObject(
-            'Magento\Framework\Json\Helper\Data',
+            \Magento\Framework\Json\Helper\Data::class,
             [
                 'jsonEncoder' => $this->jsonEncoderMock,
                 'jsonDecoder' => $this->jsonDecoderMock,

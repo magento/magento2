@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\Test\Unit\Config;
@@ -27,23 +27,23 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_fileResolverMock = $this->getMock(
-            'Magento\Framework\App\Config\FileResolver',
+            \Magento\Framework\App\Config\FileResolver::class,
             ['get'],
             [],
             '',
             false
         );
 
-        $this->_converter = $this->getMock('Magento\Framework\Mview\Config\Converter', ['convert']);
+        $this->_converter = $this->getMock(\Magento\Framework\Mview\Config\Converter::class, ['convert']);
 
-        $urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $urnResolverMock = $this->getMock(\Magento\Framework\Config\Dom\UrnResolver::class, [], [], '', false);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
             ->with('urn:magento:framework:Mview/etc/mview.xsd')
             ->willReturn('test_folder');
         $schemaLocator = new \Magento\Framework\Mview\Config\SchemaLocator($urnResolverMock);
 
-        $validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
+        $validationState = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(false);

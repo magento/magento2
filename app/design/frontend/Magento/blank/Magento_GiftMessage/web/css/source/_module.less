@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -18,6 +18,9 @@
 & when (@media-common = true) {
     .gift-message {
         .field {
+            &:extend(.abs-clearfix all);
+            margin-bottom: @indent__base;
+
             .label {
                 .lib-css(color, @gift-message-field-label__color);
                 .lib-css(font-weight, @font-weight__regular);
@@ -27,6 +30,7 @@
 
     .gift-options {
         &:extend(.abs-add-clearfix all);
+
         .actions-toolbar {
             .action-cancel {
                 &:extend(.abs-action-button-as-link all);
@@ -44,6 +48,7 @@
             margin: 0 0 @indent__base;
         }
     }
+
     .gift-summary {
         .actions-toolbar {
             > .secondary {
@@ -56,39 +61,43 @@
         }
     }
 
-    //
-    //  In-table block
-    //  ---------------------------------------------
+    .action-gift {
+        &:extend(.cart.table-wrapper .actions-toolbar > .action all);
 
-    .cart.table-wrapper {
-        .gift-content {
-            box-sizing: border-box;
-            clear: left;
-            display: none;
-            float: left;
-            margin: @indent__base 0;
-            text-align: left;
-            width: 100%;
-
-            &._active {
-                display: block;
-            }
-        }
-
-        .action-gift {
-            &:extend(.cart.table-wrapper .actions-toolbar > .action all);
-            .lib-button-icon(
+        .lib-button-icon(
             @icon-down,
             @_icon-font-size: 32px,
             @_icon-font-line-height: 16px,
             @_icon-font-position: after
-            );
+        );
 
-            &._active {
-                .lib-icon-font-symbol(
+        &.active,
+        &._active {
+            .lib-icon-font-symbol(
                 @icon-up,
                 @_icon-font-position: after
-                );
+            );
+        }
+    }
+
+    //
+    //  In-table block
+    //  ---------------------------------------------
+
+    .cart {
+        &.table-wrapper {
+            .gift-content {
+                box-sizing: border-box;
+                clear: left;
+                display: none;
+                float: left;
+                margin: @indent__s 0 @indent__base;
+                text-align: left;
+                width: 100%;
+
+                &._active {
+                    display: block;
+                }
             }
         }
     }
@@ -99,6 +108,7 @@
 
     .gift-item-block {
         margin: 0;
+
         &._active {
             .title {
                 .lib-icon-font-symbol(
@@ -109,7 +119,9 @@
         }
 
         .title {
+            .lib-css(font-weight, @font-weight__bold);
             border-radius: 3px;
+
             .lib-button(
             @_button-margin: 20px 0 0,
             @_button-padding: 7px 15px,
@@ -120,7 +132,6 @@
             @_button-icon-font-line-height: 16px,
             @_button-icon-font-position: after
             );
-            .lib-css(font-weight, @font-weight__bold);
 
             &:active {
                 .lib-css(box-shadow, @button__shadow);
@@ -165,41 +176,41 @@
                 clear: left;
             }
         }
-    }
 
-    .order-details-items .order-items {
-        .order-gift-message {
-            &:not(.expanded-content) {
-                &:extend(.abs-hidden);
+        .order-items {
+            .order-gift-message {
+                &:not(.expanded-content) {
+                    &:extend(.abs-hidden);
+                }
+
+                .action.close {
+                    &:extend(.abs-no-display all);
+                }
             }
 
-            .action.close {
-                &:extend(.abs-no-display all);
-            }
-        }
-
-        .action.show {
-            .lib-icon-font(
-            @_icon-font-content: @icon-down,
-            @_icon-font-size: 22px,
-            @_icon-font-text-hide: false,
-            @_icon-font-position: after,
-            @_icon-font-display: inline-block
-            );
-            padding-right: @indent__base;
-            position: relative;
-
-            &:after {
-                position: absolute;
-                right: 0;
-                top: -4px;
-            }
-
-            &.expanded {
-                .lib-icon-font-symbol(
-                @_icon-font-content: @icon-up,
-                @_icon-font-position: after
+            .action.show {
+                .lib-icon-font(
+                @_icon-font-content: @icon-down,
+                @_icon-font-size: 22px,
+                @_icon-font-text-hide: false,
+                @_icon-font-position: after,
+                @_icon-font-display: inline-block
                 );
+                padding-right: @indent__base;
+                position: relative;
+
+                &:after {
+                    position: absolute;
+                    right: 0;
+                    top: -4px;
+                }
+
+                &.expanded {
+                    .lib-icon-font-symbol(
+                    @_icon-font-content: @icon-up,
+                    @_icon-font-position: after
+                    );
+                }
             }
         }
     }
@@ -226,22 +237,26 @@
     }
 
     .gift-item-block {
-        border-bottom: 0;
         .lib-css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
+        border-bottom: 0;
     }
 
-    .cart.table-wrapper {
-        .gift-content {
-            margin-right: -@indent__s;
+    .cart {
+        &.table-wrapper {
+            .gift-content {
+                margin-right: -@indent__s;
+            }
         }
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
-    .cart.table-wrapper {
-        .gift-content {
-            border-bottom: @border-width__base solid @border-color__base;
-            margin-bottom: @indent__base;
+    .cart {
+        &.table-wrapper {
+            .gift-content {
+                border-bottom: @border-width__base solid @border-color__base;
+                margin-bottom: @indent__base;
+            }
         }
     }
 }
@@ -253,11 +268,7 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .gift-message {
         .field {
-            &:extend(.abs-clearfix all);
-            .lib-form-field-type-revert(
-            @_type: inline,
-            @_type-inline-label-align: left
-            );
+            margin-bottom: @indent__base;
         }
     }
 
@@ -323,9 +334,22 @@
     //  In-table block
     //  ---------------------------------------------
 
-    .cart.table-wrapper {
-        .action-gift {
-            float: left;
+    .cart {
+        &.table-wrapper {
+            .action-gift {
+                float: left;
+            }
+        }
+    }
+
+    //
+    //  Multiple Shipping Checkout
+    //  ---------------------------------------------
+
+    .order-options,
+    .table-order-review {
+        .gift-wrapping {
+            max-width: 50%;
         }
     }
 }

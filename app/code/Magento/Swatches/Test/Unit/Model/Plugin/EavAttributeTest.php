@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -56,22 +56,22 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->attribute = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
-        $this->swatchFactory = $this->getMock('\Magento\Swatches\Model\SwatchFactory', ['create'], [], '', false);
-        $this->swatchHelper = $this->getMock('\Magento\Swatches\Helper\Data', [], [], '', false);
-        $this->swatch = $this->getMock('\Magento\Swatches\Model\Swatch', [], [], '', false);
-        $this->resource = $this->getMock('Magento\Swatches\Model\ResourceModel\Swatch', [], [], '', false);
+        $this->attribute = $this->getMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], [], '', false);
+        $this->swatchFactory = $this->getMock(\Magento\Swatches\Model\SwatchFactory::class, ['create'], [], '', false);
+        $this->swatchHelper = $this->getMock(\Magento\Swatches\Helper\Data::class, [], [], '', false);
+        $this->swatch = $this->getMock(\Magento\Swatches\Model\Swatch::class, [], [], '', false);
+        $this->resource = $this->getMock(\Magento\Swatches\Model\ResourceModel\Swatch::class, [], [], '', false);
         $this->collection =
-            $this->getMock('\Magento\Swatches\Model\ResourceModel\Swatch\Collection', [], [], '', false);
+            $this->getMock(\Magento\Swatches\Model\ResourceModel\Swatch\Collection::class, [], [], '', false);
         $this->collectionFactory = $this->getMock(
-            '\Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory',
+            \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->abstractSource = $this->getMock(
-            '\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
+            \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class,
             [],
             [],
             '',
@@ -80,7 +80,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->eavAttribute = $objectManager->getObject(
-            'Magento\Swatches\Model\Plugin\EavAttribute',
+            \Magento\Swatches\Model\Plugin\EavAttribute::class,
             [
                 'collectionFactory' => $this->collectionFactory,
                 'swatchFactory' => $this->swatchFactory,
@@ -262,7 +262,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                     false
                 )
             );
-         $this->eavAttribute->beforeSave($this->attribute);
+        $this->eavAttribute->beforeSave($this->attribute);
     }
 
     public function testBeforeSaveNotSwatch()
@@ -374,6 +374,66 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             ->with($this->attribute)
             ->willReturn(true);
         $this->swatchHelper->expects($this->never())->method('isTextSwatch');
+
+        $this->eavAttribute->afterAfterSave($this->attribute);
+    }
+
+    public function testDefaultTextualSwatchAfterSave()
+    {
+        $this->abstractSource->expects($this->once())->method('getAllOptions')
+            ->willReturn($this->allOptions);
+
+        $this->swatch->expects($this->any())->method('getId')
+            ->willReturn(EavAttribute::DEFAULT_STORE_ID);
+        $this->swatch->expects($this->any())->method('save');
+        $this->swatch->expects($this->any())->method('isDeleted')
+            ->with(false);
+
+        $this->collection->expects($this->any())->method('addFieldToFilter')
+            ->willReturnSelf();
+        $this->collection->expects($this->any())->method('getFirstItem')
+            ->willReturn($this->swatch);
+        $this->collectionFactory->expects($this->any())->method('create')
+            ->willReturn($this->collection);
+
+        $this->attribute->expects($this->at(0))->method('getData')
+            ->willReturn($this->optionIds);
+        $this->attribute->expects($this->at(1))->method('getSource')
+            ->willReturn($this->abstractSource);
+        $this->attribute->expects($this->at(2))->method('getData')
+            ->with('default/0')
+            ->willReturn(null);
+
+        $this->attribute->expects($this->at(3))->method('getData')
+            ->with('swatch/value')
+            ->willReturn(
+                [
+                    self::STORE_ID => [
+                        1 => "test",
+                        2 => false,
+                        3 => null,
+                        4 => "",
+                    ]
+                ]
+            );
+
+        $this->swatchHelper->expects($this->exactly(2))->method('isSwatchAttribute')
+            ->with($this->attribute)
+            ->willReturn(true);
+        $this->swatchHelper->expects($this->once())->method('isVisualSwatch')
+            ->with($this->attribute)
+            ->willReturn(false);
+        $this->swatchHelper->expects($this->once())->method('isTextSwatch')
+            ->with($this->attribute)
+            ->willReturn(true);
+
+        $this->swatch->expects($this->any())->method('setData')
+            ->withConsecutive(
+                ['option_id', self::OPTION_ID],
+                ['store_id', 1],
+                ['type', Swatch::SWATCH_TYPE_TEXTUAL],
+                ['value', "test"]
+            );
 
         $this->eavAttribute->afterAfterSave($this->attribute);
     }

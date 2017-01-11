@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $model \Magento\ImportExport\Model\Export\AbstractEntity */
         $model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Export\AbstractEntity',
+            \Magento\ImportExport\Model\Export\AbstractEntity::class,
             [],
             'Stub_UnitTest_Magento_ImportExport_Model_Export_Entity_TestSetAndGet',
             false

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -74,7 +74,7 @@ class InjectableTests extends \PHPUnit_Framework_TestSuite
     public function prepareSuite()
     {
         $this->init();
-        return $this->objectManager->create('Magento\Mtf\TestSuite\AppState');
+        return $this->objectManager->create(\Magento\Mtf\TestSuite\AppState::class);
     }
 
     /**
@@ -97,11 +97,20 @@ class InjectableTests extends \PHPUnit_Framework_TestSuite
             $configFilePath = realpath(MTF_BP . '/testsuites/' . $_ENV['testsuite_rule_path']);
 
             /** @var \Magento\Mtf\Config\DataInterface $configData */
-            $configData = $objectManagerFactory->getObjectManager()->create('Magento\Mtf\Config\TestRunner');
-            $configData->setFileName($configFileName . '.xml')->load($configFilePath);
-
+            $configData = $objectManagerFactory->getObjectManager()->create(\Magento\Mtf\Config\TestRunner::class);
+            $filter = getopt('', ['filter:']);
+            if (!isset($filter['filter'])) {
+                $configData->setFileName($configFileName . '.xml')->load($configFilePath);
+            } else {
+                $isValid = preg_match('`variation::(.*?)$`', $filter['filter'], $variation);
+                if ($isValid === 1) {
+                    $configData->setFileName($configFileName . '.xml')->load($configFilePath);
+                    $data['rule']['variation']['allow'][0]['name'][0]['value'] = $variation[1];
+                    $configData->merge($data);
+                }
+            }
             $this->objectManager = $objectManagerFactory->create(
-                ['Magento\Mtf\Config\TestRunner' => $configData]
+                [\Magento\Mtf\Config\TestRunner::class => $configData]
             );
         }
     }

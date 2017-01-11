@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,25 +35,31 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_subjectMock = $this->getMock(
-            '\Magento\Customer\Api\GroupRepositoryInterface', [], [], '', false
+            \Magento\Customer\Api\GroupRepositoryInterface::class, [], [], '', false
         );
 
         $indexerMock = $this->getMock(
-            'Magento\Indexer\Model\Indexer',
+            \Magento\Indexer\Model\Indexer::class,
             ['getId', 'invalidate'],
             [],
             '',
             false
         );
         $indexerMock->expects($this->once())->method('invalidate');
-        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock(
+            \Magento\Framework\Indexer\IndexerRegistry::class,
+            ['get'],
+            [],
+            '',
+            false
+        );
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID)
             ->will($this->returnValue($indexerMock));
 
         $this->_model = $this->_objectManager->getObject(
-            'Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup',
+            \Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup::class,
             ['indexerRegistry' => $this->indexerRegistryMock]
         );
     }

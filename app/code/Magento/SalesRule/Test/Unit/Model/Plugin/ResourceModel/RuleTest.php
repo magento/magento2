@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,17 +31,17 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->ruleResource = $this->getMockBuilder('Magento\SalesRule\Model\ResourceModel\Rule')
+        $this->ruleResource = $this->getMockBuilder(\Magento\SalesRule\Model\ResourceModel\Rule::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->genericClosure = function () {
             return;
         };
-        $this->abstractModel = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
+        $this->abstractModel = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->plugin = $objectManager->getObject('Magento\SalesRule\Model\Plugin\ResourceModel\Rule');
+        $this->plugin = $objectManager->getObject(\Magento\SalesRule\Model\Plugin\ResourceModel\Rule::class);
     }
 
     public function testAroundLoadCustomerGroupIds()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,14 +30,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click "Save".
  * 6. Perform asserts.
  *
- * @group Downloadable_Product_(MX)
+ * @group Downloadable_Product
  * @ZephyrId MAGETWO-24775
  */
 class UpdateDownloadableProductEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

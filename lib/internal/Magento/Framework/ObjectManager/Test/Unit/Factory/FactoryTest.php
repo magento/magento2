@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Factory;
@@ -37,7 +37,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateNoArgs()
     {
-        $this->assertInstanceOf('StdClass', $this->factory->create('StdClass'));
+        $this->assertInstanceOf('StdClass', $this->factory->create(\StdClass::class));
     }
 
     /**
@@ -46,13 +46,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveArgumentsException()
     {
-        $configMock = $this->getMock('\Magento\Framework\ObjectManager\Config\Config', [], [], '', false);
+        $configMock = $this->getMock(\Magento\Framework\ObjectManager\Config\Config::class, [], [], '', false);
         $configMock->expects($this->once())->method('getArguments')
             ->will($this->returnValue([
                 'firstParam' => 1,
             ]));
 
-        $definitionsMock = $this->getMock('Magento\Framework\ObjectManager\DefinitionInterface');
+        $definitionsMock = $this->getMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
         $definitionsMock->expects($this->once())->method('getParameters')
             ->will($this->returnValue([[
                 'firstParam', 'string', true, 'default_val',
@@ -65,17 +65,20 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->objectManager = new ObjectManager($this->factory, $this->config);
         $this->factory->setObjectManager($this->objectManager);
-        $this->factory->create('Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar', ['foo' => 'bar']);
+        $this->factory->create(
+            \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class,
+            ['foo' => 'bar']
+        );
     }
 
     public function testCreateOneArg()
     {
         /** @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar $result */
         $result = $this->factory->create(
-            'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar',
+            \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class,
             ['foo' => 'bar']
         );
-        $this->assertInstanceOf('\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar', $result);
+        $this->assertInstanceOf(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class, $result);
         $this->assertEquals('bar', $result->getFoo());
     }
 
@@ -84,15 +87,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         // let's imitate that One is injectable by providing DI configuration for it
         $this->config->extend(
             [
-                'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar' => [
+                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class => [
                     'arguments' => ['foo' => 'bar'],
                 ],
             ]
         );
         /** @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two $result */
-        $result = $this->factory->create('Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two');
-        $this->assertInstanceOf('\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two', $result);
-        $this->assertInstanceOf('\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar', $result->getOne());
+        $result = $this->factory->create(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two::class);
+        $this->assertInstanceOf(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two::class, $result);
+        $this->assertInstanceOf(
+            \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class,
+            $result->getOne()
+        );
         $this->assertEquals('bar', $result->getOne()->getFoo());
         $this->assertEquals('optional', $result->getBaz());
     }
@@ -126,20 +132,37 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateUsingReflection()
     {
-        $type = 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Polymorphous';
-        $definitions = $this->getMock('Magento\Framework\ObjectManager\DefinitionInterface');
+        $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Polymorphous::class;
+        $definitions = $this->getMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
         // should be more than defined in "switch" of create() method
         $definitions->expects($this->once())->method('getParameters')->with($type)->will($this->returnValue([
-            ['one', null, false, null], ['two', null, false, null], ['three', null, false, null],
-            ['four', null, false, null], ['five', null, false, null], ['six', null, false, null],
-            ['seven', null, false, null], ['eight', null, false, null], ['nine', null, false, null],
+            ['one', null, false, null],
+            ['two', null, false, null],
+            ['three', null, false, null],
+            ['four', null, false, null],
+            ['five', null, false, null],
+            ['six', null, false, null],
+            ['seven', null, false, null],
+            ['eight', null, false, null],
+            ['nine', null, false, null],
             ['ten', null, false, null],
         ]));
         $factory = new Developer($this->config, null, $definitions);
-        $result = $factory->create($type, [
-            'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5,
-            'six' => 6, 'seven' => 7, 'eight' => 8, 'nine' => 9, 'ten' => 10,
-        ]);
+        $result = $factory->create(
+            $type,
+            [
+                'one' => 1,
+                'two' => 2,
+                'three' => 3,
+                'four' => 4,
+                'five' => 5,
+                'six' => 6,
+                'seven' => 7,
+                'eight' => 8,
+                'nine' => 9,
+                'ten' => 10,
+            ]
+        );
         $this->assertSame(10, $result->getArg(9));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,10 @@
 
             <dd id="allow-gift-options-for-order-container" class="order-options">
                 <div class="options-order-container" id="options-order-container-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>"></div>
-                    <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#allow-gift-messages-for-order-container"}}'><?php /* @escapeNotVerified */ echo __('Gift Message') ?></a>
+                    <button class="action action-gift"
+                            data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#allow-gift-messages-for-order-container"}}'>
+                        <span><?php /* @escapeNotVerified */ echo __('Gift Message') ?></span>
+                    </button>
                     <div id="allow-gift-messages-for-order-container" class="gift-messages-order hidden">
                         <fieldset class="fieldset">
                             <p><?php /* @escapeNotVerified */ echo __('Leave this box blank if you don\'t want to leave a gift message for the entire order.') ?></p>
@@ -52,13 +55,12 @@
                             </div>
                         </fieldset>
                         <script>
-require(['jquery'], function(jQuery){
-
-    jQuery('#add-gift-options-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>')
-        .add('#add-gift-options-for-order-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>').removeClass('hidden');
-
-});
-</script>
+                            require(['jquery'], function(jQuery){
+                                jQuery('#add-gift-options-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>')
+                                    .add('#add-gift-options-for-order-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>')
+                                    .removeClass('hidden');
+                            });
+                        </script>
                     </div>
             </dd>
             <?php endif ?>
@@ -87,7 +89,10 @@ require(['jquery'], function(jQuery){
                          <div class="options">
                              <div class="options-items-container" id="options-items-container-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>-<?php /* @escapeNotVerified */ echo $_item->getId() ?>"></div>
                              <?php if ($block->isItemMessagesAvailable($_item)): ?>
-                             <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?php /* @escapeNotVerified */ echo $_item->getId() ?>"}}'><?php /* @escapeNotVerified */ echo __('Gift Message') ?></a>
+                             <button class="action action-gift"
+                                     data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?php /* @escapeNotVerified */ echo $_item->getId() ?>"}}'>
+                                 <span><?php /* @escapeNotVerified */ echo __('Gift Message') ?></span>
+                             </button>
                              <div id="gift-messages-for-item-container-<?php /* @escapeNotVerified */ echo $_item->getId() ?>" class="block message hidden">
                                  <fieldset class="fieldset">
                                      <p><?php /* @escapeNotVerified */ echo __('Leave a box blank if you don\'t want to add a gift message for that item.') ?></p>
@@ -118,24 +123,23 @@ require(['jquery'], function(jQuery){
                 </ol>
             </dd>
             <script>
-require(['jquery'], function(jQuery){
-
-    jQuery('#add-gift-options-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>')
-        .add('#add-gift-options-for-items-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>').removeClass('hidden');
-
-});
-</script>
+                require(['jquery'], function(jQuery){
+                    jQuery('#add-gift-options-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>')
+                        .add('#add-gift-options-for-items-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>')
+                        .removeClass('hidden');
+                });
+            </script>
             <?php endif; ?>
             <dt class="extra-options-container" id="extra-options-container-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>"></dt>
         </dl>
     </fieldset>
-<script type="text/x-magento-init">
-{
-    "#allow_gift_options, #allow_gift_options_for_order, #allow_gift_options_for_items": {
-        "giftOptions": {}
+    <script type="text/x-magento-init">
+    {
+        "#allow_gift_options, #allow_gift_options_for_order, #allow_gift_options_for_items": {
+            "giftOptions": {}
+        }
     }
-}
-</script>
+    </script>
 <?php break; ?>
 
 <?php case 'multishipping_address': ?>
@@ -159,7 +163,10 @@ require(['jquery'], function(jQuery){
                 <div class="options-order-container" id="options-order-container-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>"></div>
                 <?php if ($block->isMessagesAvailable()): ?>
                     <?php $_giftMessage = true; ?>
-                    <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-order-container-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>"}}'><?php /* @escapeNotVerified */ echo __('Gift Message') ?></a>
+                    <button class="action action-gift"
+                            data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-order-container-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>"}}'>
+                        <span><?php /* @escapeNotVerified */ echo __('Gift Message') ?></span>
+                    </button>
                     <div id="gift-messages-for-order-container-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>" class="gift-messages-order hidden">
                         <fieldset class="fieldset">
                             <p><?php /* @escapeNotVerified */ echo __('You can leave this box blank if you don\'t want to add a gift message for this address.') ?></p>
@@ -212,7 +219,10 @@ require(['jquery'], function(jQuery){
 
                              <?php if ($block->isItemMessagesAvailable($_item)): ?>
                              <?php $_giftMessage = true; ?>
-                                 <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?php /* @escapeNotVerified */ echo $_item->getId() ?>"}}'><?php /* @escapeNotVerified */ echo __('Gift Message') ?></a>
+                                 <button class="action action-gift"
+                                         data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?php /* @escapeNotVerified */ echo $_item->getId() ?>"}}'>
+                                     <span><?php /* @escapeNotVerified */ echo __('Gift Message') ?></span>
+                                 </button>
                                  <div id="gift-messages-for-item-container-<?php /* @escapeNotVerified */ echo $_item->getId() ?>" class="block message hidden">
                                      <fieldset class="fieldset">
                                         <p><?php /* @escapeNotVerified */ echo __('You can leave this box blank if you don\'t want to add a gift message for the item.') ?></p>
@@ -247,13 +257,13 @@ require(['jquery'], function(jQuery){
             <dt class="extra-options-container" id="extra-options-container-<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>"></dt>
         </dl>
     </fieldset>
-<script type="text/x-magento-init">
-    {
-        "#allow_gift_options_<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>, #allow_gift_options_for_order_<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>, #allow_gift_options_for_items_<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>": {
-            "giftOptions": {}
+    <script type="text/x-magento-init">
+        {
+            "#allow_gift_options_<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>, #allow_gift_options_for_order_<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>, #allow_gift_options_for_items_<?php /* @escapeNotVerified */ echo $block->getEntity()->getId() ?>": {
+                "giftOptions": {}
+            }
         }
-    }
-</script>
+    </script>
     <?php break; ?>
 <?php endswitch ?>
 <?php if ($_giftMessage): ?>

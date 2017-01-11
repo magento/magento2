@@ -2,7 +2,7 @@
 /**
  * Tests for \Magento\Webapi\Model\Soap\Wsdl\Generator.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Soap\Wsdl;
@@ -32,11 +32,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->serviceMetadata = $this->getMockBuilder(
-            'Magento\Webapi\Model\ServiceMetadata'
+            \Magento\Webapi\Model\ServiceMetadata::class
         )->disableOriginalConstructor()->getMock();
 
         $_wsdlMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Soap\Wsdl'
+            \Magento\Webapi\Model\Soap\Wsdl::class
         )->disableOriginalConstructor()->setMethods(
             [
                 'addSchemaTypeSection',
@@ -54,20 +54,20 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ]
         )->getMock();
         $this->_wsdlFactoryMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Soap\WsdlFactory'
+            \Magento\Webapi\Model\Soap\WsdlFactory::class
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();
         $this->_wsdlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($_wsdlMock));
 
         $this->_cacheMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Cache\Type\Webapi'
+            \Magento\Webapi\Model\Cache\Type\Webapi::class
         )->disableOriginalConstructor()->getMock();
         $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
         $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
 
         $this->_typeProcessor = $this->getMock(
-            'Magento\Framework\Reflection\TypeProcessor',
+            \Magento\Framework\Reflection\TypeProcessor::class,
             [],
             [],
             '',
@@ -75,7 +75,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject $authorizationMock */
-        $authorizationMock = $this->getMockBuilder('Magento\Framework\Webapi\Authorization')
+        $authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
             ->disableOriginalConstructor()
             ->getMock();
         $authorizationMock->expects($this->any())->method('isAllowed')->willReturn(true);
@@ -83,10 +83,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->customAttributeTypeLocator = $objectManager
-            ->getObject('Magento\Eav\Model\EavCustomAttributeTypeLocator');
+            ->getObject(\Magento\Eav\Model\EavCustomAttributeTypeLocator::class);
 
         $this->_wsdlGenerator = $objectManager->getObject(
-            'Magento\Webapi\Model\Soap\Wsdl\Generator',
+            \Magento\Webapi\Model\Soap\Wsdl\Generator::class,
             [
                 'wsdlFactory' => $this->_wsdlFactoryMock,
                 'cache' => $this->_cacheMock,

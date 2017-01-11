@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\View\Layout\Filter;
@@ -19,7 +19,7 @@ class AclTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->authorizationMock = $this->getMockBuilder('Magento\Framework\AuthorizationInterface')
+        $this->authorizationMock = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
             ->getMock();
 
         $this->model = new \Magento\Backend\Model\View\Layout\Filter\Acl($this->authorizationMock);
@@ -27,14 +27,13 @@ class AclTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterAclElements()
     {
-        $scheduledStructureMock = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure')
+        $scheduledStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $structureMock = $this->getMockBuilder('Magento\Framework\View\Layout\Data\Structure')
+        $structureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Data\Structure::class)
             ->disableOriginalConstructor()
             ->getMock();
-
 
         $elements = [
             'element_0' => [

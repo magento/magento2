@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Model;
@@ -30,15 +30,15 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->configMock = $this->getMock('Magento\Framework\Session\Config\ConfigInterface');
-        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
+        $this->configMock = $this->getMock(\Magento\Framework\Session\Config\ConfigInterface::class);
+        $this->cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(
-            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+            \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
         )->disableOriginalConstructor()
             ->getMock();
 
         $resourceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -48,7 +48,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         );
 
         $actionValidatorMock = $this->getMock(
-            'Magento\Framework\Model\ActionValidator\RemoveAction',
+            \Magento\Framework\Model\ActionValidator\RemoveAction::class,
             [],
             [],
             '',
@@ -57,20 +57,20 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
 
         $context = $helper->getObject(
-            'Magento\Framework\Model\Context',
+            \Magento\Framework\Model\Context::class,
             [
                 'actionValidator' => $actionValidatorMock,
             ]
         );
 
         $this->session = $helper->getObject(
-            'Magento\Persistent\Model\Session',
+            \Magento\Persistent\Model\Session::class,
             [
                 'sessionConfig' => $this->configMock,
                 'cookieManager' => $this->cookieManagerMock,
                 'context'       => $context,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
-                'request' => $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false, false),
+                'request' => $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false, false),
                 'resource' => $resourceMock,
             ]
         );
@@ -92,7 +92,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $cookiePath = 'some_path';
         $this->configMock->expects($this->once())->method('getCookiePath')->will($this->returnValue($cookiePath));
-        $cookieMetadataMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata')
+        $cookieMetadataMock = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $cookieMetadataMock->expects($this->once())
@@ -119,7 +119,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $duration = 1000;
         $key = 'sessionKey';
         $this->session->setKey($key);
-        $cookieMetadataMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata')
+        $cookieMetadataMock = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $cookieMetadataMock->expects($this->once())
@@ -166,7 +166,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $cookieValue = 'cookieValue',
         $cookiePath = 'cookiePath'
     ) {
-        $cookieMetadataMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata')
+        $cookieMetadataMock = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $cookieMetadataMock->expects($this->exactly($numCalls))

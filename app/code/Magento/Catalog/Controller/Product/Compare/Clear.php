@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Product\Compare;
@@ -31,7 +31,7 @@ class Clear extends \Magento\Catalog\Controller\Product\Compare
         try {
             $items->clear();
             $this->messageManager->addSuccess(__('You cleared the comparison list.'));
-            $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare')->calculate();
+            $this->_objectManager->get(\Magento\Catalog\Helper\Product\Compare::class)->calculate();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,11 +11,11 @@ $customerIdFromFixture = 1;
 
 $order->setCustomerId($customerIdFromFixture)->setCustomerIsGuest(false)->save();
 
-$payment2 = $objectManager->create('Magento\Sales\Model\Order\Payment');
+$payment2 = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
 $payment2->setMethod('checkmo');
 
 /** @var \Magento\Sales\Model\Order $order */
-$order = $objectManager->create('Magento\Sales\Model\Order');
+$order = $objectManager->create(\Magento\Sales\Model\Order::class);
 $order->setIncrementId('100000002')
     ->setState(
         \Magento\Sales\Model\Order::STATE_PROCESSING
@@ -36,7 +36,7 @@ $order->setIncrementId('100000002')
     )->setShippingAddress(
         $shippingAddress
     )->setStoreId(
-        $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId()
+        $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId()
     )->addItem(
         $orderItem
     )->setPayment(

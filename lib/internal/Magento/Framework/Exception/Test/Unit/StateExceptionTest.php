@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ class StateExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testStateExceptionInstance()
     {
-        $instanceClass = 'Magento\Framework\Exception\StateException';
+        $instanceClass = \Magento\Framework\Exception\StateException::class;
         $message = 'message %1 %2';
         $params = [
             'parameter1',

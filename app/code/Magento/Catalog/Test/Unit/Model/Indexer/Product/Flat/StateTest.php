@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
@@ -21,17 +21,17 @@ class StateTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $indexerMock = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerMock = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $flatIndexerHelperMock = $this->getMock(
-            'Magento\Catalog\Helper\Product\Flat\Indexer',
+            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
             [],
             [],
             '',
             false
         );
-        $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $configMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_model = $this->_objectManager->getObject(
-            'Magento\Catalog\Model\Indexer\Product\Flat\State',
+            \Magento\Catalog\Model\Indexer\Product\Flat\State::class,
             [
                 'scopeConfig' => $configMock,
                 'flatIndexer' => $indexerMock,
@@ -43,6 +43,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIndexer()
     {
-        $this->assertInstanceOf('\Magento\Catalog\Helper\Product\Flat\Indexer', $this->_model->getFlatIndexerHelper());
+        $this->assertInstanceOf(
+            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
+            $this->_model->getFlatIndexerHelper()
+        );
     }
 }

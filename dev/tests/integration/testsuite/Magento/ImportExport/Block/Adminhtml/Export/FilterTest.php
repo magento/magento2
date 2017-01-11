@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,12 +18,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\DesignInterface')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\View\DesignInterface::class)
             ->setDefaultDesignTheme();
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\ImportExport\Block\Adminhtml\Export\Filter');
+            ->create(\Magento\ImportExport\Block\Adminhtml\Export\Filter::class);
         $method = new \ReflectionMethod(
-            'Magento\ImportExport\Block\Adminhtml\Export\Filter',
+            \Magento\ImportExport\Block\Adminhtml\Export\Filter::class,
             '_getDateFromToHtmlWithValue'
         );
         $method->setAccessible(true);
@@ -37,14 +37,14 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Eav\Model\Entity\Attribute',
+            \Magento\Eav\Model\Entity\Attribute::class,
             $arguments
         );
         $html = $method->invoke($block, $attribute, null);
         $this->assertNotEmpty($html);
 
         $dateFormat = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
         )->getDateFormat(
             \IntlDateFormatter::SHORT
         );

@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Test\Unit\Model\Export;
 
 use Magento\CustomerImportExport\Model\Export\Customer;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
     /**#@+
@@ -53,7 +56,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $storeManager = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
 
         $storeManager->expects(
             $this->any()
@@ -72,19 +75,19 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = new \Magento\CustomerImportExport\Model\Export\Customer(
-            $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
+            $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class),
             $storeManager,
-            $this->getMock('Magento\ImportExport\Model\Export\Factory', [], [], '', false),
+            $this->getMock(\Magento\ImportExport\Model\Export\Factory::class, [], [], '', false),
             $this->getMock(
-                'Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory',
+                \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class,
                 [],
                 [],
                 '',
                 false
             ),
-            $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface', [], [], '', false),
-            $this->getMock('Magento\Eav\Model\Config', [], [], '', false),
-            $this->getMock('Magento\Customer\Model\ResourceModel\Customer\CollectionFactory', [], [], '', false),
+            $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class, [], [], '', false),
+            $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false),
+            $this->getMock(\Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class, [], [], '', false),
             $this->_getModelDependencies()
         );
     }
@@ -101,20 +104,20 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelDependencies()
     {
-        $translator = $this->getMock('stdClass');
+        $translator = $this->getMock(\stdClass::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $attributeCollection = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
+            $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
         );
         foreach ($this->_attributes as $attributeData) {
             $arguments = $objectManagerHelper->getConstructArguments(
-                'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-                ['eavTypeFactory' => $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false)]
+                \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+                ['eavTypeFactory' => $this->getMock(\Magento\Eav\Model\Entity\TypeFactory::class, [], [], '', false)]
             );
             $arguments['data'] = $attributeData;
             $attribute = $this->getMockForAbstractClass(
-                'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+                \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
                 $arguments,
                 '',
                 true,
@@ -192,7 +195,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $writer \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter */
         $writer = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter',
+            \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter::class,
             [],
             '',
             false,
@@ -212,9 +215,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $this->_model->setWriter($writer);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $arguments = $objectManagerHelper->getConstructArguments('Magento\Framework\Model\AbstractModel');
+        $arguments = $objectManagerHelper->getConstructArguments(\Magento\Framework\Model\AbstractModel::class);
         $arguments['data'] = $this->_customerData;
-        $item = $this->getMockForAbstractClass('Magento\Framework\Model\AbstractModel', $arguments);
+        $item = $this->getMockForAbstractClass(\Magento\Framework\Model\AbstractModel::class, $arguments);
 
         $this->_model->exportItem($item);
     }

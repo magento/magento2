@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
@@ -8,6 +8,7 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 /**
  * Class VoidTest
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class VoidTest extends \PHPUnit_Framework_TestCase
 {
@@ -96,53 +97,55 @@ class VoidTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->creditmemoMock = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
+        $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
             ->setMethods(['getInvoice', 'getOrder', 'cancel', 'getId', 'void', '__wakeup'])
             ->getMock();
-        $titleMock = $this->getMockBuilder('Magento\Framework\App\Action\Title')
+        $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->responseMock = $this->getMockBuilder('Magento\Framework\App\Response\Http')
+        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->helperMock = $this->getMockBuilder('Magento\Backend\Helper\Data')
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->helperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManagerMock = $this->getMockBuilder('Magento\Framework\Message\Manager')
+        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session')
+        $this->sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->actionFlagMock = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
+        $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loaderMock = $this->getMockBuilder('Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader')
+        $this->loaderMock = $this->getMockBuilder(\Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->senderMock = $this->getMockBuilder('Magento\Sales\Model\Order\Email\Sender\CreditmemoSender')
+        $this->senderMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Email\Sender\CreditmemoSender::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
-            ->disableOriginalConstructor()
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
+        )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultForwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
-            ->disableOriginalConstructor()
+        $this->resultForwardFactoryMock = $this->getMockBuilder(
+            \Magento\Backend\Model\View\Result\ForwardFactory::class
+        )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultForwardMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
+        $this->resultForwardMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -176,7 +179,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->controller = $objectManager->getObject(
-            'Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Void',
+            \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Void::class,
             [
                 'context' => $this->contextMock,
                 'creditmemoLoader' => $this->loaderMock,
@@ -206,7 +209,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Forward',
+            \Magento\Backend\Model\View\Result\Forward::class,
             $this->controller->execute()
         );
     }
@@ -242,7 +245,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->controller->execute()
         );
     }
@@ -278,7 +281,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->controller->execute()
         );
     }
@@ -290,13 +293,13 @@ class VoidTest extends \PHPUnit_Framework_TestCase
     {
         $id = '111';
 
-        $transactionMock = $this->getMockBuilder('Magento\Framework\DB\Transaction')
+        $transactionMock = $this->getMockBuilder(\Magento\Framework\DB\Transaction::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
+        $invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -309,7 +312,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->creditmemoMock);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\DB\Transaction')
+            ->with(\Magento\Framework\DB\Transaction::class)
             ->willReturn($transactionMock);
         $this->creditmemoMock->expects($this->any())
             ->method('getOrder')
@@ -332,7 +335,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->controller->execute()
         );
     }

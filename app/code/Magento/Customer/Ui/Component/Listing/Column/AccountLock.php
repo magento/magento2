@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Ui\Component\Listing\Column;
@@ -41,9 +41,13 @@ class AccountLock extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $lockExpires = new \DateTime($item['lock_expires']);
-                if ($lockExpires > new \DateTime()) {
-                    $item['lock_expires'] =  __('Locked');
+                if (array_key_exists('lock_expires', $item)) {
+                    $lockExpires = new \DateTime($item['lock_expires']);
+                    if ($lockExpires > new \DateTime()) {
+                        $item['lock_expires'] =  __('Locked');
+                    } else {
+                        $item['lock_expires'] = __('Unlocked');
+                    }
                 } else {
                     $item['lock_expires'] = __('Unlocked');
                 }

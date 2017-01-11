@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
@@ -148,7 +148,9 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
             'store_labels_fieldset',
             ['legend' => __('Store View Specific Labels'), 'class' => 'store-scope']
         );
-        $renderer = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset');
+        $renderer = $this->getLayout()->createBlock(
+            \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset::class
+        );
         $fieldset->setRenderer($renderer);
 
         foreach ($this->_storeManager->getWebsites() as $website) {

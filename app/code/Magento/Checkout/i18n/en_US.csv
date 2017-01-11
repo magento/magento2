@@ -27,6 +27,7 @@ State/Province,State/Province
 "One-page checkout is turned off.","One-page checkout is turned off."
 "Guest checkout is disabled.","Guest checkout is disabled."
 Checkout,Checkout
+"Checkout Section","Checkout Section"
 "Page not found.","Page not found."
 "Please agree to all the terms and conditions before placing the order.","Please agree to all the terms and conditions before placing the order."
 "Something went wrong while processing your order. Please try again later.","Something went wrong while processing your order. Please try again later."
@@ -40,7 +41,7 @@ Checkout,Checkout
 "This quote item does not exist.","This quote item does not exist."
 "Display number of items in cart","Display number of items in cart"
 "Display item quantities","Display item quantities"
-"Unable to place order. Please try again later.","Unable to place order. Please try again later."
+"An error occurred on the server. Please try to place the order again.","An error occurred on the server. Please try to place the order again."
 "Shipping address is not set","Shipping address is not set"
 "Unable to save address. Please check input data.","Unable to save address. Please check input data."
 "Carrier with such method not found: %1, %2","Carrier with such method not found: %1, %2"
@@ -120,7 +121,6 @@ Login,Login
 Close,Close
 item,item
 items,items
-"Go to Checkout","Go to Checkout"
 "Recently added item(s)","Recently added item(s)"
 "View and edit cart","View and edit cart"
 "See Details","See Details"

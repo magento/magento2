@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,21 +27,21 @@ class FixerIoTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->currencyFactoryMock = $this->getMockBuilder('Magento\Directory\Model\CurrencyFactory')
+        $this->currencyFactoryMock = $this->getMockBuilder(\Magento\Directory\Model\CurrencyFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->httpClientFactoryMock = $this->getMockBuilder('Magento\Framework\HTTP\ZendClientFactory')
+        $this->httpClientFactoryMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $scopeMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $scopeMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Directory\Model\Currency\Import\FixerIo',
+            \Magento\Directory\Model\Currency\Import\FixerIo::class,
             [
                 'currencyFactory' => $this->currencyFactoryMock,
                 'scopeConfig' => $scopeMock,
@@ -59,17 +59,17 @@ class FixerIoTest extends \PHPUnit_Framework_TestCase
         $message = "We can't retrieve a rate from http://api.fixer.io/latest?base=USD&symbols=EUR,UAH for UAH.";
 
         /** @var \Magento\Directory\Model\Currency|\PHPUnit_Framework_MockObject_MockObject $currencyMock */
-        $currencyMock = $this->getMockBuilder('Magento\Directory\Model\Currency')
+        $currencyMock = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         /** @var \Magento\Framework\HTTP\ZendClient|\PHPUnit_Framework_MockObject_MockObject $currencyMock */
-        $httpClientMock = $this->getMockBuilder('Magento\Framework\HTTP\ZendClient')
+        $httpClientMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClient::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         /** @var \Zend_Http_Response|\PHPUnit_Framework_MockObject_MockObject $currencyMock */
-        $httpResponseMock = $this->getMockBuilder('Zend_Http_Response')
+        $httpResponseMock = $this->getMockBuilder(\Zend_Http_Response::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

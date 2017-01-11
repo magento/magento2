@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,15 +45,17 @@ class BundleRegularPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->saleableInterfaceMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $this->saleableInterfaceMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPriceInfo', 'getPriceType', 'getPrice'])
             ->getMock();
-        $this->bundleCalculatorMock = $this->getMock('Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface');
+        $this->bundleCalculatorMock = $this->getMock(
+            \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface::class
+        );
 
-        $this->priceInfoMock = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
+        $this->priceInfoMock = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
 
-        $this->customOptionPriceMock = $this->getMockBuilder('\Magento\Catalog\Pricing\Price\CustomOptionPrice')
+        $this->customOptionPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\CustomOptionPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -61,7 +63,7 @@ class BundleRegularPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfoMock));
 
-        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->regularPrice = new \Magento\Bundle\Pricing\Price\BundleRegularPrice(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -118,7 +118,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\ResourceModel\Attribute');
+        $this->_init(\Magento\Customer\Model\ResourceModel\Attribute::class);
     }
 
     /**

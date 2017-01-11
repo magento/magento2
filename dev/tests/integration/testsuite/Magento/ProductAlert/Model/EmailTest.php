@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,9 +35,9 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->customerAccountManagement = $this->_objectManager->create(
-            'Magento\Customer\Api\AccountManagementInterface'
+            \Magento\Customer\Api\AccountManagementInterface::class
         );
-        $this->_customerViewHelper = $this->_objectManager->create('Magento\Customer\Helper\View');
+        $this->_customerViewHelper = $this->_objectManager->create(\Magento\Customer\Helper\View::class);
     }
 
     /**
@@ -52,15 +52,15 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
 
-        $this->_emailModel = $this->_objectManager->create('Magento\ProductAlert\Model\Email');
+        $this->_emailModel = $this->_objectManager->create(\Magento\ProductAlert\Model\Email::class);
 
         /** @var \Magento\Store\Model\Website $website */
-        $website = $this->_objectManager->create('Magento\Store\Model\Website');
+        $website = $this->_objectManager->create(\Magento\Store\Model\Website::class);
         $website->load(1);
         $this->_emailModel->setWebsite($website);
 
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
-        $customerRepository = $this->_objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerRepository = $this->_objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customer = $customerRepository->getById(1);
 
         if ($isCustomerIdUsed) {
@@ -70,15 +70,16 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         }
 
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->_objectManager->create('Magento\Catalog\Model\Product');
+        $product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load(1);
 
         $this->_emailModel->addPriceProduct($product);
-
         $this->_emailModel->send();
 
         /** @var \Magento\TestFramework\Mail\Template\TransportBuilderMock $transportBuilder */
-        $transportBuilder = $this->_objectManager->get('Magento\TestFramework\Mail\Template\TransportBuilderMock');
+        $transportBuilder = $this->_objectManager->get(
+            \Magento\TestFramework\Mail\Template\TransportBuilderMock::class
+        );
         $this->assertContains(
             'John Smith,',
             $transportBuilder->getSentMessage()->getBodyHtml()->getRawContent()

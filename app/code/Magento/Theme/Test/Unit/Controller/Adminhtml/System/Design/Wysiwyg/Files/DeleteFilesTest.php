@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Wysiwyg\Files;
@@ -24,11 +24,11 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->storage = $this->getMock('Magento\Theme\Model\Wysiwyg\Storage', [], [], '', false);
-        $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->storage = $this->getMock(\Magento\Theme\Model\Wysiwyg\Storage::class, [], [], '', false);
+        $this->response = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
         $this->request = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             [],
             '',
             false,
@@ -39,7 +39,7 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->controller = $helper->getObject(
-            'Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\DeleteFiles',
+            \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\DeleteFiles::class,
             [
                 'objectManager' => $this->objectManager,
                 'request' => $this->request,
@@ -54,7 +54,7 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
             ->method('isPost')
             ->willReturn(false);
 
-        $jsonData = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);
+        $jsonData = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
         $jsonData->expects($this->once())
             ->method('jsonEncode')
             ->with(['error' => true, 'message' => 'Wrong request'])
@@ -62,7 +62,7 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\Json\Helper\Data')
+            ->with(\Magento\Framework\Json\Helper\Data::class)
             ->willReturn($jsonData);
 
         $this->response->expects($this->once())
@@ -82,18 +82,18 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
             ->with('files')
             ->willReturn('{"files":"file"}');
 
-        $jsonData = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);
+        $jsonData = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
         $jsonData->expects($this->once())
             ->method('jsonDecode')
             ->with('{"files":"file"}')
             ->willReturn(['files' => 'file']);
         $this->objectManager->expects($this->at(0))
             ->method('get')
-            ->with('Magento\Framework\Json\Helper\Data')
+            ->with(\Magento\Framework\Json\Helper\Data::class)
             ->willReturn($jsonData);
         $this->objectManager->expects($this->at(1))
             ->method('get')
-            ->with('Magento\Theme\Model\Wysiwyg\Storage')
+            ->with(\Magento\Theme\Model\Wysiwyg\Storage::class)
             ->willReturn($this->storage);
         $this->storage->expects($this->once())
             ->method('deleteFile')

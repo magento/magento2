@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->collection = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
                 '__wakeup',
                 'getSelect',
@@ -52,7 +52,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->attributeModel = $this->getMock(
-            '\Magento\Catalog\Model\Entity\Attributee',
+            \Magento\Catalog\Model\Entity\Attributee::class,
             [
                 '__wakeup',
                 'getAttributeCode',
@@ -66,9 +66,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->backendAttributeModel = $this->getMock(
-            '\Magento\Catalog\Model\Product\Attribute\Backend\Sku', ['__wakeup', 'getTable'], [], '', false);
+            \Magento\Catalog\Model\Product\Attribute\Backend\Sku::class,
+            ['__wakeup', 'getTable'],
+            [],
+            '',
+            false
+        );
         $this->status = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Product\Attribute\Source\Status'
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::class
         );
 
         $this->attributeModel->expects($this->any())->method('getAttribute')

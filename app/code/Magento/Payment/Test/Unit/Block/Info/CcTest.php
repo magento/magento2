@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,14 +31,26 @@ class CcTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->paymentConfig = $this->getMock('Magento\Payment\Model\Config', [], [], '', false);
-        $this->localeDate = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface', [], [], '', false);
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', ['getLocaleDate'], [], '', false);
+        $this->paymentConfig = $this->getMock(\Magento\Payment\Model\Config::class, [], [], '', false);
+        $this->localeDate = $this->getMock(
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $context = $this->getMock(
+            \Magento\Framework\View\Element\Template\Context::class,
+            ['getLocaleDate'],
+            [],
+            '',
+            false
+        );
         $context->expects($this->any())
             ->method('getLocaleDate')
             ->will($this->returnValue($this->localeDate));
         $this->model = $this->objectManager->getObject(
-            'Magento\Payment\Block\Info\Cc',
+            \Magento\Payment\Block\Info\Cc::class,
             [
                 'paymentConfig' => $this->paymentConfig,
                 'context' => $context
@@ -54,7 +66,7 @@ class CcTest extends \PHPUnit_Framework_TestCase
         $this->paymentConfig->expects($this->any())
             ->method('getCcTypes')
             ->will($this->returnValue($configCcTypes));
-        $paymentInfo = $this->getMock('Magento\Payment\Model\Info', ['getCcType'], [], '', false);
+        $paymentInfo = $this->getMock(\Magento\Payment\Model\Info::class, ['getCcType'], [], '', false);
         $paymentInfo->expects($this->any())
             ->method('getCcType')
             ->will($this->returnValue($ccType));
@@ -79,7 +91,13 @@ class CcTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasCcExpDate($ccExpMonth, $ccExpYear, $expected)
     {
-        $paymentInfo = $this->getMock('Magento\Payment\Model\Info', ['getCcExpMonth', 'getCcExpYear'], [], '', false);
+        $paymentInfo = $this->getMock(
+            \Magento\Payment\Model\Info::class,
+            ['getCcExpMonth', 'getCcExpYear'],
+            [],
+            '',
+            false
+        );
         $paymentInfo->expects($this->any())
             ->method('getCcExpMonth')
             ->will($this->returnValue($ccExpMonth));
@@ -107,7 +125,7 @@ class CcTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCcExpMonth($ccExpMonth, $expected)
     {
-        $paymentInfo = $this->getMock('Magento\Payment\Model\Info', ['getCcExpMonth'], [], '', false);
+        $paymentInfo = $this->getMock(\Magento\Payment\Model\Info::class, ['getCcExpMonth'], [], '', false);
         $paymentInfo->expects($this->any())
             ->method('getCcExpMonth')
             ->will($this->returnValue($ccExpMonth));
@@ -131,7 +149,13 @@ class CcTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCcExpDate($ccExpMonth, $ccExpYear)
     {
-        $paymentInfo = $this->getMock('Magento\Payment\Model\Info', ['getCcExpMonth', 'getCcExpYear'], [], '', false);
+        $paymentInfo = $this->getMock(
+            \Magento\Payment\Model\Info::class,
+            ['getCcExpMonth', 'getCcExpYear'],
+            [],
+            '',
+            false
+        );
         $paymentInfo
             ->expects($this->any())
             ->method('getCcExpMonth')

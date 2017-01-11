@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,6 +32,7 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $price;
+
     /**
      * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -55,15 +56,15 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->saleableItem = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getPriceInfo', '__wakeup'],
             [],
             '',
             false
         );
 
-        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
-        $this->price = $this->getMock('Magento\Catalog\Pricing\Price\BasePrice', [], [], '', false);
+        $this->priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
+        $this->price = $this->getMock(\Magento\Catalog\Pricing\Price\BasePrice::class, [], [], '', false);
 
         $this->priceInfo->expects($this->any())
             ->method('getAdjustments')
@@ -78,20 +79,20 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('base_price'))
             ->will($this->returnValue($this->price));
 
-        $this->calculator = $this->getMockBuilder('Magento\Framework\Pricing\Adjustment\Calculator')
+        $this->calculator = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\Calculator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->helper = $this->getMock(
-            'Magento\Msrp\Helper\Data',
+            \Magento\Msrp\Helper\Data::class,
             ['isShowPriceOnGesture', 'getMsrpPriceMessage', 'canApplyMsrp'],
             [],
             '',
             false
         );
-        $this->config = $this->getMock('Magento\Msrp\Model\Config', ['isEnabled'], [], '', false);
+        $this->config = $this->getMock(\Magento\Msrp\Model\Config::class, ['isEnabled'], [], '', false);
 
-        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->object = new \Magento\Msrp\Pricing\Price\MsrpPrice(
             $this->saleableItem,

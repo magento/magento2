@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Form;
@@ -51,12 +51,12 @@ class FieldTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->uiComponentFactoryMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentFactory')
+        $this->uiComponentFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
@@ -128,7 +128,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
      */
     protected function getWrappedComponentMock()
     {
-        $wrappedComponentMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentInterface')
+        $wrappedComponentMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
             ->getMockForAbstractClass();
 
         $wrappedComponentMock->expects($this->any())
@@ -157,7 +157,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
      */
     protected function getComponentsMock()
     {
-        $componentMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentInterface')
+        $componentMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
             ->getMockForAbstractClass();
 
         return [$componentMock];

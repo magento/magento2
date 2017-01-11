@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,10 +30,10 @@ class ServiceDataAttributesScannerTest extends \PHPUnit_Framework_TestCase
     {
         $files = [$this->testFile];
         $expectedResult = [
-            'Magento\Sales\Api\Data\OrderExtensionInterface',
-            'Magento\Sales\Api\Data\OrderExtension',
-            'Magento\Sales\Api\Data\OrderItemExtensionInterface',
-            'Magento\Sales\Api\Data\OrderItemExtension',
+            \Magento\Sales\Api\Data\OrderExtensionInterface::class,
+            \Magento\Sales\Api\Data\OrderExtension::class,
+            \Magento\Sales\Api\Data\OrderItemExtensionInterface::class,
+            \Magento\Sales\Api\Data\OrderItemExtension::class,
         ];
         $this->assertSame($expectedResult, $this->model->collectEntities($files));
     }

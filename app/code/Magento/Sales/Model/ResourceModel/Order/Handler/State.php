@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,9 +23,6 @@ class State
      */
     public function check(Order $order)
     {
-        if (!$order->getId()) {
-            return $order;
-        }
         if (!$order->isCanceled() && !$order->canUnhold() && !$order->canInvoice() && !$order->canShip()) {
             if (0 == $order->getBaseGrandTotal() || $order->canCreditmemo()) {
                 if ($order->getState() !== Order::STATE_COMPLETE) {

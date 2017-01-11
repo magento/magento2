@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model;
@@ -42,19 +42,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
-        $this->directoryHelper = $this->getMockBuilder('Magento\Directory\Helper\Data')
+        $this->directoryHelper = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
 
-        $this->ccTypeFactory = $this->getMockBuilder('Magento\Payment\Model\Source\CctypeFactory')
+        $this->ccTypeFactory = $this->getMockBuilder(\Magento\Payment\Model\Source\CctypeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->certFactory = $this->getMockBuilder('Magento\Paypal\Model\CertFactory')
+        $this->certFactory = $this->getMockBuilder(\Magento\Paypal\Model\CertFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -129,7 +129,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->model->setMethod($methodName);
         $this->assertEquals($expected, $this->model->isMethodAvailable($methodName));
     }
-
 
     public function testGetMerchantCountryPaypal()
     {

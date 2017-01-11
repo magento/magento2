@@ -2,11 +2,14 @@
 /**
  * Unit test for session \Magento\Customer\Model\Session
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SessionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -52,30 +55,30 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_storageMock = $this->getMock(
-            'Magento\Customer\Model\Session\Storage',
+            \Magento\Customer\Model\Session\Storage::class,
             ['getIsCustomerEmulated', 'getData', 'unsIsCustomerEmulated', '__sleep', '__wakeup'],
             [],
             '',
             false
         );
-        $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $this->_httpContextMock = $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false);
-        $this->urlFactoryMock = $this->getMock('Magento\Framework\UrlFactory', [], [], '', false);
-        $this->customerFactoryMock = $this->getMockBuilder('Magento\Customer\Model\CustomerFactory')
+        $this->_eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $this->_httpContextMock = $this->getMock(\Magento\Framework\App\Http\Context::class, [], [], '', false);
+        $this->urlFactoryMock = $this->getMock(\Magento\Framework\UrlFactory::class, [], [], '', false);
+        $this->customerFactoryMock = $this->getMockBuilder(\Magento\Customer\Model\CustomerFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->customerRepositoryMock = $this->getMock(
-            'Magento\Customer\Api\CustomerRepositoryInterface',
+            \Magento\Customer\Api\CustomerRepositoryInterface::class,
             [],
             [],
             '',
             false
         );
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
         $this->_model = $helper->getObject(
-            'Magento\Customer\Model\Session',
+            \Magento\Customer\Model\Session::class,
             [
                 'customerFactory' => $this->customerFactoryMock,
                 'storage' => $this->_storageMock,
@@ -90,8 +93,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCustomerAsLoggedIn()
     {
-        $customer = $this->getMock('Magento\Customer\Model\Customer', [], [], '', false);
-        $customerDto = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $customer = $this->getMock(\Magento\Customer\Model\Customer::class, [], [], '', false);
+        $customerDto = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class, [], [], '', false);
         $customer->expects($this->any())
             ->method('getDataModel')
             ->will($this->returnValue($customerDto));
@@ -110,8 +113,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCustomerDataAsLoggedIn()
     {
-        $customer = $this->getMock('Magento\Customer\Model\Customer', [], [], '', false);
-        $customerDto = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $customer = $this->getMock(\Magento\Customer\Model\Customer::class, [], [], '', false);
+        $customerDto = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class, [], [], '', false);
 
         $this->customerFactoryMock->expects($this->once())
             ->method('create')
@@ -134,7 +137,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testAuthenticate()
     {
-        $urlMock = $this->getMock('Magento\Framework\Url', [], [], '', false);
+        $urlMock = $this->getMock(\Magento\Framework\Url::class, [], [], '', false);
         $urlMock->expects($this->exactly(2))
             ->method('getUrl')
             ->will($this->returnValue(''));
@@ -173,12 +176,12 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareLoginDataMock($customerId)
     {
-        $customerDataMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $customerDataMock = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class, [], [], '', false);
         $customerDataMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($customerId));
 
-        $customerMock = $this->getMock('Magento\Customer\Model\Customer', [], [], '', false);
+        $customerMock = $this->getMock(\Magento\Customer\Model\Customer::class, [], [], '', false);
         $customerMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($customerId));
@@ -244,7 +247,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCustomerRemovesFlagThatShowsIfCustomerIsEmulated()
     {
-        $customerMock = $this->getMock('Magento\Customer\Model\Customer', [], [], '', false);
+        $customerMock = $this->getMock(\Magento\Customer\Model\Customer::class, [], [], '', false);
         $this->_storageMock->expects($this->once())->method('unsIsCustomerEmulated');
         $this->_model->setCustomer($customerMock);
     }

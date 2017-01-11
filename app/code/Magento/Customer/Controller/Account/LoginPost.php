@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
@@ -13,6 +13,7 @@ use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
@@ -177,6 +178,10 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     $this->session->setUsername($login['username']);
                 } catch (AuthenticationException $e) {
                     $message = __('Invalid login or password.');
+                    $this->messageManager->addError($message);
+                    $this->session->setUsername($login['username']);
+                } catch (LocalizedException $e) {
+                    $message = $e->getMessage();
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
                 } catch (\Exception $e) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,8 +22,14 @@ class LicenseTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->directoryReadMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->directoryReadMock = $this->getMock(
+            \Magento\Framework\Filesystem\Directory\Read::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryRead')

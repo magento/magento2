@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Pricing\Render;
@@ -41,24 +41,22 @@ class ConfiguredPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->templateContext = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
+        $this->templateContext = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->saleableItem = $this->getMockBuilder('Magento\Framework\Pricing\SaleableInterface')
+        $this->saleableItem = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)
             ->getMockForAbstractClass();
 
-        $this->price = $this->getMockBuilder('Magento\Framework\Pricing\Price\PriceInterface')
-            ->setMethods([
-                'setItem',
-            ])
+        $this->price = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
+            ->setMethods(['setItem'])
             ->getMockForAbstractClass();
 
-        $this->rendererPool = $this->getMockBuilder('Magento\Framework\Pricing\Render\RendererPool')
+        $this->rendererPool = $this->getMockBuilder(\Magento\Framework\Pricing\Render\RendererPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->item = $this->getMockBuilder('Magento\Catalog\Model\Product\Configuration\Item\ItemInterface')
+        $this->item = $this->getMockBuilder(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class)
             ->getMockForAbstractClass();
 
         $this->model = new ConfiguredPriceBox(
@@ -72,7 +70,7 @@ class ConfiguredPriceBoxTest extends \PHPUnit_Framework_TestCase
 
     public function testSetLayout()
     {
-        $layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
+        $layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->getMockForAbstractClass();
 
         $this->price->expects($this->once())
@@ -81,7 +79,7 @@ class ConfiguredPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Wishlist\Pricing\Render\ConfiguredPriceBox',
+            \Magento\Wishlist\Pricing\Render\ConfiguredPriceBox::class,
             $this->model->setLayout($layoutMock)
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,18 +40,18 @@ class GridTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->context = $this->getMockBuilder('\Magento\Backend\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
         $this->response = $this->getMock(
-            '\Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             [
                 'sendResponse',
                 'setBody'
             ]
         );
-        $this->view = $this->getMock('\Magento\Framework\App\ViewInterface');
+        $this->view = $this->getMock(\Magento\Framework\App\ViewInterface::class);
 
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -64,7 +64,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->view));
 
         $this->controller = $this->objectManagerHelper->getObject(
-            '\Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Grid',
+            \Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Grid::class,
             [
                 'context' => $this->context
             ]
@@ -73,9 +73,9 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $layout = $this->getMock('\Magento\Framework\View\LayoutInterface');
+        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
         $block = $this->getMockBuilder(
-            'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid'
+            \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['setIndex', 'toHtml'])

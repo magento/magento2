@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -114,7 +114,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\ResourceModel\Visitor');
+        $this->_init(\Magento\Customer\Model\ResourceModel\Visitor::class);
         $userAgent = $this->httpHeader->getHttpUserAgent();
         if ($this->ignoredUserAgents) {
             if (in_array($userAgent, $this->ignoredUserAgents)) {

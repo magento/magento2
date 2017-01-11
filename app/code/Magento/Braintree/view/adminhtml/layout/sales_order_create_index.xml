@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,13 +18,17 @@
                 <argument name="method" xsi:type="string">braintree_cc_vault</argument>
                 <argument name="template" xsi:type="string">Magento_Vault::form/vault.phtml</argument>
             </action>
+            <action method="setMethodFormTemplate">
+                <argument name="method" xsi:type="string">braintree_paypal_vault</argument>
+                <argument name="template" xsi:type="string">Magento_Vault::form/vault.phtml</argument>
+            </action>
         </referenceBlock>
         <referenceBlock name="content">
             <block name="braintree_payment_script"
                    as="braintree_payment_script"
-                   after="billing_method"
                    template="Magento_Braintree::payment/script.phtml"
-                   class="Magento\Braintree\Block\Payment"/>
+                   class="Magento\Braintree\Block\Payment"
+                   after="billing_method"/>
         </referenceBlock>
     </body>
 </page>

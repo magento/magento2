@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,7 +16,7 @@
         <referenceBlock name="footer_links">
             <block class="Magento\Sales\Block\Guest\Link" name="sales-guest-form-link">
                 <arguments>
-                    <argument name="label" xsi:type="string">Orders and Returns</argument>
+                    <argument name="label" xsi:type="string" translate="true">Orders and Returns</argument>
                     <argument name="path" xsi:type="string">sales/guest/form</argument>
                 </arguments>
             </block>

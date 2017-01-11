@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,7 @@ class CleanupFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->object = new CleanupFiles($this->filesystem);
     }
 
@@ -65,7 +65,7 @@ class CleanupFilesTest extends \PHPUnit_Framework_TestCase
      */
     private function getDirectoryCleanMock($subPath = null)
     {
-        $dir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
+        $dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $dir->expects($this->once())->method('search')->with('*', $subPath)->willReturn(['one', 'two']);
         $dir->expects($this->exactly(2))->method('delete');
         $dir->expects($this->once())->method('isExist')->will($this->returnValue(true));

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -71,7 +71,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $massActionToggleList = '//span[contains(@class, "action-menu-item") and .= "%s"]';
+    protected $massActionToggleList = './/span[contains(@class, "action-menu-item") and .= "%s"]';
 
     /**
      * Action button (located above the Grid).
@@ -85,7 +85,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $actionList = '//span[contains(@class, "action-menu-item") and .= "%s"]';
+    protected $actionList = './/span[contains(@class, "action-menu-item") and .= "%s"]';
 
     /**
      * Column header locator.
@@ -95,14 +95,34 @@ class DataGrid extends Grid
     protected $columnHeader = './/*[@data-role="grid-wrapper"]//th/span[.="%s"]';
 
     /**
+     * Grid row xpath locator.
+     *
      * @var string
      */
-    protected $rowById = "//tr[//input[@data-action='select-row' and @value='%s']]";
+    protected $rowById = ".//tr[td//input[@data-action='select-row' and @value='%s']]";
 
     /**
+     * Column header number.
+     *
      * @var string
      */
-    protected $cellByHeader = "//td[count(//th[span[.='%s']]/preceding-sibling::th)+1]";
+    protected $columnNumber = ".//th[span[.='%s']][not(ancestor::*[@class='sticky-header'])]/preceding-sibling::th";
+
+    /**
+     * Cell number.
+     *
+     * @var string
+     */
+    protected $cellByHeader = "//td[%s+1]";
+
+    // @codingStandardsIgnoreStart
+    /**
+     * Admin data grid header selector.
+     *
+     * @var string
+     */
+    private $gridHeader = './/div[@class="admin__data-grid-header"][(not(ancestor::*[@class="sticky-header"]) and not(contains(@style,"visibility: hidden"))) or (ancestor::*[@class="sticky-header" and not(contains(@style,"display: none"))])]';
+    // @codingStandardsIgnoreEnd
 
     /**
      * @var string
@@ -133,14 +153,14 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $sortLink = "//th[contains(@class, '%s')]/span[contains(text(), '%s')]";
+    protected $sortLink = './/div[@data-role="grid-wrapper"]//th[contains(@class, "%s")]/span[contains(text(), "%s")]';
 
     /**
      * Current page input.
      *
      * @var string
      */
-    protected $currentPage = '[data-ui-id="current-page-input"]';
+    protected $currentPage = ".//*[@data-ui-id='current-page-input'][not(ancestor::*[@class='sticky-header'])]";
 
     /**
      * Clear all applied Filters.
@@ -163,7 +183,7 @@ class DataGrid extends Grid
      */
     protected function waitFilterToLoad()
     {
-        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->getTemplateBlock()->waitLoader();
         $browser = $this->_rootElement;
         $selector = $this->filterButton . ', ' . $this->resetButton;
         $browser->waitUntil(
@@ -234,7 +254,7 @@ class DataGrid extends Grid
         if ($rowItem->isVisible()) {
             $this->clickEditLink($rowItem);
         } else {
-            throw new \Exception('Searched item was not found.');
+            throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
         $this->waitLoader();
     }
@@ -252,7 +272,7 @@ class DataGrid extends Grid
         if ($rowItem->isVisible()) {
             $rowItem->find($this->selectItem)->click();
         } else {
-            throw new \Exception('Searched item was not found.');
+            throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
         $this->waitLoader();
     }
@@ -281,7 +301,10 @@ class DataGrid extends Grid
         if ($acceptAlert) {
             $element = $this->browser->find($this->alertModal);
             /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+            $modal = $this->blockFactory->create(
+                \Magento\Ui\Test\Block\Adminhtml\Modal::class,
+                ['element' => $element]
+            );
             $modal->acceptAlert();
         }
     }
@@ -317,12 +340,12 @@ class DataGrid extends Grid
     public function selectAction($action)
     {
         $actionType = is_array($action) ? key($action) : $action;
-        $this->_rootElement->find($this->actionButton)->click();
-        $this->_rootElement
+        $this->getGridHeaderElement()->find($this->actionButton)->click();
+        $this->getGridHeaderElement()
             ->find(sprintf($this->actionList, $actionType), Locator::SELECTOR_XPATH)
             ->click();
         if (is_array($action)) {
-            $this->_rootElement
+            $this->getGridHeaderElement()
                 ->find(sprintf($this->actionList, end($action)), Locator::SELECTOR_XPATH)
                 ->click();
         }
@@ -342,7 +365,7 @@ class DataGrid extends Grid
             $this->sortGridByField('ID');
         }
         foreach ($items as $item) {
-            $this->_rootElement->find($this->currentPage)->setValue('');
+            $this->_rootElement->find($this->currentPage, Locator::SELECTOR_XPATH)->setValue('');
             $this->waitLoader();
             $selectItem = $this->getRow($item)->find($this->selectItem);
             do {
@@ -354,7 +377,7 @@ class DataGrid extends Grid
                 }
             } while ($this->nextPage());
             if (!$selectItem->isVisible()) {
-                throw new \Exception('Searched item was not found.');
+                throw new \Exception("Searched item was not found\n" . print_r($item, true));
             }
         }
     }
@@ -377,6 +400,8 @@ class DataGrid extends Grid
     }
 
     /**
+     * Sort grid by column.
+     *
      * @param string $columnLabel
      */
     public function sortByColumn($columnLabel)
@@ -384,6 +409,7 @@ class DataGrid extends Grid
         $this->waitLoader();
         $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
         $this->_rootElement->find(sprintf($this->columnHeader, $columnLabel), Locator::SELECTOR_XPATH)->click();
+        $this->waitLoader();
     }
 
     /**
@@ -422,7 +448,11 @@ class DataGrid extends Grid
     {
         $this->waitLoader();
         $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
-        $selector = sprintf($this->rowById, $id) . sprintf($this->cellByHeader, $headerLabel);
+        $columnNumber = count(
+            $this->_rootElement->getElements(sprintf($this->columnNumber, $headerLabel), Locator::SELECTOR_XPATH)
+        );
+        $selector = sprintf($this->rowById, $id) . sprintf($this->cellByHeader, $columnNumber);
+
         return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
     }
 
@@ -457,5 +487,15 @@ class DataGrid extends Grid
         }
 
         return $data;
+    }
+
+    /**
+     * Returns admin data grid header element.
+     *
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    private function getGridHeaderElement()
+    {
+        return $this->_rootElement->find($this->gridHeader, Locator::SELECTOR_XPATH);
     }
 }

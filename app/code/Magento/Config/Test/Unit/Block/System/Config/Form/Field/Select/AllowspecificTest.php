@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field\Select;
@@ -20,10 +20,12 @@ class AllowspecificTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_object = $testHelper->getObject('Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific');
+        $this->_object = $testHelper->getObject(
+            \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific::class
+        );
         $this->_object->setData('html_id', 'spec_element');
         $this->_formMock = $this->getMock(
-            'Magento\Framework\Data\Form',
+            \Magento\Framework\Data\Form::class,
             ['getHtmlIdPrefix', 'getHtmlIdSuffix', 'getElement'],
             [],
             '',
@@ -35,14 +37,14 @@ class AllowspecificTest extends \PHPUnit_Framework_TestCase
     public function testGetAfterElementHtml()
     {
         $this->_formMock->expects(
-            $this->exactly(2)
+            $this->once()
         )->method(
             'getHtmlIdPrefix'
         )->will(
             $this->returnValue('test_prefix_')
         );
         $this->_formMock->expects(
-            $this->exactly(2)
+            $this->once()
         )->method(
             'getHtmlIdSuffix'
         )->will(
@@ -55,7 +57,7 @@ class AllowspecificTest extends \PHPUnit_Framework_TestCase
 
         $actual = $this->_object->getAfterElementHtml();
 
-        $this->assertStringEndsWith($afterHtmlCode, $actual);
+        $this->assertStringEndsWith('</script>' . $afterHtmlCode, $actual);
         $this->assertStringStartsWith('<script type="text/javascript">', trim($actual));
         $this->assertContains('test_prefix_spec_element_test_suffix', $actual);
     }
@@ -69,7 +71,7 @@ class AllowspecificTest extends \PHPUnit_Framework_TestCase
         $this->_object->setForm($this->_formMock);
 
         $elementMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Select',
+            \Magento\Framework\Data\Form\Element\Select::class,
             ['setDisabled'],
             [],
             '',

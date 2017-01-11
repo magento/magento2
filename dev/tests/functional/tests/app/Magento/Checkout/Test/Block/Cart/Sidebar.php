@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Block\Cart;
@@ -16,11 +16,11 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class Sidebar extends Block
 {
     /**
-     * Quantity input selector.
+     * Mini cart subtotal selector.
      *
      * @var string
      */
-    private $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"item-qty")]';
+    private $subtotal = '.subtotal .price';
 
     /**
      * Mini cart link selector.
@@ -35,6 +35,13 @@ class Sidebar extends Block
      * @var string
      */
     protected $braintreePaypalCheckoutButton = './/button[contains(@id, "braintree-paypal-mini-cart")]';
+
+    /**
+     * Locator value for "Proceed to Checkout" button.
+     *
+     * @var string
+     */
+    private $proceedToCheckoutButton = '#top-cart-btn-checkout';
 
     /**
      * Minicart items quantity
@@ -100,8 +107,8 @@ class Sidebar extends Block
     public function openMiniCart()
     {
         $this->waitCounterQty();
-        if (!$this->_rootElement->find($this->cartContent)->isVisible()) {
-            $this->_rootElement->find($this->cartLink)->click();
+        if (!$this->browser->find($this->cartContent)->isVisible()) {
+            $this->browser->find($this->cartLink)->click();
         }
     }
 
@@ -114,6 +121,16 @@ class Sidebar extends Block
     {
         $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
             ->click();
+    }
+
+    /**
+     * Click "Proceed to Checkout" button.
+     *
+     * @return void
+     */
+    public function clickProceedToCheckoutButton()
+    {
+        $this->_rootElement->find($this->proceedToCheckoutButton)->click();
     }
 
     /**
@@ -155,16 +172,16 @@ class Sidebar extends Block
     }
 
     /**
-     * Get product quantity.
+     * Get subtotal.
      *
-     * @param string $productName
      * @return string
      */
-    public function getProductQty($productName)
+    public function getSubtotal()
     {
         $this->openMiniCart();
-        $productQty = sprintf($this->qty, $productName);
-        return $this->_rootElement->find($productQty, Locator::SELECTOR_XPATH)->getValue();
+        $subtotal = $this->_rootElement->find($this->subtotal)->getText();
+
+        return $this->escapeCurrency($subtotal);
     }
 
     /**
@@ -175,6 +192,7 @@ class Sidebar extends Block
      */
     public function getCartItem(FixtureInterface $product)
     {
+        $this->openMiniCart();
         $dataConfig = $product->getDataConfig();
         $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
         $cartItem = null;
@@ -187,7 +205,7 @@ class Sidebar extends Block
                 Locator::SELECTOR_XPATH
             );
             $cartItem = $this->blockFactory->create(
-                'Magento\Checkout\Test\Block\Cart\Sidebar\Item',
+                \Magento\Checkout\Test\Block\Cart\Sidebar\Item::class,
                 ['element' => $cartItemBlock]
             );
         }
@@ -220,5 +238,17 @@ class Sidebar extends Block
     public function waitLoader()
     {
         $this->waitForElementNotVisible($this->loadingMask);
+    }
+
+    /**
+     * Escape currency in price.
+     *
+     * @param string $price
+     * @param string $currency [optional]
+     * @return string
+     */
+    protected function escapeCurrency($price, $currency = '$')
+    {
+        return str_replace($currency, '', $price);
     }
 }

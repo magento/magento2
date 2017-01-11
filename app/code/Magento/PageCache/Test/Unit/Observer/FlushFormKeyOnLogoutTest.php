@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Observer;
@@ -14,12 +14,12 @@ class FlushFormKeyOnLogoutTest extends \PHPUnit_Framework_TestCase
     {
         /** @var FormKey | \PHPUnit_Framework_MockObject_MockObject $cookieFormKey */
         $cookieFormKey = $this->getMockBuilder(
-            'Magento\Framework\App\PageCache\FormKey'
+            \Magento\Framework\App\PageCache\FormKey::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
-        $observerObject = $this->getMock('Magento\Framework\Event\Observer');
+        $observerObject = $this->getMock(\Magento\Framework\Event\Observer::class);
 
         $observer = new FlushFormKeyOnLogout($cookieFormKey);
 

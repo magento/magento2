@@ -2,13 +2,13 @@
 /**
  * SalesRule 10% discount coupon
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\SalesRule\Model\RuleFactory $salesRule */
-$salesRuleFactory = $objectManager->get('Magento\SalesRule\Model\RuleFactory');
+$salesRuleFactory = $objectManager->get(\Magento\SalesRule\Model\RuleFactory::class);
 
 /** @var \Magento\SalesRule\Model\Rule $salesRule */
 $salesRule = $salesRuleFactory->create();
@@ -18,7 +18,7 @@ $data = [
     'is_active' => true,
     'website_ids' => [
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
         )->getStore()->getWebsiteId()
     ],
     'customer_group_ids' => [\Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID],
@@ -30,6 +30,6 @@ $data = [
 ];
 
 $salesRule->loadPost($data)->setUseAutoGeneration(false)->save();
-$objectManager->get('Magento\Framework\Registry')->unregister('Magento/Checkout/_file/discount_10percent');
-$objectManager->get('Magento\Framework\Registry')
+$objectManager->get(\Magento\Framework\Registry::class)->unregister('Magento/Checkout/_file/discount_10percent');
+$objectManager->get(\Magento\Framework\Registry::class)
     ->register('Magento/Checkout/_file/discount_10percent', $salesRule->getRuleId());

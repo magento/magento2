@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -28,16 +28,16 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dbVersionInfo = $this->getMock('Magento\Framework\Module\DbVersionInfo', [], [], '', false);
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $this->dbVersionInfo = $this->getMock(\Magento\Framework\Module\DbVersionInfo::class, [], [], '', false);
+        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerProvider->expects($this->any())
             ->method('get')
             ->will($this->returnValue($objectManager));
         $objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValue($this->dbVersionInfo));
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $this->command = new DbStatusCommand($objectManagerProvider, $this->deploymentConfig);
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -78,7 +78,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
                 continue;
             }
             $date = ObjectManager::getInstance()->create(
-                '\Magento\Backend\Test\Fixture\Source\Date',
+                \Magento\Backend\Test\Fixture\Source\Date::class,
                 ['params' => [], 'data' => ['pattern' => $reportFilter]]
             );
             $customersReport[$name] = $date->getData();

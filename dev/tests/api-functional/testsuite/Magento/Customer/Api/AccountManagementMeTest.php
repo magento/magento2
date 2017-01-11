@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -67,16 +67,16 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $this->_markTestAsRestOnly();
 
         $this->customerRegistry = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Model\CustomerRegistry'
+            \Magento\Customer\Model\CustomerRegistry::class
         );
 
         $this->customerRepository = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Api\CustomerRepositoryInterface',
+            \Magento\Customer\Api\CustomerRepositoryInterface::class,
             ['customerRegistry' => $this->customerRegistry]
         );
 
         $this->customerAccountManagement = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Api\AccountManagementInterface');
+            ->get(\Magento\Customer\Api\AccountManagementInterface::class);
 
         $this->customerHelper = new CustomerHelper();
         $this->customerData = $this->customerHelper->createSampleCustomer();
@@ -85,7 +85,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $this->resetTokenForCustomerSampleData();
 
         $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Reflection\DataObjectProcessor'
+            \Magento\Framework\Reflection\DataObjectProcessor::class
         );
     }
 
@@ -94,10 +94,10 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
      */
     public function tearDown()
     {
-        unset($this->customerRepository);
+        $this->customerRepository = null;
 
         /** @var \Magento\Framework\Registry $registry */
-        $registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', true);
 
@@ -130,7 +130,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
 
         $updatedCustomerData = $this->dataObjectProcessor->buildOutputDataArray(
             $customerData,
-            'Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $updatedCustomerData[CustomerInterface::LASTNAME] = $lastName . 'Updated';
         $updatedCustomerData[CustomerInterface::ID] = 25;
@@ -157,7 +157,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $customerData = $this->_getCustomerData($this->customerData[CustomerInterface::ID]);
         $expectedCustomerDetails = $this->dataObjectProcessor->buildOutputDataArray(
             $customerData,
-            'Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $expectedCustomerDetails['addresses'][0]['id'] =
             (int)$expectedCustomerDetails['addresses'][0]['id'];

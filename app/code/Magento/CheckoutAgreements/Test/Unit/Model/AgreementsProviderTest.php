@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
@@ -36,17 +36,17 @@ class AgreementsProviderTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->agreementCollFactoryMock = $this->getMock(
-            '\Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory',
+            \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->model = $objectManager->getObject(
-            'Magento\CheckoutAgreements\Model\AgreementsProvider',
+            \Magento\CheckoutAgreements\Model\AgreementsProvider::class,
             [
                 'agreementCollectionFactory' => $this->agreementCollFactoryMock,
                 'storeManager' => $this->storeManagerMock,
@@ -65,7 +65,7 @@ class AgreementsProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $agreementCollection = $this->getMock(
-            '\Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection',
+            \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection::class,
             [],
             [],
             '',
@@ -73,7 +73,7 @@ class AgreementsProviderTest extends \PHPUnit_Framework_TestCase
         );
         $this->agreementCollFactoryMock->expects($this->once())->method('create')->willReturn($agreementCollection);
 
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,12 +37,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = 'Magento\Payment\Helper\Data';
+        $className = \Magento\Payment\Helper\Data::class;
         $arguments = $objectManagerHelper->getConstructArguments($className);
         /** @var \Magento\Framework\App\Helper\Context $context */
         $context = $arguments['context'];
         $this->scopeConfig = $context->getScopeConfig();
-        $this->layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface', [], [], '', false);
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class, [], [], '', false);
         $layoutFactoryMock = $arguments['layoutFactory'];
         $layoutFactoryMock->expects($this->once())->method('create')->willReturn($this->layoutMock);
 
@@ -52,7 +52,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->helper = $objectManagerHelper->getObject($className, $arguments);
     }
-
 
     public function testGetMethodInstance()
     {
@@ -120,19 +119,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig->expects(new MethodInvokedAtIndex(0))
             ->method('getValue')
             ->with(sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, $methodA['code']))
-            ->will($this->returnValue('Magento\Payment\Model\Method\AbstractMethod'));
+            ->will($this->returnValue(\Magento\Payment\Model\Method\AbstractMethod::class));
         $this->scopeConfig->expects(new MethodInvokedAtIndex(1))
             ->method('getValue')
             ->with(
                 sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, $methodB['code'])
             )
-            ->will($this->returnValue('Magento\Payment\Model\Method\AbstractMethod'));
+            ->will($this->returnValue(\Magento\Payment\Model\Method\AbstractMethod::class));
         $this->scopeConfig->expects(new MethodInvokedAtIndex(2))
             ->method('getValue')
             ->with(sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, 'empty'))
             ->will($this->returnValue(null));
 
-        $methodInstanceMockA = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $methodInstanceMockA = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInstanceMockA->expects($this->any())
             ->method('isAvailable')
@@ -142,7 +141,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with('sort_order', null)
             ->will($this->returnValue($methodA['data']['sort_order']));
 
-        $methodInstanceMockB = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $methodInstanceMockB = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInstanceMockB->expects($this->any())
             ->method('isAvailable')
@@ -171,13 +170,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         list($blockType, $methodCode) = ['method_block_type', 'method_code'];
 
-        $methodMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $methodMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
-        $layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
+        $layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\BlockInterface')
+        $blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setMethod', 'toHtml'])
             ->getMock();
@@ -196,13 +195,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $blockType = 'method_block_type';
 
-        $methodMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $methodMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
-        $infoMock = $this->getMockBuilder('Magento\Payment\Model\Info')
+        $infoMock = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\BlockInterface')
+        $blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setInfo', 'toHtml'])
             ->getMock();
@@ -221,13 +220,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         list($storeId, $blockHtml, $secureMode, $blockType) = [1, 'HTML MARKUP', true, 'method_block_type'];
 
-        $methodMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $methodMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
-        $infoMock = $this->getMockBuilder('Magento\Payment\Model\Info')
+        $infoMock = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $paymentBlockMock = $this->getMockBuilder('Magento\Framework\View\Element\BlockInterface')
+        $paymentBlockMock = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setArea', 'setIsSecureMode', 'getMethod', 'setStore', 'toHtml', 'setInfo'])
             ->getMock();

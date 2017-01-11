@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Pack;
@@ -67,7 +67,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         \Magento\Framework\System\Dirs::rm($this->_packPath);
 
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
         $this->backupRegistrar = $paths->getValue();
@@ -77,7 +77,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         \Magento\Framework\System\Dirs::rm($this->_packPath);
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
         $paths->setValue($this->backupRegistrar);

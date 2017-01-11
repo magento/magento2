@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Helper\Dashboard;
@@ -44,7 +44,7 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
     private function getStoreManager()
     {
         if ($this->_storeManager === null) {
-            $this->_storeManager = ObjectManager::getInstance()->get('Magento\Store\Model\StoreManagerInterface');
+            $this->_storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
         }
         return $this->_storeManager;
     }

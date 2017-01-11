@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model;
@@ -24,8 +24,8 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->read = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->read = $this->getMock(\Magento\Framework\Filesystem\Directory\Read::class, [], [], '', false);
         $filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($this->read);
         $this->cronScriptReadinessCheck = new CronScriptReadinessCheck($filesystem);
     }

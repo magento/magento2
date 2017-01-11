@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,9 @@ namespace Magento\Catalog\Test\Unit\Model\Category;
 use Magento\Catalog\Model\Category\AttributeRepository;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -47,14 +50,14 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->searchBuilderMock =
-            $this->getMock('Magento\Framework\Api\SearchCriteriaBuilder', [], [], '', false);
+            $this->getMock(\Magento\Framework\Api\SearchCriteriaBuilder::class, [], [], '', false);
         $this->filterBuilderMock =
-            $this->getMock('Magento\Framework\Api\FilterBuilder', [], [], '', false);
+            $this->getMock(\Magento\Framework\Api\FilterBuilder::class, [], [], '', false);
         $this->attributeRepositoryMock =
-            $this->getMock('Magento\Eav\Api\AttributeRepositoryInterface', [], [], '', false);
+            $this->getMock(\Magento\Eav\Api\AttributeRepositoryInterface::class, [], [], '', false);
         $this->searchResultMock =
             $this->getMock(
-                'Magento\Framework\Api\SearchResultsInterface',
+                \Magento\Framework\Api\SearchResultsInterface::class,
                 [
                     'getItems',
                     'getSearchCriteria',
@@ -67,11 +70,11 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
                 [],
                 '',
                 false);
-        $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
+        $this->eavConfigMock = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
         $this->eavConfigMock->expects($this->any())->method('getEntityType')
             ->willReturn(new \Magento\Framework\DataObject(['default_attribute_set_id' => 3]));
         $this->model = (new ObjectManager($this))->getObject(
-            'Magento\Catalog\Model\Category\AttributeRepository',
+            \Magento\Catalog\Model\Category\AttributeRepository::class,
             [
                 'searchCriteriaBuilder' => $this->searchBuilderMock,
                 'filterBuilder' => $this->filterBuilderMock,
@@ -83,7 +86,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
         $this->attributeRepositoryMock->expects($this->once())
             ->method('getList')
             ->with(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE, $searchCriteriaMock)
@@ -96,7 +99,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $attributeCode = 'some Attribute Code';
         $dataInterfaceMock =
-            $this->getMock('Magento\Catalog\Api\Data\CategoryAttributeInterface', [], [], '', false);
+            $this->getMock(\Magento\Catalog\Api\Data\CategoryAttributeInterface::class, [], [], '', false);
         $this->attributeRepositoryMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE, $attributeCode)
@@ -107,7 +110,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCustomAttributesMetadata()
     {
-        $filterMock = $this->getMock('Magento\Framework\Service\V1\Data\Filter', [], [], '', false);
+        $filterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
         $this->filterBuilderMock->expects($this->once())->method('setField')
             ->with('attribute_set_id')->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())->method('setValue')->with(
@@ -115,9 +118,9 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())->method('create')->willReturn($filterMock);
         $this->searchBuilderMock->expects($this->once())->method('addFilters')->with([$filterMock])->willReturnSelf();
-        $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
         $this->searchBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
-        $itemMock = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $itemMock = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
         $this->attributeRepositoryMock->expects($this->once())->method('getList')->with(
             \Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE,
             $searchCriteriaMock

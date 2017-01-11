@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -64,7 +64,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->authSessionMock = $this->getMock(
-            '\Magento\Backend\Model\Auth\Session',
+            \Magento\Backend\Model\Auth\Session::class,
             ['isActive', 'getStatus', 'getUser', 'getId', 'getSessionId', 'getUpdatedAt'],
             [],
             '',
@@ -72,7 +72,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->adminSessionInfoCollectionFactoryMock = $this->getMock(
-            '\Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory',
+            \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -80,7 +80,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->adminSessionInfoCollectionMock = $this->getMock(
-            '\Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection',
+            \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection::class,
             [
                 'filterByUser',
                 'filterExpiredSessions',
@@ -96,7 +96,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->adminSessionInfoFactoryMock = $this->getMock(
-            '\Magento\Security\Model\AdminSessionInfoFactory',
+            \Magento\Security\Model\AdminSessionInfoFactory::class,
             ['create'],
             [],
             '',
@@ -104,7 +104,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->currentSessionMock = $this->getMock(
-            '\Magento\Security\Model\AdminSessionInfo',
+            \Magento\Security\Model\AdminSessionInfo::class,
             [
                 'isActive',
                 'getStatus',
@@ -125,7 +125,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->userMock = $this->getMock(
-            '\Magento\User\Model\User',
+            \Magento\User\Model\User::class,
             ['getId'],
             [],
             '',
@@ -141,7 +141,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Security\Model\AdminSessionsManager',
+            \Magento\Security\Model\AdminSessionsManager::class,
             [
                 'securityConfig' => $this->securityConfigMock,
                 'authSession' => $this->authSessionMock,

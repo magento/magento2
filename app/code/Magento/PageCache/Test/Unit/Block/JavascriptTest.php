@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Block;
@@ -44,11 +44,11 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->requestMock = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             [
                 'getRouteName',
                 'getControllerName',
@@ -68,13 +68,13 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
+        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layoutUpdateMock = $this->getMockBuilder('Magento\Framework\View\Layout\ProcessorInterface')
+        $this->layoutUpdateMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ProcessorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())
@@ -91,7 +91,7 @@ class JavascriptTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->layoutUpdateMock);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->blockJavascript = $objectManager->getObject(
-            'Magento\PageCache\Block\Javascript',
+            \Magento\PageCache\Block\Javascript::class,
             [
                 'context' => $this->contextMock
             ]

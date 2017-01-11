@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
@@ -30,9 +30,9 @@ class SetManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->attrSetManagementMock = $this->getMock('\Magento\Eav\Api\AttributeSetManagementInterface');
-        $this->attributeSetRepository = $this->getMock('\Magento\Eav\Api\AttributeSetRepositoryInterface');
-        $this->eavConfig = $this->getMock('\Magento\Eav\Model\Config', [], [], '', false);
+        $this->attrSetManagementMock = $this->getMock(\Magento\Eav\Api\AttributeSetManagementInterface::class);
+        $this->attributeSetRepository = $this->getMock(\Magento\Eav\Api\AttributeSetRepositoryInterface::class);
+        $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
         $this->model = new \Magento\Catalog\Model\Product\Attribute\SetManagement(
             $this->attrSetManagementMock,
             $this->attributeSetRepository,
@@ -43,15 +43,15 @@ class SetManagementTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $skeletonId = 1;
-        $attributeSetMock = $this->getMock('\Magento\Eav\Api\Data\AttributeSetInterface');
-        $skeletonSetMock = $this->getMock('\Magento\Eav\Api\Data\AttributeSetInterface');
+        $attributeSetMock = $this->getMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);
+        $skeletonSetMock = $this->getMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);
 
         $this->attributeSetRepository->expects($this->once())
             ->method('get')
             ->with($skeletonId)
             ->willReturn($skeletonSetMock);
 
-        $typeMock = $this->getMock('\Magento\Eav\Model\Entity\Type', [], [], '', false);
+        $typeMock = $this->getMock(\Magento\Eav\Model\Entity\Type::class, [], [], '', false);
         $typeMock->expects($this->once())->method('getId')->willReturn(4);
         $this->eavConfig->expects($this->once())
             ->method('getEntityType')
@@ -76,14 +76,14 @@ class SetManagementTest extends \PHPUnit_Framework_TestCase
     public function testCreateNonProductAttributeSet()
     {
         $skeletonId = 1;
-        $attributeSetMock = $this->getMock('\Magento\Eav\Api\Data\AttributeSetInterface');
-        $skeletonSetMock = $this->getMock('\Magento\Eav\Api\Data\AttributeSetInterface');
+        $attributeSetMock = $this->getMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);
+        $skeletonSetMock = $this->getMock(\Magento\Eav\Api\Data\AttributeSetInterface::class);
         $this->attributeSetRepository->expects($this->once())
             ->method('get')
             ->with($skeletonId)
             ->willReturn($skeletonSetMock);
 
-        $typeMock = $this->getMock('\Magento\Eav\Model\Entity\Type', [], [], '', false);
+        $typeMock = $this->getMock(\Magento\Eav\Model\Entity\Type::class, [], [], '', false);
         $typeMock->expects($this->once())->method('getId')->willReturn(4);
         $this->eavConfig->expects($this->once())
             ->method('getEntityType')

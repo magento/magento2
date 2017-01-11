@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Adapter\Query\Preprocessor;
@@ -23,13 +23,13 @@ class SynonymsTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->synonymAnalyzer = $this->getMockBuilder('Magento\Search\Model\SynonymAnalyzer')
+        $this->synonymAnalyzer = $this->getMockBuilder(\Magento\Search\Model\SynonymAnalyzer::class)
             ->setMethods(['getSynonymsForPhrase'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->synonymPreprocessor = $objectManager->getObject(
-            'Magento\Search\Adapter\Query\Preprocessor\Synonyms',
+            \Magento\Search\Adapter\Query\Preprocessor\Synonyms::class,
             [
                 'synonymsAnalyzer' => $this->synonymAnalyzer
             ]

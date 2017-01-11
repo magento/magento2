@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Observer;
@@ -22,7 +22,7 @@ class CaseCheckUnsuccessfulMessageWhenCaptchaFailedTest extends \Magento\TestFra
     public function testCheckUnsuccessfulMessageWhenCaptchaFailed()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         )->turnOffSecretKey();
         $this->getRequest()->setPostValue(['email' => 'dummy@dummy.com', 'captcha' => '1234']);
         $this->dispatch('backend/admin/auth/forgotpassword');

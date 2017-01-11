@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
@@ -17,7 +17,7 @@ class OrderCommentSenderTest extends AbstractSenderTest
     protected function setUp()
     {
         $this->stepMockSetup();
-        $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity');
+        $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity::class);
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->sender = new OrderCommentSender(
             $this->templateContainerMock,
@@ -44,7 +44,6 @@ class OrderCommentSenderTest extends AbstractSenderTest
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
             ->will($this->returnValue(false));
-
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')

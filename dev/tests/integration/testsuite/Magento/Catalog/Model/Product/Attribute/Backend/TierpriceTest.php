@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
@@ -32,17 +32,17 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product\Attribute\Backend\Tierprice'
+            \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice::class
         );
         $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         $this->metadataPool = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\EntityManager\MetadataPool'
+            \Magento\Framework\EntityManager\MetadataPool::class
         );
         $this->_model->setAttribute(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Eav\Model\Config'
+                \Magento\Eav\Model\Config::class
             )->getAttribute(
                 'catalog_product',
                 'tier_price'
@@ -95,6 +95,21 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
         $this->_model->validate($product);
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testValidatePercentage()
+    {
+        $product = new \Magento\Framework\DataObject();
+        $product->setTierPrice(
+            [
+                ['website_id' => 0, 'cust_group' => 1, 'price_qty' => 2, 'percentage_value' => 101],
+            ]
+        );
+
+        $this->_model->validate($product);
+    }
+
     public function testPreparePriceData()
     {
         $data = [
@@ -113,7 +128,7 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $fixtureProduct = $this->productRepository->get('simple');
         $product->setId($fixtureProduct->getId());
@@ -122,7 +137,7 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
         $this->_model->afterLoad($product);
         $price = $product->getTierPrice();
         $this->assertNotEmpty($price);
-        $this->assertEquals(3, count($price));
+        $this->assertEquals(4, count($price));
     }
 
     /**
@@ -132,7 +147,7 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load($this->productRepository->get('simple')->getId());
         $product->unlockAttributes();
@@ -149,7 +164,7 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
         $this->_model->afterSave($product);
 
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $fixtureProduct = $this->productRepository->get('simple');
         $product->setId($fixtureProduct->getId());
@@ -165,17 +180,17 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveEmpty()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
         )->setCurrentStore(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                \Magento\Store\Model\StoreManagerInterface::class
             )->getStore(
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID
             )
         );
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load($this->productRepository->get('simple')->getId());
         $product->setOrigData();
@@ -183,7 +198,7 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
         $this->_model->afterSave($product);
 
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $fixtureProduct = $this->productRepository->get('simple');
         $product->setId($fixtureProduct->getId());

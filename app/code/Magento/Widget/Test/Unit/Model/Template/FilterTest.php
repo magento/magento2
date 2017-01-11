@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model\Template;
@@ -51,14 +51,20 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->widgetResourceMock = $this->getMock('Magento\Widget\Model\ResourceModel\Widget', [], [], '', false);
-        $this->widgetMock = $this->getMock('Magento\Widget\Model\Widget', [], [], '', false);
-        $this->layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface');
+        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->widgetResourceMock = $this->getMock(
+            \Magento\Widget\Model\ResourceModel\Widget::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->widgetMock = $this->getMock(\Magento\Widget\Model\Widget::class, [], [], '', false);
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
 
         $this->filter = $this->objectManagerHelper->getObject(
-            'Magento\Widget\Model\Template\Filter',
+            \Magento\Widget\Model\Template\Filter::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'widgetResource' => $this->widgetResourceMock,
@@ -240,7 +246,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected function getBlockMock($returnedResult = '')
     {
         /** @var \Magento\Widget\Block\BlockInterface|\PHPUnit_Framework_MockObject_MockObject $blockMock */
-        $blockMock = $this->getMockBuilder('Magento\Widget\Block\BlockInterface')
+        $blockMock = $this->getMockBuilder(\Magento\Widget\Block\BlockInterface::class)
             ->setMethods(['toHtml'])
             ->getMockForAbstractClass();
         $blockMock->expects($this->any())

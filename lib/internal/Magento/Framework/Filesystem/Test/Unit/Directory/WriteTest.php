@@ -2,7 +2,7 @@
 /**
  * Unit Test for \Magento\Framework\Filesystem\Directory\Write
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Test\Unit\Directory;
@@ -38,9 +38,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->driver = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+        $this->driver = $this->getMock(\Magento\Framework\Filesystem\Driver\File::class, [], [], '', false);
         $this->fileFactory = $this->getMock(
-            'Magento\Framework\Filesystem\File\WriteFactory',
+            \Magento\Framework\Filesystem\File\WriteFactory::class,
             [],
             [],
             '',
@@ -68,7 +68,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function testGetDriver()
     {
         $this->assertInstanceOf(
-            'Magento\Framework\Filesystem\DriverInterface',
+            \Magento\Framework\Filesystem\DriverInterface::class,
             $this->write->getDriver(),
             'getDriver method expected to return instance of Magento\Framework\Filesystem\DriverInterface'
         );
@@ -88,10 +88,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->write->isWritable('correct-path'));
     }
 
-
     public function testCreateSymlinkTargetDirectoryExists()
     {
-        $targetDir = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $targetDir = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMock();
         $targetDir->driver = $this->driver;
         $sourcePath = 'source/path/file';
@@ -120,6 +119,17 @@ class WriteTest extends \PHPUnit_Framework_TestCase
             )->willReturn(true);
 
         $this->assertTrue($this->write->createSymlink($sourcePath, $destinationFile, $targetDir));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\FileSystemException
+     */
+    public function testOpenFileNonWritable()
+    {
+        $targetPath = '/path/to/target.file';
+        $this->driver->expects($this->once())->method('isExists')->willReturn(true);
+        $this->driver->expects($this->once())->method('isWritable')->willReturn(false);
+        $this->write->openFile($targetPath);
     }
 
     /**

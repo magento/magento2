@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,20 +20,26 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit_Framework_TestCase
     {
         $fixtureXmlFile = __DIR__ . '/_files/test.xml';
 
-        $filesMock = $this->getMock('\Magento\Framework\App\Utility\Files', ['getXmlCatalogFiles'], [], '', false);
+        $filesMock = $this->getMock(\Magento\Framework\App\Utility\Files::class, ['getXmlCatalogFiles'], [], '', false);
         $filesMock->expects($this->at(0))
             ->method('getXmlCatalogFiles')
             ->will($this->returnValue([[$fixtureXmlFile]]));
         $filesMock->expects($this->at(1))
             ->method('getXmlCatalogFiles')
             ->will($this->returnValue([]));
-        $urnResolverMock = $this->getMock('\Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $urnResolverMock = $this->getMock(\Magento\Framework\Config\Dom\UrnResolver::class, [], [], '', false);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
             ->with($this->equalTo('urn:magento:framework:Module/etc/module.xsd'))
             ->will($this->returnValue($fixtureXmlFile));
 
-        $phpstormFormatMock = $this->getMock('\Magento\Developer\Model\XmlCatalog\Format\PhpStorm', [], [], '', false);
+        $phpstormFormatMock = $this->getMock(
+            \Magento\Developer\Model\XmlCatalog\Format\PhpStorm::class,
+            [],
+            [],
+            '',
+            false
+        );
         $phpstormFormatMock->expects($this->once())
             ->method('generateCatalog')
             ->with(
@@ -42,8 +48,8 @@ class XmlCatalogGenerateCommandTest extends \PHPUnit_Framework_TestCase
             )->will($this->returnValue(null));
 
         $formats = ['phpstorm' => $phpstormFormatMock];
-        $readFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
-        $readDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface', [], [], '', false);
+        $readFactory = $this->getMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class, [], [], '', false);
+        $readDirMock = $this->getMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class, [], [], '', false);
 
         $content = file_get_contents($fixtureXmlFile);
 

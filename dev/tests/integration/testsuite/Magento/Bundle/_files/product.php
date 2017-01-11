@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,11 +14,11 @@ require __DIR__ . '/../../../Magento/Catalog/_files/products.php';
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $sampleProduct = $productRepository->get('simple');
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('bundle')
     ->setId(3)
     ->setAttributeSetId(4)
@@ -59,7 +59,7 @@ if ($product->getBundleOptionsData()) {
     $options = [];
     foreach ($product->getBundleOptionsData() as $key => $optionData) {
         if (!(bool)$optionData['delete']) {
-            $option = $objectManager->create('Magento\Bundle\Api\Data\OptionInterfaceFactory')
+            $option = $objectManager->create(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
                 ->create(['data' => $optionData]);
             $option->setSku($product->getSku());
             $option->setOptionId(null);
@@ -70,7 +70,7 @@ if ($product->getBundleOptionsData()) {
                 foreach ($bundleLinks[$key] as $linkData) {
                     if (!(bool)$linkData['delete']) {
                         /** @var \Magento\Bundle\Api\Data\LinkInterface$link */
-                        $link = $objectManager->create('Magento\Bundle\Api\Data\LinkInterfaceFactory')
+                        $link = $objectManager->create(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class)
                             ->create(['data' => $linkData]);
                         $linkProduct = $productRepository->getById($linkData['product_id']);
                         $link->setSku($linkProduct->getSku());

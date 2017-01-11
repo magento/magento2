@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 /**
  * @magentoDataFixture Magento/Catalog/_files/validate_image_info.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,15 +33,15 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\File\Size $fileSize */
-        $fileSize = $this->objectManager->create('Magento\Framework\File\Size');
+        $fileSize = $this->objectManager->create(\Magento\Framework\File\Size::class);
         $this->maxFileSizeInMb = $fileSize->getMaxFileSizeInMb();
 
         $this->validateFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Option\Type\File\ValidateFactory',
+            \Magento\Catalog\Model\Product\Option\Type\File\ValidateFactory::class,
             ['create']
         );
         $this->model = $this->objectManager->create(
-            'Magento\Catalog\Model\Product\Option\Type\File\ValidatorInfo',
+            \Magento\Catalog\Model\Product\Option\Type\File\ValidatorInfo::class,
             [
                 'validateFactory' => $this->validateFactoryMock,
             ]
@@ -53,7 +54,7 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
     public function testExceptionWithErrors()
     {
         $this->setExpectedException(
-            '\Magento\Framework\Exception\LocalizedException',
+            \Magento\Framework\Exception\LocalizedException::class,
             "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The maximum allowed image size for 'MediaOption' is 2000x2000 px.\n"
@@ -63,7 +64,7 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $validateMock = $this->getMock('Zend_Validate', ['isValid', 'getErrors']);
+        $validateMock = $this->getMock(\Zend_Validate::class, ['isValid', 'getErrors']);
         $validateMock->expects($this->once())->method('isValid')->will($this->returnValue(false));
         $validateMock->expects($this->exactly(2))->method('getErrors')->will($this->returnValue([
             \Zend_Validate_File_ExcludeExtension::FALSE_EXTENSION,
@@ -87,11 +88,11 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
     public function testExceptionWithoutErrors()
     {
         $this->setExpectedException(
-            '\Magento\Framework\Exception\LocalizedException',
+            \Magento\Framework\Exception\LocalizedException::class,
             "Please specify product's required option(s)."
         );
 
-        $validateMock = $this->getMock('Zend_Validate', ['isValid', 'getErrors']);
+        $validateMock = $this->getMock(\Zend_Validate::class, ['isValid', 'getErrors']);
         $validateMock->expects($this->once())->method('isValid')->will($this->returnValue(false));
         $validateMock->expects($this->exactly(1))->method('getErrors')->will($this->returnValue(false));
         $this->validateFactoryMock->expects($this->once())
@@ -109,7 +110,7 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate()
     {
-        $validateMock = $this->getMock('Zend_Validate', ['isValid']);
+        $validateMock = $this->getMock(\Zend_Validate::class, ['isValid']);
         $validateMock->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $this->validateFactoryMock->expects($this->once())
             ->method('create')
@@ -150,7 +151,7 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
             'price_type' => 'fixed',
         ];
         $option = $this->objectManager->create(
-            'Magento\Catalog\Model\Product\Option',
+            \Magento\Catalog\Model\Product\Option::class,
             [
                 'data' => array_merge($data, $options)
             ]
@@ -165,11 +166,11 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
     protected function getOptionValue()
     {
         /** @var \Magento\Catalog\Model\Product\Media\Config $config */
-        $config = $this->objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+        $config = $this->objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
         $file = $config->getBaseTmpMediaPath() . '/magento_small_image.jpg';
 
         /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = $this->objectManager->get('Magento\Framework\Filesystem');
+        $filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         $tmpDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
         $filePath = $tmpDirectory->getAbsolutePath($file);
 

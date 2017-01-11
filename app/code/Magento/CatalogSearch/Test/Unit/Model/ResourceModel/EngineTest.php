@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
-
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -23,11 +22,11 @@ class EngineTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIfNullSql'])
             ->getMockForAbstractClass();
-        $resource = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
+        $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection', 'getTableName'])
             ->getMock();
@@ -41,7 +40,7 @@ class EngineTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $this->target = $objectManager->getObject(
-            '\Magento\CatalogSearch\Model\ResourceModel\Engine',
+            \Magento\CatalogSearch\Model\ResourceModel\Engine::class,
             [
                 'resource' => $resource,
             ]

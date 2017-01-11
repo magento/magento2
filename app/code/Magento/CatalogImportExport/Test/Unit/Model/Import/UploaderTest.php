@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
@@ -50,32 +50,33 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->coreFileStorageDb = $this->getMockBuilder('\Magento\MediaStorage\Helper\File\Storage\Database')
+        $this->coreFileStorageDb = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->coreFileStorage = $this->getMockBuilder('\Magento\MediaStorage\Helper\File\Storage')
+        $this->coreFileStorage = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->imageFactory = $this->getMockBuilder('\Magento\Framework\Image\AdapterFactory')
+        $this->imageFactory = $this->getMockBuilder(\Magento\Framework\Image\AdapterFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->validator = $this->getMockBuilder('\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension')
+        $this->validator = $this->getMockBuilder(
+            \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class
+        )->disableOriginalConstructor()->getMock();
+
+        $this->readFactory = $this->getMockBuilder(\Magento\Framework\Filesystem\File\ReadFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Writer::class)
+            ->setMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->readFactory = $this->getMockBuilder('\Magento\Framework\Filesystem\File\ReadFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->directoryMock = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\Writer')
-            ->setMethods(['writeFile', 'getRelativePath'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->filesystem = $this->getMockBuilder('\Magento\Framework\Filesystem')
+        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDirectoryWrite'])
             ->getMock();
@@ -83,7 +84,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                         ->method('getDirectoryWrite')
                         ->will($this->returnValue($this->directoryMock));
 
-        $this->uploader = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Uploader')
+        $this->uploader = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
             ->setConstructorArgs([
                 $this->coreFileStorageDb,
                 $this->coreFileStorage,
@@ -92,6 +93,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 $this->filesystem,
                 $this->readFactory,
             ])
+            ->setMethods(['_setUploadFile', 'save', 'getTmpDir'])
             ->getMock();
     }
 
@@ -100,72 +102,54 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testMoveFileUrl($fileUrl, $expectedHost, $expectedFileName)
     {
+        $destDir = 'var/dest/dir';
         $expectedRelativeFilePath = $this->uploader->getTmpDir() . '/' . $expectedFileName;
+        $this->directoryMock->expects($this->once())->method('isWritable')->with($destDir)->willReturn(true);
         $this->directoryMock->expects($this->any())->method('getRelativePath')->with($expectedRelativeFilePath);
+        $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($destDir)
+            ->willReturn($destDir . '/' . $expectedFileName);
         // Check writeFile() method invoking.
-        $this->directoryMock->expects($this->any())->method('writeFile')->will($this->returnValue(null));
+        $this->directoryMock->expects($this->any())->method('writeFile')->will($this->returnValue($expectedFileName));
 
         // Create adjusted reader which does not validate path.
-        $readMock = $this->getMockBuilder('Magento\Framework\Filesystem\File\Read')
+        $readMock = $this->getMockBuilder(\Magento\Framework\Filesystem\File\Read::class)
             ->disableOriginalConstructor()
             ->setMethods(['readAll'])
             ->getMock();
         // Check readAll() method invoking.
         $readMock->expects($this->once())->method('readAll')->will($this->returnValue(null));
 
-        $this->readFactory = $this->getMockBuilder('\Magento\Framework\Filesystem\File\ReadFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
         // Check create() method invoking with expected argument.
         $this->readFactory->expects($this->once())
                         ->method('create')
                         ->will($this->returnValue($readMock))->with($expectedHost);
-
-        $uploaderMock = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Uploader')
-            ->setConstructorArgs([
-                $this->coreFileStorageDb,
-                $this->coreFileStorage,
-                $this->imageFactory,
-                $this->validator,
-                $this->filesystem,
-                $this->readFactory,
-            ])
-            ->setMethods(['_setUploadFile', 'save', 'getTmpDir'])
-            ->getMock();
-
         //Check invoking of getTmpDir(), _setUploadFile(), save() methods.
-        $uploaderMock->expects($this->any())->method('getTmpDir')->will($this->returnValue(''));
-        $uploaderMock->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
-        $uploaderMock->expects($this->once())->method('save')->will($this->returnValue(['name' => null]));
+        $this->uploader->expects($this->any())->method('getTmpDir')->will($this->returnValue(''));
+        $this->uploader->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
+        $this->uploader->expects($this->once())->method('save')->with($destDir . '/' . $expectedFileName)
+            ->willReturn(['name' => $expectedFileName]);
 
-        $uploaderMock->move($fileUrl);
+        $this->uploader->setDestDir($destDir);
+        $this->assertEquals(['name' => $expectedFileName], $this->uploader->move($fileUrl));
     }
 
     public function testMoveFileName()
     {
+        $destDir = 'var/dest/dir';
         $fileName = 'test_uploader_file';
         $expectedRelativeFilePath = $this->uploader->getTmpDir() . '/' . $fileName;
+        $this->directoryMock->expects($this->once())->method('isWritable')->with($destDir)->willReturn(true);
         $this->directoryMock->expects($this->any())->method('getRelativePath')->with($expectedRelativeFilePath);
-
-        $uploaderMock = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Uploader')
-            ->setConstructorArgs([
-                $this->coreFileStorageDb,
-                $this->coreFileStorage,
-                $this->imageFactory,
-                $this->validator,
-                $this->filesystem,
-                $this->readFactory,
-            ])
-            ->setMethods(['_setUploadFile', 'save', 'getTmpDir'])
-            ->getMock();
-
+        $this->directoryMock->expects($this->once())->method('getAbsolutePath')->with($destDir)
+            ->willReturn($destDir . '/' . $fileName);
         //Check invoking of getTmpDir(), _setUploadFile(), save() methods.
-        $uploaderMock->expects($this->once())->method('getTmpDir')->will($this->returnValue(''));
-        $uploaderMock->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
-        $uploaderMock->expects($this->once())->method('save')->will($this->returnValue(['name' => null]));
+        $this->uploader->expects($this->once())->method('getTmpDir')->will($this->returnValue(''));
+        $this->uploader->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
+        $this->uploader->expects($this->once())->method('save')->with($destDir . '/' . $fileName)
+            ->willReturn(['name' => $fileName]);
 
-        $uploaderMock->move($fileName);
+        $this->uploader->setDestDir($destDir);
+        $this->assertEquals(['name' => $fileName], $this->uploader->move($fileName));
     }
 
     public function moveFileUrlDataProvider()

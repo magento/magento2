@@ -1,15 +1,15 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Catalog\Test\Repository\CatalogAttributeSet">
         <dataset name="default">
+            <field name="attribute_set_id" xsi:type="string">%id%</field>
             <field name="attribute_set_name" xsi:type="string">Default</field>
-            <field name="attribute_set_id" xsi:type="string">4</field>
         </dataset>
 
         <dataset name="custom_attribute_set">
@@ -36,6 +36,16 @@
             </field>
             <field name="assigned_attributes" xsi:type="array">
                 <item name="dataset" xsi:type="string">color_for_promo_rules</item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_attribute_set_with_sizes">
+            <field name="attribute_set_name" xsi:type="string">Custom_attribute_set_with_sizes_%isolation%</field>
+            <field name="skeleton_set" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="assigned_attributes" xsi:type="array">
+                <item name="dataset" xsi:type="string">sizes_for_promo_rules</item>
             </field>
         </dataset>
     </repository>

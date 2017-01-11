@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="disable_guest_checkout">
+            <field name="checkout/options/guest_checkout" xsi:type="array">
+                <item name="scope" xsi:type="string">checkout</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="string">0</item>
+            </field>
+        </dataset>
+        <dataset name="disable_guest_checkout_rollback">
+            <field name="checkout/options/guest_checkout" xsi:type="array">
+                <item name="scope" xsi:type="string">checkout</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="string">1</item>
+            </field>
+        </dataset>
+        <dataset name="disable_customer_redirect_after_logging">
+            <field name="customer/startup/redirect_dashboard" xsi:type="array">
+                <item name="scope" xsi:type="string">customer</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="string">0</item>
+            </field>
+        </dataset>
+        <dataset name="disable_customer_redirect_after_logging_rollback">
+            <field name="customer/startup/redirect_dashboard" xsi:type="array">
+                <item name="scope" xsi:type="string">customer</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="string">1</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

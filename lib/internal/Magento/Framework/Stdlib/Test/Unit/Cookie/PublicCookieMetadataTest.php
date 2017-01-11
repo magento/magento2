@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class PublicCookieMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->publicCookieMetadata = $objectManager->getObject(
-            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata'
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
         );
     }
 

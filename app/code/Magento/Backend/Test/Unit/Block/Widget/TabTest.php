@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block\Widget;
@@ -28,7 +28,7 @@ class TabTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Backend\Block\Widget\Tab $object */
         $object = $this->helper->getObject(
-            '\Magento\Backend\Block\Widget\Tab',
+            \Magento\Backend\Block\Widget\Tab::class,
             ['data' => [$field => $value]]
         );
         $this->assertEquals($expected, $object->{$method}());

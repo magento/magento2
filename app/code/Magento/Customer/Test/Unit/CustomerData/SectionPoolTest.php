@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,8 +32,14 @@ class SectionPoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('\Magento\Framework\ObjectManagerInterface', [], [], '', false);
-        $this->identifierMock = $this->getMock('\Magento\Customer\CustomerData\Section\Identifier', [], [], '', false);
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
+        $this->identifierMock = $this->getMock(
+            \Magento\Customer\CustomerData\Section\Identifier::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->sectionSourceMap = ['section1' => 'b'];
         $this->model = new SectionPool(
             $this->objectManagerMock,
@@ -54,7 +60,13 @@ class SectionPoolTest extends \PHPUnit_Framework_TestCase
         ];
         $identifierResult = [1, 2, 3];
 
-        $sectionSourceMock = $this->getMock('\Magento\Customer\CustomerData\SectionSourceInterface', [], [], '', false);
+        $sectionSourceMock = $this->getMock(
+            \Magento\Customer\CustomerData\SectionSourceInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with('b')

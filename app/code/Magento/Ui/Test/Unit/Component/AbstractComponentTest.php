@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component;
@@ -28,7 +28,7 @@ class AbstractComponentTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $processorMock = $this->getMock(
-            'Magento\Framework\View\Element\UiComponent\Processor',
+            \Magento\Framework\View\Element\UiComponent\Processor::class,
             [],
             [],
             '',
@@ -37,11 +37,11 @@ class AbstractComponentTest extends \PHPUnit_Framework_TestCase
         );
         $processorMock->expects($this->once())
             ->method('register');
-        $this->contextMock = $this->getMock('Magento\Framework\View\Element\UiComponent\ContextInterface');
+        $this->contextMock = $this->getMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getProcessor')
             ->willReturn($processorMock);
-        $this->abstractComponent = $this->getMockBuilder('Magento\Ui\Component\AbstractComponent')
+        $this->abstractComponent = $this->getMockBuilder(\Magento\Ui\Component\AbstractComponent::class)
             ->enableOriginalConstructor()
             ->setMethods(['getComponentName'])
             ->setConstructorArgs(['context' => $this->contextMock])
@@ -119,7 +119,7 @@ class AbstractComponentTest extends \PHPUnit_Framework_TestCase
     public function testAddGetChildComponents()
     {
         /** @var \Magento\Framework\View\Element\UiComponentInterface|MockObject $uiComponentMock */
-        $uiComponentMock = $this->getMock('Magento\Framework\View\Element\UiComponentInterface');
+        $uiComponentMock = $this->getMock(\Magento\Framework\View\Element\UiComponentInterface::class);
         $name = 'componentName';
 
         $this->abstractComponent->addComponent($name, $uiComponentMock);
@@ -132,7 +132,7 @@ class AbstractComponentTest extends \PHPUnit_Framework_TestCase
     public function testGetChildComponents()
     {
         /** @var \Magento\Framework\View\Element\UiComponentInterface|MockObject $uiComponentMock */
-        $uiComponentMock = $this->getMock('Magento\Framework\View\Element\UiComponentInterface');
+        $uiComponentMock = $this->getMock(\Magento\Framework\View\Element\UiComponentInterface::class);
         $name = 'componentName';
         $expectedResult = [$name => $uiComponentMock];
 
@@ -156,7 +156,7 @@ class AbstractComponentTest extends \PHPUnit_Framework_TestCase
         $name = 'componentName';
         $expectedResult = 'some html code';
         /** @var \Magento\Framework\View\Element\UiComponentInterface|MockObject $uiComponentMock */
-        $uiComponentMock = $this->getMock('Magento\Framework\View\Element\UiComponentInterface');
+        $uiComponentMock = $this->getMock(\Magento\Framework\View\Element\UiComponentInterface::class);
         $uiComponentMock->expects($this->once())
             ->method('render')
             ->willReturn($expectedResult);
@@ -210,7 +210,7 @@ class AbstractComponentTest extends \PHPUnit_Framework_TestCase
     {
         $namespace = 'my_namespace';
         /** @var \Magento\Framework\View\Element\UiComponentInterface|MockObject $uiComponentMock */
-        $uiComponentMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentInterface')
+        $uiComponentMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
             ->setMethods(['getData'])
             ->getMockForAbstractClass();
         $uiComponentMock->expects($this->once())

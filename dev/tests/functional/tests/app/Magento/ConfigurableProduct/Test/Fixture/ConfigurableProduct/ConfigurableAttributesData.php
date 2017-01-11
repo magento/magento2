@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -129,7 +129,6 @@ class ConfigurableAttributesData extends DataSource
         foreach ($this->attributes as $attributeKey => $attribute) {
             $attributeData = $attribute->getData();
             $options = [];
-
             foreach ($attributeData['options'] as $key => $option) {
                 $options['option_key_' . $key] = $option;
             }
@@ -276,6 +275,16 @@ class ConfigurableAttributesData extends DataSource
         foreach ($this->attributesData as $attributeKey => $attribute) {
             $variationsMatrix = $this->addVariationMatrix($variationsMatrix, $attribute, $attributeKey);
         }
+
+        if (isset($data['matrix'])) {
+            foreach ($data['matrix'] as $key => $value) {
+                if (isset($value['sku']) && $value['sku'] === '') {
+                    unset($variationsMatrix[$key]['sku']);
+                    unset($data['matrix'][$key]['sku']);
+                }
+            }
+        }
+
         $this->variationsMatrix = isset($data['matrix'])
             ? array_replace_recursive($variationsMatrix, $data['matrix'])
             : $variationsMatrix;
@@ -305,7 +314,6 @@ class ConfigurableAttributesData extends DataSource
                     $row
                 );
             }
-
         }
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -75,17 +75,17 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->response = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode'],
             [],
             '',
             false
         );
         $this->customerSession = $this->getMock(
-            '\Magento\Customer\Model\Session',
+            \Magento\Customer\Model\Session::class,
             [
                 'isLoggedIn',
                 'getLastCustomerId',
@@ -99,7 +99,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->objectManager = $this->getMock(
-            '\Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             ['get'],
             [],
             '',
@@ -107,7 +107,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
         );
         $this->customerAccountManagementMock =
             $this->getMock(
-                '\Magento\Customer\Model\AccountManagement',
+                \Magento\Customer\Model\AccountManagement::class,
                 ['authenticate'],
                 [],
                 '',
@@ -115,25 +115,25 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->jsonHelperMock = $this->getMock(
-            '\Magento\Framework\Json\Helper\Data',
+            \Magento\Framework\Json\Helper\Data::class,
             ['jsonDecode'],
             [],
             '',
             false
         );
 
-        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $this->resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
+        $this->resultJsonFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->resultRaw = $this->getMockBuilder('Magento\Framework\Controller\Result\Raw')
+        $this->resultRaw = $this->getMockBuilder(\Magento\Framework\Controller\Result\Raw::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultRawFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
+        $resultRawFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\RawFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -148,7 +148,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
-            'Magento\Customer\Controller\Ajax\Login',
+            \Magento\Customer\Controller\Ajax\Login::class,
             [
                 'context' => $contextMock,
                 'customerSession' => $this->customerSession,
@@ -192,7 +192,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->with($jsonRequest)
             ->willReturn(['username' => 'customer@example.com', 'password' => 'password']);
 
-        $customerMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface');
+        $customerMock = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\CustomerInterface::class);
         $this->customerAccountManagementMock
             ->expects($this->any())
             ->method('authenticate')
@@ -262,7 +262,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->with($jsonRequest)
             ->willReturn(['username' => 'invalid@example.com', 'password' => 'invalid']);
 
-        $customerMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface');
+        $customerMock = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\CustomerInterface::class);
         $this->customerAccountManagementMock
             ->expects($this->any())
             ->method('authenticate')

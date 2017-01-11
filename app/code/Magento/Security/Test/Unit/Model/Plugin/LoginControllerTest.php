@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,7 +44,7 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->messageManagerMock = $this->getMock(
-            '\Magento\Framework\Message\ManagerInterface',
+            \Magento\Framework\Message\ManagerInterface::class,
             [],
             [],
             '',
@@ -52,7 +52,7 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->adminSessionsManagerMock = $this->getMock(
-            '\Magento\Security\Model\AdminSessionsManager',
+            \Magento\Security\Model\AdminSessionsManager::class,
             ['getLogoutReasonMessageByStatus'],
             [],
             '',
@@ -68,7 +68,7 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->backendControllerAuthLoginMock = $this->getMock(
-            '\Magento\Backend\Controller\Adminhtml\Auth\Login',
+            \Magento\Backend\Controller\Adminhtml\Auth\Login::class,
             ['getRequest', 'getUrl'],
             [],
             '',
@@ -76,7 +76,7 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->requestMock = $this->getMock(
-            '\Magento\Framework\App\Request\Http',
+            \Magento\Framework\App\Request\Http::class,
             ['getUri'],
             [],
             '',
@@ -84,7 +84,7 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->controller = $this->objectManager->getObject(
-            '\Magento\Security\Model\Plugin\LoginController',
+            \Magento\Security\Model\Plugin\LoginController::class,
             [
                 'messageManager' => $this->messageManagerMock,
                 'sessionsManager' => $this->adminSessionsManagerMock,

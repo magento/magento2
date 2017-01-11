@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Security\Model\ResourceModel;
 
 /**
@@ -26,7 +30,7 @@ class PasswordResetRequestEventTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create('Magento\Security\Model\PasswordResetRequestEvent');
+        $this->model = $this->objectManager->create(\Magento\Security\Model\PasswordResetRequestEvent::class);
         $this->resourceModel = $this->model->getResource();
     }
 

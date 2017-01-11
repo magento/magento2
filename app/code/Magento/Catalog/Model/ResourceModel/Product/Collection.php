@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,13 +8,16 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\DB\Select;
-use Magento\Store\Model\Store;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Store\Model\Store;
+use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * Product collection
@@ -232,7 +235,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $dateTime;
 
     /**
-     * @var GroupManagementInterface
+     * @var \Magento\Customer\Api\GroupManagementInterface
      */
     protected $_groupManagement;
 
@@ -244,6 +247,23 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $needToAddWebsiteNamesToResult;
 
     /**
+     * @var Gallery
+     */
+    private $mediaGalleryResource;
+
+    /**
+     * @var GalleryReadHandler
+     */
+    private $productGalleryReadHandler;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * Collection constructor
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -263,7 +283,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @param ProductLimitationFactory|null $productLimitationFactory
+     * @param MetadataPool|null $metadataPool
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -287,7 +309,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         GroupManagementInterface $groupManagement,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ProductLimitationFactory $productLimitationFactory = null,
+        MetadataPool $metadataPool = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -299,7 +323,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->_groupManagement = $groupManagement;
-        $this->_productLimitationFilters = $this->createLimitationFilters();
+        $productLimitationFactory = $productLimitationFactory ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory::class
+        );
+        $this->_productLimitationFilters = $productLimitationFactory->create();
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         parent::__construct(
             $entityFactory,
             $logger,
@@ -430,9 +458,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _construct()
     {
         if ($this->isEnabledFlat()) {
-            $this->_init('Magento\Catalog\Model\Product', 'Magento\Catalog\Model\ResourceModel\Product\Flat');
+            $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product\Flat::class);
         } else {
-            $this->_init('Magento\Catalog\Model\Product', 'Magento\Catalog\Model\ResourceModel\Product');
+            $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product::class);
         }
         $this->_initTables();
     }
@@ -448,7 +476,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _init($model, $entityModel)
     {
         if ($this->isEnabledFlat()) {
-            $entityModel = 'Magento\Catalog\Model\ResourceModel\Product\Flat';
+            $entityModel = \Magento\Catalog\Model\ResourceModel\Product\Flat::class;
         }
         return parent::_init($model, $entityModel);
     }
@@ -1858,6 +1886,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
 
+        // Preventing overriding price loaded from EAV because we want to use the one from index
+        $this->removeAttributeToSelect('price');
+
         $connection = $this->getConnection();
         $select = $this->getSelect();
         $joinCond = join(
@@ -2070,12 +2101,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($this->getFlag('tier_price_added')) {
             return $this;
         }
+        $linkField = $this->getConnection()->getAutoIncrementField($this->getTable('catalog_product_entity'));
 
         $tierPrices = [];
         $productIds = [];
         foreach ($this->getItems() as $item) {
-            $productIds[] = $item->getId();
-            $tierPrices[$item->getId()] = [];
+            $productIds[] = $item->getData($linkField);
+            $tierPrices[$item->getData($linkField)] = [];
         }
         if (!$productIds) {
             return $this;
@@ -2083,59 +2115,27 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
         $attribute = $this->getAttribute('tier_price');
-        if ($attribute->isScopeGlobal()) {
-            $websiteId = 0;
-        } else {
-            if ($this->getStoreId()) {
-                $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
-            }
+        /* @var $backend \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice */
+        $backend = $attribute->getBackend();
+        $websiteId = 0;
+        if (!$attribute->isScopeGlobal() && null !== $this->getStoreId()) {
+            $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
         }
-        $linkField = $this->getConnection()->getAutoIncrementField($this->getTable('catalog_product_entity'));
-        $connection = $this->getConnection();
-        $columns = [
-            'price_id' => 'value_id',
-            'website_id' => 'website_id',
-            'all_groups' => 'all_groups',
-            'cust_group' => 'customer_group_id',
-            'price_qty' => 'qty',
-            'price' => 'value',
-            'product_id' => $linkField,
-        ];
-        $select = $connection->select()->from(
-            $this->getTable('catalog_product_entity_tier_price'),
-            $columns
-        )->where(
+
+        $select = $backend->getResource()->getSelect($websiteId);
+        $select->columns(['product_id' => $linkField])->where(
             $linkField .' IN(?)',
             $productIds
         )->order(
-            [$linkField, 'qty']
+            $linkField
         );
 
-        if ($websiteId == '0') {
-            $select->where('website_id = ?', $websiteId);
-        } else {
-            $select->where('website_id IN(?)', ['0', $websiteId]);
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
+            $tierPrices[$row['product_id']][] = $row;
         }
-
-        foreach ($connection->fetchAll($select) as $row) {
-            $tierPrices[$row['product_id']][] = [
-                'website_id' => $row['website_id'],
-                'cust_group' => $row['all_groups'] ? $this->_groupManagement->getAllCustomersGroup()->getId() : $row['cust_group'],
-                'price_qty' => $row['price_qty'],
-                'price' => $row['price'],
-                'website_price' => $row['price'],
-            ];
-        }
-
-        /* @var $backend \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice */
-        $backend = $attribute->getBackend();
 
         foreach ($this->getItems() as $item) {
-            $data = $tierPrices[$item->getId()];
-            if (!empty($data) && $websiteId) {
-                $data = $backend->preparePriceData($data, $item->getTypeId(), $websiteId);
-            }
-            $item->setData('tier_price', $data);
+            $backend->setPriceData($item, $tierPrices[$item->getData($linkField)]);
         }
 
         $this->setFlag('tier_price_added', true);
@@ -2165,6 +2165,87 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $this->_priceDataFieldFilters[] = array_merge([$comparisonFormat], $fields);
         return $this;
+    }
+
+    /**
+     * Add media gallery data to loaded items
+     *
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function addMediaGalleryData()
+    {
+        if ($this->getFlag('media_gallery_added')) {
+            return $this;
+        }
+
+        if (!$this->count()) {
+            return $this;
+        }
+
+        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        $attribute = $this->getAttribute('media_gallery');
+        $select = $this->getMediaGalleryResource()->createBatchBaseSelect(
+            $this->getStoreId(),
+            $attribute->getAttributeId()
+        );
+
+        $mediaGalleries = [];
+        $linkField = $this->getProductEntityMetadata()->getLinkField();
+        $items = $this->getItems();
+
+        $select->where('entity.' . $linkField . ' IN (?)', array_map(function ($item) {
+            return $item->getId();
+        }, $items));
+
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
+            $mediaGalleries[$row[$linkField]][] = $row;
+        }
+
+        foreach ($items as $item) {
+            $mediaEntries = isset($mediaGalleries[$item->getId()]) ? $mediaGalleries[$item->getId()] : [];
+            $this->getGalleryReadHandler()->addMediaDataToProduct($item, $mediaEntries);
+        }
+
+        $this->setFlag('media_gallery_added', true);
+        return $this;
+    }
+
+    /**
+     * Get product entity metadata
+     *
+     * @return \Magento\Framework\EntityManager\EntityMetadataInterface
+     */
+    public function getProductEntityMetadata()
+    {
+        return $this->metadataPool->getMetadata(ProductInterface::class);
+    }
+
+    /**
+     * Retrieve GalleryReadHandler
+     *
+     * @return GalleryReadHandler
+     * @deprecated
+     */
+    private function getGalleryReadHandler()
+    {
+        if ($this->productGalleryReadHandler === null) {
+            $this->productGalleryReadHandler = ObjectManager::getInstance()->get(GalleryReadHandler::class);
+        }
+        return $this->productGalleryReadHandler;
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     */
+    private function getMediaGalleryResource()
+    {
+        if (null === $this->mediaGalleryResource) {
+            $this->mediaGalleryResource = ObjectManager::getInstance()->get(Gallery::class);
+        }
+        return $this->mediaGalleryResource;
     }
 
     /**
@@ -2261,14 +2342,5 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         return $this->_pricesCount;
-    }
-
-    /**
-     * @return Collection\ProductLimitation
-     */
-    private function createLimitationFilters()
-    {
-        return \Magento\Framework\App\ObjectManager::getInstance()
-                ->create('Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation');
     }
 }

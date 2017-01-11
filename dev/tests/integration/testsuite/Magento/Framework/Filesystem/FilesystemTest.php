@@ -2,7 +2,7 @@
 /**
  * Test for \Magento\Framework\Filesystem
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem;
@@ -25,7 +25,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystem = Bootstrap::getObjectManager()->create('Magento\Framework\Filesystem');
+        $this->filesystem = Bootstrap::getObjectManager()->create(\Magento\Framework\Filesystem::class);
     }
 
     /**
@@ -34,7 +34,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     public function testGetDirectoryReadInstance()
     {
         $dir = $this->filesystem->getDirectoryRead(AppDirectoryList::VAR_DIR);
-        $this->assertInstanceOf('\Magento\Framework\Filesystem\Directory\Read', $dir);
+        $this->assertInstanceOf(\Magento\Framework\Filesystem\Directory\Read::class, $dir);
     }
 
     /**
@@ -43,7 +43,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     public function testGetDirectoryWriteInstance()
     {
         $dir = $this->filesystem->getDirectoryWrite(AppDirectoryList::VAR_DIR);
-        $this->assertInstanceOf('\Magento\Framework\Filesystem\Directory\Write', $dir);
+        $this->assertInstanceOf(\Magento\Framework\Filesystem\Directory\Write::class, $dir);
     }
 
     /**

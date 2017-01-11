@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,12 +13,12 @@ class UpdaterSuccessTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         /** @var $maintenanceMode \Magento\Framework\App\MaintenanceMode */
-        $maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
+        $maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, [], [], '', false);
         $maintenanceMode->expects($this->once())->method('set')->with(false);
         /** @var $controller UpdaterSuccess */
         $controller = new UpdaterSuccess($maintenanceMode);
         $viewModel = $controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 }

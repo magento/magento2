@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Category;
@@ -125,7 +125,7 @@ class View extends \Magento\Framework\App\Action\Action
         } catch (NoSuchEntityException $e) {
             return false;
         }
-        if (!$this->_objectManager->get('Magento\Catalog\Helper\Category')->canShow($category)) {
+        if (!$this->_objectManager->get(\Magento\Catalog\Helper\Category::class)->canShow($category)) {
             return false;
         }
         $this->_catalogSession->setLastVisitedCategoryId($category->getId());
@@ -136,7 +136,7 @@ class View extends \Magento\Framework\App\Action\Action
                 ['category' => $category, 'controller_action' => $this]
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return false;
         }
 

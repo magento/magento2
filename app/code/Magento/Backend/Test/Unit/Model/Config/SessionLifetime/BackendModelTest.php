@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Config\SessionLifetime;
@@ -16,9 +16,11 @@ class BackendModelTest extends \PHPUnit_Framework_TestCase
     public function testBeforeSave($value, $errorMessage = null)
     {
         /** @var BackendModel $model */
-        $model = (new ObjectManager($this))->getObject('Magento\Backend\Model\Config\SessionLifetime\BackendModel');
+        $model = (new ObjectManager($this))->getObject(
+            \Magento\Backend\Model\Config\SessionLifetime\BackendModel::class
+        );
         if ($errorMessage !== null) {
-            $this->setExpectedException('\Magento\Framework\Exception\LocalizedException', $errorMessage);
+            $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $errorMessage);
         }
         $model->setValue($value);
         $model->beforeSave();

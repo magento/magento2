@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Test\Unit\Model\Config\Source;
@@ -27,11 +27,12 @@ class AllRegionTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $countryCollectionFactory = $this->getMockBuilder(
-            'Magento\Directory\Model\ResourceModel\Country\CollectionFactory'
+            \Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class
         )->setMethods(['create', '__wakeup', '__sleep'])->disableOriginalConstructor()->getMock();
 
-        $this->countryCollection = $this->getMockBuilder('Magento\Directory\Model\ResourceModel\Country\Collection')
-            ->setMethods(['load', 'toOptionArray', '__wakeup', '__sleep'])
+        $this->countryCollection = $this->getMockBuilder(
+            \Magento\Directory\Model\ResourceModel\Country\Collection::class
+        )->setMethods(['load', 'toOptionArray', '__wakeup', '__sleep'])
             ->disableOriginalConstructor()
             ->getMock();
         $countryCollectionFactory->expects($this->once())
@@ -42,9 +43,9 @@ class AllRegionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $regionCollectionFactory = $this->getMockBuilder(
-            'Magento\Directory\Model\ResourceModel\Region\CollectionFactory'
+            \Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class
         )->disableOriginalConstructor()->setMethods(['create', '__wakeup', '__sleep'])->getMock();
-        $this->regionCollection = $this->getMockBuilder('Magento\Directory\Model\ResourceModel\Region\Collection')
+        $this->regionCollection = $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Region\Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getIterator', '__wakeup', '__sleep'])
             ->getMock();
@@ -56,7 +57,7 @@ class AllRegionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->regionCollection));
 
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Directory\Model\Config\Source\Allregion',
+            \Magento\Directory\Model\Config\Source\Allregion::class,
             [
                 'countryCollectionFactory' => $countryCollectionFactory,
                 'regionCollectionFactory' => $regionCollectionFactory
@@ -200,7 +201,7 @@ class AllRegionTest extends \PHPUnit_Framework_TestCase
      */
     private function generateRegion($countryId, $id, $defaultName)
     {
-        $region = $this->getMockBuilder('Magento\Directory\Model\Region')
+        $region = $this->getMockBuilder(\Magento\Directory\Model\Region::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCountryId', 'getId', 'getDefaultName', '__wakeup', '__sleep'])
             ->getMock();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
@@ -22,9 +22,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Catalog\Model\Product\Option');
+        $this->model = $objectManager->getObject(\Magento\Catalog\Model\Product\Option::class);
         $this->model->setProduct($this->productMock);
     }
 
@@ -38,7 +38,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     public function testGetRegularPrice()
     {
         $priceInfoMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Pricing\PriceInfoInterface',
+            \Magento\Framework\Pricing\PriceInfoInterface::class,
             [],
             '',
             false,
@@ -47,7 +47,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ['getAmount', 'getPrice']
         );
         $priceInfoMock->expects($this->once())->method('getPrice')->willReturnSelf();
-        $amountMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
+        $amountMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $priceInfoMock->expects($this->once())->method('getAmount')->willReturn($amountMock);
 
         $this->productMock->expects($this->once())->method('getPriceInfo')->willReturn($priceInfoMock);

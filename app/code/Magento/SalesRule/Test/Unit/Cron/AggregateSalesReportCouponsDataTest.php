@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Cron;
@@ -33,7 +33,7 @@ class AggregateSalesReportCouponsDataTest extends \PHPUnit_Framework_TestCase
         $this->initMocks();
 
         $this->model = $helper->getObject(
-            'Magento\SalesRule\Cron\AggregateSalesReportCouponsData',
+            \Magento\SalesRule\Cron\AggregateSalesReportCouponsData::class,
             [
                 'reportRule' => $this->reportRule,
                 'localeResolver' => $this->localeResolver,
@@ -44,9 +44,15 @@ class AggregateSalesReportCouponsDataTest extends \PHPUnit_Framework_TestCase
 
     protected function initMocks()
     {
-        $this->localeResolver = $this->getMock('Magento\Framework\Locale\Resolver', [], [], '', false);
-        $this->localeDate = $this->getMock('Magento\Framework\Stdlib\DateTime\Timezone', ['date'], [], '', false);
-        $this->reportRule = $this->getMock('Magento\SalesRule\Model\ResourceModel\Report\Rule', [], [], '', false);
+        $this->localeResolver = $this->getMock(\Magento\Framework\Locale\Resolver::class, [], [], '', false);
+        $this->localeDate = $this->getMock(\Magento\Framework\Stdlib\DateTime\Timezone::class, ['date'], [], '', false);
+        $this->reportRule = $this->getMock(
+            \Magento\SalesRule\Model\ResourceModel\Report\Rule::class,
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     public function testExecute()
@@ -64,7 +70,7 @@ class AggregateSalesReportCouponsDataTest extends \PHPUnit_Framework_TestCase
         $this->localeResolver->expects($this->once())
             ->method('revert');
 
-        $scheduleMock = $this->getMock('Magento\Cron\Model\Schedule', [], [], '', false);
+        $scheduleMock = $this->getMock(\Magento\Cron\Model\Schedule::class, [], [], '', false);
 
         $this->assertEquals($this->model, $this->model->execute($scheduleMock));
     }

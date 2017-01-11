@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -24,7 +24,7 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $this->_objectManager->create('Magento\Framework\App\FrontController');
+        $this->_model = $this->_objectManager->create(\Magento\Framework\App\FrontController::class);
     }
 
     public function testDispatch()
@@ -33,10 +33,13 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Can\'t test dispatch process without sending headers');
         }
         $_SERVER['HTTP_HOST'] = 'localhost';
-        $this->_objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-        $request = $this->_objectManager->get('Magento\Framework\App\Request\Http');
+        $this->_objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
+        $request = $this->_objectManager->get(\Magento\Framework\App\Request\Http::class);
         /* empty action */
         $request->setRequestUri('core/index/index');
-        $this->assertInstanceOf('Magento\Framework\Controller\ResultInterface', $this->_model->dispatch($request));
+        $this->assertInstanceOf(
+            \Magento\Framework\Controller\ResultInterface::class,
+            $this->_model->dispatch($request)
+        );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,9 +27,9 @@ class AuthorizationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->userContextMock = $this->getMock('Magento\Authorization\Model\UserContextInterface');
+        $this->userContextMock = $this->getMock(\Magento\Authorization\Model\UserContextInterface::class);
         $this->quoteManagementMock = $this->getMock(
-            'Magento\Quote\Model\GuestCart\GuestCartManagement',
+            \Magento\Quote\Model\GuestCart\GuestCartManagement::class,
             [],
             [],
             '',

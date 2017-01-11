@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,6 +22,13 @@ abstract class Sidebar extends Block
     protected $addToOrder = './/tr[td[.="%s"]]//input[contains(@name,"add")]';
 
     /**
+     * 'Add to order' configure.
+     *
+     * @var string
+     */
+    protected $addToOrderConfigure = './/tr[td[contains(.,"%s")]]//a[contains(@class, "icon-configure")]';
+
+    /**
      * 'Add to order' checkbox.
      *
      * @var string
@@ -39,9 +46,18 @@ abstract class Sidebar extends Block
         foreach ($products as $product) {
             $name = $product->getName();
             $this->_rootElement->find(sprintf($this->addToOrderProductName, $name), Locator::SELECTOR_XPATH)->click();
-            $this->_rootElement->click();
-            $this->_rootElement->find(sprintf($this->addToOrder, $name), Locator::SELECTOR_XPATH, 'checkbox')
-                ->setValue('Yes');
+
+            $dataConfig = $product->getDataConfig();
+            $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+
+            if ($this->hasRender($typeId)) {
+                $this->_rootElement->find(sprintf($this->addToOrderConfigure, $name), Locator::SELECTOR_XPATH)->click();
+                $this->callRender($typeId, 'configProduct', ['product' => $product]);
+            } else {
+                $this->_rootElement->click();
+                $this->_rootElement->find(sprintf($this->addToOrder, $name), Locator::SELECTOR_XPATH, 'checkbox')
+                    ->setValue('Yes');
+            }
         }
     }
 }

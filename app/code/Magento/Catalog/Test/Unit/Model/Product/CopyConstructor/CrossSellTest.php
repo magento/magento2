@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\CopyConstructor;
@@ -36,10 +36,10 @@ class CrossSellTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = new \Magento\Catalog\Model\Product\CopyConstructor\CrossSell();
 
-        $this->_productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $this->_productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
 
         $this->_duplicateMock = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['setCrossSellLinkData', '__wakeup'],
             [],
             '',
@@ -47,7 +47,7 @@ class CrossSellTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_linkMock = $this->getMock(
-            '\Magento\Catalog\Model\Product\Link',
+            \Magento\Catalog\Model\Product\Link::class,
             ['__wakeup', 'getAttributes', 'getCrossSellLinkCollection', 'useCrossSellLinks'],
             [],
             '',
@@ -75,7 +75,7 @@ class CrossSellTest extends \PHPUnit_Framework_TestCase
         $this->_linkMock->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
 
         $productLinkMock = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Link',
+            \Magento\Catalog\Model\ResourceModel\Product\Link::class,
             ['__wakeup', 'getLinkedProductId', 'toArray'],
             [],
             '',
@@ -94,7 +94,7 @@ class CrossSellTest extends \PHPUnit_Framework_TestCase
         );
 
         $collectionMock = $helper->getCollectionMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Link\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Link\Collection::class,
             [$productLinkMock]
         );
         $this->_productMock->expects(

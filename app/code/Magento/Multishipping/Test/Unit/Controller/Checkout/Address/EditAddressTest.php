@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,9 @@ namespace Magento\Multishipping\Test\Unit\Controller\Checkout\Address;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class EditAddressTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -61,21 +64,21 @@ class EditAddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->configMock = $this->getMock('Magento\Framework\View\Page\Config', [], [], '', false);
+        $this->configMock = $this->getMock(\Magento\Framework\View\Page\Config::class, [], [], '', false);
         $this->checkoutMock =
-            $this->getMock('Magento\Multishipping\Model\Checkout\Type\Multishipping', [], [], '', false);
-        $this->titleMock = $this->getMock('Magento\Framework\View\Page\Title', [], [], '', false);
-        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
-        $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
-        $this->request = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
+            $this->getMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping::class, [], [], '', false);
+        $this->titleMock = $this->getMock(\Magento\Framework\View\Page\Title::class, [], [], '', false);
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class);
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        $response = $this->getMockBuilder('\Magento\Framework\App\ResponseInterface')
+        $response = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        $contextMock = $this->getMock('\Magento\Framework\App\Action\Context', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\App\Action\Context::class, [], [], '', false);
         $contextMock->expects($this->atLeastOnce())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
@@ -85,14 +88,15 @@ class EditAddressTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
         $methods = ['setTitle', 'getTitle', 'setSuccessUrl', 'setBackUrl', 'setErrorUrl', '__wakeUp'];
         $this->addressFormMock =
-            $this->getMock('Magento\Customer\Block\Address\Edit', $methods, [], '', false);
-        $this->urlMock = $this->getMock('Magento\Framework\UrlInterface');
+            $this->getMock(\Magento\Customer\Block\Address\Edit::class, $methods, [], '', false);
+        $this->urlMock = $this->getMock(\Magento\Framework\UrlInterface::class);
         $contextMock->expects($this->any())->method('getUrl')->willReturn($this->urlMock);
-        $this->pageMock = $this->getMock('Magento\Framework\View\Result\Page', [], [], '', false);
+        $this->pageMock = $this->getMock(\Magento\Framework\View\Result\Page::class, [], [], '', false);
         $this->pageMock->expects($this->any())->method('getConfig')->willReturn($this->configMock);
         $this->configMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
         $this->viewMock->expects($this->any())->method('getPage')->willReturn($this->pageMock);
-        $this->controller = $objectManager->getObject('Magento\Multishipping\Controller\Checkout\Address\EditAddress',
+        $this->controller = $objectManager->getObject(
+            \Magento\Multishipping\Controller\Checkout\Address\EditAddress::class,
             ['context' => $contextMock]);
     }
 
@@ -111,7 +115,7 @@ class EditAddressTest extends \PHPUnit_Framework_TestCase
             ->method('setTitle')
             ->with('Edit Address')
             ->willReturnSelf();
-        $helperMock = $this->getMock('Magento\Multishipping\Helper\Data', [], [], '', false);
+        $helperMock = $this->getMock(\Magento\Multishipping\Helper\Data::class, [], [], '', false);
         $helperMock->expects($this->any())->method('__')->willReturn('Edit Address');
         $valueMap = [
             ['*/*/selectBilling', null, 'success/url'],

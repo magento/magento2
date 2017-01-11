@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
@@ -72,33 +72,47 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected $storeId = 111;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eventDispatcher;
+
     protected function setUp()
     {
+        $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['dispatch'])
+            ->getMock();
+
         $this->context = $this->getMock(
-            '\Magento\Framework\Model\Context',
+            \Magento\Framework\Model\Context::class,
             ['getEventDispatcher'],
             [],
             '',
             false
         );
+        $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventDispatcher);
 
         $this->registry = $this->getMock(
-            '\Magento\Framework\Registry',
+            \Magento\Framework\Registry::class,
             [],
             [],
             '',
             false
         );
 
-        $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
+        $this->customerSession = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
 
-        $store = $this->getMock('Magento\Store\Model\Store', ['getId', '__wakeup'], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup'], [], '', false);
         $store->expects($this->any())->method('getId')->willReturn($this->storeId);
-        $this->storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface', ['getStore']);
+        $this->storeManager = $this->getMockForAbstractClass(
+            \Magento\Store\Model\StoreManagerInterface::class,
+            ['getStore']
+        );
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->stockConfiguration = $this->getMock(
-            '\Magento\CatalogInventory\Api\StockConfigurationInterface',
+            \Magento\CatalogInventory\Api\StockConfigurationInterface::class,
             [],
             [],
             '',
@@ -106,11 +120,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->stockItemRepository = $this->getMockForAbstractClass(
-            '\Magento\CatalogInventory\Api\StockItemRepositoryInterface'
+            \Magento\CatalogInventory\Api\StockItemRepositoryInterface::class
         );
 
         $this->resource = $this->getMock(
-            'Magento\CatalogInventory\Model\ResourceModel\Stock\Item',
+            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class,
             [],
             [],
             '',
@@ -118,7 +132,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resourceCollection = $this->getMock(
-            'Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection',
+            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection::class,
             [],
             [],
             '',
@@ -128,7 +142,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->item = $this->objectManagerHelper->getObject(
-            'Magento\CatalogInventory\Model\Stock\Item',
+            \Magento\CatalogInventory\Model\Stock\Item::class,
             [
                 'context' => $this->context,
                 'registry' => $this->registry,
@@ -171,7 +185,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetProduct()
     {
         $product = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [
                 'getId',
                 'getName',
@@ -455,6 +469,41 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 ],
                 3
             ],
+        ];
+    }
+
+    /**
+     * We wan't to ensure that property $_eventPrefix used during event dispatching
+     *
+     * @param $eventName
+     * @param $methodName
+     *
+     * @dataProvider eventsDataProvider
+     */
+    public function testDispatchEvents($eventName, $methodName)
+    {
+        $isCalledWithRightPrefix = 0;
+        $this->eventDispatcher->expects($this->any())->method('dispatch')->with(
+            $this->callback(function ($arg) use (&$isCalledWithRightPrefix, $eventName) {
+                $isCalledWithRightPrefix |= ($arg === $eventName);
+                return true;
+            }),
+            $this->anything()
+        );
+
+        $this->item->$methodName();
+        $this->assertEquals(
+            1,
+            (int) $isCalledWithRightPrefix,
+            sprintf("Event %s doesn't dispatched", $eventName)
+        );
+    }
+
+    public function eventsDataProvider()
+    {
+        return [
+            ['cataloginventory_stock_item_save_before', 'beforeSave'],
+            ['cataloginventory_stock_item_save_after', 'afterSave'],
         ];
     }
 }

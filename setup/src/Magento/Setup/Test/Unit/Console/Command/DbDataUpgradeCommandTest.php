@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,14 +24,14 @@ class DbDataUpgradeCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setup()
     {
-        $this->installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->installerFactory = $this->getMock(\Magento\Setup\Model\InstallerFactory::class, [], [], '', false);
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
     }
 
     public function testExecute()
     {
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->will($this->returnValue(true));
-        $installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
+        $installer = $this->getMock(\Magento\Setup\Model\Installer::class, [], [], '', false);
         $this->installerFactory->expects($this->once())->method('create')->will($this->returnValue($installer));
         $installer->expects($this->once())->method('installDataFixtures');
 

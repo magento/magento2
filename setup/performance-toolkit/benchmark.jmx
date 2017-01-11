@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -790,7 +790,7 @@ if (1 == Integer.parseInt(vars.get("category_name_counter"))) {
 } else {
     categoryNamesList = props.get("category_names_list");
 }
-log.info("category name: " + vars.get("category_name"));
+
 categoryNamesList.add(vars.get("category_name"));</stringProp>
           <stringProp name="BeanShellSampler.filename"/>
           <stringProp name="BeanShellSampler.parameters"/>
@@ -828,7 +828,7 @@ props.put("category_name", vars.get("category_name"));</stringProp>
       <hashTree>
         <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert search result" enabled="true">
           <collectionProp name="Asserion.test_strings">
-            <stringProp name="1297547762">(?i)Search results for: 'Simple'</stringProp>
+            <stringProp name="-359033486">(?i)Search results for: (.+?)Simple(.+?)</stringProp>
           </collectionProp>
           <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
           <boolProp name="Assertion.assume_success">false</boolProp>
@@ -892,7 +892,7 @@ props.put("category_name", vars.get("category_name"));</stringProp>
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: Extract uenc" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">simple_product_uenc</stringProp>
-            <stringProp name="RegexExtractor.regex">${base_path}checkout/cart/add/uenc/([^/]+)/product/</stringProp>
+            <stringProp name="RegexExtractor.regex">"uenc":"([^"]+)"</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default"/>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -934,7 +934,7 @@ props.put("category_name", vars.get("category_name"));</stringProp>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert uenc" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="824150030">^[\w\,]+$</stringProp>
+              <stringProp name="2845929">^.+$</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -1002,7 +1002,7 @@ productList.add(productMap);</stringProp>
       <hashTree>
         <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert search result" enabled="true">
           <collectionProp name="Asserion.test_strings">
-            <stringProp name="-1354477292">Search results for: 'Configurable'</stringProp>
+            <stringProp name="1735257364">Search results for: (.+?)Configurable(.+?)</stringProp>
             <stringProp name="1647182604">&lt;div class="search results"&gt;</stringProp>
           </collectionProp>
           <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -1067,7 +1067,7 @@ productList.add(productMap);</stringProp>
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: Extract uenc" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">configurable_product_uenc</stringProp>
-            <stringProp name="RegexExtractor.regex">${base_path}checkout/cart/add/uenc/([^/]+)/product/</stringProp>
+            <stringProp name="RegexExtractor.regex">"uenc":"([^"]+)"</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default"/>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -1149,7 +1149,7 @@ productList.add(productMap);</stringProp>
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert uenc" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="824150030">^[\w\,]+$</stringProp>
+              <stringProp name="2845929">^.+$</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -3918,7 +3918,7 @@ vars.put("loadType", "Guest");</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Estimate Shipping Methods ${__property(activeAdminThread)}(${testLabel})" enabled="true">
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Estimate Shipping Methods${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
         <collectionProp name="Arguments.arguments">
@@ -3983,7 +3983,7 @@ vars.put("loadType", "Guest");</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Billing/Shipping Information ${__property(activeAdminThread)}(${testLabel})" enabled="true">
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Billing/Shipping Information${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
         <collectionProp name="Arguments.arguments">
@@ -4048,7 +4048,7 @@ vars.put("loadType", "Guest");</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Payment Info/Place Order ${__property(activeAdminThread)}(${testLabel})" enabled="true">
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Payment Info/Place Order${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
         <collectionProp name="Arguments.arguments">
@@ -5264,7 +5264,7 @@ vars.put("loadType", "Customer");</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Estimate Shipping Methods ${__property(activeAdminThread)}(${testLabel})" enabled="true">
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Estimate Shipping Methods${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
         <collectionProp name="Arguments.arguments">

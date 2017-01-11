@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,12 +49,12 @@ class GuestCartManagementTest extends WebapiAbstract
     public function tearDown()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         foreach ($this->createdQuotes as $quoteId) {
             $quote->load($quoteId);
             $quote->delete();
             /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-            $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMask');
+            $quoteIdMask = $this->objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
             $quoteIdMask->load($quoteId, 'quote_id');
             $quoteIdMask->delete();
         }
@@ -67,11 +67,11 @@ class GuestCartManagementTest extends WebapiAbstract
     public function testAssignCustomer()
     {
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMaskFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory');
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class);
         $quoteIdMask = $quoteIdMaskFactory->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -80,11 +80,11 @@ class GuestCartManagementTest extends WebapiAbstract
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         /** @var $repository \Magento\Customer\Api\CustomerRepositoryInterface */
-        $repository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $repository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
         $customer = $repository->getById(1);
         $customerId = $customer->getId();
@@ -113,7 +113,7 @@ class GuestCartManagementTest extends WebapiAbstract
 
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
         // Reload target quote
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $this->assertEquals(0, $quote->getCustomerIsGuest());
         $this->assertEquals($customer->getId(), $quote->getCustomerId());
         $this->assertEquals($customer->getFirstname(), $quote->getCustomerFirstname());
@@ -128,7 +128,7 @@ class GuestCartManagementTest extends WebapiAbstract
     public function testAssignCustomerThrowsExceptionIfThereIsNoCustomerWithGivenId()
     {
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
         $customerId = 9999;
         $serviceInfo = [
@@ -187,15 +187,15 @@ class GuestCartManagementTest extends WebapiAbstract
     public function testAssignCustomerThrowsExceptionIfTargetCartIsNotAnonymous()
     {
         /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = $this->objectManager->create('Magento\Customer\Model\Customer')->load(1);
+        $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load(1);
         $customerId = $customer->getId();
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
 
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -204,7 +204,7 @@ class GuestCartManagementTest extends WebapiAbstract
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -239,20 +239,20 @@ class GuestCartManagementTest extends WebapiAbstract
     public function testAssignCustomerThrowsExceptionIfCustomerAlreadyHasActiveCart()
     {
         /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = $this->objectManager->create('Magento\Customer\Model\Customer')->load(1);
+        $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load(1);
         // Customer has a quote with reserved order ID test_order_1 (see fixture)
         /** @var $customerQuote \Magento\Quote\Model\Quote */
-        $customerQuote = $this->objectManager->create('Magento\Quote\Model\Quote')
+        $customerQuote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)
             ->load('test_order_1', 'reserved_order_id');
         $customerQuote->setIsActive(1)->save();
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
 
         $cartId = $quote->getId();
 
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -263,7 +263,7 @@ class GuestCartManagementTest extends WebapiAbstract
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         $serviceInfo = [
@@ -294,11 +294,12 @@ class GuestCartManagementTest extends WebapiAbstract
     public function testPlaceOrder()
     {
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test_order_1', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)
+            ->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -319,7 +320,7 @@ class GuestCartManagementTest extends WebapiAbstract
         $orderId = $this->_webApiCall($serviceInfo, ['cartId' => $cartId]);
 
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
         $items = $order->getAllItems();
         $this->assertCount(1, $items);
         $this->assertEquals('Simple Product', $items[0]->getName());
@@ -334,16 +335,16 @@ class GuestCartManagementTest extends WebapiAbstract
     public function testAssignCustomerByGuestUser()
     {
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMaskFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory');
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class);
         $quoteIdMask = $quoteIdMaskFactory->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
-        $repository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $repository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
         $customer = $repository->getById(1);
         $customerId = $customer->getId();

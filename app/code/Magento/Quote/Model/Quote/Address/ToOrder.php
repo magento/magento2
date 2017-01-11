@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -74,12 +74,17 @@ class ToOrder
         $this->dataObjectHelper->populateWithArray(
             $order,
             array_merge($orderData, $data),
-            '\Magento\Sales\Api\Data\OrderInterface'
+            \Magento\Sales\Api\Data\OrderInterface::class
         );
         $order->setStoreId($object->getQuote()->getStoreId())
             ->setQuoteId($object->getQuote()->getId())
             ->setIncrementId($object->getQuote()->getReservedOrderId());
-        $this->objectCopyService->copyFieldsetToTarget('sales_convert_quote', 'to_order', $object->getQuote(), $order);
+        $this->objectCopyService->copyFieldsetToTarget(
+            'sales_convert_quote',
+            'to_order',
+            $object->getQuote(),
+            $order
+        );
         $this->eventManager->dispatch(
             'sales_convert_quote_to_order',
             ['order' => $order, 'quote' => $object->getQuote()]

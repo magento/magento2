@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Controller\Adminhtml\History;
@@ -37,7 +37,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->resultPage = $this->getMock(
-            'Magento\Backend\Model\View\Result\Page',
+            \Magento\Backend\Model\View\Result\Page::class,
             ['setActiveMenu', 'getConfig', 'getTitle', 'prepend', 'addBreadcrumb'],
             [],
             '',
@@ -46,7 +46,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->resultPage->expects($this->any())->method('getConfig')->willReturnSelf();
         $this->resultPage->expects($this->any())->method('getTitle')->willReturnSelf();
         $this->resultFactory = $this->getMock(
-            'Magento\Framework\Controller\ResultFactory',
+            \Magento\Framework\Controller\ResultFactory::class,
             ['create'],
             [],
             '',
@@ -54,7 +54,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
         $this->resultFactory->expects($this->any())->method('create')->willReturn($this->resultPage);
         $this->context = $this->getMock(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             ['getResultFactory'],
             [],
             '',
@@ -63,7 +63,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getResultFactory')->willReturn($this->resultFactory);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->indexController = $this->objectManagerHelper->getObject(
-            'Magento\ImportExport\Controller\Adminhtml\History\Index',
+            \Magento\ImportExport\Controller\Adminhtml\History\Index::class,
             [
                 'context' => $this->context,
             ]

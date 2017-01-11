@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
@@ -69,9 +69,9 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
+        $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
         $this->messageFactoryMock = $this->getMock(
-            'Magento\GiftMessage\Model\MessageFactory',
+            \Magento\GiftMessage\Model\MessageFactory::class,
             [
                 'create',
                 '__wakeup'
@@ -80,9 +80,9 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->messageMock = $this->getMock('Magento\GiftMessage\Model\Message', [], [], '', false);
+        $this->messageMock = $this->getMock(\Magento\GiftMessage\Model\Message::class, [], [], '', false);
         $this->quoteItemMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             [
                 'getGiftMessageId',
                 '__wakeup'
@@ -92,7 +92,7 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->quoteMock = $this->getMock(
-            '\Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             [
                 'getGiftMessageId',
                 'getItemById',
@@ -104,11 +104,11 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->giftMessageManagerMock =
-            $this->getMock('Magento\GiftMessage\Model\GiftMessageManager', [], [], '', false);
-        $this->helperMock = $this->getMock('Magento\GiftMessage\Helper\Message', [], [], '', false);
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+            $this->getMock(\Magento\GiftMessage\Model\GiftMessageManager::class, [], [], '', false);
+        $this->helperMock = $this->getMock(\Magento\GiftMessage\Helper\Message::class, [], [], '', false);
+        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->cartRepository = new \Magento\GiftMessage\Model\CartRepository(
             $this->quoteRepositoryMock,
             $this->storeManagerMock,

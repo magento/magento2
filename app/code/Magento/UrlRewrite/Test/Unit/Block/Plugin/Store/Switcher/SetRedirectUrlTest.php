@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,15 +33,15 @@ class SetRedirectUrlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
-        $this->urlHelper = $this->getMock('Magento\Framework\Url\Helper\Data', [], [], '', false);
-        $this->urlFinder = $this->getMock('Magento\UrlRewrite\Model\UrlFinderInterface', [], [], '', false);
-        $this->switcher = $this->getMock('Magento\Store\Block\Switcher', [], [], '', false);
+        $this->store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->urlHelper = $this->getMock(\Magento\Framework\Url\Helper\Data::class, [], [], '', false);
+        $this->urlFinder = $this->getMock(\Magento\UrlRewrite\Model\UrlFinderInterface::class, [], [], '', false);
+        $this->switcher = $this->getMock(\Magento\Store\Block\Switcher::class, [], [], '', false);
 
         $this->unit = (new ObjectManager($this))->getObject(
-            'Magento\UrlRewrite\Block\Plugin\Store\Switcher\SetRedirectUrl',
+            \Magento\UrlRewrite\Block\Plugin\Store\Switcher\SetRedirectUrl::class,
             [
                 'urlFinder' => $this->urlFinder,
                 'urlHelper' => $this->urlHelper,
@@ -81,7 +81,7 @@ class SetRedirectUrlTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTargetStorePostData()
     {
-        $urlRewrite = $this->getMock('Magento\UrlRewrite\Service\V1\Data\UrlRewrite');
+        $urlRewrite = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
         $urlRewrite->expects($this->once())->method('getRequestPath')->willReturn('path');
 
         $this->request->expects($this->once())->method('getPathInfo')->willReturn('path');

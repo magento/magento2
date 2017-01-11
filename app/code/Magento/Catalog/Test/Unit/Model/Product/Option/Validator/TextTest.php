@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $configMock = $this->getMock('Magento\Catalog\Model\ProductOptions\ConfigInterface');
+        $configMock = $this->getMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
         $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price();
         $config = [
             [
@@ -46,7 +46,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
         ];
         $configMock->expects($this->once())->method('getAll')->will($this->returnValue($config));
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', '__wakeup', 'getMaxCharacters'];
-        $this->valueMock = $this->getMock('Magento\Catalog\Model\Product\Option', $methods, [], '', false);
+        $this->valueMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, $methods, [], '', false);
         $this->validator = new \Magento\Catalog\Model\Product\Option\Validator\Text(
             $configMock,
             $priceConfigMock

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,13 +17,19 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $entityFactory = $this->getMock('\Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
-        $logger = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
-        $fetchStrategy = $this->getMock('\Magento\Framework\Data\Collection\Db\FetchStrategy\Query', [], [], '', false);
-        $eventManager = $this->getMock('\Magento\Framework\Event\Manager', [], [], '', false);
-        $connection = $this->getMock('\Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $entityFactory = $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false);
+        $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $fetchStrategy = $this->getMock(
+            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $eventManager = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
+        $connection = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
 
-        $resource = $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+        $resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection'])
             ->getMockForAbstractClass();

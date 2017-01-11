@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Block\System\Variable;
@@ -24,14 +24,16 @@ class EditTest extends \PHPUnit_Framework_TestCase
         ];
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $variable = $objectManager->create('Magento\Variable\Model\Variable')->setData($data)->save();
+        $variable = $objectManager->create(\Magento\Variable\Model\Variable::class)->setData($data)->save();
 
-        $objectManager->get('Magento\Framework\Registry')->register('current_variable', $variable);
-        $objectManager->get('Magento\Framework\App\RequestInterface')->setParam('variable_id', $variable->getId());
+        $objectManager->get(\Magento\Framework\Registry::class)->register('current_variable', $variable);
+        $objectManager->get(
+            \Magento\Framework\App\RequestInterface::class
+        )->setParam('variable_id', $variable->getId());
         $block = $objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Variable\Block\System\Variable\Edit',
+            \Magento\Variable\Block\System\Variable\Edit::class,
             'variable'
         );
         $this->assertArrayHasKey('variable-delete_button', $block->getLayout()->getAllBlocks());

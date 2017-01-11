@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -40,14 +40,14 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     {
         try {
             /** @var $cart \Magento\Quote\Model\Quote */
-            $cart = $this->objectManager->get('Magento\Quote\Model\Quote');
+            $cart = $this->objectManager->get(\Magento\Quote\Model\Quote::class);
             $cart->load($reservedOrderId, 'reserved_order_id');
             if (!$cart->getId()) {
                 throw new \InvalidArgumentException('There is no quote with provided reserved order ID.');
             }
             $cart->delete();
             /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-            $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMask');
+            $quoteIdMask = $this->objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
             $quoteIdMask->load($cart->getId(), 'quote_id');
             $quoteIdMask->delete();
         } catch (\InvalidArgumentException $e) {
@@ -61,7 +61,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     public function testReSetPayment()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1_with_payment', 'reserved_order_id');
         $cartId = $this->getMaskedCartId($quote->getId());
 
@@ -94,7 +94,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     public function testSetPaymentWithVirtualProduct()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_with_virtual_product', 'reserved_order_id');
         $cartId = $this->getMaskedCartId($quote->getId());
 
@@ -126,7 +126,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     public function testSetPaymentWithSimpleProduct()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $this->getMaskedCartId($quote->getId());
 
@@ -161,7 +161,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     public function testSetPaymentWithSimpleProductWithoutAddress()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_with_simple_product_without_address', 'reserved_order_id');
         $cartId = $this->getMaskedCartId($quote->getId());
 
@@ -193,7 +193,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     public function testGetList()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $this->getMaskedCartId($quote->getId());
 
@@ -227,7 +227,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     public function testGet()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1_with_payment', 'reserved_order_id');
         $cartId = $this->getMaskedCartId($quote->getId());
 
@@ -272,7 +272,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
     {
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         return $quoteIdMask->getMaskedId();

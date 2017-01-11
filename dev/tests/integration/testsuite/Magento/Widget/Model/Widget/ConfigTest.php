@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\Widget;
@@ -18,7 +18,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Widget\Model\Widget\Config'
+            \Magento\Widget\Model\Widget\Config::class
         );
     }
 
@@ -30,7 +30,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetPluginSettings()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\DesignInterface'
+            \Magento\Framework\View\DesignInterface::class
         )->setDesignTheme(
             'Magento/backend'
         );
@@ -43,8 +43,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('widget_window_url', $settings);
 
         $jsFilename = $settings['widget_plugin_src'];
-        $this->assertStringStartsWith('http://localhost/pub/static/adminhtml/Magento/backend/en_US/', $jsFilename);
-        $this->assertStringEndsWith('editor_plugin.js', $jsFilename);
+        $this->assertStringMatchesFormat(
+            'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/%s/editor_plugin.js',
+            $jsFilename
+        );
 
         $this->assertInternalType('array', $settings['widget_placeholders']);
 

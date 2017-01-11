@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Message;
@@ -41,20 +41,20 @@ class InterpretationStrategyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->renderersPool = $this->getMockBuilder(
-            'Magento\Framework\View\Element\Message\Renderer\RenderersPool'
+            \Magento\Framework\View\Element\Message\Renderer\RenderersPool::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->messageConfigurationsPool = $this->getMockBuilder(
-            'Magento\Framework\View\Element\Message\MessageConfigurationsPool'
+            \Magento\Framework\View\Element\Message\MessageConfigurationsPool::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->messageMock = $this->getMock(
-            'Magento\Framework\Message\MessageInterface'
+            \Magento\Framework\Message\MessageInterface::class
         );
         $this->renderer = $this->getMock(
-            'Magento\Framework\View\Element\Message\Renderer\RendererInterface'
+            \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
         );
 
         $this->interpretationStrategy = new InterpretationStrategy(
@@ -75,7 +75,7 @@ class InterpretationStrategyTest extends \PHPUnit_Framework_TestCase
         $renderedMessage = 'Script';
 
         $renderer = $this->getMock(
-            'Magento\Framework\View\Element\Message\Renderer\RendererInterface'
+            \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
         );
 
         $this->messageMock->expects(static::once())

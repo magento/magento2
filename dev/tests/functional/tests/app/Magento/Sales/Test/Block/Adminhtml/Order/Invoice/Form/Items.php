@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class Items extends AbstractItemsNewBlock
     {
         $selector = sprintf($this->productItem, $product->getSku());
         return $this->blockFactory->create(
-            'Magento\Sales\Test\Block\Adminhtml\Order\Invoice\Form\Items\Product',
+            \Magento\Sales\Test\Block\Adminhtml\Order\Invoice\Form\Items\Product::class,
             ['element' => $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)]
         );
     }

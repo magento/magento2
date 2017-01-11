@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -30,7 +30,7 @@ class CartItemRepositoryTest extends WebapiAbstract
     public function testGetList()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $cartId = $quote->getId();
         $output = [];
@@ -71,10 +71,10 @@ class CartItemRepositoryTest extends WebapiAbstract
     public function testAddItem()
     {
         /** @var  \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product')->load(2);
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load(2);
         $productSku = $product->getSku();
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
         $serviceInfo = [
@@ -107,10 +107,10 @@ class CartItemRepositoryTest extends WebapiAbstract
     public function testRemoveItem()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $cartId = $quote->getId();
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $productId = $product->getIdBySku('simple_one');
         $product->load($productId);
         $itemId = $quote->getItemByProduct($product)->getId();
@@ -131,7 +131,7 @@ class CartItemRepositoryTest extends WebapiAbstract
             "itemId" => $itemId,
         ];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $this->assertFalse($quote->hasProductId($productId));
     }
@@ -142,10 +142,10 @@ class CartItemRepositoryTest extends WebapiAbstract
     public function testUpdateItem()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $cartId = $quote->getId();
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $productId = $product->getIdBySku('simple_one');
         $product->load($productId);
         $itemId = $quote->getItemByProduct($product)->getId();
@@ -178,7 +178,7 @@ class CartItemRepositoryTest extends WebapiAbstract
             ];
         }
         $this->_webApiCall($serviceInfo, $requestData);
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $this->assertTrue($quote->hasProductId(1));
         $item = $quote->getItemByProduct($product);

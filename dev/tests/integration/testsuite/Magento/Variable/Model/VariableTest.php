@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Model;
@@ -15,7 +15,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Variable\Model\Variable'
+            \Magento\Variable\Model\Variable::class
         );
     }
 
@@ -31,7 +31,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $this->_model->save();
 
         $variable = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Variable\Model\Variable'
+            \Magento\Variable\Model\Variable::class
         );
         $variable->loadByCode('test_code');
         $this->assertEquals($this->_model->getName(), $variable->getName());

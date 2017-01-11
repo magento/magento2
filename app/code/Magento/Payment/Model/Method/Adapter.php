@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
@@ -268,14 +268,17 @@ class Adapter implements MethodInterface
         $checkResult = new DataObject();
         $checkResult->setData('is_available', true);
         try {
-            $validator = $this->getValidatorPool()->get('availability');
-            $result = $validator->validate(
-                [
-                    'payment' => $this->paymentDataObjectFactory->create($this->getInfoInstance())
-                ]
-            );
+            $infoInstance = $this->getInfoInstance();
+            if ($infoInstance !== null) {
+                $validator = $this->getValidatorPool()->get('availability');
+                $result = $validator->validate(
+                    [
+                        'payment' => $this->paymentDataObjectFactory->create($infoInstance)
+                    ]
+                );
 
-            $checkResult->setData('is_available', $result->isValid());
+                $checkResult->setData('is_available', $result->isValid());
+            }
         } catch (\Exception $e) {
             // pass
         }

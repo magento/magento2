@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Helper\Oauth;
@@ -44,12 +44,12 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_consumerFactory = $this->getMockBuilder('Magento\Integration\Model\Oauth\ConsumerFactory')
+        $this->_consumerFactory = $this->getMockBuilder(\Magento\Integration\Model\Oauth\ConsumerFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->_consumerMock = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\Consumer'
+            \Magento\Integration\Model\Oauth\Consumer::class
         )->disableOriginalConstructor()->getMock();
         $this->_consumerFactory->expects(
             $this->any()
@@ -60,18 +60,18 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_tokenFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\TokenFactory'
+            \Magento\Integration\Model\Oauth\TokenFactory::class
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\Token'
+            \Magento\Integration\Model\Oauth\Token::class
         )->disableOriginalConstructor()->getMock();
         $this->_tokenFactory->expects($this->any())->method('create')->will($this->returnValue($this->_tokenMock));
 
         $this->_storeManagerMock = $this->getMockBuilder(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
         $this->_storeMock = $this->getMockBuilder(
-            'Magento\Store\Model\Store'
+            \Magento\Store\Model\Store::class
         )->disableOriginalConstructor()->getMock();
         $this->_storeManagerMock->expects(
             $this->any()
@@ -82,22 +82,22 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_dataHelper = $this->getMockBuilder(
-            'Magento\Integration\Helper\Oauth\Data'
+            \Magento\Integration\Helper\Oauth\Data::class
         )->disableOriginalConstructor()->getMock();
 
         $oauthHelperMock = $this->getMockBuilder(
-            'Magento\Framework\Oauth\Helper\Oauth'
+            \Magento\Framework\Oauth\Helper\Oauth::class
         )->disableOriginalConstructor()->getMock();
 
         $tokenProviderMock = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\Token\Provider'
+            \Magento\Integration\Model\Oauth\Token\Provider::class
         )->disableOriginalConstructor()->getMock();
 
         $this->_httpClientMock = $this->getMockBuilder(
-            'Magento\Framework\HTTP\ZendClient'
+            \Magento\Framework\HTTP\ZendClient::class
         )->disableOriginalConstructor()->getMock();
         $this->_loggerMock = $this->getMockBuilder(
-            'Psr\Log\LoggerInterface'
+            \Psr\Log\LoggerInterface::class
         )->getMock();
 
         $this->_oauthService = new \Magento\Integration\Model\OauthService(
@@ -158,12 +158,12 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             $this->returnSelf()
         );
 
-        $dateHelperMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
+        $dateHelperMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $dateHelperMock->expects($this->any())->method('gmtDate');
 
-        $dateHelper = new \ReflectionProperty('Magento\Integration\Model\OauthService', '_dateHelper');
+        $dateHelper = new \ReflectionProperty(\Magento\Integration\Model\OauthService::class, '_dateHelper');
         $dateHelper->setAccessible(true);
         $dateHelper->setValue($this->_oauthService, $dateHelperMock);
 

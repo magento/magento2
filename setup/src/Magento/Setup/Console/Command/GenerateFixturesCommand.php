@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -78,14 +78,20 @@ class GenerateFixturesCommand extends Command
             $output->writeln('<info>Generating profile with following params:</info>');
 
             foreach ($fixtureModel->getParamLabels() as $configKey => $label) {
-                $output->writeln('<info> |- ' . $label . ': ' . $fixtureModel->getValue($configKey) . '</info>');
+                $output->writeln(
+                    '<info> |- ' . $label . ': ' . (is_array($fixtureModel->getValue($configKey)) === true
+                        ? sizeof(
+                            $fixtureModel->getValue($configKey)[array_keys($fixtureModel->getValue($configKey))[0]]
+                        ) : $fixtureModel->getValue($configKey)) . '</info>'
+                );
             }
 
             /** @var $config \Magento\Indexer\Model\Config */
-            $config = $fixtureModel->getObjectManager()->get('Magento\Indexer\Model\Config');
+            $config = $fixtureModel->getObjectManager()->get(\Magento\Indexer\Model\Config::class);
             $indexerListIds = $config->getIndexers();
             /** @var $indexerRegistry \Magento\Framework\Indexer\IndexerRegistry */
-            $indexerRegistry = $fixtureModel->getObjectManager()->create('Magento\Framework\Indexer\IndexerRegistry');
+            $indexerRegistry = $fixtureModel->getObjectManager()
+                ->create(\Magento\Framework\Indexer\IndexerRegistry::class);
             $indexersState = [];
             foreach ($indexerListIds as $indexerId) {
                 $indexer = $indexerRegistry->get($indexerId['indexer_id']);

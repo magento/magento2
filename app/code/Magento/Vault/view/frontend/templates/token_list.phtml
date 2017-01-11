@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/** @var \Magento\Vault\Block\Customer\AccountTokens $block */
+$tokens = $block->getPaymentTokens();
+?>
+<?php if (count($tokens) !== 0): ?>
+    <div class="table-wrapper my-credit-cards">
+        <table class="data table table-credit-cards" id="token-list-table">
+            <thead>
+            <tr>
+                <th scope="col" class="col"><?php echo $block->escapeHtml(__('PayPal Account')); ?></th>
+                <th scope="col" class="col actions">&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($tokens as $token): ?>
+                <?php /* @noEscape */ echo $block->renderTokenHtml($token); ?>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>

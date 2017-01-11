@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
@@ -20,7 +20,7 @@ class ExportProductExcel extends \Magento\Reports\Controller\Adminhtml\Report\Sh
     {
         $fileName = 'shopcart_product.xml';
         $content = $this->_view->getLayout()->createBlock(
-            'Magento\Reports\Block\Adminhtml\Shopcart\Product\Grid'
+            \Magento\Reports\Block\Adminhtml\Shopcart\Product\Grid::class
         )->getExcelFile(
             $fileName
         );

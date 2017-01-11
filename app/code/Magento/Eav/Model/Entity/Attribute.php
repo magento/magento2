@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity;
@@ -152,16 +152,16 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     {
         switch ($this->getAttributeCode()) {
             case 'created_at':
-                return 'Magento\Eav\Model\Entity\Attribute\Backend\Time\Created';
+                return \Magento\Eav\Model\Entity\Attribute\Backend\Time\Created::class;
 
             case 'updated_at':
-                return 'Magento\Eav\Model\Entity\Attribute\Backend\Time\Updated';
+                return \Magento\Eav\Model\Entity\Attribute\Backend\Time\Updated::class;
 
             case 'store_id':
-                return 'Magento\Eav\Model\Entity\Attribute\Backend\Store';
+                return \Magento\Eav\Model\Entity\Attribute\Backend\Store::class;
 
             case 'increment_id':
-                return 'Magento\Eav\Model\Entity\Attribute\Backend\Increment';
+                return \Magento\Eav\Model\Entity\Attribute\Backend\Increment::class;
 
             default:
                 break;
@@ -178,7 +178,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     protected function _getDefaultSourceModel()
     {
         if ($this->getAttributeCode() == 'store_id') {
-            return 'Magento\Eav\Model\Entity\Attribute\Source\Store';
+            return \Magento\Eav\Model\Entity\Attribute\Source\Store::class;
         }
         return parent::_getDefaultSourceModel();
     }
@@ -266,11 +266,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
         if ($this->getBackendType() == 'datetime') {
             if (!$this->getBackendModel()) {
-                $this->setBackendModel('Magento\Eav\Model\Entity\Attribute\Backend\Datetime');
+                $this->setBackendModel(\Magento\Eav\Model\Entity\Attribute\Backend\Datetime::class);
             }
 
             if (!$this->getFrontendModel()) {
-                $this->setFrontendModel('Magento\Eav\Model\Entity\Attribute\Frontend\Datetime');
+                $this->setFrontendModel(\Magento\Eav\Model\Entity\Attribute\Frontend\Datetime::class);
             }
 
             // save default date value as timestamp
@@ -289,7 +289,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
         if ($this->getBackendType() == 'gallery') {
             if (!$this->getBackendModel()) {
-                $this->setBackendModel('Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend');
+                $this->setBackendModel(\Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class);
             }
         }
 
@@ -498,6 +498,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function __sleep()
     {
+        $this->unsetData('attribute_set_info');
         return array_diff(
             parent::__sleep(),
             ['_localeDate', '_localeResolver', 'reservedAttributeList', 'dateTimeFormatter']

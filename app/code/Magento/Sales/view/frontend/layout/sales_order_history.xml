@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,6 +11,12 @@
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Order\History" name="sales.order.history" cacheable="false">
                 <container name="sales.order.history.info" as="info" label="Order History Info"/>
+                <container name="sales.order.history.extra.column.header" as="extra.column.header" label="Order History Extra Column Header"/>
+                <block class="Magento\Sales\Block\Order\History\Container"
+                       name="sales.order.history.extra.container" as="extra.container">
+                    <block class="Magento\Framework\View\Element\Template"
+                        name="sales.order.history.extra.container.data" as="extra.container.data"/>
+                </block>
             </block>
             <block class="Magento\Customer\Block\Account\Dashboard" name="customer.account.link.back" template="account/link/back.phtml" cacheable="false"/>
         </referenceContainer>

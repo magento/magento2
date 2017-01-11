@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Model;
@@ -34,10 +34,10 @@ class WeeeConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->weeeHelperMock = $this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
-        $this->weeeConfigMock = $this->getMock('Magento\Weee\Model\Config', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->weeeHelperMock = $this->getMock(\Magento\Weee\Helper\Data::class, [], [], '', false);
+        $this->weeeConfigMock = $this->getMock(\Magento\Weee\Model\Config::class, [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
 
         $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
 

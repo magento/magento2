@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,21 +48,21 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->fileSource = $this->getMock(
-            '\Magento\Framework\RequireJs\Config\File\Collector\Aggregated',
+            \Magento\Framework\RequireJs\Config\File\Collector\Aggregated::class,
             [],
             [],
             '',
             false
         );
-        $this->design = $this->getMockForAbstractClass('\Magento\Framework\View\DesignInterface');
+        $this->design = $this->getMockForAbstractClass(\Magento\Framework\View\DesignInterface::class);
 
-        $readFactory = $this->getMock('\Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false);
-        $this->fileReader = $this->getMock('\Magento\Framework\Filesystem\File\Read', [], [], '', false);
+        $readFactory = $this->getMock(\Magento\Framework\Filesystem\File\ReadFactory::class, [], [], '', false);
+        $this->fileReader = $this->getMock(\Magento\Framework\Filesystem\File\Read::class, [], [], '', false);
         $readFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->fileReader));
-        $repo = $this->getMock('\Magento\Framework\View\Asset\Repository', [], [], '', false);
-        $this->context = $this->getMockBuilder('Magento\Framework\View\Asset\ContextInterface')
+        $repo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
+        $this->context = $this->getMockBuilder(\Magento\Framework\View\Asset\ContextInterface::class)
             ->setMethods(
                 [
                     'getConfigPath',
@@ -72,11 +72,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
         $repo->expects($this->once())->method('getStaticViewFileContext')->will($this->returnValue($this->context));
-        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+        $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->minifyAdapterMock = $this->getMockBuilder('Magento\Framework\Code\Minifier\AdapterInterface')
+        $this->minifyAdapterMock = $this->getMockBuilder(\Magento\Framework\Code\Minifier\AdapterInterface::class)
             ->getMockForAbstractClass();
 
         $this->object = new Config(
@@ -96,7 +96,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(function ($file) {
                 return $file . ' content';
             }));
-        $fileOne = $this->getMock('\Magento\Framework\View\File', [], [], '', false);
+        $fileOne = $this->getMock(\Magento\Framework\View\File::class, [], [], '', false);
         $fileOne->expects($this->once())
             ->method('getFilename')
             ->will($this->returnValue('some/full/relative/path/file_one.js'));
@@ -106,14 +106,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $fileOne->expects($this->once())
             ->method('getModule')
             ->will($this->returnValue('Module_One'));
-        $fileTwo = $this->getMock('\Magento\Framework\View\File', [], [], '', false);
+        $fileTwo = $this->getMock(\Magento\Framework\View\File::class, [], [], '', false);
         $fileTwo->expects($this->once())
             ->method('getFilename')
             ->will($this->returnValue('some/full/relative/path/file_two.js'));
         $fileTwo->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('file_two.js'));
-        $theme = $this->getMockForAbstractClass('\Magento\Framework\View\Design\ThemeInterface');
+        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $this->design->expects($this->once())
             ->method('getDesignTheme')
             ->will($this->returnValue($theme));

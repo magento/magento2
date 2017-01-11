@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -40,6 +40,7 @@
                 <minimum_password_length>8</minimum_password_length>
                 <lockout_failures>10</lockout_failures>
                 <lockout_threshold>10</lockout_threshold>
+                <autocomplete_on_storefront>0</autocomplete_on_storefront>
             </password>
             <address>
                 <street_lines>2</street_lines>
@@ -94,10 +95,5 @@ T: {{var telephone}}
 {{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}|]]></pdf>
             </address_templates>
         </customer>
-        <general>
-            <restriction>
-                <autocomplete_on_storefront>0</autocomplete_on_storefront>
-            </restriction>
-        </general>
     </default>
 </config>

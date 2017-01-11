@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->structure = $objectManagerHelper->getObject(
-            'Magento\Framework\View\Page\Config\Structure'
+            \Magento\Framework\View\Page\Config\Structure::class
         );
     }
 

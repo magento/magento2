@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category\Widget;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -58,11 +61,11 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->viewMock = $this->getMock('Magento\Framework\App\View', ['getLayout'], [], '', false);
+        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->viewMock = $this->getMock(\Magento\Framework\App\View::class, ['getLayout'], [], '', false);
         $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             [],
             [],
             '',
@@ -71,10 +74,10 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $context = $this->getMock(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             ['getRequest', 'getResponse', 'getMessageManager', 'getSession'],
             $helper->getConstructArguments(
-                'Magento\Backend\App\Action\Context',
+                \Magento\Backend\App\Action\Context::class,
                 [
                     'response' => $this->responseMock,
                     'request' => $this->requestMock,
@@ -84,10 +87,10 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $this->resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
+        $resultJsonFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -95,9 +98,9 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultJson);
 
-        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', ['createBlock'], [], '', false);
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, ['createBlock'], [], '', false);
 
-        $layoutFactory = $this->getMockBuilder('Magento\Framework\View\LayoutFactory')
+        $layoutFactory = $this->getMockBuilder(\Magento\Framework\View\LayoutFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -107,7 +110,7 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
 
         $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
         $context->expects($this->once())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $this->registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $this->controller = new \Magento\Catalog\Controller\Adminhtml\Category\Widget\CategoriesJson(
             $context, $layoutFactory, $resultJsonFactory, $this->registryMock
         );
@@ -116,7 +119,7 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
     protected function _getTreeBlock()
     {
         $this->chooserBlockMock = $this->getMock(
-            'Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser', [], [], '', false
+            \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser::class, [], [], '', false
         );
         $this->layoutMock->expects($this->once())->method('createBlock')->will(
             $this->returnValue($this->chooserBlockMock)
@@ -129,11 +132,11 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
         $testCategoryId = 1;
 
         $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValue($testCategoryId));
-        $categoryMock = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $categoryMock->expects($this->once())->method('load')->will($this->returnValue($categoryMock));
         $categoryMock->expects($this->once())->method('getId')->will($this->returnValue($testCategoryId));
         $this->objectManagerMock->expects($this->once())->method('create')
-            ->with($this->equalTo('Magento\Catalog\Model\Category'))->will($this->returnValue($categoryMock));
+            ->with($this->equalTo(\Magento\Catalog\Model\Category::class))->will($this->returnValue($categoryMock));
 
         $this->chooserBlockMock->expects($this->once())->method('setSelectedCategories')->will(
             $this->returnValue($this->chooserBlockMock)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,7 +38,7 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->phpCookieManagerMock = $this->getMock(
-            '\Magento\Framework\Stdlib\Cookie\PhpCookieManager',
+            \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class,
             ['setPublicCookie'],
             [],
             '',
@@ -46,7 +46,7 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->cookieMetadataFactoryMock = $this->getMock(
-            '\Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory',
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory::class,
             ['create'],
             [],
             '',
@@ -54,7 +54,7 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->cookieMetadataMock = $this->getMock(
-            '\Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class,
             ['setPath', 'setDuration'],
             [],
             '',
@@ -62,7 +62,7 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->cookieReaderMock = $this->getMock(
-            '\Magento\Framework\Stdlib\Cookie\CookieReaderInterface',
+            \Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class,
             ['getCookie'],
             [],
             '',
@@ -70,7 +70,7 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->backendDataMock = $this->getMock(
-            '\Magento\Backend\Helper\Data',
+            \Magento\Backend\Helper\Data::class,
             [],
             [],
             '',

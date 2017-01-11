@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Aggregation\Builder;
@@ -25,7 +25,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $bucketValue = 'dataProvider';
         /** @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container $provider */
         $provider = $this->objectManager->getObject(
-            'Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container',
+            \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container::class,
             ['buckets' => [$bucketName => $bucketValue]]
         );
         $this->assertEquals($bucketValue, $provider->get($bucketName));

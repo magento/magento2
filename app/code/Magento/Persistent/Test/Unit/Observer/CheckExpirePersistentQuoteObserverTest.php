@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,14 +51,21 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sessionMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
-        $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->persistentHelperMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
+        $this->sessionMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
+        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->persistentHelperMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
         $this->observerMock
-            = $this->getMock('Magento\Framework\Event\Observer', ['getControllerAction', '__wakeUp'], [], '', false);
-        $this->quoteManagerMock = $this->getMock('Magento\Persistent\Model\QuoteManager', [], [], '', false);
-        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
-        $this->checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
+            = $this->getMock(
+                \Magento\Framework\Event\Observer::class,
+                ['getControllerAction',
+                '__wakeUp'],
+                [],
+                '',
+                false
+            );
+        $this->quoteManagerMock = $this->getMock(\Magento\Persistent\Model\QuoteManager::class, [], [], '', false);
+        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
         $this->model = new \Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver(
             $this->sessionMock,
             $this->persistentHelperMock,

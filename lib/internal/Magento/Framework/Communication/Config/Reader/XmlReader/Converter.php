@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Communication\Config\Reader\XmlReader;
@@ -9,6 +9,7 @@ use Magento\Framework\Communication\ConfigInterface as Config;
 use Magento\Framework\Phrase;
 use Magento\Framework\Communication\Config\ReflectionGenerator;
 use Magento\Framework\Stdlib\BooleanUtils;
+use Magento\Framework\Communication\Config\ConfigParser;
 use Magento\Framework\Communication\Config\Reader\XmlReader\Validator;
 
 /**
@@ -16,6 +17,10 @@ use Magento\Framework\Communication\Config\Reader\XmlReader\Validator;
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
+    /**
+     * @deprecated
+     * @see ConfigParser::SERVICE_METHOD_NAME_PATTERN
+     */
     const SERVICE_METHOD_NAME_PATTERN = '/^([a-zA-Z\\\\]+)::([a-zA-Z]+)$/';
 
     /**
@@ -34,6 +39,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $xmlValidator;
 
     /**
+     * @var ConfigParser
+     */
+    private $configParser;
+
+    /**
      * Initialize dependencies
      *
      * @param ReflectionGenerator $reflectionGenerator
@@ -48,6 +58,21 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $this->reflectionGenerator = $reflectionGenerator;
         $this->booleanUtils = $booleanUtils;
         $this->xmlValidator = $xmlValidator;
+    }
+
+    /**
+     * The getter function to get the new ConfigParser dependency.
+     *
+     * @return \Magento\Framework\Communication\Config\ConfigParser
+     * @deprecated
+     */
+    private function getConfigParser()
+    {
+        if ($this->configParser === null) {
+            $this->configParser = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Communication\Config\ConfigParser::class);
+        }
+        return $this->configParser;
     }
 
     /**
@@ -81,8 +106,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $serviceMethod = $this->getServiceMethodBySchema($topicNode);
             $requestResponseSchema = $serviceMethod
                 ? $this->reflectionGenerator->extractMethodMetadata(
-                    $serviceMethod['typeName'],
-                    $serviceMethod['methodName']
+                    $serviceMethod[ConfigParser::TYPE_NAME],
+                    $serviceMethod[ConfigParser::METHOD_NAME]
                 )
                 : null;
             $requestSchema = $this->extractTopicRequestSchema($topicNode);
@@ -104,8 +129,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             if ($serviceMethod) {
                 $output[$topicName] = $this->reflectionGenerator->generateTopicConfigForServiceMethod(
                     $topicName,
-                    $serviceMethod['typeName'],
-                    $serviceMethod['methodName'],
+                    $serviceMethod[ConfigParser::TYPE_NAME],
+                    $serviceMethod[ConfigParser::METHOD_NAME],
                     $handlers
                 );
             } else if ($requestSchema && $responseSchema) {
@@ -213,7 +238,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             return null;
         }
         $topicName = $topicAttributes->getNamedItem('name')->nodeValue;
-        return $this->parseServiceMethod($topicAttributes->getNamedItem('schema')->nodeValue, $topicName);
+        $serviceMethod = $topicAttributes->getNamedItem('schema')->nodeValue;
+        return $this->parseServiceMethod($serviceMethod, $topicName);
     }
 
     /**
@@ -225,10 +251,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     protected function parseServiceMethod($serviceMethod, $topicName)
     {
-        preg_match(self::SERVICE_METHOD_NAME_PATTERN, $serviceMethod, $matches);
-        $className = $matches[1];
-        $methodName = $matches[2];
-        $this->xmlValidator->validateServiceMethod($serviceMethod, $topicName, $className, $methodName);
-        return ['typeName' => $className, 'methodName' => $methodName];
+        $parsedServiceMethod = $this->getConfigParser()->parseServiceMethod($serviceMethod);
+        $this->xmlValidator->validateServiceMethod(
+            $serviceMethod,
+            $topicName,
+            $parsedServiceMethod[ConfigParser::TYPE_NAME],
+            $parsedServiceMethod[ConfigParser::METHOD_NAME]
+        );
+        return $parsedServiceMethod;
     }
 }

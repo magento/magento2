@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -33,8 +33,8 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->quote = $this->objectManager->create('Magento\Quote\Model\Quote');
-        $this->totalsCollector = $this->objectManager->create('Magento\Quote\Model\Quote\TotalsCollector');
+        $this->quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
+        $this->totalsCollector = $this->objectManager->create(\Magento\Quote\Model\Quote\TotalsCollector::class);
     }
 
     /**
@@ -43,12 +43,12 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
      */
     public function testGetListForVirtualCart()
     {
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $cartId = $quote->load('test_order_with_virtual_product', 'reserved_order_id')->getId();
 
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -63,7 +63,7 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
     public function testGetList()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
         if (!$cartId) {
@@ -72,7 +72,7 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
 
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
             ->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
@@ -121,7 +121,7 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
     {
         $result = [];
         /** @var \Magento\Quote\Model\Cart\ShippingMethodConverter $converter */
-        $converter = $this->objectManager->create('\Magento\Quote\Model\Cart\ShippingMethodConverter');
+        $converter = $this->objectManager->create(\Magento\Quote\Model\Cart\ShippingMethodConverter::class);
         foreach ($groupedRates as $carrierRates) {
             foreach ($carrierRates as $rate) {
                 $result[] = $converter->modelToDataObject($rate, $currencyCode)->__toArray();

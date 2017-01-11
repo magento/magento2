@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -92,98 +92,98 @@ class CreateTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
-        $registryMock = $this->getMock('Magento\Framework\Registry');
-        $configMock = $this->getMock('Magento\Sales\Model\Config', [], [], '', false);
-        $this->sessionQuoteMock = $this->getMock('Magento\Backend\Model\Session\Quote', [], [], '', false);
-        $loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $copyMock = $this->getMock('Magento\Framework\DataObject\Copy', [], [], '', false);
-        $messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $registryMock = $this->getMock(\Magento\Framework\Registry::class);
+        $configMock = $this->getMock(\Magento\Sales\Model\Config::class, [], [], '', false);
+        $this->sessionQuoteMock = $this->getMock(\Magento\Backend\Model\Session\Quote::class, [], [], '', false);
+        $loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $copyMock = $this->getMock(\Magento\Framework\DataObject\Copy::class, [], [], '', false);
+        $messageManagerMock = $this->getMock(\Magento\Framework\Message\ManagerInterface::class);
         $this->formFactoryMock = $this->getMock(
-            'Magento\Customer\Model\Metadata\FormFactory',
+            \Magento\Customer\Model\Metadata\FormFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->customerFactoryMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
 
-        $this->itemUpdater = $this->getMock('Magento\Quote\Model\Quote\Item\Updater', [], [], '', false);
+        $this->itemUpdater = $this->getMock(\Magento\Quote\Model\Quote\Item\Updater::class, [], [], '', false);
 
-        $this->objectFactory = $this->getMockBuilder('\Magento\Framework\DataObject\Factory')
+        $this->objectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->customerMapper = $this->getMockBuilder(
-            'Magento\Customer\Model\Customer\Mapper'
+            \Magento\Customer\Model\Customer\Mapper::class
         )->setMethods(['toFlatArray'])->disableOriginalConstructor()->getMock();
 
         $this->quoteInitializerMock = $this->getMock(
-            'Magento\Sales\Model\AdminOrder\Product\Quote\Initializer',
+            \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer::class,
             [],
             [],
             '',
             false
         );
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\CustomerRepositoryInterface',
+            \Magento\Customer\Api\CustomerRepositoryInterface::class,
             [],
             '',
             false
         );
         $this->addressRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\AddressRepositoryInterface',
+            \Magento\Customer\Api\AddressRepositoryInterface::class,
             [],
             '',
             false
         );
         $this->addressFactoryMock = $this->getMock(
-            'Magento\Customer\Api\Data\AddressInterfaceFactory',
+            \Magento\Customer\Api\Data\AddressInterfaceFactory::class,
             [],
             [],
             '',
             false
         );
         $this->groupRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\GroupRepositoryInterface',
+            \Magento\Customer\Api\GroupRepositoryInterface::class,
             [],
             '',
             false
         );
         $this->scopeConfigMock = $this->getMockForAbstractClass(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             [],
             '',
             false
         );
         $this->emailSenderMock = $this->getMock(
-            'Magento\Sales\Model\AdminOrder\EmailSender',
+            \Magento\Sales\Model\AdminOrder\EmailSender::class,
             [],
             [],
             '',
             false
         );
         $this->accountManagementMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\AccountManagementInterface',
+            \Magento\Customer\Api\AccountManagementInterface::class,
             [],
             '',
             false
         );
-        $this->dataObjectHelper = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
+        $this->dataObjectHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->adminOrderCreate = $objectManagerHelper->getObject(
-            'Magento\Sales\Model\AdminOrder\Create',
+            \Magento\Sales\Model\AdminOrder\Create::class,
             [
                 'objectManager' => $objectManagerMock,
                 'eventManager' => $eventManagerMock,
@@ -220,7 +220,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
         foreach ($attributes as $attribute) {
             $attributeMock = $this->getMock(
-                'Magento\Customer\Api\Data\AttributeMetadataInterface',
+                \Magento\Customer\Api\Data\AttributeMetadataInterface::class,
                 [],
                 [],
                 '',
@@ -233,7 +233,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         }
 
         $customerGroupMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\GroupInterface',
+            \Magento\Customer\Api\Data\GroupInterface::class,
             [],
             '',
             false,
@@ -242,28 +242,29 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ['getTaxClassId']
         );
         $customerGroupMock->expects($this->once())->method('getTaxClassId')->will($this->returnValue($taxClassId));
-        $customerFormMock = $this->getMock('Magento\Customer\Model\Metadata\Form', [], [], '', false);
-        $customerFormMock->expects($this->any())->method('getAttributes')->will($this->returnValue($attributeMocks));
+        $customerFormMock = $this->getMock(\Magento\Customer\Model\Metadata\Form::class, [], [], '', false);
+        $customerFormMock->expects($this->any())
+            ->method('getAttributes')
+            ->will($this->returnValue([$attributeMocks[1]]));
         $customerFormMock->expects($this->any())->method('extractData')->will($this->returnValue([]));
-        $customerFormMock->expects($this->any())->method('restoreData')->will($this->returnValue([]));
+        $customerFormMock->expects($this->any())->method('restoreData')->will($this->returnValue(['group_id' => 1]));
 
         $customerFormMock->expects($this->any())
             ->method('prepareRequest')
-            ->will($this->returnValue($this->getMock('Magento\Framework\App\RequestInterface')));
+            ->will($this->returnValue($this->getMock(\Magento\Framework\App\RequestInterface::class)));
 
-        $customerMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $customerMock = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class, [], [], '', false);
         $this->customerMapper->expects($this->atLeastOnce())
             ->method('toFlatArray')
-            ->willReturn(['email' => 'user@example.com', 'group_id' => 1, 'gender' => 1]);
+            ->willReturn(['group_id' => 1]);
 
 
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $quoteMock->expects($this->any())->method('getCustomer')->will($this->returnValue($customerMock));
         $quoteMock->expects($this->once())
             ->method('addData')
             ->with(
             [
-                'customer_email' => $attributes[0][1],
                 'customer_group_id' => $attributes[1][1],
                 'customer_tax_class_id' => $taxClassId
             ]
@@ -272,8 +273,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('populateWithArray')
             ->with(
                 $customerMock,
-                ['email' => 'user@example.com', 'group_id' => 1, 'gender' => 1],
-                '\Magento\Customer\Api\Data\CustomerInterface'
+                ['group_id' => 1], \Magento\Customer\Api\Data\CustomerInterface::class
             );
 
         $this->formFactoryMock->expects($this->any())->method('create')->will($this->returnValue($customerFormMock));
@@ -284,7 +284,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('getById')
             ->will($this->returnValue($customerGroupMock));
 
-        $this->adminOrderCreate->setAccountData([]);
+        $this->adminOrderCreate->setAccountData(['group_id' => 1]);
     }
 
     public function testUpdateQuoteItemsNotArray()
@@ -302,9 +302,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $itemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
 
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $quoteMock->expects($this->once())
             ->method('getItemById')
             ->will($this->returnValue($itemMock));
@@ -330,12 +330,12 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $itemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
         $itemMock->expects($this->once())
             ->method('getQty')
             ->will($this->returnValue($qty));
 
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $quoteMock->expects($this->once())
             ->method('updateItem')
             ->will($this->returnValue($itemMock));
@@ -350,5 +350,33 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
         $this->adminOrderCreate->setRecollect(false);
         $this->adminOrderCreate->updateQuoteItems($items);
+    }
+
+    public function testApplyCoupon()
+    {
+        $couponCode = '';
+        $quoteMock = $this->getMock(
+            \Magento\Quote\Model\Quote::class,
+            ['getShippingAddress', 'setCouponCode'],
+            [],
+            '',
+            false
+        );
+        $this->sessionQuoteMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+
+        $addressMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['setCollectShippingRates', 'setFreeShipping'],
+            [],
+            '',
+            false
+        );
+        $quoteMock->expects($this->exactly(2))->method('getShippingAddress')->willReturn($addressMock);
+        $quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode)->willReturnSelf();
+
+        $addressMock->expects($this->once())->method('setCollectShippingRates')->with(true)->willReturnSelf();
+        $addressMock->expects($this->once())->method('setFreeShipping')->with(null)->willReturnSelf();
+
+        $this->adminOrderCreate->applyCoupon($couponCode);
     }
 }

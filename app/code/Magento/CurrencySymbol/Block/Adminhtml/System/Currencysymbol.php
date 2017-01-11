@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,6 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
      */
     protected function _construct()
     {
-        $this->_blockGroup = 'Magento\CurrencySymbol\System';
         $this->_controller = 'adminhtml_system_currencysymbol';
         parent::_construct();
     }
@@ -60,7 +59,7 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
     {
         $this->getToolbar()->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Save Currency Symbols'),
                 'class' => 'save primary save-currency-symbols',

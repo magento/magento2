@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
@@ -26,17 +26,17 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product\Url'
+            \Magento\Catalog\Model\Product\Url::class
         );
         $this->urlPathGenerator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator'
+            \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::class
         );
     }
 
     public function testGetUrlInStore()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         $product = $repository->get('simple');
         $this->assertStringEndsWith('simple-product.html', $this->_model->getUrlInStore($product));
@@ -45,7 +45,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetProductUrl()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         $product = $repository->get('simple');
         $this->assertStringEndsWith('simple-product.html', $this->_model->getProductUrl($product));
@@ -60,13 +60,13 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->setUrlPath('product.html');
 
         /** @var $category \Magento\Catalog\Model\Category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category',
+            \Magento\Catalog\Model\Category::class,
             ['data' => ['url_path' => 'category', 'entity_id' => 5, 'path_ids' => [2, 3, 5]]]
         );
         $category->setOrigData();
@@ -81,13 +81,13 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetUrl()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         $product = $repository->get('simple');
         $this->assertStringEndsWith('simple-product.html', $this->_model->getUrl($product));
 
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->setId(100);
         $this->assertContains('catalog/product/view/id/100/', $this->_model->getUrl($product));

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
@@ -34,7 +34,7 @@ class SalesConfigFilesTest extends AbstractMergedConfigTest
     protected function getMergedSchemaFile()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        return $objectManager->get('Magento\Sales\Model\Config\SchemaLocator')->getSchema();
+        return $objectManager->get(\Magento\Sales\Model\Config\SchemaLocator::class)->getSchema();
     }
 
     protected function getConfigFiles()

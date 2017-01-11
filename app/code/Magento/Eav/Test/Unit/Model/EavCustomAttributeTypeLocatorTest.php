@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->attributeRepository = $this->getMock(
-            'Magento\Eav\Model\AttributeRepository',
+            \Magento\Eav\Model\AttributeRepository::class,
             ['get'],
             [],
             '',
@@ -64,7 +64,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('get')
             ->willReturn($attributeRepositoryResponse);
-        
+
         $this->eavCustomAttributeTypeLocator = new EavCustomAttributeTypeLocator(
             $this->attributeRepository,
             $stringUtility,
@@ -97,16 +97,16 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function getTypeDataProvider()
     {
-        $serviceInterface = 'Magento\Catalog\Api\Data\ProductInterface';
+        $serviceInterface = \Magento\Catalog\Api\Data\ProductInterface::class;
         $eavEntityType = 'catalog_product';
-        $mediaBackEndModelClass = 'Magento\Catalog\Model\Product\Attribute\Backend\Media';
-        $mediaAttributeDataInterface = '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface';
+        $mediaBackEndModelClass = \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class;
+        $mediaAttributeDataInterface = \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class;
         $serviceBackendModelDataInterfaceMapData = [
             $serviceInterface => [$mediaBackEndModelClass => $mediaAttributeDataInterface]
         ];
 
         $attribute = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['getBackendModel'],
             [],
             '',
@@ -118,7 +118,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($mediaBackEndModelClass);
 
         $attributeNoBackendModel = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['getBackendModel', 'getFrontendInput'],
             [],
             '',
@@ -174,7 +174,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'attributeCode' => 'media_galley',
-                'serviceClass' => 'Magento\Catalog\Api\Data\ProductInterface',
+                'serviceClass' => \Magento\Catalog\Api\Data\ProductInterface::class,
                 'attributeRepositoryResponse' => $attribute,
                 'stringUtility' => $stringUtility,
                 'serviceEntityTypeMapData' => [$serviceInterface => $eavEntityType],
@@ -190,8 +190,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
                 'serviceBackendModelDataInterfaceMapData' =>
                     [
                         $serviceInterface =>
-                            [
-                                'Magento\Eav\Model\Attribute\Data\Image' => $mediaAttributeDataInterface
+                            [\Magento\Eav\Model\Attribute\Data\Image::class => $mediaAttributeDataInterface
                             ]
                     ],
                 'expected' => $mediaAttributeDataInterface
@@ -215,7 +214,10 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             'mixed',
-            $this->eavCustomAttributeTypeLocator->getType('media_galley', 'Magento\Catalog\Api\Data\ProductInterface')
+            $this->eavCustomAttributeTypeLocator->getType(
+                'media_galley',
+                \Magento\Catalog\Api\Data\ProductInterface::class
+            )
         );
     }
 

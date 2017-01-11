@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -304,7 +304,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Gets the credit memo base discount tax compensation amount.
      *
-     * @return float Credit memo base discount tax compensation amount.
+     * @return float|null Credit memo base discount tax compensation amount.
      */
     public function getBaseDiscountTaxCompensationAmount();
 
@@ -318,7 +318,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Gets the credit memo base shipping discount tax compensation amount.
      *
-     * @return float Credit memo base shipping discount tax compensation amount.
+     * @return float|null Credit memo base shipping discount tax compensation amount.
      */
     public function getBaseShippingDiscountTaxCompensationAmnt();
 
@@ -453,7 +453,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Gets the credit memo discount tax compensation amount.
      *
-     * @return float Credit memo discount tax compensation amount.
+     * @return float|null Credit memo discount tax compensation amount.
      */
     public function getDiscountTaxCompensationAmount();
 
@@ -501,7 +501,7 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Gets the credit memo shipping discount tax compensation amount.
      *
-     * @return float Credit memo shipping discount tax compensation amount.
+     * @return float|null Credit memo shipping discount tax compensation amount.
      */
     public function getShippingDiscountTaxCompensationAmount();
 

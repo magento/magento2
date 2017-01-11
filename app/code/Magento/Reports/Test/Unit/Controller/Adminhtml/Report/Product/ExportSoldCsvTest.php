@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,13 +27,13 @@ class ExportSoldCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\
     {
         parent::setUp();
 
-        $this->dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\Filter\Date')
+        $this->dateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\Filter\Date::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->exportSoldCsv = $objectManager->getObject(
-            'Magento\Reports\Controller\Adminhtml\Report\Product\ExportSoldCsv',
+            \Magento\Reports\Controller\Adminhtml\Report\Product\ExportSoldCsv::class,
             [
                 'context' => $this->contextMock,
                 'fileFactory' => $this->fileFactoryMock,

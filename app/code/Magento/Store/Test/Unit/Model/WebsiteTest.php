@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model;
@@ -31,14 +31,14 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $this->websiteFactory = $this->getMockBuilder('Magento\Store\Model\WebsiteFactory')
+        $this->websiteFactory = $this->getMockBuilder(\Magento\Store\Model\WebsiteFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create', 'getCollection', '__wakeup'])
             ->getMock();
 
         /** @var Website $websiteModel */
         $this->model = $this->objectManagerHelper->getObject(
-            'Magento\Store\Model\Website',
+            \Magento\Store\Model\Website::class,
             ['websiteFactory' => $this->websiteFactory]
         );
     }
@@ -46,7 +46,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     public function testIsCanDelete()
     {
         $websiteCollection = $this->getMock(
-            'Magento\Store\Model\ResourceModel\Website\Collection',
+            \Magento\Store\Model\ResourceModel\Website\Collection::class,
             ['getSize'],
             [],
             '',

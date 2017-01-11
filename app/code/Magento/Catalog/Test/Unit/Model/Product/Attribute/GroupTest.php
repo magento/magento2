@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
@@ -25,7 +25,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            '\Magento\Catalog\Model\Product\Attribute\Group',
+            \Magento\Catalog\Model\Product\Attribute\Group::class,
             [
                 'attributeCollectionFactory' => $this->getMockedCollectionFactory()
             ]
@@ -40,7 +40,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $mockedCollection = $this->getMockedCollection();
 
         $mockBuilder = $this->getMockBuilder(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory'
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class
         );
         $mock = $mockBuilder->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -58,7 +58,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
      */
     private function getMockedCollection()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection');
+        $mockBuilder = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
         $mock = $mockBuilder->disableOriginalConstructor()
             ->getMock();
 

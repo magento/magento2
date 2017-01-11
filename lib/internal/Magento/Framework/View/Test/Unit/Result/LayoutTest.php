@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,19 +41,19 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
-        $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $this->translateInline = $this->getMock('Magento\Framework\Translate\InlineInterface');
+        $this->layout = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false);
+        $this->request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $this->translateInline = $this->getMock(\Magento\Framework\Translate\InlineInterface::class);
 
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
+        $context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
         $context->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
         $context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
         $context->expects($this->any())->method('getEventManager')->will($this->returnValue($this->eventManager));
 
         $this->resultLayout = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
-                'Magento\Framework\View\Result\Layout',
+                \Magento\Framework\View\Result\Layout::class,
                 ['context' => $context, 'translateInline' => $this->translateInline]
             );
     }
@@ -77,7 +77,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testAddHandle()
     {
-        $processor = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface', [], [], '', false);
+        $processor = $this->getMock(\Magento\Framework\View\Layout\ProcessorInterface::class, [], [], '', false);
         $processor->expects($this->once())->method('addHandle')->with('module_controller_action');
 
         $this->layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
@@ -87,7 +87,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testAddUpdate()
     {
-        $processor = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface', [], [], '', false);
+        $processor = $this->getMock(\Magento\Framework\View\Layout\ProcessorInterface::class, [], [], '', false);
         $processor->expects($this->once())->method('addUpdate')->with('handle_name');
 
         $this->layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
@@ -125,7 +125,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject $response */
-        $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $response = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
         $response->expects($setHttpResponseCodeCount)->method('setHttpResponseCode')->with($httpCode);
         $response->expects($setHeaderCount)->method('setHeader')->with($headerName, $headerValue, $replaceHeader);
         $response->expects($this->once())->method('appendBody')->with($layoutOutput);
@@ -152,7 +152,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testAddDefaultHandle()
     {
-        $processor = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface', [], [], '', false);
+        $processor = $this->getMock(\Magento\Framework\View\Layout\ProcessorInterface::class, [], [], '', false);
         $processor->expects($this->once())->method('addHandle')->with('module_controller_action');
 
         $this->layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));

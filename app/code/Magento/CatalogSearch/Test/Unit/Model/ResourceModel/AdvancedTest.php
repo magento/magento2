@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
@@ -22,7 +22,7 @@ class AdvancedTest extends PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->model = $helper->getObject('Magento\CatalogSearch\Model\ResourceModel\Advanced');
+        $this->model = $helper->getObject(\Magento\CatalogSearch\Model\ResourceModel\Advanced::class);
     }
 
     /**
@@ -31,7 +31,7 @@ class AdvancedTest extends PHPUnit_Framework_TestCase
     public function testPrepareCondition($backendType, $value, $expected)
     {
         /** @var Attribute|\PHPUnit_Framework_MockObject_MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->setMethods(['getBackendType'])
             ->disableOriginalConstructor()
             ->getMock();

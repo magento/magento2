@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Address;
+
+use Magento\Sales\Api\Data\OrderAddressSearchResultInterface;
+use \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 
 /**
  * Flat sales order payment collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection
+class Collection extends AbstractCollection implements OrderAddressSearchResultInterface
 {
     /**
      * Event prefix
@@ -33,7 +36,10 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection\Abs
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Address', 'Magento\Sales\Model\ResourceModel\Order\Address');
+        $this->_init(
+            \Magento\Sales\Model\Order\Address::class,
+            \Magento\Sales\Model\ResourceModel\Order\Address::class
+        );
     }
 
     /**

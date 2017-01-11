@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,21 +34,27 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->link = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Link', [], [], '', false);
-        $this->connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->link = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Link::class, [], [], '', false);
+        $this->connection = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
+        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $this->resource
             ->expects($this->once())
             ->method('getConnection')
             ->will($this->returnValue($this->connection));
 
-        $this->import = $this->getMock('Magento\ImportExport\Model\Import', [], [], '', false);
-        $this->importFactory = $this->getMock('Magento\ImportExport\Model\ImportFactory', ['create'], [], '', false);
+        $this->import = $this->getMock(\Magento\ImportExport\Model\Import::class, [], [], '', false);
+        $this->importFactory = $this->getMock(
+            \Magento\ImportExport\Model\ImportFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->importFactory->expects($this->any())->method('create')->will($this->returnValue($this->import));
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->links = $this->objectManagerHelper->getObject(
-            'Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\Links',
+            \Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\Links::class,
             [
                 'productLink' => $this->link,
                 'resource' => $this->resource,
@@ -95,7 +101,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $linksData['position'] = [4 => 6];
         $linksData['qty'] = [9 => 3];
         $this->processBehaviorGetter('append');
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
         $select->expects($this->any())->method('from')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
@@ -137,7 +143,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     protected function processAttributeGetter($dbAttributes)
     {
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $this->connection->expects($this->once())->method('select')->will($this->returnValue($select));
         $select->expects($this->once())->method('from')->will($this->returnSelf());
         $select->expects($this->once())->method('where')->will($this->returnSelf());
@@ -164,7 +170,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     protected function processBehaviorGetter($behavior)
     {
-        $dataSource = $this->getMock('Magento\ImportExport\Model\ResourceModel\Import\Data', [], [], '', false);
+        $dataSource = $this->getMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class, [], [], '', false);
         $dataSource->expects($this->once())->method('getBehavior')->will($this->returnValue($behavior));
         $this->import->expects($this->once())->method('getDataSourceModel')->will($this->returnValue($dataSource));
     }

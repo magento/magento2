@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model;
@@ -61,13 +61,19 @@ class TaxRateCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
-        $this->filterBuilderMock = $this->getMock('Magento\Framework\Api\FilterBuilder', [], [], '', false);
+        $this->entityFactoryMock = $this->getMock(
+            \Magento\Framework\Data\Collection\EntityFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->filterBuilderMock = $this->getMock(\Magento\Framework\Api\FilterBuilder::class, [], [], '', false);
         $this->searchCriteriaBuilderMock =
-            $this->getMock('Magento\Framework\Api\SearchCriteriaBuilder', [], [], '', false);
-        $this->sortOrderBuilderMock = $this->getMock('Magento\Framework\Api\SortOrderBuilder', [], [], '', false);
+            $this->getMock(\Magento\Framework\Api\SearchCriteriaBuilder::class, [], [], '', false);
+        $this->sortOrderBuilderMock = $this->getMock(\Magento\Framework\Api\SortOrderBuilder::class, [], [], '', false);
         $this->rateServiceMock = $this->getMock(
-            'Magento\Tax\Api\TaxRateRepositoryInterface',
+            \Magento\Tax\Api\TaxRateRepositoryInterface::class,
             [
                 'save',
                 'get',
@@ -81,27 +87,27 @@ class TaxRateCollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->rateConverterMock = $this->getMock(
-            'Magento\Tax\Model\Calculation\Rate\Converter',
+            \Magento\Tax\Model\Calculation\Rate\Converter::class,
             [],
             [],
             '',
             false
         );
         $this->searchCriteriaMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteriaInterface',
+            \Magento\Framework\Api\SearchCriteriaInterface::class,
             [],
             [],
             '',
             false
         );
         $this->searchResultsMock = $this->getMock(
-            'Magento\Tax\Api\Data\TaxRateSearchResultsInterface',
+            \Magento\Tax\Api\Data\TaxRateSearchResultsInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->taxRateMock = $this->getMock('Magento\Tax\Model\Calculation\Rate', [], [], '', false);
+        $this->taxRateMock = $this->getMock(\Magento\Tax\Model\Calculation\Rate::class, [], [], '', false);
 
         $this->searchCriteriaBuilderMock->expects($this->any())
             ->method('create')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -473,7 +473,7 @@ class AbstractAction
     {
         if (null === $this->categoryMetadata) {
             $metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
             $this->categoryMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
         }
         return $this->categoryMetadata;
@@ -486,7 +486,7 @@ class AbstractAction
     {
         if (null === $this->skipStaticColumns) {
             $provider = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\Indexer\Category\Flat\SkipStaticColumnsProvider');
+                ->get(\Magento\Catalog\Model\Indexer\Category\Flat\SkipStaticColumnsProvider::class);
             $this->skipStaticColumns = $provider->get();
         }
         return $this->skipStaticColumns;

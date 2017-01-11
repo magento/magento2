@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class DocBlockTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_object = new \Magento\TestFramework\Bootstrap\DocBlock(__DIR__);
-        $this->_application = $this->getMock('Magento\TestFramework\Application', [], [], '', false);
+        $this->_application = $this->getMock(\Magento\TestFramework\Application::class, [], [], '', false);
     }
 
     protected function tearDown()
@@ -52,11 +52,11 @@ class DocBlockTest extends \PHPUnit_Framework_TestCase
     public function testRegisterAnnotations()
     {
         $this->_expectNoListenerCreation(
-            'Magento\TestFramework\Event\PhpUnit',
+            \Magento\TestFramework\Event\PhpUnit::class,
             'Instance of the event manager is required.'
         );
         $this->_expectNoListenerCreation(
-            'Magento\TestFramework\Event\Magento',
+            \Magento\TestFramework\Event\Magento::class,
             'Instance of the "Magento\TestFramework\EventManager" is expected.'
         );
         $this->_object->registerAnnotations($this->_application);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -120,6 +120,7 @@ class Simple implements Fallback\ResolverInterface
      */
     protected function resolveFile(RuleInterface $fallbackRule, $file, array $params = [])
     {
+        $params['file'] = $file;
         foreach ($fallbackRule->getPatternDirs($params) as $dir) {
             $path = "{$dir}/{$file}";
             $dirRead = $this->readFactory->create($dir);

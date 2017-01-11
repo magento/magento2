@@ -1,23 +1,28 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule;
 
-use \Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\CatalogRule\Model\Rule;
+use Magento\Framework\DataObject;
+use Magento\Catalog\Model\Product;
 
 /**
  * Class Validation. Call validate method for configurable product instead simple product
  */
 class Validation
 {
-    /** @var Configurable */
+    /**
+     * @var Configurable
+     */
     private $configurable;
 
     /**
-     * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType
+     * @param Configurable $configurableType
      */
     public function __construct(Configurable $configurableType)
     {
@@ -25,17 +30,15 @@ class Validation
     }
 
     /**
-     * @param \Magento\CatalogRule\Model\Rule $rule
-     * @param \Closure $proceed
-     * @param \Magento\Framework\DataObject|\Magento\Catalog\Model\Product $product
+     * Define if it is needed to apply rule if parent configurable product match conditions
+     *
+     * @param Rule $rule
+     * @param bool $validateResult
+     * @param DataObject|Product $product
      * @return bool
      */
-    public function aroundValidate(
-        \Magento\CatalogRule\Model\Rule $rule,
-        \Closure $proceed,
-        \Magento\Framework\DataObject $product
-    ) {
-        $validateResult = $proceed($product);
+    public function afterValidate(Rule $rule, $validateResult, DataObject $product)
+    {
         if (!$validateResult && ($configurableProducts = $this->configurable->getParentIdsByChild($product->getId()))) {
             foreach ($configurableProducts as $configurableProductId) {
                 $validateResult = $rule->getConditions()->validateByEntityId($configurableProductId);

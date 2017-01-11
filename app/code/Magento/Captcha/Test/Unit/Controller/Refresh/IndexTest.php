@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Controller\Refresh;
@@ -54,14 +54,14 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->captchaHelperMock = $this->getMock('Magento\Captcha\Helper\Data', [], [], '', false);
-        $this->captchaMock = $this->getMock('Magento\Captcha\Model\DefaultModel', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->contextMock = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
-        $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
-        $this->layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface');
-        $this->flagMock = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
+        $this->captchaHelperMock = $this->getMock(\Magento\Captcha\Helper\Data::class, [], [], '', false);
+        $this->captchaMock = $this->getMock(\Magento\Captcha\Model\DefaultModel::class, [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Framework\App\Action\Context::class, [], [], '', false);
+        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class);
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->flagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
 
         $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $this->contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
@@ -82,7 +82,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $content = ['formId' => $formId];
 
         $blockMethods = ['setFormId', 'setIsAjax', 'toHtml'];
-        $blockMock = $this->getMock('Magento\Captcha\Block\Captcha', $blockMethods, [], '', false);
+        $blockMock = $this->getMock(\Magento\Captcha\Block\Captcha::class, $blockMethods, [], '', false);
 
         $this->requestMock->expects($this->any())->method('getPost')->with('formId')->will($this->returnValue($formId));
         $this->requestMock->expects($this->exactly($callsNumber))->method('getContent')

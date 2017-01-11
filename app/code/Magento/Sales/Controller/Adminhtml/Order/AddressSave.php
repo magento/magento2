@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
@@ -24,7 +24,9 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
     {
         $addressId = $this->getRequest()->getParam('address_id');
         /** @var $address \Magento\Sales\Api\Data\OrderAddressInterface|\Magento\Sales\Model\Order\Address */
-        $address = $this->_objectManager->create('Magento\Sales\Api\Data\OrderAddressInterface')->load($addressId);
+        $address = $this->_objectManager->create(
+            \Magento\Sales\Api\Data\OrderAddressInterface::class
+        )->load($addressId);
         $data = $this->getRequest()->getPostValue();
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data && $address->getId()) {

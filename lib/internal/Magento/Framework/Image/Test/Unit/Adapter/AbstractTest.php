@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,14 +34,14 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->directoryWriteMock = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Write',
+            \Magento\Framework\Filesystem\Directory\Write::class,
             [],
             [],
             '',
             false
         );
         $this->filesystemMock = $this->getMock(
-            'Magento\Framework\Filesystem',
+            \Magento\Framework\Filesystem::class,
             ['getDirectoryWrite', 'createDirectory'],
             [],
             '',
@@ -54,10 +54,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->directoryWriteMock)
         );
-        $this->loggerMock = $this->getMockBuilder( 'Psr\Log\LoggerInterface')->getMock();
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
 
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Framework\Image\Adapter\AbstractAdapter',
+            \Magento\Framework\Image\Adapter\AbstractAdapter::class,
             [$this->filesystemMock, $this->loggerMock]
         );
     }

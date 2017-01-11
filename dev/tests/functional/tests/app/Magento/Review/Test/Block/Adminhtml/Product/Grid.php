@@ -1,18 +1,25 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Review\Test\Block\Adminhtml\Product;
 
-use Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Backend\Test\Block\Widget\Grid as AbstractGrid;
 
 /**
  * Review catalog product grid.
  */
-class Grid extends DataGrid
+class Grid extends AbstractGrid
 {
+    /**
+     * First row selector
+     *
+     * @var string
+     */
+    protected $firstRowSelector = './/tbody/tr[1]';
+
     /**
      * Grid filter selectors
      *

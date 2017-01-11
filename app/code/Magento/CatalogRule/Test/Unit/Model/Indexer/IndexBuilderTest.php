@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -120,46 +120,52 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->resource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             ['getConnection', 'getTableName'],
             [],
             '',
             false
         );
         $this->ruleCollectionFactory = $this->getMock(
-            'Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory',
+            \Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory::class,
             ['create', 'addFieldToFilter'],
             [],
             '',
             false
         );
         $this->backend = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend',
+            \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,
             [],
             [],
             '',
             false
         );
-        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $this->metadataPool = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
-        $metadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
+        $this->select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $this->metadataPool = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
+        $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
-        $this->connection = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
-        $this->db = $this->getMock('Zend_Db_Statement_Interface', [], [], '', false);
-        $this->website = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
-        $this->combine = $this->getMock('Magento\Rule\Model\Condition\Combine', [], [], '', false);
-        $this->rules = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
-        $this->logger = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
-        $this->attribute = $this->getMock('Magento\Eav\Model\Entity\Attribute\AbstractAttribute', [], [], '', false);
-        $this->priceCurrency = $this->getMock('Magento\Framework\Pricing\PriceCurrencyInterface');
-        $this->dateFormat = $this->getMock('Magento\Framework\Stdlib\DateTime', [], [], '', false);
-        $this->dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
-        $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', ['getAttribute'], [], '', false);
-        $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->productFactory = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
+        $this->connection = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->db = $this->getMock(\Zend_Db_Statement_Interface::class, [], [], '', false);
+        $this->website = $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
+        $this->combine = $this->getMock(\Magento\Rule\Model\Condition\Combine::class, [], [], '', false);
+        $this->rules = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
+        $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $this->attribute = $this->getMock(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->priceCurrency = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->dateFormat = $this->getMock(\Magento\Framework\Stdlib\DateTime::class, [], [], '', false);
+        $this->dateTime = $this->getMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, [], [], '', false);
+        $this->eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getAttribute'], [], '', false);
+        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->productFactory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, ['create'], [], '', false);
 
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
         $this->connection->expects($this->any())->method('query')->will($this->returnValue($this->db));
@@ -218,21 +224,21 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     public function testUpdateCatalogRuleGroupWebsiteData()
     {
         $priceAttrMock = $this->getMock(
-            'Magento\Catalog\Model\Entity\Attribute',
+            \Magento\Catalog\Model\Entity\Attribute::class,
             ['getBackend'],
             [],
             '',
             false
         );
         $backendModelMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Attribute\Backend\Tierprice',
+            \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice::class,
             ['getResource'],
             [],
             '',
             false
         );
         $resourceMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice',
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice::class,
             ['getMainTable'],
             [],
             '',

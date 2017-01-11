@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer\Filter;
@@ -27,16 +27,16 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
         $category->load(4);
         $layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Layer\Category');
+            ->get(\Magento\Catalog\Model\Layer\Category::class);
         $layer->setCurrentCategory($category);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Filter\Price', ['layer' => $layer]);
+            ->create(\Magento\Catalog\Model\Layer\Filter\Price::class, ['layer' => $layer]);
         $this->groupManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Api\GroupManagementInterface');
+            ->get(\Magento\Customer\Api\GroupManagementInterface::class);
     }
 
     public function testApplyNothing()
@@ -45,13 +45,13 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $this->_model->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\View\LayoutInterface'
+                \Magento\Framework\View\LayoutInterface::class
             )->createBlock(
-                'Magento\Framework\View\Element\Text'
+                \Magento\Framework\View\Element\Text::class
             )
         );
 
@@ -64,14 +64,14 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('price', 'non-numeric');
         $this->_model->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\View\LayoutInterface'
+                \Magento\Framework\View\LayoutInterface::class
             )->createBlock(
-                'Magento\Framework\View\Element\Text'
+                \Magento\Framework\View\Element\Text::class
             )
         );
 
@@ -86,14 +86,14 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('price', '10-20');
         $this->_model->apply(
             $request,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\View\LayoutInterface'
+                \Magento\Framework\View\LayoutInterface::class
             )->createBlock(
-                'Magento\Framework\View\Element\Text'
+                \Magento\Framework\View\Element\Text::class
             )
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -56,7 +56,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->collectionMock = $this->getMockBuilder('\Magento\Setup\Module\Di\Definition\Collection')
+        $this->collectionMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Definition\Collection::class)
             ->setMethods([])->getMock();
         $this->model = new \Magento\Setup\Module\Di\Definition\Collection();
     }

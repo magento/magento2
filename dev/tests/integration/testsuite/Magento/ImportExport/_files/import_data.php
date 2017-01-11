@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -104,7 +104,7 @@ $bunches = [
 ];
 
 $importDataResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\ImportExport\Model\ResourceModel\Import\Data'
+    \Magento\ImportExport\Model\ResourceModel\Import\Data::class
 );
 
 foreach ($bunches as $bunch) {
@@ -113,5 +113,7 @@ foreach ($bunches as $bunch) {
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$objectManager->get('Magento\Framework\Registry')->unregister('_fixture/Magento_ImportExport_Import_Data');
-$objectManager->get('Magento\Framework\Registry')->register('_fixture/Magento_ImportExport_Import_Data', $bunches);
+$objectManager->get(\Magento\Framework\Registry::class)->unregister('_fixture/Magento_ImportExport_Import_Data');
+$objectManager->get(
+    \Magento\Framework\Registry::class
+)->register('_fixture/Magento_ImportExport_Import_Data', $bunches);

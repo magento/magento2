@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Simplexml;
@@ -64,7 +64,7 @@ class Config
      *
      * @var string
      */
-    protected $_elementClass = 'Magento\Framework\Simplexml\Element';
+    protected $_elementClass = \Magento\Framework\Simplexml\Element::class;
 
     /**
      * Xpath describing nodes in configuration that need to be extended

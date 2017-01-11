@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Model\Layout;
@@ -45,7 +45,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
 </layout>
 XML;
 
-        $this->_xmlDocument = simplexml_load_string($string, 'Magento\Framework\Simplexml\Element');
+        $this->_xmlDocument = simplexml_load_string($string, \Magento\Framework\Simplexml\Element::class);
 
         $this->_object = new \Magento\Framework\View\Model\Layout\Translator();
     }

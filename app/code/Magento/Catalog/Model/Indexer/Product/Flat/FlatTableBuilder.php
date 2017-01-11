@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
@@ -221,7 +221,11 @@ class FlatTableBuilder
 
         unset($tables[$entityTableName]);
 
-        $allColumns = array_merge(['entity_id', 'type_id', 'attribute_set_id'], $columnsList);
+        $allColumns = array_values(
+            array_unique(
+                array_merge(['entity_id', $linkField, 'type_id', 'attribute_set_id'], $columnsList)
+            )
+        );
 
         /* @var $status \Magento\Eav\Model\Entity\Attribute */
         $status = $this->_productIndexerHelper->getAttribute('status');
@@ -263,7 +267,7 @@ class FlatTableBuilder
 
             $select->joinLeft(
                 $temporaryTableName,
-                "e.entity_id = " . $temporaryTableName . ".entity_id",
+                sprintf('e.%1$s = %2$s.%1$s', $linkField, $temporaryTableName),
                 $columnsNames
             );
             $allColumns = array_merge($allColumns, $columnsNames);
@@ -277,7 +281,7 @@ class FlatTableBuilder
             if (!empty($columnValueNames)) {
                 $select->joinLeft(
                     $temporaryValueTableName,
-                    "e.${linkField} = " . $temporaryValueTableName . ".entity_id",
+                    sprintf('e.%1$s = %2$s.%1$s', $linkField, $temporaryValueTableName),
                     $columnValueNames
                 );
                 $allColumns = array_merge($allColumns, $columnValueNames);
@@ -371,7 +375,7 @@ class FlatTableBuilder
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

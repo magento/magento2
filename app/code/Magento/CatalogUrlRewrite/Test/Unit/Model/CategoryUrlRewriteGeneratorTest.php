@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,21 +40,21 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->currentUrlRewritesRegenerator = $this->getMockBuilder(
-            'Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator'
+            \Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator::class
         )->disableOriginalConstructor()->getMock();
         $this->canonicalUrlRewriteGenerator = $this->getMockBuilder(
-            'Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator'
+            \Magento\CatalogUrlRewrite\Model\Category\CanonicalUrlRewriteGenerator::class
         )->disableOriginalConstructor()->getMock();
         $this->childrenUrlRewriteGenerator = $this->getMockBuilder(
-            'Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator'
+            \Magento\CatalogUrlRewrite\Model\Category\ChildrenUrlRewriteGenerator::class
         )->disableOriginalConstructor()->getMock();
-        $this->storeViewService = $this->getMockBuilder('Magento\CatalogUrlRewrite\Service\V1\StoreViewService')
+        $this->storeViewService = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Service\V1\StoreViewService::class)
             ->disableOriginalConstructor()->getMock();
-        $this->category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
-        $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
+        $this->category = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
+        $this->categoryRepository = $this->getMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
 
         $this->categoryUrlRewriteGenerator = (new ObjectManager($this))->getObject(
-            'Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator',
+            \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator::class,
             [
                 'canonicalUrlRewriteGenerator' => $this->canonicalUrlRewriteGenerator,
                 'childrenUrlRewriteGenerator' => $this->childrenUrlRewriteGenerator,
@@ -90,7 +90,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$current]));
         $categoryForSpecificStore = $this->getMock(
-            'Magento\Catalog\Model\Category',
+            \Magento\Catalog\Model\Category::class,
             ['getUrlKey', 'getUrlPath'],
             [],
             '',

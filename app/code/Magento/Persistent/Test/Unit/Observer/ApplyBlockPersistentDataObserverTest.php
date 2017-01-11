@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -59,15 +59,21 @@ class ApplyBlockPersistentDataObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $eventMethods = ['getConfigFilePath', 'getBlock', '__wakeUp'];
-        $this->sessionMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
-        $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->persistentHelperMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
+        $this->sessionMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
+        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->persistentHelperMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
         $this->configMock =
-            $this->getMock('\Magento\Persistent\Model\Persistent\ConfigFactory', ['create'], [], '', false);
-        $this->observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $this->eventMock = $this->getMock('Magento\Framework\Event', $eventMethods, [], '', false);
-        $this->blockMock = $this->getMock('Magento\Framework\View\Element\AbstractBlock', [], [], '', false);
-        $this->persistentConfigMock = $this->getMock('\Magento\Persistent\Model\Persistent\Config', [], [], '', false);
+            $this->getMock(\Magento\Persistent\Model\Persistent\ConfigFactory::class, ['create'], [], '', false);
+        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $this->eventMock = $this->getMock(\Magento\Framework\Event::class, $eventMethods, [], '', false);
+        $this->blockMock = $this->getMock(\Magento\Framework\View\Element\AbstractBlock::class, [], [], '', false);
+        $this->persistentConfigMock = $this->getMock(
+            \Magento\Persistent\Model\Persistent\Config::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new \Magento\Persistent\Observer\ApplyBlockPersistentDataObserver(
                 $this->sessionMock,
                 $this->persistentHelperMock,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Cron;
@@ -69,33 +69,33 @@ class ReportCountsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\Config')
+        $this->configMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNewRelicEnabled'])
             ->getMock();
-        $this->productManagementMock = $this->getMockBuilder('Magento\Catalog\Api\ProductManagementInterface')
+        $this->productManagementMock = $this->getMockBuilder(\Magento\Catalog\Api\ProductManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configurableManagementMock = $this
-            ->getMockBuilder('Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface')
+            ->getMockBuilder(\Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->categoryManagementMock = $this->getMockBuilder('Magento\Catalog\Api\CategoryManagementInterface')
+        $this->categoryManagementMock = $this->getMockBuilder(\Magento\Catalog\Api\CategoryManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->countsFactoryMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\CountsFactory')
+        $this->countsFactoryMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\CountsFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->countsModelMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\Counts')
+        $this->countsModelMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Counts::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->countsCollectionFactoryMock = $this
-            ->getMockBuilder('Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory')
+            ->getMockBuilder(\Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $collectionClassName = 'Magento\NewRelicReporting\Model\ResourceModel\Counts\Collection';
+        $collectionClassName = \Magento\NewRelicReporting\Model\ResourceModel\Counts\Collection::class;
         $this->countsCollectionMock = $this->getMockBuilder($collectionClassName)
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'addOrder', 'setPageSize', 'getFirstItem'])

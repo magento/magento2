@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit;
@@ -28,29 +28,30 @@ class SearchResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->searchResultFactory = $this->getMockBuilder('Magento\Framework\Api\Search\SearchResultFactory')
+        $this->searchResultFactory = $this->getMockBuilder(\Magento\Framework\Api\Search\SearchResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->documentFactory = $this->getMockBuilder('Magento\Framework\Api\Search\DocumentFactory')
+        $this->documentFactory = $this->getMockBuilder(\Magento\Framework\Api\Search\DocumentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = (new ObjectManager($this))->getObject('Magento\Framework\Search\SearchResponseBuilder', [
-            'searchResultFactory' => $this->searchResultFactory,
-        ]);
+        $this->model = (new ObjectManager($this))->getObject(
+            \Magento\Framework\Search\SearchResponseBuilder::class,
+            ['searchResultFactory' => $this->searchResultFactory]
+        );
     }
 
     public function testBuild()
     {
         $aggregations = ['aggregations'];
 
-        $document = $this->getMockBuilder('Magento\Framework\Api\Search\DocumentInterface')
+        $document = $this->getMockBuilder(\Magento\Framework\Api\Search\DocumentInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         /** @var SearchResultInterface|\PHPUnit_Framework_MockObject_MockObject $searchResult */
-        $searchResult = $this->getMockBuilder('Magento\Framework\Api\Search\SearchResultInterface')
+        $searchResult = $this->getMockBuilder(\Magento\Framework\Api\Search\SearchResultInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $searchResult->expects($this->once())
@@ -65,7 +66,7 @@ class SearchResponseBuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($searchResult);
 
         /** @var QueryResponse|\PHPUnit_Framework_MockObject_MockObject $response */
-        $response = $this->getMockBuilder('Magento\Framework\Search\Response\QueryResponse')
+        $response = $this->getMockBuilder(\Magento\Framework\Search\Response\QueryResponse::class)
             ->setMethods(['getIterator', 'getAggregations'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -78,6 +79,6 @@ class SearchResponseBuilderTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->model->build($response);
 
-        $this->assertInstanceOf('Magento\Framework\Api\Search\SearchResultInterface', $result);
+        $this->assertInstanceOf(\Magento\Framework\Api\Search\SearchResultInterface::class, $result);
     }
 }

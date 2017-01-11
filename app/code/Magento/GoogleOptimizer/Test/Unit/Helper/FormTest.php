@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Helper;
@@ -30,30 +30,30 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_formMock = $this->getMock(
-            'Magento\Framework\Data\Form',
+            \Magento\Framework\Data\Form::class,
             ['setFieldNameSuffix', 'addFieldset'],
             [],
             '',
             false
         );
         $this->_fieldsetMock = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Fieldset',
+            \Magento\Framework\Data\Form\Element\Fieldset::class,
             [],
             [],
             '',
             false
         );
         $this->_experimentCodeMock = $this->getMock(
-            'Magento\GoogleOptimizer\Model\Code',
+            \Magento\GoogleOptimizer\Model\Code::class,
             ['getExperimentScript', 'getCodeId', '__wakeup'],
             [],
             '',
             false
         );
-        $context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
+        $context = $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false);
         $data = ['context' => $context];
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_helper = $objectManagerHelper->getObject('Magento\GoogleOptimizer\Helper\Form', $data);
+        $this->_helper = $objectManagerHelper->getObject(\Magento\GoogleOptimizer\Helper\Form::class, $data);
     }
 
     public function testAddFieldsWithExperimentCode()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\PageCache;
@@ -45,15 +45,15 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(
-            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+            \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
         )
             ->disableOriginalConstructor()->getMock();
         $this->version = $objectManager->getObject(
-            'Magento\Framework\App\PageCache\Version',
+            \Magento\Framework\App\PageCache\Version::class,
             [
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
@@ -77,7 +77,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock->expects($this->once())->method('isPost')->will($this->returnValue($isPost));
         if ($isPost) {
-            $publicCookieMetadataMock = $this->getMock('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata');
+            $publicCookieMetadataMock = $this->getMock(\Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class);
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setPath')
                 ->with('/')

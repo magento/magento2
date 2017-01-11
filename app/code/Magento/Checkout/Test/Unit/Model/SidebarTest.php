@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Model;
@@ -23,9 +23,9 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cartMock = $this->getMock('Magento\Checkout\Model\Cart', [], [], '', false);
-        $this->checkoutHelperMock = $this->getMock('Magento\Checkout\Helper\Data', [], [], '', false);
-        $this->resolverMock = $this->getMock('Magento\Framework\Locale\ResolverInterface');
+        $this->cartMock = $this->getMock(\Magento\Checkout\Model\Cart::class, [], [], '', false);
+        $this->checkoutHelperMock = $this->getMock(\Magento\Checkout\Helper\Data::class, [], [], '', false);
+        $this->resolverMock = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class);
 
         $this->sidebar = new Sidebar(
             $this->cartMock,
@@ -74,10 +74,10 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     {
         $itemId = 1;
 
-        $itemMock = $this->getMockBuilder('Magento\Quote\Api\Data\CartItemInterface')
+        $itemMock = $this->getMockBuilder(\Magento\Quote\Api\Data\CartItemInterface::class)
             ->getMock();
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
         $quoteMock->expects($this->once())
@@ -100,7 +100,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     {
         $itemId = 2;
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
         $quoteMock->expects($this->once())

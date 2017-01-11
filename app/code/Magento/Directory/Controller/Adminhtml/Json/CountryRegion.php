@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Directory\Controller\Adminhtml\Json;
@@ -20,7 +20,7 @@ class CountryRegion extends \Magento\Backend\App\Action
         $countryId = $this->getRequest()->getParam('parent');
         if (!empty($countryId)) {
             $arrRegions = $this->_objectManager->create(
-                'Magento\Directory\Model\ResourceModel\Region\Collection'
+                \Magento\Directory\Model\ResourceModel\Region\Collection::class
             )->addCountryFilter(
                 $countryId
             )->load()->toOptionArray();
@@ -32,7 +32,7 @@ class CountryRegion extends \Magento\Backend\App\Action
             }
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($arrRes)
+            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($arrRes)
         );
     }
 }

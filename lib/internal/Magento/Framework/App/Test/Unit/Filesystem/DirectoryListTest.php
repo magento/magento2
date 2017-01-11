@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/root/dir/foo', $object->getPath(DirectoryList::APP));
         $this->assertEquals('bar', $object->getUrlPath(DirectoryList::APP));
         $this->setExpectedException(
-            '\Magento\Framework\Exception\FileSystemException',
+            \Magento\Framework\Exception\FileSystemException::class,
             "Unknown directory type: 'unknown'"
         );
         $object->getPath('unknown');

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Test\Unit\Model\ResourceModel;
@@ -41,17 +41,17 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->select = $this->getMock('Magento\Framework\DB\Select', ['from', 'where'], [], '', false);
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->select = $this->getMock(\Magento\Framework\DB\Select::class, ['from', 'where'], [], '', false);
         $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'prepareSqlCondition', 'quoteIdentifier'],
             [],
             '',
             false
         );
         $this->resource = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -81,7 +81,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('test_main_table'));
 
         $this->collection = (new ObjectManager($this))->getObject(
-            'Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection',
+            \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection::class,
             [
                 'storeManager' => $this->storeManager,
                 'resource' => $this->resource,
@@ -125,7 +125,7 @@ class UrlRewriteCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddStoreFilterIfStoreIsInt($storeId, $withAdmin, $condition)
     {
-        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
         $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
 

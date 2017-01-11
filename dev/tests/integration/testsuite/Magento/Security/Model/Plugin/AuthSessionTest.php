@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model\Plugin;
@@ -48,14 +48,14 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->objectManager->get('Magento\Framework\Config\ScopeInterface')
+        $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $this->auth = $this->objectManager->create('Magento\Backend\Model\Auth');
-        $this->authSession = $this->objectManager->create('Magento\Backend\Model\Auth\Session');
-        $this->adminSessionInfo = $this->objectManager->create('Magento\Security\Model\AdminSessionInfo');
+        $this->auth = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
+        $this->authSession = $this->objectManager->create(\Magento\Backend\Model\Auth\Session::class);
+        $this->adminSessionInfo = $this->objectManager->create(\Magento\Security\Model\AdminSessionInfo::class);
         $this->auth->setAuthStorage($this->authSession);
-        $this->adminSessionsManager = $this->objectManager->create('Magento\Security\Model\AdminSessionsManager');
-        $this->dateTime = $this->objectManager->create('Magento\Framework\Stdlib\DateTime');
+        $this->adminSessionsManager = $this->objectManager->create(\Magento\Security\Model\AdminSessionsManager::class);
+        $this->dateTime = $this->objectManager->create(\Magento\Framework\Stdlib\DateTime::class);
     }
 
     /**

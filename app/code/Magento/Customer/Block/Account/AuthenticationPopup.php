@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Account;
@@ -43,10 +43,10 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     public function getConfig()
     {
         return [
-            'autocomplete' => $this->isAutocompleteEnabled(),
-            'customerRegisterUrl' => $this->getCustomerRegisterUrlUrl(),
-            'customerForgotPasswordUrl' => $this->getCustomerForgotPasswordUrl(),
-            'baseUrl' => $this->getBaseUrl()
+            'autocomplete' => $this->escapeHtml($this->isAutocompleteEnabled()),
+            'customerRegisterUrl' => $this->escapeUrl($this->getCustomerRegisterUrlUrl()),
+            'customerForgotPasswordUrl' => $this->escapeUrl($this->getCustomerForgotPasswordUrl()),
+            'baseUrl' => $this->escapeUrl($this->getBaseUrl())
         ];
     }
 

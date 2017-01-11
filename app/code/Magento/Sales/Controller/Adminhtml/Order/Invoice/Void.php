@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
@@ -23,12 +23,12 @@ class Void extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\V
         }
         try {
             /** @var \Magento\Sales\Api\InvoiceManagementInterface $invoiceManagement */
-            $invoiceManagement = $this->_objectManager->get('Magento\Sales\Api\InvoiceManagementInterface');
+            $invoiceManagement = $this->_objectManager->get(\Magento\Sales\Api\InvoiceManagementInterface::class);
             $invoiceManagement->setVoid($invoice->getEntityId());
 
             $invoice->getOrder()->setIsInProcess(true);
             $this->_objectManager->create(
-                'Magento\Framework\DB\Transaction'
+                \Magento\Framework\DB\Transaction::class
             )->addObject(
                 $invoice
             )->addObject(

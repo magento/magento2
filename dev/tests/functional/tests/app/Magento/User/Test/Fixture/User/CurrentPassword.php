@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,7 +38,7 @@ class CurrentPassword implements FixtureInterface
         $this->params = $params;
         /** @var \Magento\Mtf\Config\DataInterface $systemConfig */
         if ($data == '%current_password%') {
-            $systemConfig = ObjectManager::getInstance()->create('Magento\Mtf\Config\DataInterface');
+            $systemConfig = ObjectManager::getInstance()->create(\Magento\Mtf\Config\DataInterface::class);
             $data = $systemConfig->get('application/0/backendPassword/0/value');
         }
         $this->data = $data;

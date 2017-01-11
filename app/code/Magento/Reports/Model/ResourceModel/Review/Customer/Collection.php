@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -83,7 +83,7 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
         $this->getSelect()->reset(
             \Magento\Framework\DB\Select::COLUMNS
         )->joinInner(
-            ['customer' => $connection->getTableName('customer_entity')],
+            ['customer' => $this->getTable('customer_entity')],
             'customer.entity_id = detail.customer_id',
             []
         )->columns(

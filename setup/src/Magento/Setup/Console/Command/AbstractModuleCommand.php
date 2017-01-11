@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -78,11 +78,11 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
     protected function cleanup(InputInterface $input, OutputInterface $output)
     {
         /** @var \Magento\Framework\App\Cache $cache */
-        $cache = $this->objectManager->get('Magento\Framework\App\Cache');
+        $cache = $this->objectManager->get(\Magento\Framework\App\Cache::class);
         $cache->clean();
         $output->writeln('<info>Cache cleared successfully.</info>');
         /** @var \Magento\Framework\App\State\CleanupFiles $cleanupFiles */
-        $cleanupFiles = $this->objectManager->get('Magento\Framework\App\State\CleanupFiles');
+        $cleanupFiles = $this->objectManager->get(\Magento\Framework\App\State\CleanupFiles::class);
         $cleanupFiles->clearCodeGeneratedClasses();
         $output->writeln(
             "<info>Generated classes cleared successfully. Please run the 'setup:di:compile' command to "

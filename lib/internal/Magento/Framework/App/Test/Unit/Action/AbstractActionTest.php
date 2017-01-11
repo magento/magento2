@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,15 +28,15 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()->getMock();
-        $this->response = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false);
+        $this->response = $this->getMock(\Magento\Framework\App\ResponseInterface::class, [], [], '', false);
 
-        $this->redirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+        $this->redirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->setMethods(['setRefererOrBaseUrl'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->redirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+        $this->redirectFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\RedirectFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -44,7 +44,7 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->redirect);
 
-        $this->context = $this->getMockBuilder('Magento\Framework\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())
@@ -57,7 +57,10 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
             ->method('getResponse')
             ->willReturn($this->response);
 
-        $this->action = $this->getMockForAbstractClass('Magento\Framework\App\Action\AbstractAction', [$this->context]);
+        $this->action = $this->getMockForAbstractClass(
+            \Magento\Framework\App\Action\AbstractAction::class,
+            [$this->context]
+        );
     }
 
     public function testGetRequest()

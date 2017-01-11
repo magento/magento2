@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -68,7 +68,7 @@ class GuestCartItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getMaskedId')
             ->willReturn($this->maskedCartId);
 
-        $this->quoteItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $this->quoteItemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
         $this->quoteItemMock->expects($this->any())
             ->method('getItemId')
             ->willReturn($this->maskedCartId);
@@ -79,10 +79,10 @@ class GuestCartItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setQuoteId')
             ->with($this->cartId);
 
-        $this->cartItemRepositoryMock = $this->getMock('\Magento\Quote\Api\CartItemRepositoryInterface');
+        $this->cartItemRepositoryMock = $this->getMock(\Magento\Quote\Api\CartItemRepositoryInterface::class);
         $this->guestCartItemRepository =
             $objectManager->getObject(
-                'Magento\Quote\Model\GuestCart\GuestCartItemRepository',
+                \Magento\Quote\Model\GuestCart\GuestCartItemRepository::class,
                 [
                     'repository' => $this->cartItemRepositoryMock,
                     'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
@@ -107,7 +107,7 @@ class GuestCartItemRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetList()
     {
-        $itemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $itemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
         $itemMock->expects($this->any())
             ->method('setQuoteId')
             ->with($this->maskedCartId);

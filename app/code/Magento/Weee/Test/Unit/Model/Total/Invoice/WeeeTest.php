@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Model\Total\Invoice;
@@ -34,7 +34,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->weeeData = $this->getMockBuilder('\Magento\Weee\Helper\Data')
+        $this->weeeData = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
             ->setMethods(
                 [
                     'getRowWeeeTaxInclTax',
@@ -53,14 +53,14 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Sales\Model\Order\Invoice\Total\Tax $model */
         $this->model = $this->objectManager->getObject(
-            'Magento\Weee\Model\Total\Invoice\Weee',
+            \Magento\Weee\Model\Total\Invoice\Weee::class,
             [
                 'weeeData' => $this->weeeData,
             ]
         );
 
         $this->order = $this->getMock(
-            '\Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             [
                 '__wakeup'
             ],
@@ -70,7 +70,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->invoice = $this->getMock(
-            '\Magento\Sales\Model\Order\Invoice',
+            \Magento\Sales\Model\Order\Invoice::class,
             [
                 'getAllItems',
                 'getOrder',
@@ -683,7 +683,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
         $orderItem = $this->getMock(
-            '\Magento\Sales\Model\Order\Item',
+            \Magento\Sales\Model\Order\Item::class,
             [
                 'isDummy',
                 '__wakeup'
@@ -724,7 +724,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         }
         /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject $invoiceItem */
         $invoiceItem = $this->getMock(
-            '\Magento\Sales\Model\Order\Invoice\Item',
+            \Magento\Sales\Model\Order\Invoice\Item::class,
             [
                 'getOrderItem',
                 'isLast',

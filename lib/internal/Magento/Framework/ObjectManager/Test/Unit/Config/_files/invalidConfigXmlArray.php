@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -155,5 +155,21 @@ return [
             "Element 'argument': Duplicate key-sequence ['same_param_name'] in key identity-constraint"
                 . " 'argumentName'.\nLine: 6\n"
         ],
-    ]
+    ],
+    'sorted_object_list_with_invalid_sortOrder_attribute_value' => [
+        '<?xml version="1.0"?>
+        <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <type name="Some_Name">
+                <arguments>
+                    <argument name="sorted_object_list" xsi:type="array">
+                        <item name="someObject" xsi:type="object" sortOrder="false">Some_Class_Name</item>
+                    </argument>
+                </arguments>
+            </type>
+        </config>',
+        [
+            "Element 'item', attribute 'sortOrder': 'false' is not a valid value of the atomic type 'xs:integer'." .
+            "\nLine: 6\n"
+        ],
+    ],
 ];

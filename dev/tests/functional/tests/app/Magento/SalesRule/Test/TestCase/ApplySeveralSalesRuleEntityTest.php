@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,14 +21,13 @@ use Magento\Mtf\Fixture\FixtureFactory;
  * 2. Apply all created rules.
  * 3. Perform all assertions.
  *
- * @group Sales_Rules_(CS)
+ * @group Sales_Rules
  * @ZephyrId MAGETWO-45883
  */
 class ApplySeveralSalesRuleEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -82,6 +81,6 @@ class ApplySeveralSalesRuleEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create('\Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep')->run();
+        $this->objectManager->create(\Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep::class)->run();
     }
 }

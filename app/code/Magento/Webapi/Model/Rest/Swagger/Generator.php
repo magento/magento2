@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Rest\Swagger;
@@ -26,6 +26,8 @@ use \Magento\Framework\Api\SimpleDataObjectConverter;
  *
  * Generate REST API description in a format of JSON document,
  * compliant with {@link https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md Swagger specification}
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Generator extends AbstractSchemaGenerator
 {
@@ -881,13 +883,13 @@ class Generator extends AbstractSchemaGenerator
     {
         $httpCode = '500';
         $description = 'Internal Server error';
-        if (is_subclass_of($exceptionClass, '\Magento\Framework\Exception\LocalizedException')) {
+        if (is_subclass_of($exceptionClass, \Magento\Framework\Exception\LocalizedException::class)) {
             // Map HTTP codes for LocalizedExceptions according to exception type
-            if (is_subclass_of($exceptionClass, '\Magento\Framework\Exception\NoSuchEntityException')) {
+            if (is_subclass_of($exceptionClass, \Magento\Framework\Exception\NoSuchEntityException::class)) {
                 $httpCode = WebapiException::HTTP_NOT_FOUND;
                 $description = '404 Not Found';
-            } elseif (is_subclass_of($exceptionClass, '\Magento\Framework\Exception\AuthorizationException')
-                || is_subclass_of($exceptionClass, '\Magento\Framework\Exception\AuthenticationException')
+            } elseif (is_subclass_of($exceptionClass, \Magento\Framework\Exception\AuthorizationException::class)
+                || is_subclass_of($exceptionClass, \Magento\Framework\Exception\AuthenticationException::class)
             ) {
                 $httpCode = WebapiException::HTTP_UNAUTHORIZED;
                 $description = self::UNAUTHORIZED_DESCRIPTION;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,7 +40,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->collection->offsetExists('node1'), true);
         $this->collection->offsetSet('node1', 'Hello');
         $this->assertSame($this->collection->offsetExists('node1'), true);
-        $this->assertSame($this->collection->offsetGet('node1'), 'Hello');
+        $this->assertSame($this->collection->offsetget('node1'), 'Hello');
         $this->collection->offsetUnset('node1');
         $this->assertSame($this->collection->offsetExists('node1'), false);
     }

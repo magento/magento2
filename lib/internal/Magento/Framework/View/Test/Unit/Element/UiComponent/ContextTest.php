@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,32 +21,32 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $pageLayout = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')->getMock();
-        $request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
+        $pageLayout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)->getMock();
+        $request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $buttonProviderFactory =
-            $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Control\ButtonProviderFactory')
+            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Control\ButtonProviderFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $actionPoolFactory =
-            $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory')
+            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $contentTypeFactory =
-            $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory')
+            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')->getMock();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')->getMock();
+        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)->getMock();
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)->getMock();
         $uiComponentFactory =
-            $this->getMockBuilder('Magento\Framework\View\Element\UiComponentFactory')
+            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $objectManagerHelper->getObject(
-            'Magento\Framework\View\Element\UiComponent\Context',
+            \Magento\Framework\View\Element\UiComponent\Context::class,
             [
                 'pageLayout'            => $pageLayout,
                 'request'               => $request,

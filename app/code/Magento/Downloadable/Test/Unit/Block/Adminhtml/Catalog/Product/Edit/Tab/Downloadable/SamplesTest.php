@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
@@ -51,10 +51,10 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->urlBuilder = $this->getMock('Magento\Backend\Model\Url', ['getUrl'], [], '', false);
-        $urlFactory = $this->getMock('Magento\Backend\Model\UrlFactory', [], [], '', false);
+        $this->urlBuilder = $this->getMock(\Magento\Backend\Model\Url::class, ['getUrl'], [], '', false);
+        $urlFactory = $this->getMock(\Magento\Backend\Model\UrlFactory::class, [], [], '', false);
         $this->fileHelper = $this->getMock(
-            '\Magento\Downloadable\Helper\File',
+            \Magento\Downloadable\Helper\File::class,
             [
                 'getFilePath',
                 'ensureFileInFilesystem',
@@ -65,7 +65,7 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->productModel = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [
                 '__wakeup',
                 'getTypeId',
@@ -77,7 +77,7 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->downloadableProductModel = $this->getMock(
-            '\Magento\Downloadable\Model\Product\Type',
+            \Magento\Downloadable\Model\Product\Type::class,
             [
                 '__wakeup',
                 'getSamples'
@@ -87,7 +87,7 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->downloadableSampleModel = $this->getMock(
-            '\Magento\Downloadable\Model\Sample',
+            \Magento\Downloadable\Model\Sample::class,
             [
                 '__wakeup',
                 'getId',
@@ -101,7 +101,7 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->coreRegistry = $this->getMock(
-            '\Magento\Framework\Registry',
+            \Magento\Framework\Registry::class,
             [
                 '__wakeup',
                 'registry'
@@ -110,9 +110,9 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->escaper = $this->getMock('\Magento\Framework\Escaper', ['escapeHtml'], [], '', false);
+        $this->escaper = $this->getMock(\Magento\Framework\Escaper::class, ['escapeHtml'], [], '', false);
         $this->block = $objectManagerHelper->getObject(
-            'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples',
+            \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples::class,
             [
                 'urlBuilder' => $this->urlBuilder,
                 'urlFactory' => $urlFactory,
@@ -127,7 +127,7 @@ class SamplesTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfig()
     {
-        $this->assertInstanceOf('Magento\Framework\DataObject', $this->block->getConfig());
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $this->block->getConfig());
     }
 
     public function testGetSampleData()

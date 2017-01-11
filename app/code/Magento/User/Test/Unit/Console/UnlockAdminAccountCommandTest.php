@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,7 +38,7 @@ class UnlockAdminAccountCommandTest extends \PHPUnit_Framework_TestCase
     public function testConfigure()
     {
         $this->command = $this->objectManager
-            ->getObject('Magento\User\Console\UnlockAdminAccountCommand');
+            ->getObject(\Magento\User\Console\UnlockAdminAccountCommand::class);
 
         $this->assertEquals(UnlockAdminAccountCommand::COMMAND_ADMIN_ACCOUNT_UNLOCK, $this->command->getName());
         $this->assertEquals(UnlockAdminAccountCommand::COMMAND_DESCRIPTION, $this->command->getDescription());

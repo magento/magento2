@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout>
+    <container name="container1" label="Container 1">
+        <block class="Magento\Framework\View\Element\Text" name="no_name2"/>
+    </container>
+    <referenceContainer name="container1" remove="true"/>
+    <referenceBlock name="child_block1" remove="true"/>
+    <block class="Magento\Framework\View\Element\Text" name="block_container" as="block.container">
+        <block class="Magento\Framework\View\Element\Text" name="child_block1"/>
+        <block class="Magento\Framework\View\Element\Text" name="child_block2"/>
+    </block>
+    <referenceContainer name="not_exist" remove="false"/>
+    <referenceContainer name="container1" remove="false"/>
+    <referenceBlock name="child_block1" remove="false"/>
+</layout>

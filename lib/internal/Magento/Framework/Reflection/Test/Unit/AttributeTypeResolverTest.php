@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,8 +30,8 @@ class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->typeProcessor = $this->getMock('Magento\Framework\Reflection\TypeProcessor', [], [], '', false);
-        $this->configMock = $this->getMock('Magento\Framework\Api\ExtensionAttribute\Config', [], [], '', false);
+        $this->typeProcessor = $this->getMock(\Magento\Framework\Reflection\TypeProcessor::class, [], [], '', false);
+        $this->configMock = $this->getMock(\Magento\Framework\Api\ExtensionAttribute\Config::class, [], [], '', false);
         $this->model = new AttributeTypeResolver($this->typeProcessor, $this->configMock);
     }
 
@@ -65,18 +65,21 @@ class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
         $config = [
             'Some\Class' => [
                 'some_code' => [
-                    'type' => '\Magento\Framework\DataObject',
+                    'type' => \Magento\Framework\DataObject::class,
                 ],
             ]
         ];
 
         $this->typeProcessor->expects($this->once())
             ->method('getArrayItemType')
-            ->with('\Magento\Framework\DataObject')
-            ->willReturn('\Magento\Framework\DataObject');
+            ->with(\Magento\Framework\DataObject::class)
+            ->willReturn(\Magento\Framework\DataObject::class);
 
         $this->configMock->expects($this->once())->method('get')->willReturn($config);
-        $this->assertEquals('\Magento\Framework\DataObject', $this->model->resolveObjectType($code, $value, $context));
+        $this->assertEquals(
+            \Magento\Framework\DataObject::class,
+            $this->model->resolveObjectType($code, $value, $context)
+        );
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
@@ -25,8 +25,8 @@ class FrontTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $layout \Magento\Framework\View\Layout */
-        $layout = $this->objectManager->create('Magento\Framework\View\LayoutInterface');
-        $this->block = $layout->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front');
+        $layout = $this->objectManager->create(\Magento\Framework\View\LayoutInterface::class);
+        $this->block = $layout->createBlock(\Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front::class);
     }
 
     /**
@@ -36,11 +36,11 @@ class FrontTest extends \PHPUnit_Framework_TestCase
     public function testToHtml($attributeCode)
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $model */
-        $model = $this->objectManager->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
+        $model = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $model->loadByCode(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
 
         /** @var \Magento\Framework\Registry $coreRegistry */
-        $coreRegistry = $this->objectManager->get('\Magento\Framework\Registry');
+        $coreRegistry = $this->objectManager->get(\Magento\Framework\Registry::class);
         $coreRegistry->unregister('entity_attribute');
         $coreRegistry->register('entity_attribute', $model);
 

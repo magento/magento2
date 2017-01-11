@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -418,8 +418,10 @@ class Store extends AbstractExtensibleModel implements
     {
         parent::__wakeup();
         $this->_coreFileStorageDatabase = ObjectManager::getInstance()
-            ->get('Magento\MediaStorage\Helper\File\Storage\Database');
-        $this->_config = ObjectManager::getInstance()->get('Magento\Framework\App\Config\ReinitableConfigInterface');
+            ->get(\Magento\MediaStorage\Helper\File\Storage\Database::class);
+        $this->_config = ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Config\ReinitableConfigInterface::class
+        );
     }
 
     /**
@@ -429,7 +431,7 @@ class Store extends AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\ResourceModel\Store');
+        $this->_init(\Magento\Store\Model\ResourceModel\Store::class);
     }
 
     /**
@@ -1035,6 +1037,18 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Reinit Stores on after save
+     *
+     * @deprecated
+     * @return $this
+     */
+    public function afterSave()
+    {
+        $this->_storeManager->reinitStores();
+        return parent::afterSave();
+    }
+
+    /**
      * @inheritdoc
      */
     public function setWebsiteId($websiteId)
@@ -1270,7 +1284,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        return [self::CACHE_TAG];
     }
 
     /**
@@ -1325,7 +1339,7 @@ class Store extends AbstractExtensibleModel implements
     {
         if ($this->urlModifier === null) {
             $this->urlModifier = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Framework\Url\ModifierInterface'
+                \Magento\Framework\Url\ModifierInterface::class
             );
         }
 

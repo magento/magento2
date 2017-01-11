@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,7 @@ class SelectVersionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->systemPackage = $this->getMock('Magento\Setup\Model\SystemPackage', [], [], '', false);
+        $this->systemPackage = $this->getMock(\Magento\Setup\Model\SystemPackage::class, [], [], '', false);
         $this->controller = new SelectVersion(
             $this->systemPackage
         );
@@ -34,7 +34,7 @@ class SelectVersionTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 
@@ -50,7 +50,7 @@ class SelectVersionTest extends \PHPUnit_Framework_TestCase
                 ]
             ]);
         $jsonModel = $this->controller->systemPackageAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
@@ -62,7 +62,7 @@ class SelectVersionTest extends \PHPUnit_Framework_TestCase
             ->method('getPackageVersions')
             ->will($this->throwException(new \Exception("Test error message")));
         $jsonModel = $this->controller->systemPackageAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
@@ -80,7 +80,7 @@ class SelectVersionTest extends \PHPUnit_Framework_TestCase
                 ]
             ]);
         $jsonModel = $this->controller->installedSystemPackageAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);

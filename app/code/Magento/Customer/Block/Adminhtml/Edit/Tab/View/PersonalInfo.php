@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
@@ -172,7 +172,9 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     {
 
         if (!($this->customerRegistry instanceof \Magento\Customer\Model\CustomerRegistry)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Customer\Model\CustomerRegistry');
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Customer\Model\CustomerRegistry::class
+            );
         } else {
             return $this->customerRegistry;
         }
@@ -190,7 +192,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             $this->dataObjectHelper->populateWithArray(
                 $this->customer,
                 $this->_backendSession->getCustomerData()['account'],
-                '\Magento\Customer\Api\Data\CustomerInterface'
+                \Magento\Customer\Api\Data\CustomerInterface::class
             );
         }
         return $this->customer;

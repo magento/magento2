@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Type;
@@ -38,20 +38,20 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->model = $this->objectManagerHelper->getObject('Magento\Catalog\Model\Product\Type\Simple');
+        $this->model = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\Type\Simple::class);
 
-        $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getHasOptions', '__wakeup', '__sleep', 'getResource'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productResource = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product')
+        $this->productResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
             ->setMethods(['getSortedAttributes', 'loadAllAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->product->expects($this->any())->method('getResource')->will($this->returnValue($this->productResource));
 
-        $this->attribute = $this->getMockBuilder('Magento\Catalog\Model\Entity\Attribute')
+        $this->attribute = $this->getMockBuilder(\Magento\Catalog\Model\Entity\Attribute::class)
             ->setMethods(['getGroupSortPath', 'getSortPath', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();

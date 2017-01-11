@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Gallery;
@@ -45,7 +45,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->attributeRepository = $this->getMock(
-            'Magento\Catalog\Model\Product\Attribute\Repository',
+            \Magento\Catalog\Model\Product\Attribute\Repository::class,
             ['get'],
             [],
             '',
@@ -53,7 +53,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $fileStorageDb = $this->getMock(
-            'Magento\MediaStorage\Helper\File\Storage\Database',
+            \Magento\MediaStorage\Helper\File\Storage\Database::class,
             [],
             [],
             '',
@@ -61,7 +61,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->mediaConfig = $this->getMock(
-            'Magento\Catalog\Model\Product\Media\Config',
+            \Magento\Catalog\Model\Product\Media\Config::class,
             [],
             [],
             '',
@@ -69,7 +69,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->mediaDirectory = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Write',
+            \Magento\Framework\Filesystem\Directory\Write::class,
             [],
             [],
             '',
@@ -77,7 +77,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $filesystem = $this->getMock(
-            'Magento\Framework\Filesystem',
+            \Magento\Framework\Filesystem::class,
             [],
             [],
             '',
@@ -88,7 +88,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->mediaDirectory);
 
         $resourceModel = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Gallery',
+            \Magento\Catalog\Model\ResourceModel\Product\Gallery::class,
             ['getMainTable'],
             [],
             '',
@@ -101,7 +101,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->dataObject = $this->getMock(
-            'Magento\Framework\DataObject',
+            \Magento\Framework\DataObject::class,
             ['getIsDuplicate', 'isLockedAttribute', 'getMediaAttributes'],
             [],
             '',
@@ -109,7 +109,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $this->objectHelper->getObject(
-            'Magento\Catalog\Model\Product\Gallery\Processor',
+            \Magento\Catalog\Model\Product\Gallery\Processor::class,
             [
                 'attributeRepository' => $this->attributeRepository,
                 'fileStorageDb' => $fileStorageDb,
@@ -126,7 +126,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $attributeId = 345345;
 
         $attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute',
+            \Magento\Eav\Model\Entity\Attribute::class,
             ['getBackendTable', 'isStatic', 'getAttributeId', 'getName', '__wakeup'],
             [],
             '',
@@ -164,14 +164,14 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $attributeCode = 'attr_code';
         $attribute = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute',
+            \Magento\Eav\Model\Entity\Attribute::class,
             ['getAttributeCode', 'getIsRequired', 'isValueEmpty', 'getIsUnique', 'getEntityType', '__wakeup'],
             [],
             '',
             false
         );
         $attributeEntity = $this->getMock(
-            '\Magento\Framework\Model\ResourceModel\AbstractResourceAbstractEntity',
+            \Magento\Framework\Model\ResourceModel\AbstractResourceAbstractEntity::class,
             ['checkAttributeUniqueValue']
         );
         $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
@@ -195,6 +195,58 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         return [
             [true],
             [false]
+        ];
+    }
+
+    /**
+     * @param int $setDataExpectsCalls
+     * @param string|null $setDataArgument
+     * @param array|string $mediaAttribute
+     * @dataProvider clearMediaAttributeDataProvider
+     */
+    public function testClearMediaAttribute($setDataExpectsCalls, $setDataArgument, $mediaAttribute)
+    {
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->exactly($setDataExpectsCalls))
+            ->method('setData')
+            ->with($setDataArgument, 'no_selection');
+
+        $this->mediaConfig->expects($this->once())
+            ->method('getMediaAttributeCodes')
+            ->willReturn(['image', 'small_image']);
+
+        $this->assertSame($this->model, $this->model->clearMediaAttribute($productMock, $mediaAttribute));
+    }
+
+    /**
+     * @return array
+     */
+    public function clearMediaAttributeDataProvider()
+    {
+        return [
+            [
+                'setDataExpectsCalls' => 1,
+                'setDataArgument' => 'image',
+                'mediaAttribute' => 'image',
+            ],
+            [
+                'setDataExpectsCalls' => 1,
+                'setDataArgument' => 'image',
+                'mediaAttribute' => ['image'],
+            ],
+            [
+                'setDataExpectsCalls' => 0,
+                'setDataArgument' => null,
+                'mediaAttribute' => 'some_image',
+            ],
+            [
+                'setDataExpectsCalls' => 0,
+                'setDataArgument' => null,
+                'mediaAttribute' => ['some_image'],
+            ],
         ];
     }
 }

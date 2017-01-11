@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Helper;
@@ -17,10 +17,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\TestFramework\ObjectManager  $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\App\Request\Http $request */
-        $request = $objectManager->get('Magento\Framework\App\RequestInterface');
+        $request = $objectManager->get(\Magento\Framework\App\RequestInterface::class);
         $request->setParam('q', 'five <words> here <being> tested');
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Helper\Data'
+            \Magento\CatalogSearch\Helper\Data::class
         );
     }
 
@@ -39,6 +39,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckNotesResult()
     {
-        $this->assertInstanceOf('Magento\CatalogSearch\Helper\Data', $this->_helper->checkNotes());
+        $this->assertInstanceOf(\Magento\CatalogSearch\Helper\Data::class, $this->_helper->checkNotes());
     }
 }

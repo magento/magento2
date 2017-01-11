@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,22 +24,25 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->localeCurrencyMock = $this->getMock('\Magento\Framework\Locale\CurrencyInterface');
+        $this->localeCurrencyMock = $this->getMock(\Magento\Framework\Locale\CurrencyInterface::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->currency = $objectManager->getObject('Magento\Directory\Model\Currency', [
-            'localeCurrency' => $this->localeCurrencyMock,
-            'data' => [
-                'currency_code' => $this->currencyCode,
+        $this->currency = $objectManager->getObject(
+            \Magento\Directory\Model\Currency::class,
+            [
+                'localeCurrency' => $this->localeCurrencyMock,
+                'data' => [
+                    'currency_code' => $this->currencyCode,
+                ]
             ]
-        ]);
+        );
     }
 
     public function testGetCurrencySymbol()
     {
         $currencySymbol = '$';
 
-        $currencyMock = $this->getMockBuilder('\Magento\Framework\Currency')
+        $currencyMock = $this->getMockBuilder(\Magento\Framework\Currency::class)
             ->disableOriginalConstructor()
             ->getMock();
         $currencyMock->expects($this->once())
@@ -61,7 +64,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOutputFormat($withCurrency, $noCurrency, $expected)
     {
-        $currencyMock = $this->getMockBuilder('\Magento\Framework\Currency')
+        $currencyMock = $this->getMockBuilder(\Magento\Framework\Currency::class)
             ->disableOriginalConstructor()
             ->getMock();
         $currencyMock->expects($this->at(0))

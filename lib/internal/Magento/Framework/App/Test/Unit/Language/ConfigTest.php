@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,15 +25,21 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $this->urnResolverMock = $this->getMock(\Magento\Framework\Config\Dom\UrnResolver::class, [], [], '', false);
         $this->urnResolverMock->expects($this->any())
             ->method('getRealPath')
             ->with('urn:magento:framework:App/Language/package.xsd')
             ->willReturn($this->urnResolver->getRealPath('urn:magento:framework:App/Language/package.xsd'));
-        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock = $this->getMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
-        $domFactoryMock = $this->getMock('Magento\Framework\Config\DomFactory', [], [], '', false);
+        $domFactoryMock = $this->getMock(\Magento\Framework\Config\DomFactory::class, [], [], '', false);
         $domFactoryMock->expects($this->once())
             ->method('createDom')
             ->willReturnCallback(

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model;
@@ -25,9 +25,9 @@ class OptionTypeListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->typeMock = $this->getMock('\Magento\Bundle\Model\Source\Option\Type', [], [], '', false);
+        $this->typeMock = $this->getMock(\Magento\Bundle\Model\Source\Option\Type::class, [], [], '', false);
         $this->typeFactoryMock = $this->getMock(
-            '\Magento\Bundle\Api\Data\OptionTypeInterfaceFactory',
+            \Magento\Bundle\Api\Data\OptionTypeInterfaceFactory::class,
             ['create'],
             [],
             '',
@@ -45,7 +45,7 @@ class OptionTypeListTest extends \PHPUnit_Framework_TestCase
             ->method('toOptionArray')
             ->willReturn([['value' => 'value', 'label' => 'label']]);
 
-        $typeMock = $this->getMock('\Magento\Bundle\Api\Data\OptionTypeInterface');
+        $typeMock = $this->getMock(\Magento\Bundle\Api\Data\OptionTypeInterface::class);
         $typeMock->expects($this->once())->method('setCode')->with('value')->willReturnSelf();
         $typeMock->expects($this->once())->method('setLabel')->with('label')->willReturnSelf();
         $this->typeFactoryMock->expects($this->once())->method('create')->willReturn($typeMock);

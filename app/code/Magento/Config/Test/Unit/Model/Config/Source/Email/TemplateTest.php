@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,10 +32,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false, false);
-        $this->_emailConfig = $this->getMock('Magento\Email\Model\Template\Config', [], [], '', false);
+        $this->_coreRegistry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false, false);
+        $this->_emailConfig = $this->getMock(\Magento\Email\Model\Template\Config::class, [], [], '', false);
         $this->_templatesFactory = $this->getMock(
-            'Magento\Email\Model\ResourceModel\Template\CollectionFactory',
+            \Magento\Email\Model\ResourceModel\Template\CollectionFactory::class,
             [],
             [],
             '',
@@ -50,7 +50,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testToOptionArray()
     {
-        $collection = $this->getMock('Magento\Email\Model\ResourceModel\Template\Collection', [], [], '', false);
+        $collection = $this->getMock(\Magento\Email\Model\ResourceModel\Template\Collection::class, [], [], '', false);
         $collection->expects(
             $this->once()
         )->method(

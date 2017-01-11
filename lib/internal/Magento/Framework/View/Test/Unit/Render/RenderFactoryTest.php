@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,11 +21,11 @@ class RenderFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->renderFactory = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\Render\RenderFactory',
+            \Magento\Framework\View\Render\RenderFactory::class,
             [
                 'objectManager' => $this->objectManagerMock
             ]
@@ -34,12 +34,12 @@ class RenderFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $instance = 'Magento\Framework\View\RenderInterface';
+        $instance = \Magento\Framework\View\RenderInterface::class;
         $renderMock = $this->getMock($instance, [], [], '', false);
         $data = 'RenderInterface';
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('Magento\Framework\View\Render\RenderInterface'))
+            ->with($this->equalTo(\Magento\Framework\View\Render\RenderInterface::class))
             ->will($this->returnValue($renderMock));
         $this->assertInstanceOf($instance, $this->renderFactory->get($data));
     }
@@ -52,7 +52,7 @@ class RenderFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('Magento\Framework\View\Render\RenderInterface'))
+            ->with($this->equalTo(\Magento\Framework\View\Render\RenderInterface::class))
             ->will($this->returnValue(new \stdClass()));
         $this->renderFactory->get('RenderInterface');
     }

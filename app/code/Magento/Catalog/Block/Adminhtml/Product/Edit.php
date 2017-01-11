@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -95,7 +95,7 @@ class Edit extends \Magento\Backend\Block\Widget
             if ($this->getToolbar()) {
                 $this->getToolbar()->addChild(
                     'back_button',
-                    'Magento\Backend\Block\Widget\Button',
+                    \Magento\Backend\Block\Widget\Button::class,
                     [
                         'label' => __('Back'),
                         'title' => __('Back'),
@@ -110,7 +110,7 @@ class Edit extends \Magento\Backend\Block\Widget
         } else {
             $this->addChild(
                 'back_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 ['label' => __('Close Window'), 'onclick' => 'window.close()', 'class' => 'cancel']
             );
         }
@@ -118,7 +118,7 @@ class Edit extends \Magento\Backend\Block\Widget
         if (!$this->getProduct()->isReadonly()) {
             $this->addChild(
                 'reset_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Reset'),
                     'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', ['_current' => true]) . '\')'
@@ -129,11 +129,11 @@ class Edit extends \Magento\Backend\Block\Widget
         if (!$this->getProduct()->isReadonly() && $this->getToolbar()) {
             $this->getToolbar()->addChild(
                 'save-split-button',
-                'Magento\Backend\Block\Widget\Button\SplitButton',
+                \Magento\Backend\Block\Widget\Button\SplitButton::class,
                 [
                     'id' => 'save-split-button',
                     'label' => __('Save'),
-                    'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
+                    'class_name' => \Magento\Backend\Block\Widget\Button\SplitButton::class,
                     'button_class' => 'widget-button-save',
                     'options' => $this->_getSaveSplitButtonOptions()
                 ]

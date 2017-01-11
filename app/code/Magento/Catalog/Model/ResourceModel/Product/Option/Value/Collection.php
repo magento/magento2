@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Option\Value;
@@ -20,8 +20,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\Catalog\Model\Product\Option\Value',
-            'Magento\Catalog\Model\ResourceModel\Product\Option\Value'
+            \Magento\Catalog\Model\Product\Option\Value::class,
+            \Magento\Catalog\Model\ResourceModel\Product\Option\Value::class
         );
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,12 +29,12 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->userContext = $this->getMockBuilder('Magento\Authorization\Model\UserContextInterface')
+        $this->userContext = $this->getMockBuilder(\Magento\Authorization\Model\UserContextInterface::class)
             ->getMockForAbstractClass();
-        $this->cartManagement = $this->getMockBuilder('Magento\Quote\Api\CartManagementInterface')
+        $this->cartManagement = $this->getMockBuilder(\Magento\Quote\Api\CartManagementInterface::class)
             ->getMockForAbstractClass();
         $this->model = (new ObjectManager($this))->getObject(
-            'Magento\Quote\Model\Webapi\ParamOverriderCartId',
+            \Magento\Quote\Model\Webapi\ParamOverriderCartId::class,
             [
                 'userContext' => $this->userContext,
                 'cartManagement' => $this->cartManagement,
@@ -54,7 +54,7 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
             ->method('getUserId')
             ->will($this->returnValue($customerId));
 
-        $cart = $this->getMockBuilder('Magento\Quote\Api\Data\CartInterface')
+        $cart = $this->getMockBuilder(\Magento\Quote\Api\Data\CartInterface::class)
             ->getMockForAbstractClass();
         $this->cartManagement->expects($this->once())
             ->method('getCartForCustomer')

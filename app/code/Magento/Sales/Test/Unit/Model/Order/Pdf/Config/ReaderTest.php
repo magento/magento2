@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf\Config;
@@ -34,7 +34,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
+        $this->_fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
         $this->_fileResolverMock->expects(
             $this->once()
         )->method(
@@ -51,10 +51,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->_converter = $this->getMock('Magento\Sales\Model\Order\Pdf\Config\Converter', ['convert']);
+        $this->_converter = $this->getMock(\Magento\Sales\Model\Order\Pdf\Config\Converter::class, ['convert']);
 
         $moduleReader = $this->getMock(
-            'Magento\Framework\Module\Dir\Reader',
+            \Magento\Framework\Module\Dir\Reader::class,
             ['getModuleDir'],
             [],
             '',
@@ -73,7 +73,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_schemaLocator = new \Magento\Sales\Model\Order\Pdf\Config\SchemaLocator($moduleReader);
-        $this->_validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
+        $this->_validationState = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $this->_validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(false);

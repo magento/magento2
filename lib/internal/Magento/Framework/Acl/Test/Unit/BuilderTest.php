@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl\Test\Unit;
@@ -45,12 +45,12 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_aclMock = new \Magento\Framework\Acl();
-        $this->_aclCacheMock = $this->getMock('Magento\Framework\Acl\CacheInterface');
-        $this->_aclFactoryMock = $this->getMock('Magento\Framework\AclFactory', [], [], '', false);
+        $this->_aclCacheMock = $this->getMock(\Magento\Framework\Acl\CacheInterface::class);
+        $this->_aclFactoryMock = $this->getMock(\Magento\Framework\AclFactory::class, [], [], '', false);
         $this->_aclFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_aclMock));
-        $this->_roleLoader = $this->getMock('Magento\Framework\Acl\Loader\DefaultLoader');
-        $this->_ruleLoader = $this->getMock('Magento\Framework\Acl\Loader\DefaultLoader');
-        $this->_resourceLoader = $this->getMock('Magento\Framework\Acl\Loader\DefaultLoader');
+        $this->_roleLoader = $this->getMock(\Magento\Framework\Acl\Loader\DefaultLoader::class);
+        $this->_ruleLoader = $this->getMock(\Magento\Framework\Acl\Loader\DefaultLoader::class);
+        $this->_resourceLoader = $this->getMock(\Magento\Framework\Acl\Loader\DefaultLoader::class);
         $this->_model = new \Magento\Framework\Acl\Builder(
             $this->_aclFactoryMock,
             $this->_aclCacheMock,

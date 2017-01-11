@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Form\Login;
@@ -30,23 +30,23 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->customerUrl = $this->getMockBuilder(
-            'Magento\Customer\Model\Url'
+            \Magento\Customer\Model\Url::class
         )->disableOriginalConstructor()->setMethods(
             ['getRegisterUrl']
         )->getMock();
         $this->checkoutData = $this->getMockBuilder(
-            'Magento\Checkout\Helper\Data'
+            \Magento\Checkout\Helper\Data::class
         )->disableOriginalConstructor()->setMethods(
             ['isContextCheckout']
         )->getMock();
         $this->coreUrl = $this->getMockBuilder(
-            'Magento\Framework\Url\Helper\Data'
+            \Magento\Framework\Url\Helper\Data::class
         )->disableOriginalConstructor()->setMethods(
             ['addRequestParam']
         )->getMock();
 
         $this->block = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Customer\Block\Form\Login\Info',
+            \Magento\Customer\Block\Form\Login\Info::class,
             [
                 'customerUrl' => $this->customerUrl,
                 'checkoutData' => $this->checkoutData,

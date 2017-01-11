@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model;
@@ -14,6 +14,8 @@ use Magento\Framework\Api\SortOrder;
 
 /**
  * Class OrderRepositoryTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,23 +40,35 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
+    /**
      * Setup the test
      */
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 
-        $className = 'Magento\Sales\Model\ResourceModel\Metadata';
+        $className = \Magento\Sales\Model\ResourceModel\Metadata::class;
         $this->metadata = $this->getMock($className, [], [], '', false);
 
-        $className = 'Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory';
+        $className = \Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory::class;
         $this->searchResultFactory = $this->getMock($className, ['create'], [], '', false);
-
+        $this->collectionProcessor = $this->getMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = $this->objectManager->getObject(
-            '\Magento\Sales\Model\OrderRepository',
+            \Magento\Sales\Model\OrderRepository::class,
             [
                 'metadata' => $this->metadata,
                 'searchResultFactory' => $this->searchResultFactory,
+                'collectionProcessor' => $this->collectionProcessor
             ]
         );
     }
@@ -65,53 +79,71 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetList()
     {
-        $fieldName = 'field';
-        $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
-        $collectionMock = $this->getMock('\Magento\Sales\Model\ResourceModel\Order\Collection', [], [], '', false);
-        $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
-        $filterGroupFilterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
-        $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
+        $collectionMock = $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class, [], [], '', false);
         $itemsMock = $this->getMockBuilder(OrderInterface::class)->disableOriginalConstructor()->getMock();
 
         $extensionAttributes = $this->getMock(
-            '\Magento\Sales\Api\Data\OrderExtension',
+            \Magento\Sales\Api\Data\OrderExtension::class,
             ['getShippingAssignments'],
             [],
             '',
             false
         );
         $shippingAssignmentBuilder = $this->getMock(
-            '\Magento\Sales\Model\Order\ShippingAssignmentBuilder',
+            \Magento\Sales\Model\Order\ShippingAssignmentBuilder::class,
             [],
             [],
             '',
             false
         );
-
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteriaMock, $collectionMock);
         $itemsMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttributes);
         $extensionAttributes->expects($this->any())
             ->method('getShippingAssignments')
             ->willReturn($shippingAssignmentBuilder);
 
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($collectionMock);
-
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
-        $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterGroupFilterMock]);
-        $filterGroupFilterMock->expects($this->exactly(2))->method('getConditionType')->willReturn('eq');
-        $filterGroupFilterMock->expects($this->atLeastOnce())->method('getField')->willReturn($fieldName);
-        $filterGroupFilterMock->expects($this->once())->method('getValue')->willReturn('value');
-        $sortOrderMock->expects($this->once())->method('getDirection');
-        $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
-        $sortOrderMock->expects($this->atLeastOnce())->method('getField')->willReturn($fieldName);
-        $collectionMock->expects($this->once())->method('addFieldToFilter')
-            ->willReturn(SortOrder::SORT_ASC);
-        $collectionMock->expects($this->once())->method('addOrder')->with($fieldName, 'DESC');
-        $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn(4);
-        $collectionMock->expects($this->once())->method('setCurPage')->with(4);
-        $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn(42);
-        $collectionMock->expects($this->once())->method('setPageSize')->with(42);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$itemsMock]);
 
         $this->assertEquals($collectionMock, $this->model->getList($searchCriteriaMock));
+    }
+
+    public function testSave()
+    {
+        $mapperMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderEntity = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
+        $extensionAttributes = $this->getMock(
+            \Magento\Sales\Api\Data\OrderExtension::class,
+            ['getShippingAssignments'],
+            [],
+            '',
+            false
+        );
+        $shippingAssignment = $this->getMockBuilder(\Magento\Sales\Model\Order\ShippingAssignment::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getShipping'])
+            ->getMock();
+        $shippingMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipping::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAddress', 'getMethod'])
+            ->getMock();
+        $orderEntity->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttributes);
+        $orderEntity->expects($this->once())->method('getIsNotVirtual')->willReturn(true);
+        $extensionAttributes
+            ->expects($this->any())
+            ->method('getShippingAssignments')
+            ->willReturn([$shippingAssignment]);
+        $shippingAssignment->expects($this->once())->method('getShipping')->willReturn($shippingMock);
+        $shippingMock->expects($this->once())->method('getAddress');
+        $shippingMock->expects($this->once())->method('getMethod');
+        $this->metadata->expects($this->once())->method('getMapper')->willReturn($mapperMock);
+        $mapperMock->expects($this->once())->method('save');
+        $orderEntity->expects($this->any())->method('getEntityId')->willReturn(1);
+        $this->model->save($orderEntity);
     }
 }

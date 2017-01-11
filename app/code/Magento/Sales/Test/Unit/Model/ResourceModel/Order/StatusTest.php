@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,12 +42,12 @@ class StatusTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
+        $this->selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $this->selectMock->expects($this->any())->method('from')->will($this->returnSelf());
         $this->selectMock->expects($this->any())->method('where');
 
         $this->connectionMock = $this->getMock(
-            '\Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['update', 'insertOnDuplicate'],
             [],
             '',
@@ -56,7 +56,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
 
         $this->resourceMock = $this->getMock(
-            '\Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -73,9 +73,10 @@ class StatusTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue($this->connectionMock)
             );
 
-        $this->configMock = $this->getMock('\Magento\Eav\Model\Config', ['getConnectionName'], [], '', false);
+        $this->configMock = $this->getMock(\Magento\Eav\Model\Config::class, ['getConnectionName'], [], '', false);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Sales\Model\ResourceModel\Order\Status',
+        $this->model = $objectManager->getObject(
+            \Magento\Sales\Model\ResourceModel\Order\Status::class,
             ['resource' => $this->resourceMock]
         );
     }

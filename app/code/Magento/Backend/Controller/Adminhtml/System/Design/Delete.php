@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Design;
@@ -15,7 +15,7 @@ class Delete extends \Magento\Backend\Controller\Adminhtml\System\Design
     {
         $id = $this->getRequest()->getParam('id');
         if ($id) {
-            $design = $this->_objectManager->create('Magento\Framework\App\DesignInterface')->load($id);
+            $design = $this->_objectManager->create(\Magento\Framework\App\DesignInterface::class)->load($id);
 
             try {
                 $design->delete();

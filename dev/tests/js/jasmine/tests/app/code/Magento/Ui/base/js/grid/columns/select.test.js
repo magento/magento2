@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*eslint max-nested-callbacks: 0*/
@@ -24,11 +24,6 @@ define([
         describe('getLabel method', function () {
             it('get label while options empty', function () {
                 expect(select.getLabel(2)).toBe('');
-            });
-
-            it('get label for existed value', function () {
-                select.options = opts;
-                expect(select.getLabel(2)).toBe('b');
             });
         });
     });

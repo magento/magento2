@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\TestStep;
 
 use Magento\Checkout\Test\Constraint\AssertGrandTotalOrderReview;
+use Magento\Checkout\Test\Constraint\AssertBillingAddressAbsentInPayment;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -25,6 +26,11 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
      * @var AssertGrandTotalOrderReview
      */
     private $assertGrandTotalOrderReview;
+
+    /**
+     * @var AssertBillingAddressAbsentInPayment
+     */
+    private $assertBillingAddressAbsentInPayment;
 
     /**
      * @var CheckoutOnepageSuccess
@@ -49,6 +55,7 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
     /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
+     * @param AssertBillingAddressAbsentInPayment $assertBillingAddressAbsentInPayment
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param FixtureFactory $fixtureFactory
      * @param array $products
@@ -57,6 +64,7 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         AssertGrandTotalOrderReview $assertGrandTotalOrderReview,
+        AssertBillingAddressAbsentInPayment $assertBillingAddressAbsentInPayment,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         FixtureFactory $fixtureFactory,
         array $products,
@@ -64,6 +72,7 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertGrandTotalOrderReview = $assertGrandTotalOrderReview;
+        $this->assertBillingAddressAbsentInPayment = $assertBillingAddressAbsentInPayment;
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->fixtureFactory = $fixtureFactory;
         $this->products = $products;
@@ -78,9 +87,12 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
         if (isset($this->prices['grandTotal'])) {
             $this->assertGrandTotalOrderReview->processAssert($this->checkoutOnepage, $this->prices['grandTotal']);
         }
+
+        $this->assertBillingAddressAbsentInPayment->processAssert($this->checkoutOnepage);
+
         $parentWindow = $this->checkoutOnepage->getPaymentBlock()
             ->getSelectedPaymentMethodBlock()
-            ->clickContinueToPaypal();
+            ->clickPayWithPaypal();
         $this->checkoutOnepage->getBraintreePaypalBlock()->process($parentWindow);
         
         $order = $this->fixtureFactory->createByCode(

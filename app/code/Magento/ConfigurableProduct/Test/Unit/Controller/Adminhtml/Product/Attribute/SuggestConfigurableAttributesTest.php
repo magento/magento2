@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Attribute;
@@ -35,18 +35,18 @@ class SuggestConfigurableAttributesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->helperMock = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);
+        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->helperMock = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
         $this->attributeListMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\SuggestedAttributeList',
+            \Magento\ConfigurableProduct\Model\SuggestedAttributeList::class,
             [],
             [],
             '',
             false
         );
         $this->suggestAttributes = $helper->getObject(
-            'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\SuggestConfigurableAttributes',
+            \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\SuggestConfigurableAttributes::class,
             [
                 'response' => $this->responseMock,
                 'request' => $this->requestMock,

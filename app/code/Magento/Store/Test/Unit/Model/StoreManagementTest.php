@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Model;
@@ -20,7 +20,7 @@ class StoreManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->storesFactoryMock = $this->getMock(
-            'Magento\Store\Model\ResourceModel\Store\CollectionFactory',
+            \Magento\Store\Model\ResourceModel\Store\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -33,7 +33,7 @@ class StoreManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCount()
     {
-        $storesMock = $this->getMock('\Magento\Store\Model\ResourceModel\Store\Collection', [], [], '', false);
+        $storesMock = $this->getMock(\Magento\Store\Model\ResourceModel\Store\Collection::class, [], [], '', false);
 
         $this->storesFactoryMock
             ->expects($this->once())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Helper\Product\Configuration;
@@ -39,10 +39,10 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->itemMock = $this->getMock('Magento\Catalog\Model\Product\Configuration\Item\ItemInterface');
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $this->itemMock = $this->getMock(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $this->typeInstanceMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
             ['getSelectedAttributesInfo', '__wakeup'],
             [],
             '',
@@ -53,7 +53,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             return ['options'];
         };
         $this->subjectMock = $this->getMock(
-            'Magento\Catalog\Helper\Product\Configuration',
+            \Magento\Catalog\Helper\Product\Configuration::class,
             [],
             [],
             '',

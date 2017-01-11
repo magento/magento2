@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Cart\SalesModel;
@@ -15,7 +15,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $this->_quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Quote($this->_quoteMock);
     }
 
@@ -64,7 +64,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAllItems($pItem, $name, $qty, $price)
     {
-        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item\AbstractItem', [], [], '', false);
+        $itemMock = $this->getMock(\Magento\Quote\Model\Quote\Item\AbstractItem::class, [], [], '', false);
         $itemMock->expects($this->any())->method('getParentItem')->will($this->returnValue($pItem));
         $itemMock->expects($this->once())->method('__call')->with('getName')->will($this->returnValue($name));
         $itemMock->expects($this->any())->method('getTotalQty')->will($this->returnValue($qty));
@@ -114,7 +114,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetter($isVirtual, $getterMethod)
     {
-        $address = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $address = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
         $address->expects(
             $this->any()
         )->method(
@@ -124,7 +124,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($getterMethod)
         );
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $quoteMock->expects($this->any())->method('getIsVirtual')->will($this->returnValue($isVirtual));
         $method = 'getShippingAddress';
         if ($isVirtual) {

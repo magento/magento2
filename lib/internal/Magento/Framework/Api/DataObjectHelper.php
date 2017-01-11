@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -173,10 +173,10 @@ class DataObjectHelper
             return $this;
         }
 
-        if (is_subclass_of($returnType, '\Magento\Framework\Api\ExtensibleDataInterface')) {
+        if (is_subclass_of($returnType, \Magento\Framework\Api\ExtensibleDataInterface::class)) {
             $object = $this->objectFactory->create($returnType, []);
             $this->populateWithArray($object, $value, $returnType);
-        } else if (is_subclass_of($returnType, '\Magento\Framework\Api\ExtensionAttributesInterface')) {
+        } else if (is_subclass_of($returnType, \Magento\Framework\Api\ExtensionAttributesInterface::class)) {
             foreach ($value as $extensionAttributeKey => $extensionAttributeValue) {
                 $extensionAttributeGetterMethodName
                     = 'get' . \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase(

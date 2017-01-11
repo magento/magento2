@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -107,7 +107,7 @@ class BackupRollback
     public function codeBackup($time, $type = Factory::TYPE_FILESYSTEM)
     {
         /** @var \Magento\Framework\Backup\Filesystem $fsBackup */
-        $fsBackup = $this->objectManager->create('Magento\Framework\Backup\Filesystem');
+        $fsBackup = $this->objectManager->create(\Magento\Framework\Backup\Filesystem::class);
         $fsBackup->setRootDir($this->directoryList->getRoot());
         if ($type === Factory::TYPE_FILESYSTEM) {
             $fsBackup->addIgnorePaths($this->getCodeBackupIgnorePaths());
@@ -154,7 +154,7 @@ class BackupRollback
             throw new LocalizedException(new Phrase('The rollback file does not exist.'));
         }
         /** @var \Magento\Framework\Backup\Filesystem $fsRollback */
-        $fsRollback = $this->objectManager->create('Magento\Framework\Backup\Filesystem');
+        $fsRollback = $this->objectManager->create(\Magento\Framework\Backup\Filesystem::class);
         if ($type === Factory::TYPE_FILESYSTEM) {
             $ignorePaths = $this->getCodeBackupIgnorePaths();
             $granularType = 'Code';
@@ -198,7 +198,7 @@ class BackupRollback
     public function dbBackup($time)
     {
         /** @var \Magento\Framework\Backup\Db $dbBackup */
-        $dbBackup = $this->objectManager->create('Magento\Framework\Backup\Db');
+        $dbBackup = $this->objectManager->create(\Magento\Framework\Backup\Db::class);
         $dbBackup->setRootDir($this->directoryList->getRoot());
         if (!$this->file->isExists($this->backupsDir)) {
             $this->file->createDirectory($this->backupsDir);
@@ -230,7 +230,7 @@ class BackupRollback
             throw new LocalizedException(new Phrase('The rollback file does not exist.'));
         }
         /** @var \Magento\Framework\Backup\Db $dbRollback */
-        $dbRollback = $this->objectManager->create('Magento\Framework\Backup\Db');
+        $dbRollback = $this->objectManager->create(\Magento\Framework\Backup\Db::class);
         $dbRollback->setRootDir($this->directoryList->getRoot());
         $dbRollback->setBackupsDir($this->backupsDir);
         $dbRollback->setBackupExtension('sql');
@@ -241,7 +241,7 @@ class BackupRollback
         }
         $dbRollback->setTime($time[0]);
         $this->log->log('DB rollback is starting...');
-        $dbRollback->setResourceModel($this->objectManager->create('Magento\Backup\Model\ResourceModel\Db'));
+        $dbRollback->setResourceModel($this->objectManager->create(\Magento\Backup\Model\ResourceModel\Db::class));
         $dbRollback->rollback();
         $this->log->log('DB rollback filename: ' . $dbRollback->getBackupFilename());
         $this->log->log('DB rollback path: ' . $dbRollback->getBackupPath());
@@ -326,7 +326,7 @@ class BackupRollback
     public function getDBDiskSpace()
     {
         /** @var \Magento\Framework\Backup\Db $dbBackup */
-        $dbBackup = $this->objectManager->create('Magento\Framework\Backup\Db');
+        $dbBackup = $this->objectManager->create(\Magento\Framework\Backup\Db::class);
         return $dbBackup->getDBSize();
     }
 }

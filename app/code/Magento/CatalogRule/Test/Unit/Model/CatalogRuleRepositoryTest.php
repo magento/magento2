@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,9 +30,21 @@ class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ruleResourceMock = $this->getMock('Magento\CatalogRule\Model\ResourceModel\Rule', [], [], '', false);
-        $this->ruleFactoryMock = $this->getMock('Magento\CatalogRule\Model\RuleFactory', ['create'], [], '', false);
-        $this->ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
+        $this->ruleResourceMock = $this->getMock(
+            \Magento\CatalogRule\Model\ResourceModel\Rule::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->ruleFactoryMock = $this->getMock(
+            \Magento\CatalogRule\Model\RuleFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
         $this->repository = new \Magento\CatalogRule\Model\CatalogRuleRepository(
             $this->ruleResourceMock,
             $this->ruleFactoryMock
@@ -52,7 +64,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $ruleId = 1;
         $ruleData = ['id' => $ruleId];
         $this->ruleMock->expects($this->once())->method('getData')->willReturn($ruleData);
-        $ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
+        $ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
         $this->ruleMock->expects($this->exactly(2))->method('getRuleId')->willReturn($ruleId);
         $ruleMock->expects($this->once())->method('addData')->with($ruleData)->willReturn($ruleMock);
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($ruleMock);
@@ -92,7 +104,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testDeleteRuleById()
     {
         $ruleId = 1;
-        $ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
+        $ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('getRuleId')->willReturn($ruleId);
         $ruleMock->expects($this->once())->method('load')->with($ruleId)->willReturn($ruleMock);
@@ -121,7 +133,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetRule()
     {
         $ruleId = 1;
-        $ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
+        $ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('load')->with($ruleId)->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('getRuleId')->willReturn($ruleId);
@@ -137,7 +149,7 @@ class CatalogRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetNonExistentRule()
     {
         $ruleId = 1;
-        $ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
+        $ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('load')->with($ruleId)->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('getRuleId')->willReturn(null);

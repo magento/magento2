@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\View;
@@ -40,11 +40,11 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->resource = $this->objectManager->get('Magento\Framework\App\ResourceConnection');
+        $this->resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $this->connection = $this->resource->getConnection();
 
         $this->model = $this->objectManager->create(
-            'Magento\Framework\Mview\View\Changelog',
+            \Magento\Framework\Mview\View\Changelog::class,
             ['resource' => $this->resource]
         );
         $this->model->setViewId('test_view_id_1');
@@ -68,7 +68,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Mview\View\Changelog $model */
         $model = $this->objectManager->create(
-            'Magento\Framework\Mview\View\Changelog',
+            \Magento\Framework\Mview\View\Changelog::class,
             ['resource' => $this->resource]
         );
         $model->setViewId('test_view_id_2');
@@ -88,7 +88,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     public function testGetVersion()
     {
         $model = $this->objectManager->create(
-            'Magento\Framework\Mview\View\Changelog',
+            \Magento\Framework\Mview\View\Changelog::class,
             ['resource' => $this->resource]
         );
         $model->setViewId('test_view_id_2');

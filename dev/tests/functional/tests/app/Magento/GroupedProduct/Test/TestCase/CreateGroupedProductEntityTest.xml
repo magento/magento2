@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -57,6 +57,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
         <variation name="CreateGroupedProductEntityTestVariation5" summary="Create with no required products">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
@@ -107,6 +108,19 @@
             <constraint name="Magento\GroupedProduct\Test\Constraint\AssertTierPriceOnGroupedProductPage" />
             <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="CreateGroupedProductEntityTestVariation10" summary="Create Grouped Product and Assign it on Custom Website">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
+            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+            <data name="product/data/associated/products" xsi:type="string">catalogProductSimple::default,catalogProductVirtual::default</data>
+            <data name="product/data/associated/dataset" xsi:type="string">defaultSimpleProduct</data>
+            <data name="product/data/website_ids/0/dataset" xsi:type="string">custom_store</data>
+            <data name="isRequired" xsi:type="string">No</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductOnCustomWebsite" />
         </variation>
     </testCase>
 </config>

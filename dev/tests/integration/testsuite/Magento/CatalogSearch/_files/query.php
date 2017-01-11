@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var $query \Magento\Search\Model\Query */
-$query = $objectManager->create('Magento\Search\Model\Query');
+$query = $objectManager->create(\Magento\Search\Model\Query::class);
 $query->setStoreId(1);
 $query->setQueryText(
     'query_text'

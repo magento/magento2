@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Block\Relation\Store;
@@ -23,7 +23,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceBlock = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Block')
+        $this->resourceBlock = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Block::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -41,7 +41,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('lookupStoreIds')
             ->willReturn([$storeId]);
 
-        $block = $this->getMockBuilder('Magento\Cms\Model\Block')
+        $block = $this->getMockBuilder(\Magento\Cms\Model\Block::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -56,12 +56,12 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $result = $this->model->execute($block);
-        $this->assertInstanceOf('Magento\Cms\Model\Block', $result);
+        $this->assertInstanceOf(\Magento\Cms\Model\Block::class, $result);
     }
 
     public function testExecuteWithNoId()
     {
-        $block = $this->getMockBuilder('Magento\Cms\Model\Block')
+        $block = $this->getMockBuilder(\Magento\Cms\Model\Block::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -70,6 +70,6 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         $result = $this->model->execute($block);
-        $this->assertInstanceOf('Magento\Cms\Model\Block', $result);
+        $this->assertInstanceOf(\Magento\Cms\Model\Block::class, $result);
     }
 }

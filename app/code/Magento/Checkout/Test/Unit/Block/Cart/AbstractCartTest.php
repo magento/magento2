@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart;
@@ -26,7 +26,7 @@ class AbstractCartTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItemRenderer($type, $expectedType)
     {
-        $renderer = $this->getMock('Magento\Framework\View\Element\RendererList', [], [], '', false);
+        $renderer = $this->getMock(\Magento\Framework\View\Element\RendererList::class, [], [], '', false);
 
         $renderer->expects(
             $this->once()
@@ -40,7 +40,7 @@ class AbstractCartTest extends \PHPUnit_Framework_TestCase
         );
 
         $layout = $this->getMock(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['getChildName', 'getBlock'],
             [],
             '',
@@ -61,10 +61,10 @@ class AbstractCartTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\Sales\Block\Items\AbstractItems */
         $block = $this->_objectManager->getObject(
-            'Magento\Checkout\Block\Cart\AbstractCart',
+            \Magento\Checkout\Block\Cart\AbstractCart::class,
             [
                 'context' => $this->_objectManager->getObject(
-                    'Magento\Backend\Block\Template\Context',
+                    \Magento\Backend\Block\Template\Context::class,
                     ['layout' => $layout]
                 )
             ]
@@ -88,7 +88,7 @@ class AbstractCartTest extends \PHPUnit_Framework_TestCase
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
         $layout = $this->getMock(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['getChildName', 'getBlock'],
             [],
             '',
@@ -98,10 +98,10 @@ class AbstractCartTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\Checkout\Block\Cart\AbstractCart */
         $block = $this->_objectManager->getObject(
-            'Magento\Checkout\Block\Cart\AbstractCart',
+            \Magento\Checkout\Block\Cart\AbstractCart::class,
             [
                 'context' => $this->_objectManager->getObject(
-                    'Magento\Backend\Block\Template\Context',
+                    \Magento\Backend\Block\Template\Context::class,
                     ['layout' => $layout]
                 )
             ]
@@ -118,9 +118,9 @@ class AbstractCartTest extends \PHPUnit_Framework_TestCase
     public function testGetTotalsCache($expectedResult, $isVirtual)
     {
         $totals = $isVirtual ? ['billing_totals'] : ['shipping_totals'];
-        $addressMock = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
-        $checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
 
         $quoteMock->expects($this->once())->method('isVirtual')->willReturn($isVirtual);
@@ -130,7 +130,7 @@ class AbstractCartTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Checkout\Block\Cart\AbstractCart $model */
         $model = $this->_objectManager->getObject(
-            'Magento\Checkout\Block\Cart\AbstractCart',
+            \Magento\Checkout\Block\Cart\AbstractCart::class,
             ['checkoutSession' => $checkoutSessionMock]
         );
         $this->assertEquals($expectedResult, $model->getTotalsCache());

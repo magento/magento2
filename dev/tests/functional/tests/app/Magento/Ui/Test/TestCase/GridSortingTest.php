@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,14 +22,14 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
  * 3. Sort grid using provided columns
  * 5. Perform Asserts
  *
- * @group Ui_(CS)
+ * @group Ui
  * @ZephyrId MAGETWO-41328
  */
 class GridSortingTest extends Injectable
 {
     /* tags */
+    const SEVERITY = 'S2';
     const MVP = 'no';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

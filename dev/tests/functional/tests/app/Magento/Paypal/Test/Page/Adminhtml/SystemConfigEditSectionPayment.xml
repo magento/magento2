@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="SystemConfigEditSectionPayment" area="Adminhtml" mca="admin/system_config/edit/section/payment" module="Magento_Backend">
+        <block name="expressCheckoutConfigBlock" class="Magento\Paypal\Test\Block\System\Config\ExpressCheckout" locator="#row_payment_us_paypal_alternative_payment_methods_express_checkout_us" strategy="css selector" />
+        <block name="paymentsAdvancedConfigBlock" class="Magento\Paypal\Test\Block\System\Config\PaymentsAdvanced" locator="#row_payment_us_paypal_group_all_in_one_payflow_advanced" strategy="css selector" />
+        <block name="paymentsProConfigBlock" class="Magento\Paypal\Test\Block\System\Config\PaymentsPro" locator="#row_payment_us_paypal_group_all_in_one_wpp_usuk" strategy="css selector" />
+        <block name="payflowProConfigBlock" class="Magento\Paypal\Test\Block\System\Config\PayflowPro" locator="#row_payment_us_paypal_payment_gateways_paypal_payflowpro_with_express_checkout" strategy="css selector" />
+        <block name="payflowLinkConfigBlock" class="Magento\Paypal\Test\Block\System\Config\PayflowLink" locator="#row_payment_us_paypal_payment_gateways_payflow_link_us" strategy="css selector" />
+    </page>
+</config>

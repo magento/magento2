@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+__(Class::CONSTANT)
+
+__(self::CONSTANT)
+
+__(\Namespace\Class::CONSTANT)
+
+__(
+    Class::CONSTANT
+)
+
+Phrase(Class::CONSTANT)
+
+Phrase(self::CONSTANT)
+
+Phrase(\Namespace\Class::CONSTANT)
+
+\Magento\Framework\Phrase(Class::CONSTANT)
+
+\Magento\Framework\Phrase(
+    Class::CONSTANT
+)

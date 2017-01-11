@@ -38,6 +38,12 @@ location ~* ^/setup($|/) {
     root $MAGE_ROOT;
     location ~ ^/setup/index.php {
         fastcgi_pass   fastcgi_backend;
+
+        fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
+        fastcgi_param  PHP_VALUE "memory_limit=768M \n max_execution_time=600";
+        fastcgi_read_timeout 600s;
+        fastcgi_connect_timeout 600s;
+
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
         include        fastcgi_params;
@@ -76,7 +82,7 @@ location ~* ^/update($|/) {
 }
 
 location / {
-    try_files $uri $uri/ /index.php?$args;
+    try_files $uri $uri/ /index.php$is_args$args;
 }
 
 location /pub/ {
@@ -102,7 +108,7 @@ location /static/ {
         expires +1y;
 
         if (!-f $request_filename) {
-            rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+            rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
         }
     }
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
@@ -111,17 +117,17 @@ location /static/ {
         expires    off;
 
         if (!-f $request_filename) {
-           rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+           rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
         }
     }
     if (!-f $request_filename) {
-        rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+        rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
     }
     add_header X-Frame-Options "SAMEORIGIN";
 }
 
 location /media/ {
-    try_files $uri $uri/ /get.php?$args;
+    try_files $uri $uri/ /get.php$is_args$args;
 
     location ~ ^/media/theme_customization/.*\.xml {
         deny all;
@@ -131,13 +137,13 @@ location /media/ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
         expires +1y;
-        try_files $uri $uri/ /get.php?$args;
+        try_files $uri $uri/ /get.php$is_args$args;
     }
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
         add_header Cache-Control "no-store";
         add_header X-Frame-Options "SAMEORIGIN";
         expires    off;
-        try_files $uri $uri/ /get.php?$args;
+        try_files $uri $uri/ /get.php$is_args$args;
     }
     add_header X-Frame-Options "SAMEORIGIN";
 }
@@ -161,7 +167,7 @@ location ~ (index|get|static|report|404|503)\.php$ {
     fastcgi_buffers 1024 4k;
 
     fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
-    fastcgi_param  PHP_VALUE "memory_limit=768M \n max_execution_time=600";
+    fastcgi_param  PHP_VALUE "memory_limit=768M \n max_execution_time=18000";
     fastcgi_read_timeout 600s;
     fastcgi_connect_timeout 600s;
 

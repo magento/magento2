@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
@@ -37,7 +37,7 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
             )->setTemplateStyles(
                 $request->getParam('template_styles')
             )->setModifiedAt(
-                $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->gmtDate()
+                $this->_objectManager->get(\Magento\Framework\Stdlib\DateTime\DateTime::class)->gmtDate()
             )->setOrigTemplateCode(
                 $request->getParam('orig_template_code')
             )->setOrigTemplateVariables(
@@ -54,12 +54,12 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
             }
 
             $template->save();
-            $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData(false);
             $this->messageManager->addSuccess(__('You saved the email template.'));
             $this->_redirect('adminhtml/*');
         } catch (\Exception $e) {
             $this->_objectManager->get(
-                'Magento\Backend\Model\Session'
+                \Magento\Backend\Model\Session::class
             )->setData(
                 'email_template_form_data',
                 $request->getParams()

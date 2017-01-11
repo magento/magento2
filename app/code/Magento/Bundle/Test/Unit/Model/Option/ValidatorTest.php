@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model\Option;
@@ -21,9 +21,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new ObjectManager($this);
-        $validate = $helper->getObject('Magento\Framework\Validator\NotEmpty', ['options' => NotEmpty::ALL]);
+        $validate = $helper->getObject(\Magento\Framework\Validator\NotEmpty::class, ['options' => NotEmpty::ALL]);
 
-        $validateFactory = $this->getMockBuilder('Magento\Framework\Validator\NotEmptyFactory')
+        $validateFactory = $this->getMockBuilder(\Magento\Framework\Validator\NotEmptyFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -32,7 +32,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($validate);
 
         $this->validator = $helper->getObject(
-            'Magento\Bundle\Model\Option\Validator',
+            \Magento\Bundle\Model\Option\Validator::class,
             ['notEmptyFactory' => $validateFactory]
         );
     }
@@ -49,7 +49,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testIsValid($title, $type, $isValid, $expectedMessages)
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Option $option */
-        $option = $this->getMockBuilder('Magento\Bundle\Model\Option')
+        $option = $this->getMockBuilder(\Magento\Bundle\Model\Option::class)
             ->setMethods(['getTitle', 'getType'])
             ->disableOriginalConstructor()
             ->getMock();

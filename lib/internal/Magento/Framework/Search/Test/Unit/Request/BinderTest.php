@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Request;
@@ -21,7 +21,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->binder = $helper->getObject('Magento\Framework\Search\Request\Binder');
+        $this->binder = $helper->getObject(\Magento\Framework\Search\Request\Binder::class);
     }
 
     /**

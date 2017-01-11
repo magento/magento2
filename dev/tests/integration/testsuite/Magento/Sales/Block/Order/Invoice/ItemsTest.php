@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order\Invoice;
@@ -25,11 +25,11 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
-        $this->_block = $this->_layout->createBlock('Magento\Sales\Block\Order\Invoice\Items', 'block');
+        $this->_block = $this->_layout->createBlock(\Magento\Sales\Block\Order\Invoice\Items::class, 'block');
         $this->_invoice = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Order\Invoice'
+            \Magento\Sales\Model\Order\Invoice::class
         );
     }
 
@@ -38,7 +38,7 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetInvoiceTotalsHtml()
     {
-        $childBlock = $this->_layout->addBlock('Magento\Framework\View\Element\Text', 'invoice_totals', 'block');
+        $childBlock = $this->_layout->addBlock(\Magento\Framework\View\Element\Text::class, 'invoice_totals', 'block');
 
         $expectedHtml = '<b>Any html</b>';
         $this->assertEmpty($childBlock->getInvoice());
@@ -52,7 +52,11 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetInvoiceCommentsHtml()
     {
-        $childBlock = $this->_layout->addBlock('Magento\Framework\View\Element\Text', 'invoice_comments', 'block');
+        $childBlock = $this->_layout->addBlock(
+            \Magento\Framework\View\Element\Text::class,
+            'invoice_comments',
+            'block'
+        );
 
         $expectedHtml = '<b>Any html</b>';
         $this->assertEmpty($childBlock->getEntity());

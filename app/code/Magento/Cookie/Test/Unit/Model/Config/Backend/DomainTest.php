@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
@@ -26,8 +26,8 @@ class DomainTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $eventDispatcherMock = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
-        $contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
+        $eventDispatcherMock = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
         $contextMock->expects(
             $this->any()
         )->method(
@@ -37,7 +37,7 @@ class DomainTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\AbstractResource',
+            \Magento\Framework\Model\ResourceModel\AbstractResource::class,
             [
                 '_construct',
                 'getConnection',
@@ -54,12 +54,12 @@ class DomainTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->validatorMock = $this->getMockBuilder(
-            'Magento\Framework\Session\Config\Validator\CookieDomainValidator'
+            \Magento\Framework\Session\Config\Validator\CookieDomainValidator::class
         )->disableOriginalConstructor()
             ->getMock();
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->domain = $helper->getObject(
-            'Magento\Cookie\Model\Config\Backend\Domain',
+            \Magento\Cookie\Model\Config\Backend\Domain::class,
             [
                 'context' => $contextMock,
                 'resource' => $this->resourceMock,

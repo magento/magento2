@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model;
@@ -16,7 +16,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
-    
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -36,7 +36,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->quoteRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Quote\Api\CartRepositoryInterface',
+            \Magento\Quote\Api\CartRepositoryInterface::class,
             [],
             '',
             false,
@@ -44,11 +44,11 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->methodListMock = $this->getMock('Magento\Payment\Model\MethodList', [], [], '', false);
-        $this->zeroTotalMock = $this->getMock('Magento\Payment\Model\Checks\ZeroTotal', [], [], '', false);
+        $this->methodListMock = $this->getMock(\Magento\Payment\Model\MethodList::class, [], [], '', false);
+        $this->zeroTotalMock = $this->getMock(\Magento\Payment\Model\Checks\ZeroTotal::class, [], [], '', false);
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Quote\Model\PaymentMethodManagement',
+            \Magento\Quote\Model\PaymentMethodManagement::class,
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'methodList' => $this->methodListMock,
@@ -60,8 +60,8 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
     public function testGetPaymentIfPaymentMethodNotSet()
     {
         $cartId = 11;
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
         $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
         $paymentMock->expects($this->once())->method('getId')->will($this->returnValue(null));
 
@@ -77,10 +77,10 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 11;
 
-        $paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
         $paymentMock->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
 
         $this->quoteRepositoryMock->expects($this->once())
@@ -93,13 +93,13 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $cartId = 10;
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('get')
             ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
-        $paymentMethod = $this->getMock('Magento\Quote\Api\Data\PaymentMethodInterface');
+        $paymentMethod = $this->getMock(\Magento\Quote\Api\Data\PaymentMethodInterface::class);
         $this->methodListMock->expects($this->once())
             ->method('getAvailableMethods')
             ->with($quoteMock)
@@ -116,7 +116,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $paymentMethod = 'checkmo';
 
         $quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             ['setTotalsCollectedFlag', 'getPayment', 'isVirtual', 'getBillingAddress', 'collectTotals', 'save'],
             [],
             '',
@@ -124,7 +124,13 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         );
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($quoteMock);
 
-        $methodMock = $this->getMock('Magento\Quote\Model\Quote\Payment', ['setChecks', 'getData'], [], '', false);
+        $methodMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Payment::class,
+            ['setChecks', 'getData'],
+            [],
+            '',
+            false
+        );
         $methodMock->expects($this->once())
             ->method('setChecks')
             ->with([
@@ -137,7 +143,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $methodMock->expects($this->once())->method('getData')->willReturn($methodDataWithAdditionalData);
 
         $paymentMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Payment',
+            \Magento\Quote\Model\Quote\Payment::class,
             ['importData', 'getMethod', 'getMethodInstance', 'getId'],
             [],
             '',
@@ -147,7 +153,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $paymentMock->expects($this->once())->method('getMethod')->willReturn($paymentMethod);
 
         $billingAddressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             ['getCountryId', 'setPaymentMethod'],
             [],
             '',
@@ -162,7 +168,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->exactly(2))->method('isVirtual')->willReturn(true);
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
 
-        $methodInstance = $this->getMockForAbstractClass('Magento\Payment\Model\MethodInterface');
+        $methodInstance = $this->getMockForAbstractClass(\Magento\Payment\Model\MethodInterface::class);
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
 
         $this->zeroTotalMock->expects($this->once())
@@ -189,7 +195,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $paymentMethod = 'checkmo';
 
         $quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             ['getPayment', 'isVirtual', 'getBillingAddress'],
             [],
             '',
@@ -197,7 +203,13 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         );
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($quoteMock);
 
-        $methodMock = $this->getMock('Magento\Quote\Model\Quote\Payment', ['setChecks', 'getData'], [], '', false);
+        $methodMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Payment::class,
+            ['setChecks', 'getData'],
+            [],
+            '',
+            false
+        );
         $methodMock->expects($this->once())
             ->method('setChecks')
             ->with([
@@ -210,7 +222,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $methodMock->expects($this->once())->method('getData')->willReturn($methodData);
 
         $paymentMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Payment',
+            \Magento\Quote\Model\Quote\Payment::class,
             ['importData', 'getMethod', 'getMethodInstance'],
             [],
             '',
@@ -220,7 +232,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $paymentMock->expects($this->once())->method('getMethod')->willReturn($paymentMethod);
 
         $billingAddressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             ['getCountryId', 'setPaymentMethod'],
             [],
             '',
@@ -235,7 +247,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->exactly(2))->method('isVirtual')->willReturn(true);
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
 
-        $methodInstance = $this->getMockForAbstractClass('Magento\Payment\Model\MethodInterface');
+        $methodInstance = $this->getMockForAbstractClass(\Magento\Payment\Model\MethodInterface::class);
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
 
         $this->zeroTotalMock->expects($this->once())
@@ -253,7 +265,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $paymentMethod = 'checkmo';
 
         $quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             ['getPayment', 'isVirtual', 'getShippingAddress', 'setTotalsCollectedFlag', 'collectTotals', 'save'],
             [],
             '',
@@ -261,7 +273,13 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         );
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($quoteMock);
 
-        $methodMock = $this->getMock('Magento\Quote\Model\Quote\Payment', ['setChecks', 'getData'], [], '', false);
+        $methodMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Payment::class,
+            ['setChecks', 'getData'],
+            [],
+            '',
+            false
+        );
         $methodMock->expects($this->once())
             ->method('setChecks')
             ->with([
@@ -274,7 +292,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $methodMock->expects($this->once())->method('getData')->willReturn($methodData);
 
         $paymentMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Payment',
+            \Magento\Quote\Model\Quote\Payment::class,
             ['importData', 'getMethod', 'getMethodInstance', 'getId'],
             [],
             '',
@@ -284,7 +302,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $paymentMock->expects($this->once())->method('getMethod')->willReturn($paymentMethod);
 
         $shippingAddressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             ['getCountryId', 'setPaymentMethod'],
             [],
             '',
@@ -300,7 +318,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->exactly(2))->method('isVirtual')->willReturn(false);
         $quoteMock->expects($this->exactly(4))->method('getShippingAddress')->willReturn($shippingAddressMock);
 
-        $methodInstance = $this->getMockForAbstractClass('Magento\Payment\Model\MethodInterface');
+        $methodInstance = $this->getMockForAbstractClass(\Magento\Payment\Model\MethodInterface::class);
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
 
         $this->zeroTotalMock->expects($this->once())
@@ -326,7 +344,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $methodData = ['method' => 'data'];
 
         $quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             ['getPayment', 'isVirtual', 'getShippingAddress'],
             [],
             '',
@@ -334,7 +352,13 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         );
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($quoteMock);
 
-        $methodMock = $this->getMock('Magento\Quote\Model\Quote\Payment', ['setChecks', 'getData'], [], '', false);
+        $methodMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Payment::class,
+            ['setChecks', 'getData'],
+            [],
+            '',
+            false
+        );
         $methodMock->expects($this->once())
             ->method('setChecks')
             ->with([
@@ -346,10 +370,16 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $methodMock->expects($this->once())->method('getData')->willReturn($methodData);
 
-        $paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', ['importData'], [], '', false);
+        $paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, ['importData'], [], '', false);
         $paymentMock->expects($this->once())->method('importData')->with($methodData)->willReturnSelf();
 
-        $shippingAddressMock = $this->getMock('Magento\Quote\Model\Quote\Address', ['getCountryId'], [], '', false);
+        $shippingAddressMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['getCountryId'],
+            [],
+            '',
+            false
+        );
         $shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(null);
 
         $quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);

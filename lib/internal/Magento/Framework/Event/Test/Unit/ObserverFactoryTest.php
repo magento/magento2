@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ class ObserverFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             ['get', 'create'],
             [],
             '',
@@ -41,7 +41,7 @@ class ObserverFactoryTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $className = 'Magento\Class';
-        $observerMock = $this->getMock('Magento\Observer', [], [], '', false, false);
+        $observerMock = $this->getMock(\Magento\Observer::class, [], [], '', false, false);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with($className)
@@ -54,7 +54,7 @@ class ObserverFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $className = 'Magento\Class';
-        $observerMock = $this->getMock('Magento\Observer', [], [], '', false, false);
+        $observerMock = $this->getMock(\Magento\Observer::class, [], [], '', false, false);
         $arguments = ['arg1', 'arg2'];
 
         $this->objectManagerMock->expects($this->once())

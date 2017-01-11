@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Api;
@@ -51,7 +51,6 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
      */
     public function testRemoveChild()
     {
-        $this->markTestSkipped('must be unskipped after fixing bug about wrong saving bundle option price');
         $productSku = 'bundle-product';
         $childSku = 'simple';
         $optionIds = $this->getProductOptions(3);
@@ -167,10 +166,10 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
     protected function getProductOptions($productId)
     {
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Product');
+        $product = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Product::class);
         $product->load($productId);
         /** @var  \Magento\Bundle\Model\Product\Type $type */
-        $type = Bootstrap::getObjectManager()->get('Magento\Bundle\Model\Product\Type');
+        $type = Bootstrap::getObjectManager()->get(\Magento\Bundle\Model\Product\Type::class);
         return $type->getOptionsIds($product);
     }
 

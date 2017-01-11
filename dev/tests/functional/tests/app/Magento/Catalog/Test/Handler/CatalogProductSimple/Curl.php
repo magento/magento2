@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -89,9 +89,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'Catalog' => 2,
             'Search' => 3,
             'Catalog, Search' => 4
-        ],
-        'website_ids' => [
-            'Main Website' => 1
         ],
         'status' => [
             'No' => 2,
@@ -182,7 +179,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'use_config_manage_stock' => 'No',
             'min_sale_qty' => 1,
             'use_config_min_sale_qty' => 1,
-            'max_sale_qty' => 10000 ,
+            'max_sale_qty' => 10000,
             'use_config_max_sale_qty' => 1,
             'enable_qty_increments' => 'No',
             'use_config_enable_qty_increments' => 'No',
@@ -415,12 +412,13 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     protected function prepareWebsites()
     {
         if (!empty($this->fields['product']['website_ids'])) {
-            foreach ($this->fields['product']['website_ids'] as $key => $website) {
-                $website = isset($this->mappingData['website_ids'][$website])
-                    ? $this->mappingData['website_ids'][$website]
-                    : $website;
-                $this->fields['product']['website_ids'][$key] = $website;
+            foreach ($this->fixture->getDataFieldConfig('website_ids')['source']->getWebsites() as $key => $website) {
+                $this->fields['product']['extension_attributes']['website_ids'][$key] = $website->getWebsiteId();
             }
+        } else {
+            $website = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
+                ->create(\Magento\Store\Test\Fixture\Website::class, ['dataset' => 'default']);
+            $this->fields['product']['extension_attributes']['website_ids'][] = $website->getWebsiteId();
         }
     }
 
@@ -490,7 +488,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         if (!isset($this->fields['product']['custom_options'])) {
             return;
         }
-
         $options = [];
         foreach ($this->fields['product']['custom_options'] as $key => $customOption) {
             $options[$key] = [
@@ -512,7 +509,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         }
 
         $this->fields['product']['options'] = $options;
-        $this->fields['affect_product_custom_options'] = 1;
+        $this->fields['product']['affect_product_custom_options'] = 1;
         unset($this->fields['product']['custom_options']);
     }
 

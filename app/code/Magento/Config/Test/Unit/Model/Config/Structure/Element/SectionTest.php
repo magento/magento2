@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
@@ -27,11 +27,11 @@ class SectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->_authorizationMock = $this->getMock('Magento\Framework\AuthorizationInterface');
+        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
+        $this->_authorizationMock = $this->getMock(\Magento\Framework\AuthorizationInterface::class);
 
         $this->_model = $objectManager->getObject(
-            'Magento\Config\Model\Config\Structure\Element\Section',
+            \Magento\Config\Model\Config\Structure\Element\Section::class,
             [
                 'storeManager' => $this->_storeManagerMock,
                 'authorization' => $this->_authorizationMock,

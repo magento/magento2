@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,8 @@ namespace Magento\CatalogRule\Test\TestCase;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Fixture\Product\CategoryIds;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Util\Command\Cli\Cron;
 
 /**
  * Preconditions:
@@ -23,14 +25,13 @@ use Magento\CatalogRule\Test\Fixture\CatalogRule;
  * 6. Create simple product with category.
  * 7. Perform all asserts.
  *
- * @group Catalog_Price_Rules_(MX)
+ * @group Catalog_Price_Rules
  * @ZephyrId MAGETWO-25187
  */
 class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
@@ -39,35 +40,47 @@ class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
      *
      * @param CatalogRule $catalogPriceRule
      * @param CatalogRule $catalogPriceRuleOriginal
+     * @param Customer $customer
+     * @param Cron $cron
      * @param string $saveAction
+     * @param bool $isCronEnabled
      * @return array
      */
-    public function testUpdateCatalogPriceRule(
+    public function test(
         CatalogRule $catalogPriceRule,
         CatalogRule $catalogPriceRuleOriginal,
-        $saveAction
+        Cron $cron,
+        $saveAction,
+        Customer $customer = null,
+        $isCronEnabled = false
     ) {
         // Preconditions
         $catalogPriceRuleOriginal->persist();
 
-        //Prepare data
+        if ($customer !== null) {
+            $customer->persist();
+        }
+
+        if ($isCronEnabled) {
+            $cron->run();
+            $cron->run();
+        }
+
+        // Prepare data
         $productSimple = $this->fixtureFactory->createByCode(
             'catalogProductSimple',
             ['dataset' => 'product_with_category']
         );
-        if ($saveAction == 'saveAndApply') {
-            /** @var CategoryIds $sourceCategories */
-            $sourceCategories = $productSimple->getDataFieldConfig('category_ids')['source'];
-            $replace = [
+
+        /** @var CategoryIds $sourceCategories */
+        $sourceCategories = $productSimple->getDataFieldConfig('category_ids')['source'];
+        $replace = [
+            'conditions' => [
                 'conditions' => [
-                    'conditions' => [
-                        '%category_1%' => $sourceCategories->getIds()[0],
-                    ],
+                    '%category_1%' => $sourceCategories->getIds()[0],
                 ],
-            ];
-        } else {
-            $replace = [];
-        }
+            ],
+        ];
         $filter = [
             'name' => $catalogPriceRuleOriginal->getName(),
             'rule_id' => $catalogPriceRuleOriginal->getId(),
@@ -78,6 +91,11 @@ class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleIndex->getCatalogRuleGrid()->searchAndOpen($filter);
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule, null, $replace);
         $this->catalogRuleNew->getFormPageActions()->$saveAction();
+
+        if ($isCronEnabled) {
+            $cron->run();
+            $cron->run();
+        }
 
         // Create simple product with category
         $productSimple->persist();

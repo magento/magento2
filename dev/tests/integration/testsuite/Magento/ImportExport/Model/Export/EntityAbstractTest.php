@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,12 +25,12 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\TestFramework\ObjectManager  $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Export\AbstractEntity',
+            \Magento\ImportExport\Model\Export\AbstractEntity::class,
             [
-                $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
-                $objectManager->get('Magento\Store\Model\StoreManager'),
-                $objectManager->get('Magento\ImportExport\Model\Export\Factory'),
-                $objectManager->get('Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory')
+                $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                $objectManager->get(\Magento\Store\Model\StoreManager::class),
+                $objectManager->get(\Magento\ImportExport\Model\Export\Factory::class),
+                $objectManager->get(\Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class)
             ]
         );
     }
@@ -58,10 +58,10 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\ImportExport\Model\Export\Adapter\Csv'
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
             )
         );
-        $this->assertInstanceOf('Magento\ImportExport\Model\Export\Adapter\Csv', $this->_model->getWriter());
+        $this->assertInstanceOf(\Magento\ImportExport\Model\Export\Adapter\Csv::class, $this->_model->getWriter());
     }
 
     /**
@@ -80,7 +80,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     public function testFilterAttributeCollection()
     {
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\ResourceModel\Attribute\Collection'
+            \Magento\Customer\Model\ResourceModel\Attribute\Collection::class
         );
         $collection = $this->_model->filterAttributeCollection($collection);
         /**

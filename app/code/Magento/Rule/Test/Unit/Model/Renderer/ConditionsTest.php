@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,9 +28,9 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->conditions = $this->objectManagerHelper->getObject('Magento\Rule\Model\Renderer\Conditions');
+        $this->conditions = $this->objectManagerHelper->getObject(\Magento\Rule\Model\Renderer\Conditions::class);
         $this->_element = $this->getMock(
-            '\Magento\Framework\Data\Form\Element\AbstractElement',
+            \Magento\Framework\Data\Form\Element\AbstractElement::class,
             ['getRule'],
             [],
             '',
@@ -40,11 +40,11 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
 
     public function testRender()
     {
-        $rule = $this->getMockBuilder('Magento\Rule\Model\AbstractModel')
+        $rule = $this->getMockBuilder(\Magento\Rule\Model\AbstractModel::class)
             ->setMethods(['getConditions', '__sleep', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $conditions = $this->getMock('\Magento\Rule\Model\Condition\Combine', ['asHtmlRecursive'], [], '', false);
+        $conditions = $this->getMock(\Magento\Rule\Model\Condition\Combine::class, ['asHtmlRecursive'], [], '', false);
 
         $this->_element->expects($this->any())
             ->method('getRule')

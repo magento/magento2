@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Model\SearchEngine;
@@ -28,8 +28,14 @@ class MenuBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->searchFeatureConfig = $this->getMock('\Magento\Search\Model\SearchEngine\Config', [], [], '', false);
-        $this->engineResolver = $this->getMock('\Magento\Search\Model\EngineResolver', [], [], '', false);
+        $this->searchFeatureConfig = $this->getMock(
+            \Magento\Search\Model\SearchEngine\Config::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->engineResolver = $this->getMock(\Magento\Search\Model\EngineResolver::class, [], [], '', false);
     }
 
     public function testAfterGetResult()
@@ -41,22 +47,22 @@ class MenuBuilderTest extends \PHPUnit_Framework_TestCase
             ->with('synonyms', 'mysql')
             ->willReturn(false);
         /** @var \Magento\Backend\Model\Menu $menu */
-        $menu = $this->getMock('\Magento\Backend\Model\Menu', [], [], '', false);
+        $menu = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
         $menu->expects($this->once())->method('remove')->willReturn(true);
 
         /** @var \Magento\Backend\Model\Menu\Builder $menuBuilder */
-        $menuBuilder = $this->getMock('\Magento\Backend\Model\Menu\Builder', [], [], '', false);
+        $menuBuilder = $this->getMock(\Magento\Backend\Model\Menu\Builder::class, [], [], '', false);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Search\Model\SearchEngine\MenuBuilder $searchMenuBuilder */
         $searchMenuBuilder = $objectManager->getObject(
-            'Magento\Search\Model\SearchEngine\MenuBuilder',
+            \Magento\Search\Model\SearchEngine\MenuBuilder::class,
             [
                 'searchFeatureConfig' => $this->searchFeatureConfig,
                 'engineResolver' => $this->engineResolver
             ]
         );
         $this->assertInstanceOf(
-            '\Magento\Backend\Model\Menu',
+            \Magento\Backend\Model\Menu::class,
             $searchMenuBuilder->afterGetResult($menuBuilder, $menu)
         );
     }

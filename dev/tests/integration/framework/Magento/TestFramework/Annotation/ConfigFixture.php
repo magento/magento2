@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,11 @@ namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Handler which works with magentoConfigFixture annotations
+ *
+ * @package Magento\TestFramework\Annotation
+ */
 class ConfigFixture
 {
     /**
@@ -47,7 +52,7 @@ class ConfigFixture
         $result = null;
         if ($scopeCode !== false) {
             /** @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig */
-            $scopeConfig = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
+            $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
             $result = $scopeConfig->getValue(
                 $configPath,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -71,7 +76,7 @@ class ConfigFixture
             if (strpos($configPath, 'default/') === 0) {
                 $configPath = substr($configPath, 8);
                 $objectManager->get(
-                    'Magento\Framework\App\Config\MutableScopeConfigInterface'
+                    \Magento\Framework\App\Config\MutableScopeConfigInterface::class
                 )->setValue(
                     $configPath,
                     $value,
@@ -80,7 +85,7 @@ class ConfigFixture
             }
         } else {
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\App\Config\MutableScopeConfigInterface'
+                \Magento\Framework\App\Config\MutableScopeConfigInterface::class
             )->setValue(
                 $configPath,
                 $value,

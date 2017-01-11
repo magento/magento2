@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
@@ -26,9 +26,9 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $this->moduleManagerMock = $this->getMock(
-            'Magento\Framework\Module\Manager',
+            \Magento\Framework\Module\Manager::class,
             ['isOutputEnabled'],
             [],
             '',
@@ -36,7 +36,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Config\Model\Config\Structure\AbstractElement',
+            \Magento\Config\Model\Config\Structure\AbstractElement::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'moduleManager' => $this->moduleManagerMock,

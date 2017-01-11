@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
@@ -44,12 +44,12 @@ class IpnTest extends \PHPUnit_Framework_TestCase
         $ipnData['mc_currency'] = $currencyCode;
 
         /** @var  $ipnFactory \Magento\Paypal\Model\IpnFactory */
-        $ipnFactory = $this->_objectManager->create('Magento\Paypal\Model\IpnFactory');
+        $ipnFactory = $this->_objectManager->create(\Magento\Paypal\Model\IpnFactory::class);
 
         $model = $ipnFactory->create(['data' => $ipnData, 'curlFactory' => $this->_createMockedHttpAdapter()]);
         $model->processIpnRequest();
 
-        $order = $this->_objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $this->_assertOrder($order, $currencyCode);
     }
@@ -89,8 +89,8 @@ class IpnTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createMockedHttpAdapter()
     {
-        $factory = $this->getMock('Magento\Framework\HTTP\Adapter\CurlFactory', ['create'], [], '', false);
-        $adapter = $this->getMock('Magento\Framework\HTTP\Adapter\Curl', ['read', 'write'], [], '', false);
+        $factory = $this->getMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create'], [], '', false);
+        $adapter = $this->getMock(\Magento\Framework\HTTP\Adapter\Curl::class, ['read', 'write'], [], '', false);
 
         $adapter->expects($this->once())->method('read')->with()->will($this->returnValue("\nVERIFIED"));
 

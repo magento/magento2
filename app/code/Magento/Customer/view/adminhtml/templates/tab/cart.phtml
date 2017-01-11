@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
+/* @var \Magento\Customer\Block\Adminhtml\Edit\Tab\Cart $block */
 ?>
-<?php /* @var $block \Magento\Customer\Block\Adminhtml\Edit\Tab\Cart */ ?>
 <?php if ($block->getCartHeader()): ?>
 <div class="content-header skip-header">
     <table>
         <tr>
-            <td style="width:50%;"><h4><?php /* @escapeNotVerified */ echo $block->getCartHeader(); ?></h4></td>
+            <td style="width:50%;"><h4><?php echo $block->escapeHtml($block->getCartHeader()); ?></h4></td>
         </tr>
     </table>
 </div>
@@ -29,19 +29,19 @@ require([
     "Magento_Catalog/catalog/product/composite/configure"
 ], function(alert, confirm){
 
-<?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>cartControl = {
+<?php echo $block->escapeJs($block->getJsObjectName()) ?>cartControl = {
     reload: function (params) {
         if (!params) {
             params = {};
         }
-        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.reloadParams = params;
-        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.reload();
-        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.reloadParams = {};
+        <?php echo $block->escapeJs($block->getJsObjectName()) ?>.reloadParams = params;
+        <?php echo $block->escapeJs($block->getJsObjectName()) ?>.reload();
+        <?php echo $block->escapeJs($block->getJsObjectName()) ?>.reloadParams = {};
     },
 
     configureItem: function (itemId) {
-        productConfigure.setOnLoadIFrameCallback('<?php /* @escapeNotVerified */ echo $listType ?>', this.cbOnLoadIframe.bind(this));
-        productConfigure.showItemConfiguration('<?php /* @escapeNotVerified */ echo $listType ?>', itemId);
+        productConfigure.setOnLoadIFrameCallback('<?php echo $block->escapeJs($listType) ?>', this.cbOnLoadIframe.bind(this));
+        productConfigure.showItemConfiguration('<?php echo $block->escapeJs($listType) ?>', itemId);
         return false;
     },
 
@@ -57,14 +57,14 @@ require([
 
         if (!itemId) {
             alert({
-                content: '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('No item specified.')) ?>'
+                content: '<?php echo $block->escapeJs(__('No item specified.')) ?>'
             });
 
             return false;
         }
 
         confirm({
-            content: '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Are you sure you want to remove this item?')) ?>',
+            content: '<?php echo $block->escapeJs(__('Are you sure you want to remove this item?')) ?>',
             actions: {
                 confirm: function(){
                     self.reload({'delete':itemId});
@@ -81,10 +81,10 @@ $params = [
 ];
 ?>
 productConfigure.addListType(
-    '<?php /* @escapeNotVerified */ echo $listType ?>',
+    '<?php echo $block->escapeJs($listType) ?>',
     {
-        urlFetch: '<?php /* @escapeNotVerified */ echo $block->getUrl('customer/cart_product_composite_cart/configure', $params) ?>',
-        urlConfirm: '<?php /* @escapeNotVerified */ echo $block->getUrl('customer/cart_product_composite_cart/update', $params) ?>'
+        urlFetch: '<?php echo $block->escapeJs($block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/configure', $params))) ?>',
+        urlConfirm: '<?php echo $block->escapeJs($block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/update', $params))) ?>'
     }
 );
 

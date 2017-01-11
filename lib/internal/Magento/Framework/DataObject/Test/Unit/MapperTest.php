@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,8 +25,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fromMock = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
-        $this->toMock = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $this->fromMock = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
+        $this->toMock = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
         $this->mapper = new \Magento\Framework\DataObject\Mapper();
     }
 

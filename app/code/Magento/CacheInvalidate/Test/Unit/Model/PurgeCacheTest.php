@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CacheInvalidate\Test\Unit\Model;
@@ -23,8 +23,8 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $socketFactoryMock = $this->getMock('Magento\CacheInvalidate\Model\SocketFactory', [], [], '', false);
-        $this->socketAdapterMock = $this->getMock('\Zend\Http\Client\Adapter\Socket', [], [], '', false);
+        $socketFactoryMock = $this->getMock(\Magento\CacheInvalidate\Model\SocketFactory::class, [], [], '', false);
+        $this->socketAdapterMock = $this->getMock(\Zend\Http\Client\Adapter\Socket::class, [], [], '', false);
         $this->socketAdapterMock->expects($this->once())
             ->method('setOptions')
             ->with(['timeout' => 10]);
@@ -32,12 +32,12 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->socketAdapterMock);
 
-        $this->loggerMock = $this->getMock('Magento\Framework\Cache\InvalidateLogger', [], [], '', false);
-        $this->cacheServer = $this->getMock('Magento\PageCache\Model\Cache\Server', [], [], '', false);
+        $this->loggerMock = $this->getMock(\Magento\Framework\Cache\InvalidateLogger::class, [], [], '', false);
+        $this->cacheServer = $this->getMock(\Magento\PageCache\Model\Cache\Server::class, [], [], '', false);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\CacheInvalidate\Model\PurgeCache',
+            \Magento\CacheInvalidate\Model\PurgeCache::class,
             [
                 'cacheServer' => $this->cacheServer,
                 'socketAdapterFactory' => $socketFactoryMock,

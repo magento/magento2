@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
@@ -26,7 +26,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
     {
         $inputParams = ['param_one' => 'value_one', 'param_two' => 'value_two'];
 
-        $ruleOne = $this->getMockForAbstractClass('\Magento\Framework\View\Design\Fallback\Rule\RuleInterface');
+        $ruleOne = $this->getMockForAbstractClass(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class);
         $ruleOne->expects(
             $this->once()
         )->method(
@@ -37,7 +37,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(['rule_one/path/one', 'rule_one/path/two'])
         );
 
-        $ruleTwo = $this->getMockForAbstractClass('\Magento\Framework\View\Design\Fallback\Rule\RuleInterface');
+        $ruleTwo = $this->getMockForAbstractClass(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class);
         $ruleTwo->expects(
             $this->once()
         )->method(

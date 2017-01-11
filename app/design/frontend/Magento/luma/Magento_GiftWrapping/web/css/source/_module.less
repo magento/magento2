@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -25,6 +25,17 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
+    .gift-wrapping {
+        .label {
+            .lib-css(margin, @form-field-type-label-block__margin);
+            display: inline-block;
+        }
+
+        .field {
+            margin-bottom: @indent__s;
+        }
+    }
+
     .gift-wrapping-info {
         .lib-css(font-weight, @font-weight__light);
         font-size: @font-size__l;
@@ -99,6 +110,7 @@
         .action-remove {
             &:extend(.abs-action-button-as-link all);
             margin: -@indent__xs 0 0 @indent__xs;
+
             .lib-icon-font(
             @icon-trash,
             @_icon-font-size: 18px,
@@ -130,9 +142,15 @@
     }
 
     .opc-wrapper {
-        .fieldset.gift-message .field.gift-wrapping {
-            padding: 0;
-            width: 100%;
+        .fieldset {
+            &.gift-message {
+                .field {
+                    &.gift-wrapping {
+                        padding: 0;
+                        width: 100%;
+                    }
+                }
+            }
         }
     }
 
@@ -140,6 +158,7 @@
     .table-order-items {
         .gift-wrapping {
             margin: @indent__base 0 0;
+
             .title {
                 float: none;
             }
@@ -160,6 +179,8 @@
 
     .gift-summary,
     .gift-options {
+        &:extend(.abs-adjustment-incl-excl-tax all);
+
         .price-box {
             margin-left: 22px;
         }
@@ -173,8 +194,30 @@
                 font-weight: @font-weight__bold;
             }
         }
+    }
 
-        &:extend(.abs-adjustment-incl-excl-tax all);
+    //
+    //  Multiple Shipping Checkout
+    //  ---------------------------------------------
+
+    .order-options {
+        .item {
+            padding-bottom: @indent__base;
+        }
+
+        .product {
+            &:extend(.abs-add-clearfix all);
+            margin-bottom: @indent__s;
+        }
+
+        .product-image-container {
+            float: left;
+            padding-right: @indent__s;
+        }
+
+        .gift-wrapping {
+            margin-bottom: @indent__s;
+        }
     }
 }
 
@@ -183,11 +226,15 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .gift-wrapping {
-        .lib-css(border-bottom, @gift-wrapping__border-width solid @gift-wrapping__border-color);
-        margin-bottom: @indent__base;
-        padding-bottom: @indent__s;
+    .gift-options-cart-item,
+    .cart-gift-item {
+        .gift-wrapping {
+            .lib-css(border-bottom, @gift-wrapping__border-width solid @gift-wrapping__border-color);
+            margin-bottom: @indent__base;
+            padding-bottom: @indent__s;
+        }
     }
+
 
     .gift-wrapping-list {
         width: 100%;
@@ -238,18 +285,42 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .gift-wrapping {
-        box-sizing: border-box;
-        float: left;
-        padding-right: @indent__base;
-        width: 50%;
-
-        & + .gift-message {
-            .lib-css(border-left, @gift-wrapping__border-width solid @gift-wrapping__border-color);
+    .gift-options-cart-item,
+    .cart-gift-item {
+        .gift-wrapping {
             box-sizing: border-box;
             float: left;
-            padding-left: 4.5rem;
+            padding-right: @indent__base;
             width: 50%;
+
+            & + .gift-message {
+                .lib-css(border-left, @gift-wrapping__border-width solid @gift-wrapping__border-color);
+                box-sizing: border-box;
+                float: left;
+                padding-left: 4.5rem;
+                width: 50%;
+            }
+        }
+
+        .gift-summary {
+            .regular-price {
+                white-space: nowrap;
+            }
+        }
+
+        .gift-wrapping-name {
+            padding-right: @indent__base;
+        }
+    }
+
+    //
+    //  Multiple Shipping Checkout
+    //  ---------------------------------------------
+
+    .order-options,
+    .table-order-review {
+        .gift-wrapping {
+            max-width: 50%;
         }
     }
 }

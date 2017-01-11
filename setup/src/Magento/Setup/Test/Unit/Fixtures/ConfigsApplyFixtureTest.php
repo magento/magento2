@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,17 +23,17 @@ class ConfigsApplyFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+        $this->fixtureModelMock = $this->getMock(\Magento\Setup\Fixtures\FixtureModel::class, [], [], '', false);
 
         $this->model = new ConfigsApplyFixture($this->fixtureModelMock);
     }
     public function testExecute()
     {
-        $cacheMock = $this->getMock('\Magento\Framework\App\Cache', [], [], '', false);
+        $cacheMock = $this->getMock(\Magento\Framework\App\Cache::class, [], [], '', false);
 
-        $valueMock = $this->getMock('\Magento\Framework\App\Config', [], [], '', false);
+        $valueMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
         $objectManagerMock->expects($this->once())
             ->method('get')
             ->will($this->returnValue($cacheMock));
@@ -52,10 +52,10 @@ class ConfigsApplyFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
-        $configMock = $this->getMock('\Magento\Framework\App\Config\ValueInterface', [], [], '', false);
+        $configMock = $this->getMock(\Magento\Framework\App\Config\ValueInterface::class, [], [], '', false);
         $configMock->expects($this->never())->method('save');
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
         $objectManagerMock->expects($this->never())
             ->method('create')
             ->willReturn($configMock);

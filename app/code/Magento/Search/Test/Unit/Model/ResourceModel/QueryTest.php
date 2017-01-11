@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Model\ResourceModel;
@@ -23,31 +23,34 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->adapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resource->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->adapter);
 
-        $context = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\Context')
+        $context = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->any())
             ->method('getResources')
             ->willReturn($resource);
 
-        $this->model = $objectManager->getObject('Magento\Search\Model\ResourceModel\Query', ['context' => $context]);
+        $this->model = $objectManager->getObject(
+            \Magento\Search\Model\ResourceModel\Query::class,
+            ['context' => $context]
+        );
     }
 
     public function testSaveIncrementalPopularity()
     {
         /** @var \Magento\Search\Model\Query|\PHPUnit_Framework_MockObject_MockObject $model */
-        $model = $this->getMockBuilder('Magento\Search\Model\Query')
+        $model = $this->getMockBuilder(\Magento\Search\Model\Query::class)
             ->disableOriginalConstructor()
             ->getMock();
         $model->expects($this->any())
@@ -66,7 +69,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     public function testSaveNumResults()
     {
         /** @var \Magento\Search\Model\Query|\PHPUnit_Framework_MockObject_MockObject $model */
-        $model = $this->getMockBuilder('Magento\Search\Model\Query')
+        $model = $this->getMockBuilder(\Magento\Search\Model\Query::class)
             ->disableOriginalConstructor()
             ->getMock();
         $model->expects($this->any())

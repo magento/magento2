@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Report\Row;
@@ -115,9 +115,13 @@ class TransactionMap implements DocumentInterface
      */
     public function getCustomAttributes()
     {
+        $shouldBeLocalized = ['paymentInstrumentType', 'type', 'status'];
         $output = [];
         foreach ($this->getMappedValues() as $key => $value) {
             $attribute = $this->attributeValueFactory->create();
+            if(in_array($key, $shouldBeLocalized)) {
+                $value = __($value);
+            }
             $output[] = $attribute->setAttributeCode($key)->setValue($value);
         }
         return $output;

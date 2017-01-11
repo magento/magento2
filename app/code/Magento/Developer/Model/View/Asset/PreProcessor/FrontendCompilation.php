@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Model\View\Asset\PreProcessor;
@@ -74,10 +74,6 @@ class FrontendCompilation implements PreProcessorInterface
      */
     public function process(PreProcessor\Chain $chain)
     {
-        $content = $chain->getContent();
-        if (trim($content) !== '') {
-            return;
-        }
 
         try {
             $this->lockerProcess->lockProcess($this->lockName);
@@ -87,7 +83,10 @@ class FrontendCompilation implements PreProcessorInterface
 
             /** @var FallbackContext $context */
             $context = $chain->getAsset()->getContext();
-            $chain->setContent($this->processContent($path, $content, $module, $context));
+
+            $result = $this->processContent($path, $chain->getContent(), $module, $context);
+            $chain->setContent($result['content']);
+            $chain->setContentType($result['sourceType']);
         } finally {
             $this->lockerProcess->unlockProcess();
         }
@@ -100,28 +99,33 @@ class FrontendCompilation implements PreProcessorInterface
      * @param string $content
      * @param string $module
      * @param FallbackContext $context
-     * @return string
+     * @return array
      */
     private function processContent($path, $content, $module, FallbackContext $context)
     {
+        $sourceTypePattern = '#\.' . preg_quote(pathinfo($path, PATHINFO_EXTENSION), '#') . '$#';
+
         foreach ($this->alternativeSource->getAlternativesExtensionsNames() as $name) {
             $asset = $this->assetBuilder->setArea($context->getAreaCode())
                 ->setTheme($context->getThemePath())
                 ->setLocale($context->getLocale())
                 ->setModule($module)
-                ->setPath(preg_replace(
-                    '#\.' . preg_quote(pathinfo($path, PATHINFO_EXTENSION)) . '$#',
-                    '.' . $name,
-                    $path
-                ))->build();
+                ->setPath(preg_replace($sourceTypePattern, '.' . $name, $path))
+                ->build();
 
             $processedContent = $this->assetSource->getContent($asset);
 
             if (trim($processedContent) !== '') {
-                return $processedContent;
+                return [
+                    'content' => $processedContent,
+                    'sourceType' => $name
+                ];
             }
         }
 
-        return $content;
+        return [
+            'content' => $content,
+            'sourceType' => pathinfo($path, PATHINFO_EXTENSION)
+        ];
     }
 }

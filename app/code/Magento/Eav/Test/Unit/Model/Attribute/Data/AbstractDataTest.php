@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,10 +19,10 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $timezoneMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $loggerMock = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
-        $localeResolverMock = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
-        $stringMock = $this->getMock('\Magento\Framework\Stdlib\StringUtils', [], [], '', false);
+        $timezoneMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
+        $localeResolverMock = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class);
+        $stringMock = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class, [], [], '', false);
 
         /* testing abstract model through its child */
         $this->model = new Text($timezoneMock, $loggerMock, $localeResolverMock, $stringMock);
@@ -34,7 +34,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEntity()
     {
-        $entityMock = $this->getMock('\Magento\Framework\Model\AbstractModel', [], [], '', false);
+        $entityMock = $this->getMock(\Magento\Framework\Model\AbstractModel::class, [], [], '', false);
         $this->model->setEntity($entityMock);
         $this->assertEquals($entityMock, $this->model->getEntity());
     }
@@ -100,7 +100,11 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     public function testGetRequestValue($requestScope, $value, $params, $requestScopeOnly, $expectedResult)
     {
         $requestMock = $this->getMock(
-            '\Magento\Framework\App\Request\Http', ['getParams', 'getParam'], [], '', false
+            \Magento\Framework\App\Request\Http::class,
+            ['getParams', 'getParam'],
+            [],
+            '',
+            false
         );
         $requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap([
             ['attributeCode', false, $value],
@@ -108,7 +112,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         ]));
         $requestMock->expects($this->any())->method('getParams')->will($this->returnValue($params));
 
-        $attributeMock = $this->getMock('\Magento\Eav\Model\Attribute', [], [], '', false);
+        $attributeMock = $this->getMock(\Magento\Eav\Model\Attribute::class, [], [], '', false);
         $attributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('attributeCode'));
 
         $this->model->setAttribute($attributeMock);

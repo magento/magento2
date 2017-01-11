@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,15 +37,15 @@ class ExportViewedCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminhtm
     {
         parent::setUp();
 
-        $this->dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\Filter\Date')
+        $this->dateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\Filter\Date::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->helperMock = $this->getMockBuilder('Magento\Backend\Helper\Data')
+        $this->helperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerMock
@@ -57,7 +57,7 @@ class ExportViewedCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminhtm
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->exportViewedCsv = $objectManager->getObject(
-            'Magento\Reports\Controller\Adminhtml\Report\Product\ExportViewedCsv',
+            \Magento\Reports\Controller\Adminhtml\Report\Product\ExportViewedCsv::class,
             [
                 'context' => $this->contextMock,
                 'fileFactory' => $this->fileFactoryMock,
@@ -82,7 +82,7 @@ class ExportViewedCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminhtm
         $this->layoutMock
             ->expects($this->once())
             ->method('createBlock')
-            ->with('Magento\Reports\Block\Adminhtml\Product\Viewed\Grid')
+            ->with(\Magento\Reports\Block\Adminhtml\Product\Viewed\Grid::class)
             ->willReturn($this->abstractBlockMock);
 
         $this->fileFactoryMock

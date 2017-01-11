@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model\Template\Config;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,7 +40,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $fileResolver = $this->getMock(
-            'Magento\Email\Model\Template\Config\FileResolver',
+            \Magento\Email\Model\Template\Config\FileResolver::class,
             [],
             [],
             '',
@@ -48,10 +51,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             __DIR__ . '/_files/Fixture/ModuleTwo/etc/email_templates_two.xml',
         ];
 
-        $this->_converter = $this->getMock('Magento\Email\Model\Template\Config\Converter', ['convert']);
+        $this->_converter = $this->getMock(\Magento\Email\Model\Template\Config\Converter::class, ['convert']);
 
         $moduleReader = $this->getMock(
-            'Magento\Framework\Module\Dir\Reader',
+            \Magento\Framework\Module\Dir\Reader::class,
             ['getModuleDir'],
             [],
             '',
@@ -69,26 +72,32 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
         $schemaLocator = new \Magento\Email\Model\Template\Config\SchemaLocator($moduleReader);
 
-        $validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface', [], [], '', true);
+        $validationStateMock = $this->getMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            [],
+            [],
+            '',
+            true
+        );
         $validationStateMock->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(false);
 
         $this->_moduleDirResolver = $this->getMock(
-            'Magento\Framework\Module\Dir\ReverseResolver',
+            \Magento\Framework\Module\Dir\ReverseResolver::class,
             [],
             [],
             '',
             false
         );
         $readFactory = $this->getMock(
-            '\Magento\Framework\Filesystem\File\ReadFactory',
+            \Magento\Framework\Filesystem\File\ReadFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->read = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false);
+        $this->read = $this->getMock(\Magento\Framework\Filesystem\File\Read::class, [], [], '', false);
         $readFactory->expects($this->any())->method('create')->willReturn($this->read);
 
         $fileIterator = new \Magento\Email\Model\Template\Config\FileIterator(

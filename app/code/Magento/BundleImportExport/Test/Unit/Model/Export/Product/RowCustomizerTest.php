@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\BundleImportExport\Test\Unit\Model\Export\Product;
@@ -59,17 +59,17 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->rowCustomizerMock = $this->objectManagerHelper->getObject(
-            '\Magento\BundleImportExport\Model\Export\RowCustomizer'
+            \Magento\BundleImportExport\Model\Export\RowCustomizer::class
         );
         $this->productResourceCollection = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             ['addAttributeToFilter', 'getIterator'],
             [],
             '',
             false
         );
         $this->product = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [
                 'getEntityId',
                 'getPriceType',
@@ -93,7 +93,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())->method('getWeightType')->willReturn(1);
         $this->product->expects($this->any())->method('getTypeInstance')->willReturnSelf();
         $this->optionsCollection = $this->getMock(
-            '\Magento\Bundle\Model\ResourceModel\Option\Collection',
+            \Magento\Bundle\Model\ResourceModel\Option\Collection::class,
             ['setOrder', 'getIterator'],
             [],
             '',
@@ -102,7 +102,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())->method('getOptionsCollection')->willReturn($this->optionsCollection);
         $this->optionsCollection->expects($this->any())->method('setOrder')->willReturnSelf();
         $this->option = $this->getMock(
-            '\Magento\Bundle\Model\Option',
+            \Magento\Bundle\Model\Option::class,
             ['getId', 'getTitle', 'getType', 'getRequired'],
             [],
             '',
@@ -116,7 +116,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(new \ArrayIterator([$this->option]))
         );
         $this->selection = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getSku', 'getSelectionPriceValue', 'getIsDefault', 'getSelectionQty', 'getSelectionPriceType'],
             [],
             '',
@@ -127,7 +127,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->selection->expects($this->any())->method('getSelectionQty')->willReturn(1);
         $this->selection->expects($this->any())->method('getSelectionPriceType')->willReturn(1);
         $this->selectionsCollection = $this->getMock(
-            '\Magento\Bundle\Model\ResourceModel\Selection\Collection',
+            \Magento\Bundle\Model\ResourceModel\Selection\Collection::class,
             ['getIterator', 'addAttributeToSort'],
             [],
             '',
@@ -178,7 +178,8 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     public function testAddData()
     {
         $preparedData = $this->rowCustomizerMock->prepareData($this->productResourceCollection, [1]);
-        $attributes = 'attribute=1,sku_type=1,price_type=1,price_view=1,weight_type=1,values=values,shipment_type=1';
+        $attributes = 'attribute=1,sku_type=1,attribute2="Text",price_type=1,price_view=1,weight_type=1,'
+            . 'values=values,shipment_type=1,attribute3=One,Two,Three';
         $dataRow = [
             'sku' => 'sku1',
             'additional_attributes' => $attributes
@@ -186,7 +187,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $preparedRow = $preparedData->addData($dataRow, 1);
         $expected = [
             'sku' => 'sku1',
-            'additional_attributes' => 'attribute=1',
+            'additional_attributes' => 'attribute=1,attribute2="Text",attribute3=One,Two,Three',
             'bundle_price_type' => 'fixed',
             'bundle_shipment_type' => 'separately',
             'bundle_sku_type' => 'fixed',

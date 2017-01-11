@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@
         <span><?php /* @escapeNotVerified */ echo $block->getHeaderText() ?></span>
     </legend>
     <br>
-    <div class="form-inline">
+    <div class="form-inline" data-mage-init='{"Magento_Sales/order/edit/address/form":{}}'>
         <?php echo $block->getForm()->toHtml() ?>
     </div>
 </fieldset>

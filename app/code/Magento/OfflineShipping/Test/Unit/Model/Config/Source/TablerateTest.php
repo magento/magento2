@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Test\Unit\Model\Config\Source;
@@ -19,15 +19,16 @@ class TablerateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->carrierTablerateMock = $this->getMockBuilder('\Magento\OfflineShipping\Model\Carrier\Tablerate')
+        $this->carrierTablerateMock = $this->getMockBuilder(\Magento\OfflineShipping\Model\Carrier\Tablerate::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode'])
             ->getMock();
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $helper->getObject('Magento\OfflineShipping\Model\Config\Source\Tablerate', [
-            'carrierTablerate' => $this->carrierTablerateMock
-        ]);
+        $this->model = $helper->getObject(
+            \Magento\OfflineShipping\Model\Config\Source\Tablerate::class,
+            ['carrierTablerate' => $this->carrierTablerateMock]
+        );
     }
 
     public function testToOptionArray()

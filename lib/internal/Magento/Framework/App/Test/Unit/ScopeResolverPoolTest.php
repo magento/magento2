@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,12 +20,13 @@ class ScopeResolverPoolTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $scope = $this->getMock('\Magento\Framework\App\ScopeResolverInterface');
-        $scopeResolver = $this->_helper->getObject('Magento\Framework\App\ScopeResolverPool', [
-            'scopeResolvers' => [
-                'test' => $scope,
+        $scope = $this->getMock(\Magento\Framework\App\ScopeResolverInterface::class);
+        $scopeResolver = $this->_helper->getObject(
+            \Magento\Framework\App\ScopeResolverPool::class,
+            [
+                'scopeResolvers' => ['test' => $scope]
             ]
-        ]);
+        );
         $this->assertSame($scope, $scopeResolver->get('test'));
     }
 
@@ -39,11 +40,12 @@ class ScopeResolverPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetException($scope)
     {
-        $scopeResolver = $this->_helper->getObject('Magento\Framework\App\ScopeResolverPool', [
-            'scopeResolvers' => [
-                'test' => new \Magento\Framework\DataObject(),
+        $scopeResolver = $this->_helper->getObject(
+            \Magento\Framework\App\ScopeResolverPool::class,
+            [
+                'scopeResolvers' => ['test' => new \Magento\Framework\DataObject()]
             ]
-        ]);
+        );
         $scopeResolver->get($scope);
     }
 

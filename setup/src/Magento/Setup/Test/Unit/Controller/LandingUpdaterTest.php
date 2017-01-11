@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class LandingUpdaterTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         /** @var \Magento\Framework\App\ProductMetadata|\PHPUnit_Framework_MockObject_MockObject $productMetadataMock */
-        $productMetadataMock =  $this->getMockBuilder('Magento\Framework\App\ProductMetadata')
+        $productMetadataMock =  $this->getMockBuilder(\Magento\Framework\App\ProductMetadata::class)
             ->setMethods(['getVersion'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -32,7 +32,7 @@ class LandingUpdaterTest extends \PHPUnit_Framework_TestCase
         $controller = new LandingUpdater($productMetadataMock);
         $_SERVER['DOCUMENT_ROOT'] = 'some/doc/root/value';
         $viewModel = $controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
         $this->assertEquals('/magento/setup/landing.phtml', $viewModel->getTemplate());
         $variables = $viewModel->getVariables();

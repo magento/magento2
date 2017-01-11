@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,10 +28,15 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collectionFactoryMock = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory', ['create'], [], '', false);
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
 
         $this->storeManagerMock = $this->getMock(
-            '\Magento\Store\Model\StoreManagerInterface', [], [], '', false
+            \Magento\Store\Model\StoreManagerInterface::class, [], [], '', false
         );
 
         $this->model = new \Magento\Catalog\Model\Layer\Search\FilterableAttributeList(
@@ -46,14 +51,14 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetList()
     {
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
 
         $storeId = 4321;
         $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
 
         $collectionMock = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection', [], [], '', false
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class, [], [], '', false
         );
         $this->collectionFactoryMock
             ->expects($this->once())
@@ -63,7 +68,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
         $collectionMock
             ->expects($this->once())
             ->method('setItemObjectClass')
-            ->with('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+            ->with(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->will($this->returnSelf());
         $collectionMock
             ->expects($this->once())

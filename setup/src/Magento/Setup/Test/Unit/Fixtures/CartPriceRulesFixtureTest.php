@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@ namespace Magento\Setup\Test\Unit\Fixtures;
 
 use \Magento\Setup\Fixtures\CartPriceRulesFixture;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -22,19 +25,19 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+        $this->fixtureModelMock = $this->getMock(\Magento\Setup\Fixtures\FixtureModel::class, [], [], '', false);
 
         $this->model = new CartPriceRulesFixture($this->fixtureModelMock);
     }
 
     public function testExecute()
     {
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $storeMock->expects($this->once())
             ->method('getRootCategoryId')
             ->will($this->returnValue(2));
 
-        $websiteMock = $this->getMock('\Magento\Store\Model\Website', [], [], '', false);
+        $websiteMock = $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
         $websiteMock->expects($this->once())
             ->method('getGroups')
             ->will($this->returnValue([$storeMock]));
@@ -42,9 +45,9 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue('website_id'));
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
         $abstractDbMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [$contextMock],
             '',
             true,
@@ -56,12 +59,12 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getAllChildren')
             ->will($this->returnValue([1]));
 
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $storeManagerMock->expects($this->once())
             ->method('getWebsites')
             ->will($this->returnValue([$websiteMock]));
 
-        $categoryMock = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $categoryMock->expects($this->once())
             ->method('getResource')
             ->will($this->returnValue($abstractDbMock));
@@ -72,18 +75,18 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue('category_id'));
 
-        $modelMock = $this->getMock('\Magento\SalesRule\Model\Rule', [], [], '', false);
-        $modelFactoryMock = $this->getMock('\Magento\SalesRule\Model\RuleFactory', ['create'], [], '', false);
+        $modelMock = $this->getMock(\Magento\SalesRule\Model\Rule::class, [], [], '', false);
+        $modelFactoryMock = $this->getMock(\Magento\SalesRule\Model\RuleFactory::class, ['create'], [], '', false);
         $modelFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($modelMock);
 
         $objectValueMap = [
-            ['Magento\SalesRule\Model\RuleFactory', $modelFactoryMock],
-            ['Magento\Catalog\Model\Category', $categoryMock]
+            [\Magento\SalesRule\Model\RuleFactory::class, $modelFactoryMock],
+            [\Magento\Catalog\Model\Category::class, $categoryMock]
         ];
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($storeManagerMock));
@@ -111,13 +114,13 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
-        $ruleMock = $this->getMock('\Magento\SalesRule\Model\Rule', [], [], '', false);
+        $ruleMock = $this->getMock(\Magento\SalesRule\Model\Rule::class, [], [], '', false);
         $ruleMock->expects($this->never())->method('save');
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
         $objectManagerMock->expects($this->never())
             ->method('get')
-            ->with($this->equalTo('Magento\SalesRule\Model\Rule'))
+            ->with($this->equalTo(\Magento\SalesRule\Model\Rule::class))
             ->willReturn($ruleMock);
 
         $this->fixtureModelMock
@@ -148,14 +151,14 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
         $result = $this->model->generateAdvancedCondition($ruleId, $categoriesArray);
         if ($ruleId < ($ruleCount - 200)) {
             $firstCondition = [
-                'type'      => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product',
+                'type'      => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                 'attribute' => 'category_ids',
                 'operator'  => '==',
                 'value'     => null,
             ];
 
             $secondCondition = [
-                'type'      => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Address',
+                'type'      => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                 'attribute' => 'base_subtotal',
                 'operator'  => '>=',
                 'value'     => 5,
@@ -163,13 +166,13 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             $expected = [
                 'conditions' => [
                     1 => [
-                        'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Combine',
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                         'aggregator' => 'all',
                         'value' => '1',
                         'new_child' => '',
                     ],
                     '1--1'=> [
-                        'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product\\Found',
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                         'aggregator' => 'all',
                         'value' => '1',
                         'new_child' => '',
@@ -179,7 +182,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
                 ],
                 'actions' => [
                     1 => [
-                        'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product\\Combine',
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Combine::class,
                         'aggregator' => 'all',
                         'value' => '1',
                         'new_child' => '',
@@ -197,14 +200,14 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
                         'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
                         'Wisconsin', 'Wyoming'];
             $firstCondition = [
-                'type'      => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Address',
+                'type'      => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                 'attribute' => 'region',
                 'operator'  => '==',
                 'value'     => $regions[($ruleId / 4) % 50],
             ];
 
             $secondCondition = [
-                'type'      => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Address',
+                'type'      => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                 'attribute' => 'base_subtotal',
                 'operator'  => '>=',
                 'value'     => 5,
@@ -212,7 +215,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             $expected = [
                 'conditions' => [
                     1 => [
-                        'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Combine',
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                         'aggregator' => 'all',
                         'value' => '1',
                         'new_child' => '',
@@ -222,7 +225,7 @@ class CartPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
                 ],
                 'actions' => [
                     1 => [
-                        'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product\\Combine',
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Combine::class,
                         'aggregator' => 'all',
                         'value' => '1',
                         'new_child' => '',

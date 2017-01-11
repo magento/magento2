@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -22,10 +22,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
+        $this->_fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_configReader = $objectManager->create(
-            'Magento\Webapi\Model\Config\Reader',
+            \Magento\Webapi\Model\Config\Reader::class,
             ['fileResolver' => $this->_fileResolverMock]
         );
     }

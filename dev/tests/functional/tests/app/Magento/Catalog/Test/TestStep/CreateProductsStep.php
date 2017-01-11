@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ class CreateProductsStep implements TestStepInterface
     /**
      * Products names in data set
      *
-     * @var string
+     * @var string|array
      */
     protected $products;
 
@@ -42,7 +42,7 @@ class CreateProductsStep implements TestStepInterface
      *
      * @constructor
      * @param FixtureFactory $fixtureFactory
-     * @param string $products
+     * @param string|array $products
      * @param array $data [optional]
      */
     public function __construct(FixtureFactory $fixtureFactory, $products, array $data = [])
@@ -60,8 +60,10 @@ class CreateProductsStep implements TestStepInterface
     public function run()
     {
         $products = [];
-        $productsDataSets = explode(',', $this->products);
-        foreach ($productsDataSets as $key => $productDataSet) {
+        if (!is_array($this->products)) { // for backward compatible changes
+            $this->products = explode(',', $this->products);
+        }
+        foreach ($this->products as $key => $productDataSet) {
             $productDataSet = explode('::', $productDataSet);
             $fixtureClass = $productDataSet[0];
             $dataset = isset($productDataSet[1]) ? $productDataSet[1] : '';

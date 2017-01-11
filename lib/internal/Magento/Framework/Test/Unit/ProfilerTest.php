@@ -2,7 +2,7 @@
 /**
  * Unit Test for \Magento\Framework\Profiler
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
@@ -30,7 +30,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     {
         $expected = ['some_key' => 'some_value'];
         \Magento\Framework\Profiler::setDefaultTags($expected);
-        $this->assertAttributeEquals($expected, '_defaultTags', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals($expected, '_defaultTags', \Magento\Framework\Profiler::class);
     }
 
     public function testAddTagFilter()
@@ -40,8 +40,8 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         \Magento\Framework\Profiler::addTagFilter('tag1', 'value_1.2');
 
         $expected = ['tag1' => ['value_1.1', 'value_1.2'], 'tag2' => ['value_2.1']];
-        $this->assertAttributeEquals($expected, '_tagFilters', 'Magento\Framework\Profiler');
-        $this->assertAttributeEquals(true, '_hasTagFilters', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals($expected, '_tagFilters', \Magento\Framework\Profiler::class);
+        $this->assertAttributeEquals(true, '_hasTagFilters', \Magento\Framework\Profiler::class);
     }
 
     public function testAdd()
@@ -52,7 +52,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(\Magento\Framework\Profiler::isEnabled());
 
         $expected = [$mock];
-        $this->assertAttributeEquals($expected, '_drivers', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals($expected, '_drivers', \Magento\Framework\Profiler::class);
     }
 
     /**
@@ -61,7 +61,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     protected function _getDriverMock()
     {
         return $this->getMockBuilder(
-            'Magento\Framework\Profiler\DriverInterface'
+            \Magento\Framework\Profiler\DriverInterface::class
         )->setMethods(
             ['start', 'stop', 'clear']
         )->getMockForAbstractClass();
@@ -223,13 +223,13 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         \Magento\Framework\Profiler::add($driver);
         \Magento\Framework\Profiler::reset();
 
-        $this->assertAttributeEquals([], '_currentPath', 'Magento\Framework\Profiler');
-        $this->assertAttributeEquals([], '_tagFilters', 'Magento\Framework\Profiler');
-        $this->assertAttributeEquals([], '_defaultTags', 'Magento\Framework\Profiler');
-        $this->assertAttributeEquals([], '_drivers', 'Magento\Framework\Profiler');
-        $this->assertAttributeEquals(false, '_hasTagFilters', 'Magento\Framework\Profiler');
-        $this->assertAttributeEquals(0, '_pathCount', 'Magento\Framework\Profiler');
-        $this->assertAttributeEquals([], '_pathIndex', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals([], '_currentPath', \Magento\Framework\Profiler::class);
+        $this->assertAttributeEquals([], '_tagFilters', \Magento\Framework\Profiler::class);
+        $this->assertAttributeEquals([], '_defaultTags', \Magento\Framework\Profiler::class);
+        $this->assertAttributeEquals([], '_drivers', \Magento\Framework\Profiler::class);
+        $this->assertAttributeEquals(false, '_hasTagFilters', \Magento\Framework\Profiler::class);
+        $this->assertAttributeEquals(0, '_pathCount', \Magento\Framework\Profiler::class);
+        $this->assertAttributeEquals([], '_pathIndex', \Magento\Framework\Profiler::class);
     }
 
     /**
@@ -287,10 +287,10 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 
     public function testApplyConfig()
     {
-        $mockDriver = $this->getMock('Magento\Framework\Profiler\DriverInterface');
+        $mockDriver = $this->getMock(\Magento\Framework\Profiler\DriverInterface::class);
         $driverConfig = ['type' => 'foo'];
         $mockDriverFactory = $this->getMockBuilder(
-            'Magento\Framework\Profiler\Driver\Factory'
+            \Magento\Framework\Profiler\Driver\Factory::class
         )->disableOriginalConstructor()->getMock();
         $config = [
             'drivers' => [$driverConfig],
@@ -309,13 +309,13 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         );
 
         \Magento\Framework\Profiler::applyConfig($config, '');
-        $this->assertAttributeEquals([$mockDriver], '_drivers', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals([$mockDriver], '_drivers', \Magento\Framework\Profiler::class);
         $this->assertAttributeEquals(
             ['tagName' => ['tagValue']],
             '_tagFilters',
-            'Magento\Framework\Profiler'
+            \Magento\Framework\Profiler::class
         );
-        $this->assertAttributeEquals(true, '_enabled', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals(true, '_enabled', \Magento\Framework\Profiler::class);
     }
 
     /**
@@ -326,7 +326,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseConfig($data, $isAjax, $expected)
     {
-        $method = new \ReflectionMethod('Magento\Framework\Profiler', '_parseConfig');
+        $method = new \ReflectionMethod(\Magento\Framework\Profiler::class, '_parseConfig');
         $method->setAccessible(true);
         $this->assertEquals($expected, $method->invoke(null, $data, '', $isAjax));
     }
@@ -338,7 +338,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     public function parseConfigDataProvider()
     {
         $driverFactory = new \Magento\Framework\Profiler\Driver\Factory();
-        $otherDriverFactory = $this->getMock('Magento\Framework\Profiler\Driver\Factory');
+        $otherDriverFactory = $this->getMock(\Magento\Framework\Profiler\Driver\Factory::class);
         return [
             'Empty configuration' => [
                 [],

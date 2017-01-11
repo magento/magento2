@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
@@ -17,7 +17,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     protected function setUp()
     {
         $this->currencyRate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Directory\Model\Currency'
+            \Magento\Directory\Model\Currency::class
         );
         parent::setUp();
     }

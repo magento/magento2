@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Item;
+
+use \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
 
 /**
  * Flat sales order payment collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection
+class Collection extends AbstractCollection implements \Magento\Sales\Api\Data\OrderItemSearchResultInterface
 {
     /**
      * Event prefix
@@ -40,7 +42,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection\Abs
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Item', 'Magento\Sales\Model\ResourceModel\Order\Item');
+        $this->_init(\Magento\Sales\Model\Order\Item::class, \Magento\Sales\Model\ResourceModel\Order\Item::class);
     }
 
     /**

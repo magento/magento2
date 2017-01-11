@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:redefine schemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+        <xs:complexType name="aclResource">
+            <xs:complexContent>
+                <xs:restriction base="aclResource">
+                    <xs:annotation>
+                        <xs:documentation>
+                            ACL Resource. Recursive complex type
+                        </xs:documentation>
+                    </xs:annotation>
+
+                    <xs:sequence>
+                        <xs:element minOccurs="0" maxOccurs="unbounded" name="resource" type="aclResource" />
+                    </xs:sequence>
+
+                    <xs:attribute name="id" type="typeId" use="required" />
+                    <xs:attribute name="title" type="typeTitle" use="required" />
+                    <xs:attribute name="translate" type="xs:string" use="optional" />
+                    <xs:attribute name="sortOrder" type="xs:int" use="optional" />
+                    <xs:attribute name="disabled" type="xs:boolean" use="optional" />
+                </xs:restriction>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:redefine>
+</xs:schema>

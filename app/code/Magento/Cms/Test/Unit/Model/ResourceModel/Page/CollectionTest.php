@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page;
@@ -29,15 +29,15 @@ class CollectionTest extends AbstractCollectionTest
     {
         parent::setUp();
 
-        $this->storeManagerMock  = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock  = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->metadataPoolMock  = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
+        $this->metadataPoolMock  = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->collection = $this->objectManager->getObject(
-            'Magento\Cms\Model\ResourceModel\Page\Collection',
+            \Magento\Cms\Model\ResourceModel\Page\Collection::class,
             [
                 'resource' => $this->resource,
                 'connection' => $this->connection,
@@ -95,7 +95,7 @@ class CollectionTest extends AbstractCollectionTest
             $expectedResult[$storeData[$linkField]][] = $storeData['store_id'];
         }
 
-        $entityMetadataMock = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
+        $entityMetadataMock = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entityMetadataMock->expects($this->any())->method('getLinkField')->willReturn($linkField);
@@ -104,7 +104,9 @@ class CollectionTest extends AbstractCollectionTest
         $this->select->expects($this->any())->method('from')->willReturnSelf();
         $this->connection->expects($this->any())->method('fetchAll')->willReturn($storesData);
 
-        $storeDataMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')->getMockForAbstractClass();
+        $storeDataMock = $this->getMockBuilder(
+            \Magento\Store\Api\Data\StoreInterface::class
+        )->getMockForAbstractClass();
         $storeDataMock->expects($this->any())->method('getId')->willReturn(current($expectedResult[$item->getId()]));
         $storeDataMock->expects($this->any())->method('getCode')->willReturn('some_code');
         $this->storeManagerMock->expects($this->any())->method('getStores')->willReturn([$storeDataMock]);

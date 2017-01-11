@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Express;
 
 use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
 use Magento\Customer\Model\AccountManagement;
+use Magento\Framework\App\ObjectManager;
 use Magento\Paypal\Model\Config as PaypalConfig;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Framework\DataObject;
@@ -70,7 +72,7 @@ class Checkout
      *
      * @var string
      */
-    protected $_apiType = 'Magento\Paypal\Model\Api\Nvp';
+    protected $_apiType = \Magento\Paypal\Model\Api\Nvp::class;
 
     /**
      * Payment method type
@@ -267,6 +269,11 @@ class Checkout
      * @var \Magento\Quote\Model\Quote\TotalsCollector
      */
     protected $totalsCollector;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
@@ -789,7 +796,8 @@ class Checkout
 
         $this->ignoreAddressValidation();
         $this->_quote->collectTotals();
-        $order = $this->quoteManagement->submit($this->_quote);
+        $orderId = $this->quoteManagement->placeOrder($this->_quote->getId());
+        $order = $this->getOrderRepository()->get($orderId);
 
         if (!$order) {
             return;
@@ -1156,5 +1164,21 @@ class Checkout
             ->setCustomerIsGuest(true)
             ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
         return $this;
+    }
+
+    /**
+     * Returns order repository instance
+     *
+     * @return OrderRepositoryInterface
+     * @deprecated
+     */
+    private function getOrderRepository()
+    {
+        if ($this->orderRepository === null) {
+            $this->orderRepository = ObjectManager::getInstance()
+                ->get(OrderRepositoryInterface::class);
+        }
+
+        return $this->orderRepository;
     }
 }

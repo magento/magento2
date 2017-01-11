@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config;
@@ -9,8 +9,8 @@ class ValueFactoryTest extends \Magento\Framework\TestFramework\Unit\AbstractFac
 {
     protected function setUp()
     {
-        $this->instanceClassName = 'Magento\Framework\App\Config\ValueInterface';
-        $this->factoryClassName = 'Magento\Framework\App\Config\ValueFactory';
+        $this->instanceClassName = \Magento\Framework\App\Config\ValueInterface::class;
+        $this->factoryClassName = \Magento\Framework\App\Config\ValueFactory::class;
         parent::setUp();
     }
 

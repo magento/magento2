@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Wysiwyg;
@@ -18,12 +18,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
+            \Magento\Framework\Config\ScopeInterface::class
         )->setCurrentScope(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Cms\Model\Wysiwyg\Config'
+            \Magento\Cms\Model\Wysiwyg\Config::class
         );
     }
 
@@ -33,7 +33,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetConfig()
     {
         $config = $this->_model->getConfig();
-        $this->assertInstanceOf('Magento\Framework\DataObject', $config);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $config);
     }
 
     /**
@@ -42,7 +42,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetConfigCssUrls()
     {
         $config = $this->_model->getConfig();
-        $publicPathPattern = 'http://localhost/pub/static/adminhtml/Magento/backend/en_US/mage/%s';
+        $publicPathPattern = 'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/mage/%s';
         $this->assertStringMatchesFormat($publicPathPattern, $config->getPopupCss());
         $this->assertStringMatchesFormat($publicPathPattern, $config->getContentCss());
     }

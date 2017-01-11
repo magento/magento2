@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field;
@@ -38,7 +38,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_element = $this->getMockForAbstractClass(
-            'Magento\Framework\Data\Form\Element\AbstractElement',
+            \Magento\Framework\Data\Form\Element\AbstractElement::class,
             [],
             '',
             false,
@@ -55,11 +55,11 @@ class CountryTest extends \PHPUnit_Framework_TestCase
         $this->_element->expects($this->any())
             ->method('getName')
             ->will($this->returnValue('name'));
-        $this->_request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
-        $this->_jsHelper = $this->getMock('Magento\Framework\View\Helper\Js', [], [], '', false);
-        $this->_url = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
+        $this->_request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
+        $this->_jsHelper = $this->getMock(\Magento\Framework\View\Helper\Js::class, [], [], '', false);
+        $this->_url = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
         $this->_model = $helper->getObject(
-            'Magento\Paypal\Block\Adminhtml\System\Config\Field\Country',
+            \Magento\Paypal\Block\Adminhtml\System\Config\Field\Country::class,
             ['request' => $this->_request, 'jsHelper' => $this->_jsHelper, 'url' => $this->_url]
         );
     }

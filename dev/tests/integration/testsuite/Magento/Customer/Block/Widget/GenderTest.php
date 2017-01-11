@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Widget;
@@ -22,11 +22,11 @@ class GenderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
         $this->_block = $objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Customer\Block\Widget\Gender'
+            \Magento\Customer\Block\Widget\Gender::class
         );
     }
 
@@ -39,7 +39,7 @@ class GenderTest extends \PHPUnit_Framework_TestCase
         $options = $this->_block->getGenderOptions();
         $this->assertInternalType('array', $options);
         $this->assertNotEmpty($options);
-        $this->assertContainsOnlyInstancesOf('Magento\Customer\Model\Data\Option', $options);
+        $this->assertContainsOnlyInstancesOf(\Magento\Customer\Model\Data\Option::class, $options);
     }
 
     /**

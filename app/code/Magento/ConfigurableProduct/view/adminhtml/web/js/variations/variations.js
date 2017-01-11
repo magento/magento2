@@ -1,6 +1,6 @@
 // jscs:disable requireDotNotation
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // jscs:disable jsDoc
@@ -301,6 +301,12 @@ define([
          * Chose action for the form save button
          */
         saveFormHandler: function() {
+            this.source.data["configurable-matrix-serialized"] =
+                JSON.stringify(this.source.data["configurable-matrix"]);
+            delete this.source.data["configurable-matrix"];
+            this.source.data["associated_product_ids_serialized"] =
+                JSON.stringify(this.source.data["associated_product_ids"]);
+            delete this.source.data["associated_product_ids"];
             if (this.checkForNewAttributes()) {
                 this.formSaveParams = arguments;
                 this.attributeSetHandlerModal().openModal();

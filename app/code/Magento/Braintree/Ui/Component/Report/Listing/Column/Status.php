@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Ui\Component\Report\Listing\Column;
@@ -44,20 +44,20 @@ class Status implements OptionSourceInterface
     private function getAvailableStatuses()
     {
         return [
-            Transaction::AUTHORIZATION_EXPIRED => __('Authorization expired'),
-            Transaction::AUTHORIZING => __('Authorizing'),
-            Transaction::AUTHORIZED => __('Authorized'),
-            Transaction::GATEWAY_REJECTED => __('Gateway rejected'),
-            Transaction::FAILED => __('Failed'),
-            Transaction::PROCESSOR_DECLINED => __('Processor declined'),
-            Transaction::SETTLED => __('Settled'),
-            Transaction::SETTLING => __('Settling'),
-            Transaction::SUBMITTED_FOR_SETTLEMENT => __('Submitted for settlement'),
-            Transaction::VOIDED => __('Voided'),
-            Transaction::UNRECOGNIZED => __('Unrecognized'),
-            Transaction::SETTLEMENT_DECLINED => __('Settlement declined'),
-            Transaction::SETTLEMENT_PENDING => __('Settlement pending'),
-            Transaction::SETTLEMENT_CONFIRMED => __('Settlement confirmed')
+            Transaction::AUTHORIZATION_EXPIRED => __(Transaction::AUTHORIZATION_EXPIRED),
+            Transaction::AUTHORIZING => __(Transaction::AUTHORIZING),
+            Transaction::AUTHORIZED => __(Transaction::AUTHORIZED),
+            Transaction::GATEWAY_REJECTED => __(Transaction::GATEWAY_REJECTED),
+            Transaction::FAILED => __(Transaction::FAILED),
+            Transaction::PROCESSOR_DECLINED => __(Transaction::PROCESSOR_DECLINED),
+            Transaction::SETTLED => __(Transaction::SETTLED),
+            Transaction::SETTLING => __(Transaction::SETTLING),
+            Transaction::SUBMITTED_FOR_SETTLEMENT => __(Transaction::SUBMITTED_FOR_SETTLEMENT),
+            Transaction::VOIDED => __(Transaction::VOIDED),
+            Transaction::UNRECOGNIZED => __(Transaction::UNRECOGNIZED),
+            Transaction::SETTLEMENT_DECLINED => __(Transaction::SETTLEMENT_DECLINED),
+            Transaction::SETTLEMENT_PENDING => __(Transaction::SETTLEMENT_PENDING),
+            Transaction::SETTLEMENT_CONFIRMED => __(Transaction::SETTLEMENT_CONFIRMED)
         ];
     }
 }

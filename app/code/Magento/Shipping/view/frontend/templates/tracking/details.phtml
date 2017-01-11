@@ -1,0 +1,95 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Framework\View\Element\Template */
+
+$track = $block->getData('track');
+$email = $block->getData('storeSupportEmail');
+$fields = [
+    'Status' => 'getStatus',
+    'Signed by' => 'getSignedby',
+    'Delivered to' => 'getDeliveryLocation',
+    'Shipped or billed on' => 'getShippedDate',
+    'Service Type' => 'getService',
+    'Weight' => 'getWeight',
+];
+?>
+<table class="data table order tracking" id="tracking-table-popup-<?php /* @noEscape */ echo $track->getTracking(); ?>">
+    <caption class="table-caption"><?php echo $block->escapeHtml(__('Order tracking')); ?></caption>
+    <tbody>
+    <?php if (is_object($track)): ?>
+        <tr>
+            <th class="col label" scope="row"><?php echo $block->escapeHtml(__('Tracking Number:')); ?></th>
+            <td class="col value"><?php echo $block->escapeHtml($track->getTracking()); ?></td>
+        </tr>
+        <?php if ($track->getCarrierTitle()): ?>
+            <tr>
+                <th class="col label" scope="row"><?php echo $block->escapeHtml(__('Carrier:')); ?></th>
+                <td class="col value"><?php echo $block->escapeHtml($track->getCarrierTitle()); ?></td>
+            </tr>
+        <?php endif; ?>
+        <?php if ($track->getErrorMessage()): ?>
+            <tr>
+                <th class="col label" scope="row"><?php echo $block->escapeHtml(__('Error:')); ?></th>
+                <td class="col error">
+                    <?php echo $block->escapeHtml(__('Tracking information is currently not available. Please ')); ?>
+                    <?php if ($block->getContactUsEnabled()) : ?>
+                        <a href="<?php echo $block->escapeUrl($block->getContactUs()); ?>" target="_blank"
+                           title="<?php echo $block->escapeHtml(__('contact us')); ?>">
+                            <?php echo $block->escapeHtml(__('contact us')); ?>
+                        </a>
+                        <?php echo $block->escapeHtml(__(' for more information or ')); ?>
+                    <?php endif; ?>
+                    <?php echo $block->escapeHtml(__('email us at ')); ?>
+                    <a href="mailto:<?php /* @noEscape */ echo $email; ?>"><?php /* @noEscape */ echo $email; ?></a>
+                </td>
+            </tr>
+        <?php elseif ($track->getTrackSummary()): ?>
+            <tr>
+                <th class="col label" scope="row"><?php echo $block->escapeHtml(__('Info:')); ?></th>
+                <td class="col value"><?php echo $block->escapeHtml($track->getTrackSummary()); ?></td>
+            </tr>
+        <?php elseif ($track->getUrl()): ?>
+            <tr>
+                <th class="col label" scope="row"><?php echo $block->escapeHtml(__('Track:')); ?></th>
+                <td class="col value">
+                    <a href="<?php echo $block->escapeUrl($track->getUrl()); ?>" target="_blank">
+                        <?php echo $block->escapeUrl($track->getUrl()); ?>
+                    </a>
+                </td>
+            </tr>
+        <?php else: ?>
+            <?php foreach ($fields as $title => $property): ?>
+                <?php if (!empty($track->$property())): ?>
+                    <tr>
+                        <th class="col label" scope="row"><?php /* @noEscape */ echo $block->escapeHtml(__($title . ':')); ?></th>
+                        <td class="col value"><?php echo $block->escapeHtml($track->$property()); ?></td>
+                    </tr>
+                <?php endif;?>
+            <?php endforeach; ?>
+
+            <?php if ($track->getDeliverydate()): ?>
+                <tr>
+                    <th class="col label" scope="row"><?php echo $block->escapeHtml(__('Delivered on:')); ?></th>
+                    <td class="col value">
+                        <?php /* @noEscape */ echo $block->formatDeliveryDateTime($track->getDeliverydate(), $track->getDeliverytime()); ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php elseif (isset($track['title']) && isset($track['number']) && $track['number']): ?>
+        <?php /* if the tracking is custom value */ ?>
+        <tr>
+            <th class="col label" scope="row">
+                <?php echo($track['title'] ? $block->escapeHtml($track['title']) : $block->escapeHtml(__('N/A'))); ?>:
+            </th>
+            <td class="col value"><?php echo(isset($track['number']) ? $block->escapeHtml($track['number']) : ''); ?></td>
+        </tr>
+    <?php endif; ?>
+    </tbody>
+</table>

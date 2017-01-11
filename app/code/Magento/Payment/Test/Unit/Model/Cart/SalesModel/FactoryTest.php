@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Cart\SalesModel;
@@ -15,7 +15,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Factory($this->_objectManagerMock);
     }
 
@@ -43,8 +43,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function createDataProvider()
     {
         return [
-            ['Magento\Quote\Model\Quote', 'Magento\Payment\Model\Cart\SalesModel\Quote'],
-            ['Magento\Sales\Model\Order', 'Magento\Payment\Model\Cart\SalesModel\Order']
+            [\Magento\Quote\Model\Quote::class, \Magento\Payment\Model\Cart\SalesModel\Quote::class],
+            [\Magento\Sales\Model\Order::class, \Magento\Payment\Model\Cart\SalesModel\Order::class]
         ];
     }
 

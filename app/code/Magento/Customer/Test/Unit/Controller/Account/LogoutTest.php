@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Controller\Account;
@@ -44,10 +44,10 @@ class LogoutTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Action\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->sessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'logout', 'setBeforeAuthUrl', 'setLastCustomerId'])
             ->getMock();
@@ -87,8 +87,6 @@ class LogoutTest extends \PHPUnit_Framework_TestCase
         $cookieMetadataFactoryProperty = $refClass->getProperty('cookieMetadataFactory');
         $cookieMetadataFactoryProperty->setAccessible(true);
         $cookieMetadataFactoryProperty->setValue($this->controller, $this->cookieMetadataFactory);
-
-
     }
 
     public function testExecute()

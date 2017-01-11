@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Widget;
@@ -19,10 +19,10 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Block\Widget\Taxvat $block */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Block\Widget\Taxvat'
+            \Magento\Customer\Block\Widget\Taxvat::class
         );
 
-        $this->assertContains('title="Tax/VAT number"', $block->toHtml());
+        $this->assertContains('title="Tax&#x2F;VAT&#x20;number"', $block->toHtml());
         $this->assertNotContains('required', $block->toHtml());
     }
 
@@ -34,24 +34,24 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Model\Attribute $model */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Attribute'
+            \Magento\Customer\Model\Attribute::class
         );
         $model->loadByCode('customer', 'taxvat')->setIsRequired(true);
         $model->save();
 
         /** @var \Magento\Customer\Block\Widget\Taxvat $block */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Block\Widget\Taxvat'
+            \Magento\Customer\Block\Widget\Taxvat::class
         );
 
-        $this->assertContains('title="Tax/VAT number"', $block->toHtml());
+        $this->assertContains('title="Tax&#x2F;VAT&#x20;number"', $block->toHtml());
         $this->assertContains('required', $block->toHtml());
     }
 
     protected function tearDown()
     {
         /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
         $eavConfig->clear();
     }
 }

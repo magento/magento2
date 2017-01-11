@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -10,22 +10,27 @@ define([], function () {
      * Returns new address object
      */
     return function (addressData) {
-        var identifier = Date.now();
+        var identifier = Date.now(),
+            regionId;
+
+        if (addressData.region && addressData.region.region_id) {
+            regionId = addressData.region.region_id;
+        } else if (addressData.country_id && addressData.country_id == window.checkoutConfig.defaultCountryId) {
+            regionId = window.checkoutConfig.defaultRegionId || undefined;
+        }
 
         return {
             email: addressData.email,
-            countryId: (addressData.country_id) ? addressData.country_id : window.checkoutConfig.defaultCountryId,
-            regionId: (addressData.region && addressData.region.region_id) ?
-                addressData.region.region_id
-                : window.checkoutConfig.defaultRegionId,
+            countryId: addressData['country_id'] || addressData.countryId || window.checkoutConfig.defaultCountryId,
+            regionId: regionId || addressData.regionId,
             regionCode: (addressData.region) ? addressData.region.region_code : null,
             region: (addressData.region) ? addressData.region.region : null,
-            customerId: addressData.customer_id,
+            customerId: addressData.customer_id || addressData.customerId,
             street: addressData.street,
             company: addressData.company,
             telephone: addressData.telephone,
             fax: addressData.fax,
-            postcode: addressData.postcode ? addressData.postcode : window.checkoutConfig.defaultPostcode,
+            postcode: addressData.postcode ? addressData.postcode : window.checkoutConfig.defaultPostcode || undefined,
             city: addressData.city,
             firstname: addressData.firstname,
             lastname: addressData.lastname,

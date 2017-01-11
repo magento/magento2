@@ -2,7 +2,7 @@
 /**
  * Test class for \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
@@ -46,7 +46,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $methods = [
             'getCompositeReadonly',
             'setBundleOptionsData',
@@ -58,24 +58,24 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             'setCanSaveBundleSelections',
             '__wakeup',
         ];
-        $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', $methods, [], '', false);
-        $optionInterfaceFactory = $this->getMockBuilder('Magento\Bundle\Api\Data\OptionInterfaceFactory')
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, $methods, [], '', false);
+        $optionInterfaceFactory = $this->getMockBuilder(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $linkInterfaceFactory = $this->getMockBuilder('Magento\Bundle\Api\Data\LinkInterfaceFactory')
+        $linkInterfaceFactory = $this->getMockBuilder(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRepository = $this->getMockBuilder('Magento\Catalog\Api\ProductRepositoryInterface')
+        $productRepository = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $customOptionFactory = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customOptionFactory = $this->getMockBuilder(
+            \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class
+        )->disableOriginalConstructor()->getMock();
         $this->subjectMock = $this->getMock(
-            'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
+            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class,
             [],
             [],
             '',

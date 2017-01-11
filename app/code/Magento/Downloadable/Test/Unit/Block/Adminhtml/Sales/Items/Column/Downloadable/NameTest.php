@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,22 +31,22 @@ class NameTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $contextMock = $this->getMockBuilder('Magento\Backend\Block\Template\Context')
+        $contextMock = $this->getMockBuilder(\Magento\Backend\Block\Template\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->purchasedFactory = $this->getMockBuilder('Magento\Downloadable\Model\Link\PurchasedFactory')
+        $this->purchasedFactory = $this->getMockBuilder(\Magento\Downloadable\Model\Link\PurchasedFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->itemsFactory = $this->getMockBuilder(
-            'Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory'
+            \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->block = $objectManager->getObject(
-            'Magento\Downloadable\Block\Adminhtml\Sales\Items\Column\Downloadable\Name',
+            \Magento\Downloadable\Block\Adminhtml\Sales\Items\Column\Downloadable\Name::class,
             [
                 'context' => $contextMock,
                 'purchasedFactory' => $this->purchasedFactory,
@@ -57,16 +57,16 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLinks()
     {
-        $item = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
+        $item = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
-        $linkPurchased = $this->getMockBuilder('Magento\Downloadable\Model\Link\Purchased')
+        $linkPurchased = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Purchased::class)
             ->disableOriginalConstructor()
             ->setMethods(['load'])
             ->getMock();
         $itemCollection =
-            $this->getMockBuilder('Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection')
+            $this->getMockBuilder(\Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter'])
             ->getMock();

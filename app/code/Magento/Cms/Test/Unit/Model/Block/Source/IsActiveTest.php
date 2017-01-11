@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\Block\Source;
@@ -31,7 +31,7 @@ class IsActiveTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->cmsBlockMock = $this->getMockBuilder('Magento\Cms\Model\Block')
+        $this->cmsBlockMock = $this->getMockBuilder(\Magento\Cms\Model\Block::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAvailableStatuses'])
             ->getMock();
@@ -46,7 +46,7 @@ class IsActiveTest extends \PHPUnit_Framework_TestCase
      */
     protected function getSourceClassName()
     {
-        return 'Magento\Cms\Model\Block\Source\IsActive';
+        return \Magento\Cms\Model\Block\Source\IsActive::class;
     }
 
     /**

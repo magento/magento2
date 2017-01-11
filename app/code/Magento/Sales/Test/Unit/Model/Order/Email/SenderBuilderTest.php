@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email;
@@ -38,7 +38,7 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
         $emailCopyTo = ['example@mail.com'];
 
         $this->templateContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\Template',
+            \Magento\Sales\Model\Order\Email\Container\Template::class,
             ['getTemplateVars', 'getTemplateOptions', 'getTemplateId'],
             [],
             '',
@@ -46,7 +46,7 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->storeMock = $this->getMock(
-            '\Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             ['getStoreId', '__wakeup'],
             [],
             '',
@@ -54,7 +54,7 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->identityContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\ShipmentIdentity',
+            \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::class,
             [
                 'getEmailIdentity', 'getCustomerEmail',
                 'getCustomerName', 'getTemplateOptions', 'getEmailCopyTo',
@@ -66,7 +66,7 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->transportBuilder = $this->getMock(
-            '\Magento\Framework\Mail\Template\TransportBuilder',
+            \Magento\Framework\Mail\Template\TransportBuilder::class,
             [
                 'addTo', 'addBcc', 'getTransport',
                 'setTemplateIdentifier', 'setTemplateOptions', 'setTemplateVars',
@@ -119,7 +119,7 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
         $customerName = 'test_name';
         $customerEmail = 'test_email';
         $transportMock = $this->getMock(
-            '\Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock',
+            \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class,
             [],
             [],
             '',
@@ -152,7 +152,7 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
     public function testSendCopyTo()
     {
         $transportMock = $this->getMock(
-            '\Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock',
+            \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class,
             [],
             [],
             '',

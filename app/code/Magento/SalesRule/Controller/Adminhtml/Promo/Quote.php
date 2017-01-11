@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo;
@@ -58,7 +58,7 @@ abstract class Quote extends \Magento\Backend\App\Action
     {
         $this->_coreRegistry->register(
             \Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE,
-            $this->_objectManager->create('Magento\SalesRule\Model\Rule')
+            $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class)
         );
         $id = (int)$this->getRequest()->getParam('id');
 

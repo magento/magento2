@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,33 +44,33 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        $this->objectManager = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
+        $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMockForAbstractClass();
-        $this->messageManager = $this->getMockBuilder('\Magento\Framework\Message\ManagerInterface')
+        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['addSuccess', 'addError'])
             ->getMockForAbstractClass();
-        $this->pageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+        $this->pageFactory = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT, [])
             ->willReturn($this->resultRedirectMock);
-        $this->context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->atLeastOnce())
@@ -88,7 +88,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->controller = $this->objectManagerHelper->getObject(
-            'Magento\Search\Controller\Adminhtml\Term\MassDelete',
+            \Magento\Search\Controller\Adminhtml\Term\MassDelete::class,
             [
                 'context' => $this->context,
                 'resultPageFactory' => $this->pageFactory,
@@ -124,7 +124,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
      */
     private function createQuery($index, $id)
     {
-        $query = $this->getMockBuilder('Magento\Search\Model\Query')
+        $query = $this->getMockBuilder(\Magento\Search\Model\Query::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'delete'])
             ->getMock();
@@ -137,7 +137,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->objectManager->expects($this->at($index))
             ->method('create')
-            ->with('Magento\Search\Model\Query')
+            ->with(\Magento\Search\Model\Query::class)
             ->will($this->returnValue($query));
         return $query;
     }

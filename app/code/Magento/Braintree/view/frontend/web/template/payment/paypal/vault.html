@@ -1,0 +1,47 @@
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="payment-method" css="'_active': (getId() === isChecked())">
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment[method]"
+               class="radio"
+               data-bind="
+                    attr: {'id': getId()},
+                    value: getId(),
+                    click: selectPaymentMethod,
+                    checked: isChecked,
+                    visible: isRadioButtonVisible()"/>
+        <label class="label" data-bind="attr: {'for': getId()}">
+            <img data-bind="attr: {
+                'src': getPaymentIcon().url,
+                'width': getPaymentIcon().width,
+                'height': getPaymentIcon().height
+            }" class="payment-icon">
+            <span text="getPayerEmail()"></span>
+        </label>
+    </div>
+
+    <div class="payment-method-content">
+        <each args="getRegion('messages')" render=""></each>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="
+                            click: beforePlaceOrder,
+                            attr: {title: $t('Place Order')}">
+                    <span translate="'Place Order'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

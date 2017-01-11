@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,19 +26,19 @@ class ParamsOverriderTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $userContextMock = $this->getMockBuilder('Magento\Authorization\Model\UserContextInterface')
+        $userContextMock = $this->getMockBuilder(\Magento\Authorization\Model\UserContextInterface::class)
             ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMockForAbstractClass();
         $userContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($userId));
         $userContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($userType));
 
         $paramOverriderCustomerId = $objectManager->getObject(
-            'Magento\Webapi\Controller\Rest\ParamOverriderCustomerId',
+            \Magento\Webapi\Controller\Rest\ParamOverriderCustomerId::class,
             ['userContext' => $userContextMock]
         );
 
         /** @var \Magento\Webapi\Controller\Rest\ParamsOverrider $paramsOverrider */
         $paramsOverrider = $objectManager->getObject(
-            'Magento\Webapi\Controller\Rest\ParamsOverrider',
+            \Magento\Webapi\Controller\Rest\ParamsOverrider::class,
             ['paramOverriders' => ['%customer_id%' => $paramOverriderCustomerId ]]
         );
 

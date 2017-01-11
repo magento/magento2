@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Arguments;
@@ -17,7 +17,7 @@ class ArgumentInterpreterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $const = $this->getMock(
-            '\Magento\Framework\Data\Argument\Interpreter\Constant',
+            \Magento\Framework\Data\Argument\Interpreter\Constant::class,
             ['evaluate'],
             [],
             '',

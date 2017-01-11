@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
@@ -36,12 +36,12 @@ class ThemeUninstallerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->themePackageInfo = $this->getMock('Magento\Theme\Model\Theme\ThemePackageInfo', [], [], '', false);
-        $this->remove = $this->getMock('Magento\Framework\Composer\Remove', [], [], '', false);
-        $this->themeProvider = $this->getMock('Magento\Theme\Model\Theme\ThemeProvider', [], [], '', false);
+        $this->themePackageInfo = $this->getMock(\Magento\Theme\Model\Theme\ThemePackageInfo::class, [], [], '', false);
+        $this->remove = $this->getMock(\Magento\Framework\Composer\Remove::class, [], [], '', false);
+        $this->themeProvider = $this->getMock(\Magento\Theme\Model\Theme\ThemeProvider::class, [], [], '', false);
         $this->themeUninstaller = new ThemeUninstaller($this->themePackageInfo, $this->remove, $this->themeProvider);
         $this->output = $this->getMockForAbstractClass(
-            'Symfony\Component\Console\Output\OutputInterface',
+            \Symfony\Component\Console\Output\OutputInterface::class,
             [],
             '',
             false
@@ -53,7 +53,7 @@ class ThemeUninstallerTest extends \PHPUnit_Framework_TestCase
         $this->output->expects($this->atLeastOnce())->method('writeln');
         $this->themePackageInfo->expects($this->never())->method($this->anything());
         $this->remove->expects($this->never())->method($this->anything());
-        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
         $theme->expects($this->exactly(3))->method('delete');
         $this->themeProvider->expects($this->exactly(3))->method('getThemeByFullPath')->willReturn($theme);
         $this->themeUninstaller->uninstallRegistry(

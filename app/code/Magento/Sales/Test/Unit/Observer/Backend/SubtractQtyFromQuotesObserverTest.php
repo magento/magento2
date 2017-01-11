@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Observer\Backend;
@@ -31,10 +31,10 @@ class SubtractQtyFromQuotesObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_quoteMock = $this->getMock('Magento\Quote\Model\ResourceModel\Quote', [], [], '', false);
-        $this->_observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $this->_quoteMock = $this->getMock(\Magento\Quote\Model\ResourceModel\Quote::class, [], [], '', false);
+        $this->_observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
         $this->_eventMock = $this->getMock(
-            'Magento\Framework\Event',
+            \Magento\Framework\Event::class,
             ['getProduct', 'getStatus', 'getProductId'],
             [],
             '',
@@ -47,7 +47,7 @@ class SubtractQtyFromQuotesObserverTest extends \PHPUnit_Framework_TestCase
     public function testSubtractQtyFromQuotes()
     {
         $productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getId', 'getStatus', '__wakeup'],
             [],
             '',

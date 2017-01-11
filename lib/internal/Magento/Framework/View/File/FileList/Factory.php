@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ class Factory
     /**
      * Default file list collator
      */
-    const FILE_LIST_COLLATOR = 'Magento\Framework\View\File\FileList\Collator';
+    const FILE_LIST_COLLATOR = \Magento\Framework\View\File\FileList\Collator::class;
 
     /**
      * Object manager
@@ -48,6 +48,6 @@ class Factory
         if (!$collator instanceof CollateInterface) {
             throw new \UnexpectedValueException("$instanceName has to implement the collate interface.");
         }
-        return $this->objectManager->create('Magento\Framework\View\File\FileList', ['collator' => $collator]);
+        return $this->objectManager->create(\Magento\Framework\View\File\FileList::class, ['collator' => $collator]);
     }
 }

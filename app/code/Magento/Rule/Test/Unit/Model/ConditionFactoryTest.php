@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,11 +27,11 @@ class ConditionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->conditionFactory = $this->objectManagerHelper->getObject(
-            'Magento\Rule\Model\ConditionFactory',
+            \Magento\Rule\Model\ConditionFactory::class,
             [
                 'objectManager' => $this->objectManagerMock
             ]

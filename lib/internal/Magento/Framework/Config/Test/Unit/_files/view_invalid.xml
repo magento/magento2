@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,4 +10,21 @@
         <var name="var1">Value1</var>
         <var name="var1">Value1</var><!-- duplicate var name -->
     </vars>
+    <media>
+        <images module="Magento_Catalog">
+            <!-- Valid image type values -->
+            <image id="test" type="valid"/>
+            <image id="test" type="valid_image"/>
+            <image id="test" type="valid_image_type"/>
+            <!-- Invalid image type values -->
+            <image id="test" type="_invalid_image_type"/>
+            <image id="test" type="invalid-image"/>
+            <image id="test" type="Invalid"/>
+            <image id="test" type="invalid_"/>
+            <image id="test" type="invalid__image"/>
+            <image id="test" type="i"/>
+            <image id="test" type="?invalid"/>
+            <image id="test" type="123"/>
+        </images>
+    </media>
 </view>

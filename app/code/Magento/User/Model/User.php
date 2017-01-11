@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Model;
@@ -162,7 +162,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\User\Model\ResourceModel\User');
+        $this->_init(\Magento\User\Model\ResourceModel\User::class);
     }
 
     /**
@@ -194,15 +194,15 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_eventManager = $objectManager->get('Magento\Framework\Event\ManagerInterface');
-        $this->_userData = $objectManager->get('Magento\User\Helper\Data');
-        $this->_config = $objectManager->get('Magento\Backend\App\ConfigInterface');
-        $this->_registry = $objectManager->get('Magento\Framework\Registry');
-        $this->_validatorObject = $objectManager->get('Magento\Framework\Validator\DataObjectFactory');
-        $this->_roleFactory = $objectManager->get('Magento\Authorization\Model\RoleFactory');
-        $this->_encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
-        $this->_transportBuilder = $objectManager->get('Magento\Framework\Mail\Template\TransportBuilder');
-        $this->_storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $this->_eventManager = $objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
+        $this->_userData = $objectManager->get(\Magento\User\Helper\Data::class);
+        $this->_config = $objectManager->get(\Magento\Backend\App\ConfigInterface::class);
+        $this->_registry = $objectManager->get(\Magento\Framework\Registry::class);
+        $this->_validatorObject = $objectManager->get(\Magento\Framework\Validator\DataObjectFactory::class);
+        $this->_roleFactory = $objectManager->get(\Magento\Authorization\Model\RoleFactory::class);
+        $this->_encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
+        $this->_transportBuilder = $objectManager->get(\Magento\Framework\Mail\Template\TransportBuilder::class);
+        $this->_storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
     }
 
     /**
@@ -391,7 +391,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         $templateId = $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE);
         $transport = $this->_transportBuilder->setTemplateIdentifier($templateId)
-            ->setTemplateModel('Magento\Email\Model\BackendTemplate')
+            ->setTemplateModel(\Magento\Email\Model\BackendTemplate::class)
             ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
             ->setTemplateVars(['user' => $this, 'store' => $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)])
             ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
@@ -474,7 +474,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
         $transport = $this->_transportBuilder
             ->setTemplateIdentifier($this->_config->getValue(self::XML_PATH_USER_NOTIFICATION_TEMPLATE))
-            ->setTemplateModel('Magento\Email\Model\BackendTemplate')
+            ->setTemplateModel(\Magento\Email\Model\BackendTemplate::class)
             ->setTemplateOptions(['area' => FrontNameResolver::AREA_CODE, 'store' => Store::DEFAULT_STORE_ID])
             ->setTemplateVars(
                 [

@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-$storeManager = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface');
+$storeManager = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class);
 
 /** @var \Magento\Store\Model\Store $store */
-$store = Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
+$store = Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
 $storeCode = 'fixturestore';
 
 if (!$store->load($storeCode)->getId()) {
@@ -23,5 +23,5 @@ if (!$store->load($storeCode)->getId()) {
     $store->save();
 
     /* Refresh stores memory cache */
-    Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();
+    Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
 }

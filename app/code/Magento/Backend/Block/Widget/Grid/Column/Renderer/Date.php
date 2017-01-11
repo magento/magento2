@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
@@ -52,7 +52,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     protected function _getFormat()
     {
         $format = $this->getColumn()->getFormat();
-        if (!$format) {
+        if ($format === null) {
             if (self::$_format === null) {
                 try {
                     self::$_format = $this->_localeDate->getDateFormat(

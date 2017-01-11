@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -116,6 +116,13 @@
         <arguments>
             <argument name="hydrators" xsi:type="array">
                 <item name="Magento\CatalogRule\Api\Data\RuleInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderComposite">
+        <arguments>
+            <argument name="linkedProductSelectBuilder" xsi:type="array">
+                <item name="catalogRulePrice" xsi:type="object">Magento\CatalogRule\Model\ResourceModel\Product\LinkedProductSelectBuilderByCatalogRulePrice</item>
             </argument>
         </arguments>
     </type>

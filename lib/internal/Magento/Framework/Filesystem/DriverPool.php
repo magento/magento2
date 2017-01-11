@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,10 +26,10 @@ class DriverPool
      * @var string[]
      */
     protected $types = [
-        self::FILE => 'Magento\Framework\Filesystem\Driver\File',
-        self::HTTP => 'Magento\Framework\Filesystem\Driver\Http',
-        self::HTTPS => 'Magento\Framework\Filesystem\Driver\Https',
-        self::ZLIB => 'Magento\Framework\Filesystem\Driver\Zlib',
+        self::FILE => \Magento\Framework\Filesystem\Driver\File::class,
+        self::HTTP => \Magento\Framework\Filesystem\Driver\Http::class,
+        self::HTTPS => \Magento\Framework\Filesystem\Driver\Https::class,
+        self::ZLIB => \Magento\Framework\Filesystem\Driver\Zlib::class,
     ];
 
     /**
@@ -55,7 +55,7 @@ class DriverPool
                 $type = $typeOrObject;
                 $object = false;
             }
-            if (!is_subclass_of($type, '\Magento\Framework\Filesystem\DriverInterface')) {
+            if (!is_subclass_of($type, \Magento\Framework\Filesystem\DriverInterface::class)) {
                 throw new \InvalidArgumentException("The specified type '{$type}' does not implement DriverInterface.");
             }
             $this->types[$code] = $type;

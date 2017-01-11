@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Test\Unit\Model\Rule;
@@ -19,7 +19,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
     public function testApplyAll()
     {
         $ruleProcessorMock = $this->getMock(
-            'Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor',
+            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class,
             ['markIndexerAsInvalid'],
             [],
             '',
@@ -36,7 +36,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
     public function testExceptionApplyAll()
     {
         $ruleProcessorMock = $this->getMock(
-            'Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor',
+            \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor::class,
             ['markIndexerAsInvalid'],
             [],
             '',

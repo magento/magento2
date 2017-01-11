@@ -1,16 +1,16 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <div class="admin__field" css="element.setClasses(element)">
     <label if="element.label" class="admin__field-label" attr="for: element.uid">
-        <span text="element.label"/>
+        <span translate="element.label"/>
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper">
-        <div class="admin__control-table-pagination" visible="!!$data.recordData().length">
+        <div class="admin__control-table-pagination" visible="!!element.getRecordCount()">
             <div class="admin__data-grid-pager">
                 <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
                 <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
@@ -22,7 +22,7 @@
 
             <thead if="element.columnsHeader">
             <tr data-bind="foreach: {data: labels, as: 'label'}">
-                <th text="label.config.label"
+                <th translate="label.config.label"
                     css="item.columnsHeaderClasses">
                 </th>
             </tr>
@@ -33,27 +33,28 @@
                 <td css="$parents[1].setClasses(elem)" if="elem.template">
                     <div class="fieldset-wrapper admin__collapsible-block-wrapper"
                          collapsible="openClass: '_show', closeOnOuter: false, opened: elem.opened()">
-                        <div class="fieldset-wrapper-title" toggleCollapsible>
+                        <div class="fieldset-wrapper-title">
 
-                            <div class="admin__collapsible-title" data-role="collapsible-title">
+                            <div class="admin__collapsible-title" data-role="collapsible-title" click="elem.toggleOpened">
                                 <render args="name: $parents[1].dndConfig.template, data: $parents[1].dnd"
                                         if="$parents[1].dndConfig.enabled" />
 
-                                <span text="$parent.getLabel(elem)" />
+                                <span translate="$parent.getLabel(elem)" />
                             </div>
 
                             <button class="action-delete"
+                                    data-index="delete_button"
                                     type="button"
                                     title="'Delete'"
                                     click="function(){
-                                            $parents[1].deleteRecord($parent.index, $parent.recordId)
+                                            $parents[1].deleteHandler($parent.index, $parent.recordId)
                                         }">
-                                <span text="'Delete'"/>
+                                <span translate="'Delete'"/>
                             </button>
                         </div>
 
                         <div class="admin__collapsible-content"
-                             css="{_show: $collapsible.opened()}"
+                             css="{_show: $data.opened()}"
                              data-role="collapsible-content"
                              template="elem.template"></div>
                     </div>
@@ -66,7 +67,7 @@
             <button attr="{disabled: disabled}"
                     type="button"
                     click="addChild.bind($data, false, false)">
-                <span text="addButtonLabel"/>
+                <span translate="addButtonLabel"/>
             </button>
         </div>
     </div>

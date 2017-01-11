@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,26 +26,28 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $loggerMock = $this->getMockBuilder('Psr\\Log\\LoggerInterface')->disableOriginalConstructor()->getMock();
+        $loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->disableOriginalConstructor()->getMock();
         $loggerMock->expects($this->any())->method('critical')->will($this->returnSelf());
         $this->_service = $objectManager->create(
-            'Magento\Integration\Model\AuthorizationService',
+            \Magento\Integration\Model\AuthorizationService::class,
             [
                 'logger' => $loggerMock
             ]
         );
 
-        $this->userContextMock = $this->getMockForAbstractClass('Magento\Authorization\Model\UserContextInterface');
+        $this->userContextMock = $this->getMockForAbstractClass(
+            \Magento\Authorization\Model\UserContextInterface::class
+        );
         $this->userContextMock
             ->expects($this->any())
             ->method('getUserType')
             ->will($this->returnValue(UserContextInterface::USER_TYPE_INTEGRATION));
         $roleLocator = $objectManager->create(
-            'Magento\Webapi\Model\WebapiRoleLocator',
+            \Magento\Webapi\Model\WebapiRoleLocator::class,
             ['userContext' => $this->userContextMock]
         );
         $this->libAuthorization = $objectManager->create(
-            'Magento\Framework\Authorization',
+            \Magento\Framework\Authorization::class,
             ['roleLocator' => $roleLocator]
         );
     }

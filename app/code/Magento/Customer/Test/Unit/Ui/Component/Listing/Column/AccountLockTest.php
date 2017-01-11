@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
@@ -20,14 +20,14 @@ class AccountLockTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactory = $this->getMock(
-            'Magento\Framework\View\Element\UiComponentFactory',
+            \Magento\Framework\View\Element\UiComponentFactory::class,
             [],
             [],
             '',
@@ -46,27 +46,9 @@ class AccountLockTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareDataSource($lockExpirationDate, $expectedResult)
     {
-        $dataSource = [
-            'data' => [
-                'items' => [
-                    [
-                        'lock_expires' => $lockExpirationDate
-                    ],
-                ]
-            ]
-        ];
-        $expectedDataSource = [
-            'data' => [
-                'items' => [
-                    [
-                        'lock_expires' => $expectedResult,
-                    ],
-                ]
-            ]
-        ];
-        $dataSource = $this->component->prepareDataSource($dataSource);
+        $dataSource = $this->component->prepareDataSource($lockExpirationDate);
 
-        $this->assertEquals($expectedDataSource, $dataSource);
+        $this->assertEquals($expectedResult, $dataSource);
     }
 
     /**
@@ -76,13 +58,77 @@ class AccountLockTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'lockExpirationDate' => date("F j, Y", strtotime('-1 days')),
-                'expectedResult' => new \Magento\Framework\Phrase('Unlocked')
+                'lockExpirationDate' => [
+                    'data' => [
+                        'items' => [['lock_expires' => null]],
+                    ]
+                ],
+                'expectedResult' => [
+                    'data' => [
+                        'items' => [
+                            [
+                                'lock_expires' => new \Magento\Framework\Phrase('Unlocked')
+                            ],
+                        ]
+                    ]
+                ]
             ],
             [
-                'lockExpirationDate' => date("F j, Y", strtotime('+1 days')),
-                'expectedResult' => new \Magento\Framework\Phrase('Locked')
-            ]
+                'lockExpirationDate' => [
+                    'data' => [
+                        'items' => [[]]//Non exist lock_expires data
+                    ]
+                ],
+                'expectedResult' => [
+                    'data' => [
+                        'items' => [
+                            [
+                                'lock_expires' => new \Magento\Framework\Phrase('Unlocked')
+                            ],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'lockExpirationDate' => [
+                    'data' => [
+                        'items' => [
+                            [
+                                'lock_expires' => date("F j, Y", strtotime('-1 days'))
+                            ],
+                        ]
+                    ]
+                ],
+                'expectedResult' => [
+                    'data' => [
+                        'items' => [
+                            [
+                                'lock_expires' => new \Magento\Framework\Phrase('Unlocked')
+                            ],
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'lockExpirationDate' => [
+                    'data' => [
+                        'items' => [
+                            [
+                                'lock_expires' => date("F j, Y", strtotime('+1 days'))
+                            ],
+                        ]
+                    ]
+                ],
+                'expectedResult' => [
+                    'data' => [
+                        'items' => [
+                            [
+                                'lock_expires' => new \Magento\Framework\Phrase('Locked')
+                            ],
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 }

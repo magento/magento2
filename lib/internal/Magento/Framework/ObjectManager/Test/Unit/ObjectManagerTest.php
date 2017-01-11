@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Test\Unit;
@@ -39,19 +39,19 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateCreatesNewInstanceEveryTime()
     {
-        $objectA = $this->_object->create('Magento\Test\Di\Child');
-        $this->assertInstanceOf('Magento\Test\Di\Child', $objectA);
-        $objectB = $this->_object->create('Magento\Test\Di\Child');
-        $this->assertInstanceOf('Magento\Test\Di\Child', $objectB);
+        $objectA = $this->_object->create(\Magento\Test\Di\Child::class);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $objectA);
+        $objectB = $this->_object->create(\Magento\Test\Di\Child::class);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $objectB);
         $this->assertNotSame($objectA, $objectB);
     }
 
     public function testGetCreatesNewInstanceOnlyOnce()
     {
-        $objectA = $this->_object->get('Magento\Test\Di\Child');
-        $this->assertInstanceOf('Magento\Test\Di\Child', $objectA);
-        $objectB = $this->_object->get('Magento\Test\Di\Child');
-        $this->assertInstanceOf('Magento\Test\Di\Child', $objectB);
+        $objectA = $this->_object->get(\Magento\Test\Di\Child::class);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $objectA);
+        $objectB = $this->_object->get(\Magento\Test\Di\Child::class);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $objectB);
         $this->assertSame($objectA, $objectB);
     }
 
@@ -60,17 +60,17 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $this->_object->configure(
             [
                 'preferences' => [
-                    'Magento\Test\Di\DiInterface' => 'Magento\Test\Di\DiParent',
-                    'Magento\Test\Di\DiParent' => 'Magento\Test\Di\Child',
+                    \Magento\Test\Di\DiInterface::class => \Magento\Test\Di\DiParent::class,
+                    \Magento\Test\Di\DiParent::class => \Magento\Test\Di\Child::class,
                 ],
             ]
         );
-        $interface = $this->_object->create('Magento\Test\Di\DiInterface');
-        $parent = $this->_object->create('Magento\Test\Di\DiParent');
-        $child = $this->_object->create('Magento\Test\Di\Child');
-        $this->assertInstanceOf('Magento\Test\Di\Child', $interface);
-        $this->assertInstanceOf('Magento\Test\Di\Child', $parent);
-        $this->assertInstanceOf('Magento\Test\Di\Child', $child);
+        $interface = $this->_object->create(\Magento\Test\Di\DiInterface::class);
+        $parent = $this->_object->create(\Magento\Test\Di\DiParent::class);
+        $child = $this->_object->create(\Magento\Test\Di\Child::class);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $interface);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $parent);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $child);
         $this->assertNotSame($interface, $parent);
         $this->assertNotSame($interface, $child);
     }
@@ -80,17 +80,17 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $this->_object->configure(
             [
                 'preferences' => [
-                    'Magento\Test\Di\DiInterface' => 'Magento\Test\Di\DiParent',
-                    'Magento\Test\Di\DiParent' => 'Magento\Test\Di\Child',
+                    \Magento\Test\Di\DiInterface::class => \Magento\Test\Di\DiParent::class,
+                    \Magento\Test\Di\DiParent::class => \Magento\Test\Di\Child::class,
                 ],
             ]
         );
-        $interface = $this->_object->get('Magento\Test\Di\DiInterface');
-        $parent = $this->_object->get('Magento\Test\Di\DiParent');
-        $child = $this->_object->get('Magento\Test\Di\Child');
-        $this->assertInstanceOf('Magento\Test\Di\Child', $interface);
-        $this->assertInstanceOf('Magento\Test\Di\Child', $parent);
-        $this->assertInstanceOf('Magento\Test\Di\Child', $child);
+        $interface = $this->_object->get(\Magento\Test\Di\DiInterface::class);
+        $parent = $this->_object->get(\Magento\Test\Di\DiParent::class);
+        $child = $this->_object->get(\Magento\Test\Di\Child::class);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $interface);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $parent);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $child);
         $this->assertSame($interface, $parent);
         $this->assertSame($interface, $child);
     }
@@ -104,12 +104,12 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $this->_object->configure(
             [
                 'preferences' => [
-                    'Magento\Test\Di\DiInterface' => 'Magento\Test\Di\DiParent',
-                    'Magento\Test\Di\DiParent' => 'Magento\Test\Di\Child',
+                    \Magento\Test\Di\DiInterface::class => \Magento\Test\Di\DiParent::class,
+                    \Magento\Test\Di\DiParent::class => \Magento\Test\Di\Child::class,
                 ],
             ]
         );
-        $this->_object->create('Magento\Test\Di\Aggregate\AggregateParent');
+        $this->_object->create(\Magento\Test\Di\Aggregate\AggregateParent::class);
     }
 
     public function testCreateResolvesScalarParametersAutomatically()
@@ -117,23 +117,23 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $this->_object->configure(
             [
                 'preferences' => [
-                    'Magento\Test\Di\DiInterface' => 'Magento\Test\Di\DiParent',
-                    'Magento\Test\Di\DiParent' => 'Magento\Test\Di\Child',
+                    \Magento\Test\Di\DiInterface::class => \Magento\Test\Di\DiParent::class,
+                    \Magento\Test\Di\DiParent::class => \Magento\Test\Di\Child::class,
                 ],
-                'Magento\Test\Di\Aggregate\AggregateParent' => [
+                \Magento\Test\Di\Aggregate\AggregateParent::class => [
                     'arguments' => [
-                        'child' => ['instance' => 'Magento\Test\Di\Child\A'],
+                        'child' => ['instance' => \Magento\Test\Di\Child\A::class],
                         'scalar' => 'scalarValue',
                     ],
                 ],
             ]
         );
         /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
-        $result = $this->_object->create('Magento\Test\Di\Aggregate\AggregateParent');
-        $this->assertInstanceOf('Magento\Test\Di\Aggregate\AggregateParent', $result);
-        $this->assertInstanceOf('Magento\Test\Di\Child', $result->interface);
-        $this->assertInstanceOf('Magento\Test\Di\Child', $result->parent);
-        $this->assertInstanceOf('Magento\Test\Di\Child\A', $result->child);
+        $result = $this->_object->create(\Magento\Test\Di\Aggregate\AggregateParent::class);
+        $this->assertInstanceOf(\Magento\Test\Di\Aggregate\AggregateParent::class, $result);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $result->interface);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $result->parent);
+        $this->assertInstanceOf(\Magento\Test\Di\Child\A::class, $result->child);
         $this->assertEquals('scalarValue', $result->scalar);
         $this->assertEquals('1', $result->optionalScalar);
     }
@@ -143,21 +143,21 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $this->_object->configure(
             [
                 'preferences' => [
-                    'Magento\Test\Di\DiInterface' => 'Magento\Test\Di\DiParent',
-                    'Magento\Test\Di\DiParent' => 'Magento\Test\Di\Child',
+                    \Magento\Test\Di\DiInterface::class => \Magento\Test\Di\DiParent::class,
+                    \Magento\Test\Di\DiParent::class => \Magento\Test\Di\Child::class,
                 ],
-                'Magento\Test\Di\DiInterface' => ['shared' => 0],
-                'Magento\Test\Di\Aggregate\AggregateParent' => [
+                \Magento\Test\Di\DiInterface::class => ['shared' => 0],
+                \Magento\Test\Di\Aggregate\AggregateParent::class => [
                     'arguments' => ['scalar' => 'scalarValue'],
                 ],
             ]
         );
         /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
-        $result = $this->_object->create('Magento\Test\Di\Aggregate\AggregateParent');
-        $this->assertInstanceOf('Magento\Test\Di\Aggregate\AggregateParent', $result);
-        $this->assertInstanceOf('Magento\Test\Di\Child', $result->interface);
-        $this->assertInstanceOf('Magento\Test\Di\Child', $result->parent);
-        $this->assertInstanceOf('Magento\Test\Di\Child', $result->child);
+        $result = $this->_object->create(\Magento\Test\Di\Aggregate\AggregateParent::class);
+        $this->assertInstanceOf(\Magento\Test\Di\Aggregate\AggregateParent::class, $result);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $result->interface);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $result->parent);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $result->child);
         $this->assertNotSame($result->interface, $result->parent);
         $this->assertNotSame($result->interface, $result->child);
         $this->assertSame($result->parent, $result->child);
@@ -173,17 +173,17 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $this->_object->configure(
             [
                 'preferences' => [
-                    'Magento\Test\Di\DiInterface' => 'Magento\Test\Di\DiParent',
-                    'Magento\Test\Di\DiParent' => 'Magento\Test\Di\Child\Circular',
+                    \Magento\Test\Di\DiInterface::class => \Magento\Test\Di\DiParent::class,
+                    \Magento\Test\Di\DiParent::class => \Magento\Test\Di\Child\Circular::class,
                 ],
             ]
         );
-        $this->_object->create('Magento\Test\Di\Aggregate\AggregateParent');
+        $this->_object->create(\Magento\Test\Di\Aggregate\AggregateParent::class);
     }
 
     public function testCreateIgnoresOptionalArguments()
     {
-        $instance = $this->_object->create('Magento\Test\Di\Aggregate\WithOptional');
+        $instance = $this->_object->create(\Magento\Test\Di\Aggregate\WithOptional::class);
         $this->assertNull($instance->parent);
         $this->assertNull($instance->child);
     }
@@ -193,11 +193,11 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $this->_object->configure(
             [
                 'preferences' => [
-                    'Magento\Test\Di\DiInterface' => 'Magento\Test\Di\DiParent',
-                    'Magento\Test\Di\DiParent' => 'Magento\Test\Di\Child',
+                    \Magento\Test\Di\DiInterface::class => \Magento\Test\Di\DiParent::class,
+                    \Magento\Test\Di\DiParent::class => \Magento\Test\Di\Child::class,
                 ],
                 'customChildType' => [
-                    'type' => 'Magento\Test\Di\Aggregate\Child',
+                    'type' => \Magento\Test\Di\Aggregate\Child::class,
                     'arguments' => [
                         'scalar' => 'configuredScalar',
                         'secondScalar' => 'configuredSecondScalar',
@@ -207,7 +207,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $customChild = $this->_object->get('customChildType');
-        $this->assertInstanceOf('Magento\Test\Di\Aggregate\Child', $customChild);
+        $this->assertInstanceOf(\Magento\Test\Di\Aggregate\Child::class, $customChild);
         $this->assertEquals('configuredScalar', $customChild->scalar);
         $this->assertEquals('configuredSecondScalar', $customChild->secondScalar);
         $this->assertEquals(1, $customChild->optionalScalar);
@@ -220,9 +220,9 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $this->_object->configure(
             [
                 'customChildType' => [
-                    'type' => 'Magento\Test\Di\Aggregate\Child',
+                    'type' => \Magento\Test\Di\Aggregate\Child::class,
                     'arguments' => [
-                        'interface' => ['instance' => 'Magento\Test\Di\DiParent'],
+                        'interface' => ['instance' => \Magento\Test\Di\DiParent::class],
                         'scalar' => 'configuredScalar',
                         'secondScalar' => 'configuredSecondScalar',
                     ],
@@ -239,7 +239,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
                 'customChildType' => [
                     'arguments' => [
                         'interface' => [
-                            'instance' => 'Magento\Test\Di\DiParent',
+                            'instance' => \Magento\Test\Di\DiParent::class,
                             'shared' => false,
                         ],
                     ],
@@ -257,9 +257,9 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $this->_object->configure(
             [
                 'customChildType' => [
-                    'type' => 'Magento\Test\Di\Aggregate\Child',
+                    'type' => \Magento\Test\Di\Aggregate\Child::class,
                     'arguments' => [
-                        'interface' => ['instance' => 'Magento\Test\Di\DiParent'],
+                        'interface' => ['instance' => \Magento\Test\Di\DiParent::class],
                         'scalar' => 'configuredScalar',
                         'secondScalar' => 'configuredSecondScalar',
                     ],
@@ -271,10 +271,10 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($childA, $childB);
         $this->assertSame($childA->interface, $childB->interface);
 
-        $this->_object->configure(['Magento\Test\Di\DiParent' => ['shared' => false]]);
+        $this->_object->configure([\Magento\Test\Di\DiParent::class => ['shared' => false]]);
 
-        $parent1 = $this->_object->create('Magento\Test\Di\DiParent');
-        $parent2 = $this->_object->create('Magento\Test\Di\DiParent');
+        $parent1 = $this->_object->create(\Magento\Test\Di\DiParent::class);
+        $parent2 = $this->_object->create(\Magento\Test\Di\DiParent::class);
         $this->assertNotSame($parent1, $parent2);
 
         $childA = $this->_object->create('customChildType');
@@ -286,11 +286,11 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_object->configure(
             [
-                'Magento\Test\Di\DiParent' => ['shared' => false],
+                \Magento\Test\Di\DiParent::class => ['shared' => false],
                 'customChildType' => [
-                    'type' => 'Magento\Test\Di\Aggregate\Child',
+                    'type' => \Magento\Test\Di\Aggregate\Child::class,
                     'arguments' => [
-                        'interface' => ['instance' => 'Magento\Test\Di\DiParent'],
+                        'interface' => ['instance' => \Magento\Test\Di\DiParent::class],
                         'scalar' => 'configuredScalar',
                         'secondScalar' => 'configuredSecondScalar',
                     ],
@@ -307,7 +307,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
                 'customChildType' => [
                     'arguments' => [
                         'interface' => [
-                            'instance' => 'Magento\Test\Di\DiParent',
+                            'instance' => \Magento\Test\Di\DiParent::class,
                             'shared' => true,
                         ],
                     ],
@@ -324,8 +324,10 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_object->configure(
             [
-                'preferences' => ['Magento\Test\Di\DiInterface' => 'Magento\Test\Di\DiParent'],
-                'Magento\Test\Di\Aggregate\AggregateParent' => [
+                'preferences' => [
+                    \Magento\Test\Di\DiInterface::class => \Magento\Test\Di\DiParent::class
+                ],
+                \Magento\Test\Di\Aggregate\AggregateParent::class => [
                     'arguments' => [
                         'scalar' => ['argument' => 'first_param'],
                         'optionalScalar' => ['argument' => 'second_param'],
@@ -334,7 +336,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             ]
         );
         /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
-        $result = $this->_object->create('Magento\Test\Di\Aggregate\AggregateParent');
+        $result = $this->_object->create(\Magento\Test\Di\Aggregate\AggregateParent::class);
         $this->assertEquals('first_param_value', $result->scalar);
         $this->assertEquals('second_param_value', $result->optionalScalar);
     }
@@ -342,15 +344,13 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
     public function testConfiguredArgumentsAreInherited()
     {
         $this->_object->configure(
-            [
-                'Magento\Test\Di\Aggregate\AggregateParent' => [
+            [\Magento\Test\Di\Aggregate\AggregateParent::class => [
                     'arguments' => [
-                        'interface' => ['instance' => 'Magento\Test\Di\DiParent'],
+                        'interface' => ['instance' => \Magento\Test\Di\DiParent::class],
                         'scalar' => ['argument' => 'first_param'],
                         'optionalScalar' => 'parentOptionalScalar',
                     ],
-                ],
-                'Magento\Test\Di\Aggregate\Child' => [
+                ], \Magento\Test\Di\Aggregate\Child::class => [
                     'arguments' => [
                         'secondScalar' => 'childSecondScalar',
                     ],
@@ -359,8 +359,8 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
-        $result = $this->_object->create('Magento\Test\Di\Aggregate\Child');
-        $this->assertInstanceOf('Magento\Test\Di\DiParent', $result->interface);
+        $result = $this->_object->create(\Magento\Test\Di\Aggregate\Child::class);
+        $this->assertInstanceOf(\Magento\Test\Di\DiParent::class, $result->interface);
         $this->assertEquals('first_param_value', $result->scalar);
         $this->assertEquals('childSecondScalar', $result->secondScalar);
         $this->assertEquals('parentOptionalScalar', $result->optionalScalar);
@@ -370,16 +370,16 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_object->configure(
             [
-                'Magento\Test\Di\Aggregate\AggregateParent' => [
+                \Magento\Test\Di\Aggregate\AggregateParent::class => [
                     'arguments' => [
-                        'interface' => ['instance' => 'Magento\Test\Di\DiParent'],
+                        'interface' => ['instance' => \Magento\Test\Di\DiParent::class],
                         'scalar' => ['argument' => 'first_param'],
                         'optionalScalar' => 'parentOptionalScalar',
                     ],
                 ],
-                'Magento\Test\Di\Aggregate\Child' => [
+                \Magento\Test\Di\Aggregate\Child::class => [
                     'arguments' => [
-                        'interface' => ['instance' => 'Magento\Test\Di\Child'],
+                        'interface' => ['instance' => \Magento\Test\Di\Child::class],
                         'scalar' => ['argument' => 'second_param'],
                         'secondScalar' => 'childSecondScalar',
                         'optionalScalar' => 'childOptionalScalar',
@@ -389,8 +389,8 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var $result \Magento\Test\Di\Aggregate\AggregateParent */
-        $result = $this->_object->create('Magento\Test\Di\Aggregate\Child');
-        $this->assertInstanceOf('Magento\Test\Di\Child', $result->interface);
+        $result = $this->_object->create(\Magento\Test\Di\Aggregate\Child::class);
+        $this->assertInstanceOf(\Magento\Test\Di\Child::class, $result->interface);
         $this->assertEquals('second_param_value', $result->scalar);
         $this->assertEquals('childSecondScalar', $result->secondScalar);
         $this->assertEquals('childOptionalScalar', $result->optionalScalar);
@@ -398,6 +398,9 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIgnoresFirstSlash()
     {
-        $this->assertSame($this->_object->get('Magento\Test\Di\Child'), $this->_object->get('Magento\Test\Di\Child'));
+        $this->assertSame(
+            $this->_object->get(\Magento\Test\Di\Child::class),
+            $this->_object->get(\Magento\Test\Di\Child::class)
+        );
     }
 }

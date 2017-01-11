@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,13 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 
+/**
+ * Plugin for Magento\Catalog\Api\ProductRepositoryInterface
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AroundProductRepositorySave
 {
     /**
@@ -53,26 +59,22 @@ class AroundProductRepositorySave
      *
      * Pay attention that in this code we mostly work with original product object to process stock item data,
      * not with received result (saved product) because it is already contains new empty stock item object.
-     * It is a reason why this plugin cannot be rewritten to after plugin
      *
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $subject
-     * @param callable $proceed
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param ProductRepositoryInterface $subject
+     * @param ProductInterface $result
+     * @param ProductInterface $product
      * @param bool $saveOptions
-     * @return \Magento\Catalog\Api\Data\ProductInterface
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @return ProductInterface
+     * @throws CouldNotSaveException
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
-        \Magento\Catalog\Api\ProductRepositoryInterface $subject,
-        \Closure $proceed,
-        \Magento\Catalog\Api\Data\ProductInterface $product,
+    public function afterSave(
+        ProductRepositoryInterface $subject,
+        ProductInterface $result,
+        ProductInterface $product,
         $saveOptions = false
     ) {
-        /**
-         * @var \Magento\Catalog\Api\Data\ProductInterface $result
-         */
-        $result = $proceed($product, $saveOptions);
-
         /* @var StockItemInterface $stockItem */
         $stockItem = $this->getStockItemToBeUpdated($product);
         if (null === $stockItem) {

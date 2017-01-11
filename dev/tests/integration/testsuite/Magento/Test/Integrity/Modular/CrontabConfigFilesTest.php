@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular;
@@ -27,7 +27,7 @@ class CrontabConfigFilesTest extends AbstractMergedConfigTest
     {
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        return $objectManager->get('Magento\Cron\Model\Config\SchemaLocator')->getSchema();
+        return $objectManager->get(\Magento\Cron\Model\Config\SchemaLocator::class)->getSchema();
     }
 
     protected function getConfigFiles()

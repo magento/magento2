@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,8 +63,8 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     {
         $this->_assertSessionErrors = false;
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_objectManager->removeSharedInstance('Magento\Framework\App\ResponseInterface');
-        $this->_objectManager->removeSharedInstance('Magento\Framework\App\RequestInterface');
+        $this->_objectManager->removeSharedInstance(\Magento\Framework\App\ResponseInterface::class);
+        $this->_objectManager->removeSharedInstance(\Magento\Framework\App\RequestInterface::class);
     }
 
     protected function tearDown()
@@ -107,7 +107,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     public function getRequest()
     {
         if (!$this->_request) {
-            $this->_request = $this->_objectManager->get('Magento\Framework\App\RequestInterface');
+            $this->_request = $this->_objectManager->get(\Magento\Framework\App\RequestInterface::class);
         }
         return $this->_request;
     }
@@ -120,7 +120,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     public function getResponse()
     {
         if (!$this->_response) {
-            $this->_response = $this->_objectManager->get('Magento\Framework\App\ResponseInterface');
+            $this->_response = $this->_objectManager->get(\Magento\Framework\App\ResponseInterface::class);
         }
         return $this->_response;
     }
@@ -197,7 +197,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     public function assertSessionMessages(
         \PHPUnit_Framework_Constraint $constraint,
         $messageType = null,
-        $messageManagerClass = 'Magento\Framework\Message\Manager'
+        $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         $this->_assertSessionErrors = false;
 
@@ -219,7 +219,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      */
     protected function getMessages(
         $messageType = null,
-        $messageManagerClass = 'Magento\Framework\Message\Manager'
+        $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         return array_merge(
             $this->getSessionMessages($messageType, $messageManagerClass),
@@ -236,7 +236,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      */
     protected function getSessionMessages(
         $messageType = null,
-        $messageManagerClass = 'Magento\Framework\Message\Manager'
+        $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         /** @var $messageManager \Magento\Framework\Message\ManagerInterface */
         $messageManager = $this->_objectManager->get($messageManagerClass);

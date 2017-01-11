@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable;
@@ -45,7 +45,7 @@ class Samples extends Form
     {
         $element = $element ?: $this->_rootElement;
         return $this->blockFactory->create(
-            'Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable\SampleRow',
+            \Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable\SampleRow::class,
             ['element' => $element->find(sprintf($this->rowBlock, ++$index))]
         );
     }

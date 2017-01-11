@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
@@ -47,7 +47,7 @@ class RatingItems extends ProductController
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);
         $resultRaw->setContents(
-            $layout->createBlock('Magento\Review\Block\Adminhtml\Rating\Detailed')
+            $layout->createBlock(\Magento\Review\Block\Adminhtml\Rating\Detailed::class)
                 ->setIndependentMode()
                 ->toHtml()
         );

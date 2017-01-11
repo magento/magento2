@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
@@ -59,7 +59,7 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
             $category->addData($categoryData);
         }
 
-        $resultPageFactory = $this->_objectManager->get('Magento\Framework\View\Result\PageFactory');
+        $resultPageFactory = $this->_objectManager->get(\Magento\Framework\View\Result\PageFactory::class);
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $resultPageFactory->create();
 

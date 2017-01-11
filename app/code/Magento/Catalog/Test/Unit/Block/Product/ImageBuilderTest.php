@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Product;
@@ -24,12 +24,12 @@ class ImageBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helperFactory = $this->getMockBuilder('Magento\Catalog\Helper\ImageFactory')
+        $this->helperFactory = $this->getMockBuilder(\Magento\Catalog\Helper\ImageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->imageFactory = $this->getMockBuilder('Magento\Catalog\Block\Product\ImageFactory')
+        $this->imageFactory = $this->getMockBuilder(\Magento\Catalog\Block\Product\ImageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -42,12 +42,12 @@ class ImageBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSetProduct()
     {
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->assertInstanceOf(
-            'Magento\Catalog\Block\Product\ImageBuilder',
+            \Magento\Catalog\Block\Product\ImageBuilder::class,
             $this->model->setProduct($productMock)
         );
     }
@@ -57,7 +57,7 @@ class ImageBuilderTest extends \PHPUnit_Framework_TestCase
         $imageId = 'test_image_id';
 
         $this->assertInstanceOf(
-            'Magento\Catalog\Block\Product\ImageBuilder',
+            \Magento\Catalog\Block\Product\ImageBuilder::class,
             $this->model->setImageId($imageId)
         );
     }
@@ -68,7 +68,7 @@ class ImageBuilderTest extends \PHPUnit_Framework_TestCase
             'name' => 'value',
         ];
         $this->assertInstanceOf(
-            'Magento\Catalog\Block\Product\ImageBuilder',
+            \Magento\Catalog\Block\Product\ImageBuilder::class,
             $this->model->setAttributes($attributes)
         );
     }
@@ -81,11 +81,11 @@ class ImageBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $imageId = 'test_image_id';
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $helperMock = $this->getMockBuilder('Magento\Catalog\Helper\Image')
+        $helperMock = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
             ->disableOriginalConstructor()
             ->getMock();
         $helperMock->expects($this->once())
@@ -116,7 +116,7 @@ class ImageBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($helperMock);
 
-        $imageMock = $this->getMockBuilder('Magento\Catalog\Block\Product\Image')
+        $imageMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Image::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -128,7 +128,7 @@ class ImageBuilderTest extends \PHPUnit_Framework_TestCase
         $this->model->setProduct($productMock);
         $this->model->setImageId($imageId);
         $this->model->setAttributes($data['custom_attributes']);
-        $this->assertInstanceOf('Magento\Catalog\Block\Product\Image', $this->model->create());
+        $this->assertInstanceOf(\Magento\Catalog\Block\Product\Image::class, $this->model->create());
     }
 
     /**

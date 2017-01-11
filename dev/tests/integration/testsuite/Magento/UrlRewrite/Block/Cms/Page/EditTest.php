@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Cms\Page;
@@ -25,12 +25,12 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
 
         /** @var $block \Magento\UrlRewrite\Block\Cms\Page\Edit */
         $block = $layout->createBlock(
-            'Magento\UrlRewrite\Block\Cms\Page\Edit',
+            \Magento\UrlRewrite\Block\Cms\Page\Edit::class,
             '',
             ['data' => $blockAttributes]
         );
@@ -58,7 +58,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         if ($expected['selector']) {
             $this->assertInstanceOf(
-                'Magento\UrlRewrite\Block\Selector',
+                \Magento\UrlRewrite\Block\Selector::class,
                 $selectorBlock,
                 'Child block with entity selector is invalid'
             );
@@ -83,7 +83,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         if ($expected['cms_page_link']) {
             $this->assertInstanceOf(
-                'Magento\UrlRewrite\Block\Link',
+                \Magento\UrlRewrite\Block\Link::class,
                 $cmsPageLinkBlock,
                 'Child block with CMS page link is invalid'
             );
@@ -212,7 +212,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         if ($expected['form']) {
             $this->assertInstanceOf(
-                'Magento\UrlRewrite\Block\Cms\Page\Edit\Form',
+                \Magento\UrlRewrite\Block\Cms\Page\Edit\Form::class,
                 $formBlock,
                 'Child block with form is invalid'
             );
@@ -249,7 +249,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         if ($expected['cms_pages_grid']) {
             $this->assertInstanceOf(
-                'Magento\UrlRewrite\Block\Cms\Page\Grid',
+                \Magento\UrlRewrite\Block\Cms\Page\Grid::class,
                 $gridBlock,
                 'Child block with CMS pages grid is invalid'
             );
@@ -267,16 +267,16 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $urlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $urlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\UrlRewrite\Model\UrlRewrite'
+            \Magento\UrlRewrite\Model\UrlRewrite::class
         );
         /** @var $cmsPage \Magento\Cms\Model\Page */
         $cmsPage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Cms\Model\Page',
+            \Magento\Cms\Model\Page::class,
             ['data' => ['page_id' => 1, 'title' => 'Test CMS Page']]
         );
         /** @var $existingUrlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $existingUrlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\UrlRewrite\Model\UrlRewrite',
+            \Magento\UrlRewrite\Model\UrlRewrite::class,
             ['data' => ['url_rewrite_id' => 1]]
         );
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,8 +37,8 @@ class GroupManagementTest extends WebapiAbstract
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->groupRegistry = $objectManager->get('Magento\Customer\Model\GroupRegistry');
-        $this->groupRepository = $objectManager->get('Magento\Customer\Model\ResourceModel\GroupRepository');
+        $this->groupRegistry = $objectManager->get(\Magento\Customer\Model\GroupRegistry::class);
+        $this->groupRepository = $objectManager->get(\Magento\Customer\Model\ResourceModel\GroupRepository::class);
     }
 
     /**

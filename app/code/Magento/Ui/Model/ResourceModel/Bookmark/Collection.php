@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Model\ResourceModel\Bookmark;
@@ -19,6 +19,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Magento\Ui\Model\Bookmark', 'Magento\Ui\Model\ResourceModel\Bookmark');
+        $this->_init(\Magento\Ui\Model\Bookmark::class, \Magento\Ui\Model\ResourceModel\Bookmark::class);
     }
 }

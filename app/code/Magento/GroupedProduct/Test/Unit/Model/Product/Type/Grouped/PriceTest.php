@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type\Grouped;
@@ -19,11 +19,11 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->finalPriceModel = $helper->getObject(
-            'Magento\GroupedProduct\Model\Product\Type\Grouped\Price',
+            \Magento\GroupedProduct\Model\Product\Type\Grouped\Price::class,
             []
         );
     }
@@ -103,7 +103,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('hasCustomOptions')->will($this->returnValue(true));
 
         $productTypeMock = $this->getMock(
-            'Magento\GroupedProduct\Model\Product\Type\Grouped',
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
             [],
             [],
             '',
@@ -154,7 +154,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function getFinalPriceDataProvider()
     {
         $optionMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Option',
+            \Magento\Catalog\Model\Product\Option::class,
             ['getValue', '__wakeup'],
             [],
             '',
@@ -191,7 +191,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function generateAssociatedProducts()
     {
         $childProductMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getId', 'getFinalPrice', '__wakeup'],
             [],
             '',

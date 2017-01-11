@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\System\Store;
@@ -14,10 +14,10 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\Backend\Block\System\Store\Delete */
-        $block = $layout->createBlock('Magento\Backend\Block\System\Store\Delete', 'block');
+        $block = $layout->createBlock(\Magento\Backend\Block\System\Store\Delete::class, 'block');
 
         $dataObject = new \Magento\Framework\DataObject();
         $form = $block->getChildBlock('form');

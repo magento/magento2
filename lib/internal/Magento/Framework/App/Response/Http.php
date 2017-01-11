@@ -2,7 +2,7 @@
 /**
  * HTTP response
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Response;
@@ -168,9 +168,11 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     public function __wakeup()
     {
         $objectManager = ObjectManager::getInstance();
-        $this->cookieManager = $objectManager->create('Magento\Framework\Stdlib\CookieManagerInterface');
-        $this->cookieMetadataFactory = $objectManager->get('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory');
-        $this->request = $objectManager->get('Magento\Framework\App\Request\Http');
+        $this->cookieManager = $objectManager->create(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+        $this->cookieMetadataFactory = $objectManager->get(
+            \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
+        );
+        $this->request = $objectManager->get(\Magento\Framework\App\Request\Http::class);
     }
 
     /**

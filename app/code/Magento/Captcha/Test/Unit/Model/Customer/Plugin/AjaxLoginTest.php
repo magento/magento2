@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Model\Customer\Plugin;
@@ -54,19 +54,25 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sessionManagerMock = $this->getMock('Magento\Checkout\Model\Session', ['setUsername'], [], '', false);
-        $this->captchaHelperMock = $this->getMock('Magento\Captcha\Helper\Data', [], [], '', false);
-        $this->captchaMock = $this->getMock('Magento\Captcha\Model\DefaultModel', [], [], '', false);
+        $this->sessionManagerMock = $this->getMock(
+            \Magento\Checkout\Model\Session::class,
+            ['setUsername'],
+            [],
+            '',
+            false
+        );
+        $this->captchaHelperMock = $this->getMock(\Magento\Captcha\Helper\Data::class, [], [], '', false);
+        $this->captchaMock = $this->getMock(\Magento\Captcha\Model\DefaultModel::class, [], [], '', false);
         $this->jsonFactoryMock = $this->getMock(
-            'Magento\Framework\Controller\Result\JsonFactory',
+            \Magento\Framework\Controller\Result\JsonFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->resultJsonMock = $this->getMock('Magento\Framework\Controller\Result\Json', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->loginControllerMock = $this->getMock('Magento\Customer\Controller\Ajax\Login', [], [], '', false);
+        $this->resultJsonMock = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->loginControllerMock = $this->getMock(\Magento\Customer\Controller\Ajax\Login::class, [], [], '', false);
 
         $this->loginControllerMock->expects($this->any())->method('getRequest')
             ->will($this->returnValue($this->requestMock));

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config;
@@ -30,14 +30,14 @@ class MetadataProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_modelPoolMock = $this->getMock(
-            'Magento\Framework\App\Config\Data\ProcessorFactory',
+            \Magento\Framework\App\Config\Data\ProcessorFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->_initialConfigMock = $this->getMock('Magento\Framework\App\Config\Initial', [], [], '', false);
-        $this->_backendModelMock = $this->getMock('Magento\Framework\App\Config\Data\ProcessorInterface');
+        $this->_initialConfigMock = $this->getMock(\Magento\Framework\App\Config\Initial::class, [], [], '', false);
+        $this->_backendModelMock = $this->getMock(\Magento\Framework\App\Config\Data\ProcessorInterface::class);
         $this->_initialConfigMock->expects(
             $this->any()
         )->method(

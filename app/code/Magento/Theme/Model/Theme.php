@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model;
@@ -127,7 +127,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     protected function _construct()
     {
-        $this->_init('Magento\Theme\Model\ResourceModel\Theme');
+        $this->_init(\Magento\Theme\Model\ResourceModel\Theme::class);
     }
 
     /**
@@ -407,13 +407,13 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     {
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_resource = $objectManager->get('Magento\Theme\Model\ResourceModel\Theme');
-        $this->_resourceCollection = $objectManager->get('Magento\Theme\Model\ResourceModel\Theme\Collection');
-        $this->_themeFactory = $objectManager->get('Magento\Framework\View\Design\Theme\FlyweightFactory');
-        $this->_domainFactory = $objectManager->get('Magento\Framework\View\Design\Theme\Domain\Factory');
-        $this->_imageFactory = $objectManager->get('Magento\Framework\View\Design\Theme\ImageFactory');
-        $this->_validator = $objectManager->get('Magento\Framework\View\Design\Theme\Validator');
-        $this->_customFactory = $objectManager->get('Magento\Framework\View\Design\Theme\CustomizationFactory');
+        $this->_resource = $objectManager->get(\Magento\Theme\Model\ResourceModel\Theme::class);
+        $this->_resourceCollection = $objectManager->get(\Magento\Theme\Model\ResourceModel\Theme\Collection::class);
+        $this->_themeFactory = $objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
+        $this->_domainFactory = $objectManager->get(\Magento\Framework\View\Design\Theme\Domain\Factory::class);
+        $this->_imageFactory = $objectManager->get(\Magento\Framework\View\Design\Theme\ImageFactory::class);
+        $this->_validator = $objectManager->get(\Magento\Framework\View\Design\Theme\Validator::class);
+        $this->_customFactory = $objectManager->get(\Magento\Framework\View\Design\Theme\CustomizationFactory::class);
     }
 
     /**

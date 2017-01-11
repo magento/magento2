@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
@@ -17,7 +17,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         $id = $this->getRequest()->getParam('attribute_id');
         /** @var $model \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
         $model = $this->_objectManager->create(
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
         )->setEntityTypeId(
             $this->_entityTypeId
         );
@@ -39,7 +39,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         }
 
         // set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getAttributeData(true);
+        $data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getAttributeData(true);
         if (!empty($data)) {
             $model->addData($data);
         }

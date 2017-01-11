@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,7 +52,7 @@ class SchemaXml
     public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
-        $this->fieldsProvider = $this->objectManager->create('Magento\Mtf\Util\Generate\Fixture\FieldsProvider');
+        $this->fieldsProvider = $this->objectManager->create(\Magento\Mtf\Util\Generate\Fixture\FieldsProvider::class);
         $this->dom = new \DOMDocument('1.0');
         $this->dom->load(dirname(__FILE__) . '/template.xml');
         $this->dom->preserveWhiteSpace = false;

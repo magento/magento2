@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Cart;
@@ -9,6 +9,9 @@ namespace Magento\Checkout\Controller\Cart;
 use Magento\Framework;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Configure extends \Magento\Checkout\Controller\Cart
 {
     /**
@@ -70,7 +73,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
             $params->setBuyRequest($quoteItem->getBuyRequest());
 
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-            $this->_objectManager->get('Magento\Catalog\Helper\Product\View')
+            $this->_objectManager->get(\Magento\Catalog\Helper\Product\View::class)
                 ->prepareAndRender(
                     $resultPage,
                     $quoteItem->getProduct()->getId(),
@@ -80,7 +83,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
             return $resultPage;
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We cannot configure the product.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->_goBack();
         }
     }

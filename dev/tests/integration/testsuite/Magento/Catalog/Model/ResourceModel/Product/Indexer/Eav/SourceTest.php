@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
@@ -11,6 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class SourceTest
+ * @magentoAppIsolation enabled
  */
 class SourceTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,15 +37,15 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->source = Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source'
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\Source::class
         );
 
         $this->productResource = Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\ResourceModel\Product'
+            \Magento\Catalog\Model\ResourceModel\Product::class
         );
 
         $this->_eavIndexerProcessor = Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Indexer\Product\Eav\Processor'
+            \Magento\Catalog\Model\Indexer\Product\Eav\Processor::class
         );
     }
 
@@ -60,7 +61,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             ->create(ProductRepositoryInterface::class);
 
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attr **/
-        $attr = Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')
+        $attr = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class)
            ->getAttribute('catalog_product', 'test_configurable');
         $attr->setIsFilterable(1)->save();
 
@@ -68,7 +69,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $options **/
         $options = Bootstrap::getObjectManager()->create(
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
         );
         $options->setAttributeFilter($attr->getId())->load();
         $optionIds = $options->getAllIds();
@@ -106,13 +107,13 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             ->create(ProductRepositoryInterface::class);
 
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attr **/
-        $attr = Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')
+        $attr = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class)
            ->getAttribute('catalog_product', 'multiselect_attribute');
         $attr->setIsFilterable(1)->save();
 
         /** @var $options \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
         $options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
         );
         $options->setAttributeFilter($attr->getId());
         $optionIds = $options->getAllIds();

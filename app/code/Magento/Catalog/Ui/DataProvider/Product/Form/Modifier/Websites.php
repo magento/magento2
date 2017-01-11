@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -154,8 +154,8 @@ class Websites extends AbstractModifier
         $tooltip = [
             'link' => 'http://docs.magento.com/m2/ce/user_guide/configuration/scope.html',
             'description' => __(
-                'If your Magento site has multiple views, ' .
-                'you can set the scope to apply to a specific view.'
+                'If your Magento installation has multiple websites, ' .
+                'you can edit the scope to use the product on specific sites.'
             ),
         ];
         $sortOrder = 0;

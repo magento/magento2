@@ -2,7 +2,7 @@
 /**
  * test Magento\Customer\Model\Metadata\Form\Multiselect
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
@@ -44,13 +44,13 @@ class MultiselectTest extends AbstractFormTestCase
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject | Multiselect $multiselect */
         $multiselect = $this->getMockBuilder(
-            'Magento\Customer\Model\Metadata\Form\Multiselect'
+            \Magento\Customer\Model\Metadata\Form\Multiselect::class
         )->disableOriginalConstructor()->setMethods(
             ['_getRequestValue']
         )->getMock();
         $multiselect->expects($this->once())->method('_getRequestValue')->will($this->returnValue($value));
 
-        $request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')->getMock();
+        $request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
         $actual = $multiselect->extractValue($request);
         $this->assertEquals($expected, $actual);
     }
@@ -186,7 +186,7 @@ class MultiselectTest extends AbstractFormTestCase
      */
     protected function runOutputValueTest($value, $expected, $format)
     {
-        $option1 = $this->getMockBuilder('Magento\Customer\Api\Data\OptionInterface')
+        $option1 = $this->getMockBuilder(\Magento\Customer\Api\Data\OptionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
@@ -197,7 +197,7 @@ class MultiselectTest extends AbstractFormTestCase
             ->method('getValue')
             ->will($this->returnValue('14'));
 
-        $option2 = $this->getMockBuilder('Magento\Customer\Api\Data\OptionInterface')
+        $option2 = $this->getMockBuilder(\Magento\Customer\Api\Data\OptionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();

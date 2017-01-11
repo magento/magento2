@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,38 +14,14 @@ $testsBaseDir = dirname(__DIR__);
 $integrationTestsDir = realpath("{$testsBaseDir}/../integration");
 $fixtureBaseDir = $integrationTestsDir . '/testsuite';
 
+setCustomErrorHandler();
+
 $logWriter = new \Zend_Log_Writer_Stream('php://output');
 $logWriter->setFormatter(new \Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
 $logger = new \Zend_Log($logWriter);
 
-/** Copy test modules to app/code/Magento to make them visible for Magento instance */
-$pathToCommittedTestModules = __DIR__ . '/../_files/Magento';
-$pathToInstalledMagentoInstanceModules = __DIR__ . '/../../../../app/code/Magento';
-$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($pathToCommittedTestModules));
-/** @var SplFileInfo $file */
-foreach ($iterator as $file) {
-    if (!$file->isDir()) {
-        $source = $file->getPathname();
-        $relativePath = substr($source, strlen($pathToCommittedTestModules));
-        $destination = $pathToInstalledMagentoInstanceModules . $relativePath;
-        $targetDir = dirname($destination);
-        if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0755, true);
-        }
-        copy($source, $destination);
-    }
-}
-unset($iterator, $file);
-
-// Register the modules under '_files/'
-$pathPattern = $pathToInstalledMagentoInstanceModules . '/TestModule*/registration.php';
-$files = glob($pathPattern, GLOB_NOSORT);
-if ($files === false) {
-    throw new \RuntimeException('glob() returned error while searching in \'' . $pathPattern . '\'');
-}
-foreach ($files as $file) {
-    include $file;
-}
+$testFrameworkDir = __DIR__;
+require_once  __DIR__ . '/../../integration/framework/deployTestModules.php';
 
 /* Bootstrap the application */
 $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
@@ -91,9 +67,9 @@ $application->initialize();
 
 \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Framework\Component\DirSearch');
+    ->create(\Magento\Framework\Component\DirSearch::class);
 $themePackageList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Framework\View\Design\Theme\ThemePackageList');
+    ->create(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
 \Magento\Framework\App\Utility\Files::setInstance(
     new \Magento\Framework\App\Utility\Files(
         new \Magento\Framework\Component\ComponentRegistrar(),
@@ -102,3 +78,40 @@ $themePackageList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     )
 );
 unset($bootstrap, $application, $settings, $shell);
+
+/**
+ * Set custom error handler
+ */
+function setCustomErrorHandler()
+{
+    set_error_handler(
+        function ($errNo, $errStr, $errFile, $errLine) {
+            if (error_reporting()) {
+                $errorNames = [
+                    E_ERROR => 'Error',
+                    E_WARNING => 'Warning',
+                    E_PARSE => 'Parse',
+                    E_NOTICE => 'Notice',
+                    E_CORE_ERROR => 'Core Error',
+                    E_CORE_WARNING => 'Core Warning',
+                    E_COMPILE_ERROR => 'Compile Error',
+                    E_COMPILE_WARNING => 'Compile Warning',
+                    E_USER_ERROR => 'User Error',
+                    E_USER_WARNING => 'User Warning',
+                    E_USER_NOTICE => 'User Notice',
+                    E_STRICT => 'Strict',
+                    E_RECOVERABLE_ERROR => 'Recoverable Error',
+                    E_DEPRECATED => 'Deprecated',
+                    E_USER_DEPRECATED => 'User Deprecated',
+                ];
+
+                $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : "";
+
+                throw new \PHPUnit_Framework_Exception(
+                    sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),
+                    $errNo
+                );
+            }
+        }
+    );
+}

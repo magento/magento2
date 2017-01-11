@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreStart
@@ -58,12 +58,12 @@ namespace Magento\Framework\Session\Test\Unit {
             require_once __DIR__ . '/_files/mock_session_regenerate_id.php';
 
             $mockPHPFunctions = true;
-            $this->mockSessionConfig = $this->getMockBuilder('\Magento\Framework\Session\Config\ConfigInterface')
+            $this->mockSessionConfig = $this->getMockBuilder(\Magento\Framework\Session\Config\ConfigInterface::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-            $this->mockCookieManager = $this->getMock('\Magento\Framework\Stdlib\CookieManagerInterface');
+            $this->mockCookieManager = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
             $this->mockCookieMetadataFactory = $this->getMockBuilder(
-                'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+                \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
             )
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -74,7 +74,7 @@ namespace Magento\Framework\Session\Test\Unit {
                 'cookieMetadataFactory' => $this->mockCookieMetadataFactory,
             ];
             $this->sessionManager = $this->objectManager->getObject(
-                'Magento\Framework\Session\SessionManager',
+                \Magento\Framework\Session\SessionManager::class,
                 $arguments
             );
         }
@@ -82,7 +82,7 @@ namespace Magento\Framework\Session\Test\Unit {
         public function testSessionManagerConstructor()
         {
             self::$isIniSetInvoked = false;
-            $this->objectManager->getObject('Magento\Framework\Session\SessionManager');
+            $this->objectManager->getObject(\Magento\Framework\Session\SessionManager::class);
             $this->assertTrue(SessionManagerTest::$isIniSetInvoked);
         }
     }

@@ -2,7 +2,7 @@
 /**
  * Test for \Magento\Paypal\Block\Payment\Form\Billing\Agreement
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Payment\Form\Billing;
@@ -15,10 +15,10 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Quote\Model\ResourceModel\Quote\Collection'
+            \Magento\Quote\Model\ResourceModel\Quote\Collection::class
         )->getFirstItem();
         /** @var \Magento\Framework\View\LayoutInterface $layout */
-        $layout = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
+        $layout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $layout->expects(
@@ -31,7 +31,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
         $layout->expects($this->once())->method('getParentName')->will($this->returnValue('billing_agreement_form'));
 
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Paypal\Block\Payment\Form\Billing\Agreement'
+            \Magento\Paypal\Block\Payment\Form\Billing\Agreement::class
         );
         $this->_block->setLayout($layout);
     }

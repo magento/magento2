@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
@@ -15,16 +15,16 @@ class AssociatedProductsCollectionTest extends \PHPUnit_Framework_TestCase
     public function testGetColumnValues()
     {
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('\Magento\Catalog\Api\ProductRepositoryInterface');
+            ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('grouped-product');
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->register('current_product', $product);
+        $objectManager->get(\Magento\Framework\Registry::class)->register('current_product', $product);
 
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection'
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection::class
         );
 
         $resultData = $collection->getColumnValues('sku');

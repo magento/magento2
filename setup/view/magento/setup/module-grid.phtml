@@ -1,0 +1,160 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<h2 class="page-title">{{$state.current.header}}</h2>
+
+<div class="row" ng-show="modulesProcessed && total == 0">
+    <label class="form-label">
+        <b>We didn't find any modules at this time. Please try later.</b><br/>
+    </label>
+</div>
+<div class="admin__data-grid-outer-wrap" ng-show="modulesProcessed && total > 0">
+    <div class="admin__data-grid-header">
+        <div class="admin__data-grid-header-row row row-gutter">
+            <div class="col-xs-3">
+                <div class="admin__control-support-text module-summary">
+                    <span class="module-summary-title">Available modules</span>
+                    <span class="module-summary-count">{{total}} modules</span>
+                </div>
+            </div>
+            <div class="col-xs-9 admin__data-grid-pager-wrap"
+                 ng-include="'<?php echo $this->basePath();?>/pub/magento/setup/view/pagination.html'">
+            </div>
+        </div>
+    </div>
+    <div class="admin__data-grid-wrap" ng-show="$state.is('root.module')">
+        <table class="data-grid">
+            <thead data-part="head">
+            <tr>
+                <th class="data-grid-th _col-xs">
+                    <span></span>
+                </th>
+                <th ng-click="order('name')"
+                    ng-class="{'_ascend' : predicate === 'name' && !reverse,
+                               '_descend' : predicate === 'name' && reverse}"
+                    class="data-grid-th _sortable">
+                    <span>Component Name</span>
+                </th>
+                <th ng-click="order('moduleName')"
+                    ng-class="{'_ascend' : predicate === 'moduleName' && !reverse,
+                               '_descend' : predicate === 'moduleName' && reverse}"
+                    class="data-grid-th _sortable">
+                    <span>Module Name</span>
+                </th>
+                <th ng-click="order('version')"
+                    ng-class="{'_ascend' : predicate === 'version' && !reverse,
+                               '_descend' : predicate === 'version' && reverse}"
+                    class="data-grid-th _sortable">
+                    <span>Version</span>
+                </th>
+                <th ng-click="order('vendor')"
+                    ng-class="{'_ascend' : predicate === 'vendor' && !reverse,
+                               '_descend' : predicate === 'vendor' && reverse}"
+                    class="data-grid-th _sortable">
+                    <span>Vendor</span>
+                </th>
+                <th class="data-grid-actions-cell data-grid-th">
+                    <span>Action</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in modules | orderBy:predicate:reverse
+                | startFrom:(currentPage - 1) * rowLimit | limitTo:rowLimit"
+                ng-class="{'_odd-row' : $index % 2}">
+                <td class="data-grid-indicator-cell">
+                    <span class="component-indicator"
+                          ng-class="getIndicatorInfo(item, 'icon')"
+                          data-label="{{getIndicatorInfo(item, 'label')}}"
+                        ><span>{{getIndicatorInfo(item, 'label')}}</span>
+                    </span>
+                </td>
+                <td class="col-manager-item-name">
+                    <div class="data-grid-data"
+                          ng-click="showDependencies = !showDependencies"
+                          ng-class="{'_show-dependencies': item.requiredBy.length > 0 && showDependencies,
+                                     '_hide-dependencies': item.requiredBy.length > 0 && !showDependencies,
+                                     '_no-dependencies': item.requiredBy.length == 0}">
+                        {{item.package_title}}
+                    </div>
+                    <div class="product-modules-block" ng-show="item.requiredBy.length > 0 && showDependencies">
+                        <div class="product-modules-title">
+                            Packages currently using module
+                        </div>
+                        <div class="product-modules-descriprion">
+                            Module Name
+                        </div>
+                        <ul class="product-modules-list">
+                            <li ng-repeat="product in item.requiredBy">
+                                <span class="component-indicator"
+                                      ng-class="getIndicatorInfo(product, 'icon')"
+                                      data-label="{{getIndicatorInfo(product, 'label')}}">
+                                    <span>{{getIndicatorInfo(product, 'label')}}</span>
+                                </span>
+                                {{product.package_title}}
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <div class="data-grid-data">{{item.moduleName}}</div>
+                    <div class="product-modules-block" ng-show="item.requiredBy.length > 0 && showDependencies">
+                        <div class="product-modules-title">
+                            &nbsp;
+                        </div>
+                        <div class="product-modules-descriprion">
+                            Package Type
+                        </div>
+                        <ul class="product-modules-list">
+                            <li ng-repeat="product in item.requiredBy">
+                                {{product.package_type}}
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <div class="data-grid-data">{{item.version}}</div>
+                    <div class="product-modules-block" ng-show="item.requiredBy.length > 0 && showDependencies">
+                        <div class="product-modules-title">
+                            &nbsp;
+                        </div>
+                        <div class="product-modules-descriprion">
+                            Version
+                        </div>
+                        <ul class="product-modules-list">
+                            <li ng-repeat="product in item.requiredBy">
+                                {{product.version}}
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{item.vendor}}</span>
+                </td>
+                <td class="data-grid-actions-cell">
+                    <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(item)}">
+                        <button class="action-select"
+                                ng-click="toggleActiveActionsCell(item)"
+                                ng-blur="closeActiveActionsCell(item)">
+                            <span>Select</span>
+                        </button>
+                        <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(item)}">
+                            <li ng-class="{'hide': item.enable}"
+                                ng-mousedown="enableDisable('enable', item)">
+                                <a class="action-menu-item item-enable">Enable</a>
+                            </li>
+                            <li ng-class="{'hide': !item.enable}"
+                                ng-mousedown="enableDisable('disable', item)">
+                                <a class="action-menu-item item-disable">Disable</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

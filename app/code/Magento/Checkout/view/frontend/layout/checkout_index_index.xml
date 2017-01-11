@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -209,7 +209,7 @@
                                                                         <!-- post-code field has custom UI component -->
                                                                         <item name="component" xsi:type="string">Magento_Ui/js/form/element/post-code</item>
                                                                         <item name="validation" xsi:type="array">
-                                                                            <item name="required-entry" xsi:type="string">true</item>
+                                                                            <item name="required-entry" xsi:type="boolean">true</item>
                                                                         </item>
                                                                     </item>
                                                                     <item name="company" xsi:type="array">

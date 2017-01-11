@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
@@ -21,7 +21,9 @@ class NamedParamsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_interpreter = $this->getMockForAbstractClass('Magento\Framework\Data\Argument\InterpreterInterface');
+        $this->_interpreter = $this->getMockForAbstractClass(
+            \Magento\Framework\Data\Argument\InterpreterInterface::class
+        );
         $this->_model = new NamedParams($this->_interpreter);
     }
 

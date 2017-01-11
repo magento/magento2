@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 ?>
 
@@ -24,11 +23,15 @@ require([
 //<![CDATA[
     jQuery('#filter_form').mage('validation', {errorClass: 'mage-error'});
     function filterFormSubmit() {
-        var filters = $$('#filter_form input', '#filter_form select');
-        var elements = [];
-        for(var i in filters){
-            if(filters[i].value && filters[i].value.length && !filters[i].disabled) elements.push(filters[i]);
+        var filters = $$('#filter_form input', '#filter_form select'),
+            elements = [];
+
+        for (var i in filters) {
+            if (filters[i].value && filters[i].value.length && !filters[i].disabled) {
+                elements.push(filters[i]);
+            }
         }
+
         if (jQuery('#filter_form').valid()) {
             setLocation('<?php /* @escapeNotVerified */ echo $block->getFilterUrl(); ?>filter/'+Base64.encode(Form.serializeElements(elements))+'/');
         }

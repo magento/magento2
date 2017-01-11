@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -127,7 +127,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Product'),
                 'index' => 'name',
-                'renderer' => 'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item'
+                'renderer' => \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item::class
             ]
         );
 
@@ -165,7 +165,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Action'),
                 'index' => 'quote_item_id',
-                'renderer' => 'Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction',
+                'renderer' => \Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction::class,
                 'filter' => false,
                 'sortable' => false,
                 'actions' => [

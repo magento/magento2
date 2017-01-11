@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,13 +32,13 @@ class SendFriendTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->sendfriendDataMock = $this->getMockBuilder('Magento\SendFriend\Helper\Data')
+        $this->sendfriendDataMock = $this->getMockBuilder(\Magento\SendFriend\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
+        $this->cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
 
         $this->model = $objectManager->getObject(
-            'Magento\SendFriend\Model\SendFriend',
+            \Magento\SendFriend\Model\SendFriend::class,
             [
                 'sendfriendData' => $this->sendfriendDataMock,
                 'cookieManager' => $this->cookieManagerMock,
@@ -69,7 +69,7 @@ class SendFriendTest extends \PHPUnit_Framework_TestCase
 
         $this->cookieManagerMock->expects($this->once())->method('getCookie')->with($cookieName);
         $this->cookieManagerMock->expects($this->once())->method('setSensitiveCookie');
-        $sendFriendClass = new \ReflectionClass('Magento\SendFriend\Model\SendFriend');
+        $sendFriendClass = new \ReflectionClass(\Magento\SendFriend\Model\SendFriend::class);
         $method = $sendFriendClass->getMethod('_sentCountByCookies');
         $method->setAccessible(true);
         $method->invokeArgs($this->model, [true]);

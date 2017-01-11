@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import;
@@ -29,15 +29,18 @@ abstract class AbstractImportTestCase extends \PHPUnit_Framework_TestCase
     protected function getErrorAggregatorObject($methods = null)
     {
         $errorFactory = $this->getMockBuilder(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory'
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $errorFactory->method('create')->willReturn(
-            $this->objectManagerHelper->getObject('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError')
+            $this->objectManagerHelper->getObject(
+                \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::class
+            )
         );
-        return $this->getMockBuilder('Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator')
-            ->setMethods($methods)
+        return $this->getMockBuilder(
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class
+        )->setMethods($methods)
             ->setConstructorArgs(['errorFactory' => $errorFactory])
             ->getMock();
     }

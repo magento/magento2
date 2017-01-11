@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote;
@@ -25,11 +25,11 @@ class RelationTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\Quote\Model\Quote\Relation'
+            \Magento\Quote\Model\Quote\Relation::class
         );
     }
 
@@ -39,7 +39,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
     public function testProcessRelation()
     {
         $addressCollectionMock = $this->getMock(
-            'Magento\Eav\Model\Entity\Collection\AbstractCollection',
+            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
             [],
             [],
             '',
@@ -49,9 +49,8 @@ class RelationTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('getAddressesCollection')->willReturn($addressCollectionMock);
         $addressCollectionMock->expects($this->once())->method('save');
 
-
         $itemsCollectionMock = $this->getMock(
-            'Magento\Eav\Model\Entity\Collection\AbstractCollection',
+            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
             [],
             [],
             '',
@@ -62,7 +61,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
         $itemsCollectionMock->expects($this->once())->method('save');
 
         $paymentCollectionMock = $this->getMock(
-            'Magento\Eav\Model\Entity\Collection\AbstractCollection',
+            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
             [],
             [],
             '',
@@ -72,7 +71,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('getPaymentsCollection')->willReturn($paymentCollectionMock);
         $paymentCollectionMock->expects($this->once())->method('save');
 
-        $paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
         $this->quoteMock->expects($this->once())->method('currentPaymentWasSet')->willReturn(true);
         $this->quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);
         $paymentMock->expects($this->once())->method('save');

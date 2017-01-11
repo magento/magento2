@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db;
@@ -30,7 +30,7 @@ class CreateEntityRowTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->connection = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
@@ -44,7 +44,7 @@ class CreateEntityRowTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
 
         $metadata = $this->getMock(
-            'Magento\Framework\EntityManager\EntityMetadata',
+            \Magento\Framework\EntityManager\EntityMetadata::class,
             [],
             [],
             '',
@@ -72,7 +72,7 @@ class CreateEntityRowTest extends \PHPUnit_Framework_TestCase
             ->willReturn('100000001');
 
         $this->metadataPool = $this->getMock(
-            'Magento\Framework\EntityManager\MetadataPool',
+            \Magento\Framework\EntityManager\MetadataPool::class,
             [],
             [],
             '',

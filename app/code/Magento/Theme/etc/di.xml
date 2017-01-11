@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -210,6 +210,15 @@
                 <item name="footer_absolute_footer" xsi:type="array">
                     <item name="path" xsi:type="string">design/footer/absolute_footer</item>
                     <item name="fieldset" xsi:type="string">other_settings/footer</item>
+                </item>
+                <item name="default_robots" xsi:type="array">
+                    <item name="path" xsi:type="string">design/search_engine_robots/default_robots</item>
+                    <item name="fieldset" xsi:type="string">other_settings/search_engine_robots</item>
+                </item>
+                <item name="custom_instructions" xsi:type="array">
+                    <item name="path" xsi:type="string">design/search_engine_robots/custom_instructions</item>
+                    <item name="backend_model" xsi:type="string">Magento\Config\Model\Config\Backend\Admin\Robots</item>
+                    <item name="fieldset" xsi:type="string">other_settings/search_engine_robots</item>
                 </item>
             </argument>
         </arguments>

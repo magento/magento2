@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Test\Unit\Model\ResourceModel;
@@ -24,8 +24,8 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceMock = $this->getMock('\Magento\CatalogRule\Model\ResourceModel\Rule', [], [], '', false);
-        $this->metadataMock = $this->getMock('\Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
+        $this->resourceMock = $this->getMock(\Magento\CatalogRule\Model\ResourceModel\Rule::class, [], [], '', false);
+        $this->metadataMock = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
         $this->subject = new \Magento\CatalogRule\Model\ResourceModel\ReadHandler(
             $this->resourceMock,
             $this->metadataMock
@@ -36,7 +36,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $linkedField = 'entity_id';
         $entityId = 100;
-        $entityType = '\Magento\CatalogRule\Entity\Type';
+        $entityType = \Magento\CatalogRule\Api\Data\RuleInterface::class;
         $entityData = [
             $linkedField => $entityId
         ];
@@ -45,7 +45,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $websiteIds = [4, 5, 6];
 
         $metadataMock = $this->getMock(
-            '\Magento\Framework\EntityManager\EntityMetadata',
+            \Magento\Framework\EntityManager\EntityMetadata::class,
             ['getLinkField'],
             [],
             '',

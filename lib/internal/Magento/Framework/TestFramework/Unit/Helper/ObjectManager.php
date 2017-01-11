@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ObjectManager
 {
     /**
@@ -17,8 +20,8 @@ class ObjectManager
      * @var array
      */
     protected $_specialCases = [
-        'Magento\Framework\Model\ResourceModel\AbstractResource' => '_getResourceModelMock',
-        'Magento\Framework\TranslateInterface' => '_getTranslatorMock',
+        \Magento\Framework\Model\ResourceModel\AbstractResource::class => '_getResourceModelMock',
+        \Magento\Framework\TranslateInterface::class => '_getTranslatorMock',
     ];
 
     /**
@@ -68,7 +71,7 @@ class ObjectManager
     {
         $object = null;
         $interfaces = class_implements($className);
-        if (in_array('Magento\Framework\ObjectManager\ContextInterface', $interfaces)) {
+        if (in_array(\Magento\Framework\ObjectManager\ContextInterface::class, $interfaces)) {
             $object = $this->getObject($className, $arguments);
         } elseif (isset($this->_specialCases[$className])) {
             $method = $this->_specialCases[$className];
@@ -86,7 +89,7 @@ class ObjectManager
     protected function _getResourceModelMock()
     {
         $resourceMock = $this->_testObject->getMock(
-            'Magento\Framework\Module\ModuleResource',
+            \Magento\Framework\Module\ModuleResource::class,
             ['getIdFieldName', '__sleep', '__wakeup'],
             [],
             '',
@@ -152,8 +155,8 @@ class ObjectManager
      */
     public function getObject($className, array $arguments = [])
     {
-        if (is_subclass_of($className, '\Magento\Framework\Api\AbstractSimpleObjectBuilder')
-            || is_subclass_of($className, '\Magento\Framework\Api\Builder')
+        if (is_subclass_of($className, \Magento\Framework\Api\AbstractSimpleObjectBuilder::class)
+            || is_subclass_of($className, \Magento\Framework\Api\Builder::class)
         ) {
             return $this->getBuilder($className, $arguments);
         }
@@ -186,7 +189,8 @@ class ObjectManager
     protected function getBuilder($className, array $arguments)
     {
         if (!isset($arguments['objectFactory'])) {
-            $objectFactory = $this->_testObject->getMock('Magento\Framework\Api\ObjectFactory', [], [], '', false);
+            $objectFactory =
+                $this->_testObject->getMock(\Magento\Framework\Api\ObjectFactory::class, [], [], '', false);
 
             $objectFactory->expects($this->_testObject->any())
                 ->method('populateWithArray')
@@ -286,7 +290,7 @@ class ObjectManager
      */
     public function getCollectionMock($className, array $data)
     {
-        if (!is_subclass_of($className, '\Magento\Framework\Data\Collection')) {
+        if (!is_subclass_of($className, \Magento\Framework\Data\Collection::class)) {
             throw new \InvalidArgumentException(
                 $className . ' does not instance of \Magento\Framework\Data\Collection'
             );
@@ -314,7 +318,7 @@ class ObjectManager
      */
     private function _getMockObject($argClassName, array $arguments)
     {
-        if (is_subclass_of($argClassName, '\Magento\Framework\Api\ExtensibleObjectBuilder')) {
+        if (is_subclass_of($argClassName, \Magento\Framework\Api\ExtensibleObjectBuilder::class)) {
             $object = $this->getBuilder($argClassName, $arguments);
             return $object;
         } else {

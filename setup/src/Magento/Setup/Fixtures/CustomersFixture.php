@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ class CustomersFixture extends Fixture
         $this->fixtureModel->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */
-        $storeManager = $this->fixtureModel->getObjectManager()->create('Magento\Store\Model\StoreManager');
+        $storeManager = $this->fixtureModel->getObjectManager()->create(\Magento\Store\Model\StoreManager::class);
         /** @var $defaultStoreView \Magento\Store\Model\Store */
         $defaultStoreView = $storeManager->getDefaultStoreView();
         $defaultStoreViewId = $defaultStoreView->getStoreId();
@@ -93,7 +93,7 @@ class CustomersFixture extends Fixture
         $generator = new Generator($pattern, $customersNumber);
         /** @var \Magento\ImportExport\Model\Import $import */
         $import = $this->fixtureModel->getObjectManager()->create(
-            'Magento\ImportExport\Model\Import',
+            \Magento\ImportExport\Model\Import::class,
             [
                 'data' => [
                     'entity' => 'customer_composite',

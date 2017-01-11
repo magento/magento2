@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -175,6 +175,10 @@
                     <comment>Account will be unlocked after provided time.</comment>
                     <frontend_class>required-entry validate-digits</frontend_class>
                 </field>
+                <field id="autocomplete_on_storefront" type="select" translate="label" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Enable Autocomplete on login/forgot password forms</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="address" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Name and Address Options</label>
@@ -265,12 +269,6 @@
                 <field id="validate_vat_number" translate="button_label" sortOrder="62" showInDefault="1" showInWebsite="1" showInStore="0">
                     <button_label>Validate VAT Number</button_label>
                     <frontend_model>Magento\Customer\Block\Adminhtml\System\Config\Validatevat</frontend_model>
-                </field>
-            </group>
-            <group id="restriction">
-                <field id="autocomplete_on_storefront" type="select" translate="label" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Enable Autocomplete on login/forgot password forms</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
         </section>

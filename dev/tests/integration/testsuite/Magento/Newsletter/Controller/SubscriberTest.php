@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller;
@@ -89,7 +89,7 @@ class SubscriberTest extends AbstractController
     {
         /** @var \Magento\Customer\Model\Session $session */
         $session = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\Session');
+            ->get(\Magento\Customer\Model\Session::class);
         $session->loginById($customerId);
     }
 }

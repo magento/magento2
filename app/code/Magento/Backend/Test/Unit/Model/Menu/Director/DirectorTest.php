@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,17 +38,17 @@ class DirectorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_builderMock = $this->getMock('Magento\Backend\Model\Menu\Builder', [], [], '', false);
-        $this->_logger = $this->getMock('Psr\Log\LoggerInterface');
+        $this->_builderMock = $this->getMock(\Magento\Backend\Model\Menu\Builder::class, [], [], '', false);
+        $this->_logger = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->_commandMock = $this->getMock(
-            'Magento\Backend\Model\Menu\Builder\AbstractCommand',
+            \Magento\Backend\Model\Menu\Builder\AbstractCommand::class,
             ['getId', '_execute', 'execute', 'chain'],
             [],
             '',
             false
         );
         $this->_commandFactoryMock = $this->getMock(
-            'Magento\Backend\Model\Menu\Builder\CommandFactory',
+            \Magento\Backend\Model\Menu\Builder\CommandFactory::class,
             ['create'],
             [],
             '',

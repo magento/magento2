@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@
     <div class="page-header-hgroup col-l-8 col-m-6">
         <div class="page-title-wrapper">
             <h1 class="page-title">
-                {{$state.current.noMenu ? $state.current.title : titles[$state.current.type]}}</h1>
+                {{$state.current.noMenu ? $state.current.title : $root.titles[$state.current.type]}}</h1>
         </div>
     </div>
     <div class="page-header-actions col-l-4 col-m-6" style="display: none">

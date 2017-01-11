@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,26 +63,28 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareMock()
     {
-        $this->saleableInterfaceMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $this->saleableInterfaceMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPriceType', 'getPriceInfo'])
             ->getMock();
-        $this->bundleCalculatorMock = $this->getMock('Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface');
+        $this->bundleCalculatorMock = $this->getMock(
+            \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface::class
+        );
 
-        $this->basePriceMock = $this->getMock('Magento\Catalog\Pricing\Price\BasePrice', [], [], '', false);
+        $this->basePriceMock = $this->getMock(\Magento\Catalog\Pricing\Price\BasePrice::class, [], [], '', false);
         $this->basePriceMock->expects($this->any())
             ->method('getValue')
             ->will($this->returnValue($this->baseAmount));
 
-        $this->bundleOptionMock = $this->getMockBuilder('Magento\Bundle\Pricing\Price\BundleOptionPrice')
+        $this->bundleOptionMock = $this->getMockBuilder(\Magento\Bundle\Pricing\Price\BundleOptionPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customOptionPriceMock = $this->getMockBuilder('\Magento\Catalog\Pricing\Price\CustomOptionPrice')
+        $this->customOptionPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\CustomOptionPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->priceInfoMock = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
+        $this->priceInfoMock = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
 
         $this->priceInfoMock->expects($this->atLeastOnce())
             ->method('getPrice')
@@ -96,7 +98,7 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfoMock));
 
-        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->finalPrice = new \Magento\Bundle\Pricing\Price\FinalPrice(

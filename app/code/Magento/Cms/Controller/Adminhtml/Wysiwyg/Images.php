@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg;
@@ -55,7 +55,7 @@ abstract class Images extends \Magento\Backend\App\Action
     public function getStorage()
     {
         if (!$this->_coreRegistry->registry('storage')) {
-            $storage = $this->_objectManager->create('Magento\Cms\Model\Wysiwyg\Images\Storage');
+            $storage = $this->_objectManager->create(\Magento\Cms\Model\Wysiwyg\Images\Storage::class);
             $this->_coreRegistry->register('storage', $storage);
         }
         return $this->_coreRegistry->registry('storage');

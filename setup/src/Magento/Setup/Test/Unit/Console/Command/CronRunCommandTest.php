@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -43,10 +43,10 @@ class CronRunCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
-        $this->readinessCheck = $this->getMock('Magento\Setup\Model\Cron\ReadinessCheck', [], [], '', false);
-        $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->queue = $this->getMock(\Magento\Setup\Model\Cron\Queue::class, [], [], '', false);
+        $this->readinessCheck = $this->getMock(\Magento\Setup\Model\Cron\ReadinessCheck::class, [], [], '', false);
+        $this->status = $this->getMock(\Magento\Setup\Model\Cron\Status::class, [], [], '', false);
         $this->command = new CronRunCommand(
             $this->deploymentConfig,
             $this->queue,
@@ -150,7 +150,7 @@ class CronRunCommandTest extends \PHPUnit_Framework_TestCase
         $this->setUpPreliminarySuccess();
         $this->queue->expects($this->at(0))->method('peek')->willReturn(['name' => 'setup:']);
         $this->queue->expects($this->at(1))->method('peek')->willReturn(['name' => 'setup:']);
-        $job = $this->getMockForAbstractClass('Magento\Setup\Model\Cron\AbstractJob', [], '', false);
+        $job = $this->getMockForAbstractClass(\Magento\Setup\Model\Cron\AbstractJob::class, [], '', false);
         $job->expects($this->once())->method('execute')->willThrowException(new \Exception('job failed'));
         $this->queue->expects($this->at(2))->method('popQueuedJob')->willReturn($job);
         $this->status->expects($this->atLeastOnce())->method('toggleUpdateError')->with(true);
@@ -162,7 +162,7 @@ class CronRunCommandTest extends \PHPUnit_Framework_TestCase
         $this->setUpPreliminarySuccess();
         $this->queue->expects($this->at(0))->method('peek')->willReturn(['name' => 'setup:']);
         $this->queue->expects($this->at(1))->method('peek')->willReturn(['name' => 'setup:']);
-        $job = $this->getMockForAbstractClass('Magento\Setup\Model\Cron\AbstractJob', [], '', false);
+        $job = $this->getMockForAbstractClass(\Magento\Setup\Model\Cron\AbstractJob::class, [], '', false);
         $job->expects($this->once())->method('execute');
         $this->queue->expects($this->at(2))->method('popQueuedJob')->willReturn($job);
         $this->status->expects($this->never())->method('toggleUpdateError')->with(true);

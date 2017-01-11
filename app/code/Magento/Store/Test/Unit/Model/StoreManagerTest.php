@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Store\Test\Unit\Model;
+
+use Magento\Framework\App\DeploymentConfig;
 
 class StoreManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,16 +28,16 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->storeRepositoryMock = $this->getMockBuilder('Magento\Store\Api\StoreRepositoryInterface')
+        $this->storeRepositoryMock = $this->getMockBuilder(\Magento\Store\Api\StoreRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->storeResolverMock = $this->getMockBuilder('Magento\Store\Api\StoreResolverInterface')
+        $this->storeResolverMock = $this->getMockBuilder(\Magento\Store\Api\StoreResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $this->model = $objectManager->getObject(
-            '\Magento\Store\Model\StoreManager',
+            \Magento\Store\Model\StoreManager::class,
             [
                 'storeRepository' => $this->storeRepositoryMock,
                 'storeResolver' => $this->storeResolverMock
@@ -46,7 +48,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreEmptyParameter()
     {
         $storeId = 1;
-        $storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -55,14 +57,14 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getById')
             ->with($storeId)
             ->willReturn($storeMock);
-        $this->assertInstanceOf('Magento\Store\Api\Data\StoreInterface', $this->model->getStore());
+        $this->assertInstanceOf(\Magento\Store\Api\Data\StoreInterface::class, $this->model->getStore());
         $this->assertEquals($storeMock, $this->model->getStore());
     }
 
     public function testGetStoreStringParameter()
     {
         $storeId = 'store_code';
-        $storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -71,18 +73,18 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
             ->with($storeId)
             ->willReturn($storeMock);
         $actualStore = $this->model->getStore($storeId);
-        $this->assertInstanceOf('Magento\Store\Api\Data\StoreInterface', $actualStore);
+        $this->assertInstanceOf(\Magento\Store\Api\Data\StoreInterface::class, $actualStore);
         $this->assertEquals($storeMock, $actualStore);
     }
 
     public function testGetStoreObjectStoreParameter()
     {
-        $storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $actualStore = $this->model->getStore($storeMock);
-        $this->assertInstanceOf('Magento\Store\Api\Data\StoreInterface', $actualStore);
+        $this->assertInstanceOf(\Magento\Store\Api\Data\StoreInterface::class, $actualStore);
         $this->assertEquals($storeMock, $actualStore);
     }
 
@@ -97,11 +99,11 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
 
     public function getStoresDataProvider()
     {
-        $defaultStoreMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $defaultStoreMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

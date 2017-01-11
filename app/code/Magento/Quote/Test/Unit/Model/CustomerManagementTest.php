@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model;
@@ -53,7 +53,7 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\CustomerRepositoryInterface',
+            \Magento\Customer\Api\CustomerRepositoryInterface::class,
             [],
             '',
             false,
@@ -62,7 +62,7 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
             ['getById']
         );
         $this->customerAddressRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\AddressRepositoryInterface',
+            \Magento\Customer\Api\AddressRepositoryInterface::class,
             [],
             '',
             false,
@@ -71,7 +71,7 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
             ['getById']
         );
         $this->accountManagementMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\AccountManagementInterface',
+            \Magento\Customer\Api\AccountManagementInterface::class,
             [],
             '',
             false,
@@ -80,21 +80,21 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
             []
         );
         $this->quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             ['getId', 'getCustomer', 'getBillingAddress', 'getShippingAddress', 'setCustomer', 'getPasswordHash'],
             [],
             '',
             false
         );
         $this->quoteAddressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             [],
             [],
             '',
             false
         );
         $this->customerMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\CustomerInterface',
+            \Magento\Customer\Api\Data\CustomerInterface::class,
             [],
             '',
             false,
@@ -103,7 +103,7 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
             ['getId', 'getDefaultBilling']
         );
         $this->customerAddressMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AddressInterface',
+            \Magento\Customer\Api\Data\AddressInterface::class,
             [],
             '',
             false,
@@ -156,6 +156,36 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
             ->method('createAccountWithPasswordHash')
             ->with($this->customerMock, 'password hash')
             ->willReturn($this->customerMock);
+        $this->customerManagement->populateCustomerInfo($this->quoteMock);
+    }
+
+    public function testPopulateCustomerInfoForExistingCustomer()
+    {
+        $this->quoteMock->expects($this->once())
+            ->method('getCustomer')
+            ->willReturn($this->customerMock);
+        $this->customerMock->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn(1);
+        $this->customerMock->expects($this->atLeastOnce())
+            ->method('getDefaultBilling')
+            ->willReturn(100500);
+        $this->quoteMock->expects($this->atLeastOnce())
+            ->method('getBillingAddress')
+            ->willReturn($this->quoteAddressMock);
+        $this->quoteMock->expects($this->atLeastOnce())
+            ->method('getShippingAddress')
+            ->willReturn($this->quoteAddressMock);
+        $this->quoteAddressMock->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn(null);
+        $this->customerAddressRepositoryMock->expects($this->atLeastOnce())
+            ->method('getById')
+            ->with(100500)
+            ->willReturn($this->customerAddressMock);
+        $this->quoteAddressMock->expects($this->atLeastOnce())
+            ->method('importCustomerAddressData')
+            ->willReturnSelf();
         $this->customerManagement->populateCustomerInfo($this->quoteMock);
     }
 }

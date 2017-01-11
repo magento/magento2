@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,8 +36,8 @@ class BackupFactory
     public function create($timestamp, $type)
     {
         $backupId = $timestamp . '_' . $type;
-        $fsCollection = $this->_objectManager->get('Magento\Backup\Model\Fs\Collection');
-        $backupInstance = $this->_objectManager->get('Magento\Backup\Model\Backup');
+        $fsCollection = $this->_objectManager->get(\Magento\Backup\Model\Fs\Collection::class);
+        $backupInstance = $this->_objectManager->get(\Magento\Backup\Model\Backup::class);
         foreach ($fsCollection as $backup) {
             if ($backup->getId() == $backupId) {
                 $backupInstance->setType(

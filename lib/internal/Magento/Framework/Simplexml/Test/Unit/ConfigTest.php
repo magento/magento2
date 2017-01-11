@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Simplexml\Test\Unit;
@@ -31,7 +31,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertXmlStringEqualsXmlString($xml, $config->getXmlString());
 
         /** @var Element $simpleXml */
-        $simpleXml = simplexml_load_string(file_get_contents($file), 'Magento\Framework\Simplexml\Element');
+        $simpleXml = simplexml_load_string(file_get_contents($file), \Magento\Framework\Simplexml\Element::class);
         $config = new Config($simpleXml);
         $this->assertXmlStringEqualsXmlString($xml, $config->getXmlString());
     }
@@ -65,7 +65,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($config->getXpath('wrong_xpath'));
         $element = $config->getXpath('/root/node_2/node_2_1');
         $this->assertArrayHasKey(0, $element);
-        $this->assertInstanceOf('Magento\Framework\Simplexml\Element', $element[0]);
+        $this->assertInstanceOf(\Magento\Framework\Simplexml\Element::class, $element[0]);
         $this->assertSame('Value 2.1', $element[0]->asArray());
     }
 
@@ -115,7 +115,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->config->setCacheId('cacheId');
         $this->config->setCacheChecksum('CacheChecksum');
-        $cache = $this->getMock('Magento\Framework\Simplexml\Config\Cache\File', ['load']);
+        $cache = $this->getMock(\Magento\Framework\Simplexml\Config\Cache\File::class, ['load']);
         $cache->expects($this->once())->method('load')->with('cacheId__CHECKSUM')
             ->will($this->returnValue('415a5472d4f94b71ff80fd1c8e9eca7f'));
         $this->config->setCache($cache);
@@ -129,7 +129,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->config->setCacheId('cacheId');
         $this->config->setCacheChecksum('CacheChecksum');
-        $cache = $this->getMock('Magento\Framework\Simplexml\Config\Cache\File', ['load']);
+        $cache = $this->getMock(\Magento\Framework\Simplexml\Config\Cache\File::class, ['load']);
         $this->config->setCache($cache);
 
         $cache->expects($this->at(0))->method('load')->with('cacheId__CHECKSUM')
@@ -150,7 +150,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $xml = '<config><node>1</node></config>';
 
-        $cache = $this->getMock('Magento\Framework\Simplexml\Config\Cache\File', ['save']);
+        $cache = $this->getMock(\Magento\Framework\Simplexml\Config\Cache\File::class, ['save']);
         $cache->expects($this->at(0))->method('save')
             ->with(null, 'cacheId__CHECKSUM', ['cacheTags'], 10)
             ->will($this->returnValue(true));
@@ -175,7 +175,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testRemoveCache()
     {
-        $cache = $this->getMock('Magento\Framework\Simplexml\Config\Cache\File', ['remove']);
+        $cache = $this->getMock(\Magento\Framework\Simplexml\Config\Cache\File::class, ['remove']);
         $cache->expects($this->at(0))->method('remove')
             ->with('cacheId')
             ->will($this->returnValue(true));

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
@@ -24,7 +24,7 @@ class MarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notific
         if ($notificationId) {
             try {
                 $this->_objectManager->create(
-                    'Magento\AdminNotification\Model\NotificationService'
+                    \Magento\AdminNotification\Model\NotificationService::class
                 )->markAsRead(
                     $notificationId
                 );

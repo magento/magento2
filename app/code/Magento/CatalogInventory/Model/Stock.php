@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model;
@@ -24,7 +24,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      *
      * @var string
      */
-    protected $eventPrefix = 'cataloginventory_stock';
+    protected $_eventPrefix = 'cataloginventory_stock';
 
     /**
      * Parameter name in event
@@ -56,10 +56,11 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogInventory\Model\ResourceModel\Stock');
+        $this->_init(\Magento\CatalogInventory\Model\ResourceModel\Stock::class);
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Retrieve stock identifier
      *

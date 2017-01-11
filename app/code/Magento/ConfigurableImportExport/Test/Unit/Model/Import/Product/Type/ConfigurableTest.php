@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -312,15 +312,10 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'prodAttrColFac' => $this->attrCollectionFactory,
                 'params' => $this->params,
                 'resource' => $this->resource,
-                'productColFac' => $this->productCollectionFactory
+                'productColFac' => $this->productCollectionFactory,
+                'metadataPool' => $metadataPoolMock,
             ]
         );
-        $reflection = new \ReflectionClass(
-            \Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable::class
-        );
-        $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->configurable, $metadataPoolMock);
     }
 
     /**

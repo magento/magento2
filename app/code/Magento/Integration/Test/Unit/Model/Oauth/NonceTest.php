@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,14 +44,14 @@ class NonceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contextMock = $this->getMock(
-            'Magento\Framework\Model\Context',
+            \Magento\Framework\Model\Context::class,
             ['getEventDispatcher'],
             [],
             '',
             false
         );
         $eventManagerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             '',
             false,
@@ -63,21 +63,21 @@ class NonceTest extends \PHPUnit_Framework_TestCase
             ->method('getEventDispatcher')
             ->will($this->returnValue($eventManagerMock));
         $this->registryMock = $this->getMock(
-            'Magento\Framework\Registry',
+            \Magento\Framework\Registry::class,
             [],
             [],
             '',
             false
         );
         $this->oauthDataMock = $this->getMock(
-            'Magento\Integration\Helper\Oauth\Data',
+            \Magento\Integration\Helper\Oauth\Data::class,
             [],
             [],
             '',
             false
         );
         $this->resourceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\AbstractResource',
+            \Magento\Framework\Model\ResourceModel\AbstractResource::class,
             [],
             '',
             false,
@@ -86,7 +86,7 @@ class NonceTest extends \PHPUnit_Framework_TestCase
             ['getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries']
         );
         $this->resourceCollectionMock = $this->getMock(
-            'Magento\Framework\Data\Collection\AbstractDb',
+            \Magento\Framework\Data\Collection\AbstractDb::class,
             [],
             [],
             '',

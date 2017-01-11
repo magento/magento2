@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -32,9 +32,9 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
-        $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+        $config = $objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
         $mediaDirectory = $objectManager->get(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
             DirectoryList::MEDIA
         );
@@ -55,11 +55,11 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Catalog\Model\Product\Media\Config $config */
-        $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+        $config = $objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
 
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $objectManager->get(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
             DirectoryList::MEDIA
         );
@@ -75,14 +75,14 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product\Gallery\Processor'
+            \Magento\Catalog\Model\Product\Gallery\Processor::class
         );
     }
 
     public function testValidate()
     {
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->assertTrue($this->_model->validate($product));
         $this->_model->getAttribute()->setIsRequired(true);
@@ -98,7 +98,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     public function testAddImage()
     {
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->setId(1);
         $file = $this->_model->addImage($product, self::$_mediaTmpDir . '/magento_small_image.jpg');
@@ -108,7 +108,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     public function testUpdateImage()
     {
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->setData('media_gallery', ['images' => ['image' => ['file' => 'magento_image.jpg']]]);
         $this->_model->updateImage($product, 'magento_image.jpg', ['label' => 'test label']);
@@ -118,7 +118,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     public function testRemoveImage()
     {
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->setData('media_gallery', ['images' => ['image' => ['file' => 'magento_image.jpg']]]);
         $this->_model->removeImage($product, 'magento_image.jpg');
@@ -128,7 +128,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     public function testGetImage()
     {
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->setData('media_gallery', ['images' => ['image' => ['file' => 'magento_image.jpg']]]);
 
@@ -142,26 +142,26 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->setData(['image' => 'test1', 'small_image' => 'test2', 'thumbnail' => 'test3']);
 
-        $this->assertNotEmpty($product->getData('image'));
+        $this->assertNotEquals('no_selection', $product->getData('image'));
         $this->_model->clearMediaAttribute($product, 'image');
-        $this->assertNull($product->getData('image'));
+        $this->assertEquals('no_selection', $product->getData('image'));
 
-        $this->assertNotEmpty($product->getData('small_image'));
-        $this->assertNotEmpty($product->getData('thumbnail'));
+        $this->assertNotEquals('no_selection', $product->getData('small_image'));
+        $this->assertNotEquals('no_selection', $product->getData('thumbnail'));
         $this->_model->clearMediaAttribute($product, ['small_image', 'thumbnail']);
-        $this->assertNull($product->getData('small_image'));
-        $this->assertNull($product->getData('thumbnail'));
+        $this->assertEquals('no_selection', $product->getData('small_image'));
+        $this->assertEquals('no_selection', $product->getData('thumbnail'));
     }
 
     public function testSetMediaAttribute()
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->_model->setMediaAttribute($product, 'image', 'test1');
         $this->assertEquals('test1', $product->getData('image'));

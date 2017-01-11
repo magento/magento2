@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,14 +22,14 @@ class ReaderPoolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->readerFactoryMock = $this->getMockBuilder('Magento\Framework\View\Layout\ReaderFactory')
+        $this->readerFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ReaderFactory::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->pool = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\Layout\ReaderPool',
+            \Magento\Framework\View\Layout\ReaderPool::class,
             [
                 'readerFactory' => $this->readerFactoryMock,
-                'readers' => ['move' => 'Magento\Framework\View\Layout\Reader\Move']
+                'readers' => ['move' => \Magento\Framework\View\Layout\Reader\Move::class]
             ]
         );
     }
@@ -37,7 +37,7 @@ class ReaderPoolTest extends \PHPUnit_Framework_TestCase
     public function testInterpret()
     {
         /** @var Reader\Context $contextMock */
-        $contextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
+        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
             ->disableOriginalConstructor()->getMock();
 
         $currentElement = new \Magento\Framework\View\Layout\Element(
@@ -47,7 +47,7 @@ class ReaderPoolTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Magento\Framework\View\Layout\Reader\Move|\PHPUnit_Framework_MockObject_MockObject $moveReaderMock
          */
-        $moveReaderMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Move')
+        $moveReaderMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Move::class)
             ->disableOriginalConstructor()->getMock();
         $moveReaderMock->expects($this->exactly(2))->method('interpret')
             ->willReturn($this->returnSelf());
@@ -56,7 +56,7 @@ class ReaderPoolTest extends \PHPUnit_Framework_TestCase
 
         $this->readerFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturnMap([['Magento\Framework\View\Layout\Reader\Move', [], $moveReaderMock]]);
+            ->willReturnMap([[\Magento\Framework\View\Layout\Reader\Move::class, [], $moveReaderMock]]);
 
         $this->pool->interpret($contextMock, $currentElement);
         $this->pool->interpret($contextMock, $currentElement);

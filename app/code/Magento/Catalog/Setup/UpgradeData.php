@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Setup;
@@ -16,6 +16,7 @@ use Magento\Eav\Setup\EavSetupFactory;
 /**
  * Upgrade Data script
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -92,38 +93,38 @@ class UpgradeData implements UpgradeDataInterface
             $categorySetup->updateEntityType(
                 \Magento\Catalog\Model\Category::ENTITY,
                 'entity_model',
-                'Magento\Catalog\Model\ResourceModel\Category'
+                \Magento\Catalog\Model\ResourceModel\Category::class
             );
             $categorySetup->updateEntityType(
                 \Magento\Catalog\Model\Category::ENTITY,
                 'attribute_model',
-                'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+                \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
             );
             $categorySetup->updateEntityType(
                 \Magento\Catalog\Model\Category::ENTITY,
                 'entity_attribute_collection',
-                'Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection'
+                \Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection::class
             );
             $categorySetup->updateAttribute(
                 \Magento\Catalog\Model\Category::ENTITY,
                 'custom_design_from',
                 'attribute_model',
-                'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+                \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
             );
             $categorySetup->updateEntityType(
                 \Magento\Catalog\Model\Product::ENTITY,
                 'entity_model',
-                'Magento\Catalog\Model\ResourceModel\Product'
+                \Magento\Catalog\Model\ResourceModel\Product::class
             );
             $categorySetup->updateEntityType(
                 \Magento\Catalog\Model\Product::ENTITY,
                 'attribute_model',
-                'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+                \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
             );
             $categorySetup->updateEntityType(
                 \Magento\Catalog\Model\Product::ENTITY,
                 'entity_attribute_collection',
-                'Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection'
+                \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
             );
         }
 
@@ -328,7 +329,7 @@ class UpgradeData implements UpgradeDataInterface
                     'type' => 'varchar',
                     'label' => 'New Layout',
                     'input' => 'select',
-                    'source' => 'Magento\Catalog\Model\Product\Attribute\Source\Layout',
+                    'source' => \Magento\Catalog\Model\Product\Attribute\Source\Layout::class,
                     'required' => false,
                     'sort_order' => 50,
                     'global' => ScopedAttributeInterface::SCOPE_STORE,

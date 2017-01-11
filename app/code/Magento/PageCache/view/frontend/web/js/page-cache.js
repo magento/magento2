@@ -1,7 +1,7 @@
 /**
  * Handles additional ajax request for rendering user private content
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,7 @@ define([
                     case 9: // DOCUMENT_NODE
                         var hostName = window.location.hostname,
                             iFrameHostName = $('<a>')
-                                .prop('href', element.prop('src'))
+                                .prop('href', $(element).prop('src'))
                                 .prop('hostname');
 
                         if (hostName === iFrameHostName) {

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -79,6 +79,9 @@ define([
             }.bind(this));
 
             this.element.on('blur', $.proxy(function () {
+                if (!this.searchLabel.hasClass('active')) {
+                    return;
+                }
 
                 setTimeout($.proxy(function () {
                     if (this.autoComplete.is(':hidden')) {

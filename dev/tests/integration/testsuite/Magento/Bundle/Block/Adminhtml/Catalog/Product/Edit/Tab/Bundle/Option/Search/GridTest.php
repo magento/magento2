@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search;
@@ -16,11 +16,11 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE]
         );
         $block = $layout->createBlock(
-            'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid',
+            \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid::class,
             'block'
         );
         $block->setId('temp_id');

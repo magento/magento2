@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -91,6 +91,15 @@
                 .field {
                     float: none;
                 }
+            }
+        }
+    }
+
+    //  Full name fieldset
+    .fieldset {
+        .fullname {
+            > .label {
+                &:extend(.abs-visually-hidden all);
             }
         }
     }
@@ -254,35 +263,35 @@
             z-index: -1;
         }
 
-        .password-strength-meter-0 & {
+        .password-none & {
             &:before {
                 background-color: @_password-default;
                 width: 100%;
             }
         }
 
-        .password-strength-meter-1 & {
+        .password-weak & {
             &:before {
                 background-color: @_password-weak;
                 width: 25%;
             }
         }
 
-        .password-strength-meter-2 & {
+        .password-medium & {
             &:before {
                 background-color: @_password-medium;
                 width: 50%;
             }
         }
 
-        .password-strength-meter-3 & {
+        .password-strong & {
             &:before {
                 background-color: @_password-strong;
                 width: 75%;
             }
         }
 
-        .password-strength-meter-4 & {
+        .password-very-strong & {
             &:before {
                 background-color: @_password-very-strong;
                 width: 100%;
@@ -310,6 +319,11 @@
 
     .order-products-toolbar {
         position: relative;
+
+        .toolbar-amount {
+            position: relative;
+            text-align: center;
+        }
     }
 }
 
@@ -349,9 +363,15 @@
     .form-create-account {
         .fieldset-fullname {
             .fields {
+                display: table;
+                width: 100%;
+
                 .field {
-                    float: left;
-                    margin: 0 @indent__s @indent__s 0;
+                    display: table-cell;
+
+                    + .field {
+                        padding-left: @indent__s;
+                    }
                 }
             }
 
@@ -441,7 +461,7 @@
     }
 
     .form-address-edit {
-        .fieldset {
+        > .fieldset {
             &:extend(.abs-blocks-2columns all);
         }
     }

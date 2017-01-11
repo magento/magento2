@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class GiftOptions extends Form
      *
      * @var string
      */
-    protected $allowGiftOptions = '//a[contains(@class,"action-gift")][ancestor::tbody[contains(.,"%s")]]';
+    protected $allowGiftOptions = '//*[contains(@class,"action-gift")][ancestor::tbody[contains(.,"%s")]]';
 
     /**
      * Selector for apply Gift Message button on order
@@ -96,7 +96,7 @@ class GiftOptions extends Form
                         Locator::SELECTOR_XPATH
                     )->click();
                     $giftMessageForm = $this->blockFactory->create(
-                        'Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm',
+                        \Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm::class,
                         ['element' => $this->_rootElement->find($this->giftMessageItemForm)]
                     );
                     $giftMessage = $giftMessage->getItems()[0];

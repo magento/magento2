@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page\Relation\Store;
@@ -29,11 +29,11 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
+        $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourcePage = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page')
+        $this->resourcePage = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -51,7 +51,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $newStore = 2;
         $linkField = 'link_id';
 
-        $adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $adapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->getMockForAbstractClass();
 
         $whereForDelete = [
@@ -72,7 +72,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('cms_page_store', [$whereForInsert])
             ->willReturnSelf();
 
-        $entityMetadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
+        $entityMetadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entityMetadata->expects($this->once())
@@ -95,7 +95,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('cms_page_store')
             ->willReturn('cms_page_store');
 
-        $page = $this->getMockBuilder('Magento\Cms\Model\Page')
+        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getStores',

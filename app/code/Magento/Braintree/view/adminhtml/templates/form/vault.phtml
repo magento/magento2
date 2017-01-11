@@ -1,13 +1,13 @@
 <?php
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreFile
 
 /** @var \Magento\Framework\View\Element\Template $block */
-$details = $block->getData('details');
+$details = $block->getData(TokenUiComponentProviderInterface::COMPONENT_DETAILS);
 $icon = $block->getData('icons')[$details['type']];
 $id = $block->escapeHtml($block->getData('id'));
 ?>
@@ -15,6 +15,7 @@ $id = $block->escapeHtml($block->getData('id'));
         "Magento_Braintree/js/vault": {
             "container": "payment_<?php /* @noEscape */ echo $id; ?>",
             "publicHash": "<?php echo $block->escapeHtml($block->getData(TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH)); ?>",
+            "code": "<?php echo $block->escapeHtml($block->getData('code')); ?>",
             "nonceUrl": "<?php echo $block->escapeUrl($block->getData('nonceUrl')); ?>"
         }
     }' id="payment_<?php /* @noEscape */ echo $id;?>" class="admin__field">

@@ -1,21 +1,24 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Plugin;
 
+use Magento\Indexer\Model\Config\Data;
+use Magento\Catalog\Model\Indexer\Category\Flat\State;
+
 class IndexerConfigData
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Flat\State
+     * @var State
      */
     protected $state;
 
     /**
-     * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $state
+     * @param State $state
      */
-    public function __construct(\Magento\Catalog\Model\Indexer\Category\Flat\State $state)
+    public function __construct(State $state)
     {
         $this->state = $state;
     }
@@ -23,24 +26,18 @@ class IndexerConfigData
     /**
      *  Unset indexer data in configuration if flat is disabled
      *
-     * @param \Magento\Indexer\Model\Config\Data $subject
-     * @param callable $proceed
+     * @param Data $subject
+     * @param mixed $data
      * @param string $path
      * @param mixed $default
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGet(
-        \Magento\Indexer\Model\Config\Data $subject,
-        \Closure $proceed,
-        $path = null,
-        $default = null
-    ) {
-        $data = $proceed($path, $default);
-
+    public function afterGet(Data $subject, $data, $path = null, $default = null)
+    {
         if (!$this->state->isFlatEnabled()) {
-            $indexerId = \Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID;
+            $indexerId = State::INDEXER_ID;
             if (!$path && isset($data[$indexerId])) {
                 unset($data[$indexerId]);
             } elseif ($path) {

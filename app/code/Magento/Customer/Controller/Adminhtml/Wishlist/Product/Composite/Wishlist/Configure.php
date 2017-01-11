@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishlist;
@@ -32,7 +32,7 @@ class Configure extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\
             $configureResult->setMessage($e->getMessage());
         }
 
-        return $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
+        return $this->_objectManager->get(\Magento\Catalog\Helper\Product\Composite::class)
             ->renderConfigureResult($configureResult);
     }
 }

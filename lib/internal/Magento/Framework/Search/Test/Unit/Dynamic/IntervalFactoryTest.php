@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Dynamic;
@@ -42,17 +42,17 @@ class IntervalFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->helper = new ObjectManager($this);
 
-        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->setMethods(['create', 'get', 'configure'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->interval = $this->getMockBuilder('Magento\Framework\Search\Dynamic\IntervalInterface')
+        $this->interval = $this->getMockBuilder(\Magento\Framework\Search\Dynamic\IntervalInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
     }
@@ -115,7 +115,7 @@ class IntervalFactoryTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Search\Dynamic\IntervalFactory $factory */
         $factory = $this->helper->getObject(
-            'Magento\Framework\Search\Dynamic\IntervalFactory',
+            \Magento\Framework\Search\Dynamic\IntervalFactory::class,
             [
                 'objectManager' => $this->objectManager,
                 'scopeConfig' => $this->scopeConfig,

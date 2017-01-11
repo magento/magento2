@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,17 +28,19 @@ class TopToolbar extends Block
      */
     public function getSelectSortType()
     {
-        return $this->_rootElement->find("#sorter")->getElements('option[selected]')[0]->getText();
+        $selectedOption = $this->_rootElement->find($this->sorter)->getElements('option[selected]')[0]->getText();
+        preg_match('/\w+\s?\w+/', $selectedOption, $matches);
+        return $matches[0];
     }
 
     /**
      * Get all available method of sorting product
      *
-     * @return array|string
+     * @return array
      */
     public function getSortType()
     {
-        $content = str_replace("\r", '', $this->_rootElement->find($this->sorter)->getText());
+        $content = $this->_rootElement->find($this->sorter)->getText();
         return explode("\n", $content);
     }
 }

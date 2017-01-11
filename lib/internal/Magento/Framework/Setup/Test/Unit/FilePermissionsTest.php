@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\Test\Unit;
@@ -32,14 +32,26 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->directoryWriteMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
-        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->directoryWriteMock = $this->getMock(
+            \Magento\Framework\Filesystem\Directory\Write::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
 
         $this->filesystemMock
             ->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->directoryWriteMock));
-        $this->directoryListMock = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $this->directoryListMock = $this->getMock(
+            \Magento\Framework\App\Filesystem\DirectoryList::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->filePermissions = new FilePermissions(
             $this->filesystemMock,

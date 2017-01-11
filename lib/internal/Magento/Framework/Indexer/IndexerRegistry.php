@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer;
@@ -34,8 +34,9 @@ class IndexerRegistry
     public function get($indexerId)
     {
         if (!isset($this->indexers[$indexerId])) {
-            $this->indexers[$indexerId] = $this->objectManager->create('Magento\Framework\Indexer\IndexerInterface')
-                ->load($indexerId);
+            $this->indexers[$indexerId] = $this->objectManager->create(
+                \Magento\Framework\Indexer\IndexerInterface::class
+            )->load($indexerId);
         }
         return $this->indexers[$indexerId];
     }

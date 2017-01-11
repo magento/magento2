@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Login controller
@@ -178,6 +179,11 @@ class Login extends \Magento\Framework\App\Action\Action
                 'message' => $e->getMessage()
             ];
         } catch (InvalidEmailOrPasswordException $e) {
+            $response = [
+                'errors' => true,
+                'message' => $e->getMessage()
+            ];
+        } catch (LocalizedException $e) {
             $response = [
                 'errors' => true,
                 'message' => $e->getMessage()

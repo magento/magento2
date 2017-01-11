@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -22,7 +22,7 @@ class OrderCommentsListTest extends WebapiAbstract
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $objectManager->get('Magento\Sales\Model\Order')->loadByIncrementId('100000001');
+        $order = $objectManager->get(\Magento\Sales\Model\Order::class)->loadByIncrementId('100000001');
         $history = $order->addStatusHistoryComment($comment, $order->getStatus());
         $history->save();
 
@@ -40,7 +40,7 @@ class OrderCommentsListTest extends WebapiAbstract
         $requestData = ['id' => $order->getId()];
         $result = $this->_webApiCall($serviceInfo, $requestData);
         foreach ($result['items'] as $history) {
-            $orderHistoryStatus = $objectManager->get('Magento\Sales\Model\Order\Status\History')
+            $orderHistoryStatus = $objectManager->get(\Magento\Sales\Model\Order\Status\History::class)
                 ->load($history['entity_id']);
             $this->assertEquals($orderHistoryStatus->getComment(), $history['comment']);
             $this->assertEquals($orderHistoryStatus->getStatus(), $history['status']);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Test\Unit\Block\Adminhtml\System\Currency\Rate;
@@ -30,21 +30,21 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
         $service = 'service';
 
         $sourceServiceFactoryMock = $this->getMock(
-            'Magento\Directory\Model\Currency\Import\Source\ServiceFactory',
+            \Magento\Directory\Model\Currency\Import\Source\ServiceFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $sourceServiceMock = $this->getMock(
-            'Magento\Directory\Model\Currency\Import\Source\Service',
+            \Magento\Directory\Model\Currency\Import\Source\Service::class,
             [],
             [],
             '',
             false
         );
         $backendSessionMock = $this->getMock(
-            'Magento\Backend\Model\Session',
+            \Magento\Backend\Model\Session::class,
             ['getCurrencyRateService'],
             [],
             '',
@@ -53,7 +53,7 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
 
         /** @var $layoutMock \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
         $layoutMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\LayoutInterface',
+            \Magento\Framework\View\LayoutInterface::class,
             [],
             '',
             false,
@@ -63,7 +63,7 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
         );
 
         $blockMock = $this->getMock(
-            'Magento\Framework\View\Element\Html\Select',
+            \Magento\Framework\View\Element\Html\Select::class,
             ['setOptions', 'setId', 'setName', 'setValue', 'setTitle'],
             [],
             '',
@@ -84,7 +84,7 @@ class ServicesTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services */
         $block = $this->objectManagerHelper->getObject(
-            'Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services',
+            \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services::class,
             [
                 'srcCurrencyFactory' => $sourceServiceFactoryMock,
                 'backendSession' => $backendSessionMock

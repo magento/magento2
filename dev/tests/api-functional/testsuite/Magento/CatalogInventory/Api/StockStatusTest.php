@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Api;
@@ -25,7 +25,7 @@ class StockStatusTest extends WebapiAbstract
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $objectManager->get('Magento\Catalog\Model\Product')->load(1);
+        $product = $objectManager->get(\Magento\Catalog\Model\Product::class)->load(1);
         $expectedData = $product->getQuantityAndStockStatus();
         $serviceInfo = [
             'rest' => [

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Setup;
@@ -13,7 +13,7 @@ class CategorySetupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->unit = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Catalog\Setup\CategorySetup'
+            \Magento\Catalog\Setup\CategorySetup::class
         );
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,14 +22,14 @@ class CategoriesFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+        $this->fixtureModelMock = $this->getMock(\Magento\Setup\Fixtures\FixtureModel::class, [], [], '', false);
 
         $this->model = new CategoriesFixture($this->fixtureModelMock);
     }
     public function testExecute()
     {
         $categoryMock = $this->getMock(
-            '\Magento\Catalog\Model\Category',
+            \Magento\Catalog\Model\Category::class,
             [
                 'getName',
                 'setId',
@@ -82,22 +82,22 @@ class CategoriesFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('setIsActive')
             ->willReturnSelf();
 
-        $groupMock = $this->getMock('\Magento\Store\Model\Group', [], [], '', false);
+        $groupMock = $this->getMock(\Magento\Store\Model\Group::class, [], [], '', false);
         $groupMock->expects($this->once())
             ->method('getRootCategoryId')
             ->will($this->returnValue('root_category_id'));
 
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $storeManagerMock->expects($this->once())
             ->method('getGroups')
             ->will($this->returnValue([$groupMock]));
 
         $objectValueMock = [
-            ['Magento\Store\Model\StoreManager', [], $storeManagerMock],
-            ['Magento\Catalog\Model\Category', [], $categoryMock]
+            [\Magento\Store\Model\StoreManager::class, [], $storeManagerMock],
+            [\Magento\Catalog\Model\Category::class, [], $categoryMock]
         ];
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValueMap($objectValueMock));
@@ -121,13 +121,13 @@ class CategoriesFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
-        $categoryMock = $this->getMock('\Magento\Catalog\Model\Category', [], [], '', false);
+        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $categoryMock->expects($this->never())->method('save');
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
         $objectManagerMock->expects($this->never())
             ->method('create')
-            ->with($this->equalTo('Magento\Catalog\Model\Category'))
+            ->with($this->equalTo(\Magento\Catalog\Model\Category::class))
             ->willReturn($categoryMock);
 
         $this->fixtureModelMock

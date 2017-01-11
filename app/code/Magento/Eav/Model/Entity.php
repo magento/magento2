@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
@@ -11,15 +11,15 @@ namespace Magento\Eav\Model;
  */
 class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
 {
-    const DEFAULT_ENTITY_MODEL = 'Magento\Eav\Model\Entity';
+    const DEFAULT_ENTITY_MODEL = \Magento\Eav\Model\Entity::class;
 
-    const DEFAULT_ATTRIBUTE_MODEL = 'Magento\Eav\Model\Entity\Attribute';
+    const DEFAULT_ATTRIBUTE_MODEL = \Magento\Eav\Model\Entity\Attribute::class;
 
-    const DEFAULT_BACKEND_MODEL = 'Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend';
+    const DEFAULT_BACKEND_MODEL = \Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class;
 
-    const DEFAULT_FRONTEND_MODEL = 'Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend';
+    const DEFAULT_FRONTEND_MODEL = \Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend::class;
 
-    const DEFAULT_SOURCE_MODEL = 'Magento\Eav\Model\Entity\Attribute\Source\Config';
+    const DEFAULT_SOURCE_MODEL = \Magento\Eav\Model\Entity\Attribute\Source\Config::class;
 
     const DEFAULT_ENTITY_TABLE = 'eav_entity';
 

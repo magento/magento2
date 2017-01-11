@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -253,6 +253,7 @@
         .lib-css(z-index, @_dropdown-list-z-index);
         box-sizing: border-box;
         display: none;
+        position: absolute;
 
         ._lib-dropdown-list-position(
             @_dropdown-list-position-top,
@@ -291,7 +292,6 @@
 
         @{_options-selector} {
             display: block;
-            position: absolute;
         }
     }
 }

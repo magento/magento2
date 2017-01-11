@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,9 +54,9 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 
     private function initTotalBaseCalculator()
     {
-        $taxClassService = $this->getMock('Magento\Tax\Api\TaxClassManagementInterface');
+        $taxClassService = $this->getMock(\Magento\Tax\Api\TaxClassManagementInterface::class);
         $this->totalBaseCalculator = $this->getMock(
-            'Magento\Tax\Model\Calculation\TotalBaseCalculator',
+            \Magento\Tax\Model\Calculation\TotalBaseCalculator::class,
             ['deltaRound'],
             [
                 'taxClassService' => $taxClassService,

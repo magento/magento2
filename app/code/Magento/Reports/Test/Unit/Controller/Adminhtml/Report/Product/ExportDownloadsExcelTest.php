@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,13 +27,13 @@ class ExportDownloadsExcelTest extends \Magento\Reports\Test\Unit\Controller\Adm
     {
         parent::setUp();
 
-        $this->dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\Filter\Date')
+        $this->dateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\Filter\Date::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->exportDownloadsExcel = $objectManager->getObject(
-            'Magento\Reports\Controller\Adminhtml\Report\Product\ExportDownloadsExcel',
+            \Magento\Reports\Controller\Adminhtml\Report\Product\ExportDownloadsExcel::class,
             [
                 'context' => $this->contextMock,
                 'fileFactory' => $this->fileFactoryMock,
@@ -64,7 +64,7 @@ class ExportDownloadsExcelTest extends \Magento\Reports\Test\Unit\Controller\Adm
         $this->layoutMock
             ->expects($this->once())
             ->method('createBlock')
-            ->with('Magento\Reports\Block\Adminhtml\Product\Downloads\Grid')
+            ->with(\Magento\Reports\Block\Adminhtml\Product\Downloads\Grid::class)
             ->willReturn($this->abstractBlockMock);
 
         $this->fileFactoryMock

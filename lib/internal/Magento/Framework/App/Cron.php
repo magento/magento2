@@ -2,7 +2,7 @@
 /**
  * Cron application
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -66,11 +66,11 @@ class Cron implements \Magento\Framework\AppInterface
     public function launch()
     {
         $this->_state->setAreaCode(Area::AREA_CRONTAB);
-        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
         $this->objectManager->configure($configLoader->load(Area::AREA_CRONTAB));
 
         /** @var \Magento\Framework\Event\ManagerInterface $eventManager */
-        $eventManager = $this->objectManager->get('Magento\Framework\Event\ManagerInterface');
+        $eventManager = $this->objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
         $eventManager->dispatch('default');
         $this->_response->setCode(0);
         return $this->_response;

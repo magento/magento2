@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -36,10 +36,8 @@
             <!-- /ko -->
         </div>
 
-        <!-- ko if: getCartParam('possible_onepage_checkout') -->
-            <!-- ko foreach: getRegion('subtotalContainer') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
+        <!-- ko foreach: getRegion('subtotalContainer') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
 
         <!-- ko foreach: getRegion('extraInfo') -->
@@ -56,11 +54,11 @@
                         data-action="close"
                         data-bind="
                             attr: {
-                                title: $t('Go to Checkout')
+                                title: $t('Proceed to Checkout')
                             },
                             click: closeMinicart()
                         ">
-                    <!-- ko i18n: 'Go to Checkout' --><!-- /ko -->
+                    <!-- ko i18n: 'Proceed to Checkout' --><!-- /ko -->
                 </button>
                 <div data-bind="html: getCartParam('extra_actions')"></div>
             </div>

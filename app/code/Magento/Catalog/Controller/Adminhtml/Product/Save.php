@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -97,6 +97,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         $productTypeId = $this->getRequest()->getParam('type');
         if ($data) {
             try {
+                $this->unserializeProductData($data);
                 $product = $this->initializationHelper->initialize(
                     $this->productBuilder->build($this->getRequest())
                 );
@@ -125,8 +126,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                     $this->messageManager->addNotice(
                         __(
                             'SKU for product %1 has been changed to %2.',
-                            $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getName()),
-                            $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getSku())
+                            $this->_objectManager->get(
+                                \Magento\Framework\Escaper::class
+                            )->escapeHtml($product->getName()),
+                            $this->_objectManager->get(
+                                \Magento\Framework\Escaper::class
+                            )->escapeHtml($product->getSku())
                         )
                     );
                 }
@@ -144,7 +149,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
-                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addError($e->getMessage());
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
@@ -174,6 +179,30 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
         }
         return $resultRedirect;
+    }
+
+    /**
+     * Unserialize product data for configurable products
+     *
+     * @param array $postData
+     * @return void
+     */
+    private function unserializeProductData($postData)
+    {
+        if (isset($postData["configurable-matrix-serialized"])) {
+            $configurableMatrixSerialized = $postData["configurable-matrix-serialized"];
+            if ($configurableMatrixSerialized != null && !empty($configurableMatrixSerialized)) {
+                $postData["configurable-matrix"] = json_decode($configurableMatrixSerialized, true);
+                unset($postData["configurable-matrix-serialized"]);
+            }
+        }
+        if (isset($postData["associated_product_ids_serialized"])) {
+            $associatedProductIdsSerialized = $postData["associated_product_ids_serialized"];
+            if ($associatedProductIdsSerialized != null && !empty($associatedProductIdsSerialized)) {
+                $postData["associated_product_ids"] = json_decode($associatedProductIdsSerialized, true);
+                unset($postData["associated_product_ids_serialized"]);
+            }
+        }
     }
 
     /**
@@ -222,7 +251,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                         $copyFrom = (isset($store['copy_from'])) ? $store['copy_from'] : 0;
                         $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
                         if ($copyTo) {
-                            $this->_objectManager->create('Magento\Catalog\Model\Product')
+                            $this->_objectManager->create(\Magento\Catalog\Model\Product::class)
                                 ->setStoreId($copyFrom)
                                 ->load($productId)
                                 ->setStoreId($copyTo)
@@ -242,7 +271,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     {
         if (null === $this->categoryLinkManagement) {
             $this->categoryLinkManagement = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\CategoryLinkManagementInterface');
+                ->get(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
         }
         return $this->categoryLinkManagement;
     }
@@ -255,7 +284,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     {
         if (null === $this->storeManager) {
             $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Store\Model\StoreManagerInterface');
+                ->get(\Magento\Store\Model\StoreManagerInterface::class);
         }
         return $this->storeManager;
     }

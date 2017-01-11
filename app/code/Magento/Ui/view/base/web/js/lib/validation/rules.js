@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -9,8 +9,9 @@ define([
     'moment',
     'jquery/validate',
     'jquery/ui',
-    'mage/translate'
-], function ($, _, utils, moment) {
+    'mage/translate',
+    'mageUtils'
+], function ($, _, utils, moment, validate, ui, $t, mageUtils) {
     'use strict';
 
     /**
@@ -49,13 +50,13 @@ define([
     return _.mapObject({
         "min_text_length": [
             function (value, params) {
-                return value.length == 0 || value.length >= +params;
+                return _.isUndefined(value) || value.length == 0 || value.length >= +params;
             },
             $.mage.__('Please enter more or equal than {0} symbols.')
         ],
         "max_text_length": [
             function (value, params) {
-                return value.length <= +params;
+                return !_.isUndefined(value) && value.length <= +params;
             },
             $.mage.__('Please enter less or equal than {0} symbols.')
         ],
@@ -430,10 +431,10 @@ define([
                 var pass = $.trim(v);
                 var result = pass.length >= passwordMinLength;
                 if (result == false) {
-                    validator.passwordErrorMessage = $.mage.__(
-                        "Minimum length of this field must be equal or greater than %1 symbols." +
-                        " Leading and trailing spaces will be ignored."
-                    ).replace('%1', passwordMinLength);
+                    /*eslint-disable max-len*/
+                    validator.passwordErrorMessage = $.mage.__('Minimum length of this field must be equal or greater than %1 symbols. Leading and trailing spaces will be ignored.').replace('%1', passwordMinLength);
+
+                    /*eslint-enable max-len*/
                     return result;
                 }
                 if (pass.match(/\d+/)) {
@@ -450,10 +451,11 @@ define([
                 }
                 if (counter < passwordMinCharacterSets) {
                     result = false;
-                    validator.passwordErrorMessage = $.mage.__(
-                        "Minimum of different classes of characters in password is %1." +
-                        " Classes of characters: Lower Case, Upper Case, Digits, Special Characters."
-                    ).replace('%1', passwordMinCharacterSets);
+
+                    /*eslint-disable max-len*/
+                    validator.passwordErrorMessage = $.mage.__('Minimum of different classes of characters in password is %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.').replace('%1', passwordMinCharacterSets);
+
+                    /*eslint-enable max-len*/
                 }
                 return result;
             }, function () {
@@ -682,9 +684,9 @@ define([
             $.mage.__('Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.')
         ],
         "validate-date": [
-            function(value) {
-                var test = new Date(value);
-                return utils.isEmptyNoTrim(value) || !isNaN(test);
+            function(value, params, additionalParams) {
+                var test = moment(value, additionalParams.dateFormat);
+                return utils.isEmptyNoTrim(value) || test.isValid();
             },$.mage.__('Please enter a valid date.')
 
         ],
@@ -741,7 +743,8 @@ define([
                     }
                 }
                 return true;
-            }, "Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com."
+            },
+            $.mage.__('Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com.')
         ],
         "validate-cc-number": [
             /**

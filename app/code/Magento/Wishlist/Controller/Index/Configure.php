@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
@@ -9,6 +9,9 @@ use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Configure extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
@@ -59,7 +62,7 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         try {
             /* @var $item \Magento\Wishlist\Model\Item */
-            $item = $this->_objectManager->create('Magento\Wishlist\Model\Item');
+            $item = $this->_objectManager->create(\Magento\Wishlist\Model\Item::class);
             $item->loadWithOptions($id);
             if (!$item->getId()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -82,13 +85,13 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex
             }
             if ($buyRequest->getQty() && !$item->getQty()) {
                 $item->setQty($buyRequest->getQty());
-                $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
+                $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
             }
             $params->setBuyRequest($buyRequest);
             /** @var \Magento\Framework\View\Result\Page $resultPage */
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
             $this->_objectManager->get(
-                'Magento\Catalog\Helper\Product\View'
+                \Magento\Catalog\Helper\Product\View::class
             )->prepareAndRender(
                 $resultPage,
                 $item->getProductId(),
@@ -103,7 +106,7 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex
             return $resultRedirect;
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t configure the product right now.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $resultRedirect->setPath('*');
             return $resultRedirect;
         }

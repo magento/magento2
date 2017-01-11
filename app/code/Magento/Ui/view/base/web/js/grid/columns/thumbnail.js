@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -7,7 +7,8 @@ define([
     'jquery',
     'mage/template',
     'text!Magento_Ui/templates/grid/cells/thumbnail/preview.html',
-    'Magento_Ui/js/modal/modal'
+    'Magento_Ui/js/modal/modal',
+    'mage/translate'
 ], function (Column, $, mageTemplate, thumbnailPreviewTemplate) {
     'use strict';
 

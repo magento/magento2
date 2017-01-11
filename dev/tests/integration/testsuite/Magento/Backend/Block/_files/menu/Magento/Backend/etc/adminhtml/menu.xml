@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config>
+    <menu>
+        <add id="Magento_Backend::system" title="System" module="Magento_Backend" sortOrder="30" resource="Magento_Backend::system"/>
+        <add id="Magento_Backend::system_report" title="Report" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::system" resource="Magento_Backend::report"/>
+
+        <add id="Magento_Backend::system_report_magento_invite_general" title="Invite" module="Magento_Backend" sortOrder="20" parent="Magento_Backend::system_report" resource="Magento_Backend::report_magento_invite_general"/>
+        <add id="Magento_Backend::system_report_private_sales" title="Private Sales" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::system_report" resource="Magento_Backend::report_private_sales" />
+        <add id="Magento_Backend::system_report_magento_invite_customer" title="Invited Customers" module="Magento_Backend" sortOrder="30" parent="Magento_Backend::system_report" resource="Magento_Backend::report_magento_invite_customer"/>
+    </menu>
+</config>

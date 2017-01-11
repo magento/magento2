@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,14 +51,14 @@ class MakePersistentQuoteGuestObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->actionMock = $this->getMock('Magento\Persistent\Controller\Index', [], [], '', false);
-        $this->observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $this->sessionHelperMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
-        $this->helperMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
-        $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->quoteManagerMock = $this->getMock('Magento\Persistent\Model\QuoteManager', [], [], '', false);
+        $this->actionMock = $this->getMock(\Magento\Persistent\Controller\Index::class, [], [], '', false);
+        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $this->sessionHelperMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
+        $this->helperMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
+        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->quoteManagerMock = $this->getMock(\Magento\Persistent\Model\QuoteManager::class, [], [], '', false);
         $this->eventManagerMock =
-            $this->getMock('Magento\Framework\Event', ['getControllerAction', '__wakeUp'], [], '', false);
+            $this->getMock(\Magento\Framework\Event::class, ['getControllerAction', '__wakeUp'], [], '', false);
         $this->observerMock
             ->expects($this->once())
             ->method('getEvent')

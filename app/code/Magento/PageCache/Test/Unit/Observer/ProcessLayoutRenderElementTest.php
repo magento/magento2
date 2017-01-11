@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_configMock = $this->getMock(
-            'Magento\PageCache\Model\Config',
+            \Magento\PageCache\Model\Config::class,
             ['getType', 'isEnabled'],
             [],
             '',
@@ -44,21 +44,21 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = new \Magento\PageCache\Observer\ProcessLayoutRenderElement($this->_configMock);
         $this->_observerMock = $this->getMock(
-            'Magento\Framework\Event\Observer',
+            \Magento\Framework\Event\Observer::class,
             ['getEvent'],
             [],
             '',
             false
         );
         $this->_layoutMock = $this->getMock(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['isCacheable', 'getBlock', 'getUpdate', 'getHandles'],
             [],
             '',
             false
         );
         $this->_blockMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\AbstractBlock',
+            \Magento\Framework\View\Element\AbstractBlock::class,
             [],
             '',
             false,
@@ -85,7 +85,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
         $expectedOutput
     ) {
         $eventMock = $this->getMock(
-            'Magento\Framework\Event',
+            \Magento\Framework\Event::class,
             ['getLayout', 'getElementName', 'getTransport'],
             [],
             '',

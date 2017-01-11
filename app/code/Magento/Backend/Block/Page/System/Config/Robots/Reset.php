@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 /**
  * "Reset to Defaults" button renderer
  *
+ * @deprecated
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Reset extends \Magento\Config\Block\System\Config\Form\Field
@@ -64,7 +65,7 @@ class Reset extends \Magento\Config\Block\System\Config\Form\Field
     public function getButtonHtml()
     {
         $button = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
                 'id' => 'reset_to_default_button',

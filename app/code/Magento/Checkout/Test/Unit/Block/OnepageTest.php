@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block;
@@ -34,20 +34,20 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $contextMock = $this->getMock('\Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $this->formKeyMock = $this->getMock('\Magento\Framework\Data\Form\FormKey', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->formKeyMock = $this->getMock(\Magento\Framework\Data\Form\FormKey::class, [], [], '', false);
         $this->configProviderMock = $this->getMock(
-            '\Magento\Checkout\Model\CompositeConfigProvider',
+            \Magento\Checkout\Model\CompositeConfigProvider::class,
             [],
             [],
             '',
             false
         );
 
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
         $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
         $this->layoutProcessorMock = $this->getMock(
-            '\Magento\Checkout\Block\Checkout\LayoutProcessorInterface',
+            \Magento\Checkout\Block\Checkout\LayoutProcessorInterface::class,
             [],
             [],
             '',
@@ -65,7 +65,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseUrl()
     {
         $baseUrl = 'http://magento.com';
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
 
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);

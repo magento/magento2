@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model;
@@ -11,6 +11,9 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Acl\RootResource;
 use Magento\Integration\Model\AuthorizationService;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -51,7 +54,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->roleMock = $this->getMock(
-            'Magento\Authorization\Model\Role',
+            \Magento\Authorization\Model\Role::class,
             ['load', 'delete', '__wakeup', 'getId', 'save'],
             [],
             '',
@@ -63,7 +66,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Authorization\Model\RoleFactory $roleFactoryMock */
         $roleFactoryMock = $this->getMock(
-            'Magento\Authorization\Model\RoleFactory',
+            \Magento\Authorization\Model\RoleFactory::class,
             ['create'],
             [],
             '',
@@ -72,14 +75,14 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
         $roleFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->roleMock));
 
         $roleCollectionFactoryMock = $this->getMock(
-            'Magento\Authorization\Model\ResourceModel\Role\CollectionFactory',
+            \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $roleCollectionMock = $this->getMock(
-            'Magento\Authorization\Model\ResourceModel\Role\Collection',
+            \Magento\Authorization\Model\ResourceModel\Role\Collection::class,
             ['setUserFilter', 'getFirstItem'],
             [],
             '',
@@ -92,9 +95,9 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($roleCollectionMock));
 
-        $rulesFactoryMock = $this->getMock('Magento\Authorization\Model\RulesFactory', ['create'], [], '', false);
+        $rulesFactoryMock = $this->getMock(\Magento\Authorization\Model\RulesFactory::class, ['create'], [], '', false);
         $this->rulesMock = $this->getMock(
-            'Magento\Authorization\Model\Rules',
+            \Magento\Authorization\Model\Rules::class,
             ['setRoleId', 'setResources', 'saveRel'],
             [],
             '',
@@ -104,15 +107,27 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->rulesMock));
 
-        $this->rootAclResourceMock = $this->getMock('Magento\Framework\Acl\RootResource', ['getId'], [], '', false);
+        $this->rootAclResourceMock = $this->getMock(
+            \Magento\Framework\Acl\RootResource::class,
+            ['getId'],
+            [],
+            '',
+            false
+        );
 
         $this->integrationAuthorizationService = new AuthorizationService(
-            $this->getMock('Magento\Framework\Acl\Builder', [], [], '', false),
+            $this->getMock(\Magento\Framework\Acl\Builder::class, [], [], '', false),
             $roleFactoryMock,
             $roleCollectionFactoryMock,
             $rulesFactoryMock,
-            $this->getMock('Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory', [], [], '', false),
-            $this->getMock('Psr\Log\LoggerInterface'),
+            $this->getMock(
+                \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory::class,
+                [],
+                [],
+                '',
+                false
+            ),
+            $this->getMock(\Psr\Log\LoggerInterface::class),
             $this->rootAclResourceMock
         );
     }

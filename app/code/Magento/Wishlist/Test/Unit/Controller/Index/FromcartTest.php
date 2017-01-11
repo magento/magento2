@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
@@ -88,26 +88,26 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
     {
         $this->prepareContext();
 
-        $this->wishlistProvider = $this->getMockBuilder('Magento\Wishlist\Controller\WishlistProviderInterface')
+        $this->wishlistProvider = $this->getMockBuilder(\Magento\Wishlist\Controller\WishlistProviderInterface::class)
             ->getMockForAbstractClass();
 
-        $this->wishlistHelper = $this->getMockBuilder('Magento\Wishlist\Helper\Data')
+        $this->wishlistHelper = $this->getMockBuilder(\Magento\Wishlist\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cart = $this->getMockBuilder('Magento\Checkout\Model\Cart')
+        $this->cart = $this->getMockBuilder(\Magento\Checkout\Model\Cart::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cartHelper = $this->getMockBuilder('Magento\Checkout\Helper\Cart')
+        $this->cartHelper = $this->getMockBuilder(\Magento\Checkout\Helper\Cart::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->escaper = $this->getMockBuilder('Magento\Framework\Escaper')
+        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->formKeyValidator = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey\Validator')
+        $this->formKeyValidator = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -165,7 +165,7 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
             ->with($this->request)
             ->willReturn(true);
 
-        $wishlistMock = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist')
+        $wishlistMock = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -178,7 +178,7 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
             ->with('item')
             ->willReturn($itemId);
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -220,11 +220,11 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
             ->with($this->request)
             ->willReturn(true);
 
-        $dataObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $dataObjectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $wishlistMock = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist')
+        $wishlistMock = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
             ->disableOriginalConstructor()
             ->getMock();
         $wishlistMock->expects($this->once())
@@ -290,7 +290,7 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
             ->with($this->request)
             ->willReturn(true);
 
-        $wishlistMock = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist')
+        $wishlistMock = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -322,19 +322,19 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareContext()
     {
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->messageManager = $this->getMockBuilder('Magento\Framework\Message\Manager')
+        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultRedirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+        $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultFactory->expects($this->any())
@@ -342,7 +342,7 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirect);
 
-        $this->context = $this->getMockBuilder('Magento\Framework\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -366,14 +366,14 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
      */
     protected function createQuoteMock($productId, $productName, $dataObjectMock, $itemId)
     {
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
         $productMock->expects($this->once())
             ->method('getName')
             ->willReturn($productName);
 
-        $quoteItemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+        $quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getProductId',
@@ -391,7 +391,7 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
             ->method('getProduct')
             ->willReturn($productMock);
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
         $quoteMock->expects($this->once())

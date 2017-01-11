@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,19 +28,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mathRandomMock = $this->getMockBuilder('Magento\Framework\Math\Random')
+        $this->mathRandomMock = $this->getMockBuilder(\Magento\Framework\Math\Random::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->configMock = $this->getMockBuilder('Magento\Backend\App\ConfigInterface')
+        $this->configMock = $this->getMockBuilder(\Magento\Backend\App\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\User\Helper\Data',
+            \Magento\User\Helper\Data::class,
             [
                 'config' => $this->configMock,
                 'mathRandom' => $this->mathRandomMock

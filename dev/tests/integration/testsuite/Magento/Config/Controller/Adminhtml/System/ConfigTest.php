@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      */
     public function testChangeBaseUrl()
     {
-        $defaultHost = Bootstrap::getObjectManager()->create('Magento\Framework\Url')->getBaseUrl();
+        $defaultHost = Bootstrap::getObjectManager()->create(\Magento\Framework\Url::class)->getBaseUrl();
         $newHost = 'm2test123.loc';
         $request = $this->getRequest();
         $request->setPostValue(
@@ -80,7 +80,7 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
                 ]
             ]
         ];
-        Bootstrap::getObjectManager()->create('Magento\Config\Model\Config\Factory')
+        Bootstrap::getObjectManager()->create(\Magento\Config\Model\Config\Factory::class)
             ->create()
             ->addData($baseUrlData)
             ->save();

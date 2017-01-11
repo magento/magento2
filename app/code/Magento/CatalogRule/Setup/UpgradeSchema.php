@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,6 +24,20 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $this->removeSubProductDiscounts($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $tables = [
+                'catalogrule_product',
+                'catalogrule_product_price',
+            ];
+            foreach ($tables as $table) {
+                $setup->getConnection()->modifyColumn(
+                    $setup->getTable($table),
+                    'customer_group_id',
+                    ['type' => 'integer']
+                );
+            }
         }
 
         $setup->endSetup();

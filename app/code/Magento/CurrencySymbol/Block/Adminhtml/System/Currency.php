@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class Currency extends \Magento\Backend\Block\Template
     {
         $this->getToolbar()->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Save Currency Rates'),
                 'class' => 'save primary save-currency-rates',
@@ -41,25 +41,28 @@ class Currency extends \Magento\Backend\Block\Template
 
         $this->getToolbar()->addChild(
             'options_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Options'), 'onclick' => $onClick]
         );
 
         $this->getToolbar()->addChild(
             'reset_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Reset'), 'onclick' => 'document.location.reload()', 'class' => 'reset']
         );
 
         $this->addChild(
             'import_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Import'), 'class' => 'add', 'type' => 'submit']
         );
 
-        $this->addChild('rates_matrix', 'Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Matrix');
+        $this->addChild('rates_matrix', \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Matrix::class);
 
-        $this->addChild('import_services', 'Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services');
+        $this->addChild(
+            'import_services',
+            \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services::class
+        );
 
         return parent::_prepareLayout();
     }

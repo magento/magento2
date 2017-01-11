@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
@@ -33,7 +33,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\SalesRule\Model\ResourceModel\Coupon');
+        $this->_init(\Magento\SalesRule\Model\ResourceModel\Coupon::class);
     }
 
     /**
@@ -73,6 +73,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Get coupon id
      *

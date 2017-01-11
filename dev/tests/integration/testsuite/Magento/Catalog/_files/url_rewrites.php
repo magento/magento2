@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var $category \Magento\Catalog\Model\Category */
-$category1 = $objectManager->create('Magento\Catalog\Model\Category');
+$category1 = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category1->isObjectNew(true);
 $category1->setName('Category 1')
     ->setParentId(2)
@@ -19,7 +19,7 @@ $category1->setName('Category 1')
     ->save();
 $category1->setPath('1/2/' . $category1->getId())->save();
 
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
@@ -31,7 +31,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->save();
 
-$category2 = $objectManager->create('Magento\Catalog\Model\Category');
+$category2 = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $category2->isObjectNew(true);
 $category2->setName('Category 2')
     ->setParentId(2)
@@ -43,7 +43,9 @@ $category2->setName('Category 2')
     ->save();
 $category2->setPath('1/2/' . $category2->getId())->save();
 
-$category3 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category3 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Catalog\Model\Category::class
+);
 $category3->isObjectNew(true);
 $category3->setName('Old Root')
     ->setParentId(1)

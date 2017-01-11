@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
@@ -19,6 +19,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
  * Class UiComponentFactory
  *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UiComponentFactory extends DataObject
 {
@@ -154,9 +155,9 @@ class UiComponentFactory extends DataObject
                 $className = $componentArguments['config']['class'];
             }
             if (!isset($componentArguments['context'])) {
-                $componentArguments['context'] = $this->contextFactory->create([
-                    'namespace' => $identifier
-                ]);
+                $componentArguments['context'] = $this->contextFactory->create(
+                    ['namespace' => $identifier]
+                );
             }
 
             $reverseMerge = isset($componentArguments['data']['reverseMetadataMerge'])
@@ -294,7 +295,7 @@ class UiComponentFactory extends DataObject
         } else {
             foreach ($bundleComponents as &$childData) {
                 if (isset($childData['attributes']['class'])
-                    && is_a($childData['attributes']['class'], 'Magento\Ui\Component\Container', true)
+                    && is_a($childData['attributes']['class'], \Magento\Ui\Component\Container::class, true)
                     && isset($childData['children']) && is_array($childData['children'])
                 ) {
                     list($childData['children'], $isMerged) = $this->mergeMetadataElement(

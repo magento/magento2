@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
@@ -19,15 +19,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
             ->setAreaCode('frontend');
         $this->helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Helper\Product'
+            \Magento\Catalog\Helper\Product::class
         );
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Api\ProductRepositoryInterface');
+            ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
     }
 
     /**
@@ -48,7 +48,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->setPrice(49.95);
         $this->assertEquals(49.95, $this->helper->getPrice($product));
@@ -58,7 +58,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->setFinalPrice(49.95);
         $this->assertEquals(49.95, $this->helper->getFinalPrice($product));
@@ -68,7 +68,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->assertStringEndsWith('placeholder/image.jpg', $this->helper->getImageUrl($product));
 
@@ -80,7 +80,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->assertStringEndsWith('placeholder/small_image.jpg', $this->helper->getSmallImageUrl($product));
 
@@ -92,7 +92,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEmpty(
             $this->helper->getThumbnailUrl(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product')
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                    \Magento\Catalog\Model\Product::class
+                )
             )
         );
     }
@@ -100,25 +102,25 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetEmailToFriendUrl()
     {
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->setId(100);
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
         $category->setId(10);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->register('current_category', $category);
+        $objectManager->get(\Magento\Framework\Registry::class)->register('current_category', $category);
 
         try {
             $this->assertStringEndsWith(
                 'sendfriend/product/send/id/100/cat_id/10/',
                 $this->helper->getEmailToFriendUrl($product)
             );
-            $objectManager->get('Magento\Framework\Registry')->unregister('current_category');
+            $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
         } catch (\Exception $e) {
-            $objectManager->get('Magento\Framework\Registry')->unregister('current_category');
+            $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
             throw $e;
         }
     }
@@ -136,7 +138,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         // non-visible or disabled
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->assertFalse($this->helper->canShow($product));
         $existingProduct = $this->productRepository->get('simple');
@@ -199,17 +201,17 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $objectManager->get('Magento\Catalog\Model\Session')->setLastVisitedCategoryId(2);
+        $objectManager->get(\Magento\Catalog\Model\Session::class)->setLastVisitedCategoryId(2);
         $product = $this->productRepository->get('simple');
         $this->helper->initProduct($product->getId(), 'view');
 
         $this->assertInstanceOf(
-            'Magento\Catalog\Model\Product',
-            $objectManager->get('Magento\Framework\Registry')->registry('current_product')
+            \Magento\Catalog\Model\Product::class,
+            $objectManager->get(\Magento\Framework\Registry::class)->registry('current_product')
         );
         $this->assertInstanceOf(
-            'Magento\Catalog\Model\Category',
-            $objectManager->get('Magento\Framework\Registry')->registry('current_category')
+            \Magento\Catalog\Model\Category::class,
+            $objectManager->get(\Magento\Framework\Registry::class)->registry('current_category')
         );
     }
 
@@ -217,12 +219,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $buyRequest = new \Magento\Framework\DataObject(['qty' => 100, 'options' => ['option' => 'value']]);
         $this->helper->prepareProductOptions($product, $buyRequest);
         $result = $product->getPreconfiguredValues();
-        $this->assertInstanceOf('Magento\Framework\DataObject', $result);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $result);
         $this->assertEquals(100, $result->getQty());
         $this->assertEquals(['option' => 'value'], $result->getOptions());
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Block\Widget\Form;
@@ -14,7 +14,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         // _prepateLayout() is blocked, because it is used by block to instantly add 'form' child
         $block = $this->getMock(
-            'Magento\Backend\Block\Widget\Form\Container',
+            \Magento\Backend\Block\Widget\Form\Container::class,
             ['getChildBlock'],
             [],
             '',

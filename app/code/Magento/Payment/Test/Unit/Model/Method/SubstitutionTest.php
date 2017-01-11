@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,13 +21,13 @@ class SubstitutionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $this->objectManager->getObject('Magento\Payment\Model\Method\Substitution');
+        $this->model = $this->objectManager->getObject(\Magento\Payment\Model\Method\Substitution::class);
     }
 
     public function testGetTitle()
     {
         $infoMock = $this->getMockBuilder(
-            'Magento\Payment\Model\Info'
+            \Magento\Payment\Model\Info::class
         )->disableOriginalConstructor()->setMethods(
             []
         )->getMock();

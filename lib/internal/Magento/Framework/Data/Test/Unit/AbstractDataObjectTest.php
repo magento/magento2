@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit;
@@ -19,13 +19,13 @@ class AbstractDataObjectTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $subObject = $objectManager->getObject('Magento\Framework\Data\Test\Unit\Stub\DataObject');
+        $subObject = $objectManager->getObject(\Magento\Framework\Data\Test\Unit\Stub\DataObject::class);
         $subObject->setData($subObjectData);
 
-        $nestedObject = $objectManager->getObject('Magento\Framework\Data\Test\Unit\Stub\DataObject');
+        $nestedObject = $objectManager->getObject(\Magento\Framework\Data\Test\Unit\Stub\DataObject::class);
         $nestedObject->setData($nestedObjectData);
 
-        $dataObject = $objectManager->getObject('Magento\Framework\Data\Test\Unit\Stub\DataObject');
+        $dataObject = $objectManager->getObject(\Magento\Framework\Data\Test\Unit\Stub\DataObject::class);
         $data = ['key' => 'value', 'object' => $subObject, 'nestedArray' => ['nestedObject' => $nestedObject]];
         $dataObject->setData($data);
 
@@ -39,7 +39,7 @@ class AbstractDataObjectTest extends \PHPUnit_Framework_TestCase
         $data = [$key => $value];
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $dataObject = $objectManager->getObject('Magento\Framework\Data\Test\Unit\Stub\DataObject');
+        $dataObject = $objectManager->getObject(\Magento\Framework\Data\Test\Unit\Stub\DataObject::class);
         $dataObject->setData($data);
 
         $this->assertEquals($value, $dataObject->get($key));

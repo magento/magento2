@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Model\ResourceModel\Sitemap;
@@ -19,7 +19,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function _construct()
     {
-        $this->_init('Magento\Sitemap\Model\Sitemap', 'Magento\Sitemap\Model\ResourceModel\Sitemap');
+        $this->_init(\Magento\Sitemap\Model\Sitemap::class, \Magento\Sitemap\Model\ResourceModel\Sitemap::class);
     }
 
     /**

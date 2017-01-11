@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,9 +33,9 @@ class GridAsyncInsertTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->gridAggregatorMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\GridInterface')
+        $this->gridAggregatorMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\GridInterface::class)
             ->getMockForAbstractClass();
-        $this->salesModelMock = $this->getMockBuilder('Magento\Sales\Model\AbstractModel')
+        $this->salesModelMock = $this->getMockBuilder(\Magento\Sales\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -43,7 +43,7 @@ class GridAsyncInsertTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMockForAbstractClass();
-        $this->scopeConfigurationMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigurationMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
         $this->unit = new \Magento\Sales\Model\GridAsyncInsert(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Helper;
@@ -54,26 +54,26 @@ class GuestTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->appContextHelperMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
-        $this->storeManagerInterfaceMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->registryMock = $this->getMock('Magento\Framework\Registry');
-        $this->sessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
+        $this->appContextHelperMock = $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false);
+        $this->storeManagerInterfaceMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class);
+        $this->sessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
         $this->cookieMetadataFactoryMock = $this->getMock(
-            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory',
+            \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->managerInterfaceMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
-        $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
-        $this->viewInterfaceMock = $this->getMock('Magento\Framework\App\ViewInterface');
-        $this->storeModelMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->managerInterfaceMock = $this->getMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->orderFactoryMock = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['create'], [], '', false);
+        $this->viewInterfaceMock = $this->getMock(\Magento\Framework\App\ViewInterface::class);
+        $this->storeModelMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesOrderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             [
                 'getProtectCode', 'loadByIncrementIdAndStoreId', 'loadByIncrementId',
                 'getId', 'getBillingAddress', '__wakeup'
@@ -85,7 +85,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->guest = $this->objectManagerHelper->getObject(
-            'Magento\Sales\Helper\Guest',
+            \Magento\Sales\Helper\Guest::class,
             [
                 'context' => $this->appContextHelperMock,
                 'storeManager' => $this->storeManagerInterfaceMock,
@@ -114,7 +114,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         $incrementId = $post['oar_order_id'];
         $protectedCode = 'protectedCode';
         $this->sessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
-        $requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $requestMock->expects($this->once())->method('getPostValue')->willReturn($post);
         $this->storeManagerInterfaceMock->expects($this->once())->method('getStore')->willReturn($this->storeModelMock);
         $this->storeModelMock->expects($this->once())->method('getId')->willReturn($storeId);
@@ -123,7 +123,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         $this->salesOrderMock->expects($this->any())->method('getId')->willReturn($incrementId);
 
         $billingAddressMock = $this->getMock(
-            'Magento\Sales\Model\Order\Address',
+            \Magento\Sales\Model\Order\Address::class,
             ['getLastname', 'getEmail', '__wakeup'],
             [],
             '',
@@ -134,7 +134,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         $this->salesOrderMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
         $this->salesOrderMock->expects($this->once())->method('getProtectCode')->willReturn($protectedCode);
         $metaDataMock = $this->getMock(
-            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class,
             [],
             [],
             '',
@@ -175,7 +175,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         $this->salesOrderMock->expects($this->exactly(1))->method('getId')->willReturn($incrementId);
         $this->salesOrderMock->expects($this->once())->method('getProtectCode')->willReturn($protectedCode);
         $metaDataMock = $this->getMock(
-            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class,
             [],
             [],
             '',
@@ -195,7 +195,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock->expects($this->once())
             ->method('setPublicCookie')
             ->with(Guest::COOKIE_NAME, $this->anything(), $metaDataMock);
-        $requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $this->assertTrue($this->guest->loadValidOrder($requestMock));
     }
 }

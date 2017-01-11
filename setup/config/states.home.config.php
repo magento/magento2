@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,27 +25,63 @@ return [
             'order'       => -1,
         ],
         [
-            'id'          => 'root.update',
-            'url'         => 'component-grid',
-            'templateUrl' => "$base/component-grid",
-            'title'       => 'Component Manager',
-            'controller'  => 'componentGridController',
+            'id'          => 'root.module',
+            'url'         => 'module-grid',
+            'templateUrl' => "$base/module-grid",
+            'title'       => 'Module Manager',
+            'controller'  => 'moduleGridController',
             'nav'         => false,
             'noMenu'      => true,
             'order'       => 1,
-            'type'        => 'update'
+            'type'        => 'module'
+        ],
+        [
+            'id'          => 'root.extension-auth',
+            'url'         => 'marketplace-credentials',
+            'templateUrl' => "$base/marketplace-credentials",
+            'title'       => 'Extension Manager',
+            'controller'  => 'MarketplaceCredentialsController',
+            'order'       => 1,
+            'nav'         => false,
+            'noMenu'      => true,
+            'type'        => 'extension'
+        ],
+        [
+            'id'          => 'root.extension',
+            'url'         => 'extension-grid',
+            'templateUrl' => "$base/extension-grid",
+            'title'       => 'Extension Manager',
+            'controller'  => 'extensionGridController',
+            'order'       => 2,
+            'nav'         => false,
+            'noMenu'      => true,
+            'type'        => 'extension'
         ],
         [
             'id'          => 'root.install',
             'url'         => 'install-extension-grid',
             'templateUrl' => "$base/install-extension-grid",
-            'title'       => "Extensions Grid",
+            'title'       => "Extension Manager",
             'controller'  => 'installExtensionGridController',
             'nav'         => false,
             'noMenu'      => true,
             'order'       => 1,
             'type'        => 'install',
-            'wrapper'     => 1
+            'wrapper'     => 1,
+            'header'      => 'Ready to Install'
+        ],
+        [
+            'id'          => 'root.update',
+            'url'         => 'update-extension-grid',
+            'templateUrl' => "$base/update-extension-grid",
+            'title'       => "Extension Manager",
+            'controller'  => 'updateExtensionGridController',
+            'nav'         => false,
+            'noMenu'      => true,
+            'order'       => 1,
+            'type'        => 'update',
+            'wrapper'     => 1,
+            'header'      => 'New Updates'
         ],
         [
             'id'          => 'root.upgrade',

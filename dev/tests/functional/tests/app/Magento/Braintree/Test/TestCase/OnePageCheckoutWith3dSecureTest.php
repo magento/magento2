@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 2. Add products to the Shopping Cart.
  * 3. Apply discounts in Shopping Cart according to dataset.
  * 4. In 'Estimate Shipping and Tax' section specify destination using values from Test Data.
- * 5. Click the 'Go to Checkout' button.
+ * 5. Click the 'Proceed to Checkout' button.
  * 6. Fill shipping information.
  * 7. Select shipping method.
  * 8. Select payment method (use reward points and store credit if available).
@@ -31,15 +31,15 @@ use Magento\Mtf\TestCase\Scenario;
  * 12. Click 'Submit' to place order.
  * 13. Perform assertions.
  *
- * @group Braintree_(CS)
+ * @group Braintree
  * @ZephyrId MAGETWO-46479
  */
 class OnePageCheckoutWith3dSecureTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

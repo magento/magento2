@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Creditmemo;
@@ -50,7 +50,10 @@ class Collection extends AbstractCollection implements CreditmemoSearchResultInt
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Creditmemo', 'Magento\Sales\Model\ResourceModel\Order\Creditmemo');
+        $this->_init(
+            \Magento\Sales\Model\Order\Creditmemo::class,
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo::class
+        );
     }
 
     /**

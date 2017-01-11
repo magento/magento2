@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Config\Backend;
@@ -15,11 +15,11 @@ class ManagestockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stockIndexerProcessor = $this->getMockBuilder('Magento\CatalogInventory\Model\Indexer\Stock\Processor')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stockIndexerProcessor = $this->getMockBuilder(
+            \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class
+        )->disableOriginalConstructor()->getMock();
         $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\CatalogInventory\Model\Config\Backend\Managestock',
+            \Magento\CatalogInventory\Model\Config\Backend\Managestock::class,
             [
                 'stockIndexerProcessor' => $this->stockIndexerProcessor,
             ]

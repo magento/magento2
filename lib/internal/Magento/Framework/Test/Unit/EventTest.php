@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
@@ -72,14 +72,14 @@ class EventTest extends \PHPUnit_Framework_TestCase
             'name' => 'ObserverName',
         ];
         $this->event->addObserver($this->observer);
-        $expected = 'Magento\Framework\Event\Observer\Collection';
+        $expected = \Magento\Framework\Event\Observer\Collection::class;
         $actual = $this->event->getObservers()->removeObserverByName($data['name']);
         $this->assertInstanceOf($expected, $actual);
     }
 
     public function testDispatch()
     {
-        $this->assertInstanceOf('Magento\Framework\Event', $this->event->dispatch());
+        $this->assertInstanceOf(\Magento\Framework\Event::class, $this->event->dispatch());
     }
 
     public function testGetName()

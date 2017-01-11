@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SendFriend\Controller;
@@ -12,7 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Email to a Friend Product Controller
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Product extends \Magento\Framework\App\Action\Action
 {
@@ -68,9 +68,9 @@ abstract class Product extends \Magento\Framework\App\Action\Action
     public function dispatch(RequestInterface $request)
     {
         /* @var $helper \Magento\SendFriend\Helper\Data */
-        $helper = $this->_objectManager->get('Magento\SendFriend\Helper\Data');
+        $helper = $this->_objectManager->get(\Magento\SendFriend\Helper\Data::class);
         /* @var $session \Magento\Customer\Model\Session */
-        $session = $this->_objectManager->get('Magento\Customer\Model\Session');
+        $session = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
 
         if (!$helper->isEnabled()) {
             throw new NotFoundException(__('Page not found.'));
@@ -80,7 +80,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             if ($this->getRequest()->getActionName() == 'sendemail') {
                 $session->setBeforeAuthUrl($this->_url->getUrl('sendfriend/product/send', ['_current' => true]));
-                $this->_objectManager->get('Magento\Catalog\Model\Session')
+                $this->_objectManager->get(\Magento\Catalog\Model\Session::class)
                     ->setSendfriendFormData($request->getPostValue());
             }
         }

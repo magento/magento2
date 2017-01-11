@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,17 +28,17 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->serviceManagerMock = $this->getMockBuilder('\Zend\ServiceManager\ServiceManager')
+        $this->serviceManagerMock = $this->getMockBuilder(\Zend\ServiceManager\ServiceManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->inputMock = $this->getMockBuilder('\Symfony\Component\Console\Input\ArgvInput')
+        $this->inputMock = $this->getMockBuilder(\Symfony\Component\Console\Input\ArgvInput::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystemDriverMock = $this->getMockBuilder('\Magento\Framework\Filesystem\Driver\File')
+        $this->filesystemDriverMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Driver\File::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = (new ObjectManager($this))->getObject(
-            '\Magento\Setup\Console\CompilerPreparation',
+            \Magento\Setup\Console\CompilerPreparation::class,
             [
                 'serviceManager' => $this->serviceManagerMock,
                 'input' => $this->inputMock,

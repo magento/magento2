@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,6 +61,13 @@ class Tree extends Block
     protected $header = 'header';
 
     /**
+     * Xpath locator for category in tree.
+     *
+     * @var string
+     */
+    protected $categoryInTree = '//*[@class="x-tree-node-ct"]/li/div/a/span[contains(text(), "%s")]/..';
+
+    /**
      * Get backend abstract block.
      *
      * @return Template
@@ -68,7 +75,7 @@ class Tree extends Block
     protected function getTemplateBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Template',
+            \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
         );
     }
@@ -154,11 +161,32 @@ class Tree extends Block
     }
 
     /**
+     * Assign child category to the parent.
+     *
+     * @param string $parentCategoryName
+     * @param string $childCategoryName
+     *
+     * @return void
+     */
+    public function assignCategory($parentCategoryName, $childCategoryName)
+    {
+        $this->_rootElement->find(sprintf($this->categoryInTree, $childCategoryName), Locator::SELECTOR_XPATH)->click();
+        $this->getTemplateBlock()->waitLoader();
+        $targetElement = $this->_rootElement->find(
+            sprintf($this->categoryInTree, $parentCategoryName),
+            Locator::SELECTOR_XPATH
+        );
+        $targetElement->hover();
+        $this->_rootElement->find(sprintf($this->categoryInTree, $childCategoryName), Locator::SELECTOR_XPATH)
+            ->dragAndDrop($targetElement);
+    }
+
+    /**
      * Expand all categories tree.
      *
      * @return void
      */
-    protected function expandAllCategories()
+    public function expandAllCategories()
     {
         $this->_rootElement->find($this->expandAll)->click();
     }

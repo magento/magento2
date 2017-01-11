@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,23 +36,23 @@ class CombineTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->conditionFactoryMock = $this->getMockBuilder('\Magento\Rule\Model\ConditionFactory')
+        $this->conditionFactoryMock = $this->getMockBuilder(\Magento\Rule\Model\ConditionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder('\Psr\Log\LoggerInterface')
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->conditionObjectMock = $this->getMockBuilder('\Magento\SalesRule\Model\Rule\Condition\Product')
+        $this->conditionObjectMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule\Condition\Product::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $this->combine = (new ObjectManagerHelper($this))->getObject(
-            '\Magento\Rule\Model\Condition\Combine',
+            \Magento\Rule\Model\Condition\Combine::class,
             [
                 "conditionFactory"    => $this->conditionFactoryMock,
                 "logger"    => $this->loggerMock,
@@ -116,7 +116,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->combine->loadArray($array);
 
-        $this->assertInstanceOf('\Magento\Rule\Model\Condition\Combine', $result);
+        $this->assertInstanceOf(\Magento\Rule\Model\Condition\Combine::class, $result);
     }
 
     public function testLoadArrayLoggerCatchException()
@@ -144,6 +144,6 @@ class CombineTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->combine->loadArray($array);
 
-        $this->assertInstanceOf('\Magento\Rule\Model\Condition\Combine', $result);
+        $this->assertInstanceOf(\Magento\Rule\Model\Condition\Combine::class, $result);
     }
 }

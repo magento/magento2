@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Helper;
@@ -15,7 +15,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Shipping\Helper\Data'
+            \Magento\Shipping\Helper\Data::class
         );
     }
 
@@ -31,10 +31,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $constructArgs = [];
-        if ('Magento\Sales\Model\Order\Shipment' == $modelName) {
+        if (\Magento\Sales\Model\Order\Shipment::class == $modelName) {
             $orderRepository = $this->_getMockOrderRepository($code);
             $constructArgs['orderRepository'] = $orderRepository;
-        } elseif ('Magento\Sales\Model\Order\Shipment\Track' == $modelName) {
+        } elseif (\Magento\Sales\Model\Order\Shipment\Track::class == $modelName) {
             $shipmentRepository = $this->_getMockShipmentRepository($code);
             $constructArgs['shipmentRepository'] = $shipmentRepository;
         }
@@ -42,10 +42,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $model = $objectManager->create($modelName, $constructArgs);
         $model->{$getIdMethod}($entityId);
 
-        if ('Magento\Sales\Model\Order' == $modelName) {
+        if (\Magento\Sales\Model\Order::class == $modelName) {
             $model->setProtectCode($code);
         }
-        if ('Magento\Sales\Model\Order\Shipment\Track' == $modelName) {
+        if (\Magento\Sales\Model\Order\Shipment\Track::class == $modelName) {
             $model->setParentId(1);
         }
 
@@ -60,9 +60,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function _getMockOrderRepository($code)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $order = $objectManager->create('Magento\Sales\Model\Order');
+        $order = $objectManager->create(\Magento\Sales\Model\Order::class);
         $order->setProtectCode($code);
-        $orderRepository = $this->getMock('Magento\Sales\Api\OrderRepositoryInterface', [], [], '', false);
+        $orderRepository = $this->getMock(\Magento\Sales\Api\OrderRepositoryInterface::class, [], [], '', false);
         $orderRepository->expects($this->atLeastOnce())->method('get')->will($this->returnValue($order));
         return $orderRepository;
     }
@@ -77,9 +77,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $orderRepository = $this->_getMockOrderRepository($code);
         $shipmentArgs = ['orderRepository' => $orderRepository];
 
-        $shipment = $objectManager->create('Magento\Sales\Model\Order\Shipment', $shipmentArgs);
+        $shipment = $objectManager->create(\Magento\Sales\Model\Order\Shipment::class, $shipmentArgs);
         $shipmentRepository = $this->getMock(
-            'Magento\Sales\Model\Order\ShipmentRepository',
+            \Magento\Sales\Model\Order\ShipmentRepository::class,
             ['get'],
             [],
             '',
@@ -95,22 +95,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function getTrackingPopupUrlBySalesModelDataProvider()
     {
         return [
-            [
-                'Magento\Sales\Model\Order',
+            [\Magento\Sales\Model\Order::class,
                 'setId',
                 42,
                 'abc',
                 'http://localhost/index.php/shipping/tracking/popup?hash=b3JkZXJfaWQ6NDI6YWJj',
             ],
-            [
-                'Magento\Sales\Model\Order\Shipment',
+            [\Magento\Sales\Model\Order\Shipment::class,
                 'setId',
                 42,
                 'abc',
                 'http://localhost/index.php/shipping/tracking/popup?hash=c2hpcF9pZDo0MjphYmM%2C'
             ],
-            [
-                'Magento\Sales\Model\Order\Shipment\Track',
+            [\Magento\Sales\Model\Order\Shipment\Track::class,
                 'setEntityId',
                 42,
                 'abc',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ require __DIR__ . '/../../../Magento/Bundle/_files/product_with_multiple_options
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->load(3);
 
 /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
@@ -36,7 +36,7 @@ $requestInfo = new \Magento\Framework\DataObject(
 );
 
 /** @var $quote \Magento\Quote\Model\Quote $quote */
-$quote = $objectManager->create('Magento\Quote\Model\Quote');
+$quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
 $quote->setStoreId(1)->setReservedOrderId('test_order_bundle')->save();
 $quote->addProduct($product, $requestInfo);
 $quote->save();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
@@ -22,10 +22,10 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
     protected function setUp()
     {
         $this->stepMockSetup();
-        $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity');
+        $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity::class);
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->shipmentMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             ['getStore', '__wakeup', 'getOrder'],
             [],
             '',

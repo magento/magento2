@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
@@ -143,7 +143,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getJobStaticRegenerateMock($methods = null)
     {
-        return $this->getMock('Magento\Setup\Model\Cron\JobStaticRegenerate', $methods, [], '', false);
+        return $this->getMock(\Magento\Setup\Model\Cron\JobStaticRegenerate::class, $methods, [], '', false);
     }
 
     /**
@@ -153,7 +153,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getFilesystemObjectMock($methods = null)
     {
-        return $this->getMock('Magento\Deploy\Model\Filesystem', $methods, [], '', false);
+        return $this->getMock(\Magento\Deploy\Model\Filesystem::class, $methods, [], '', false);
     }
 
     /**
@@ -163,7 +163,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getStatucObjectMock($methods = null)
     {
-        return $this->getMock('Magento\Setup\Model\Cron\Status', $methods, [], '', false);
+        return $this->getMock(\Magento\Setup\Model\Cron\Status::class, $methods, [], '', false);
     }
 
     /**
@@ -173,7 +173,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCleanFilesObjectMock($methods = null)
     {
-        return $this->getMock('Magento\Framework\App\State\CleanupFiles', $methods, [], '', false);
+        return $this->getMock(\Magento\Framework\App\State\CleanupFiles::class, $methods, [], '', false);
     }
 
     /**
@@ -183,7 +183,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCacheObjectMock($methods = null)
     {
-        return $this->getMock('Magento\Framework\App\State\CleanupFiles', $methods, [], '', false);
+        return $this->getMock(\Magento\Framework\App\State\CleanupFiles::class, $methods, [], '', false);
     }
 
     /**
@@ -193,7 +193,7 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getOutputObjectMock()
     {
-        return $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface');
+        return $this->getMockForAbstractClass(\Symfony\Component\Console\Output\OutputInterface::class);
     }
 
     /**
@@ -203,6 +203,6 @@ class JobStaticRegenerateTest extends \PHPUnit_Framework_TestCase
      */
     protected function getModeObjectMock($methods = null)
     {
-        return $this->getMock('Magento\Deploy\Model\Mode', $methods, [], '', false);
+        return $this->getMock(\Magento\Deploy\Model\Mode::class, $methods, [], '', false);
     }
 }

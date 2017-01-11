@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -58,6 +58,6 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             ['magento/theme-adminhtml-backend' => 7, 'magento/theme-frontend-luma' => 8],
             (array)$this->object->get('nested', '/^magento\/theme/')
-            );
+        );
     }
 }

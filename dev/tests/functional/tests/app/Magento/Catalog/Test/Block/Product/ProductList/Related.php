@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,7 @@ class Related extends PromotedSection
         $locator = sprintf($this->productItemByName, $product->getName());
 
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem',
+            \Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem::class,
             ['element' => $this->_rootElement->find($locator, Locator::SELECTOR_XPATH)]
         );
     }
@@ -47,7 +47,7 @@ class Related extends PromotedSection
 
         foreach ($elements as $element) {
             $result[] = $this->blockFactory->create(
-                'Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem',
+                \Magento\Catalog\Test\Block\Product\ProductList\Related\ProductItem::class,
                 ['element' => $element]
             );
         }

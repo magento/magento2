@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
@@ -19,7 +19,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->advancedCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('\Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection');
+            ->create(\Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block\Onepage;
@@ -32,16 +32,16 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->orderConfig = $this->getMock('Magento\Sales\Model\Order\Config', [], [], '', false);
+        $this->orderConfig = $this->getMock(\Magento\Sales\Model\Order\Config::class, [], [], '', false);
 
         $this->checkoutSession = $this->getMockBuilder(
-            'Magento\Checkout\Model\Session'
+            \Magento\Checkout\Model\Session::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->block = $objectManager->getObject(
-            'Magento\Checkout\Block\Onepage\Success',
+            \Magento\Checkout\Block\Onepage\Success::class,
             [
                 'orderConfig' => $this->orderConfig,
                 'checkoutSession' => $this->checkoutSession
@@ -51,7 +51,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAdditionalInfoHtml()
     {
-        $layout = $this->getMock('Magento\Framework\View\LayoutInterface', [], [], '', false);
+        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class, [], [], '', false);
         $layout->expects(
             $this->once()
         )->method(
@@ -77,7 +77,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
         $realOrderId = 100003332;
         $status = Order::STATE_PENDING_PAYMENT;
 
-        $order = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
 

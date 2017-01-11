@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
@@ -23,7 +23,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->amountFactoryMock = $this->getMockBuilder('Magento\Framework\Pricing\Amount\AmountFactory')
+        $this->amountFactoryMock = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\AmountFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new \Magento\Framework\Pricing\Adjustment\Calculator($this->amountFactoryMock);
@@ -52,7 +52,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             $taxAdjustmentCode => $taxAdjustment,
         ];
 
-        $amountBaseMock = $this->getMockBuilder('Magento\Framework\Pricing\Amount\Base')
+        $amountBaseMock = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->amountFactoryMock->expects($this->once())
@@ -60,12 +60,12 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($totalAmount), $this->equalTo($expectedAdjustments))
             ->will($this->returnValue($amountBaseMock));
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPriceInfo', '__wakeup'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $weeeAdjustmentMock = $this->getMockBuilder('Magento\Weee\Pricing\Adjustment')
+        $weeeAdjustmentMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $weeeAdjustmentMock->expects($this->once())
@@ -82,7 +82,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($amountInclTax), $this->equalTo($productMock))
             ->will($this->returnValue($weeeAdjustment + $amountInclTax));
 
-        $taxAdjustmentMock = $this->getMockBuilder('Magento\Tax\Pricing\Adjustment')
+        $taxAdjustmentMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $taxAdjustmentMock->expects($this->once())
@@ -103,7 +103,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->method('isIncludedInDisplayPrice');
 
         $adjustments = [$weeeAdjustmentMock, $taxAdjustmentMock];
-        $priceInfoMock = $this->getMockBuilder('\Magento\Framework\Pricing\PriceInfo\Base')
+        $priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfo\Base::class)
             ->disableOriginalConstructor()
             ->getMock();
         $priceInfoMock->expects($this->any())
@@ -115,7 +115,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($priceInfoMock));
 
         $result = $this->model->getAmount($amountInclTax, $productMock);
-        $this->assertInstanceOf('Magento\Framework\Pricing\Amount\AmountInterface', $result);
+        $this->assertInstanceOf(\Magento\Framework\Pricing\Amount\AmountInterface::class, $result);
     }
 
     public function testGetAmountExclude()
@@ -127,12 +127,12 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $adjustment = 5;
         $expectedAdjustments = [];
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPriceInfo', '__wakeup'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $taxAdjustmentMock = $this->getMockBuilder('Magento\Tax\Pricing\Adjustment')
+        $taxAdjustmentMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $taxAdjustmentMock->expects($this->once())
@@ -150,7 +150,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($fullamount), $this->equalTo($productMock))
             ->will($this->returnValue($amount));
 
-        $weeeAdjustmentMock = $this->getMockBuilder('Magento\Weee\Pricing\Adjustment')
+        $weeeAdjustmentMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $weeeAdjustmentMock->expects($this->once())
@@ -168,7 +168,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $adjustments = [$taxAdjustmentMock, $weeeAdjustmentMock];
 
-        $priceInfoMock = $this->getMockBuilder('\Magento\Framework\Pricing\PriceInfo\Base')
+        $priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfo\Base::class)
             ->disableOriginalConstructor()
             ->getMock();
         $priceInfoMock->expects($this->any())
@@ -179,7 +179,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($priceInfoMock));
 
-        $amountBaseMock = $this->getMockBuilder('Magento\Framework\Pricing\Amount\Base')
+        $amountBaseMock = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -188,6 +188,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($amount), $this->equalTo($expectedAdjustments))
             ->will($this->returnValue($amountBaseMock));
         $result = $this->model->getAmount($amount, $productMock, true);
-        $this->assertInstanceOf('Magento\Framework\Pricing\Amount\AmountInterface', $result);
+        $this->assertInstanceOf(\Magento\Framework\Pricing\Amount\AmountInterface::class, $result);
     }
 }

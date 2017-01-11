@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Observer;
@@ -37,7 +37,7 @@ class CheckoutAllSubmitAfterObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->subtractQuoteInventoryObserver = $this->getMock(
-            'Magento\CatalogInventory\Observer\SubtractQuoteInventoryObserver',
+            \Magento\CatalogInventory\Observer\SubtractQuoteInventoryObserver::class,
             [],
             [],
             '',
@@ -45,19 +45,19 @@ class CheckoutAllSubmitAfterObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->reindexQuoteInventoryObserver = $this->getMock(
-            'Magento\CatalogInventory\Observer\ReindexQuoteInventoryObserver',
+            \Magento\CatalogInventory\Observer\ReindexQuoteInventoryObserver::class,
             [],
             [],
             '',
             false
         );
 
-        $this->event = $this->getMockBuilder('Magento\Framework\Event')
+        $this->event = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProduct', 'getCollection', 'getCreditmemo', 'getQuote', 'getWebsite'])
             ->getMock();
 
-        $this->eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $this->eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEvent'])
             ->getMock();
@@ -67,7 +67,7 @@ class CheckoutAllSubmitAfterObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->event));
 
         $this->observer = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\CatalogInventory\Observer\CheckoutAllSubmitAfterObserver',
+            \Magento\CatalogInventory\Observer\CheckoutAllSubmitAfterObserver::class,
             [
                 'subtractQuoteInventoryObserver' => $this->subtractQuoteInventoryObserver,
                 'reindexQuoteInventoryObserver' => $this->reindexQuoteInventoryObserver,
@@ -77,7 +77,7 @@ class CheckoutAllSubmitAfterObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckoutAllSubmitAfter()
     {
-        $quote = $this->getMock('Magento\Quote\Model\Quote', ['getInventoryProcessed'], [], '', false);
+        $quote = $this->getMock(\Magento\Quote\Model\Quote::class, ['getInventoryProcessed'], [], '', false);
         $quote->expects($this->once())
             ->method('getInventoryProcessed')
             ->will($this->returnValue(false));

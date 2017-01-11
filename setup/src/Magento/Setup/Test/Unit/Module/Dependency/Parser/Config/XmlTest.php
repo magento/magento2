@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Dependency\Parser\Config;
@@ -17,7 +17,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->parser = $objectManagerHelper->getObject('Magento\Setup\Module\Dependency\Parser\Config\Xml');
+        $this->parser = $objectManagerHelper->getObject(\Magento\Setup\Module\Dependency\Parser\Config\Xml::class);
     }
 
     /**

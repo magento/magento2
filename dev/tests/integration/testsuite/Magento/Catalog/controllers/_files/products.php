@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,15 +11,15 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 $objectManager->get(
-    'Magento\Framework\View\DesignInterface'
+    \Magento\Framework\View\DesignInterface::class
 )->setArea(
     'frontend'
 )->setDefaultDesignTheme();
 
 /** @var \Magento\Catalog\Model\Product\Media\Config $config */
-$config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+$config = $objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
 /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
-$mediaDirectory = $objectManager->get('Magento\Framework\Filesystem')
+$mediaDirectory = $objectManager->get(\Magento\Framework\Filesystem::class)
     ->getDirectoryWrite(DirectoryList::MEDIA);
 
 $baseTmpMediaPath = $config->getBaseTmpMediaPath();
@@ -27,13 +27,13 @@ $mediaDirectory->create($baseTmpMediaPath);
 copy(__DIR__ . '/product_image.png', $mediaDirectory->getAbsolutePath($baseTmpMediaPath . '/product_image.png'));
 
 /** @var $productOne \Magento\Catalog\Model\Product */
-$productOne = $objectManager->create('Magento\Catalog\Model\Product');
+$productOne = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productOne->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
-    [$objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()]
+    [$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getWebsiteId()]
 )->setSku(
     'simple_product_1'
 )->setName(
@@ -71,13 +71,13 @@ $productOne->setTypeId(
 )->save();
 
 /** @var $productTwo \Magento\Catalog\Model\Product */
-$productTwo = $objectManager->create('Magento\Catalog\Model\Product');
+$productTwo = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $productTwo->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
-    [$objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()]
+    [$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getWebsiteId()]
 )->setSku(
     'simple_product_2'
 )->setName(

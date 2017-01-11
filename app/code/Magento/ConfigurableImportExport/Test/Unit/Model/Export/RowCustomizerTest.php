@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_collectionMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             ['addAttributeToFilter', 'fetchItem', '__wakeup'],
             [],
             '',
@@ -199,7 +199,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $expectedConfigurableData = $this->getExpectedConfigurableData();
 
         $productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getId', 'getTypeInstance', '__wakeup'],
             [],
             '',
@@ -210,7 +210,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->initiatedProductId));
 
         $typeInstanceMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
             [],
             [],
             '',
@@ -238,7 +238,6 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->_collectionMock->expects($this->at(3))
             ->method('fetchItem')
             ->will($this->returnValue(false));
-
 
         $this->_model->prepareData($this->_collectionMock, $productIds);
 
