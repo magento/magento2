@@ -68,6 +68,7 @@ class Gateway
     }
 
     /**
+     * Returns id of created case (investigation) on Signifyd service
      * @see https://www.signifyd.com/docs/api/#/reference/cases/create-a-case
      *
      * @param int $orderId
@@ -92,10 +93,11 @@ class Gateway
     }
 
     /**
+     * Returns guaranty decision result
      * @see https://www.signifyd.com/docs/api/#/reference/guarantees/submit-a-case-for-guarantee
      *
      * @param int $signifydCaseId
-     * @return array
+     * @return string
      * @throws GatewayException
      */
     public function submitCaseForGuarantee($signifydCaseId)
