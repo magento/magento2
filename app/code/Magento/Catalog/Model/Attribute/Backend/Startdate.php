@@ -47,9 +47,6 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
         if ($startDate === false) {
             return false;
         }
-        if ($startDate == '' && $object->getSpecialPrice()) {
-            $startDate = $this->_localeDate->date();
-        }
 
         return $startDate;
     }
