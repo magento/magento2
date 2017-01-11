@@ -12,6 +12,7 @@ use Magento\Sales\Helper\Admin;
 use Magento\Signifyd\Model\Config;
 use Magento\Signifyd\Model\CaseManagement;
 use Magento\Signifyd\Api\Data\CaseInterface;
+use Magento\Signifyd\Model\Guarantee\SubmitEligible;
 
 /**
  * Get Signifyd Case Info
@@ -27,6 +28,11 @@ class CaseInfo extends AbstractOrder
      * @var CaseManagement
      */
     private $caseManagement;
+
+    /**
+     * @var SubmitEligible
+     */
+    private $submitEligible;
 
     /**
      * @var int
@@ -46,6 +52,7 @@ class CaseInfo extends AbstractOrder
      * @param Admin $adminHelper
      * @param Config $config
      * @param CaseManagement $caseManagement
+     * @param SubmitEligible $submitEligible
      * @param array $data
      */
     public function __construct(
@@ -54,10 +61,12 @@ class CaseInfo extends AbstractOrder
         Admin $adminHelper,
         Config $config,
         CaseManagement $caseManagement,
+        SubmitEligible $submitEligible,
         array $data = []
     ) {
         $this->config = $config;
         $this->caseManagement = $caseManagement;
+        $this->submitEligible = $submitEligible;
 
         parent::__construct($context, $registry, $adminHelper, $data);
     }
@@ -95,15 +104,23 @@ class CaseInfo extends AbstractOrder
     }
 
     /**
-     * Gets Case entity associated with order id.
+     * Retrieves current order Id.
+     *
+     * @return integer
+     */
+    public function getOrderId()
+    {
+        return $this->getOrder()->getEntityId();
+    }
+
+    /**
+     * Gets case entity associated with order id.
      *
      * @return CaseInterface|null
      */
     public function getCaseEntity()
     {
-        return $this->caseManagement->getByOrderId(
-            $this->getOrder()->getEntityId()
-        );
+        return $this->caseManagement->getByOrderId($this->getOrderId());
     }
 
     /**
@@ -118,7 +135,7 @@ class CaseInfo extends AbstractOrder
     }
 
     /**
-     * Gets state of case guarantee eligible.
+     * Gets associated team name.
      *
      * @param CaseInterface $caseEntity
      * @return string
@@ -137,7 +154,7 @@ class CaseInfo extends AbstractOrder
 
     /**
      * Returns cell class name according to case score value.
-     * It could be used by merchant to customize order view skin.
+     * It could be used by merchant to customize order view template.
      *
      * @param CaseInterface $caseEntity
      * @return string
@@ -155,5 +172,35 @@ class CaseInfo extends AbstractOrder
         }
 
         return $result;
+    }
+
+    /**
+     * Gets configuration of allowed buttons.
+     *
+     * @return array
+     */
+    public function getButtons()
+    {
+        $buttons = [];
+
+        if ($this->submitEligible->check($this->getOrderId())) {
+            $buttons[] = $this->getSubmitButton();
+        }
+
+        return $buttons;
+    }
+
+    /**
+     * Returns configuration for submit Guarantee request button.
+     *
+     * @return array
+     */
+    private function getSubmitButton()
+    {
+        return [
+            'title' => __('Submit Guarantee request'),
+            'url' => $this->getUrl('signifyd/guarantee/create'),
+            'componentName' => 'submit_guarantee_request'
+        ];
     }
 }
