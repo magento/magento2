@@ -133,7 +133,7 @@ class RoundingErrorsTest extends \PHPUnit_Framework_TestCase
             ->willReturn('http://example.com');
         $this->roundingErrorsNotification->isDisplayed();
         $this->assertEquals(
-            '<strong>Warning tax configuration can result in rounding errors. '
+            '<strong>Your current tax configuration may result in rounding errors. '
             . '</strong><p>Store(s) affected: testWebsiteName (testStoreName)</p><p>Click on the link to '
             . '<a href="http://example.com">ignore this notification</a></p>',
             $this->roundingErrorsNotification->getText()

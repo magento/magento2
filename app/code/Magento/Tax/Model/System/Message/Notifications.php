@@ -75,6 +75,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * Retrieve unique message identity
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getIdentity()
     {
@@ -120,6 +121,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
      * Retrieve message severity
      *
      * @return int
+     * @codeCoverageIgnore
      */
     public function getSeverity()
     {

@@ -82,7 +82,7 @@ class ApplyDiscountOnPrices implements \Magento\Tax\Model\System\Message\Notific
 
         if ($this->isDisplayed()) {
             $messageDetails .= '<strong>';
-            $messageDetails .= __('If you want to apply discount on prices including tax and apply customer tax after discount, you must set Catalog Prices to “Including Price”. ');
+            $messageDetails .= __('To apply the discount on prices including tax and apply the tax after discount, set Catalog Prices to “Including Price”. ');
             $messageDetails .= '</strong><p>';
             $messageDetails .= __('Store(s) affected: ');
             $messageDetails .= implode(', ', $this->getStoresWithWrongSettings());

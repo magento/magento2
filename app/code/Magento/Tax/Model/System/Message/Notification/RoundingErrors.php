@@ -78,7 +78,7 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
 
         if (!empty($this->getStoresWithWrongSettings()) && !$this->taxConfig->isWrongDisplaySettingsIgnored()) {
             $messageDetails .= '<strong>';
-            $messageDetails .= __('Warning tax configuration can result in rounding errors. ');
+            $messageDetails .= __('Your current tax configuration may result in rounding errors. ');
             $messageDetails .= '</strong><p>';
             $messageDetails .= __('Store(s) affected: ');
             $messageDetails .= implode(', ', $this->getStoresWithWrongSettings());

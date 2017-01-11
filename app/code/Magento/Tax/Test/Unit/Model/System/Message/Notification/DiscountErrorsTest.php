@@ -94,9 +94,9 @@ class DiscountErrorsTest extends \PHPUnit_Framework_TestCase
             ->willReturn('http://example.com');
         $this->discountErrorsNotification->isDisplayed();
         $this->assertEquals(
-            '<strong>Warning tax discount configuration might result in different discounts than a customer might '
-            . 'expect. </strong><p>Store(s) affected: testWebsiteName (testStoreName)</p><p>Click on the link to '
-            . '<a href="http://example.com">ignore this notification</a></p>',
+            '<strong>With customer tax applied “Before Discount”, the final discount calculation may not match '
+            . 'customers’ expectations. </strong><p>Store(s) affected: testWebsiteName (testStoreName)'
+            . '</p><p>Click on the link to <a href="http://example.com">ignore this notification</a></p>',
             $this->discountErrorsNotification->getText()
         );
     }

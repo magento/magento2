@@ -150,8 +150,8 @@ class ApplyDiscountOnPricesTest extends \PHPUnit_Framework_TestCase
             ->willReturn('http://example.com');
         $this->applyDiscountOnPricesNotification->isDisplayed();
         $this->assertEquals(
-            '<strong>If you want to apply discount on prices including tax and apply customer tax after discount, '
-            . 'you must set Catalog Prices to “Including Price”. </strong><p>Store(s) affected: testWebsiteName '
+            '<strong>To apply the discount on prices including tax and apply the tax after discount, '
+            . 'set Catalog Prices to “Including Price”. </strong><p>Store(s) affected: testWebsiteName '
             . '(testStoreName)</p><p>Click on the link to '
             . '<a href="http://example.com">ignore this notification</a></p>',
             $this->applyDiscountOnPricesNotification->getText()
