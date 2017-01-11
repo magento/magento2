@@ -34,18 +34,12 @@ define([
                 type: 'POST',
                 url: this.postponeUrl,
                 data: data,
-                showLoader: true,
-
-                /** @inheritdoc */
-                success: function (xhr) {
-                    if (xhr.error) {
-                        self.onError(xhr);
-                    }
-                },
-
-                /** @inheritdoc */
-                error: this.onError
-            });
+                showLoader: true
+            }).done(function (xhr) {
+                if (xhr.error) {
+                    self.onError(xhr);
+                }
+            }).fail(this.onError);
         },
 
         /**
