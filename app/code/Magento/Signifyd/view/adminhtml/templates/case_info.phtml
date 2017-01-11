@@ -43,5 +43,37 @@
             </tr>
             </tbody>
         </table>
+
+        <?php foreach ($block->getButtons() as $button):?>
+        <div data-bind="scope: '<?php /* @escapeNotVerified */ echo $button['componentName']; ?>'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <script type="text/x-magento-init">
+            {
+                "*":{
+                    "Magento_Ui/js/core/app": {
+                        "components": {
+                            "<?php /* @escapeNotVerified */ echo $button['componentName']; ?>": {
+                                "component": "Magento_Signifyd/js/request-send",
+                                "config": {
+                                    "title": "<?php echo $block->escapeHtml($button['title']); ?>",
+                                    "requestURL": "<?php /* @escapeNotVerified */ echo $button['url']; ?>",
+                                    "data": {
+                                        "orderId": "<?php /* @escapeNotVerified */ echo $block->getOrderId(); ?>"
+                                    },
+                                    "actions": [
+                                        {
+                                            "targetName": "${ $.name }",
+                                            "actionName": "sendRequest"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            </script>
+        </div>
+        <?php endforeach; ?>
     </div>
 </section>
