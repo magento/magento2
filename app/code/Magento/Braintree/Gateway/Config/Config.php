@@ -44,7 +44,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param ScopeConfigInterface $scopeConfig
      * @param null|string $methodCode
      * @param string $pathPattern
-     * @param Json $serializer
+     * @param Json|null $serializer
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,

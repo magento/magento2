@@ -51,11 +51,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $value
+     * @param string $encodedValue
+     * @param string|array $value
      * @param array $expected
      * @dataProvider getCountrySpecificCardTypeConfigDataProvider
      */
-    public function testGetCountrySpecificCardTypeConfig($encodedValue, $value, $expected)
+    public function testGetCountrySpecificCardTypeConfig($encodedValue, $value, array $expected)
     {
         $this->scopeConfigMock->expects(static::once())
             ->method('getValue')
@@ -64,6 +65,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
+            ->with($encodedValue)
             ->willReturn($value);
 
         static::assertEquals(
@@ -78,12 +80,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function getCountrySpecificCardTypeConfigDataProvider()
     {
         return [
-            [
+            'valid data' => [
                 '{"GB":["VI","AE"],"US":["DI","JCB"]}',
                 ['GB' => ['VI', 'AE'], 'US' => ['DI', 'JCB']],
                 ['GB' => ['VI', 'AE'], 'US' => ['DI', 'JCB']]
             ],
-            [
+            'non-array value' => [
                 '""',
                 '',
                 []
@@ -168,8 +170,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers       \Magento\Braintree\Gateway\Config\Config::getCountryAvailableCardTypes
      * @dataProvider getCountrySpecificCardTypeConfigDataProvider
+     * @param string $encodedData
+     * @param string|array $data
+     * @param array $countryData
      */
-    public function testCountryAvailableCardTypes($encodedData, $data, $countryData)
+    public function testCountryAvailableCardTypes($encodedData, $data, array $countryData)
     {
         $this->scopeConfigMock->expects(static::any())
             ->method('getValue')
@@ -178,6 +183,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
+            ->with($encodedData)
             ->willReturn($data);
 
         foreach ($countryData as $countryId => $types) {

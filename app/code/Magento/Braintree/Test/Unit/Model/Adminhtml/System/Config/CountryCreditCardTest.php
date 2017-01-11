@@ -63,17 +63,21 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider beforeSaveDataProvider
+     * @param array $value
+     * @param array $expectedValue
+     * @param string $encodedValue
      */
-    public function testBeforeSave($value, $expectedValue)
+    public function testBeforeSave(array $value, array $expectedValue, $encodedValue)
     {
         $this->model->setValue($value);
 
         $this->serializerMock->expects($this->once())
             ->method('serialize')
-            ->will($this->returnArgument(0));
+            ->with($expectedValue)
+            ->willReturn($encodedValue);
 
         $this->model->beforeSave();
-        $this->assertEquals($expectedValue, $this->model->getValue());
+        $this->assertEquals($encodedValue, $this->model->getValue());
     }
 
     /**
@@ -86,10 +90,12 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
             'empty_value' => [
                 'value' => [],
                 'expected' => [],
+                'encoded' => '[]'
             ],
             'not_array' => [
                 'value' => ['US'],
                 'expected' => [],
+                'encoded' => '[]'
             ],
             'array_with_invalid_format' => [
                 'value' => [
@@ -98,6 +104,7 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'expected' => [],
+                'encoded' => '[]'
             ],
             'array_with_two_countries' => [
                 'value' => [
@@ -115,6 +122,7 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
                     'AF' => ['AE', 'VI'],
                     'US' => ['AE', 'VI', 'MA'],
                 ],
+                'encoded' => '{"AF":["AE","VI"],"US":["AE","VI","MA"]}'
             ],
             'array_with_two_same_countries' => [
                 'value' => [
@@ -136,16 +144,21 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
                     'AF' => ['AE', 'VI'],
                     'US' => ['AE', 'VI', 'MA', 'OT'],
                 ],
+                'encoded' => '{"AF":["AE","VI"],"US":["AE","VI","MA","OT"]}'
             ],
         ];
     }
 
     /**
      * @dataProvider afterLoadDataProvider
+     * @param string $encodedValue
+     * @param array|null $value
+     * @param array $hashData
+     * @param array|null $expected
      */
-    public function testAfterLoad($value, $hashData, $expected)
+    public function testAfterLoad($encodedValue, $value, array $hashData, $expected)
     {
-        $this->model->setValue($value);
+        $this->model->setValue($encodedValue);
         $index = 0;
         foreach ($hashData as $hash) {
             $this->mathRandomMock->expects(static::at($index))
@@ -156,7 +169,8 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
 
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
-            ->will($this->returnArgument(0));
+            ->with($encodedValue)
+            ->willReturn($value);
 
         $this->model->afterLoad();
         $this->assertEquals($expected, $this->model->getValue());
@@ -170,16 +184,19 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'empty' => [
+                'encoded' => '[]',
                 'value' => [],
                 'randomHash' => [],
                 'expected' => []
             ],
             'null' => [
+                'encoded' => '',
                 'value' => null,
                 'randomHash' => [],
                 'expected' => null
             ],
-            'valid_data' => [
+            'valid data' => [
+                'encoded' => '{"US":["AE","VI","MA"],"AF":["AE","MA"]}',
                 'value' => [
                     'US' => ['AE', 'VI', 'MA'],
                     'AF' => ['AE', 'MA']
