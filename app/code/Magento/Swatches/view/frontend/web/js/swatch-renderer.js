@@ -840,27 +840,29 @@ define([
                 }
             );
 
-            if (result.oldPrice.amount !== result.finalPrice.amount) {
-                $(this.options.slyOldPriceSelector).show();
-            } else {
-                $(this.options.slyOldPriceSelector).hide();
-            }
-
-            if (result.tierPrices.length) {
-                if (this.options.tierPriceTemplate) {
-                    tierPriceHtml = mageTemplate(
-                        this.options.tierPriceTemplate,
-                        {
-                            'tierPrices': result.tierPrices,
-                            '$t': $t,
-                            'currencyFormat': this.options.jsonConfig.currencyFormat,
-                            'priceUtils': priceUtils
-                        }
-                    );
-                    $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+            if (typeof(result) != "undefined") {
+                if (result.oldPrice.amount !== result.finalPrice.amount) {
+                    $(this.options.slyOldPriceSelector).show();
+                } else {
+                    $(this.options.slyOldPriceSelector).hide();
                 }
-            } else {
-                $(this.options.tierPriceBlockSelector).hide();
+
+                if (result.tierPrices.length) {
+                    if (this.options.tierPriceTemplate) {
+                        tierPriceHtml = mageTemplate(
+                            this.options.tierPriceTemplate,
+                            {
+                                'tierPrices': result.tierPrices,
+                                '$t': $t,
+                                'currencyFormat': this.options.jsonConfig.currencyFormat,
+                                'priceUtils': priceUtils
+                            }
+                        );
+                        $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+                    }
+                } else {
+                    $(this.options.tierPriceBlockSelector).hide();
+                }
             }
         },
 
