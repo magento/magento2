@@ -3,9 +3,9 @@
  * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\Model\AnalyticsConnector;
 
+use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Setup\InstallData;
 use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Config\Model\Config;
@@ -13,7 +13,6 @@ use Magento\Integration\Api\OauthServiceInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\App\Config\Storage\WriterInterface;
 use Psr\Log\LoggerInterface;
 
 class SignUpCommand implements AnalyticsCommandInterface
@@ -46,9 +45,10 @@ class SignUpCommand implements AnalyticsCommandInterface
     private $httpClientFactory;
 
     /**
-     * #@var WriterInterface
+     * @var AnalyticsToken
      */
-    private $configWriter;
+    private $analyticsToken;
+
     /**
      * @var LoggerInterface
      */
@@ -56,12 +56,13 @@ class SignUpCommand implements AnalyticsCommandInterface
 
     /**
      * SignUpCommand constructor.
+     *
      * @param IntegrationServiceInterface $integrationService
      * @param Config $config
      * @param StoreManagerInterface $storeManager
      * @param OauthServiceInterface $oauthService
      * @param ZendClientFactory $zendClientFactory
-     * @param WriterInterface $configWriter
+     * @param AnalyticsToken $analyticsToken
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -70,7 +71,7 @@ class SignUpCommand implements AnalyticsCommandInterface
         StoreManagerInterface $storeManager,
         OauthServiceInterface $oauthService,
         ZendClientFactory $zendClientFactory,
-        WriterInterface $configWriter,
+        AnalyticsToken $analyticsToken,
         LoggerInterface $logger
     ) {
         $this->integrationService = $integrationService;
@@ -78,7 +79,7 @@ class SignUpCommand implements AnalyticsCommandInterface
         $this->storeManager = $storeManager;
         $this->oauthService = $oauthService;
         $this->httpClientFactory = $zendClientFactory;
-        $this->configWriter = $configWriter;
+        $this->analyticsToken = $analyticsToken;
         $this->logger = $logger;
     }
 
@@ -130,6 +131,6 @@ class SignUpCommand implements AnalyticsCommandInterface
      */
     private function saveToken($token)
     {
-        $this->configWriter->save('analytics/ma/token', $token);
+        $this->analyticsToken->setToken($token);
     }
 }

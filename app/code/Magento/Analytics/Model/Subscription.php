@@ -3,7 +3,6 @@
  * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\Model;
 
 use Magento\Config\Model\Config\Structure\Element\Field;
@@ -12,6 +11,9 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory as ConfigValueFactory;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/*
+ * Model for handling of changing of subscription status to Magento BI.
+ */
 class Subscription
 {
     /**

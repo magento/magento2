@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Model\Config\Backend\Enabled;
 
 use Magento\Analytics\Model\FlagManager;
+use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Config\Value;
 
@@ -46,15 +47,25 @@ class SubscriptionHandler
     private $flagManager;
 
     /**
+     * Model for handling Magento BI token value.
+     *
+     * @var AnalyticsToken
+     */
+    private $analyticsToken;
+
+    /**
      * @param WriterInterface $configWriter
      * @param FlagManager $flagManager
+     * @param AnalyticsToken $analyticsToken
      */
     public function __construct(
         WriterInterface $configWriter,
-        FlagManager $flagManager
+        FlagManager $flagManager,
+        AnalyticsToken $analyticsToken
     ) {
         $this->configWriter = $configWriter;
         $this->flagManager = $flagManager;
+        $this->analyticsToken = $analyticsToken;
     }
 
     /**
@@ -70,10 +81,10 @@ class SubscriptionHandler
 
             $enabled = $configValue->getData('value');
 
-            if ($enabled) {
+            if ($enabled && !$this->analyticsToken->isTokenExist()) {
                 $this->setCronSchedule();
                 $this->setAttemptsFlag();
-            } else {
+            } elseif(!$enabled) {
                 $this->unsetAttemptsFlag();
             }
         }

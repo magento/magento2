@@ -6,6 +6,7 @@
 
 namespace Magento\Analytics\Test\Unit\Model\Config\Backend\Enabled;
 
+use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Analytics\Model\FlagManager;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -29,6 +30,11 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
      * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configWriterMock;
+
+    /**
+     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $tokenMock;
 
     /**
      * @var Value
@@ -67,6 +73,10 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->tokenMock = $this->getMockBuilder(AnalyticsToken::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->configValue = $this->objectManagerHelper->getObject(
@@ -82,6 +92,7 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
                 'flagManager' => $this->flagManagerMock,
                 'configWriter' => $this->configWriterMock,
                 'attemptsInitValue' => $this->attemptsInitValue,
+                'analyticsToken' => $this->tokenMock,
             ]
         );
     }
@@ -96,6 +107,10 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method('getValue')
             ->willReturn(0);
+        $this->tokenMock
+            ->expects($this->once())
+            ->method('isTokenExist')
+            ->willReturn(false);
 
         $this->configWriterMock
             ->expects($this->once())
