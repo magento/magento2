@@ -39,7 +39,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
      */
     private $objectMock;
 
-    /** @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
     private $serializerMock;
 
     protected function setUp()
@@ -55,7 +55,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
         $this->objectMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class, [], [], '', false);
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
     }
 
     public function testAroundDelete()

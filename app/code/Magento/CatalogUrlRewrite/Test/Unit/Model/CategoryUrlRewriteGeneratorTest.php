@@ -34,7 +34,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $categoryRepository;
 
-    /** @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
     protected $serializer;
 
     /**
@@ -42,7 +42,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class, [], [], '', false);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
         $this->serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(

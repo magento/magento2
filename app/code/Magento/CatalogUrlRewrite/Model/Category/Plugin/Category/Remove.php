@@ -12,7 +12,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class Remove
 {
@@ -25,25 +25,25 @@ class Remove
     /** @var ChildrenCategoriesProvider */
     protected $childrenCategoriesProvider;
 
-    /** @var SerializerInterface */
+    /** @var Json */
     private $serializer;
 
     /**
      * @param UrlPersistInterface $urlPersist
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
-     * @param SerializerInterface|null $serializer
+     * @param Json|null $serializer
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         ChildrenCategoriesProvider $childrenCategoriesProvider,
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**

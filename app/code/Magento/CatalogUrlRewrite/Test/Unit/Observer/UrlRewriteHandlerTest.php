@@ -11,7 +11,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,7 +68,7 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
+        $this->serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
 

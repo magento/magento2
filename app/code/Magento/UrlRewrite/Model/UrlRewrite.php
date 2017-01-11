@@ -6,7 +6,7 @@
 namespace Magento\UrlRewrite\Model;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * @method int getEntityId()
@@ -26,7 +26,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 class UrlRewrite extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -37,7 +37,7 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @param SerializerInterface $serializer
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -45,9 +45,9 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 

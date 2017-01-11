@@ -41,12 +41,12 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var  ProductScopeRewriteGenerator */
     private $productScopeGenerator;
 
-    /** @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
     private $serializer;
 
     public function setUp()
     {
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class, [], [], '', false);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
         $this->serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(

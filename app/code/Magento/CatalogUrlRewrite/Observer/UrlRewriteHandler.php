@@ -13,7 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class UrlRewriteHandler
 {
@@ -38,7 +38,7 @@ class UrlRewriteHandler
     /** @var CategoryBasedProductRewriteGenerator */
     private $categoryBasedProductRewriteGenerator;
 
-    /** @var SerializerInterface */
+    /** @var Json */
     private $serializer;
 
     /**
@@ -47,7 +47,7 @@ class UrlRewriteHandler
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param SerializerInterface|null $serializer
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider,
@@ -55,14 +55,14 @@ class UrlRewriteHandler
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         UrlPersistInterface $urlPersist,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**

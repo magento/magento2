@@ -26,7 +26,7 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
             false
         );
         $resourceCollection = $this->getMock(\Magento\Framework\Data\Collection\AbstractDb::class, [], [], '', false);
-        $serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class, [], [], '', false);
+        $serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
         $serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(

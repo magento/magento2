@@ -7,7 +7,7 @@ namespace Magento\UrlRewrite\Service\V1\Data;
 
 use Magento\Framework\Api\AbstractSimpleObject;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Data abstract class for url storage
@@ -40,7 +40,7 @@ class UrlRewrite extends AbstractSimpleObject
     ];
 
     /**
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -48,13 +48,13 @@ class UrlRewrite extends AbstractSimpleObject
      * UrlRewrite constructor.
      *
      * @param array $data
-     * @param SerializerInterface $serializer
+     * @param Json $serializer
      */
     public function __construct(
         $data = [],
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($data);
     }
 
