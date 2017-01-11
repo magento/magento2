@@ -120,11 +120,11 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
         $this->gateway->expects(self::once())
             ->method('submitCaseForGuarantee')
             ->with($caseEntity->getCaseId())
-            ->willReturn([]);
+            ->willReturn('');
 
         $this->logger->expects(self::once())
             ->method('error')
-            ->with('The "caseId" should not be empty.');
+            ->with('Cannot retrieve guarantee disposition for case: ' . $caseEntity->getEntityId() . '.');
 
         $result = $this->service->create($caseEntity->getOrderId());
         self::assertFalse($result);
@@ -140,16 +140,11 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $caseEntity = $this->getCaseEntity();
-        $data = [
-            'caseId' => $caseEntity->getCaseId(),
-            'guaranteeEligible' => true,
-            'guaranteeDisposition' => CaseInterface::GUARANTEE_IN_REVIEW
-        ];
 
         $this->gateway->expects(self::once())
             ->method('submitCaseForGuarantee')
             ->with($caseEntity->getCaseId())
-            ->willReturn($data);
+            ->willReturn(CaseInterface::GUARANTEE_IN_REVIEW);
 
         $this->logger->expects(self::never())
             ->method('error');
@@ -159,7 +154,6 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
 
         $updatedCase = $this->getCaseEntity();
         self::assertEquals(CaseInterface::GUARANTEE_IN_REVIEW, $updatedCase->getGuaranteeDisposition());
-        self::assertTrue((bool) $updatedCase->isGuaranteeEligible());
         self::assertEquals(CaseInterface::STATUS_PROCESSING, $updatedCase->getStatus());
 
         /** @var OrderRepositoryInterface $orderRepository */
@@ -167,7 +161,6 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
         $order = $orderRepository->get($updatedCase->getOrderId());
         $histories = $order->getStatusHistories();
         static::assertNotEmpty($histories);
-
 
         /** @var OrderStatusHistoryInterface $caseCreationComment */
         $caseCreationComment = array_pop($histories);

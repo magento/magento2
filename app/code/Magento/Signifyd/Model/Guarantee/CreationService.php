@@ -6,12 +6,12 @@
 namespace Magento\Signifyd\Model\Guarantee;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Signifyd\Model\CaseManagement;
 use Magento\Signifyd\Model\CaseUpdatingServiceFactory;
 use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use Psr\Log\LoggerInterface;
-use Magento\Signifyd\Model\CaseManagement;
 
 /**
  * Register guarantee at Signifyd and updates case entity
@@ -74,7 +74,15 @@ class CreationService
         $updatingService = $this->caseUpdatingServiceFactory->create('guarantees/creation');
 
         try {
-            $data = $this->gateway->submitCaseForGuarantee($caseEntity->getCaseId());
+            $disposition = $this->gateway->submitCaseForGuarantee($caseEntity->getCaseId());
+            if (!$disposition) {
+                $this->logger->error("Cannot retrieve guarantee disposition for case: {$caseEntity->getEntityId()}.");
+                return false;
+            }
+            $data = [
+                'caseId' => $caseEntity->getCaseId(),
+                'guaranteeDisposition' => $disposition
+            ];
             $updatingService->update($data);
         } catch (ApiCallException $e) {
             $this->logger->error($e->getMessage());
