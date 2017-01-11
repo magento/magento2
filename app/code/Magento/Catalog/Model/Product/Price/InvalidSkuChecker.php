@@ -34,7 +34,12 @@ class InvalidSkuChecker
     public function retrieveInvalidSkuList(array $skus, array $allowedProductTypes, $allowedPriceTypeValue = false)
     {
         $idsBySku = $this->productIdLocator->retrieveProductIdsBySkus($skus);
-        $skuDiff = array_diff($skus, array_keys($idsBySku));
+        $existingSkus = array_keys($idsBySku);
+        $skuDiff = array_udiff(
+            $skus,
+            $existingSkus,
+            'strcasecmp'
+        );
 
         foreach ($idsBySku as $sku => $ids) {
             foreach ($ids as $type) {
@@ -42,7 +47,7 @@ class InvalidSkuChecker
 
                 if ($allowedPriceTypeValue
                     && $type == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
-                    && $this->productRepository->get($sku)->getPriceType() != $allowedProductTypes
+                    && $this->productRepository->get($sku)->getPriceType() != $allowedPriceTypeValue
                 ) {
                     $valueTypeIsAllowed = true;
                 }
