@@ -5,7 +5,7 @@
  */
 namespace Magento\UrlRewrite\Model;
 
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
 
 /**
  * This class is to be used as a container for new generated url rewrites by adding new ones using merge method
@@ -24,7 +24,7 @@ class MergeDataProvider
     /**
      * Adds url rewrites to class data container by removing duplicates by a unique key
      *
-     * @param UrlRewrite[] $urlRewritesArray
+     * @param UrlRewriteService[] $urlRewritesArray
      * @return void
      */
     public function merge(array $urlRewritesArray)
@@ -42,7 +42,7 @@ class MergeDataProvider
     /**
      * Returns the data added to container
      *
-     * @return UrlRewrite[]
+     * @return UrlRewriteService[]
      */
     public function getData()
     {
