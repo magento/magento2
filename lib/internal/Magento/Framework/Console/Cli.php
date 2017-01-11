@@ -236,7 +236,7 @@ class Cli extends Console\Application
      */
     private function writeGenerationDirectoryReadError()
     {
-        $output = new Console\Output\ConsoleOutput();
+        $output = new \Symfony\Component\Console\Output\ConsoleOutput();
         $output->writeln(
             '<error>'
             . 'Command line user does not have read and write permissions on ' . Io::DEFAULT_DIRECTORY . ' directory. '
