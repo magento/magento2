@@ -9,7 +9,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\Signifyd\Model\Validators\CaseIdValidator;
 
 /**
  * Performs Signifyd case entity updating operations.
@@ -27,11 +26,6 @@ class CaseUpdatingService implements CaseUpdatingServiceInterface
     private $caseRepository;
 
     /**
-     * @var CaseIdValidator
-     */
-    private $caseIdValidator;
-
-    /**
      * @var CommentsHistoryUpdater
      */
     private $commentsHistoryUpdater;
@@ -41,18 +35,15 @@ class CaseUpdatingService implements CaseUpdatingServiceInterface
      *
      * @param MessageGeneratorInterface $messageGenerator
      * @param CaseRepositoryInterface $caseRepository
-     * @param CaseIdValidator $caseIdValidator
      * @param CommentsHistoryUpdater $commentsHistoryUpdater
      */
     public function __construct(
         MessageGeneratorInterface $messageGenerator,
         CaseRepositoryInterface $caseRepository,
-        CaseIdValidator $caseIdValidator,
         CommentsHistoryUpdater $commentsHistoryUpdater
     ) {
         $this->messageGenerator = $messageGenerator;
         $this->caseRepository = $caseRepository;
-        $this->caseIdValidator = $caseIdValidator;
         $this->commentsHistoryUpdater = $commentsHistoryUpdater;
     }
 
@@ -66,7 +57,7 @@ class CaseUpdatingService implements CaseUpdatingServiceInterface
      */
     public function update(array $data)
     {
-        if (!$this->caseIdValidator->validate($data)) {
+        if (empty($data['caseId'])) {
             throw new LocalizedException(__('The "%1" should not be empty.', 'caseId'));
         }
 

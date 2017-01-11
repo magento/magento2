@@ -63,26 +63,39 @@ class GeneratorFactory
      */
     public function create($type)
     {
+        $className = BaseGenerator::class;
         switch ($type) {
             case self::$caseCreation:
-                $className = CaseCreation::class;
+                $classConfig = [
+                    'template' => 'Signifyd Case %1 has been created for order.',
+                    'requiredParams' => ['caseId']
+                ];
                 break;
             case self::$caseRescore:
+                $classConfig = [];
                 $className = CaseRescore::class;
                 break;
             case self::$caseReview:
-                $className = CaseReview::class;
+                $classConfig = [
+                    'template' => 'Case Update: Case Review was completed. Review Deposition is %1.',
+                    'requiredParams' => ['reviewDisposition']
+                ];
                 break;
             case self::$guaranteeCompletion:
-                $className = GuaranteeCompletion::class;
+                $classConfig = [
+                    'template' => 'Case Update: Guarantee Disposition is %1.',
+                    'requiredParams' => ['guaranteeDisposition']
+                ];
                 break;
             case self::$guaranteeCreation:
-                $className = GuaranteeCreation::class;
+                $classConfig = [
+                    'template' => 'Case Update: Case is submitted for guarantee.'
+                ];
                 break;
             default:
                 throw new \InvalidArgumentException('Specified message type does not supported.');
         }
 
-        return $this->objectManager->create($className);
+        return $this->objectManager->create($className, $classConfig);
     }
 }

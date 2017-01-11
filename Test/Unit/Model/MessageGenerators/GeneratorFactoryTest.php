@@ -7,12 +7,9 @@ namespace Magento\Signifyd\Test\Unit\Model\MessageGenerators;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Signifyd\Model\MessageGenerators\CaseCreation;
+use Magento\Signifyd\Model\MessageGenerators\BaseGenerator;
 use Magento\Signifyd\Model\MessageGenerators\CaseRescore;
-use Magento\Signifyd\Model\MessageGenerators\CaseReview;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
-use Magento\Signifyd\Model\MessageGenerators\GuaranteeCompletion;
-use Magento\Signifyd\Model\MessageGenerators\GuaranteeCreation;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -67,7 +64,7 @@ class GeneratorFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($generator);
 
         $instance = $this->factory->create($type);
-        static::assertInstanceOf($className, $instance);
+        self::assertInstanceOf($className, $instance);
     }
 
     /**
@@ -78,11 +75,11 @@ class GeneratorFactoryTest extends \PHPUnit_Framework_TestCase
     public function typeDataProvider()
     {
         return [
-            ['cases/creation', CaseCreation::class],
+            ['cases/creation', BaseGenerator::class],
+            ['cases/review', BaseGenerator::class],
             ['cases/rescore', CaseRescore::class],
-            ['cases/review', CaseReview::class],
-            ['guarantees/completion', GuaranteeCompletion::class],
-            ['guarantees/creation', GuaranteeCreation::class],
+            ['guarantees/completion', BaseGenerator::class],
+            ['guarantees/creation', BaseGenerator::class],
         ];
     }
 
