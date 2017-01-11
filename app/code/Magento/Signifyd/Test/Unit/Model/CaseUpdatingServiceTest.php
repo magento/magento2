@@ -12,7 +12,6 @@ use Magento\Signifyd\Model\CaseUpdatingService;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
 use Magento\Signifyd\Model\MessageGeneratorException;
 use Magento\Signifyd\Model\MessageGeneratorInterface;
-use Magento\Signifyd\Model\Validators\CaseIdValidator;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -41,11 +40,6 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     private $caseRepository;
 
     /**
-     * @var CaseIdValidator|MockObject
-     */
-    private $caseIdValidator;
-
-    /**
      * @var CommentsHistoryUpdater|MockObject
      */
     private $commentsHistoryUpdater;
@@ -67,11 +61,6 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getByCaseId'])
             ->getMockForAbstractClass();
 
-        $this->caseIdValidator = $this->getMockBuilder(CaseIdValidator::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['validate'])
-            ->getMock();
-
         $this->commentsHistoryUpdater = $this->getMockBuilder(CommentsHistoryUpdater::class)
             ->disableOriginalConstructor()
             ->setMethods(['addComment'])
@@ -80,7 +69,6 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $this->service = $this->objectManager->getObject(CaseUpdatingService::class, [
             'messageGenerator' => $this->messageGenerator,
             'caseRepository' => $this->caseRepository,
-            'caseIdValidator' => $this->caseIdValidator,
             'commentsHistoryUpdater' => $this->commentsHistoryUpdater
         ]);
     }
@@ -95,10 +83,6 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     public function testUpdateWithFailedValidation()
     {
         $data = [];
-        $this->caseIdValidator->expects(self::once())
-            ->method('validate')
-            ->with($data)
-            ->willReturn(false);
 
         $this->service->update($data);
     }
@@ -116,11 +100,6 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $data = [
             'caseId' => $caseId
         ];
-
-        $this->caseIdValidator->expects(self::once())
-            ->method('validate')
-            ->with($data)
-            ->willReturn(true);
 
         $this->caseRepository->expects(self::once())
             ->method('getByCaseId')
@@ -146,11 +125,6 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
             'orderId' => '10000012',
             'score' => 500
         ];
-
-        $this->caseIdValidator->expects(self::once())
-            ->method('validate')
-            ->with($data)
-            ->willReturn(true);
 
         $caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
@@ -198,11 +172,6 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
             'caseId' => $caseId
         ];
 
-        $this->caseIdValidator->expects(self::once())
-            ->method('validate')
-            ->with($data)
-            ->willReturn(true);
-
         $caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setCaseId'])
@@ -244,11 +213,6 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $data = [
             'caseId' => $caseId
         ];
-
-        $this->caseIdValidator->expects(self::once())
-            ->method('validate')
-            ->with($data)
-            ->willReturn(true);
 
         $caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
@@ -295,11 +259,6 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $data = [
             'caseId' => $caseId
         ];
-
-        $this->caseIdValidator->expects(self::once())
-            ->method('validate')
-            ->with($data)
-            ->willReturn(true);
 
         $caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()

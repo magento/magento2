@@ -11,6 +11,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\MessageGenerators\CaseCreation;
+use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -35,7 +36,9 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
-        $messageGenerator = $this->objectManager->create(CaseCreation::class);
+        /** @var GeneratorFactory $messageFactory */
+        $messageFactory = $this->objectManager->get(GeneratorFactory::class);
+        $messageGenerator = $messageFactory->create('cases/creation');
 
         $this->service = $this->objectManager->create(CaseUpdatingService::class, [
             'messageGenerator' => $messageGenerator

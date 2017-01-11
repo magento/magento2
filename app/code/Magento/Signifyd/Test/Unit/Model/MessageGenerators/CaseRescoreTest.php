@@ -5,11 +5,10 @@
  */
 namespace Magento\Signifyd\Test\Unit\Model\MessageGenerators;
 
-use Magento\Signifyd\Model\MessageGenerators\CaseRescore;
-use Magento\Signifyd\Model\Validators\CaseIdValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
+use Magento\Signifyd\Model\MessageGenerators\CaseRescore;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -58,8 +57,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
-            'caseIdValidator' => new CaseIdValidator(),
-            'caseRepository'    => $this->caseRepository
+            'caseRepository' => $this->caseRepository
         ]);
 
     }
@@ -67,7 +65,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
     /**
      * Data array without required attribute caseId.
      *
-     * @expectedException        \Magento\Signifyd\Model\MessageGeneratorException
+     * @expectedException \Magento\Signifyd\Model\MessageGeneratorException
      * @expectedExceptionMessage The "caseId" should not be empty
      */
     public function testGenerateEmptyCaseIdException()
@@ -78,7 +76,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
     /**
      * Case entity was not found in DB.
      *
-     * @expectedException        \Magento\Signifyd\Model\MessageGeneratorException
+     * @expectedException \Magento\Signifyd\Model\MessageGeneratorException
      * @expectedExceptionMessage Case entity not found.
      */
     public function testGenerateNotFoundException()
@@ -89,8 +87,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
-            'caseIdValidator' => new CaseIdValidator(),
-            'caseRepository'    => $this->caseRepository
+            'caseRepository' => $this->caseRepository
         ]);
 
         $this->caseRescore->generate(self::$data);
@@ -111,7 +108,6 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->case);
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
-            'caseIdValidator' => new CaseIdValidator(),
             'caseRepository' => $this->caseRepository
         ]);
 
@@ -137,7 +133,6 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->case);
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
-            'caseIdValidator' => new CaseIdValidator(),
             'caseRepository' => $this->caseRepository
         ]);
 
