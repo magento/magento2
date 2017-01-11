@@ -11,6 +11,8 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class Remove
 {
@@ -23,26 +25,32 @@ class Remove
     /** @var ChildrenCategoriesProvider */
     protected $childrenCategoriesProvider;
 
+    /** @var SerializerInterface */
+    private $serializer;
+
     /**
      * @param UrlPersistInterface $urlPersist
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
+     * @param SerializerInterface|null $serializer
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
-        ChildrenCategoriesProvider $childrenCategoriesProvider
+        ChildrenCategoriesProvider $childrenCategoriesProvider,
+        SerializerInterface $serializer = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
      * Remove product urls from storage
      *
      * @param \Magento\Catalog\Model\ResourceModel\Category $subject
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @param CategoryInterface $category
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -77,7 +85,7 @@ class Remove
         );
         $this->urlPersist->deleteByData(
             [
-                UrlRewrite::METADATA => serialize(['category_id' => $categoryId]),
+                UrlRewrite::METADATA => $this->serializer->serialize(['category_id' => $categoryId]),
                 UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
             ]
         );

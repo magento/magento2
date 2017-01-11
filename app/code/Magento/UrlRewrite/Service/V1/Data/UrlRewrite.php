@@ -6,6 +6,8 @@
 namespace Magento\UrlRewrite\Service\V1\Data;
 
 use Magento\Framework\Api\AbstractSimpleObject;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Data abstract class for url storage
@@ -36,6 +38,25 @@ class UrlRewrite extends AbstractSimpleObject
         self::METADATA => null,
         self::DESCRIPTION => null,
     ];
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * UrlRewrite constructor.
+     *
+     * @param array $data
+     * @param SerializerInterface $serializer
+     */
+    public function __construct(
+        $data = [],
+        SerializerInterface $serializer = null
+    ) {
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        parent::__construct($data);
+    }
 
     /**
      * Get data by key
@@ -216,7 +237,7 @@ class UrlRewrite extends AbstractSimpleObject
     public function getMetadata()
     {
         $metadata = $this->_get(self::METADATA);
-        return !empty($metadata) ? unserialize($metadata) : [];
+        return !empty($metadata) ? $this->serializer->unserialize($metadata) : [];
     }
 
     /**
@@ -227,7 +248,7 @@ class UrlRewrite extends AbstractSimpleObject
     public function setMetadata($metadata)
     {
         if (is_array($metadata)) {
-            $metadata = serialize($metadata);
+            $metadata = $this->serializer->serialize($metadata);
         }
         return $this->setData(UrlRewrite::METADATA, $metadata);
     }
