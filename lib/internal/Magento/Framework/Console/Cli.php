@@ -8,7 +8,6 @@ namespace Magento\Framework\Console;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
-use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -98,7 +97,9 @@ class Cli extends Console\Application
         if ($this->initException) {
             $output->writeln(
                 "<error>We're sorry, an error occurred. Try clearing the cache and code generation directories. "
-                . "By default, they are: var/cache, var/di, var/generation, and var/page_cache.</error>"
+                . "By default, they are: " . $this->getDefaultDirectoryPath(DirectoryList::CACHE) . ", "
+                . $this->getDefaultDirectoryPath(DirectoryList::DI) . ", "
+                . $this->getDefaultDirectoryPath(DirectoryList::GENERATION) . ", and var/page_cache.</error>"
             );
 
             throw $this->initException;
@@ -239,7 +240,8 @@ class Cli extends Console\Application
         $output = new Console\Output\ConsoleOutput();
         $output->writeln(
             '<error>'
-            . 'Command line user does not have read and write permissions on ' . Io::DEFAULT_DIRECTORY . ' directory. '
+            . 'Command line user does not have read and write permissions on '
+            . $this->getDefaultDirectoryPath(DirectoryList::GENERATION) . ' directory. '
             . 'Please address this issue before using Magento command line.'
             . '</error>'
         );
@@ -265,5 +267,23 @@ class Cli extends Console\Application
         }
 
         return $commands;
+    }
+
+    /**
+     * Get default directory path by code
+     *
+     * @param string $code
+     * @return string
+     */
+    private function getDefaultDirectoryPath($code)
+    {
+        $config = DirectoryList::getDefaultConfig();
+        $result = '';
+
+        if (isset($config[$code][DirectoryList::PATH])) {
+            $result = $config[$code][DirectoryList::PATH];
+        }
+
+        return $result;
     }
 }
