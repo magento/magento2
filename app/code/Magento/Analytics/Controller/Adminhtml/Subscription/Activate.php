@@ -15,6 +15,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class Activate
+ */
 class Activate extends Action
 {
     /**
@@ -44,6 +47,8 @@ class Activate extends Action
     private $subscriptionApprovedField = 'analytics_subscription_checkbox';
 
     /**
+     * Activate constructor.
+     *
      * @param Context $context
      * @param Subscription $subscription
      * @param LoggerInterface $logger

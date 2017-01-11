@@ -43,6 +43,7 @@ class InstallData implements InstallDataInterface
 
     /**
      * InstallData constructor.
+     *
      * @param NotificationTime $notificationTime
      * @param FlagResource $flagResource
      * @param IntegrationService $integrationService
