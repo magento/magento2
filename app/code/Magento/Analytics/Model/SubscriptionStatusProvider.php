@@ -45,16 +45,16 @@ class SubscriptionStatusProvider
      */
     public function getStatus()
     {
+        $status = "Disabled";
         $isSubscriptionEnabled = $this->isSubscriptionEnabled();
         $hasToken = $this->analyticsToken->isTokenExist();
         if ($isSubscriptionEnabled && $hasToken) {
-            return "Enabled";
+            $status = "Enabled";
+        } elseif ($isSubscriptionEnabled && !$hasToken) {
+            $status = "Pending";
         }
-        if ($isSubscriptionEnabled && !$hasToken) {
-            return "Pending";
-        } else {
-            return "Disabled";
-        }
+
+        return $status;
     }
 
     /**
