@@ -23,7 +23,7 @@ class Config
 
     const XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY = 'tax/notification/ignore_price_display';
 
-    const XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_EXCLUDING_TAX_SETTINGS = 'tax/notification/ignore_price_excluding_tax';
+    const XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT = 'tax/notification/ignore_apply_discount';
 
     const XML_PATH_TAX_NOTIFICATION_INFO_URL = 'tax/notification/info_url';
 
@@ -764,18 +764,19 @@ class Config
     }
 
     /**
-     * Check if admin notification about possible issues related to tax display settings should be ignored.
+     * Check if admin notification related to misconfiguration of "Apply Discount On Prices" should be ignored.
      *
-     * For the case when prices under "Calculation Settings" are set to "Excluding Tax"
-     * and at the same time some of price display settings are set to "Including Tax"
+     * Warning is displayed in case when "Catalog Prices" = "Excluding Tax"
+     * AND "Apply Discount On Prices" = "Including Tax"
+     * AND "Apply Customer Tax" = "After Discount"
      *
      * @param null|string|Store $store
      * @return bool
      */
-    public function isWrongPriceExcludingTaxSettingsIgnored($store = null)
+    public function isWrongApplyDiscountSettingIgnored($store = null)
     {
         return (bool)$this->_scopeConfig->getValue(
-            self::XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_EXCLUDING_TAX_SETTINGS,
+            self::XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );

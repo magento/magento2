@@ -52,7 +52,7 @@ class Notification extends \Magento\Framework\App\Config\Value
         if ($this->isValueChanged()) {
             $this->_resetNotificationFlag(Config::XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT);
             $this->_resetNotificationFlag(Config::XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY);
-            $this->_resetNotificationFlag(Config::XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_EXCLUDING_TAX_SETTINGS);
+            $this->_resetNotificationFlag(Config::XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT);
         }
         return parent::afterSave();
     }
