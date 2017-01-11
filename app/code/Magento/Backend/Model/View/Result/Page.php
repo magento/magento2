@@ -89,7 +89,7 @@ class Page extends View\Result\Page
      * @param string $containerName
      * @return $this
      */
-    private function moveBlockToContainer(View\Element\AbstractBlock $block, $containerName)
+    protected function moveBlockToContainer(View\Element\AbstractBlock $block, $containerName)
     {
         $this->layout->setChild($containerName, $block->getNameInLayout(), '');
         return $this;
