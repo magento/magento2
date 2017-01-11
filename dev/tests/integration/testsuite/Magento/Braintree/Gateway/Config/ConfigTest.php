@@ -6,7 +6,7 @@
 
 namespace Magento\Braintree\Gateway\Config;
 
-use Magento\Braintree\Model\Adminhtml\System\Config\CountryCreditCard;
+use Magento\Config\Model\Config as SystemConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -16,8 +16,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var Config */
     private $config;
 
-    /** @var CountryCreditCard */
-    private $countryCreditCardConfig;
+    /** @var SystemConfig */
+    private $systemConfig;
 
     protected function setUp()
     {
@@ -25,8 +25,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->config = $objectManager->create(Config::class, [
             'methodCode' => self::METHOD_CODE
         ]);
-        $this->countryCreditCardConfig = $objectManager->create(CountryCreditCard::class);
-        $this->countryCreditCardConfig->setPath('payment/braintree/countrycreditcard');
+        $this->systemConfig = $objectManager->create(SystemConfig::class);
     }
 
     /**
@@ -35,13 +34,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoDbIsolation enabled
      * @dataProvider countryCreditRetrievalProvider
-     * @param array $value
+     * @param string $value
      * @param array $expected
      */
-    public function testCountryCreditRetrieval(array $value, array $expected)
+    public function testCountryCreditRetrieval($value, array $expected)
     {
-        $this->countryCreditCardConfig->setValue($value);
-        $this->countryCreditCardConfig->save();
+        $this->systemConfig->setDataByPath('payment/' . self::METHOD_CODE . '/countrycreditcard', $value);
+        $this->systemConfig->save();
 
         $countrySpecificCardTypeConfig = $this->config->getCountrySpecificCardTypeConfig();
         $this->assertEquals($expected, $countrySpecificCardTypeConfig);
@@ -56,20 +55,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'empty_array' => [
-                'value' => [],
+                'value' => '[]',
                 'expected' => []
             ],
             'valid_data' => [
-                'value' => [
-                    [
-                        'country_id' => 'AF',
-                        'cc_types' => ['AE', 'VI']
-                    ],
-                    [
-                        'country_id' => 'US',
-                        'cc_types' => ['AE', 'VI', 'MA']
-                    ]
-                ],
+                'value' => '{"AF":["AE","VI"],"US":["AE","VI","MA"]}',
                 'expected' => [
                     'AF' => ['AE', 'VI'],
                     'US' => ['AE', 'VI', 'MA']
