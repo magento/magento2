@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Braintree\Model\Adminhtml\System\Config;
 
-use Magento\Braintree\Model\Adminhtml\System\Config\CountryCreditCard;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
@@ -40,24 +39,9 @@ class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
 
         $this->countryCreditCardConfig->load($this->countryCreditCardConfig->getId());
         $loadedHashedArray = $this->countryCreditCardConfig->getValue();
-        $loadedIndexedArray = $this->replaceHashes($loadedHashedArray);
+        // strip the random hashes added by routine before assertion
+        $loadedIndexedArray = array_values($loadedHashedArray);
         $this->assertEquals($value, $loadedIndexedArray);
-    }
-
-    /**
-     * Simple function that will replace random hashes at the root level with indices
-     *
-     * @param  $loadedHashedArray
-     * @return array
-     */
-    private function replaceHashes($loadedHashedArray)
-    {
-        $returnArray = [];
-        foreach ($loadedHashedArray as $creditCardConfig) {
-            $returnArray[] = $creditCardConfig;
-        }
-
-        return $returnArray;
     }
 
     public function saveAndLoadDataProvider()

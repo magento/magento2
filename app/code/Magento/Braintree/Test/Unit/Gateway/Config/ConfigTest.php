@@ -10,6 +10,7 @@ use Magento\Braintree\Gateway\Config\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class ConfigTest
@@ -38,7 +39,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock = $this->getMock(ScopeConfigInterface::class);
         $this->serializerMock = $this->getMock(Json::class);
 
-        $this->model = new Config($this->scopeConfigMock, $this->serializerMock, self::METHOD_CODE);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            Config::class,
+            [
+                'scopeConfig' => $this->scopeConfigMock,
+                'methodCode' => self::METHOD_CODE,
+                'serializer' => $this->serializerMock
+            ]
+        );
     }
 
     /**
@@ -46,16 +55,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @param array $expected
      * @dataProvider getCountrySpecificCardTypeConfigDataProvider
      */
-    public function testGetCountrySpecificCardTypeConfig($value, $expected)
+    public function testGetCountrySpecificCardTypeConfig($encodedValue, $value, $expected)
     {
         $this->scopeConfigMock->expects(static::once())
             ->method('getValue')
             ->with($this->getPath(Config::KEY_COUNTRY_CREDIT_CARD), ScopeInterface::SCOPE_STORE, null)
-            ->willReturn($value);
+            ->willReturn($encodedValue);
 
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
-            ->will($this->returnArgument(0));
+            ->willReturn($value);
 
         static::assertEquals(
             $expected,
@@ -70,10 +79,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
+                '{"GB":["VI","AE"],"US":["DI","JCB"]}',
                 ['GB' => ['VI', 'AE'], 'US' => ['DI', 'JCB']],
                 ['GB' => ['VI', 'AE'], 'US' => ['DI', 'JCB']]
             ],
             [
+                '""',
                 '',
                 []
             ]
@@ -158,16 +169,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @covers       \Magento\Braintree\Gateway\Config\Config::getCountryAvailableCardTypes
      * @dataProvider getCountrySpecificCardTypeConfigDataProvider
      */
-    public function testCountryAvailableCardTypes($data, $countryData)
+    public function testCountryAvailableCardTypes($encodedData, $data, $countryData)
     {
         $this->scopeConfigMock->expects(static::any())
             ->method('getValue')
             ->with($this->getPath(Config::KEY_COUNTRY_CREDIT_CARD), ScopeInterface::SCOPE_STORE, null)
-            ->willReturn($data);
+            ->willReturn($encodedData);
 
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
-            ->will($this->returnArgument(0));
+            ->willReturn($data);
 
         foreach ($countryData as $countryId => $types) {
             $result = $this->model->getCountryAvailableCardTypes($countryId);

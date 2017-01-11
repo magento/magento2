@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Braintree\Gateway\Config;
 
-use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Adminhtml\System\Config\CountryCreditCard;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -39,7 +38,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @param array $value
      * @param array $expected
      */
-    public function testCountryCreditRetrieval($value, $expected)
+    public function testCountryCreditRetrieval(array $value, array $expected)
     {
         $this->countryCreditCardConfig->setValue($value);
         $this->countryCreditCardConfig->save();

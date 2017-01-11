@@ -48,9 +48,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        Json $serializer,
         $methodCode = null,
-        $pathPattern = self::DEFAULT_PATH_PATTERN
+        $pathPattern = self::DEFAULT_PATH_PATTERN,
+        Json $serializer = null
     ) {
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
