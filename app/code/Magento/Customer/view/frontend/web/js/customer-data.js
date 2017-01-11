@@ -191,7 +191,7 @@ define([
                 privateContent = $.cookieStorage.get('private_content_version');
 
             if (_.isEmpty(storage.keys())) {
-                if (!_.isEmpty(privateContent)) {
+                if (_.isEmpty(privateContent)) {
                     this.reload([], false);
                 }
             } else if (this.needReload()) {
