@@ -12,7 +12,7 @@ class SetSpecialPriceStartDateObserver implements ObserverInterface
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    protected $localeDate;
+    private $localeDate;
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
