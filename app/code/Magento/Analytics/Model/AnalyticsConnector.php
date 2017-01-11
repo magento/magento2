@@ -26,7 +26,7 @@ class AnalyticsConnector
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        $commands,
+        array $commands,
         ObjectManagerInterface $objectManager
     ) {
         $this->commands = $commands;

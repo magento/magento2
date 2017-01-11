@@ -10,7 +10,6 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="signUp" xsi:type="string">Magento\Analytics\Model\AnalyticsConnector\SignUpCommand</item>
-                <item name="generateTokenCommand" xsi:type="string">Magento\Analytics\Model\AnalyticsConnector\GenerateTokenCommand</item>
             </argument>
         </arguments>
     </type>

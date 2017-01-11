@@ -13,14 +13,13 @@ use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\Flag\FlagResource;
 use Magento\Integration\Model\IntegrationService;
 use Magento\Config\Model\Config;
+use Magento\Analytics\Model\MagentoAnalyticsApiUser;
 
 /**
  * @codeCoverageIgnore
  */
 class InstallData implements InstallDataInterface
 {
-    const MAGENTO_API_USER_NAME_PATH = 'analytics/integration_name';
-
     /**
      * @var NotificationTime
      */
@@ -78,7 +77,7 @@ class InstallData implements InstallDataInterface
     private function getIntegrationData()
     {
         $integrationData = [
-            'name' => $this->config->getConfigDataValue(self::MAGENTO_API_USER_NAME_PATH),
+            'name' => $this->config->getConfigDataValue(MagentoAnalyticsApiUser::MAGENTO_API_USER_NAME_PATH),
             'all_resources' => false,
             'resource' => [
                 'Magento_Analytics::analytics',
