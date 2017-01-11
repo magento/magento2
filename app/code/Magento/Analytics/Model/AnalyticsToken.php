@@ -58,7 +58,7 @@ class AnalyticsToken
     /**
      * Get Magento BI token value.
      *
-     * @return mixed
+     * @return string|null
      */
     public function getToken()
     {
@@ -87,6 +87,6 @@ class AnalyticsToken
      */
     public function isTokenExist()
     {
-        return !!$this->getToken();
+        return (bool)$this->getToken();
     }
 }

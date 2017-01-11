@@ -19,6 +19,10 @@
                     <backend_model>Magento\Analytics\Model\Config\Backend\Enabled</backend_model>
                     <config_path>analytics/subscription/enabled</config_path>
                 </field>
+                <field id="label" translate="label" type="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Subscription status</label>
+                    <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\SubscriptionStatusLabel</frontend_model>
+                </field>
             </group>
             <group id="cron" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Cron</label>
