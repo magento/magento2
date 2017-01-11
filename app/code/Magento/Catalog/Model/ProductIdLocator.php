@@ -95,6 +95,10 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
             }
         }
 
-        return array_intersect_key($this->idsBySku, array_flip($skus));
+        return array_intersect_ukey(
+            $this->idsBySku,
+            array_flip($skus),
+            'strcasecmp'
+        );
     }
 }
