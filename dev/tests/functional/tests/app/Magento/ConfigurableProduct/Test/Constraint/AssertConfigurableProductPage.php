@@ -91,7 +91,6 @@ class AssertConfigurableProductPage extends AssertProductPage
             foreach($formOptions[$key]['options'] as $optKey => $optData){
                 $formOptions[$key]['options'][$optKey]['price'] = 0;
             }
-
         }
 
         $errors = $this->verifyData($configurableOptions, $formOptions, true, false);
