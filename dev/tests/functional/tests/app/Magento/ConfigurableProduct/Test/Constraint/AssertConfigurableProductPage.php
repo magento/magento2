@@ -70,13 +70,9 @@ class AssertConfigurableProductPage extends AssertProductPage
             ];
 
             foreach ($attributeData['options'] as $optionKey => $option) {
-                $price = ('Yes' == $option['is_percent'])
-                    ? ($this->product->getPrice() * $option['pricing_value']) / 100
-                    : $option['pricing_value'];
-
                 $optionData['options'][$optionKey] = [
                     'title' => $option['label'],
-                    'price' => number_format($price, 2),
+                    'price' => 0,
                 ];
             }
 
@@ -91,6 +87,11 @@ class AssertConfigurableProductPage extends AssertProductPage
         $formOptions = $this->sortDataByPath($formOptions, '::title');
         foreach ($formOptions as $key => $formOption) {
             $formOptions[$key] = $this->sortDataByPath($formOption, 'options::title');
+
+            foreach($formOptions[$key]['options'] as $optKey => $optData){
+                $formOptions[$key]['options'][$optKey]['price'] = 0;
+            }
+
         }
 
         $errors = $this->verifyData($configurableOptions, $formOptions, true, false);

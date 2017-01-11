@@ -41,7 +41,7 @@
             <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
             <data name="updatedProduct/data/configurable_attributes_data/dataset" xsi:type="string">two_new_options</data>
             <data name="updatedProduct/data/checkout_data/dataset" xsi:type="string">configurable_three_attributes</data>
-            <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">154</data>
+            <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">1</data>
             <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
             <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
             <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
