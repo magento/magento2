@@ -7,14 +7,13 @@ namespace Magento\Analytics\Model;
 
 use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Config\Model\Config;
-use Magento\Integration\Model\Integration;
 use Magento\Integration\Api\OauthServiceInterface;
 use Magento\Framework\Exception\NotFoundException;
 
 /**
- * Class MagentoApiUser
+ * Class AnalyticsApiUserProvider
  */
-class MagentoAnalyticsApiUser
+class AnalyticsApiUserProvider
 {
     const MAGENTO_API_USER_NAME_PATH = 'analytics/integration_name';
     /**
@@ -25,11 +24,6 @@ class MagentoAnalyticsApiUser
      * @var Config
      */
     private $config;
-
-    /**
-     * @var Integration
-     */
-    private $integration;
     /**
      * @var OauthServiceInterface
      */

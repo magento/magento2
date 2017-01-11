@@ -7,12 +7,12 @@ namespace Magento\Analytics\Model\AnalyticsConnector;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Config\Model\Config;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Psr\Log\LoggerInterface;
-use Magento\Analytics\Model\MagentoAnalyticsApiUser;
+use Magento\Analytics\Model\AnalyticsApiUserProvider;
 use Magento\Analytics\Model\TokenGenerator;
+use Magento\Store\Model\Store;
 
 class SignUpCommand implements AnalyticsCommandInterface
 {
@@ -22,11 +22,6 @@ class SignUpCommand implements AnalyticsCommandInterface
      * @var Config
      */
     private $config;
-
-    /**
-     * @var StoreManagerInterface\
-     */
-    private $storeManager;
 
     /**
      * @var ZendClientFactory
@@ -44,9 +39,9 @@ class SignUpCommand implements AnalyticsCommandInterface
     private $logger;
 
     /**
-     * @var MagentoAnalyticsApiUser
+     * @var AnalyticsApiUserProvider
      */
-    private $analyticsApiUser;
+    private $analyticsApiUserProvider;
     /**
      * @var TokenGenerator
      */
@@ -55,28 +50,25 @@ class SignUpCommand implements AnalyticsCommandInterface
     /**
      * SignUpCommand constructor.
      * @param Config $config
-     * @param StoreManagerInterface $storeManager
      * @param ZendClientFactory $zendClientFactory
      * @param AnalyticsToken $analyticsToken
      * @param LoggerInterface $logger
-     * @param MagentoAnalyticsApiUser $analyticsApiUser
+     * @param AnalyticsApiUserProvider $analyticsApiUser
      * @param TokenGenerator $tokenGenerator
      */
     public function __construct(
         Config $config,
-        StoreManagerInterface $storeManager,
         ZendClientFactory $zendClientFactory,
         AnalyticsToken $analyticsToken,
         LoggerInterface $logger,
-        MagentoAnalyticsApiUser $analyticsApiUser,
+        AnalyticsApiUserProvider $analyticsApiUser,
         TokenGenerator $tokenGenerator
     ) {
         $this->config = $config;
-        $this->storeManager = $storeManager;
         $this->httpClientFactory = $zendClientFactory;
         $this->analyticsToken = $analyticsToken;
         $this->logger = $logger;
-        $this->analyticsApiUser = $analyticsApiUser;
+        $this->analyticsApiUserProvider = $analyticsApiUser;
         $this->tokenGenerator = $tokenGenerator;
     }
 
@@ -86,46 +78,27 @@ class SignUpCommand implements AnalyticsCommandInterface
      */
     public function execute()
     {
-        $apiUsertoken = $this->analyticsApiUser->getToken();
-
-        if (!$apiUsertoken) {
-            $this->tokenGenerator->execute();
-            $apiUsertoken = $this->analyticsApiUser->getToken();
-        }
-
-        if ($apiUsertoken) {
-            $store = $this->storeManager->getStore();
-            $requestData = json_encode(
-                [
-                    "token" => $apiUsertoken,
-                    "url" => $store->getBaseUrl()
-                ]
-            );
-
-            $maEndPoint = $this->config->getConfigDataValue(self::MA_SIGNUP_URL_PATH);
-            /** @var ZendClient $httpClient */
-            $httpClient = $this->httpClientFactory->create();
-            $httpClient->setUri($maEndPoint);
-            $httpClient->setRawData($requestData);
-            $httpClient->setMethod(\Zend_Http_Client::POST);
-            try {
-                $response = $httpClient->request();
-                if ($response->getStatus() === 200) {
-                    $body = json_decode($response->getBody(), 1);
-
-                    if (isset($body['token'])) {
-                        $this->saveToken($body['token']);
-                    }
-                    return true;
-                }
-            } catch (\Zend_Http_Client_Exception $e) {
-                $this->logger->critical($e);
-            }
-        } else {
+        $apiUserToken = $this->getToken();
+        if (!$apiUserToken) {
             $this->logger->warning("The attempt of subscription was unsuccessful on step generate token.");
+            return false;
         }
-        $this->logger->warning("The attempt of subscription was unsuccessful on step sign-up.");
-        return false;
+        
+        $requestData = json_encode(
+            [
+                "token" => $apiUserToken,
+                "url" => $this->config->getConfigDataValue(Store::XML_PATH_UNSECURE_BASE_URL)
+            ]
+        );
+
+        $token = $this->getMAToken($requestData);
+        if (!$token) {
+            $this->logger->warning("The attempt of subscription was unsuccessful on step sign-up.");
+            return false;
+        }
+        $this->saveToken($token);
+
+        return true;
     }
 
     /**
@@ -136,5 +109,45 @@ class SignUpCommand implements AnalyticsCommandInterface
     private function saveToken($token)
     {
         $this->analyticsToken->setToken($token);
+    }
+
+    /**
+     * Get MA Token from MA Api
+     * @param array $requestData
+     * @return bool|string
+     */
+    private function getMAToken(array $requestData)
+    {
+        $maEndPoint = $this->config->getConfigDataValue(self::MA_SIGNUP_URL_PATH);
+        /** @var ZendClient $httpClient */
+        $httpClient = $this->httpClientFactory->create();
+        $httpClient->setUri($maEndPoint);
+        $httpClient->setRawData($requestData);
+        $httpClient->setMethod(\Zend_Http_Client::POST);
+        try {
+            $response = $httpClient->request();
+            if ($response->getStatus() === 200) {
+                $body = json_decode($response->getBody(), 1);
+                if (isset($body['token']) && !empty($body['token'])) {
+                    return $body['token'];
+                }
+            }
+        } catch (\Zend_Http_Client_Exception $e) {
+            $this->logger->critical($e);
+        }
+        return false;
+    }
+    
+    /**
+     * @return string|false
+     */
+    private function getToken()
+    {
+        $apiUserToken = $this->analyticsApiUserProvider->getToken();
+        if (!$apiUserToken) {
+            $this->tokenGenerator->execute();
+            $apiUserToken = $this->analyticsApiUserProvider->getToken();
+        }
+        return $apiUserToken;
     }
 }
