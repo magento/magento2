@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
@@ -16,37 +16,37 @@ use Magento\Framework\Serialize\Serializer\Json;
 class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler
+     * @var UrlRewriteHandler
      */
     protected $urlRewriteHandler;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ChildrenCategoriesProvider|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $childrenCategoriesProviderMock;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $categoryUrlRewriteGeneratorMock;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productUrlRewriteGeneratorMock;
 
     /**
-     * @var \Magento\UrlRewrite\Model\UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $urlPersistMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializerMock;
 

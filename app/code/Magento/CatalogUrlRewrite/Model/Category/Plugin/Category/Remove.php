@@ -5,45 +5,40 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Category;
 
-use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
-use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\Serializer\Json;
 
 class Remove
 {
-    /** @var UrlPersistInterface */
+    /** @var \Magento\UrlRewrite\Model\UrlPersistInterface */
     protected $urlPersist;
 
-    /** @var ProductUrlRewriteGenerator */
+    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator */
     protected $productUrlRewriteGenerator;
 
-    /** @var ChildrenCategoriesProvider */
+    /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider */
     protected $childrenCategoriesProvider;
 
-    /** @var Json */
+    /** @var \Magento\Framework\Serialize\Serializer\Json */
     private $serializer;
 
     /**
-     * @param UrlPersistInterface $urlPersist
-     * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
-     * @param ChildrenCategoriesProvider $childrenCategoriesProvider
-     * @param Json|null $serializer
+     * @param \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist
+     * @param \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator $productUrlRewriteGenerator
+     * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
-        UrlPersistInterface $urlPersist,
-        ProductUrlRewriteGenerator $productUrlRewriteGenerator,
-        ChildrenCategoriesProvider $childrenCategoriesProvider,
-        Json $serializer = null
+        \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist,
+        \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator $productUrlRewriteGenerator,
+        \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Serialize\Serializer\Json::class
+        );
     }
 
     /**
@@ -51,14 +46,14 @@ class Remove
      *
      * @param \Magento\Catalog\Model\ResourceModel\Category $subject
      * @param \Closure $proceed
-     * @param CategoryInterface $category
+     * @param \Magento\Catalog\Api\Data\CategoryInterface $category
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDelete(
         \Magento\Catalog\Model\ResourceModel\Category $subject,
         \Closure $proceed,
-        CategoryInterface $category
+        \Magento\Catalog\Api\Data\CategoryInterface $category
     ) {
         $categoryIds = $this->childrenCategoriesProvider->getChildrenIds($category, true);
         $categoryIds[] = $category->getId();
@@ -80,13 +75,13 @@ class Remove
         $this->urlPersist->deleteByData(
             [
                 UrlRewrite::ENTITY_ID => $categoryId,
-                UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+                UrlRewrite::ENTITY_TYPE => \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator::ENTITY_TYPE,
             ]
         );
         $this->urlPersist->deleteByData(
             [
                 UrlRewrite::METADATA => $this->serializer->serialize(['category_id' => $categoryId]),
-                UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                UrlRewrite::ENTITY_TYPE => \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE,
             ]
         );
     }
