@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create;
 
-use Magento\Framework\DataObject;
 use Magento\Mtf\Block\Block;
 
 /**
