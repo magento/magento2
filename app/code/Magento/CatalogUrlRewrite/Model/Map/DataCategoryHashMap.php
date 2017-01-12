@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Api\Data\CategoryInterface;
@@ -21,24 +20,18 @@ class DataCategoryHashMap implements HashMapInterface
     /** @var CategoryRepository */
     private $categoryRepository;
 
-    /** @var Collection */
-    private $collection;
-
     /** @var Category */
     private $categoryResource;
 
     /**
      * @param CategoryRepository $categoryRepository
-     * @param Collection $collection
      * @param Category $categoryResource
      */
     public function __construct(
         CategoryRepository $categoryRepository,
-        Collection $collection,
         Category $categoryResource
     ) {
         $this->categoryRepository = $categoryRepository;
-        $this->collection = $collection;
         $this->categoryResource = $categoryResource;
     }
 
@@ -52,8 +45,7 @@ class DataCategoryHashMap implements HashMapInterface
     {
         if (!isset($this->hashMap[$categoryId])) {
             $category = $this->categoryRepository->get($categoryId);
-            $this->hashMap[$categoryId] = $this->collection->addIdFilter($this->getAllCategoryChildrenIds($category))
-                ->getAllIds();
+            $this->hashMap[$categoryId] = $this->getAllCategoryChildrenIds($category);
         }
         return $this->hashMap[$categoryId];
     }

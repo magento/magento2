@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
 
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Framework\DB\Select;
 use Magento\Catalog\Model\CategoryRepository;
@@ -22,9 +21,6 @@ class DataCategoryHashMapTest extends \PHPUnit_Framework_TestCase
     /** @var CategoryRepository|\PHPUnit_Framework_MockObject_MockObject */
     private $categoryRepository;
 
-    /** @var Collection|\PHPUnit_Framework_MockObject_MockObject */
-    private $collection;
-
     /** @var CategoryResource|\PHPUnit_Framework_MockObject_MockObject */
     private $categoryResource;
 
@@ -34,7 +30,6 @@ class DataCategoryHashMapTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->categoryRepository = $this->getMock(CategoryRepository::class, [], [], '', false);
-        $this->collection = $this->getMock(Collection::class, ['addIdFilter', 'getAllIds'], [], '', false);
         $this->categoryResource = $this->getMock(
             CategoryResource::class,
             ['getConnection', 'getEntityTable'],
@@ -47,7 +42,6 @@ class DataCategoryHashMapTest extends \PHPUnit_Framework_TestCase
             DataCategoryHashMap::class,
             [
                 'categoryRepository' => $this->categoryRepository,
-                'collection' => $this->collection,
                 'categoryResource' => $this->categoryResource
             ]
         );
@@ -69,15 +63,6 @@ class DataCategoryHashMapTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($categoryMock);
         $categoryMock->expects($this->any())
-            ->method('getResourceCollection')
-            ->willReturn($this->collection);
-        $this->collection->expects($this->any())
-            ->method('addIdFilter')
-            ->willReturnSelf();
-        $this->collection->expects($this->exactly(3))
-            ->method('getAllIds')
-            ->willReturnOnConsecutiveCalls($categoryIds, $categoryIdsOther, $categoryIds);
-        $categoryMock->expects($this->any())
             ->method('getResource')
             ->willReturn($this->categoryResource);
         $this->categoryResource->expects($this->any())
@@ -97,7 +82,7 @@ class DataCategoryHashMapTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $connectionAdapterMock->expects($this->any())
             ->method('fetchCol')
-            ->willReturnOnConsecutiveCalls($categoryIds, $categoryIdsOther);
+            ->willReturnOnConsecutiveCalls($categoryIds, $categoryIdsOther, $categoryIds);
 
         $this->assertEquals($categoryIds, $this->model->getAllData(1));
         $this->assertEquals($categoryIds[2], $this->model->getData(1, 2));
