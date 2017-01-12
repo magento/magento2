@@ -68,7 +68,7 @@ class AnalyticsToken
     /**
      * Set Magento BI token value.
      *
-     * @param $value
+     * @param string $value
      *
      * @return bool
      */

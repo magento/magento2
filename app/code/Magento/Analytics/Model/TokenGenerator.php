@@ -24,6 +24,7 @@ class TokenGenerator
      * @var OauthServiceInterface
      */
     private $oauthService;
+
     /**
      * @var AnalyticsApiUserProvider
      */
@@ -51,7 +52,11 @@ class TokenGenerator
      */
     public function execute()
     {
-        $creationResult = $this->oauthService->createAccessToken($this->analyticsApiUserProvider->getConsumerId(), true);
+        $creationResult = $this->oauthService->createAccessToken(
+            $this->analyticsApiUserProvider->getConsumerId(),
+            true
+        );
+
         if ($creationResult === true) {
             $integrationData = $this->analyticsApiUserProvider->getData();
             $integrationData['status'] = Integration::STATUS_ACTIVE;

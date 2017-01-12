@@ -60,7 +60,6 @@ class AnalyticsApiUserProvider
             return $accessToken->getToken();
         }
         return false;
-
     }
 
     /**
