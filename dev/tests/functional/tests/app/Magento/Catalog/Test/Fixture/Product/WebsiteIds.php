@@ -73,15 +73,8 @@ class WebsiteIds extends DataSource
         }
 
         foreach ($this->fixtureData as $dataset) {
-            if (is_array($dataset) && isset($dataset['store'])) {
-                $website = $dataset['store']->getDataFieldConfig('group_id')['source']
-                    ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
-                $this->data[] = $website->getName();
-                $this->websites[] = $website;
-                $this->stores[] = $dataset['store'];
-            } elseif (is_array($dataset) && isset($dataset['dataset'])) {
-                $store = $this->fixtureFactory->createByCode('store', $dataset);
-                $this->processStore($store);
+            if (is_array($dataset)) {
+                $this->processStore($dataset);
             } elseif ($dataset instanceof Store) {
                 $this->processStore($dataset);
             } elseif (isset($dataset['websites'])) {
@@ -95,21 +88,28 @@ class WebsiteIds extends DataSource
     }
 
     /**
-     * Add website by store fixture.
+     * Add website by dataset.
      *
-     * @param Store $store
+     * @param array $dataset
      * @return void
      */
-    private function processStore(Store $store)
+    private function processStore(array $dataset)
     {
-        if (!$store->getStoreId()) {
-            $store->persist();
+        if (isset($dataset['store'])) {
+            $website = $dataset['store']->getDataFieldConfig('group_id')['source']
+                ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
+            $this->data[] = $website->getName();
+            $this->websites[] = $website;
+            $this->stores[] = $dataset['store'];
+        } elseif (isset($dataset['dataset'])) {
+            $store = $this->fixtureFactory->createByCode('store', $dataset);
+            !$store->getStoreId() ? : $store->persist();
+            $website = $store->getDataFieldConfig('group_id')['source']
+                ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
+            $this->data[] = $website->getName();
+            $this->websites[] = $website;
+            $this->stores[] = $store;
         }
-        $website = $store->getDataFieldConfig('group_id')['source']
-            ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
-        $this->data[] = $website->getName();
-        $this->websites[] = $website;
-        $this->stores[] = $store;
     }
 
     /**
