@@ -439,20 +439,19 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * @param ProductInterface $product
-     * @param array $productDataArray
+     * @param array $mediaGalleryEntries
      * @return $this
      * @throws InputException
      * @throws StateException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function processMediaGallery(ProductInterface $product, $productDataArray)
+    protected function processMediaGallery(ProductInterface $product, $mediaGalleryEntries)
     {
-        $mediaGalleryEntries = $productDataArray['media_gallery_entries'];
         $existingMediaGallery = $product->getMediaGallery('images');
         $newEntries = [];
         if (!empty($existingMediaGallery)) {
             $entriesById = [];
-            foreach ($productDataArray['media_gallery']['images'] as $entry) {
+            foreach ($mediaGalleryEntries as $entry) {
                 if (isset($entry['value_id'])) {
                     //$entry['value_id'] = $entry['id'];
                     $entriesById[$entry['value_id']] = $entry;
@@ -471,7 +470,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
             $product->setData('media_gallery', ["images" => $existingMediaGallery]);
         } else {
-            $newEntries = $productDataArray['media_gallery'];
+            $newEntries = $mediaGalleryEntries;
         }
 
         $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
@@ -497,9 +496,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $this->processNewMediaGalleryEntry($product, $newEntry);
 
             $finalGallery = $product->getData('media_gallery');
-            $last_key = key(array_slice($finalGallery['images'], -1, 1, true));
-            $mergedInfo = array_replace_recursive($newEntry, $finalGallery['images'][$last_key]);
-            $finalGallery['images'][$last_key] = $mergedInfo;
+            $lastGalleryId = key(array_slice($finalGallery['images'], -1, 1, true));
+            $mergedInfo = array_replace_recursive($newEntry, $finalGallery['images'][$lastGalleryId]);
+            $finalGallery['images'][$lastGalleryId] = $mergedInfo;
             $product->setData('media_gallery', $finalGallery);
         }
         return $this;
@@ -528,8 +527,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $productDataArray = $this->extensibleDataObjectConverter
             ->toNestedArray($product, [], \Magento\Catalog\Api\Data\ProductInterface::class);
         $productDataArray = array_replace($productDataArray, $product->getData());
-        //unset($productDataArray['media_gallery']);
-
         $ignoreLinksFlag = $product->getData('ignore_links_flag');
         $productLinks = null;
         if (!$ignoreLinksFlag && $ignoreLinksFlag !== null) {
@@ -540,7 +537,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         $this->processLinks($product, $productLinks);
         if (isset($productDataArray['media_gallery_entries'])) {
-            $this->processMediaGallery($product, $productDataArray['media_gallery_entries']);
+            $this->processMediaGallery($product, $productDataArray['media_gallery']['images']);
         }
 
         if (!$product->getOptionsReadonly()) {
