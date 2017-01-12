@@ -11,9 +11,9 @@ use Magento\Config\App\Config\Type\System;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Class SubscriptionTest.
+ * Class SubscriptionStatusProviderTest.
  */
-class SubscriptionTest extends \PHPUnit_Framework_TestCase
+class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var System|\PHPUnit_Framework_MockObject_MockObject
@@ -61,15 +61,14 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider statusDataProvider
      *
-     * @param boolean $isSubscriptionEnabled
-     * @param boolean $hasToken
+     * @param bool $isSubscriptionEnabled
+     * @param bool $hasToken
+     * @param int $attempts
      * @param string $expectedStatus
-     *
-     * @return void
      */
-    public function testGetStatus($isSubscriptionEnabled, $hasToken, $expectedStatus)
+    public function testGetStatus($isSubscriptionEnabled, $hasToken, $attempts, $expectedStatus)
     {
-        $this->analyticsTokenMock->expects($this->once())
+        $this->analyticsTokenMock->expects($this->exactly($attempts))
             ->method('isTokenExist')
             ->willReturn($hasToken);
         $this->systemConfigMock->expects($this->once())
@@ -85,10 +84,10 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
     public function statusDataProvider()
     {
         return [
-            'TestWithEnabledStatus' => [true, true, "Enabled"],
-            'TestWithPendingStatus' => [true, false, "Pending"],
-            'TestWithDisabledStatus' => [false, false, "Disabled"],
-            'TestWithDisabledStatus2' => [false, true, "Disabled"],
+            'TestWithEnabledStatus' => [true, true, 1, "Enabled"],
+            'TestWithPendingStatus' => [true, false, 1, "Pending"],
+            'TestWithDisabledStatus' => [false, false, 0, "Disabled"],
+            'TestWithDisabledStatus2' => [false, true, 0,  "Disabled"],
         ];
     }
 }
