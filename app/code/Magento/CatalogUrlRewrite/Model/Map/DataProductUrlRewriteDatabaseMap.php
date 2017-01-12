@@ -12,7 +12,6 @@ use Magento\UrlRewrite\Model\MergeDataProvider;
 
 /**
  * Map that holds data for category url rewrites entity
- * @SuppressWarnings(PHPCPD)
  */
 class DataProductUrlRewriteDatabaseMap implements DatabaseMapInterface
 {
