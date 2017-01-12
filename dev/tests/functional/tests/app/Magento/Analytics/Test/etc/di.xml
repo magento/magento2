@@ -6,7 +6,11 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Analytics\Mtf\StagePlugin">
-        <plugin name="analytics-flags" type="Magento\Catalog\Model\Plugin\Log" />
+    <type name="Magento\Mtf\App\State\AbstractState">
+        <arguments>
+            <argument name="arguments" xsi:type="array">
+                <item name="disable-notification" xsi:type="string">Magento\Analytics\Mtf\App\State\NotificationTimeHandler</item>
+            </argument>
+        </arguments>
     </type>
 </config>
