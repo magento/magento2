@@ -8,7 +8,6 @@ namespace Magento\Signifyd\Model;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Api\CaseManagementInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
-use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use Psr\Log\LoggerInterface;
@@ -69,13 +68,13 @@ class CaseCreationService implements CaseCreationServiceInterface
 
         try {
             $caseId = $this->signifydGateway->createCase($orderId);
-            $case->setCaseId($caseId);
-            $this->caseRepository->save($case);
-        } catch (ApiCallException $e) {
-            $this->logger->error($e->getMessage());
         } catch (GatewayException $e) {
             $this->logger->error($e->getMessage());
+            return true;
         }
+
+        $case->setCaseId($caseId);
+        $this->caseRepository->save($case);
 
         return true;
     }

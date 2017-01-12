@@ -52,8 +52,8 @@ class CaseUpdatingService implements CaseUpdatingServiceInterface
      *
      * @param array $data
      * @return void
-     * @throws LocalizedException
      * @throws NotFoundException
+     * @throws LocalizedException
      */
     public function update(array $data)
     {

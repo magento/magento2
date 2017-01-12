@@ -50,7 +50,7 @@ class Create extends Action
         }
 
         $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
-        if ($this->creationService->create($orderId)) {
+        if ($this->creationService->createForOrder($orderId)) {
             $this->messageManager->addSuccessMessage(
                 __('Order has been submitted for Guarantee.')
             );

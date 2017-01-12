@@ -5,10 +5,11 @@
  */
 namespace Magento\Signifyd\Model\Guarantee;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Signifyd\Model\CaseManagement;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Signifyd\Api\GuaranteeCreationServiceInterface;
+use Magento\Signifyd\Api\CaseManagementInterface;
 use Magento\Signifyd\Model\CaseUpdatingServiceFactory;
-use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use Psr\Log\LoggerInterface;
@@ -16,8 +17,13 @@ use Psr\Log\LoggerInterface;
 /**
  * Register guarantee at Signifyd and updates case entity
  */
-class CreationService
+class CreationService implements GuaranteeCreationServiceInterface
 {
+    /**
+     * @var CaseManagementInterface
+     */
+    private $caseManagement;
+
     /**
      * @var CaseUpdatingServiceFactory
      */
@@ -34,66 +40,60 @@ class CreationService
     private $logger;
 
     /**
-     * @var CaseManagement
-     */
-    private $caseManagement;
-
-    /**
      * CreationService constructor.
      *
+     * @param CaseManagementInterface $caseManagement
      * @param CaseUpdatingServiceFactory $caseUpdatingServiceFactory
      * @param Gateway $gateway
-     * @param CaseManagement $caseManagement
      * @param LoggerInterface $logger
      */
     public function __construct(
+        CaseManagementInterface $caseManagement,
         CaseUpdatingServiceFactory $caseUpdatingServiceFactory,
         Gateway $gateway,
-        CaseManagement $caseManagement,
         LoggerInterface $logger
     ) {
+        $this->caseManagement = $caseManagement;
         $this->caseUpdatingServiceFactory = $caseUpdatingServiceFactory;
         $this->gateway = $gateway;
         $this->logger = $logger;
-        $this->caseManagement = $caseManagement;
     }
 
     /**
-     * Sends request to Signifyd to create guarantee for a case and updates case entity by retrieved data.
-     *
-     * @param int $orderId
-     * @return bool
+     * @inheritdoc
      */
-    public function create($orderId)
+    public function createForOrder($orderId)
     {
         $caseEntity = $this->caseManagement->getByOrderId($orderId);
         if ($caseEntity === null) {
-            $this->logger->error("Cannot find case entity for order entity id: {$orderId}");
-            return false;
+            throw new NotFoundException(
+                __('Case for order with specified id "%1" is not created', $orderId)
+            );
         }
-        $updatingService = $this->caseUpdatingServiceFactory->create('guarantees/creation');
+        if ($caseEntity->getCaseId() === null) {
+            throw new NotFoundException(
+                __('Case for order with specified id "%1" is not registered in Signifyd', $orderId)
+            );
+        }
+        if ($caseEntity->getGuaranteeDisposition() !== null) {
+            throw new AlreadyExistsException(
+                __('Guarantee for order "%1" has been created already', $orderId)
+            );
+        }
 
         try {
             $disposition = $this->gateway->submitCaseForGuarantee($caseEntity->getCaseId());
-            if (!$disposition) {
-                $this->logger->error("Cannot retrieve guarantee disposition for case: {$caseEntity->getEntityId()}.");
-                return false;
-            }
-            $data = [
-                'caseId' => $caseEntity->getCaseId(),
-                'guaranteeDisposition' => $disposition
-            ];
-            $updatingService->update($data);
-        } catch (ApiCallException $e) {
-            $this->logger->error($e->getMessage());
-            return false;
         } catch (GatewayException $e) {
             $this->logger->error($e->getMessage());
             return false;
-        } catch (LocalizedException $e) {
-            $this->logger->error($e->getMessage());
-            return false;
         }
+
+        $updatingService = $this->caseUpdatingServiceFactory->create('guarantees/creation');
+        $data = [
+            'caseId' => $caseEntity->getCaseId(),
+            'guaranteeDisposition' => $disposition
+        ];
+        $updatingService->update($data);
 
         return true;
     }
