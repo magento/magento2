@@ -174,15 +174,19 @@ class CostStorageTest extends WebapiAbstract
                 ]
             ],
             1 => [
-                'message' => 'Invalid attribute %fieldName = %fieldValue.',
+                'message' => 'Invalid attribute Cost = -9999. Row ID: SKU = not_existing_sku, Store ID: 9999.',
                 'parameters' => [
-                    'Cost',
                     '-9999',
+                    'not_existing_sku',
+                    '9999'
                 ]
             ],
             2 => [
-                'message' => 'Requested store is not found.',
-                'parameters' => []
+                'message' => 'Requested store is not found. Row ID: SKU = not_existing_sku, Store ID: 9999.',
+                'parameters' => [
+                    'not_existing_sku',
+                    '9999'
+                ]
             ]
         ];
 
