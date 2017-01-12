@@ -79,7 +79,7 @@ class CategoryUrlRewriteGenerator
      * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    public function generate(Category $category, $overrideStoreUrls = false, $rootCategoryId = null)
+    public function generate($category, $overrideStoreUrls = false, $rootCategoryId = null)
     {
         if ($rootCategoryId === null) {
             $rootCategoryId = $category->getEntityId();
