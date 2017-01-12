@@ -52,7 +52,7 @@ class CreateTest extends AbstractBackendController
         $this->getRequest()->setPostValue('orderId', $orderId);
 
         $this->creationService->expects($this->once())
-            ->method('create')
+            ->method('createForOrder')
             ->with($orderId)
             ->willReturn(true);
 
@@ -78,7 +78,7 @@ class CreateTest extends AbstractBackendController
         $this->getRequest()->setPostValue('orderId', $orderId);
 
         $this->creationService->expects($this->never())
-            ->method('create');
+            ->method('createForOrder');
 
         $this->dispatch(self::$entryPoint);
 

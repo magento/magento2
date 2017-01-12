@@ -12,7 +12,7 @@ use Magento\Sales\Helper\Admin;
 use Magento\Signifyd\Model\Config;
 use Magento\Signifyd\Model\CaseManagement;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\Signifyd\Model\Guarantee\SubmitEligible as GuaranteeSubmitEligible;
+use Magento\Signifyd\Model\Guarantee\CreateGuaranteeAbility;
 
 /**
  * Get Signifyd Case Info
@@ -30,9 +30,9 @@ class CaseInfo extends AbstractOrder
     private $caseManagement;
 
     /**
-     * @var GuaranteeSubmitEligible
+     * @var CreateGuaranteeAbility
      */
-    private $guaranteeSubmitEligible;
+    private $createGuaranteeAbility;
 
     /**
      * @var int
@@ -52,7 +52,7 @@ class CaseInfo extends AbstractOrder
      * @param Admin $adminHelper
      * @param Config $config
      * @param CaseManagement $caseManagement
-     * @param GuaranteeSubmitEligible $guaranteeSubmitEligible
+     * @param CreateGuaranteeAbility $createGuaranteeAbility
      * @param array $data
      */
     public function __construct(
@@ -61,12 +61,12 @@ class CaseInfo extends AbstractOrder
         Admin $adminHelper,
         Config $config,
         CaseManagement $caseManagement,
-        GuaranteeSubmitEligible $guaranteeSubmitEligible,
+        CreateGuaranteeAbility $createGuaranteeAbility,
         array $data = []
     ) {
         $this->config = $config;
         $this->caseManagement = $caseManagement;
-        $this->guaranteeSubmitEligible = $guaranteeSubmitEligible;
+        $this->createGuaranteeAbility = $createGuaranteeAbility;
 
         parent::__construct($context, $registry, $adminHelper, $data);
     }
@@ -172,7 +172,7 @@ class CaseInfo extends AbstractOrder
     {
         $buttons = [];
 
-        if ($this->guaranteeSubmitEligible->check($this->getOrderId())) {
+        if ($this->createGuaranteeAbility->isAvailable($this->getOrderId())) {
             $buttons[] = $this->getSubmitButton();
         }
 
