@@ -5,8 +5,6 @@
  */
 namespace Magento\Signifyd\Api;
 
-use Magento\Signifyd\Api\Data\CaseInterface;
-
 /**
  * Signifyd management interface
  * Allows to performs operations with Signifyd cases.
@@ -19,7 +17,8 @@ interface CaseManagementInterface
      * Creates new Case entity linked to order id.
      *
      * @param int $orderId
-     * @return CaseInterface
+     * @return \Magento\Signifyd\Api\Data\CaseInterface
+     * @throws \Magento\Framework\Exception\NotFoundException If order does not exists
      * @throws \Magento\Framework\Exception\AlreadyExistsException If case for $orderId already exists
      */
     public function create($orderId);
@@ -28,7 +27,7 @@ interface CaseManagementInterface
      * Gets Case entity associated with order id.
      *
      * @param int $orderId
-     * @return CaseInterface|null
+     * @return \Magento\Signifyd\Api\Data\CaseInterface|null
      */
     public function getByOrderId($orderId);
 }

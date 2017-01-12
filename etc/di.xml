@@ -11,5 +11,6 @@
     <preference for="Magento\Signifyd\Api\CaseManagementInterface" type="Magento\Signifyd\Model\CaseManagement" />
     <preference for="Magento\Signifyd\Api\Data\CaseSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Signifyd\Api\CaseCreationServiceInterface" type="Magento\Signifyd\Model\CaseCreationService" />
+    <preference for="Magento\Signifyd\Api\GuaranteeCreationServiceInterface" type="Magento\Signifyd\Model\Guarantee\CreationService" />
     <preference for="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface" type="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder" />
 </config>

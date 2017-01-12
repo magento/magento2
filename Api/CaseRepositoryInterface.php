@@ -5,10 +5,6 @@
  */
 namespace Magento\Signifyd\Api;
 
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\Signifyd\Api\Data\CaseSearchResultsInterface;
-
 /**
  * Signifyd Case repository interface
  *
@@ -19,16 +15,16 @@ interface CaseRepositoryInterface
     /**
      * Saves case entity.
      *
-     * @param CaseInterface $case
-     * @return CaseInterface
+     * @param \Magento\Signifyd\Api\Data\CaseInterface $case
+     * @return \Magento\Signifyd\Api\Data\CaseInterface
      */
-    public function save(CaseInterface $case);
+    public function save(\Magento\Signifyd\Api\Data\CaseInterface $case);
 
     /**
      * Gets case entity by order id.
      *
      * @param int $id
-     * @return CaseInterface
+     * @return \Magento\Signifyd\Api\Data\CaseInterface
      */
     public function getById($id);
 
@@ -36,23 +32,23 @@ interface CaseRepositoryInterface
      * Gets entity by Signifyd case id.
      *
      * @param int $caseId
-     * @return CaseInterface|null
+     * @return \Magento\Signifyd\Api\Data\CaseInterface|null
      */
     public function getByCaseId($caseId);
 
     /**
      * Deletes case entity.
      *
-     * @param CaseInterface $case
+     * @param \Magento\Signifyd\Api\Data\CaseInterface $case
      * @return bool
      */
-    public function delete(CaseInterface $case);
+    public function delete(\Magento\Signifyd\Api\Data\CaseInterface $case);
 
     /**
      * Gets list of case entities.
      *
-     * @param SearchCriteria $searchCriteria
-     * @return CaseSearchResultsInterface
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @return \Magento\Signifyd\Api\Data\CaseSearchResultsInterface
      */
-    public function getList(SearchCriteria $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
 }
