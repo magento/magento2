@@ -179,7 +179,6 @@
                             <item name="dataScope" xsi:type="string">min_sale_qty</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
-                                <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
                             <item name="sortOrder" xsi:type="string">0</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
