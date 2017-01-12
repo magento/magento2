@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -1211,6 +1211,13 @@
                 <item name="filters" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
                 <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
                 <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\Select\QueryModifierFactory">
+        <arguments>
+            <argument name="queryModifiers" xsi:type="array">
+                <item name="in" xsi:type="string">Magento\Framework\DB\Select\InQueryModifier</item>
             </argument>
         </arguments>
     </type>

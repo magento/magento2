@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -102,11 +102,6 @@
             <argument name="severity" xsi:type="string">S2</argument>
         </arguments>
     </type>
-    <type name="Magento\Checkout\Test\Constraint\AssertProductPresentInShoppingCart">
-        <arguments>
-            <argument name="severity" xsi:type="string">S2</argument>
-        </arguments>
-    </type>
     <type name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart">
         <arguments>
             <argument name="severity" xsi:type="string">S2</argument>
@@ -155,6 +150,16 @@
     <type name="Magento\Checkout\Test\Constraint\AssertTaxTotalOrderReview">
         <arguments>
             <argument name="severity" xsi:type="string">S2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertCancelSuccessMessageInShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Test\Constraint\AssertProductPresentInShoppingCart">
+        <arguments>
+            <argument name="severity" xsi:type="string">S0</argument>
         </arguments>
     </type>
 </config>
