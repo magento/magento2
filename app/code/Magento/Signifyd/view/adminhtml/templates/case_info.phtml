@@ -8,7 +8,7 @@
 ?>
 <?php /** @var $block Magento\Signifyd\Block\Adminhtml\CaseInfo */ ?>
 <?php
-    if (!$block->isModuleActive() || !($case = $block->getCaseEntity())) {
+    if (!$block->isServiceActive() || !($case = $block->getCaseEntity())) {
         return '';
     }
 ?>
