@@ -147,9 +147,8 @@ class AddProductsToShoppingCartEntityTest extends Injectable
         )->run();
 
         if ($this->configData == 'enable_https_frontend_admin_with_url') {
-            $_ENV['app_backend_url'] = mb_ereg_replace ("(http[s]?)", 'https', $_ENV['app_backend_url']);
-            $_ENV['app_frontend_url'] = mb_ereg_replace ("(http[s]?)", 'https', $_ENV['app_frontend_url']);
-
+            $_ENV['app_backend_url'] = mb_ereg_replace("(http[s]?)", 'https', $_ENV['app_backend_url']);
+            $_ENV['app_frontend_url'] = mb_ereg_replace("(http[s]?)", 'https', $_ENV['app_frontend_url']);
         }
         $products = $this->prepareProducts($productsData);
 
@@ -211,8 +210,8 @@ class AddProductsToShoppingCartEntityTest extends Injectable
             $this->getSystemConfigEditPage()->getForm()
                 ->getGroup('web', 'secure')->setValue('web', 'secure', 'base_link_url', $this->getBaseUrl());
             $this->getSystemConfigEditPage()->getPageActions()->save();
-            $_ENV['app_backend_url'] = mb_ereg_replace ("(http[s]?)", 'http', $_ENV['app_backend_url']);
-            $_ENV['app_frontend_url'] = mb_ereg_replace ("(http[s]?)", 'http', $_ENV['app_frontend_url']);
+            $_ENV['app_backend_url'] = mb_ereg_replace("(http[s]?)", 'http', $_ENV['app_backend_url']);
+            $_ENV['app_frontend_url'] = mb_ereg_replace("(http[s]?)", 'http', $_ENV['app_frontend_url']);
             $this->cache->flush();
         }
     }
@@ -226,7 +225,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     private function getBaseUrl($useHttps = false)
     {
         $protocol = $useHttps ? 'https' : 'http';
-        return mb_ereg_replace ("(http[s]?)", $protocol, $_ENV['app_frontend_url']);
+        return mb_ereg_replace("(http[s]?)", $protocol, $_ENV['app_frontend_url']);
     }
 
     /**
