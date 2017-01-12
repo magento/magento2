@@ -8,7 +8,8 @@
 ?>
 <?php /** @var $block Magento\Signifyd\Block\Adminhtml\CaseInfo */ ?>
 <?php
-    if (!$block->isServiceActive() || !($case = $block->getCaseEntity())) {
+
+    if (!$block->isServiceActive() || $block->isEmptyCase()) {
         return '';
     }
 ?>
@@ -32,14 +33,14 @@
             </thead>
             <tbody class="even">
             <tr>
-                <td class="col-case-status"><?php echo $block->escapeHtml($case->getStatus()); ?></td>
-                <td class="col-case-score-<?php echo $block->escapeHtml($block->getScoreClass($case)); ?>"><?php echo $block->escapeHtml($case->getScore()); ?></td>
-                <td class="col-guarantee-eligible"><?php echo $block->escapeHtml($block->getGuaranteeEligible($case)); ?></td>
-                <td class="col-guarantee-disposition"><?php echo $block->escapeHtml($case->getGuaranteeDisposition()); ?></td>
-                <td class="col-case-team"><?php echo $block->escapeHtml($block->getAssociatedTeam($case)); ?></td>
-                <td class="col-case-review"><?php echo $block->escapeHtml($case->getReviewDisposition()); ?></td>
-                <td class="col-case-created"><?php echo $block->escapeHtml($case->getCreatedAt()); ?></td>
-                <td class="col-case-updated"><?php echo $block->escapeHtml($case->getUpdatedAt()); ?></td>
+                <td class="col-case-status"><?php echo $block->escapeHtml($block->getCaseStatus()); ?></td>
+                <td class="col-case-score-<?php echo $block->escapeHtml($block->getScoreClass()); ?>"><?php echo $block->escapeHtml($block->getCaseScore()); ?></td>
+                <td class="col-guarantee-eligible"><?php echo $block->escapeHtml($block->getCaseGuaranteeEligible()); ?></td>
+                <td class="col-guarantee-disposition"><?php echo $block->escapeHtml($block->getCaseGuaranteeDisposition()); ?></td>
+                <td class="col-case-team"><?php echo $block->escapeHtml($block->getCaseAssociatedTeam()); ?></td>
+                <td class="col-case-review"><?php echo $block->escapeHtml($block->getCaseReviewDisposition()); ?></td>
+                <td class="col-case-created"><?php echo $block->escapeHtml($block->getCaseCreatedAt()); ?></td>
+                <td class="col-case-updated"><?php echo $block->escapeHtml($block->getCaseUpdatedAt()); ?></td>
             </tr>
             </tbody>
         </table>
