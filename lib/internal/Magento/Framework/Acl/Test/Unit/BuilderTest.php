@@ -62,10 +62,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAclUsesLoadersProvidedInConfigurationToPopulateAclIfCacheIsEmpty()
     {
-        $this->_aclCacheMock->expects($this->at(1))->method('has')->will($this->returnValue(false));
-        $this->_aclCacheMock->expects($this->at(2))->method('has')->will($this->returnValue(true));
-        $this->_aclCacheMock->expects($this->once())->method('get')->will($this->returnValue($this->_aclMock));
-        $this->_aclCacheMock->expects($this->exactly(1))->method('save')->with($this->_aclMock);
+        $this->_aclCacheMock->expects($this->never())->method('has');
+        $this->_aclCacheMock->expects($this->never())->method('get');
+        $this->_aclCacheMock->expects($this->never())->method('save');
+        $this->_aclCacheMock->expects($this->never())->method('clean');
         $this->_ruleLoader->expects($this->once())->method('populateAcl')->with($this->equalTo($this->_aclMock));
 
         $this->_roleLoader->expects($this->once())->method('populateAcl')->with($this->equalTo($this->_aclMock));
@@ -73,14 +73,17 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->_resourceLoader->expects($this->once())->method('populateAcl')->with($this->equalTo($this->_aclMock));
 
         $this->assertEquals($this->_aclMock, $this->_model->getAcl());
-        $this->assertEquals($this->_aclMock, $this->_model->getAcl());
     }
 
     public function testGetAclReturnsAclStoredInCache()
     {
-        $this->_aclCacheMock->expects($this->exactly(2))->method('has')->will($this->returnValue(true));
-        $this->_aclCacheMock->expects($this->exactly(2))->method('get')->will($this->returnValue($this->_aclMock));
+        /**
+         * The acl cache of type \Magento\Framework\Acl\CacheInterface is deprecated and should never be called
+         */
+        $this->_aclCacheMock->expects($this->never())->method('has');
+        $this->_aclCacheMock->expects($this->never())->method('get');
         $this->_aclCacheMock->expects($this->never())->method('save');
+        $this->_aclCacheMock->expects($this->never())->method('clean');
         $this->assertEquals($this->_aclMock, $this->_model->getAcl());
         $this->assertEquals($this->_aclMock, $this->_model->getAcl());
     }
@@ -90,10 +93,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAclRethrowsException()
     {
-        $this->_aclCacheMock->expects(
+        $this->_aclFactoryMock->expects(
             $this->once()
         )->method(
-            'has'
+            'create'
         )->will(
             $this->throwException(new \InvalidArgumentException())
         );

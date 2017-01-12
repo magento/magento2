@@ -43,6 +43,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject */
     protected $roleMock;
 
+    /**
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cacheMock;
+
     protected function setUp()
     {
         $this->userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
@@ -85,6 +90,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
+        $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Config\CacheInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $helper->getObject(
             \Magento\User\Model\ResourceModel\User::class,
@@ -92,7 +102,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
                 'resource' => $this->resourceMock,
                 'aclCache' => $this->aclCacheMock,
                 'roleFactory' => $this->roleFactoryMock,
-                'dateTime' => $this->dateTimeMock
+                'dateTime' => $this->dateTimeMock,
+                'cache' => $this->cacheMock,
             ]
         );
     }
@@ -412,7 +423,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->roleMock->expects($this->once())->method('load')->willReturn($this->roleMock);
         $this->roleMock->expects($this->atLeastOnce())->method('getId')->willReturn($roleId);
         $this->dbAdapterMock->expects($this->once())->method('describeTable')->willReturn([1, 2, 3]);
-
+        $this->cacheMock->expects($this->once())->method('clean')->with(
+            \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            ['acl_cache']
+        );
         $this->assertInstanceOf(
             \Magento\User\Model\ResourceModel\User::class,
             $this->invokeMethod($this->model, '_afterSave', [$methodUserMock])

@@ -24,6 +24,7 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Acl object cache
      *
      * @var \Magento\Framework\Acl\CacheInterface
+     * @deprecated
      */
     protected $_aclCache;
 
@@ -38,12 +39,18 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_logger;
 
     /**
+     * @var \Magento\Framework\Config\CacheInterface
+     */
+    private $cache;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Acl\Builder $aclBuilder
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\Acl\CacheInterface $aclCache
      * @param string $connectionName
+     * @param \Magento\Framework\Config\CacheInterface $cache
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -51,13 +58,15 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Framework\Acl\CacheInterface $aclCache,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Framework\Config\CacheInterface $cache = null
     ) {
         $this->_aclBuilder = $aclBuilder;
         parent::__construct($context, $connectionName);
         $this->_rootResource = $rootResource;
         $this->_aclCache = $aclCache;
         $this->_logger = $logger;
+        $this->cache = $cache;
     }
 
     /**
@@ -79,9 +88,9 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function saveRel(\Magento\Authorization\Model\Rules $rule)
     {
+        $connection = $this->getConnection();
+        $connection->beginTransaction();
         try {
-            $connection = $this->getConnection();
-            $connection->beginTransaction();
             $roleId = $rule->getRoleId();
 
             $condition = ['role_id = ?' => (int)$roleId];
@@ -118,7 +127,7 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
 
             $connection->commit();
-            $this->_aclCache->clean();
+            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['acl_cache']);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $connection->rollBack();
             throw $e;

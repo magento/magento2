@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Acl;
 
+/**
+ * Class Cache
+ * @package Magento\Framework\Acl
+ * @deprecated
+ */
 class Cache implements CacheInterface
 {
     /**

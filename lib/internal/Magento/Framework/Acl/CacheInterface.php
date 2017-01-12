@@ -9,6 +9,7 @@ namespace Magento\Framework\Acl;
  * ACL object cache
  *
  * @api
+ * @deprecated
  */
 interface CacheInterface
 {
