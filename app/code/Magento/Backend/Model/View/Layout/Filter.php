@@ -24,7 +24,7 @@ class Filter implements FilterInterface
      * @param FilterInterface[] $filters
      */
     public function __construct(
-        $filters = []
+        array $filters = []
     ) {
         $this->filters = $filters;
     }
