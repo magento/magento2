@@ -5,7 +5,6 @@
  */
 namespace Magento\Analytics\Model;
 
-use Magento\Analytics\Model\AnalyticsConnector\AnalyticsCommandInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -26,7 +25,7 @@ class AnalyticsConnector
 
     /**
      * AnalyticsConnector constructor.
-     * @param string[] $commands
+     * @param array $commands
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
