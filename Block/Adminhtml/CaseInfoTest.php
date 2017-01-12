@@ -6,7 +6,6 @@
 
 namespace Magento\Signifyd\Block\Adminhtml;
 
-use Magento\Framework\App\Area;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Sales\Block\Adminhtml\Order\View\Tab\Info as OrderTabInfo;
@@ -35,9 +34,6 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $bootstrap = Bootstrap::getInstance();
-        $bootstrap->loadArea(Area::AREA_ADMINHTML);
-
         $objectManager = Bootstrap::getObjectManager();
         $this->order = $objectManager->create(Order::class);
         $this->registry = $objectManager->get(Registry::class);
@@ -48,8 +44,9 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
      * Checks that block does not give contents
      * if Signifyd module is inactive.
      *
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::isModuleActive
+     * @covers CaseInfo::isModuleActive
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 0
+     * @magentoAppArea adminhtml
      */
     public function testModuleIsInactive()
     {
@@ -60,9 +57,10 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
      * Checks that block does not give contents
      * if there is no case entity created for order.
      *
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getCaseEntity
+     * @covers CaseInfo::getCaseEntity
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
      * @magentoDataFixture Magento/Signifyd/_files/order_with_customer_and_two_simple_products.php
+     * @magentoAppArea adminhtml
      */
     public function testCaseEntityNotExists()
     {
@@ -77,10 +75,11 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
      * - associated team displays correct
      * - score class displays correct
      *
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getAssociatedTeam
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getScoreClass
+     * @covers CaseInfo::getAssociatedTeam
+     * @covers CaseInfo::getScoreClass
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
      * @magentoDataFixture Magento/Signifyd/_files/case.php
+     * @magentoAppArea adminhtml
      */
     public function testCaseEntityExists()
     {
@@ -90,6 +89,38 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
         static::assertNotEmpty($html);
         static::assertContains('Some Team', $html);
         static::assertContains('col-case-score-green', $html);
+    }
+
+    /**
+     * Checks that guarantee action buttons is available on order page.
+     *
+     * @covers CaseInfo::getButtons
+     * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
+     * @magentoDataFixture Magento/Signifyd/_files/case.php
+     * @magentoAppArea adminhtml
+     */
+    public function testButtonsAvailable()
+    {
+        $this->registry->register('current_order', $this->order->loadByIncrementId('100000001'));
+
+        static::assertContains('Submit Guarantee request', $this->getBlockContents());
+    }
+
+    /**
+     * Checks that guarantee action buttons is unavailable on order page.
+     *
+     * @covers CaseInfo::getButtons
+     * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
+     * @magentoDataFixture Magento/Signifyd/_files/case.php
+     * @magentoAppArea adminhtml
+     */
+    public function testButtonsUnavailable()
+    {
+        $this->registry->register('current_order', $this->order->loadByIncrementId('100000001'));
+
+        $this->order->setState(Order::STATE_CANCELED);
+
+        static::assertNotContains('Submit Guarantee request', $this->getBlockContents());
     }
 
     /**
