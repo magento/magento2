@@ -7,9 +7,11 @@ define(
     [
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/shipping-rate-processor/new-address',
-        'Magento_Checkout/js/model/cart/totals-processor/default'
+        'Magento_Checkout/js/model/cart/totals-processor/default',
+        'Magento_Checkout/js/model/shipping-service',
+        'Magento_Checkout/js/model/cart/cache'
     ],
-    function (quote, defaultProcessor, totalsDefaultProvider) {
+    function (quote, defaultProcessor, totalsDefaultProvider, shippingService, cartCache) {
         'use strict';
 
         var rateProcessors = [],
@@ -24,12 +26,27 @@ define(
                     ? totalsProcessors[type].estimateTotals(quote.shippingAddress())
                     : totalsProcessors['default'].estimateTotals(quote.shippingAddress());
             } else {
+                // check if user data not changed -> load rates from cache
+                if (!cartCache.isAddressChanged(quote.shippingAddress())
+                    && !cartCache.isCartVersionChanged()
+                    && cartCache.getRatesCache()
+                ) {
+                    shippingService.setShippingRates(cartCache.getRatesCache());
+                    console.log('Shipping rates loaded from cache.');
+                    return;
+                }
+
                 // update rates list when estimated address was set
                 rateProcessors['default'] = defaultProcessor;
                 rateProcessors[type]
                     ? rateProcessors[type].getRates(quote.shippingAddress())
                     : rateProcessors['default'].getRates(quote.shippingAddress());
 
+                // save rates to cache after load
+                shippingService.getShippingRates().subscribe(function (rates) {
+                    cartCache.setRatesCache(rates);
+                    console.log('Shipping rates loaded from server.');
+                });
             }
         });
         quote.shippingMethod.subscribe(function () {
