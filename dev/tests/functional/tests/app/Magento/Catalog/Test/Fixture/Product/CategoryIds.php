@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,11 +51,7 @@ class CategoryIds extends DataSource
         } elseif (isset($data['dataset'])) {
             $datasets = explode(',', $data['dataset']);
             foreach ($datasets as $dataset) {
-                if (trim($dataset) == '-') {
-                    $this->data[] = '';
-                    continue;
-                }
-                $category = $fixtureFactory->createByCode('category', ['dataset' => $dataset]);
+                $category = $fixtureFactory->createByCode('category', ['dataset' => trim($dataset)]);
                 if (!isset($data['new_category']) || $data['new_category'] !== 'yes') {
                     $category->persist();
                 }
@@ -63,6 +59,16 @@ class CategoryIds extends DataSource
                 /** @var Category $category */
                 $this->data[] = $category->getName();
                 $this->categories[] = $category;
+            }
+        } else {
+            foreach ($data as $category) {
+                if ($category instanceof Category) {
+                    if (!$category->hasData('id')) {
+                        $category->persist();
+                    }
+                    $this->data[] = $category->getName();
+                    $this->categories[] = $category;
+                }
             }
         }
     }

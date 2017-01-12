@@ -2,7 +2,7 @@
 /**
  * Test object manager
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,8 +24,6 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
      * @var array
      */
     protected $persistedInstances = [
-        \Magento\TestFramework\App\Config::class,
-        \Magento\Framework\App\Config\ScopeConfigInterface::class,
         \Magento\Framework\App\ResourceConnection::class,
         \Magento\Framework\Config\Scope::class,
         \Magento\Framework\ObjectManager\RelationsInterface::class,
