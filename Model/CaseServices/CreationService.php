@@ -3,7 +3,7 @@
  * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Model;
+namespace Magento\Signifyd\Model\CaseServices;
 
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Api\CaseManagementInterface;
@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
  *
  * Creates new Case entity and register it at Signifyd
  */
-class CaseCreationService implements CaseCreationServiceInterface
+class CreationService implements CaseCreationServiceInterface
 {
     /**
      * @var CaseManagementInterface
@@ -40,7 +40,7 @@ class CaseCreationService implements CaseCreationServiceInterface
     private $caseRepository;
 
     /**
-     * CaseCreationService constructor.
+     * CreationService constructor.
      *
      * @param CaseManagementInterface $caseManagement
      * @param Gateway $signifydGateway

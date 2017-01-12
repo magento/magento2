@@ -65,7 +65,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
     /**
      * Data array without required attribute caseId.
      *
-     * @expectedException \Magento\Signifyd\Model\MessageGeneratorException
+     * @expectedException \Magento\Signifyd\Model\MessageGenerators\GeneratorException
      * @expectedExceptionMessage The "caseId" should not be empty
      */
     public function testGenerateEmptyCaseIdException()
@@ -76,7 +76,7 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
     /**
      * Case entity was not found in DB.
      *
-     * @expectedException \Magento\Signifyd\Model\MessageGeneratorException
+     * @expectedException \Magento\Signifyd\Model\MessageGenerators\GeneratorException
      * @expectedExceptionMessage Case entity not found.
      */
     public function testGenerateNotFoundException()

@@ -6,13 +6,11 @@
 namespace Magento\Signifyd\Model\MessageGenerators;
 
 use Magento\Signifyd\Api\CaseRepositoryInterface;
-use Magento\Signifyd\Model\MessageGeneratorException;
-use Magento\Signifyd\Model\MessageGeneratorInterface;
 
 /**
  * Generates message based on previous and current Case scores.
  */
-class CaseRescore implements MessageGeneratorInterface
+class CaseRescore implements GeneratorInterface
 {
     /**
      * @var CaseRepositoryInterface
@@ -35,13 +33,13 @@ class CaseRescore implements MessageGeneratorInterface
     public function generate(array $data)
     {
         if (empty($data['caseId'])) {
-            throw new MessageGeneratorException(__('The "%1" should not be empty.', 'caseId'));
+            throw new GeneratorException(__('The "%1" should not be empty.', 'caseId'));
         }
 
         $caseEntity = $this->caseRepository->getByCaseId($data['caseId']);
 
         if ($caseEntity === null) {
-            throw new MessageGeneratorException(__('Case entity not found.'));
+            throw new GeneratorException(__('Case entity not found.'));
         }
 
         return __(

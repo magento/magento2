@@ -6,17 +6,17 @@
 namespace Magento\Signifyd\Test\Unit\Controller\Webhooks;
 
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Signifyd\Model\CaseUpdatingServiceFactory;
-use Magento\Signifyd\Model\CaseUpdatingService;
-use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequestValidator;
-use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
-use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageReader;
-use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessage;
-use Psr\Log\LoggerInterface;
-use Magento\Signifyd\Controller\Webhooks\Handler;
-use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Signifyd\Controller\Webhooks\Handler;
+use Magento\Signifyd\Model\CaseServices\UpdatingService;
+use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
+use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessage;
+use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageReader;
+use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
+use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequestValidator;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class IndexTest
@@ -66,7 +66,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     private $webhookRequestValidator;
 
     /**
-     * @var CaseUpdatingServiceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UpdatingServiceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $caseUpdatingServiceFactory;
 
@@ -88,7 +88,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $this->webhookRequestValidator = $this->getMockBuilder(WebhookRequestValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->caseUpdatingServiceFactory = $this->getMockBuilder(CaseUpdatingServiceFactory::class)
+        $this->caseUpdatingServiceFactory = $this->getMockBuilder(UpdatingServiceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
@@ -142,7 +142,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->with($this->webhookRequest)
             ->willReturn($webhookMessage);
 
-        $caseUpdatingService = $this->getMockBuilder(CaseUpdatingService::class)
+        $caseUpdatingService = $this->getMockBuilder(UpdatingService::class)
             ->disableOriginalConstructor()
             ->getMock();
         $caseUpdatingService->expects($this->once())
@@ -184,7 +184,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->with($this->webhookRequest)
             ->willReturn($webhookMessage);
 
-        $caseUpdatingService = $this->getMockBuilder(CaseUpdatingService::class)
+        $caseUpdatingService = $this->getMockBuilder(UpdatingService::class)
             ->disableOriginalConstructor()
             ->getMock();
         $caseUpdatingService->expects($this->once())

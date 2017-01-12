@@ -12,8 +12,8 @@ use Magento\Signifyd\Model\Guarantee\CreationService;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Signifyd\Api\CaseManagementInterface;
-use Magento\Signifyd\Model\CaseUpdatingServiceFactory;
-use Magento\Signifyd\Model\CaseUpdatingServiceInterface;
+use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
+use Magento\Signifyd\Model\CaseServices\UpdatingServiceInterface;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Psr\Log\LoggerInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
@@ -31,7 +31,7 @@ class CreationServiceTest extends TestCase
     private $caseManagement;
 
     /**
-     * @var CaseUpdatingServiceInterface|MockObject
+     * @var UpdatingServiceInterface|MockObject
      */
     private $caseUpdatingService;
 
@@ -50,10 +50,10 @@ class CreationServiceTest extends TestCase
         $this->caseManagement = $this->getMockBuilder(CaseManagementInterface::class)
             ->getMockForAbstractClass();
 
-        $caseUpdatingServiceFactory = $this->getMockBuilder(CaseUpdatingServiceFactory::class)
+        $caseUpdatingServiceFactory = $this->getMockBuilder(UpdatingServiceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->caseUpdatingService = $this->getMockBuilder(CaseUpdatingServiceInterface::class)
+        $this->caseUpdatingService = $this->getMockBuilder(UpdatingServiceInterface::class)
             ->getMockForAbstractClass();
         $caseUpdatingServiceFactory
             ->method('create')

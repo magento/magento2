@@ -44,7 +44,7 @@ class GeneratorFactory
     private static $guaranteeCreation = 'guarantees/creation';
 
     /**
-     * CaseUpdatingServiceFactory constructor.
+     * UpdatingServiceFactory constructor.
      *
      * @param ObjectManagerInterface $objectManager
      */
@@ -58,7 +58,7 @@ class GeneratorFactory
      * Throws exception if type of message generator does not have implementations.
      *
      * @param string $type
-     * @return MessageGeneratorInterface
+     * @return GeneratorInterface
      * @throws \InvalidArgumentException
      */
     public function create($type)

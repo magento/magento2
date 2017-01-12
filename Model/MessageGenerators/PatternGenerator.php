@@ -5,9 +5,6 @@
  */
 namespace Magento\Signifyd\Model\MessageGenerators;
 
-use Magento\Signifyd\Model\MessageGeneratorException;
-use Magento\Signifyd\Model\MessageGeneratorInterface;
-
 /**
  * Common implementation of message generator.
  * Takes a message template (placeholders for localization also can be used) and list
@@ -18,7 +15,7 @@ use Magento\Signifyd\Model\MessageGeneratorInterface;
  * Message is 'Case Update: New score for the order is %1. Previous score was %2.', then the required params order
  * should be ['new_score', 'prev_score'].
  */
-class PatternGenerator implements MessageGeneratorInterface
+class PatternGenerator implements GeneratorInterface
 {
     /**
      * @var string
@@ -50,7 +47,7 @@ class PatternGenerator implements MessageGeneratorInterface
         $placeholders = [];
         foreach ($this->requiredParams as $param) {
             if (empty($data[$param])) {
-                throw new MessageGeneratorException(__('The "%1" should not be empty.', $param));
+                throw new GeneratorException(__('The "%1" should not be empty.', $param));
             }
             $placeholders[] = $data[$param];
         }
