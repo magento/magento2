@@ -14,10 +14,14 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class AnalyticsConnector
 {
-    /** string[] */
+    /**
+     * @var string[]
+     */
     private $commands;
 
-    /** ObjectManagerInterface */
+    /**
+     * @var ObjectManagerInterface
+     */
     private $objectManager;
 
     /**

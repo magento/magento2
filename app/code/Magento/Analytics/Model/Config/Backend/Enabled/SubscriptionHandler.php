@@ -23,7 +23,7 @@ class SubscriptionHandler
     /**
      * Config path for schedule setting of subscription handler.
      */
-    const CRON_STRING_PATH = 'crontab/default/jobs/analytics_generate/schedule/cron_expr';
+    const CRON_STRING_PATH = 'crontab/default/jobs/analytics_subscribe/schedule/cron_expr';
 
     /**
      * Max value for reserve counter of attempts to subscribe.
