@@ -52,6 +52,7 @@ use Magento\Catalog\Test\TestStep\CreateProductsStep;
  * 19. Call an assert AssertCatalogPriceRuleNotAppliedProductPage.
  *
  * @ZephyrId MAGETWO-39072
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class CreateCatalogRulesIndexerTest extends Injectable
 {
@@ -139,7 +140,7 @@ class CreateCatalogRulesIndexerTest extends Injectable
      * @param AssertCatalogPriceRuleAppliedProductPage $assertCatalogPriceRuleAppliedProductPage
      * @param TestStepFactory $stepFactory
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __inject(
         IndexManagement $indexManagement,
