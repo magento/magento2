@@ -51,6 +51,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     protected $loggerMock;
 
+    /**
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $appState;
+
     protected function setUp()
     {
         $this->resolver = $this->getMock(
@@ -90,8 +95,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->templateEngine->expects($this->any())->method('get')->willReturn($this->templateEngine);
 
-        $appState = $this->getMock(\Magento\Framework\App\State::class, ['getAreaCode'], [], '', false);
-        $appState->expects($this->any())->method('getAreaCode')->willReturn('frontend');
+        $this->appState = $this->getMock(\Magento\Framework\App\State::class, ['getAreaCode', 'getMode'], [], '', false);
+        $this->appState->expects($this->any())->method('getAreaCode')->willReturn('frontend');
         $storeManagerMock = $this->getMock(StoreManager::class, [], [], '', false);
         $storeMock = $this->getMock(Store::class, [], [], '', false);
         $storeManagerMock->expects($this->any())
@@ -112,7 +117,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'enginePool' => $this->templateEngine,
                 'resolver' => $this->resolver,
                 'validator' => $this->validator,
-                'appState' => $appState,
+                'appState' => $this->appState,
                 'logger' => $this->loggerMock,
                 'storeManager' => $storeManagerMock,
                 'urlBuilder' => $urlBuilderMock,
@@ -163,6 +168,30 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->with($exception)
             ->willReturn(null);
         $this->assertEquals($output, $this->block->fetchView($template));
+    }
+
+    public function testFetchViewWithNoFileNameDeveloperMode()
+    {
+        $template = false;
+        $templatePath = 'wrong_template_path.pthml';
+        $moduleName = 'Acme';
+        $blockName = 'acme_test_module_test_block';
+        $exception = "Invalid template file: '{$templatePath}' in module: '{$moduleName}' block's name: '{$blockName}'";
+        $this->block->setTemplate($templatePath);
+        $this->block->setData('module_name', $moduleName);
+        $this->block->setNameInLayout($blockName);
+        $this->validator->expects($this->once())
+            ->method('isValid')
+            ->with($template)
+            ->willReturn(false);
+        $this->loggerMock->expects($this->never())
+            ->method('critical');
+        $this->appState->expects($this->once())
+            ->method('getMode')
+            ->willReturn(\Magento\Framework\App\State::MODE_DEVELOPER);
+
+        $this->setExpectedException('\InvalidArgumentException', $exception);
+        $this->block->fetchView($template);
     }
 
     public function testSetTemplateContext()

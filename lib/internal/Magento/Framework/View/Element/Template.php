@@ -256,10 +256,12 @@ class Template extends AbstractBlock
         } else {
             $html = '';
             $templatePath = $fileName ?: $this->getTemplate();
-            $this->_logger->critical(
-                "Invalid template file: '{$templatePath}' in module: '{$this->getModuleName()}'"
-                . " block's name: '{$this->getNameInLayout()}'"
-            );
+            $errorMessage = "Invalid template file: '{$templatePath}' in module: '{$this->getModuleName()}'"
+                . " block's name: '{$this->getNameInLayout()}'";
+            if ($this->_appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
+                throw new \InvalidArgumentException($errorMessage);
+            }
+            $this->_logger->critical($errorMessage);
         }
 
         \Magento\Framework\Profiler::stop('TEMPLATE:' . $fileName);
