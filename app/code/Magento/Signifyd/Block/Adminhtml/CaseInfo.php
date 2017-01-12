@@ -104,16 +104,6 @@ class CaseInfo extends AbstractOrder
     }
 
     /**
-     * Retrieves current order Id.
-     *
-     * @return integer
-     */
-    public function getOrderId()
-    {
-        return $this->getOrder()->getEntityId();
-    }
-
-    /**
      * Gets case entity associated with order id.
      *
      * @return CaseInterface|null
@@ -142,7 +132,6 @@ class CaseInfo extends AbstractOrder
      */
     public function getAssociatedTeam(CaseInterface $caseEntity)
     {
-
         $result = 'unknown';
         $team = $caseEntity->getAssociatedTeam();
         if (isset($team['teamName'])) {
@@ -200,7 +189,18 @@ class CaseInfo extends AbstractOrder
         return [
             'title' => __('Submit Guarantee request'),
             'url' => $this->getUrl('signifyd/guarantee/create'),
-            'componentName' => 'submit_guarantee_request'
+            'componentName' => 'submit_guarantee_request',
+            'orderId' => $this->getOrderId()
         ];
+    }
+
+    /**
+     * Retrieves current order Id.
+     *
+     * @return integer
+     */
+    private function getOrderId()
+    {
+        return $this->getOrder()->getEntityId();
     }
 }
