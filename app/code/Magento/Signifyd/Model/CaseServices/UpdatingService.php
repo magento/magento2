@@ -3,20 +3,22 @@
  * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Model;
+namespace Magento\Signifyd\Model\CaseServices;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
+use Magento\Signifyd\Model\CommentsHistoryUpdater;
+use Magento\Signifyd\Model\MessageGenerators\GeneratorInterface;
 
 /**
  * Performs Signifyd case entity updating operations.
  */
-class CaseUpdatingService implements CaseUpdatingServiceInterface
+class UpdatingService implements UpdatingServiceInterface
 {
     /**
-     * @var MessageGeneratorInterface
+     * @var GeneratorInterface
      */
     private $messageGenerator;
 
@@ -31,14 +33,14 @@ class CaseUpdatingService implements CaseUpdatingServiceInterface
     private $commentsHistoryUpdater;
 
     /**
-     * CaseUpdatingService constructor.
+     * UpdatingService constructor.
      *
-     * @param MessageGeneratorInterface $messageGenerator
+     * @param GeneratorInterface $messageGenerator
      * @param CaseRepositoryInterface $caseRepository
      * @param CommentsHistoryUpdater $commentsHistoryUpdater
      */
     public function __construct(
-        MessageGeneratorInterface $messageGenerator,
+        GeneratorInterface $messageGenerator,
         CaseRepositoryInterface $caseRepository,
         CommentsHistoryUpdater $commentsHistoryUpdater
     ) {

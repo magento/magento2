@@ -41,6 +41,10 @@ class CommentsHistoryUpdater
      */
     public function addComment(CaseInterface $case, Phrase $message)
     {
+        if (!$message->getText()) {
+            return;
+        }
+
         /** @var \Magento\Sales\Api\Data\OrderStatusHistoryInterface $history */
         $history = $this->historyFactory->create();
         $history->setParentId($case->getOrderId())

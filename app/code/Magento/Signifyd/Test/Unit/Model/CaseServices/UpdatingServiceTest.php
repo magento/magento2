@@ -3,24 +3,24 @@
  * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Test\Unit\Model;
+namespace Magento\Signifyd\Test\Unit\Model\CaseServices;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\Signifyd\Model\CaseUpdatingService;
+use Magento\Signifyd\Model\CaseServices\UpdatingService;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
-use Magento\Signifyd\Model\MessageGeneratorException;
-use Magento\Signifyd\Model\MessageGeneratorInterface;
+use Magento\Signifyd\Model\MessageGenerators\GeneratorException;
+use Magento\Signifyd\Model\MessageGenerators\GeneratorInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Contains tests with different negative and positive scenarios for case updating service.
  */
-class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
+class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CaseUpdatingService
+     * @var UpdatingService
      */
     private $service;
 
@@ -30,7 +30,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var MessageGeneratorInterface|MockObject
+     * @var GeneratorInterface|MockObject
      */
     private $messageGenerator;
 
@@ -51,7 +51,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->messageGenerator = $this->getMockBuilder(MessageGeneratorInterface::class)
+        $this->messageGenerator = $this->getMockBuilder(GeneratorInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['generate'])
             ->getMock();
@@ -66,7 +66,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['addComment'])
             ->getMock();
 
-        $this->service = $this->objectManager->getObject(CaseUpdatingService::class, [
+        $this->service = $this->objectManager->getObject(UpdatingService::class, [
             'messageGenerator' => $this->messageGenerator,
             'caseRepository' => $this->caseRepository,
             'commentsHistoryUpdater' => $this->commentsHistoryUpdater
@@ -76,7 +76,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks a test case when Signifyd case id is missed in input data.
      *
-     * @covers \Magento\Signifyd\Model\CaseUpdatingService::update
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage The "caseId" should not be empty.
      */
@@ -90,7 +90,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks a test case when Signifyd case entity not found in repository.
      *
-     * @covers \Magento\Signifyd\Model\CaseUpdatingService::update
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
      * @expectedException \Magento\Framework\Exception\NotFoundException
      * @expectedExceptionMessage Case entity not found.
      */
@@ -112,7 +112,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks as test case when service cannot save Signifyd case entity
      *
-     * @covers \Magento\Signifyd\Model\CaseUpdatingService::update
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Cannot update Case entity.
      */
@@ -161,7 +161,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks as test case when message generator throws an exception
      *
-     * @covers \Magento\Signifyd\Model\CaseUpdatingService::update
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Cannot update Case entity.
      */
@@ -195,7 +195,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $this->messageGenerator->expects(self::once())
             ->method('generate')
             ->with($data)
-            ->willThrowException(new MessageGeneratorException(__('Cannot generate message.')));
+            ->willThrowException(new GeneratorException(__('Cannot generate message.')));
 
         $this->service->update($data);
     }
@@ -203,7 +203,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks a test case when comments history updater throws an exception.
      *
-     * @covers \Magento\Signifyd\Model\CaseUpdatingService::update
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Cannot update Case entity.
      */
@@ -251,7 +251,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks a test case when Signifyd case entity is successfully updated and message stored in comments history.
      *
-     * @covers \Magento\Signifyd\Model\CaseUpdatingService::update
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
      */
     public function testUpdate()
     {

@@ -3,25 +3,25 @@
  * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Test\Unit\Model;
+namespace Magento\Signifyd\Test\Unit\Model\CaseServices;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Signifyd\Model\CaseUpdatingService;
-use Magento\Signifyd\Model\CaseUpdatingServiceFactory;
+use Magento\Signifyd\Model\CaseServices\StubUpdatingService;
+use Magento\Signifyd\Model\CaseServices\UpdatingService;
+use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
 use Magento\Signifyd\Model\Config;
-use Magento\Signifyd\Model\MessageGeneratorInterface;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
-use Magento\Signifyd\Model\StubCaseUpdatingService;
+use Magento\Signifyd\Model\MessageGenerators\GeneratorInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Contains tests for case updating service factory.
  */
-class CaseUpdatingServiceFactoryTest extends \PHPUnit_Framework_TestCase
+class UpdatingServiceFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CaseUpdatingServiceFactory
+     * @var UpdatingServiceFactory
      */
     private $factory;
 
@@ -61,7 +61,7 @@ class CaseUpdatingServiceFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $objectManager = new ObjectManager($this);
-        $this->factory = $objectManager->getObject(CaseUpdatingServiceFactory::class, [
+        $this->factory = $objectManager->getObject(UpdatingServiceFactory::class, [
             'objectManager' => $this->fakeObjectManager,
             'generatorFactory' => $this->generatorFactory,
             'config' => $this->config
@@ -71,7 +71,7 @@ class CaseUpdatingServiceFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks type of instance for updating service if Signifyd is not enabled.
      *
-     * @covers \Magento\Signifyd\Model\CaseUpdatingServiceFactory::create
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory::create
      */
     public function testCreateWithInactiveConfig()
     {
@@ -82,17 +82,17 @@ class CaseUpdatingServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->fakeObjectManager->expects(self::once())
             ->method('create')
-            ->with(StubCaseUpdatingService::class)
-            ->willReturn(new StubCaseUpdatingService());
+            ->with(StubUpdatingService::class)
+            ->willReturn(new StubUpdatingService());
 
         $instance = $this->factory->create($type);
-        static::assertInstanceOf(StubCaseUpdatingService::class, $instance);
+        static::assertInstanceOf(StubUpdatingService::class, $instance);
     }
 
     /**
      * Checks type of instance for updating service if test type is received.
      *
-     * @covers \Magento\Signifyd\Model\CaseUpdatingServiceFactory::create
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory::create
      */
     public function testCreateWithTestType()
     {
@@ -103,17 +103,17 @@ class CaseUpdatingServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->fakeObjectManager->expects(self::once())
             ->method('create')
-            ->with(StubCaseUpdatingService::class)
-            ->willReturn(new StubCaseUpdatingService());
+            ->with(StubUpdatingService::class)
+            ->willReturn(new StubUpdatingService());
 
         $instance = $this->factory->create($type);
-        static::assertInstanceOf(StubCaseUpdatingService::class, $instance);
+        static::assertInstanceOf(StubUpdatingService::class, $instance);
     }
 
     /**
      * Checks exception type and message for unknown case type.
      *
-     * @covers \Magento\Signifyd\Model\CaseUpdatingServiceFactory::create
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory::create
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Specified message type does not supported.
      */
@@ -135,7 +135,7 @@ class CaseUpdatingServiceFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks if factory creates correct instance of case updating service.
      *
-     * @covers \Magento\Signifyd\Model\CaseUpdatingServiceFactory::create
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory::create
      */
     public function testCreate()
     {
@@ -144,7 +144,7 @@ class CaseUpdatingServiceFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('isActive')
             ->willReturn(true);
 
-        $messageGenerator = $this->getMockBuilder(MessageGeneratorInterface::class)
+        $messageGenerator = $this->getMockBuilder(GeneratorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->generatorFactory->expects(self::once())
@@ -152,16 +152,16 @@ class CaseUpdatingServiceFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($type)
             ->willReturn($messageGenerator);
 
-        $service = $this->getMockBuilder(CaseUpdatingService::class)
+        $service = $this->getMockBuilder(UpdatingService::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->fakeObjectManager->expects(self::once())
             ->method('create')
-            ->with(CaseUpdatingService::class, ['messageGenerator' => $messageGenerator])
+            ->with(UpdatingService::class, ['messageGenerator' => $messageGenerator])
             ->willReturn($service);
 
         $result = $this->factory->create($type);
-        static::assertInstanceOf(CaseUpdatingService::class, $result);
+        static::assertInstanceOf(UpdatingService::class, $result);
     }
 }

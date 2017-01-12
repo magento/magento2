@@ -11,7 +11,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\Signifyd\Model\CaseManagement;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -57,7 +56,6 @@ class CaseManagementTest extends \PHPUnit_Framework_TestCase
         $order = $this->getOrder();
         $case = $this->caseManagement->getByOrderId($order->getEntityId());
 
-        static::assertEquals(CaseInterface::GUARANTEE_PENDING, $case->getGuaranteeDisposition());
         static::assertEquals(CaseInterface::STATUS_PROCESSING, $case->getStatus());
         static::assertEquals(CaseInterface::DISPOSITION_GOOD, $case->getReviewDisposition());
         static::assertEquals('2016-12-12 15:17:17', $case->getCreatedAt());

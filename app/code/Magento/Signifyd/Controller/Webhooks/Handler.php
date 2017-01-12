@@ -8,7 +8,7 @@ namespace Magento\Signifyd\Controller\Webhooks;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Signifyd\Model\CaseUpdatingServiceFactory;
+use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequestValidator;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageReader;
@@ -37,7 +37,7 @@ class Handler extends Action
     private $webhookMessageReader;
 
     /**
-     * @var CaseUpdatingServiceFactory
+     * @var UpdatingServiceFactory
      */
     private $caseUpdatingServiceFactory;
 
@@ -51,7 +51,7 @@ class Handler extends Action
      * @param WebhookRequest $webhookRequest
      * @param LoggerInterface $logger
      * @param WebhookMessageReader $webhookMessageReader
-     * @param CaseUpdatingServiceFactory $caseUpdatingServiceFactory
+     * @param UpdatingServiceFactory $caseUpdatingServiceFactory
      * @param WebhookRequestValidator $webhookRequestValidator
      */
     public function __construct(
@@ -59,7 +59,7 @@ class Handler extends Action
         WebhookRequest $webhookRequest,
         LoggerInterface $logger,
         WebhookMessageReader $webhookMessageReader,
-        CaseUpdatingServiceFactory $caseUpdatingServiceFactory,
+        UpdatingServiceFactory $caseUpdatingServiceFactory,
         WebhookRequestValidator $webhookRequestValidator
     ) {
         parent::__construct($context);

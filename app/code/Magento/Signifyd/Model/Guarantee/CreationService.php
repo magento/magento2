@@ -7,9 +7,9 @@ namespace Magento\Signifyd\Model\Guarantee;
 
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Signifyd\Api\GuaranteeCreationServiceInterface;
 use Magento\Signifyd\Api\CaseManagementInterface;
-use Magento\Signifyd\Model\CaseUpdatingServiceFactory;
+use Magento\Signifyd\Api\GuaranteeCreationServiceInterface;
+use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use Psr\Log\LoggerInterface;
@@ -25,7 +25,7 @@ class CreationService implements GuaranteeCreationServiceInterface
     private $caseManagement;
 
     /**
-     * @var CaseUpdatingServiceFactory
+     * @var UpdatingServiceFactory
      */
     private $caseUpdatingServiceFactory;
 
@@ -43,13 +43,13 @@ class CreationService implements GuaranteeCreationServiceInterface
      * CreationService constructor.
      *
      * @param CaseManagementInterface $caseManagement
-     * @param CaseUpdatingServiceFactory $caseUpdatingServiceFactory
+     * @param UpdatingServiceFactory $caseUpdatingServiceFactory
      * @param Gateway $gateway
      * @param LoggerInterface $logger
      */
     public function __construct(
         CaseManagementInterface $caseManagement,
-        CaseUpdatingServiceFactory $caseUpdatingServiceFactory,
+        UpdatingServiceFactory $caseUpdatingServiceFactory,
         Gateway $gateway,
         LoggerInterface $logger
     ) {
@@ -75,7 +75,7 @@ class CreationService implements GuaranteeCreationServiceInterface
                 __('Case for order with specified id "%1" is not registered in Signifyd', $orderId)
             );
         }
-        if ($caseEntity->getGuaranteeDisposition() !== null) {
+        if ($caseEntity->getGuaranteeDisposition()) {
             throw new AlreadyExistsException(
                 __('Guarantee for order "%1" has been created already', $orderId)
             );

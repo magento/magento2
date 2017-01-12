@@ -3,21 +3,20 @@
  * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Model;
+namespace Magento\Signifyd\Model\CaseServices;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\Signifyd\Model\MessageGenerators\CaseCreation;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Contains tests for case entity updating service.
  */
-class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
+class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectManager
@@ -25,7 +24,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var CaseUpdatingService
+     * @var UpdatingService
      */
     private $service;
 
@@ -40,7 +39,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $messageFactory = $this->objectManager->get(GeneratorFactory::class);
         $messageGenerator = $messageFactory->create('cases/creation');
 
-        $this->service = $this->objectManager->create(CaseUpdatingService::class, [
+        $this->service = $this->objectManager->create(UpdatingService::class, [
             'messageGenerator' => $messageGenerator
         ]);
     }
@@ -48,7 +47,7 @@ class CaseUpdatingServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks case updating flow and messages in order comments history.
      *
-     * @covers \Magento\Signifyd\Model\CaseUpdatingService::update
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
      * @magentoDataFixture Magento/Signifyd/_files/case.php
      */
     public function testUpdate()

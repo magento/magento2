@@ -109,6 +109,22 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Checks a test when message does not specified.
+     *
+     * @covers \Magento\Signifyd\Model\CommentsHistoryUpdater::addComment
+     */
+    public function testAddCommentWithoutMessage()
+    {
+        $this->caseEntity->expects(self::never())
+            ->method('getOrderId');
+
+        $this->historyFactory->expects(self::never())
+            ->method('save');
+
+        $this->updater->addComment($this->caseEntity, __(''));
+    }
+
+    /**
      * Creates mock object for history entity.
      *
      * @return void
@@ -120,19 +136,19 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setParentId', 'setComment', 'setEntityName', 'save'])
             ->getMockForAbstractClass();
 
-        $this->historyFactory->expects(self::once())
+        $this->historyFactory->expects(self::any())
             ->method('create')
             ->willReturn($this->historyEntity);
 
-        $this->historyEntity->expects(self::once())
+        $this->historyEntity->expects(self::any())
             ->method('setParentId')
             ->with(self::$orderId)
             ->willReturnSelf();
-        $this->historyEntity->expects(self::once())
+        $this->historyEntity->expects(self::any())
             ->method('setComment')
             ->with(self::$message)
             ->willReturnSelf();
-        $this->historyEntity->expects(self::once())
+        $this->historyEntity->expects(self::any())
             ->method('setEntityName')
             ->with('order')
             ->willReturnSelf();

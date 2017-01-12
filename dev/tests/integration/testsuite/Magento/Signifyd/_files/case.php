@@ -23,7 +23,6 @@ $associatedTeam = [
 $case = $caseFactory->create();
 $case->setCaseId(123)
     ->setGuaranteeEligible(true)
-    ->setGuaranteeDisposition(CaseInterface::GUARANTEE_PENDING)
     ->setStatus(CaseInterface::STATUS_PROCESSING)
     ->setScore(553)
     ->setOrderId($order->getEntityId())

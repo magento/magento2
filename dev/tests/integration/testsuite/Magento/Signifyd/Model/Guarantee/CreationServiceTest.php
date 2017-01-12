@@ -37,6 +37,11 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -64,18 +69,17 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
      * for a specified order.
      *
      * @covers \Magento\Signifyd\Model\Guarantee\CreationService::createForOrder
+     * @expectedException \Magento\Framework\Exception\NotFoundException
+     * @expectedExceptionMessage Case for order with specified id "123" is not created
      */
     public function testCreateWithoutCaseEntity()
     {
         $orderId = 123;
-        $this->logger->expects(self::once())
-            ->method('error')
-            ->with('Cannot find case entity for order entity id: 123');
 
         $this->gateway->expects(self::never())
             ->method('submitCaseForGuarantee');
 
-        $result = $this->service->create($orderId);
+        $result = $this->service->createForOrder($orderId);
         self::assertFalse($result);
     }
 
@@ -96,30 +100,6 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects(self::once())
             ->method('error')
             ->with('Something wrong');
-
-        $result = $this->service->createForOrder($caseEntity->getOrderId());
-        self::assertFalse($result);
-    }
-
-    /**
-     * Checks a test case, when case entity updating is failed.
-     *
-     * @covers \Magento\Signifyd\Model\Guarantee\CreationService::createForOrder
-     * @magentoDataFixture Magento/Signifyd/_files/case.php
-     * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
-     */
-    public function testCreateWithFailedCaseUpdating()
-    {
-        $caseEntity = $this->getCaseEntity();
-
-        $this->gateway->expects(self::once())
-            ->method('submitCaseForGuarantee')
-            ->with($caseEntity->getCaseId())
-            ->willReturn('');
-
-        $this->logger->expects(self::once())
-            ->method('error')
-            ->with('Cannot retrieve guarantee disposition for case: ' . $caseEntity->getEntityId() . '.');
 
         $result = $this->service->createForOrder($caseEntity->getOrderId());
         self::assertFalse($result);
