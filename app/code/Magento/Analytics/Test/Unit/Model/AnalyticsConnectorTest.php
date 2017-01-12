@@ -3,7 +3,7 @@
  * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Test\Unit\Model\AnalyticsConnector;
+namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\AnalyticsConnector;
 use Magento\Framework\ObjectManagerInterface;
