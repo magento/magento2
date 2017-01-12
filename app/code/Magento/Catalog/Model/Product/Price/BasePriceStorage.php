@@ -210,7 +210,11 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 $this->validationResult->addFailedItem(
                     $id,
-                    __('Requested store is not found.')
+                    __(
+                        'Requested store is not found. Row ID: SKU = %SKU, Store ID: %storeId.',
+                        ['SKU' => $price->getSku(), 'storeId' => $price->getStoreId()]
+                    ),
+                    ['SKU' => $price->getSku(), 'storeId' => $price->getStoreId()]
                 );
             }
         }

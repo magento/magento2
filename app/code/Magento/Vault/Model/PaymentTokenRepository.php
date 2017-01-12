@@ -129,6 +129,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
         }
 
         $tokenModel->setIsActive(false);
+        $tokenModel->setIsVisible(false);
         $tokenModel->save();
 
         return true;

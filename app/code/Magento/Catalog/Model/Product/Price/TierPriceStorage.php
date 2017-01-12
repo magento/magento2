@@ -259,7 +259,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
      *
      * @param array $price
      * @param array $existingPrices
-     * @return int|void
+     * @return int|null
      */
     private function retrievePriceId(array $price, array $existingPrices)
     {
@@ -275,6 +275,8 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
                 return $existingPrice['value_id'];
             }
         }
+
+        return null;
     }
 
     /**
