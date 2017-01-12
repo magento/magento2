@@ -139,6 +139,7 @@ class CreateCatalogRulesIndexerTest extends Injectable
      * @param AssertCatalogPriceRuleAppliedProductPage $assertCatalogPriceRuleAppliedProductPage
      * @param TestStepFactory $stepFactory
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __inject(
         IndexManagement $indexManagement,
