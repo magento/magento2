@@ -130,10 +130,6 @@
             <field name="tax_region_id" xsi:type="number">12</field>
         </dataset>
 
-        <dataset name="us_ny_rate_8_1">
-            <field name="tax_region_id" xsi:type="number">43</field>
-        </dataset>
-
         <dataset name="us_ca_rate_8_25">
             <field name="tax_region_id" xsi:type="number">12</field>
         </dataset>
@@ -151,10 +147,6 @@
         </dataset>
 
         <dataset name="paypal_rate_8_25">
-            <field name="tax_region_id" xsi:type="number">12</field>
-        </dataset>
-
-        <dataset name="withZipRange">
             <field name="tax_region_id" xsi:type="number">12</field>
         </dataset>
 
