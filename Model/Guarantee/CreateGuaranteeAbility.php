@@ -14,9 +14,9 @@ use Magento\Sales\Model\Order;
 use Magento\Signifyd\Model\CaseManagement;
 
 /**
- * Checks if is possible to submit guarantee request for order.
+ * Checks if is possible to create Guarantee for order.
  */
-class SubmitEligible
+class CreateGuaranteeAbility
 {
     /**
      * @var CaseManagement
@@ -34,7 +34,7 @@ class SubmitEligible
     private $dateTimeFactory;
 
     /**
-     * Eligible count of days from the order date to submit a case for Guarantee.
+     * Eligible count of days from the order creation date to submit a case for Guarantee.
      *
      * @var int
      */
@@ -56,20 +56,32 @@ class SubmitEligible
     }
 
     /**
-     * Checks if Guarantee submit is applicable for order and case.
+     * Checks if it is possible to create Guarantee for order and case.
      *
      * @param int $orderId
      * @return bool
      */
-    public function check($orderId)
+    public function isAvailable($orderId)
     {
         $case = $this->caseManagement->getByOrderId($orderId);
-        if (null === $case || $case->isGuaranteeEligible() === false) {
+        if (null === $case) {
+            return false;
+        }
+
+        if ($case->isGuaranteeEligible() === false) {
             return false;
         }
 
         $order = $this->getOrder($orderId);
-        if (null === $order || $this->checkOrder($order) === false) {
+        if (null === $order) {
+            return false;
+        }
+
+        if (in_array($order->getState(), [Order::STATE_CANCELED, Order::STATE_CLOSED])) {
+            return false;
+        }
+
+        if ($this->isOrderOlderThen(static::$guarantyEligibleDays, $order)) {
             return false;
         }
 
@@ -80,21 +92,18 @@ class SubmitEligible
      * Checks if Guarantee submit is applicable for order.
      *
      * @param OrderInterface $order
+     * @param int $days number of days from the order creation date to submit a case for Guarantee.
      * @return bool
      */
-    private function checkOrder(OrderInterface $order)
+    private function isOrderOlderThen($days, OrderInterface $order)
     {
-        if (in_array($order->getState(), [Order::STATE_CANCELED, Order::STATE_CLOSED])) {
-            return false;
-        }
-
         $orderCreateDate = $this->dateTimeFactory->create($order->getCreatedAt(), new \DateTimeZone('UTC'));
         $currentDate = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
-        if ($orderCreateDate->diff($currentDate)->days >= static::$guarantyEligibleDays) {
-            return false;
+        if ($orderCreateDate->diff($currentDate)->days >= $days) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
