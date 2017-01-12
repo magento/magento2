@@ -20,7 +20,12 @@ class FlagTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
      */
-    private $serializer;
+    private $json;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Serialize
+     */
+    private $serialize;
 
     protected function setUp()
     {
@@ -76,7 +81,11 @@ class FlagTest extends \PHPUnit_Framework_TestCase
         $resourceCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+        $this->json = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->setMethods(null)
+            ->getMock();
+
+        $this->serialize = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Serialize::class)
             ->setMethods(null)
             ->getMock();
 
@@ -86,7 +95,8 @@ class FlagTest extends \PHPUnit_Framework_TestCase
             $resource,
             $resourceCollection,
             $data,
-            $this->serializer
+            $this->json,
+            $this->serialize
         );
     }
 
@@ -103,7 +113,7 @@ class FlagTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($flagCode, $this->flag->getFlagCode());
     }
 
-    public function testGetFlagData()
+    public function testGetFlagDataJson()
     {
         $result = $this->flag->getFlagData();
         $this->assertNull($result);
@@ -111,6 +121,16 @@ class FlagTest extends \PHPUnit_Framework_TestCase
         $this->flag->setData('flag_data', $flagData);
         $result = $this->flag->getFlagData();
         $this->assertEquals(json_decode($flagData), $result);
+    }
+
+    public function testGetFlagDataSerialized()
+    {
+        $result = $this->flag->getFlagData();
+        $this->assertNull($result);
+        $flagData = serialize('data');
+        $this->flag->setData('flag_data', $flagData);
+        $result = $this->flag->getFlagData();
+        $this->assertEquals(unserialize($flagData), $result);
     }
 
     public function testSetFlagData()

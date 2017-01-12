@@ -31,7 +31,14 @@ class Flag extends Model\AbstractModel
      *
      * @var \Magento\Framework\Serialize\Serializer\Json
      */
-    private $serializer;
+    private $json;
+
+    /**
+     * Serializer for encode/decode string/data.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Serialize
+     */
+    private $serialize;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -47,10 +54,13 @@ class Flag extends Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $json = null,
+        \Magento\Framework\Serialize\Serializer\Serialize $serialize = null
     ) {
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->json = $json ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serialize = $serialize ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Serialize::class);
         parent::__construct(
             $context,
             $registry,
@@ -102,9 +112,13 @@ class Flag extends Model\AbstractModel
     public function getFlagData()
     {
         if ($this->hasFlagData()) {
-            return $this->serializer->unserialize($this->getData('flag_data'));
-        } else {
-            return null;
+            $flagData = $this->getData('flag_data');
+            $data = $this->json->unserialize($flagData);
+            if (JSON_ERROR_NONE == json_last_error()) {
+                return $data;
+            } else {
+                return $this->serialize->unserialize($flagData);
+            }
         }
     }
 
@@ -116,7 +130,7 @@ class Flag extends Model\AbstractModel
      */
     public function setFlagData($value)
     {
-        return $this->setData('flag_data', $this->serializer->serialize($value));
+        return $this->setData('flag_data', $this->json->serialize($value));
     }
 
     /**
