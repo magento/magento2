@@ -95,7 +95,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->templateEngine->expects($this->any())->method('get')->willReturn($this->templateEngine);
 
-        $this->appState = $this->getMock(\Magento\Framework\App\State::class, ['getAreaCode', 'getMode'], [], '', false);
+        $this->appState = $this->getMock(
+            \Magento\Framework\App\State::class,
+            ['getAreaCode', 'getMode'],
+            [],
+            '',
+            false
+        );
         $this->appState->expects($this->any())->method('getAreaCode')->willReturn('frontend');
         $storeManagerMock = $this->getMock(StoreManager::class, [], [], '', false);
         $storeMock = $this->getMock(Store::class, [], [], '', false);
