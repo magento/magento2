@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Abstract class AbstractState
@@ -18,6 +19,18 @@ use Magento\Framework\App\DeploymentConfig;
 abstract class AbstractState implements StateInterface
 {
     /**
+     * Object Manager.
+     *
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var array
+     */
+    private $arguments;
+
+    /**
      * Specifies whether to clean instance under test
      *
      * @var bool
@@ -25,10 +38,25 @@ abstract class AbstractState implements StateInterface
     protected $isCleanInstance = false;
 
     /**
+     * @construct
+     * @param ObjectManager $objectManager
+     */
+    public function __construct(
+        ObjectManager $objectManager,
+        array $arguments = []
+    ) {
+        $this->objectManager = $objectManager;
+        $this->arguments = $arguments;
+    }
+    /**
      * @inheritdoc
      */
     public function apply()
     {
+        foreach ($this->arguments as $argument) {
+            $handler = $this->objectManager->get($argument);
+            $handler->execute($this);
+        }
         if ($this->isCleanInstance) {
             $this->clearInstance();
         }
