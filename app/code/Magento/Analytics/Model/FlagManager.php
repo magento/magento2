@@ -10,7 +10,6 @@ use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\Flag;
 
 /**
- * Class FlagManager
  * Service that allows to handle a flag object as a scalar value.
  */
 class FlagManager
@@ -50,8 +49,8 @@ class FlagManager
 
     /**
      * Save flag by code
-     * @param $flagCode
-     * @param $value
+     * @param string $flagCode
+     * @param mixed $value
      * @return bool
      */
     public function saveFlag($flagCode, $value)
@@ -75,7 +74,7 @@ class FlagManager
     }
 
     /**
-     * @param $flagCode
+     * @param string $flagCode
      * @return Flag
      */
     private function getFlagObject($flagCode)
