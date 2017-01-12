@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -152,7 +152,7 @@ class StoreManager implements
     public function getStore($storeId = null)
     {
         if (!isset($storeId) || '' === $storeId || $storeId === true) {
-            if (!$this->currentStoreId) {
+            if (null === $this->currentStoreId) {
                 \Magento\Framework\Profiler::start('store.resolve');
                 $this->currentStoreId = $this->storeResolver->getCurrentStoreId();
                 \Magento\Framework\Profiler::stop('store.resolve');

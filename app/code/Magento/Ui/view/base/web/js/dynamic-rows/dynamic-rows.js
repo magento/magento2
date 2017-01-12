@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -538,7 +538,8 @@ define([
                         label: cell.config.label,
                         name: cell.name,
                         required: !!cell.config.validation,
-                        columnsHeaderClasses: cell.config.columnsHeaderClasses
+                        columnsHeaderClasses: cell.config.columnsHeaderClasses,
+                        sortOrder: cell.config.sortOrder
                     });
 
                     this.labels.push(data);

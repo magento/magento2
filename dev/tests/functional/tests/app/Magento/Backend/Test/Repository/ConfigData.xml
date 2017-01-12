@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -248,6 +248,7 @@
                 </item>
             </field>
         </dataset>
+
         <dataset name="custom_allowed_country_rollback">
             <field name="general/country/allow" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
@@ -255,6 +256,7 @@
                 <item name="inherit" xsi:type="string">1</item>
             </field>
         </dataset>
+
         <dataset name="enable_single_store_mode">
             <field name="general/single_store_mode/enabled" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
@@ -263,12 +265,33 @@
                 <item name="value" xsi:type="number">1</item>
             </field>
         </dataset>
+
         <dataset name="enable_single_store_mode_rollback">
             <field name="general/single_store_mode/enabled" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
                 <item name="scope_id" xsi:type="number">0</item>
                 <item name="label" xsi:type="string">No</item>
                 <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="top_destinations_DE_ES_GB">
+            <field name="general/country/destinations" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="array">
+                    <item name="Germany" xsi:type="string">DE</item>
+                    <item name="Spain" xsi:type="string">ES</item>
+                    <item name="United Kingdom" xsi:type="string">GB</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="top_destinations_DE_ES_GB_rollback">
+            <field name="general/country/destinations" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="string"></item>
             </field>
         </dataset>
     </repository>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -14,7 +14,7 @@
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="refundedPrices" xsi:type="array">
-                <item name="0" xsi:type="string">139.9</item>
+                <item name="0" xsi:type="string">139.90</item>
             </data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
@@ -34,7 +34,7 @@
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="refundedPrices" xsi:type="array">
-                <item name="0" xsi:type="string">621.2</item>
+                <item name="0" xsi:type="string">621.20</item>
             </data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>

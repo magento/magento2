@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,6 +9,13 @@
     <type name="Magento\Sitemap\Model\Sitemap">
         <arguments>
             <argument name="resource" xsi:type="object">Magento\Sitemap\Model\ResourceModel\Sitemap</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="sitemap/generate/error_email" xsi:type="string">1</item>
+            </argument>
         </arguments>
     </type>
 </config>

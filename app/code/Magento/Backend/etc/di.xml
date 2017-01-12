@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -210,6 +210,24 @@
                     <item name="path" xsi:type="string">design/pagination/anchor_text_for_next</item>
                     <item name="fieldset" xsi:type="string">other_settings/pagination</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="trans_email/ident_general/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_general/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_sales/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_sales/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_support/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_support/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_custom1/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_custom1/email" xsi:type="string">1</item>
+                <item name="trans_email/ident_custom2/name" xsi:type="string">1</item>
+                <item name="trans_email/ident_custom2/email" xsi:type="string">1</item>
+                <item name="admin/url/custom" xsi:type="string">1</item>
+                <item name="admin/url/custom_path" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

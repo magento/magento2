@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -96,13 +96,17 @@ class ProductForm extends FormSections
             $this->callRender($typeId, 'fill', $renderArguments);
         } else {
             $sections = $this->getFixtureFieldsByContainers($product);
-            $category = $product->hasData('category_ids')
-                ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0] : $category;
-            if ($category) {
-                if ((int)$category->getId()) {
-                    $sections['product-details']['category_ids']['value'] = $category->getName();
-                } else {
-                    $this->getNewCategoryModalForm()->addNewCategory($category);
+            if ($product->hasData('category_ids') || $category) {
+                $sections['product-details']['category_ids']['value'] = [];
+                $categories = $product->hasData('category_ids')
+                    ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
+                    : [$category];
+                foreach ($categories as $category) {
+                    if ((int)$category->getId()) {
+                        $sections['product-details']['category_ids']['value'][] = $category->getName();
+                    } else {
+                        $this->getNewCategoryModalForm()->addNewCategory($category);
+                    }
                 }
             }
             $this->fillContainers($sections, $element);

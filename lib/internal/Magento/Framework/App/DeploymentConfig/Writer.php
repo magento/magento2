@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -94,10 +94,11 @@ class Writer
      * @param array $data
      * @param bool $override
      * @param string $pool
+     * @param array $comments
      * @return void
      * @throws FileSystemException
      */
-    public function saveConfig(array $data, $override = false, $pool = null)
+    public function saveConfig(array $data, $override = false, $pool = null, array $comments = [])
     {
         foreach ($data as $fileKey => $config) {
             $paths = $pool ? $this->configFilePool->getPathsByPool($pool) : $this->configFilePool->getPaths();
@@ -112,7 +113,7 @@ class Writer
                     }
                 }
 
-                $contents = $this->formatter->format($config);
+                $contents = $this->formatter->format($config, $comments);
                 try {
                     $writeFilePath = $paths[$fileKey];
                     $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($writeFilePath, $contents);

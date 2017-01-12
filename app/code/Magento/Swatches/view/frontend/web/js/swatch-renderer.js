@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -258,6 +258,9 @@ define([
 
             // whether swatches are rendered in product list or on product page
             inProductList: false,
+
+            // sly-old-price block selector
+            slyOldPriceSelector: '.sly-old-price',
 
             // tier prise selectors start
             tierPriceTemplateSelector: '#tier-prices-template',
@@ -836,6 +839,12 @@ define([
                     'prices': $widget._getPrices(result, $productPrice.priceBox('option').prices)
                 }
             );
+
+            if (result.oldPrice.amount !== result.finalPrice.amount) {
+                $(this.options.slyOldPriceSelector).show();
+            } else {
+                $(this.options.slyOldPriceSelector).hide();
+            }
 
             if (result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {

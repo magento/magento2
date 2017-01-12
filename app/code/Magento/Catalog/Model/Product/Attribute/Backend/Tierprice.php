@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -157,6 +157,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
         $data = parent::modifyPriceData($object, $data);
         foreach ($data as $key => $tierPrice) {
             if ($this->getPercentage($tierPrice)) {
+                $data[$key]['price'] = $object->getPrice() * (1 - $this->getPercentage($tierPrice) / 100);
                 $data[$key]['website_price'] = $object->getPrice() * (1 - $this->getPercentage($tierPrice) / 100);
             }
         }

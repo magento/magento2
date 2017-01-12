@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\PageCache\Test\TestCase\CacheStatusOnScheduledIndexingTest" summary="Page cache invalidation and flushing on scheduled indexing" ticketId="MAGETWO-45833">
+        <variation name="CacheStatusOnScheduledIndexingTestVariation1" summary="Verify page cache invalidation and flushing on scheduled indexing" ticketId="MAGETWO-45833">
+            <data name="initialCategory/dataset" xsi:type="string">default</data>
+            <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::default,catalogProductSimple::product_20_dollar</data>
+            <data name="caches/full_page" xsi:type="string">Enabled</data>
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCategoryCaching" />
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheStatus" />
+        </variation>
+    </testCase>
+</config>

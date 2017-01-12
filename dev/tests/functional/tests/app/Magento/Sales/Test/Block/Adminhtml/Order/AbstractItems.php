@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
 use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\ElementInterface;
 
 /**
  * Base Items block on Credit Memo, Invoice, Shipment view page.
@@ -21,11 +22,18 @@ class AbstractItems extends Block
     protected $rowItem = 'tbody';
 
     /**
-     * Locator for "Product" column.
+     * Locator for product sku column.
      *
      * @var string
      */
-    protected $product = '.col-product';
+    protected $sku = '.col-product .product-sku-block';
+
+    /**
+     * Locator for product title column.
+     *
+     * @var string
+     */
+    protected $title = '.col-product .product-title';
 
     /**
      * Locator for "Price" column.
@@ -82,9 +90,10 @@ class AbstractItems extends Block
         foreach ($items as $item) {
             $itemData = [];
 
-            $itemData += $this->parseProductName($item->find($this->product)->getText());
+            $itemData['product'] = preg_replace('/\n|\r/', '', $item->find($this->title)->getText());
+            $itemData['sku'] = $this->getSku($item);
             $itemData['price'] = $this->escapePrice($item->find($this->price)->getText());
-            $itemData['qty'] = $item->find($this->qty)->getText();
+            $itemData['qty'] = $this->getQty($item);
             $itemData['subtotal'] = $this->escapePrice($item->find($this->subtotal)->getText());
             $itemData['tax'] = $this->escapePrice($item->find($this->taxAmount)->getText());
             $itemData['discount'] = $this->escapePrice($item->find($this->discountAmount)->getText());
@@ -97,18 +106,33 @@ class AbstractItems extends Block
     }
 
     /**
-     * Parse product name to title and sku product.
+     * Get product quantity.
      *
-     * @param string $product
-     * @return array
+     * @param ElementInterface $item
+     * @return null|int
      */
-    protected function parseProductName($product)
+    private function getQty(ElementInterface $item)
     {
-        $data = array_map('trim', explode('SKU:', str_replace("\n", '', $product)));
-        return [
-            'product' => $data[0],
-            'sku' => isset($data[1]) ? $data[1] : ''
-        ];
+        $qty = null;
+        $elements = $item->getElements($this->qty);
+        foreach ($elements as $element) {
+            $qty += (int) $element->getText();
+        }
+        return $qty;
+    }
+
+    /**
+     * Get product SKU.
+     *
+     * @param ElementInterface $item
+     * @return string
+     */
+    private function getSku(ElementInterface $item)
+    {
+        $itemContent = $item->find($this->sku)->getText();
+        $itemContent = preg_replace('/\n|\r/', '', $itemContent);
+        $itemContent = str_replace('SKU: ', '', $itemContent);
+        return $itemContent;
     }
 
     /**
@@ -117,7 +141,7 @@ class AbstractItems extends Block
      * @var string $price
      * @return string
      */
-    protected function escapePrice($price)
+    private function escapePrice($price)
     {
         return preg_replace('[^0-9\.]', '', $price);
     }
