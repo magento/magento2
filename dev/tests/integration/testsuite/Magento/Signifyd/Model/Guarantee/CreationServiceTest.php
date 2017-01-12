@@ -37,11 +37,6 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -68,7 +63,7 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
      * Checks a test case, when Signifyd case entity cannot be found
      * for a specified order.
      *
-     * @covers \Magento\Signifyd\Model\Guarantee\CreationService::create
+     * @covers \Magento\Signifyd\Model\Guarantee\CreationService::createForOrder
      */
     public function testCreateWithoutCaseEntity()
     {
@@ -87,7 +82,7 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks a test case, when request is failing.
      *
-     * @covers \Magento\Signifyd\Model\Guarantee\CreationService::create
+     * @covers \Magento\Signifyd\Model\Guarantee\CreationService::createForOrder
      * @magentoDataFixture Magento/Signifyd/_files/case.php
      */
     public function testCreateWithFailedRequest()
@@ -102,14 +97,14 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
             ->method('error')
             ->with('Something wrong');
 
-        $result = $this->service->create($caseEntity->getOrderId());
+        $result = $this->service->createForOrder($caseEntity->getOrderId());
         self::assertFalse($result);
     }
 
     /**
      * Checks a test case, when case entity updating is failed.
      *
-     * @covers \Magento\Signifyd\Model\Guarantee\CreationService::create
+     * @covers \Magento\Signifyd\Model\Guarantee\CreationService::createForOrder
      * @magentoDataFixture Magento/Signifyd/_files/case.php
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
      */
@@ -126,14 +121,14 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
             ->method('error')
             ->with('Cannot retrieve guarantee disposition for case: ' . $caseEntity->getEntityId() . '.');
 
-        $result = $this->service->create($caseEntity->getOrderId());
+        $result = $this->service->createForOrder($caseEntity->getOrderId());
         self::assertFalse($result);
     }
 
     /**
      * Checks a test case, when case entity is updated successfully.
      *
-     * @covers \Magento\Signifyd\Model\Guarantee\CreationService::create
+     * @covers \Magento\Signifyd\Model\Guarantee\CreationService::createForOrder
      * @magentoDataFixture Magento/Signifyd/_files/case.php
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
      */
@@ -149,7 +144,7 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects(self::never())
             ->method('error');
 
-        $result = $this->service->create($caseEntity->getOrderId());
+        $result = $this->service->createForOrder($caseEntity->getOrderId());
         self::assertTrue($result);
 
         $updatedCase = $this->getCaseEntity();
