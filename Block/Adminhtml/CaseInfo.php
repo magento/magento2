@@ -94,11 +94,11 @@ class CaseInfo extends AbstractOrder
     }
 
     /**
-     * Checks if module is enabled.
+     * Checks if service is enabled.
      *
      * @return boolean
      */
-    public function isModuleActive()
+    public function isServiceActive()
     {
         return $this->config->isActive();
     }
