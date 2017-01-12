@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Analytics\Model\Condition;
+
 use Magento\Backend\Model\View\Layout\ConditionInterface;
 use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\Intl\DateTimeFactory;
@@ -14,7 +15,13 @@ use Magento\Framework\Intl\DateTimeFactory;
  */
 class CanViewNotification implements ConditionInterface
 {
-    const NOTIFICATION_INTERVAL = 30;
+    /**
+     * Time interval in seconds
+     *
+     * @var int
+     */
+    private $notificationInterval = 604800;
+
     /**
      * @var NotificationTime
      */
@@ -52,7 +59,7 @@ class CanViewNotification implements ConditionInterface
         }
         $datetime = $this->dateTimeFactory->create();
         return (
-            $datetime->getTimestamp() >= $lastNotificationTime + self::NOTIFICATION_INTERVAL
+            $datetime->getTimestamp() >= $lastNotificationTime + $this->notificationInterval
         );
     }
 }
