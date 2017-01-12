@@ -52,6 +52,6 @@
         <observer name="legacy_categorytree_load_after" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
     </event>
     <event name="catalog_product_save_before">
-        <observer name="set_special_price_start_date" instance="Magento\Catalog\Observer\SetSpecialPriceStartDateObserver" />
+        <observer name="set_special_price_start_date" instance="Magento\Catalog\Observer\SetSpecialPriceStartDate" />
     </event>
 </config>

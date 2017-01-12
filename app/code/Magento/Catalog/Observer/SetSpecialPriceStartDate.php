@@ -7,7 +7,10 @@ namespace Magento\Catalog\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-class SetSpecialPriceStartDateObserver implements ObserverInterface
+/**
+ *  Set value for Special Price start date
+ */
+class SetSpecialPriceStartDate implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
@@ -24,7 +27,7 @@ class SetSpecialPriceStartDateObserver implements ObserverInterface
     }
 
     /**
-     * Setting Special Price start date
+     * Set the current date to Special Price From attribute if it empty
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
