@@ -3,7 +3,7 @@
  * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Model;
+namespace Magento\Signifyd\Model\CaseServices;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
+class CreationServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectManager
@@ -47,7 +47,7 @@ class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
-     * @var CaseCreationService
+     * @var CreationService
      */
     private $service;
 
@@ -87,7 +87,7 @@ class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->service = $this->objectManager->create(
-            CaseCreationService::class,
+            CreationService::class,
             [
                 'signifydGateway' => $gateway,
                 'logger' => $this->logger
@@ -96,7 +96,7 @@ class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Signifyd\Model\CaseCreationService::createForOrder
+     * @covers \Magento\Signifyd\Model\CaseServices\CreationService::createForOrder
      * @magentoDataFixture Magento/Signifyd/_files/order_with_customer_and_two_simple_products.php
      */
     public function testCreateForOrderWithEmptyResponse()
@@ -125,7 +125,7 @@ class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Signifyd\Model\CaseCreationService::createForOrder
+     * @covers \Magento\Signifyd\Model\CaseServices\CreationService::createForOrder
      * @magentoDataFixture Magento/Signifyd/_files/order_with_customer_and_two_simple_products.php
      */
     public function testCreateForOrderWithBadResponse()
@@ -162,7 +162,7 @@ class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Signifyd\Model\CaseCreationService::createForOrder
+     * @covers \Magento\Signifyd\Model\CaseServices\CreationService::createForOrder
      * @magentoDataFixture Magento/Signifyd/_files/order_with_customer_and_two_simple_products.php
      */
     public function testCreateOrderWithEmptyInvestigationId()
@@ -183,7 +183,7 @@ class CaseCreationServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Signifyd\Model\CaseCreationService::createForOrder
+     * @covers \Magento\Signifyd\Model\CaseServices\CreationService::createForOrder
      * @magentoDataFixture Magento/Signifyd/_files/order_with_customer_and_two_simple_products.php
      */
     public function testCreateForOrder()

@@ -48,7 +48,6 @@ class HandlerTest extends AbstractController
         static::assertNotEmpty($caseEntity);
         static::assertEquals('2017-01-06 12:47:03', $caseEntity->getCreatedAt());
         static::assertEquals('2017-01-06 12:47:03', $caseEntity->getUpdatedAt());
-        static::assertEquals(CaseInterface::GUARANTEE_PENDING, $caseEntity->getGuaranteeDisposition());
         static::assertEquals('Magento', $caseEntity->getAssociatedTeam()['teamName']);
         static::assertEquals(true, $caseEntity->isGuaranteeEligible());
         static::assertEquals(CaseInterface::STATUS_OPEN, $caseEntity->getStatus());
