@@ -45,8 +45,9 @@ class Flag extends Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json $json
+     * @param \Magento\Framework\Serialize\Serializer\Serialize $serialize
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
