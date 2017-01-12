@@ -78,13 +78,12 @@ class SubscriptionHandler
     public function process(Value $configValue)
     {
         if ($configValue->isValueChanged()) {
-
             $enabled = $configValue->getData('value');
 
             if ($enabled && !$this->analyticsToken->isTokenExist()) {
                 $this->setCronSchedule();
                 $this->setAttemptsFlag();
-            } elseif(!$enabled) {
+            } elseif (!$enabled) {
                 $this->unsetAttemptsFlag();
             }
         }
