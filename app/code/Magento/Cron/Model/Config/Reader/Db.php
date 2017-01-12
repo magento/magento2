@@ -50,6 +50,6 @@ class Db
      */
     public function get()
     {
-        return $this->_converter->convert($this->config->getValue());
+        return $this->_converter->convert($this->config->get('system/default'));
     }
 }
