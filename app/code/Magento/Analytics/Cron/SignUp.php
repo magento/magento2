@@ -82,7 +82,7 @@ class SignUp
             $inboxNotification = $this->inboxFactory->create();
             $inboxNotification->addNotice(
                 "Analytics subscription unsuccessful",
-                "Ask Illia about message."
+                "Analytics subscription unsuccessful"
             );
             $this->inboxResource->save($inboxNotification);
             return false;
