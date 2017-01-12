@@ -62,8 +62,8 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
      * @dataProvider statusDataProvider
      *
      * @param boolean $isSubscriptionEnabled
-     * @param string $hasToken
-     * @param $expectedStatus
+     * @param boolean $hasToken
+     * @param string $expectedStatus
      *
      * @return void
      */
