@@ -42,6 +42,7 @@ define([
             });
 
             this.setOptions(result);
+            this.reset();
         }
     });
 });
