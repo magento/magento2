@@ -268,8 +268,7 @@ class Repository
                     'baseUrl' => $url,
                     'areaType' => $area,
                     'themePath' => $themePath,
-                    'localeCode' => $locale,
-                    'isSecure' => $isSecure
+                    'localeCode' => $locale
                 ]
             );
         }
