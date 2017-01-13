@@ -13,8 +13,6 @@ use Magento\Mtf\TestCase\Scenario;
  * 1. Configure shipping method.
  * 2. Configure payment method.
  * 3. Create products.
- * 4. Create and setup customer.
- * 5. Create sales rule according to dataset.
  *
  * Steps:
  * 1. Go to Frontend.
@@ -25,13 +23,13 @@ use Magento\Mtf\TestCase\Scenario;
  * 6. Select shipping method.
  * 7. Select payment method (use reward points and store credit if available).
  * 8. Verify order total on review step.
- * 9. Place order.
+ * 9. Click 'Place Order' button.
  * 10. Perform assertions.
  *
  * @group One_Page_Checkout
- * @ZephyrId MAGETWO-38399
+ * @ZephyrId MAGETWO-38400
  */
-class OnePageCheckoutFromMiniShoppingCartTest extends Scenario
+class OnePageCheckoutFromMiniShoppingCartDeclinedTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
@@ -40,7 +38,7 @@ class OnePageCheckoutFromMiniShoppingCartTest extends Scenario
     /* end tags */
 
     /**
-     * Runs one page checkout from mini shopping cart test.
+     * Verifies error message on Onepage Checkout.
      *
      * @return void
      */

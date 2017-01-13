@@ -352,5 +352,33 @@
                 <item name="value" xsi:type="number">1</item>
             </field>
         </dataset>
+
+        <dataset name="braintree_cctypes_AE_VI">
+            <field name="payment/braintree/cctypes" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="American Express" xsi:type="string">AE</item>
+                    <item name="Visa" xsi:type="string">VI</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="braintree_cctypes_AE_VI_rollback">
+            <field name="payment/braintree/cctypes" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="China Union Pay" xsi:type="string">CUP</item>
+                    <item name="American Express" xsi:type="string">AE</item>
+                    <item name="Visa" xsi:type="string">VI</item>
+                    <item name="MasterCard" xsi:type="string">MC</item>
+                    <item name="Discover" xsi:type="string">DI</item>
+                    <item name="JCB" xsi:type="string">JCB</item>
+                    <item name="Diners" xsi:type="string">DN</item>
+                    <item name="Maestro International" xsi:type="string">MI</item>
+                </item>
+            </field>
+        </dataset>
     </repository>
 </config>

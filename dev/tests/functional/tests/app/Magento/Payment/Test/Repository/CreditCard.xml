@@ -50,5 +50,12 @@
             <field name="cc_exp_year" xsi:type="string" />
             <field name="cc_cid" xsi:type="string" />
         </dataset>
+
+        <dataset name="master_default">
+            <field name="cc_number" xsi:type="string">5555555555554444</field>
+            <field name="cc_exp_month" xsi:type="string">01 - January</field>
+            <field name="cc_exp_year" xsi:type="string">2020</field>
+            <field name="cc_cid" xsi:type="string">123</field>
+        </dataset>
     </repository>
 </config>

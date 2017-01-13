@@ -61,4 +61,14 @@ class BraintreeCc extends PaymentCc
             $this->browser->switchToFrame();
         }
     }
+
+    /**
+     * Returns form's required elements.
+     *
+     * @return \Magento\Mtf\Client\ElementInterface[]
+     */
+    public function getRequiredFields()
+    {
+        return $this->_rootElement->getElements("div.field.required");
+    }
 }
