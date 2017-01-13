@@ -10,6 +10,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
+use Magento\Signifyd\Model\Config;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageReader;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequestValidator;
@@ -51,6 +52,10 @@ class Handler extends Action
      * @var CaseRepositoryInterface
      */
     private $caseRepository;
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * @param Context $context
@@ -60,6 +65,7 @@ class Handler extends Action
      * @param UpdatingServiceFactory $caseUpdatingServiceFactory
      * @param WebhookRequestValidator $webhookRequestValidator
      * @param CaseRepositoryInterface $caseRepository
+     * @param Config $config
      */
     public function __construct(
         Context $context,
@@ -68,7 +74,8 @@ class Handler extends Action
         WebhookMessageReader $webhookMessageReader,
         UpdatingServiceFactory $caseUpdatingServiceFactory,
         WebhookRequestValidator $webhookRequestValidator,
-        CaseRepositoryInterface $caseRepository
+        CaseRepositoryInterface $caseRepository,
+        Config $config
     ) {
         parent::__construct($context);
         $this->webhookRequest = $webhookRequest;
@@ -77,6 +84,7 @@ class Handler extends Action
         $this->caseUpdatingServiceFactory = $caseUpdatingServiceFactory;
         $this->webhookRequestValidator = $webhookRequestValidator;
         $this->caseRepository = $caseRepository;
+        $this->config = $config;
     }
 
     /**
@@ -94,6 +102,10 @@ class Handler extends Action
         $webhookMessage = $this->webhookMessageReader->read($this->webhookRequest);
 
         $data = $webhookMessage->getData();
+        if ($this->config->isDebugModeEnabled()) {
+            $this->logger->debug(json_encode($data));
+        }
+
         if (empty($data['caseId'])) {
             $this->_redirect('noroute');
             return;
