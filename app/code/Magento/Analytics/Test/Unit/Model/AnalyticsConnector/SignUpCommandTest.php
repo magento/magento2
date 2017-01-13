@@ -75,6 +75,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->httpClientFactoryMock = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->httpClientMock = $this->getMockBuilder(ZendClient::class)
             ->disableOriginalConstructor()

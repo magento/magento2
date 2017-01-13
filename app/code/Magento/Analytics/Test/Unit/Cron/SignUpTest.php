@@ -63,6 +63,7 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->inboxFactoryMock =  $this->getMockBuilder(InboxFactory::class)
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->inboxResourceMock =  $this->getMockBuilder(InboxResource::class)
