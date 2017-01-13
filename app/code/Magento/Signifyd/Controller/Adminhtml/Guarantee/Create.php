@@ -7,6 +7,7 @@ namespace Magento\Signifyd\Controller\Adminhtml\Guarantee;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Signifyd\Model\Guarantee\CreateGuaranteeAbility;
 use Magento\Signifyd\Model\Guarantee\CreationService;
 
 /**
@@ -20,17 +21,24 @@ class Create extends Action
      * @var CreationService
      */
     private $creationService;
+    /**
+     * @var CreateGuaranteeAbility
+     */
+    private $createGuaranteeAbility;
 
     /**
      * @param Context $context
      * @param CreationService $creationService
+     * @param CreateGuaranteeAbility $createGuaranteeAbility
      */
     public function __construct(
         Context $context,
-        CreationService $creationService
+        CreationService $creationService,
+        CreateGuaranteeAbility $createGuaranteeAbility
     ) {
         parent::__construct($context);
         $this->creationService = $creationService;
+        $this->createGuaranteeAbility = $createGuaranteeAbility;
     }
 
     /**
@@ -40,7 +48,7 @@ class Create extends Action
      */
     public function execute()
     {
-        $orderId = $this->getRequest()->getParam('orderId');
+        $orderId = (int)$this->getRequest()->getParam('orderId');
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if (empty($orderId)) {
@@ -50,7 +58,7 @@ class Create extends Action
         }
 
         $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
-        if ($this->creationService->createForOrder($orderId)) {
+        if ($this->createGuaranteeAbility->isAvailable($orderId) && $this->creationService->createForOrder($orderId)) {
             $this->messageManager->addSuccessMessage(
                 __('Order has been submitted for Guarantee.')
             );

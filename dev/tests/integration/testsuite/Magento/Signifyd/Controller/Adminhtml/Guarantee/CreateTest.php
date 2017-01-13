@@ -102,7 +102,7 @@ class CreateTest extends AbstractBackendController
         $this->getRequest()->setPostValue('orderId', $orderId);
 
         $this->creationService->expects($this->once())
-            ->method('create')
+            ->method('createForOrder')
             ->with($orderId)
             ->willReturn(false);
 
