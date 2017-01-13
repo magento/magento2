@@ -14,6 +14,7 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Controller\Webhooks\Handler;
 use Magento\Signifyd\Model\CaseServices\UpdatingService;
 use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
+use Magento\Signifyd\Model\Config;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessage;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageReader;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
@@ -118,6 +119,14 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getByCaseId'])
             ->getMockForAbstractClass();
 
+        $config = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isDebugModeEnabled'])
+            ->getMock();
+        $config->expects(self::any())
+            ->method('getByCaseId')
+            ->willReturn(false);
+
         $this->controller = new Handler(
             $this->context,
             $this->webhookRequest,
@@ -125,7 +134,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             $this->webhookMessageReader,
             $this->caseUpdatingServiceFactory,
             $this->webhookRequestValidator,
-            $this->caseRepository
+            $this->caseRepository,
+            $config
         );
     }
 
