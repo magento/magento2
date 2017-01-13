@@ -7,7 +7,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceBlock name="order_tab_info">
+        <referenceBlock name="order_additional_info">
             <block class="Magento\Signifyd\Block\Adminhtml\CaseInfo"  name="order_case_info" template="Magento_Signifyd::case_info.phtml"/>
         </referenceBlock>
     </body>
