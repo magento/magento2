@@ -44,15 +44,10 @@ class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\F
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
+        $element->setData(
+            'value',
+            __('Subscription status'). ': ' . __($this->subscriptionStatusProvider->getStatus()))
+        ;
         return parent::render($element);
-    }
-
-    /**
-     * @param AbstractElement $element
-     * @return string
-     */
-    protected function _getElementHtml(AbstractElement $element)
-    {
-        return __('Subscription status'). ': ' . __($this->subscriptionStatusProvider->getStatus());
     }
 }
