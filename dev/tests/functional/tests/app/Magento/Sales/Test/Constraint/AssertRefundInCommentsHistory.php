@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -21,28 +22,39 @@ class AssertRefundInCommentsHistory extends AbstractConstraint
     const REFUNDED_AMOUNT_PATTERN = '/^We refunded \w*\W{1,2}%s online. Transaction ID: "[\w\-]*"/';
 
     /**
-     * Assert that comment about refunded amount exist in Comments History section on order page in Admin.
+     * Assert that comment about refunded amount exists in Comments History section on order page in Admin.
      *
+     * @param OrderInjectable $order
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
      * @param string $orderId
-     * @param array $refundedPrices
      * @return void
      */
     public function processAssert(
+        OrderInjectable $order,
         SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
-        $orderId,
-        array $refundedPrices
+        $orderId
     ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
-        $actualRefundedAmount = $salesOrderView->getOrderHistoryBlock()->getRefundedAmount();
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $comments = $infoTab->getCommentsHistoryBlock()->getComments();
+
+        foreach ($comments as $key => $comment) {
+            if (stristr($comment['comment'], 'refunded') === false) {
+                unset($comments[$key]);
+            }
+        }
+        $comments = array_reverse(array_values($comments));
+
+        $refundedPrices = $order->getPrice()['refund'];
         foreach ($refundedPrices as $key => $refundedPrice) {
             \PHPUnit_Framework_Assert::assertRegExp(
-                sprintf(self::REFUNDED_AMOUNT_PATTERN, $refundedPrice),
-                $actualRefundedAmount[$key],
+                sprintf(self::REFUNDED_AMOUNT_PATTERN, $refundedPrice['grand_creditmemo_total']),
+                $comments[$key]['comment'],
                 'Incorrect refunded amount value for the order #' . $orderId
             );
         }
