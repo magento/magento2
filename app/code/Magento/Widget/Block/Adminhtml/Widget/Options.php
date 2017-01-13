@@ -163,6 +163,8 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             }
         }
 
+        $data['value'] = html_entity_decode( $data['value'] );
+
         // prepare element dropdown values
         if ($values = $parameter->getValues()) {
             // dropdown options are specified in configuration
