@@ -255,9 +255,11 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
     ) {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(Currencysymbol::XML_PATH_CUSTOM_CURRENCY_SYMBOL,
+            ->with(
+                Currencysymbol::XML_PATH_CUSTOM_CURRENCY_SYMBOL,
                 ScopeInterface::SCOPE_STORE,
-                null)
+                null
+            )
             ->willReturn($serializedCustomSymbols);
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
@@ -289,9 +291,11 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
-            ->with(Currencysymbol::XML_PATH_CUSTOM_CURRENCY_SYMBOL,
+            ->with(
+                Currencysymbol::XML_PATH_CUSTOM_CURRENCY_SYMBOL,
                 ScopeInterface::SCOPE_STORE,
-                null)
+                null
+            )
             ->willReturn(false);
         $this->serializerMock->expects($this->never())
             ->method('unserialize');
