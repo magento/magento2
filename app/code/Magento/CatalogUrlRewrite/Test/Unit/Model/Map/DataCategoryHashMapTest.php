@@ -5,7 +5,8 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Map;
 
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
+use Magento\Catalog\Model\ResourceModel\CategoryFactory;
+use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Framework\DB\Select;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Api\Data\CategoryInterface;
@@ -21,7 +22,10 @@ class DataCategoryHashMapTest extends \PHPUnit_Framework_TestCase
     /** @var CategoryRepository|\PHPUnit_Framework_MockObject_MockObject */
     private $categoryRepository;
 
-    /** @var CategoryResource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CategoryResourceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    private $categoryResourceFactory;
+
+    /** @var Category|\PHPUnit_Framework_MockObject_MockObject */
     private $categoryResource;
 
     /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
@@ -30,19 +34,24 @@ class DataCategoryHashMapTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->categoryRepository = $this->getMock(CategoryRepository::class, [], [], '', false);
+        $this->categoryResourceFactory = $this->getMock(CategoryFactory::class, ['create'], [], '', false);
         $this->categoryResource = $this->getMock(
-            CategoryResource::class,
+            Category::class,
             ['getConnection', 'getEntityTable'],
             [],
             '',
             false
         );
 
+        $this->categoryResourceFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->categoryResource);
+
         $this->model = (new ObjectManager($this))->getObject(
             DataCategoryHashMap::class,
             [
                 'categoryRepository' => $this->categoryRepository,
-                'categoryResource' => $this->categoryResource
+                'categoryResourceFactory' => $this->categoryResourceFactory
             ]
         );
     }

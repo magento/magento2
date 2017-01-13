@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
-use Magento\Catalog\Model\ResourceModel\Category;
+use Magento\Catalog\Model\ResourceModel\CategoryFactory;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Api\Data\CategoryInterface;
 
@@ -20,19 +20,19 @@ class DataCategoryHashMap implements HashMapInterface
     /** @var CategoryRepository */
     private $categoryRepository;
 
-    /** @var Category */
-    private $categoryResource;
+    /** @var CategoryFactory */
+    private $categoryResourceFactory;
 
     /**
      * @param CategoryRepository $categoryRepository
-     * @param Category $categoryResource
+     * @param CategoryFactory $categoryResourceFactory
      */
     public function __construct(
         CategoryRepository $categoryRepository,
-        Category $categoryResource
+        CategoryFactory $categoryResourceFactory
     ) {
         $this->categoryRepository = $categoryRepository;
-        $this->categoryResource = $categoryResource;
+        $this->categoryResourceFactory = $categoryResourceFactory;
     }
 
     /**
@@ -70,9 +70,10 @@ class DataCategoryHashMap implements HashMapInterface
      */
     private function getAllCategoryChildrenIds(CategoryInterface $category)
     {
-        $connection = $this->categoryResource->getConnection();
+        $categoryResource = $this->categoryResourceFactory->create();
+        $connection = $categoryResource->getConnection();
         $select = $connection->select()
-            ->from($this->categoryResource->getEntityTable(), 'entity_id')
+            ->from($categoryResource->getEntityTable(), 'entity_id')
             ->where($connection->quoteIdentifier('path') . ' LIKE :c_path');
         $bind = ['c_path' => $category->getPath() . '%'];
         return $connection->fetchCol($select, $bind);
