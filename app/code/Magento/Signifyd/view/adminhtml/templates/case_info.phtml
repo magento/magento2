@@ -46,20 +46,20 @@
         </table>
 
         <?php foreach ($block->getButtons() as $button):?>
-        <div data-bind="scope: '<?php /* @escapeNotVerified */ echo $button['componentName']; ?>'">
+        <div data-bind="scope: '<?php echo $block->escapeJs($block->escapeHtml($button['componentName'])); ?>'">
             <!-- ko template: getTemplate() --><!-- /ko -->
             <script type="text/x-magento-init">
             {
                 "*":{
                     "Magento_Ui/js/core/app": {
                         "components": {
-                            "<?php /* @escapeNotVerified */ echo $button['componentName']; ?>": {
+                            "<?php echo $block->escapeJs($block->escapeHtml($button['componentName'])); ?>": {
                                 "component": "Magento_Signifyd/js/request-send",
                                 "config": {
-                                    "title": "<?php echo $block->escapeHtml($button['title']); ?>",
-                                    "requestURL": "<?php /* @escapeNotVerified */ echo $button['url']; ?>",
+                                    "title": "<?php echo $block->escapeJs($block->escapeHtml($button['title'])); ?>",
+                                    "requestURL": "<?php echo $block->escapeJs($block->escapeUrl($button['url'])); ?>",
                                     "data": {
-                                        "orderId": "<?php /* @escapeNotVerified */ echo $button['orderId']; ?>"
+                                        "orderId": "<?php echo $block->escapeJs($button['orderId']); ?>"
                                     },
                                     "actions": [
                                         {
