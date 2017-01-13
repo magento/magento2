@@ -14,7 +14,7 @@ define([
         /**
          * Creates and submits form for Guarantee create/cancel
          */
-        sendRequest: function() {
+        sendRequest: function () {
             utils.submit({
                 url: this.requestURL,
                 data: this.data

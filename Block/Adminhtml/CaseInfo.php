@@ -103,7 +103,7 @@ class CaseInfo extends Template
      * @param callable $callback
      * @return mixed
      */
-    private function getCaseProperty( $defaultValue, callable $callback)
+    private function getCaseProperty($defaultValue, callable $callback)
     {
         return $this->isEmptyCase() ? $defaultValue : call_user_func($callback);
     }
@@ -115,7 +115,7 @@ class CaseInfo extends Template
      */
     public function isEmptyCase()
     {
-        return is_null($this->getCaseEntity());
+        return $this->getCaseEntity() === null;
     }
 
     /**
