@@ -21,3 +21,4 @@
 "Order has been submitted for Guarantee.","Order has been submitted for Guarantee."
 "Sorry, we can't submit order for Guarantee.","Sorry, we can't submit order for Guarantee."
 "Order id is required.","Order id is required."
+"The case entity should not be empty.","The case entity should not be empty."

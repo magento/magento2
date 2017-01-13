@@ -8,10 +8,11 @@ namespace Magento\Signifyd\Controller\Webhooks;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
-use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequestValidator;
-use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageReader;
+use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
+use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequestValidator;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -47,12 +48,18 @@ class Handler extends Action
     private $webhookRequestValidator;
 
     /**
+     * @var CaseRepositoryInterface
+     */
+    private $caseRepository;
+
+    /**
      * @param Context $context
      * @param WebhookRequest $webhookRequest
      * @param LoggerInterface $logger
      * @param WebhookMessageReader $webhookMessageReader
      * @param UpdatingServiceFactory $caseUpdatingServiceFactory
      * @param WebhookRequestValidator $webhookRequestValidator
+     * @param CaseRepositoryInterface $caseRepository
      */
     public function __construct(
         Context $context,
@@ -60,7 +67,8 @@ class Handler extends Action
         LoggerInterface $logger,
         WebhookMessageReader $webhookMessageReader,
         UpdatingServiceFactory $caseUpdatingServiceFactory,
-        WebhookRequestValidator $webhookRequestValidator
+        WebhookRequestValidator $webhookRequestValidator,
+        CaseRepositoryInterface $caseRepository
     ) {
         parent::__construct($context);
         $this->webhookRequest = $webhookRequest;
@@ -68,6 +76,7 @@ class Handler extends Action
         $this->webhookMessageReader = $webhookMessageReader;
         $this->caseUpdatingServiceFactory = $caseUpdatingServiceFactory;
         $this->webhookRequestValidator = $webhookRequestValidator;
+        $this->caseRepository = $caseRepository;
     }
 
     /**
@@ -83,10 +92,22 @@ class Handler extends Action
         }
 
         $webhookMessage = $this->webhookMessageReader->read($this->webhookRequest);
-        $caseUpdatingService = $this->caseUpdatingServiceFactory->create($webhookMessage->getEventTopic());
 
+        $data = $webhookMessage->getData();
+        if (empty($data['caseId'])) {
+            $this->_redirect('noroute');
+            return;
+        }
+
+        $case = $this->caseRepository->getByCaseId($data['caseId']);
+        if ($case === null) {
+            $this->_redirect('noroute');
+            return;
+        }
+
+        $caseUpdatingService = $this->caseUpdatingServiceFactory->create($webhookMessage->getEventTopic());
         try {
-            $caseUpdatingService->update($webhookMessage->getData());
+            $caseUpdatingService->update($case, $data);
         } catch (LocalizedException $e) {
             $this->getResponse()->setHttpResponseCode(400);
             $this->logger->critical($e);

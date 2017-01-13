@@ -163,7 +163,7 @@ class CreationServiceTest extends TestCase
         $dummyOrderId = 1;
         $dummyCaseId = 42;
         $dummyGuaranteeDisposition = 'foo';
-        $this->withCaseEntityExistsForOrderId(
+        $caseEntity = $this->withCaseEntityExistsForOrderId(
             $dummyOrderId,
             [
                 'caseId' => $dummyCaseId,
@@ -174,7 +174,7 @@ class CreationServiceTest extends TestCase
         $this->caseUpdatingService
             ->expects($this->once())
             ->method('update')
-            ->with($this->equalTo([
+            ->with($caseEntity, $this->equalTo([
                 'caseId' => $dummyCaseId,
                 'guaranteeDisposition' => $dummyGuaranteeDisposition,
             ]));
@@ -222,6 +222,8 @@ class CreationServiceTest extends TestCase
             ->method('getByOrderId')
             ->with($this->equalTo($orderId))
             ->willReturn($dummyCaseEntity);
+
+        return $dummyCaseEntity;
     }
 
     private function withGatewayFailure($failureMessage)
