@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,6 +18,11 @@ use Magento\Mtf\TestStep\TestStepInterface;
  */
 class CreateShipmentStep implements TestStepInterface
 {
+    /**
+     * Shipment column title.
+     */
+    const COLUMN_NAME = 'Shipment';
+
     /**
      * Orders Page.
      *
@@ -111,6 +116,15 @@ class CreateShipmentStep implements TestStepInterface
     public function getShipmentIds()
     {
         $this->salesOrderView->getOrderForm()->openTab('shipments');
-        return $this->salesOrderView->getOrderForm()->getTab('shipments')->getGridBlock()->getIds();
+        $this->salesOrderView->getOrderForm()->getTab('shipments')->getGridBlock()->resetFilter();
+        $shipmentIds = $this->salesOrderView->getOrderForm()->getTab('shipments')->getGridBlock()->getAllIds();
+        $incrementIds = [];
+        foreach ($shipmentIds as $shipmentId) {
+            $incrementIds[] = $this->salesOrderView->getOrderForm()
+                ->getTab('shipments')
+                ->getGridBlock()
+                ->getColumnValue($shipmentId, self::COLUMN_NAME);
+        }
+        return $incrementIds;
     }
 }

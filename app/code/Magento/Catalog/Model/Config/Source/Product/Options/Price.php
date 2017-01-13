@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Config\Source\Product\Options;
@@ -23,7 +23,7 @@ class Price implements ProductPriceOptionsInterface
     {
         return [
             ['value' => self::VALUE_FIXED, 'label' => __('Fixed')],
-            ['value' => self::VALUE_PERCENT, 'label' => __('Discount')],
+            ['value' => self::VALUE_PERCENT, 'label' => __('Percent')],
         ];
     }
 }
