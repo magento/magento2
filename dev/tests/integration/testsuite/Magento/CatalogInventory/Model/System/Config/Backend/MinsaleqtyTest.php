@@ -7,16 +7,29 @@
 namespace Magento\CatalogInventory\Model\System\Config\Backend;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Customer\Api\GroupManagementInterface;
 
 class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Framework\ObjectManagerInterface */
+    private $objectManager;
+
     /** @var Minsaleqty */
     private $minSaleQtyConfig;
 
+    /** @var GroupManagementInterface */
+    private $groupManagement;
+
+    public function __construct($name = null, array $data = array(), $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->groupManagement = $this->objectManager->create(GroupManagementInterface::class);
+    }
+
     protected function setUp()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->minSaleQtyConfig = $objectManager->create(Minsaleqty::class);
+        $this->minSaleQtyConfig = $this->objectManager->create(Minsaleqty::class);
         $this->minSaleQtyConfig->setPath('cataloginventory/item_options/min_sale_qty');
     }
 
@@ -25,7 +38,7 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
      * valid and non-numeric, it should be json encoded by the serializer, otherwise stored as-is. On load,
      * the data will be decoded (if needed) and restructured into a specific hashed array format.
      *
-     * @param $value
+     * @param bool|string|array $value
      * @param string $encodedExpectedValue
      * @param array $decodedExpectedValue
      * @magentoDbIsolation enabled
@@ -39,6 +52,11 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
 
         $this->minSaleQtyConfig->load($this->minSaleQtyConfig->getId());
         $hashedConfig = $this->minSaleQtyConfig->getValue();
+
+        if (!is_array($hashedConfig)) {
+            $this->fail('Loaded value is not an array, skipping further validation');
+        }
+
         $indexedConfig = array_values($hashedConfig);
         $this->assertEquals($decodedExpectedValue, $indexedConfig);
     }
@@ -52,23 +70,23 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
             'bool' => [false, '', []],
             'empty string' => ['', '', []],
             'empty array' => [[], '[]', []],
-            'valid numeric - global group' => [
+            'valid numeric - all customer group' => [
                 '22',
                 '22',
                 [
                     [
-                        'customer_group_id' => 32000,
+                        'customer_group_id' => $this->groupManagement::CUST_GROUP_ALL,
                         'min_sale_qty' => 22
                     ]
                 ]
             ],
-            'invalid array' => [
-                ['customer_group_id' => 32000, 'min_sale_qty' => 2.5],
-                '{"customer_group_id":32000,"min_sale_qty":2.5}',
+            'invalid named group array' => [
+                ['customer_group_id' => 1, 'min_sale_qty' => 2.5],
+                '{"customer_group_id":1,"min_sale_qty":2.5}',
                 [
                     0 => [
                         'customer_group_id' => 'customer_group_id',
-                        'min_sale_qty' => 32000
+                        'min_sale_qty' => 1
                     ],
                     1 => [
                         'customer_group_id' => 'min_sale_qty',
@@ -76,17 +94,17 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-            'valid array - global group' => [
-                [['customer_group_id' => 32000, 'min_sale_qty' => 2.5]],
+            'valid array - all customer group' => [
+                [['customer_group_id' => $this->groupManagement::CUST_GROUP_ALL, 'min_sale_qty' => 2.5]],
                 '2.5',
                 [
                     0 => [
-                        'customer_group_id' => 32000,
+                        'customer_group_id' => $this->groupManagement::CUST_GROUP_ALL,
                         'min_sale_qty' => 2.5
                     ]
                 ]
             ],
-            'valid wholesale' => [
+            'valid named group' => [
                 [['customer_group_id' => 2, 'min_sale_qty' => 2.5]],
                 '{"2":2.5}',
                 [
@@ -97,11 +115,11 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             'invalid - cannot override not logged in group' => [
-                [0 => ['min_sale_qty' => 2.5]],
+                [$this->groupManagement::NOT_LOGGED_IN_ID => ['min_sale_qty' => 2.5]],
                 '[1]',
                 [
                     0 => [
-                        'customer_group_id' => 0,
+                        'customer_group_id' => $this->groupManagement::NOT_LOGGED_IN_ID,
                         'min_sale_qty' => 1
                     ]
                 ]
