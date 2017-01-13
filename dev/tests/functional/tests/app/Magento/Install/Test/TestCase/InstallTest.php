@@ -45,7 +45,7 @@ use Magento\Mtf\Client\BrowserInterface;
  * 15. Perform assertions.
  *
  * @group Installer_and_Upgrade/Downgrade
- * @ZephyrId MAGETWO-31431
+ * @ZephyrId MAGETWO-31431, MAGETWO-62817
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
