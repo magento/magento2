@@ -99,7 +99,6 @@ class QuantityValidator
     {
         /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
         $quoteItem = $observer->getEvent()->getItem();
-
         if (!$quoteItem ||
             !$quoteItem->getProductId() ||
             !$quoteItem->getQuote() ||
@@ -107,33 +106,34 @@ class QuantityValidator
         ) {
             return;
         }
-
+        $product = $quoteItem->getProduct();
         $qty = $quoteItem->getQty();
 
-        /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
-        $stockItem = $this->stockRegistry->getStockItem(
-            $quoteItem->getProduct()->getId(),
-            $quoteItem->getProduct()->getStore()->getWebsiteId()
-        );
+        /* @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
         if (!$stockItem instanceof StockItemInterface) {
             throw new LocalizedException(__('The stock item for Product is not valid.'));
         }
 
-        $parentStockItem = false;
+        /* @var \Magento\CatalogInventory\Api\Data\StockStatusInterface $stockStatus */
+        $stockStatus = $this->stockRegistry->getStockStatus($product->getId(), $product->getStore()->getWebsiteId());
+
+        /* @var \Magento\CatalogInventory\Api\Data\StockStatusInterface $parentStockStatus */
+        $parentStockStatus = false;
 
         /**
          * Check if product in stock. For composite products check base (parent) item stock status
          */
         if ($quoteItem->getParentItem()) {
             $product = $quoteItem->getParentItem()->getProduct();
-            $parentStockItem = $this->stockRegistry->getStockItem(
+            $parentStockStatus = $this->stockRegistry->getStockStatus(
                 $product->getId(),
                 $product->getStore()->getWebsiteId()
             );
         }
 
-        if ($stockItem) {
-            if (!$stockItem->getIsInStock() || $parentStockItem && !$parentStockItem->getIsInStock()) {
+        if ($stockStatus) {
+            if (!$stockStatus->getStockStatus() || $parentStockStatus && !$parentStockStatus->getStockStatus()) {
                 $quoteItem->addErrorInfo(
                     'cataloginventory',
                     Data::ERROR_QTY,
@@ -156,13 +156,13 @@ class QuantityValidator
          * Check item for options
          */
         if (($options = $quoteItem->getQtyOptions()) && $qty > 0) {
-            $qty = $quoteItem->getProduct()->getTypeInstance()->prepareQuoteItemQty($qty, $quoteItem->getProduct());
+            $qty = $product->getTypeInstance()->prepareQuoteItemQty($qty, $product);
             $quoteItem->setData('qty', $qty);
-            if ($stockItem) {
+            if ($stockStatus) {
                 $result = $this->stockState->checkQtyIncrements(
-                    $quoteItem->getProduct()->getId(),
+                    $product->getId(),
                     $qty,
-                    $quoteItem->getProduct()->getStore()->getWebsiteId()
+                    $product->getStore()->getWebsiteId()
                 );
                 if ($result->getHasError()) {
                     $quoteItem->addErrorInfo(
