@@ -319,5 +319,17 @@
             <field name="region_id" xsi:type="string">California</field>
             <field name="postcode" xsi:type="string">90230</field>
         </dataset>
+
+        <dataset name="AVS_zip_match_address">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="street" xsi:type="string">49 Main</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">00382</field>
+        </dataset>
     </repository>
 </config>
