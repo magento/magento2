@@ -27,6 +27,6 @@ class SubscriptionForm extends Form
      */
     public function enableCheckbox()
     {
-        $this->_rootElement->find($this->checkbox, $strategy = Locator::SELECTOR_CSS, 'checkbox')->setValue([1]);
+        $this->_rootElement->find($this->checkbox, Locator::SELECTOR_CSS, 'checkbox')->setValue([1]);
     }
 }
