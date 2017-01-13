@@ -9,6 +9,7 @@ namespace Magento\Analytics\Test\Unit\Model;
 use Magento\Analytics\Model\Subscription as SubscriptionModel;
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Config\Model\Config\Structure\SearchInterface;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
@@ -40,6 +41,11 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
      * @var Field|\PHPUnit_Framework_MockObject_MockObject
      */
     private $elementFieldMock;
+
+    /**
+     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $reinitableConfigMock;
 
     /**
      * @var ObjectManagerHelper
@@ -92,6 +98,10 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->reinitableConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->subscriptionModel = $this->objectManagerHelper->getObject(
@@ -100,6 +110,7 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
                 'configValueFactory' => $this->configValueFactoryMock,
                 'configStructure' => $this->configStructureMock,
                 'configValueResource' => $this->configValueResourceMock,
+                'reinitableConfig' => $this->reinitableConfigMock,
                 'enabledConfigStructurePath' => $this->enableConfigStructurePath,
                 'yesValueDropdown'  => $this->yesValueDropdown,
             ]
@@ -160,6 +171,10 @@ class SubscriptionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('save')
             ->with($this->configValueMock)
+            ->willReturnSelf();
+        $this->reinitableConfigMock
+            ->expects($this->once())
+            ->method('reinit')
             ->willReturnSelf();
         $this->assertTrue($this->subscriptionModel->enable());
     }

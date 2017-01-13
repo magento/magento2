@@ -7,6 +7,7 @@ namespace Magento\Analytics\Model;
 
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Config\Model\Config\Structure\SearchInterface;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory as ConfigValueFactory;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
@@ -52,18 +53,28 @@ class Subscription
     private $configValueResource;
 
     /**
+     * Reinitable Config Model.
+     *
+     * @var ReinitableConfigInterface
+     */
+    private $reinitableConfig;
+
+    /**
      * @param ConfigValueFactory $configValueFactory
      * @param SearchInterface $configStructure
      * @param AbstractDb $configValueResource
+     * @param ReinitableConfigInterface $reinitableConfig
      */
     public function __construct(
         ConfigValueFactory $configValueFactory,
         SearchInterface $configStructure,
-        AbstractDb $configValueResource
+        AbstractDb $configValueResource,
+        ReinitableConfigInterface $reinitableConfig
     ) {
         $this->configValueFactory = $configValueFactory;
         $this->configStructure = $configStructure;
         $this->configValueResource = $configValueResource;
+        $this->reinitableConfig = $reinitableConfig;
     }
 
     /**
@@ -89,6 +100,8 @@ class Subscription
 
         $this->configValueResource
             ->save($configValue);
+
+        $this->reinitableConfig->reinit();
 
         return true;
     }
