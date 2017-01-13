@@ -9,13 +9,12 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\Shipment\View;
 use Magento\Sales\Test\Block\Adminhtml\Order\AbstractItems;
 
 /**
- * Class Items
- * Shipment Items block on Shipment view page
+ * Shipment Items block on Shipment view page.
  */
 class Items extends AbstractItems
 {
     /**
-     * Get items data
+     * Get items data.
      *
      * @return array
      */
@@ -27,8 +26,9 @@ class Items extends AbstractItems
         foreach ($items as $item) {
             $itemData = [];
 
-            $itemData += $this->parseProductName($item->find($this->product)->getText());
-            $itemData['qty'] = $item->find($this->qty)->getText();
+            $itemData['product'] = preg_replace('/\n|\r/', '', $item->find($this->title)->getText());
+            $itemData['sku'] = $this->getSku($item);
+            $itemData['qty'] = $this->getQty($item);
 
             $data[] = $itemData;
         }
