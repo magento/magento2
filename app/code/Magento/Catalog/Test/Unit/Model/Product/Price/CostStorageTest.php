@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,6 +40,16 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Store\Api\StoreRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $storeRepository;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Price\InvalidSkuChecker|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $invalidSkuChecker;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Price\Validation\Result|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $validationResult;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\CostStorage
@@ -101,6 +111,12 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
             true,
             ['getById']
         );
+        $this->validationResult = $this->getMockBuilder(\Magento\Catalog\Model\Product\Price\Validation\Result::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->invalidSkuChecker = $this->getMockBuilder(\Magento\Catalog\Model\Product\Price\InvalidSkuChecker::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -110,6 +126,8 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
                 'costInterfaceFactory' => $this->costInterfaceFactory,
                 'productIdLocator' => $this->productIdLocator,
                 'storeRepository' => $this->storeRepository,
+                'validationResult' => $this->validationResult,
+                'invalidSkuChecker' => $this->invalidSkuChecker,
                 'allowedProductTypes' => ['simple', 'virtual', 'downloadable'],
             ]
         );
@@ -123,16 +141,6 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $skus = ['sku_1', 'sku_2'];
-        $idsBySku = [
-            'sku_1' =>
-                [
-                    1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-                ],
-            'sku_2' =>
-                [
-                    2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
-                ]
-        ];
         $rawPrices = [
             [
                 'row_id' => 1,
@@ -145,10 +153,9 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
                 'store_id' => 1
             ]
         ];
-        $this->productIdLocator
-            ->expects($this->once())
-            ->method('retrieveProductIdsBySkus')->with($skus)
-            ->willReturn($idsBySku);
+        $this->invalidSkuChecker
+            ->expects($this->atLeastOnce())
+            ->method('isSkuListValid');
         $this->pricePersistenceFactory
             ->expects($this->once())
             ->method('create')
@@ -183,32 +190,6 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get method with exception.
-     *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested products don't exist: sku_1, sku_2
-     */
-    public function testGetWithException()
-    {
-        $skus = ['sku_1', 'sku_2'];
-        $idsBySku = [
-            'sku_1' =>
-                [
-                    1 => 'configurable'
-                ],
-            'sku_2' =>
-                [
-                    2 => 'grouped'
-                ]
-        ];
-        $this->productIdLocator
-            ->expects($this->once())
-            ->method('retrieveProductIdsBySkus')->with($skus)
-            ->willReturn($idsBySku);
-        $this->model->get($skus);
-    }
-
-    /**
      * Test update method.
      *
      * @return void
@@ -228,12 +209,16 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
                     1 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
                 ]
         ];
-        $this->costInterface->expects($this->exactly(4))->method('getSku')->willReturn($sku);
+        $this->costInterface->expects($this->exactly(5))->method('getSku')->willReturn($sku);
         $this->productIdLocator
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(1))
             ->method('retrieveProductIdsBySkus')->with([$sku])
             ->willReturn($idsBySku);
         $this->costInterface->expects($this->exactly(3))->method('getCost')->willReturn(15);
+        $this->invalidSkuChecker
+            ->expects($this->exactly(1))
+            ->method('retrieveInvalidSkuList')
+            ->willReturn([]);
         $this->costInterface->expects($this->exactly(2))->method('getStoreId')->willReturn(1);
         $this->pricePersistence->expects($this->atLeastOnce())->method('getEntityLinkField')->willReturn('row_id');
         $this->storeRepository->expects($this->once())->method('getById')->with(1)->willReturn($store);
@@ -242,6 +227,10 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(['attributeCode' => 'cost'])
             ->willReturn($this->pricePersistence);
+        $this->validationResult
+            ->expects($this->exactly(1))
+            ->method('getFailedRowIds')
+            ->willReturn([]);
         $formattedPrices = [
             [
                 'store_id' => 1,
@@ -250,42 +239,38 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $this->pricePersistence->expects($this->once())->method('update')->with($formattedPrices);
-        $this->assertTrue($this->model->update([$this->costInterface]));
-    }
-
-    /**
-     * Test update method without SKU.
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid attribute sku: .
-     */
-    public function testUpdateWithoutSku()
-    {
-        $this->costInterface->expects($this->exactly(2))->method('getSku')->willReturn(null);
-        $this->model->update([$this->costInterface]);
+        $this->validationResult
+            ->expects($this->exactly(1))
+            ->method('getFailedItems')
+            ->willReturn([]);
+        $this->assertEmpty($this->model->update([$this->costInterface]));
     }
 
     /**
      * Test update method with negative cost.
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid attribute Cost: -15.
      */
     public function testUpdateWithNegativeCost()
     {
         $sku = 'sku_1';
-        $idsBySku = [
-            'sku_1' =>
-                [
-                    1 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
-                ]
-        ];
-        $this->costInterface->expects($this->exactly(2))->method('getSku')->willReturn($sku);
-        $this->productIdLocator
-            ->expects($this->once(1))
-            ->method('retrieveProductIdsBySkus')->with([$sku])
-            ->willReturn($idsBySku);
-        $this->costInterface->expects($this->exactly(3))->method('getCost')->willReturn(-15);
+        $this->costInterface->expects($this->exactly(5))->method('getSku')->willReturn($sku);
+        $this->invalidSkuChecker
+            ->expects($this->exactly(1))
+            ->method('retrieveInvalidSkuList')
+            ->willReturn([]);
+        $this->validationResult
+            ->expects($this->exactly(1))
+            ->method('getFailedRowIds')
+            ->willReturn([0]);
+        $this->pricePersistenceFactory
+            ->expects($this->once())
+            ->method('create')
+            ->with(['attributeCode' => 'cost'])
+            ->willReturn($this->pricePersistence);
+        $this->pricePersistence->expects($this->atLeastOnce())->method('update');
+        $this->costInterface->expects($this->exactly(4))->method('getCost')->willReturn(-15);
+        $this->validationResult
+            ->expects($this->atLeastOnce())
+            ->method('getFailedItems');
         $this->model->update([$this->costInterface]);
     }
 
@@ -297,26 +282,16 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $skus = ['sku_1', 'sku_2'];
-        $idsBySku = [
-            'sku_1' =>
-                [
-                    1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-                ],
-            'sku_2' =>
-                [
-                    2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
-                ]
-        ];
-        $this->productIdLocator
-            ->expects($this->once())
-            ->method('retrieveProductIdsBySkus')->with($skus)
-            ->willReturn($idsBySku);
         $this->pricePersistenceFactory
             ->expects($this->once())
             ->method('create')
             ->with(['attributeCode' => 'cost'])
             ->willReturn($this->pricePersistence);
         $this->pricePersistence->expects($this->once())->method('delete')->with($skus);
+        $this->invalidSkuChecker
+            ->expects($this->exactly(1))
+            ->method('isSkuListValid')
+            ->willReturn(true);
         $this->model->delete($skus);
     }
 }

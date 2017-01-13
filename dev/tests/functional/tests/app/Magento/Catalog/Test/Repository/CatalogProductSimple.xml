@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -1798,6 +1798,36 @@
             <field name="checkout_data" xsi:type="array">
                 <item name="dataset" xsi:type="string">simple_order_default</item>
             </field>
+        </dataset>
+
+        <dataset name="product_with_additional_website">
+            <field name="sku" xsi:type="string">simple_product_with_category_%isolation%</field>
+            <field name="name" xsi:type="string">Simple product with category %isolation%</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">777</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">10</item>
+                <item name="dataset" xsi:type="string" />
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="dataset" xsi:type="string">custom_store</item>
+                </item>
+            </field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
         </dataset>
     </repository>
 </config>
