@@ -69,14 +69,15 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
             'guaranteeDisposition' => CaseInterface::GUARANTEE_APPROVED
         ];
 
-        $this->service->update($data);
-
         /** @var CaseRepositoryInterface $caseRepository */
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         /** @var CaseInterface $caseEntity */
         $caseEntity = $caseRepository->getByCaseId($caseId);
-        $orderEntityId = $caseEntity->getOrderId();
 
+        $this->service->update($caseEntity, $data);
+
+        $caseEntity = $caseRepository->getByCaseId($caseId);
+        $orderEntityId = $caseEntity->getOrderId();
         static::assertNotEmpty($caseEntity);
         static::assertEquals('2017-01-05 22:23:26', $caseEntity->getCreatedAt());
         static::assertEquals(CaseInterface::GUARANTEE_APPROVED, $caseEntity->getGuaranteeDisposition());

@@ -52,20 +52,16 @@ class UpdatingService implements UpdatingServiceInterface
     /**
      * Updates Signifyd Case entity by received data.
      *
+     * @param CaseInterface $case
      * @param array $data
      * @return void
      * @throws NotFoundException
      * @throws LocalizedException
      */
-    public function update(array $data)
+    public function update(CaseInterface $case, array $data)
     {
-        if (empty($data['caseId'])) {
-            throw new LocalizedException(__('The "%1" should not be empty.', 'caseId'));
-        }
-
-        $case = $this->caseRepository->getByCaseId($data['caseId']);
-        if ($case === null) {
-            throw new NotFoundException(__('Case entity not found.'));
+        if (empty($case->getEntityId()) || empty($case->getCaseId())) {
+            throw new LocalizedException(__('The case entity should not be empty.'));
         }
 
         try {

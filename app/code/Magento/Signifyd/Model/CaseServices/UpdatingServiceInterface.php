@@ -5,6 +5,8 @@
  */
 namespace Magento\Signifyd\Model\CaseServices;
 
+use Magento\Signifyd\Api\Data\CaseInterface;
+
 /**
  * Common abstraction to perform updating operations with Signifyd case entity.
  */
@@ -13,8 +15,9 @@ interface UpdatingServiceInterface
     /**
      * Updates Signifyd Case entity by received data.
      *
+     * @param CaseInterface $case
      * @param array $data
      * @return void
      */
-    public function update(array $data);
+    public function update(CaseInterface $case, array $data);
 }

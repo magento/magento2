@@ -90,7 +90,7 @@ class CreationService implements GuaranteeCreationServiceInterface
             'caseId' => $caseEntity->getCaseId(),
             'guaranteeDisposition' => $disposition
         ];
-        $updatingService->update($data);
+        $updatingService->update($caseEntity, $data);
 
         return true;
     }

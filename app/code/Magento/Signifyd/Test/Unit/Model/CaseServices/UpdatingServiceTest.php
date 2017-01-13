@@ -74,39 +74,35 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Checks a test case when Signifyd case id is missed in input data.
+     * Checks a test case when Signifyd case is empty entity.
      *
      * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "caseId" should not be empty.
+     * @expectedExceptionMessage The case entity should not be empty.
      */
-    public function testUpdateWithFailedValidation()
+    public function testUpdateWithEmptyCaseEntity()
     {
         $data = [];
+        $caseEntity = $this->withCaseEntity(null, 123, $data);
 
-        $this->service->update($data);
+        $this->service->update($caseEntity, $data);
     }
 
     /**
-     * Checks a test case when Signifyd case entity not found in repository.
+     * Checks a test case when Signifyd case id is not specified for a case entity.
      *
      * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Case entity not found.
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage The case entity should not be empty.
      */
-    public function testUpdateWithNotExistingCase()
+    public function testUpdateWithEmptyCaseId()
     {
-        $caseId = 123;
         $data = [
-            'caseId' => $caseId
+            'caseId' => 123
         ];
+        $caseEntity = $this->withCaseEntity(1, null, $data);
 
-        $this->caseRepository->expects(self::once())
-            ->method('getByCaseId')
-            ->with($caseId)
-            ->willReturn(null);
-
-        $this->service->update($data);
+        $this->service->update($caseEntity, $data);
     }
 
     /**
@@ -126,36 +122,13 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
             'score' => 500
         ];
 
-        $caseEntity = $this->getMockBuilder(CaseInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setCaseId', 'setStatus', 'setOrderId', 'setScore'])
-            ->getMockForAbstractClass();
-
-        $this->caseRepository->expects(self::once())
-            ->method('getByCaseId')
-            ->with($caseId)
-            ->willReturn($caseEntity);
-
-        $caseEntity->expects(self::never())
-            ->method('setOrderId');
-        $caseEntity->expects(self::once())
-            ->method('setCaseId')
-            ->with($caseId)
-            ->willReturnSelf();
-        $caseEntity->expects(self::once())
-            ->method('setStatus')
-            ->with(CaseInterface::STATUS_OPEN)
-            ->willReturnSelf();
-        $caseEntity->expects(self::once())
-            ->method('setScore')
-            ->with(500)
-            ->willReturnSelf();
+        $caseEntity = $this->withCaseEntity(1, $caseId, $data);
 
         $this->caseRepository->expects(self::once())
             ->method('save')
             ->willThrowException(new \Exception('Something wrong.'));
 
-        $this->service->update($data);
+        $this->service->update($caseEntity, $data);
     }
 
     /**
@@ -172,20 +145,7 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
             'caseId' => $caseId
         ];
 
-        $caseEntity = $this->getMockBuilder(CaseInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setCaseId'])
-            ->getMockForAbstractClass();
-
-        $this->caseRepository->expects(self::once())
-            ->method('getByCaseId')
-            ->with($caseId)
-            ->willReturn($caseEntity);
-
-        $caseEntity->expects(self::once())
-            ->method('setCaseId')
-            ->with($caseId)
-            ->willReturnSelf();
+        $caseEntity = $this->withCaseEntity(1, $caseId, $data);
 
         $this->caseRepository->expects(self::never())
             ->method('save')
@@ -197,7 +157,7 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
             ->with($data)
             ->willThrowException(new GeneratorException(__('Cannot generate message.')));
 
-        $this->service->update($data);
+        $this->service->update($caseEntity, $data);
     }
 
     /**
@@ -214,20 +174,7 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
             'caseId' => $caseId
         ];
 
-        $caseEntity = $this->getMockBuilder(CaseInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setCaseId'])
-            ->getMockForAbstractClass();
-
-        $this->caseRepository->expects(self::once())
-            ->method('getByCaseId')
-            ->with($caseId)
-            ->willReturn($caseEntity);
-
-        $caseEntity->expects(self::once())
-            ->method('setCaseId')
-            ->with($caseId)
-            ->willReturnSelf();
+        $caseEntity = $this->withCaseEntity(1, $caseId, $data);
 
         $this->caseRepository->expects(self::once())
             ->method('save')
@@ -245,7 +192,7 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
             ->with($caseEntity, $message)
             ->willThrowException(new \Exception('Something wrong'));
 
-        $this->service->update($data);
+        $this->service->update($caseEntity, $data);
     }
 
     /**
@@ -260,20 +207,7 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
             'caseId' => $caseId
         ];
 
-        $caseEntity = $this->getMockBuilder(CaseInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setCaseId'])
-            ->getMockForAbstractClass();
-
-        $this->caseRepository->expects(self::once())
-            ->method('getByCaseId')
-            ->with($caseId)
-            ->willReturn($caseEntity);
-
-        $caseEntity->expects(self::once())
-            ->method('setCaseId')
-            ->with($caseId)
-            ->willReturnSelf();
+        $caseEntity = $this->withCaseEntity(21, $caseId, $data);
 
         $this->caseRepository->expects(self::once())
             ->method('save')
@@ -290,6 +224,44 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
             ->method('addComment')
             ->with($caseEntity, $message);
 
-        $this->service->update($data);
+        $this->service->update($caseEntity, $data);
+    }
+
+    /**
+     * Create mock for case entity with common scenarios.
+     *
+     * @param $caseEntityId
+     * @param $caseId
+     * @param array $data
+     * @return CaseInterface|MockObject
+     */
+    private function withCaseEntity($caseEntityId, $caseId, array $data = [])
+    {
+        /** @var CaseInterface|MockObject $caseEntity */
+        $caseEntity = $this->getMockBuilder(CaseInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getEntityId', 'getCaseId', 'setCaseId', 'setStatus', 'setOrderId', 'setScore'])
+            ->getMockForAbstractClass();
+
+        $caseEntity->expects(self::any())
+            ->method('getEntityId')
+            ->willReturn($caseEntityId);
+        $caseEntity->expects(self::any())
+            ->method('getCaseId')
+            ->willReturn($caseId);
+
+        foreach ($data as $property => $value) {
+            $method = 'set' . ucfirst($property);
+            if ($property === 'orderId') {
+                $caseEntity->expects(self::never())
+                    ->method($method);
+            }
+            $caseEntity->expects(self::any())
+                ->method($method)
+                ->with(self::equalTo($value))
+                ->willReturnSelf();
+        }
+
+        return $caseEntity;
     }
 }
