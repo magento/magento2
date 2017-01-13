@@ -110,7 +110,12 @@ class ProductScopeRewriteGenerator
             if (!$this->isGlobalScope($id)
                 && !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore($id, $productId, Product::ENTITY)
             ) {
-                $urls = array_merge($urls, $this->generateForSpecificStoreView($id, $productCategories, $product));
+                // before loading the category collection by looping it, clone it and set the correct store id,
+                // so we get the correct url_path & url_key for that specific store id
+                $storeSpecificProductCategories = clone $productCategories;
+                $storeSpecificProductCategories->setStoreId($id);
+
+                $urls = array_merge($urls, $this->generateForSpecificStoreView($id, $storeSpecificProductCategories, $product));
             }
         }
 
