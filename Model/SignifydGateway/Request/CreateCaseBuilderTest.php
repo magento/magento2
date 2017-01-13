@@ -83,7 +83,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                 'orderSessionId' => $signifydOrderSessionId->get($order->getQuoteId()),
                 'browserIpAddress' => $order->getRemoteIp(),
                 'orderId' => $order->getIncrementId(),
-                'createdAt' => '2016-12-12T12:00:55+00:00',
+                'createdAt' => date('c', strtotime(date('Y-m-d 00:00:55'))),
                 'paymentGateway' => 'paypal_account',
                 'transactionId' => $payment->getLastTransId(),
                 'currency' => $order->getOrderCurrencyCode(),

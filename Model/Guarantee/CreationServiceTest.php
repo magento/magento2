@@ -12,6 +12,7 @@ use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
+use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
@@ -69,8 +70,6 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
      * for a specified order.
      *
      * @covers \Magento\Signifyd\Model\Guarantee\CreationService::createForOrder
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Case for order with specified id "123" is not created
      */
     public function testCreateWithoutCaseEntity()
     {
@@ -95,7 +94,7 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->gateway->expects(self::once())
             ->method('submitCaseForGuarantee')
-            ->willThrowException(new ApiCallException('Something wrong'));
+            ->willThrowException(new GatewayException('Something wrong'));
 
         $this->logger->expects(self::once())
             ->method('error')
