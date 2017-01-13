@@ -11,25 +11,13 @@ use Magento\Customer\Api\GroupManagementInterface;
 
 class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\ObjectManagerInterface */
-    private $objectManager;
-
     /** @var Minsaleqty */
     private $minSaleQtyConfig;
 
-    /** @var GroupManagementInterface */
-    private $groupManagement;
-
-    public function __construct($name = null, array $data = [], $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->groupManagement = $this->objectManager->create(GroupManagementInterface::class);
-    }
-
     protected function setUp()
     {
-        $this->minSaleQtyConfig = $this->objectManager->create(Minsaleqty::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->minSaleQtyConfig = $objectManager->create(Minsaleqty::class);
         $this->minSaleQtyConfig->setPath('cataloginventory/item_options/min_sale_qty');
     }
 
@@ -66,8 +54,10 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
      */
     public function saveAndLoadDataProvider()
     {
-        $allCustomersGroupID = $this->groupManagement->getAllCustomersGroup()->getId();
-        $notLoggedInGroupID = $this->groupManagement->getNotLoggedInGroup()->getId();
+        $objectManager = Bootstrap::getObjectManager();
+        $groupManagement = $objectManager->create(GroupManagementInterface::class);
+        $allCustomersGroupID = $groupManagement->getAllCustomersGroup()->getId();
+        $notLoggedInGroupID = $groupManagement->getNotLoggedInGroup()->getId();
 
         return [
             'bool' => [false, '', []],
