@@ -395,6 +395,8 @@ class Multishipping extends \Magento\Framework\DataObject
                 }
             }
 
+            $this->prepareShippingAssignment($quote);
+
             /**
              * Delete all not virtual quote items which are not added to shipping address
              * MultishippingQty should be defined for each quote item when it processed with _addShippingItem
