@@ -25,7 +25,7 @@ class CaseInfo extends Template
     /**
      * @var CaseInterface
      */
-    private $caseEntity = null;
+    private $caseEntity = false;
 
     /**
      * @var CaseManagement
@@ -87,13 +87,25 @@ class CaseInfo extends Template
      */
     private function getCaseEntity()
     {
-        if (is_null($this->caseEntity)) {
+        if ($this->caseEntity === false) {
             $this->caseEntity = $this->caseManagement->getByOrderId(
                 $this->getOrderId()
             );
         }
 
         return $this->caseEntity;
+    }
+
+    /**
+     * Default getter for case properties
+     *
+     * @param mixed $defaultValue
+     * @param callable $callback
+     * @return mixed
+     */
+    private function getCaseProperty( $defaultValue, callable $callback)
+    {
+        return $this->isEmptyCase() ? $defaultValue : call_user_func($callback);
     }
 
     /**
@@ -113,7 +125,9 @@ class CaseInfo extends Template
      */
     public function getCaseStatus()
     {
-        return $this->isEmptyCase() ? '' : $this->getCaseEntity()->getStatus();
+        return $this->getCaseProperty('', function () {
+            return $this->getCaseEntity()->getStatus();
+        });
     }
 
     /**
@@ -123,7 +137,9 @@ class CaseInfo extends Template
      */
     public function getCaseScore()
     {
-        return $this->isEmptyCase() ? 0 : $this->getCaseEntity()->getScore();
+        return $this->getCaseProperty(0, function () {
+            return $this->getCaseEntity()->getScore();
+        });
     }
 
     /**
@@ -133,11 +149,9 @@ class CaseInfo extends Template
      */
     public function getCaseGuaranteeEligible()
     {
-        if ($this->isEmptyCase()) {
-            return '';
-        }
-
-        return $this->getCaseEntity()->isGuaranteeEligible() ? __('Yes') : __('No');
+        return $this->getCaseProperty('', function () {
+            return $this->getCaseEntity()->isGuaranteeEligible() ? __('Yes') : __('No');
+        });
     }
 
     /**
@@ -147,11 +161,9 @@ class CaseInfo extends Template
      */
     public function getCaseGuaranteeDisposition()
     {
-        if ($this->isEmptyCase()) {
-            return '';
-        }
-
-        return $this->getCaseEntity()->getGuaranteeDisposition();
+        return $this->getCaseProperty('', function () {
+            return $this->getCaseEntity()->getGuaranteeDisposition();
+        });
     }
 
     /**
@@ -161,11 +173,9 @@ class CaseInfo extends Template
      */
     public function getCaseReviewDisposition()
     {
-        if ($this->isEmptyCase()) {
-            return '';
-        }
-
-        return $this->getCaseEntity()->getReviewDisposition();
+        return $this->getCaseProperty('', function () {
+            return $this->getCaseEntity()->getReviewDisposition();
+        });
     }
 
     /**
@@ -175,11 +185,9 @@ class CaseInfo extends Template
      */
     public function getCaseCreatedAt()
     {
-        if ($this->isEmptyCase()) {
-            return '';
-        }
-
-        return $this->getCaseEntity()->getCreatedAt();
+        return $this->getCaseProperty('asd', function () {
+            return $this->getCaseEntity()->getCreatedAt();
+        });
     }
 
     /**
@@ -189,11 +197,9 @@ class CaseInfo extends Template
      */
     public function getCaseUpdatedAt()
     {
-        if ($this->isEmptyCase()) {
-            return '';
-        }
-
-        return $this->getCaseEntity()->getUpdatedAt();
+        return $this->getCaseProperty('', function () {
+            return $this->getCaseEntity()->getUpdatedAt();
+        });
     }
 
     /**
@@ -203,17 +209,15 @@ class CaseInfo extends Template
      */
     public function getCaseAssociatedTeam()
     {
-        if ($this->isEmptyCase()) {
-            return '';
-        }
+        return $this->getCaseProperty('', function () {
+            $teamName = 'unknown';
+            $team = $this->getCaseEntity()->getAssociatedTeam();
+            if (isset($team['teamName'])) {
+                $teamName = $team['teamName'];
+            }
 
-        $result = 'unknown';
-        $team = $this->getCaseEntity()->getAssociatedTeam();
-        if (isset($team['teamName'])) {
-            $result = $team['teamName'];
-        }
-
-        return $result;
+            return $teamName;
+        });
     }
 
     /**
@@ -224,21 +228,19 @@ class CaseInfo extends Template
      */
     public function getScoreClass()
     {
-        if ($this->isEmptyCase()) {
-            return '';
-        }
+        return $this->getCaseProperty('', function () {
+            $score = $this->getCaseEntity()->getScore();
 
-        $score = $this->getCaseEntity()->getScore();
+            if (self::$scoreAccept <= $score) {
+                $result = 'green';
+            } elseif ($score <= self::$scoreDecline) {
+                $result = 'red';
+            } else {
+                $result = 'yellow';
+            }
 
-        if (self::$scoreAccept <= $score) {
-            $result = 'green';
-        } elseif ($score <= self::$scoreDecline) {
-            $result = 'red';
-        } else {
-            $result = 'yellow';
-        }
-
-        return $result;
+            return $result;
+        });
     }
 
     /**
