@@ -73,14 +73,13 @@ class WebsiteIds extends DataSource
         }
 
         foreach ($this->fixtureData as $dataset) {
-            if (is_array($dataset)) {
-                $this->processStore($dataset);
-            } elseif ($dataset instanceof Store) {
-                $this->processStore($dataset);
-            } elseif (isset($dataset['websites'])) {
+            if (is_array($dataset) && isset($dataset['websites'])) {
                 foreach ($dataset['websites'] as $website) {
                     $this->websites[] = $website;
                 }
+            } else {
+                $store = $this->createStore($dataset);
+                $this->setWebsiteStoreData($store);
             }
         }
 
@@ -88,28 +87,38 @@ class WebsiteIds extends DataSource
     }
 
     /**
-     * Add website by dataset.
+     * Create store.
      *
-     * @param array $dataset
+     * @param array|object $dataset
+     * @return Store
+     */
+    private function createStore($dataset)
+    {
+        if (is_array($dataset) && isset($dataset['store'])) {
+            $store = $dataset['store'];
+        } else {
+            $store = ($dataset instanceof Store)
+                ? $dataset
+                : $this->fixtureFactory->createByCode('store', $dataset);
+        }
+        !$store->getStoreId() ?: $store->persist();
+
+        return $store;
+    }
+
+    /**
+     * Set website and store data.
+     *
+     * @param Store $store
      * @return void
      */
-    private function processStore(array $dataset)
+    private function setWebsiteStoreData(Store $store)
     {
-        if (isset($dataset['store'])) {
-            $website = $dataset['store']->getDataFieldConfig('group_id')['source']
-                ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
-            $this->data[] = $website->getName();
-            $this->websites[] = $website;
-            $this->stores[] = $dataset['store'];
-        } elseif (isset($dataset['dataset'])) {
-            $store = $this->fixtureFactory->createByCode('store', $dataset);
-            !$store->getStoreId() ? : $store->persist();
-            $website = $store->getDataFieldConfig('group_id')['source']
-                ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
-            $this->data[] = $website->getName();
-            $this->websites[] = $website;
-            $this->stores[] = $store;
-        }
+        $website = $store->getDataFieldConfig('group_id')['source']
+            ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
+        $this->data[] = $website->getName();
+        $this->websites[] = $website;
+        $this->stores[] = $store;
     }
 
     /**
