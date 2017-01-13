@@ -11,6 +11,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Custom currency symbol model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Currencysymbol
 {
