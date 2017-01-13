@@ -9,12 +9,12 @@ use Magento\Mtf\TestCase\Scenario;
 /**
  * Steps:
  * 1. Log in to backend.
- * 2. Click OK on subscription pop-up
+ * 2. Click Cancel on subscription pop-up
  * 3. Navigate to menu Stores>Configuration>General>Analytics->General
  *
- * @ZephyrId MAGETWO-63108
+ * @ZephyrId MAGETWO-63156
  */
-class AnalyticsSubscribeTest extends Scenario
+class DeclineAnalyticsSubscriptionTest extends Scenario
 {
     /* tags */
     const MVP = 'no';

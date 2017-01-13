@@ -13,7 +13,7 @@ use Magento\Mtf\TestStep\TestStepInterface;
  * 1. Log in to backend.
  * 2. Click OK on subscription pop-up
  */
-class ConfirmSubscriptionStep implements TestStepInterface
+class AcceptSubscriptionStep implements TestStepInterface
 {
     /**
      * Dashboard page.
