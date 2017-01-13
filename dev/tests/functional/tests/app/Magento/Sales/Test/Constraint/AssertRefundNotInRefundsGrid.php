@@ -26,7 +26,7 @@ class AssertRefundNotInRefundsGrid extends AbstractConstraint
     public function processAssert(CreditMemoIndex $creditMemoIndex, OrderInjectable $order, array $ids)
     {
         $creditMemoIndex->open();
-        $amount = $order->getPrice();
+        $amount = $order->getPrice()['refund'];
         $orderId = $order->getId();
         foreach ($ids['creditMemoIds'] as $key => $creditMemoId) {
             $filter = [

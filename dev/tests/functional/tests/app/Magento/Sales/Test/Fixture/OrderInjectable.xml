@@ -206,5 +206,6 @@
         <field name="gw_card_tax_refunded" is_required="" />
         <field name="id" />
         <field name="price" is_required="1" group="null" repository="Magento\Sales\Test\Repository\OrderInjectable\Price" />
+        <field name="refund" is_required="" />
     </fixture>
 </config>
