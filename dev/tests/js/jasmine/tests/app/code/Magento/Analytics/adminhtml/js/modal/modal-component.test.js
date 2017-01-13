@@ -26,6 +26,10 @@ define([
                 index: '',
                 links: '',
                 listens: '',
+
+                /**
+                 * @return {Object} source - mock for form data
+                 */
                 form: function () {
                     return {
                         source: {
