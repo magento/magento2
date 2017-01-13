@@ -76,8 +76,9 @@ interface CaseInterface
 
     /**
      * Returns value, which indicates if a guarantee can be requested for a case.
+     * Returns null if state of guarantee eligible does not set yet.
      *
-     * @return boolean
+     * @return boolean|null
      */
     public function isGuaranteeEligible();
 

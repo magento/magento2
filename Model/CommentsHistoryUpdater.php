@@ -26,7 +26,6 @@ class CommentsHistoryUpdater
      */
     public function __construct(HistoryFactory $historyFactory)
     {
-
         $this->historyFactory = $historyFactory;
     }
 
