@@ -20,7 +20,7 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
     /** @var GroupManagementInterface */
     private $groupManagement;
 
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
         $this->objectManager = Bootstrap::getObjectManager();
@@ -66,6 +66,9 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
      */
     public function saveAndLoadDataProvider()
     {
+        $allCustomersGroupID = $this->groupManagement->getAllCustomersGroup()->getId();
+        $notLoggedInGroupID = $this->groupManagement->getNotLoggedInGroup()->getId();
+
         return [
             'bool' => [false, '', []],
             'empty string' => ['', '', []],
@@ -75,7 +78,7 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
                 '22',
                 [
                     [
-                        'customer_group_id' => $this->groupManagement::CUST_GROUP_ALL,
+                        'customer_group_id' => $allCustomersGroupID,
                         'min_sale_qty' => 22
                     ]
                 ]
@@ -95,11 +98,11 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             'valid array - all customer group' => [
-                [['customer_group_id' => $this->groupManagement::CUST_GROUP_ALL, 'min_sale_qty' => 2.5]],
+                [['customer_group_id' => $allCustomersGroupID, 'min_sale_qty' => 2.5]],
                 '2.5',
                 [
                     0 => [
-                        'customer_group_id' => $this->groupManagement::CUST_GROUP_ALL,
+                        'customer_group_id' => $allCustomersGroupID,
                         'min_sale_qty' => 2.5
                     ]
                 ]
@@ -115,11 +118,11 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             'invalid - cannot override not logged in group' => [
-                [$this->groupManagement::NOT_LOGGED_IN_ID => ['min_sale_qty' => 2.5]],
+                [$notLoggedInGroupID => ['min_sale_qty' => 2.5]],
                 '[1]',
                 [
                     0 => [
-                        'customer_group_id' => $this->groupManagement::NOT_LOGGED_IN_ID,
+                        'customer_group_id' => $notLoggedInGroupID,
                         'min_sale_qty' => 1
                     ]
                 ]
