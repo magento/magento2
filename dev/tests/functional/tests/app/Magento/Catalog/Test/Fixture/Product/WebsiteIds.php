@@ -78,8 +78,7 @@ class WebsiteIds extends DataSource
                     $this->websites[] = $website;
                 }
             } else {
-                $store = $this->createStore($dataset);
-                $this->setWebsiteStoreData($store);
+                $this->createStore($dataset);
             }
         }
 
@@ -90,20 +89,17 @@ class WebsiteIds extends DataSource
      * Create store.
      *
      * @param array|object $dataset
-     * @return Store
+     * @return void
      */
     private function createStore($dataset)
     {
         if (is_array($dataset) && isset($dataset['store'])) {
             $store = $dataset['store'];
         } else {
-            $store = ($dataset instanceof Store)
-                ? $dataset
-                : $this->fixtureFactory->createByCode('store', $dataset);
+            $store = isset($dataset['dataset']) ? $this->fixtureFactory->createByCode('store', $dataset) :
+                    ($dataset instanceof Store) ? $dataset : null;
         }
-        !$store->getStoreId() ?: $store->persist();
-
-        return $store;
+        isset($store) ? : $this->setWebsiteStoreData($store);
     }
 
     /**
@@ -114,6 +110,7 @@ class WebsiteIds extends DataSource
      */
     private function setWebsiteStoreData(Store $store)
     {
+        !$store->getStoreId() ? : $store->persist();
         $website = $store->getDataFieldConfig('group_id')['source']
             ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
         $this->data[] = $website->getName();
