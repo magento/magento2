@@ -56,7 +56,7 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
             [
                 $addressAttributes,
                 AttributeDataFactory::OUTPUT_FORMAT_PDF,
-                "John Smith|\n\nGreen str, 67\n\n\n\n\nCityM,|\nAlabama, 75477|\nUnited States|\nT: 3468676|\n|\n|"
+                "John Smith|\n\nGreen str, 67|\n\n\n\nCityM, Alabama, 75477|\nUnited States|\nT: 3468676|\n|\n|"
             ],
             [
                 $addressAttributes,
@@ -112,7 +112,7 @@ United States<br/>\nT: <a href=\"tel:3468676\">3468676</a>\n\n",
             [
                 $address,
                 AttributeDataFactory::OUTPUT_FORMAT_PDF,
-                "John Smith|\n\nGreen str, 67\n\n\n\n\nCityM,|\nAlabama, 75477|
+                "John Smith|\n\nGreen str, 67|\n\n\n\nCityM, Alabama, 75477|
 United States|\nT: 3468676|\n|\n|"
             ],
             [
