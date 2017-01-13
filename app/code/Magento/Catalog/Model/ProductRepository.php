@@ -453,7 +453,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $entriesById = [];
             foreach ($mediaGalleryEntries as $entry) {
                 if (isset($entry['value_id'])) {
-                    //$entry['value_id'] = $entry['id'];
                     $entriesById[$entry['value_id']] = $entry;
                 } else {
                     $newEntries[] = $entry;
@@ -462,6 +461,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             foreach ($existingMediaGallery as $key => &$existingEntry) {
                 if (isset($entriesById[$existingEntry['value_id']])) {
                     $updatedEntry = $entriesById[$existingEntry['value_id']];
+                    if ($updatedEntry['file'] === null) {
+                        unset($updatedEntry['file']);
+                    }
                     $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
                 } else {
                     //set the removed flag
