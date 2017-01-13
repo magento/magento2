@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Constraint;
@@ -22,7 +22,7 @@ class AssertConfigAnalyticsStatusPending extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $configAnalytics->getAnalyticsForm()->getAnalyticsStatus(),
             'Subscription status: Pending',
-            'Magento Analytics is enabled'
+            'Magento Analytics status is pending'
         );
     }
 
@@ -33,6 +33,6 @@ class AssertConfigAnalyticsStatusPending extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Magento Analytics is not pending in Stores>Configuration>General>Analytics->General menu';
+        return 'Magento Analytics status is not pending in Stores>Configuration>General>Analytics->General menu';
     }
 }

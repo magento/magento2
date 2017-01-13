@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Block\Adminhtml\Dashboard\Analytics;
@@ -27,6 +27,6 @@ class SubscriptionForm extends Form
      */
     public function enableCheckbox()
     {
-        $this->_rootElement->find($this->checkbox, $strategy = Locator::SELECTOR_CSS, 'checkbox')->setValue([1]);
+        $this->_rootElement->find($this->checkbox, Locator::SELECTOR_CSS, 'checkbox')->setValue([1]);
     }
 }

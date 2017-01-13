@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model;
@@ -42,7 +42,7 @@ class AnalyticsConnectorTest extends \PHPUnit_Framework_TestCase
         $this->signUpCommandMock = $this->getMockBuilder(SignUpCommand::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->commands = ['signUp' => 'Magento\Analytics\Model\AnalyticsConnector\SignUpCommand'];
+        $this->commands = ['signUp' => SignUpCommand::class];
         $this->analyticsConnector = new AnalyticsConnector($this->commands, $this->objectManagerMock);
     }
 

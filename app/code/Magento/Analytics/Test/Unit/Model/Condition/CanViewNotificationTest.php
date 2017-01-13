@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -65,7 +65,7 @@ class CanViewNotificationTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->dateTimeMock);
         $this->dateTimeMock->expects($this->once())
             ->method('getTimestamp')
-            ->willReturn(100500);
+            ->willReturn(10005000);
         $this->assertTrue($this->canViewNotification->validate());
     }
 

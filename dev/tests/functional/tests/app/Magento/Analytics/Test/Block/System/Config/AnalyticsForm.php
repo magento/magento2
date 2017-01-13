@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Block\System\Config;
@@ -22,7 +22,7 @@ class AnalyticsForm extends Form
     /**
      * @var string
      */
-    private $analyticsStatusLabel = '#row_analytics_general_label';
+    private $analyticsStatusLabel = '#row_analytics_general_label .value';
 
     public function isAnalyticsEnabled()
     {
@@ -31,6 +31,6 @@ class AnalyticsForm extends Form
 
     public function getAnalyticsStatus()
     {
-        return $this->_rootElement->find($this->analyticsStatusLabel, Locator::SELECTOR_CSS)->getValue();
+        return $this->_rootElement->find($this->analyticsStatusLabel, Locator::SELECTOR_CSS)->getText();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model\AnalyticsConnector;
@@ -16,7 +16,7 @@ use Magento\Analytics\Model\TokenGenerator;
 use Magento\Store\Model\Store;
 
 /**
- * Class SignUpCommandTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SignUpCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -75,6 +75,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->httpClientFactoryMock = $this->getMockBuilder(ZendClientFactory::class)
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->httpClientMock = $this->getMockBuilder(ZendClient::class)
             ->disableOriginalConstructor()

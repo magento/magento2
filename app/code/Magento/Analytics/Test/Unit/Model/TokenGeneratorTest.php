@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Test\Unit\Model;
@@ -77,7 +77,6 @@ class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testExecuteFalse()
     {
         $customerId = 1;
-        $integrationData = ['id' => 1, 'name' => 'Ma Api Name'];
         $this->analyticsApiUserProviderMock->expects($this->once())
             ->method('getConsumerId')
             ->willReturn($customerId);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -541,6 +541,17 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductHasImageInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCanSaveProduct" />
+        </variation>
+        <variation name="CreateSimpleProductNotVisibleIndividually" summary="Check that url rewrite is not generated for product if visibility is 'Not Visible Individually'" ticketId="MAGETWO-53788">
+            <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">simple_sku_%isolation%</data>
+            <data name="product/data/price/value" xsi:type="string">15</data>
+            <data name="product/data/weight" xsi:type="string">5</data>
+            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">1</data>
+            <data name="product/data/visibility" xsi:type="string">Not Visible Individually</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteProductNotInGrid" />
         </variation>
     </testCase>
 </config>

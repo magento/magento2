@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Block\Adminhtml\System\Config;
@@ -22,13 +22,13 @@ class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\F
     /**
      * SubscriptionStatusLabel constructor.
      *
-     * @param SubscriptionStatusProvider $labelStatusProvider
      * @param Context $context
+     * @param SubscriptionStatusProvider $labelStatusProvider
      * @param array $data
      */
     public function __construct(
-        SubscriptionStatusProvider $labelStatusProvider,
         Context $context,
+        SubscriptionStatusProvider $labelStatusProvider,
         array $data = []
     ) {
         parent::__construct($context, $data);
