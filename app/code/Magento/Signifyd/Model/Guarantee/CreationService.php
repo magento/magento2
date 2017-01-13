@@ -35,6 +35,11 @@ class CreationService implements GuaranteeCreationServiceInterface
     private $gateway;
 
     /**
+     * @var CreateGuaranteeAbility
+     */
+    private $createGuaranteeAbility;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -45,17 +50,20 @@ class CreationService implements GuaranteeCreationServiceInterface
      * @param CaseManagementInterface $caseManagement
      * @param UpdatingServiceFactory $caseUpdatingServiceFactory
      * @param Gateway $gateway
+     * @param CreateGuaranteeAbility $createGuaranteeAbility
      * @param LoggerInterface $logger
      */
     public function __construct(
         CaseManagementInterface $caseManagement,
         UpdatingServiceFactory $caseUpdatingServiceFactory,
         Gateway $gateway,
+        CreateGuaranteeAbility $createGuaranteeAbility,
         LoggerInterface $logger
     ) {
         $this->caseManagement = $caseManagement;
         $this->caseUpdatingServiceFactory = $caseUpdatingServiceFactory;
         $this->gateway = $gateway;
+        $this->createGuaranteeAbility = $createGuaranteeAbility;
         $this->logger = $logger;
     }
 
@@ -64,22 +72,11 @@ class CreationService implements GuaranteeCreationServiceInterface
      */
     public function createForOrder($orderId)
     {
+        if (!$this->createGuaranteeAbility->isAvailable($orderId)) {
+            return false;
+        }
+
         $caseEntity = $this->caseManagement->getByOrderId($orderId);
-        if ($caseEntity === null) {
-            throw new NotFoundException(
-                __('Case for order with specified id "%1" is not created', $orderId)
-            );
-        }
-        if ($caseEntity->getCaseId() === null) {
-            throw new NotFoundException(
-                __('Case for order with specified id "%1" is not registered in Signifyd', $orderId)
-            );
-        }
-        if ($caseEntity->getGuaranteeDisposition()) {
-            throw new AlreadyExistsException(
-                __('Guarantee for order "%1" has been created already', $orderId)
-            );
-        }
 
         try {
             $disposition = $this->gateway->submitCaseForGuarantee($caseEntity->getCaseId());

@@ -20,8 +20,6 @@ interface GuaranteeCreationServiceInterface
      *
      * @param int $orderId
      * @return bool
-     * @throws \Magento\Framework\Exception\NotFoundException If case for specified order is not created yet.
-     * @throws \Magento\Framework\Exception\AlreadyExistsException If guarantee already created.
      */
     public function createForOrder($orderId);
 }

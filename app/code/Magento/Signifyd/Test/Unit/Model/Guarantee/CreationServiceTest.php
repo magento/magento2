@@ -5,18 +5,17 @@
  */
 namespace Magento\Signifyd\Test\Unit\Model\Guarantee;
 
-use Magento\Signifyd\Model\SignifydGateway\GatewayException;
-use PHPUnit_Framework_TestCase as TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Signifyd\Model\Guarantee\CreationService;
-use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Signifyd\Api\CaseManagementInterface;
+use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
 use Magento\Signifyd\Model\CaseServices\UpdatingServiceInterface;
+use Magento\Signifyd\Model\Guarantee\CreateGuaranteeAbility;
+use Magento\Signifyd\Model\Guarantee\CreationService;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
+use Magento\Signifyd\Model\SignifydGateway\GatewayException;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit_Framework_TestCase as TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Signifyd\Api\Data\CaseInterface;
 
 class CreationServiceTest extends TestCase
 {
@@ -45,7 +44,15 @@ class CreationServiceTest extends TestCase
      */
     private $logger;
 
-    public function setUp()
+    /**
+     * @var CreateGuaranteeAbility|MockObject
+     */
+    private $createGuaranteeAbility;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
     {
         $this->caseManagement = $this->getMockBuilder(CaseManagementInterface::class)
             ->getMockForAbstractClass();
@@ -63,6 +70,11 @@ class CreationServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->createGuaranteeAbility = $this->getMockBuilder(CreateGuaranteeAbility::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isAvailable'])
+            ->getMock();
+
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMockForAbstractClass();
 
@@ -70,24 +82,33 @@ class CreationServiceTest extends TestCase
             $this->caseManagement,
             $caseUpdatingServiceFactory,
             $this->gateway,
+            $this->createGuaranteeAbility,
             $this->logger
         );
     }
 
-    public function testCreateForOrderWithoutCase()
+    /**
+     * Checks a test case, when guarantee ability checker does not allow to submit case for a guarantee.
+     *
+     * @covers \Magento\Signifyd\Model\Guarantee\CreationService::createForOrder
+     */
+    public function testCreateForOrderWithNotEligibleCase()
     {
-        $dummyOrderId = 1;
-        $this->withCaseEntityNotExistsForOrderId($dummyOrderId);
+        $orderId = 1;
 
-        $this->gateway
-            ->expects($this->never())
+        $this->createGuaranteeAbility->expects(self::once())
+            ->method('isAvailable')
+            ->with($orderId)
+            ->willReturn(false);
+
+        $this->caseManagement->expects(self::never())
+            ->method('getByOrderId');
+
+        $this->gateway->expects(self::never())
             ->method('submitCaseForGuarantee');
-        $this->caseUpdatingService
-            ->expects($this->never())
-            ->method('update');
-        $this->setExpectedException(NotFoundException::class);
 
-        $this->service->createForOrder($dummyOrderId);
+        $result = $this->service->createForOrder($orderId);
+        self::assertFalse($result);
     }
 
     public function testCreateForOrderWitCase()
@@ -174,8 +195,6 @@ class CreationServiceTest extends TestCase
         );
         $this->withGatewaySuccess($dummyGuaranteeDisposition);
 
-
-
         $result = $this->service->createForOrder($dummyOrderId);
         $this->assertEquals(
             true,
@@ -184,62 +203,13 @@ class CreationServiceTest extends TestCase
         );
     }
 
-    public function testCreateForOrderWithNotRegisteredCase()
-    {
-        $dummyOrderId = 1;
-        $dummyCaseId = null;
-        $this->withCaseEntityExistsForOrderId(
-            $dummyOrderId,
-            [
-                'caseId' => $dummyCaseId,
-            ]
-        );
-
-        $this->gateway
-            ->expects($this->never())
-            ->method('submitCaseForGuarantee');
-        $this->caseUpdatingService
-            ->expects($this->never())
-            ->method('update');
-        $this->setExpectedException(NotFoundException::class);
-
-        $this->service->createForOrder($dummyOrderId);
-    }
-
-    public function testCreateForOrderWithExistedGuarantee()
-    {
-        $dummyOrderId = 1;
-        $dummyCaseId = 42;
-        $dummyGuarantyDisposition = 'APPROVED';
-        $this->withCaseEntityExistsForOrderId(
-            $dummyOrderId,
-            [
-                'caseId' => $dummyCaseId,
-                'guaranteeDisposition' => $dummyGuarantyDisposition
-            ]
-        );
-
-        $this->gateway
-            ->expects($this->never())
-            ->method('submitCaseForGuarantee');
-        $this->caseUpdatingService
-            ->expects($this->never())
-            ->method('update');
-        $this->setExpectedException(AlreadyExistsException::class);
-
-        $this->service->createForOrder($dummyOrderId);
-    }
-
-    private function withCaseEntityNotExistsForOrderId($orderId)
-    {
-        $this->caseManagement
-            ->method('getByOrderId')
-            ->with($this->equalTo($orderId))
-            ->willReturn(null);
-    }
-
     private function withCaseEntityExistsForOrderId($orderId, array $caseData = [])
     {
+        $this->createGuaranteeAbility->expects(self::once())
+            ->method('isAvailable')
+            ->with(self::equalTo($orderId))
+            ->willReturn(true);
+
         $dummyCaseEntity = $this->getMockBuilder(CaseInterface::class)
             ->getMockForAbstractClass();
         foreach ($caseData as $caseProperty => $casePropertyValue) {
