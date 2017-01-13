@@ -56,6 +56,6 @@ class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\F
      */
     private function prepareLabelValue()
     {
-        return __('Subscription status').': '.__($this->subscriptionStatusProvider->getStatus());
+        return __('Subscription status') . ': ' . __($this->subscriptionStatusProvider->getStatus());
     }
 }
