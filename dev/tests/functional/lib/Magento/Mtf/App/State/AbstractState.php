@@ -26,7 +26,9 @@ abstract class AbstractState implements StateInterface
     protected $objectManager;
 
     /**
-     * @var array
+     * List of handlers
+     *
+     * @var string[]
      */
     private $arguments;
 
@@ -38,8 +40,10 @@ abstract class AbstractState implements StateInterface
     protected $isCleanInstance = false;
 
     /**
-     * @construct
+     * AbstractState constructor.
+     *
      * @param ObjectManager $objectManager
+     * @param array $arguments
      */
     public function __construct(
         ObjectManager $objectManager,
@@ -48,6 +52,7 @@ abstract class AbstractState implements StateInterface
         $this->objectManager = $objectManager;
         $this->arguments = $arguments;
     }
+
     /**
      * @inheritdoc
      */
