@@ -16,7 +16,7 @@ use Magento\Analytics\Model\TokenGenerator;
 use Magento\Store\Model\Store;
 
 /**
- * Class SignUpCommandTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SignUpCommandTest extends \PHPUnit_Framework_TestCase
 {

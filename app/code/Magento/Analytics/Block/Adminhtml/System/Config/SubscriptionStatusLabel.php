@@ -22,13 +22,13 @@ class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\F
     /**
      * SubscriptionStatusLabel constructor.
      *
-     * @param SubscriptionStatusProvider $labelStatusProvider
      * @param Context $context
+     * @param SubscriptionStatusProvider $labelStatusProvider
      * @param array $data
      */
     public function __construct(
-        SubscriptionStatusProvider $labelStatusProvider,
         Context $context,
+        SubscriptionStatusProvider $labelStatusProvider,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -53,6 +53,7 @@ class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\F
      */
     protected function _getElementHtml(AbstractElement $element)
     {
+        parent::_getElementHtml($element);
         return __('Subscription status'). ': ' . __($this->subscriptionStatusProvider->getStatus());
     }
 }

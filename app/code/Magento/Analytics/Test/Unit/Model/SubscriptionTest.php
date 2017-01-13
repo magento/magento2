@@ -15,6 +15,9 @@ use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SubscriptionTest extends \PHPUnit_Framework_TestCase
 {
     /**

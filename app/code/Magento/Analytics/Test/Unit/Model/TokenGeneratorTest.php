@@ -77,7 +77,6 @@ class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testExecuteFalse()
     {
         $customerId = 1;
-        $integrationData = ['id' => 1, 'name' => 'Ma Api Name'];
         $this->analyticsApiUserProviderMock->expects($this->once())
             ->method('getConsumerId')
             ->willReturn($customerId);
