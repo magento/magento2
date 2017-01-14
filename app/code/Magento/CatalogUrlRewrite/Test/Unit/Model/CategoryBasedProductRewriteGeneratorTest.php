@@ -12,12 +12,11 @@ use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
 
 /**
  * Class CategoryBasedProductRewriteGeneratorTest
- * @package Magento\CatalogUrlRewrite\Test\Unit\Model
  */
 class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ProductScopeRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $productScopeRewriteGeneratorMock;
 
@@ -46,6 +45,7 @@ class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit_Framework_TestCa
             ->disableOriginalConstructor()
             ->getMock();
         $storeId = 1;
+        $categoryId = 1;
         $urls = ['dummy-url.html'];
 
         $productMock->expects($this->once())
@@ -60,10 +60,10 @@ class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit_Framework_TestCa
             ->willReturn(true);
         $this->productScopeRewriteGeneratorMock->expects($this->once())
             ->method('generateForGlobalScope')
-            ->with([$categoryMock], $productMock)
+            ->with([$categoryMock], $productMock, $categoryId)
             ->willReturn($urls);
 
-        $this->assertEquals($urls, $this->generator->generate($productMock, $categoryMock));
+        $this->assertEquals($urls, $this->generator->generate($productMock, $categoryMock, $categoryId));
     }
 
     public function testGenerationWithSpecificStore()
@@ -75,6 +75,7 @@ class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit_Framework_TestCa
             ->disableOriginalConstructor()
             ->getMock();
         $storeId = 1;
+        $categoryId = 1;
         $urls = ['dummy-url.html'];
 
         $productMock->expects($this->once())
@@ -89,9 +90,9 @@ class CategoryBasedProductRewriteGeneratorTest extends \PHPUnit_Framework_TestCa
             ->willReturn(false);
         $this->productScopeRewriteGeneratorMock->expects($this->once())
             ->method('generateForSpecificStoreView')
-            ->with($storeId, [$categoryMock], $productMock)
+            ->with($storeId, [$categoryMock], $productMock, $categoryId)
             ->willReturn($urls);
 
-        $this->assertEquals($urls, $this->generator->generate($productMock, $categoryMock));
+        $this->assertEquals($urls, $this->generator->generate($productMock, $categoryMock, $categoryId));
     }
 }
