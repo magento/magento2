@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product\Image;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\Config\Customization as ThemeCustomizationConfig;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\ConfigInterface;
 
@@ -22,6 +23,11 @@ class Cache
      * @var ThemeCollection
      */
     protected $themeCollection;
+
+    /**
+     * @var ThemeCustomizationConfig
+     */
+    protected $themeCustomizationConfig;
 
     /**
      * @var ImageHelper
@@ -41,10 +47,12 @@ class Cache
     public function __construct(
         ConfigInterface $viewConfig,
         ThemeCollection $themeCollection,
-        ImageHelper $imageHelper
+        ImageHelper $imageHelper,
+        ThemeCustomizationConfig $themeCustomizationConfig
     ) {
         $this->viewConfig = $viewConfig;
         $this->themeCollection = $themeCollection;
+        $this->themeCustomizationConfig = $themeCustomizationConfig;
         $this->imageHelper = $imageHelper;
     }
 
@@ -58,8 +66,10 @@ class Cache
     protected function getData()
     {
         if (!$this->data) {
+            $themes = $this->getThemesInUse();
+
             /** @var \Magento\Theme\Model\Theme $theme */
-            foreach ($this->themeCollection->loadRegisteredThemes() as $theme) {
+            foreach ($themes as $theme) {
                 $config = $this->viewConfig->getViewConfig([
                     'area' => Area::AREA_FRONTEND,
                     'themeModel' => $theme,
@@ -126,5 +136,21 @@ class Cache
         $this->imageHelper->save();
 
         return $this;
+    }
+
+    protected function getThemesInUse()
+    {
+        $themesInUse = [];
+
+        $registeredThemes = $this->themeCollection->loadRegisteredThemes();
+        $storesByThemes   = $this->themeCustomizationConfig->getStoresByThemes();
+
+        foreach ($registeredThemes as $registeredTheme) {
+            if (array_key_exists($registeredTheme->getThemeId(), $storesByThemes)) {
+                $themesInUse[] = $registeredTheme;
+            }
+        }
+
+        return $themesInUse;
     }
 }
