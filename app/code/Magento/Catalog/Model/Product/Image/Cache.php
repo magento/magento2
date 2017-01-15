@@ -43,6 +43,7 @@ class Cache
      * @param ConfigInterface $viewConfig
      * @param ThemeCollection $themeCollection
      * @param ImageHelper $imageHelper
+     * @param ThemeCustomizationConfig $themeCustomizationConfig
      */
     public function __construct(
         ConfigInterface $viewConfig,
@@ -138,6 +139,11 @@ class Cache
         return $this;
     }
 
+    /**
+     * Retrieve themes which are currently active in the frontend
+     *
+     * @return array
+     */
     protected function getThemesInUse()
     {
         $themesInUse = [];
