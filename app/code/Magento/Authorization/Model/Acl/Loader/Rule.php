@@ -104,5 +104,5 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
         $this->cache->save($this->serializer->serialize($rulesArr), self::ACL_RULE_CACHE_KEY, ['acl_cache']);
 
         return $rulesArr;
- 	}
+    }
 }
