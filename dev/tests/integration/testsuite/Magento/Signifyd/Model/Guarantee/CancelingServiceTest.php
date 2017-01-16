@@ -103,6 +103,9 @@ class CancelingServiceTest extends \PHPUnit_Framework_TestCase
         /** @var CaseRepositoryInterface $caseRepository */
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         $caseEntity = $caseRepository->getByCaseId(self::$caseId);
+        $caseEntity->setGuaranteeDisposition(CaseInterface::GUARANTEE_PENDING);
+        $caseEntity->setGuaranteeEligible(false);
+        $caseRepository->save($caseEntity);
 
         $this->gateway->expects(self::once())
             ->method('cancelGuarantee')
@@ -129,6 +132,9 @@ class CancelingServiceTest extends \PHPUnit_Framework_TestCase
         /** @var CaseRepositoryInterface $caseRepository */
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         $caseEntity = $caseRepository->getByCaseId(self::$caseId);
+        $caseEntity->setGuaranteeDisposition(CaseInterface::GUARANTEE_PENDING);
+        $caseEntity->setGuaranteeEligible(false);
+        $caseRepository->save($caseEntity);
 
         $this->gateway->expects(self::once())
             ->method('cancelGuarantee')

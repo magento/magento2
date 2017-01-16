@@ -6,7 +6,6 @@
 namespace Magento\Signifyd\Model\Guarantee;
 
 use Magento\Signifyd\Api\CaseManagementInterface;
-use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Api\GuaranteeCancelingServiceInterface;
 use Magento\Signifyd\Model\CaseServices\UpdatingServiceFactory;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
@@ -34,6 +33,11 @@ class CancelingService implements GuaranteeCancelingServiceInterface
     private $gateway;
 
     /**
+     * @var CancelGuaranteeAbility
+     */
+    private $cancelGuaranteeAbility;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -43,18 +47,21 @@ class CancelingService implements GuaranteeCancelingServiceInterface
      * @param CaseManagementInterface $caseManagement
      * @param UpdatingServiceFactory $serviceFactory
      * @param Gateway $gateway
+     * @param CancelGuaranteeAbility $cancelGuaranteeAbility
      * @param LoggerInterface $logger
      */
     public function __construct(
         CaseManagementInterface $caseManagement,
         UpdatingServiceFactory $serviceFactory,
         Gateway $gateway,
+        CancelGuaranteeAbility $cancelGuaranteeAbility,
         LoggerInterface $logger
     ) {
 
         $this->caseManagement = $caseManagement;
         $this->serviceFactory = $serviceFactory;
         $this->gateway = $gateway;
+        $this->cancelGuaranteeAbility = $cancelGuaranteeAbility;
         $this->logger = $logger;
     }
 
@@ -63,14 +70,11 @@ class CancelingService implements GuaranteeCancelingServiceInterface
      */
     public function cancelForOrder($orderId)
     {
-        $caseEntity = $this->caseManagement->getByOrderId($orderId);
-        if ($caseEntity === null) {
+        if (!$this->cancelGuaranteeAbility->isAvailable($orderId)) {
             return false;
         }
 
-        if ($caseEntity->getGuaranteeDisposition() === CaseInterface::GUARANTEE_DECLINED) {
-            return false;
-        }
+        $caseEntity = $this->caseManagement->getByOrderId($orderId);
 
         try {
             $disposition = $this->gateway->cancelGuarantee($caseEntity->getCaseId());
