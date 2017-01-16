@@ -10,7 +10,7 @@ namespace Magento\Framework\Acl;
 /**
  * Class Cache
  * @package Magento\Framework\Acl
- * @deprecated
+ * @deprecated due to elimination of native PHP unserialization usage in 2.2.
  */
 class Cache implements CacheInterface
 {

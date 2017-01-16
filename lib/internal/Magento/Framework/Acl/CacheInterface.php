@@ -9,7 +9,7 @@ namespace Magento\Framework\Acl;
  * ACL object cache
  *
  * @api
- * @deprecated
+ * @deprecated due to elimination of native PHP unserialization usage in 2.2.
  */
 interface CacheInterface
 {

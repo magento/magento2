@@ -89,8 +89,8 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function saveRel(\Magento\Authorization\Model\Rules $rule)
     {
         $connection = $this->getConnection();
-        $connection->beginTransaction();
         try {
+            $connection->beginTransaction();
             $roleId = $rule->getRoleId();
 
             $condition = ['role_id = ?' => (int)$roleId];
