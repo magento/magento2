@@ -9,6 +9,8 @@
  */
 namespace Magento\Framework\Acl;
 
+use Magento\Framework\App\ObjectManager;
+
 class Builder
 {
     /**
@@ -39,22 +41,32 @@ class Builder
     protected $_aclFactory;
 
     /**
+     * @var \Magento\Framework\Config\CacheInterface
+     */
+    private $configCache;
+
+    /**
      * @param \Magento\Framework\AclFactory $aclFactory
      * @param \Magento\Framework\Acl\CacheInterface $cache
      * @param \Magento\Framework\Acl\LoaderInterface $roleLoader
      * @param \Magento\Framework\Acl\LoaderInterface $resourceLoader
      * @param \Magento\Framework\Acl\LoaderInterface $ruleLoader
+     * @param \Magento\Framework\Config\CacheInterface $configCache
      */
     public function __construct(
         \Magento\Framework\AclFactory $aclFactory,
         \Magento\Framework\Acl\CacheInterface $cache,
         \Magento\Framework\Acl\LoaderInterface $roleLoader,
         \Magento\Framework\Acl\LoaderInterface $resourceLoader,
-        \Magento\Framework\Acl\LoaderInterface $ruleLoader
+        \Magento\Framework\Acl\LoaderInterface $ruleLoader,
+        \Magento\Framework\Config\CacheInterface $configCache = null
     ) {
         $this->_aclFactory = $aclFactory;
         $this->_cache = $cache;
         $this->_loaderPool = [$roleLoader, $resourceLoader, $ruleLoader];
+        $this->configCache = $configCache ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Config\CacheInterface::class
+        );
     }
 
     /**
@@ -79,5 +91,15 @@ class Builder
         }
 
         return $this->_acl;
+    }
+
+    /**
+     * Get ACL config cache
+     *
+     * @return \Magento\Framework\Config\CacheInterface|mixed
+     */
+    public function getConfigCache()
+    {
+        return $this->configCache;
     }
 }

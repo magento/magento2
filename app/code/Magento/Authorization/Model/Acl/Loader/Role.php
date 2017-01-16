@@ -111,5 +111,5 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
         $rolesArray = $connection->fetchAll($select);
         $this->cache->save($this->serializer->serialize($rolesArray), self::ACL_ROLES_CACHE_KEY, ['acl_cache']);
         return $rolesArray;
- 	}
+    }
 }

@@ -62,7 +62,9 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_aclCache = $aclCache;
         $this->_roleFactory = $roleFactory;
         $this->dateTime = $dateTime;
-        $this->cache = $cache;
+        $this->cache = $cache ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Config\CacheInterface::class
+        );
     }
 
     /**
