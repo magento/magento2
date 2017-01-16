@@ -219,6 +219,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation12" summary="Create product that visible only in search and check min/max qty allowed in the shopping cart" ticketId="MAGETWO-43376, MAGETWO-43359">
+            <data name="issue" xsi:type="string">MAGETWO-63217: Error message doesn't appear on add in the cart less products than configured</data>
             <data name="configData" xsi:type="string">inventory_min_qty_3, inventory_max_qty_5</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
