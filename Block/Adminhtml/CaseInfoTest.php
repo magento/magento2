@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Signifyd\Block\Adminhtml;
 
 use Magento\Framework\App\RequestInterface;
@@ -46,7 +45,6 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
      * Checks that block does not give contents
      * if Signifyd module is inactive.
      *
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::isModuleActive
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 0
      * @magentoAppArea adminhtml
      */
@@ -77,7 +75,6 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
      * - associated team displays correct
      * - score class displays correct
      *
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getAssociatedTeam
      * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getScoreClass
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
      * @magentoDataFixture Magento/Signifyd/_files/case.php
