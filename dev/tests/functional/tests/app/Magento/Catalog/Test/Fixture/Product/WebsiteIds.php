@@ -97,7 +97,7 @@ class WebsiteIds extends DataSource
             $store = $dataset;
         } elseif (is_array($dataset)) {
             $store = isset($dataset['store']) ? $dataset['store'] :
-                     isset($dataset['dataset']) ? $this->fixtureFactory->createByCode('store', $dataset) : null;
+                (isset($dataset['dataset']) ? $this->fixtureFactory->createByCode('store', $dataset) : null);
         }
         if (isset($store)) {
             $this->setWebsiteStoreData($store);
