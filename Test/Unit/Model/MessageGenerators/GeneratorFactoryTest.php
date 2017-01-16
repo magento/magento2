@@ -80,6 +80,7 @@ class GeneratorFactoryTest extends \PHPUnit_Framework_TestCase
             ['cases/rescore', CaseRescore::class],
             ['guarantees/completion', PatternGenerator::class],
             ['guarantees/creation', PatternGenerator::class],
+            ['guarantees/cancel', PatternGenerator::class],
         ];
     }
 

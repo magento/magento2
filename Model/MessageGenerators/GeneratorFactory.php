@@ -44,6 +44,12 @@ class GeneratorFactory
     private static $guaranteeCreation = 'guarantees/creation';
 
     /**
+     * Type of message of Signifyd guarantee canceling
+     * @var string
+     */
+    private static $guaranteeCancel = 'guarantees/cancel';
+
+    /**
      * UpdatingServiceFactory constructor.
      *
      * @param ObjectManagerInterface $objectManager
@@ -90,6 +96,11 @@ class GeneratorFactory
             case self::$guaranteeCreation:
                 $classConfig = [
                     'template' => 'Case Update: Case is submitted for guarantee.'
+                ];
+                break;
+            case self::$guaranteeCancel:
+                $classConfig = [
+                    'template' => 'Case Update: Case guarantee has been cancelled.'
                 ];
                 break;
             default:
