@@ -105,7 +105,7 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
      *
      * @param integer $score
      * @param string $expectedClassName
-     * @covers \Magento\Signifyd\Block\CaseInfo::getScoreClass
+     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getScoreClass
      * @dataProvider getScoreClassDataProvider
      */
     public function testGetScoreClass($score, $expectedClassName)
@@ -127,7 +127,7 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks case property getter with real case.
      *
-     * @covers \Magento\Signifyd\Block\CaseInfo::getCaseProperty
+     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getCaseProperty
      */
     public function testCasePropertyWithCaseExists()
     {
@@ -150,7 +150,7 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * Checks case property getter with empty case.
      *
-     * @covers \Magento\Signifyd\Block\CaseInfo::getCaseProperty
+     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getCaseProperty
      */
     public function testCasePropertyWithEmptyCase()
     {
