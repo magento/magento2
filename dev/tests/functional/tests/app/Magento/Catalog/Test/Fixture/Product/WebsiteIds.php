@@ -99,7 +99,9 @@ class WebsiteIds extends DataSource
             $store = isset($dataset['store']) ? $dataset['store'] :
                      isset($dataset['dataset']) ? $this->fixtureFactory->createByCode('store', $dataset) : null;
         }
-        !isset($store) ? : $this->setWebsiteStoreData($store);
+        if (isset($store)) {
+            $this->setWebsiteStoreData($store);
+        }
     }
 
     /**
@@ -110,7 +112,9 @@ class WebsiteIds extends DataSource
      */
     private function setWebsiteStoreData(Store $store)
     {
-        $store->getStoreId() ? : $store->persist();
+        if (!$store->getStoreId()) {
+            $store->persist();
+        }
         $website = $store->getDataFieldConfig('group_id')['source']
             ->getStoreGroup()->getDataFieldConfig('website_id')['source']->getWebsite();
         $this->data[] = $website->getName();
