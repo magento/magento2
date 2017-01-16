@@ -133,6 +133,10 @@ class Gateway
         );
 
         $disposition = $this->processDispositionResult($result);
+        if ($disposition !== self::GUARANTEE_CANCELED) {
+            throw new GatewayException("API returned unexpected disposition: $disposition.");
+        }
+
         return $disposition;
     }
 

@@ -85,7 +85,6 @@ class GatewayTest extends TestCase
             ]);
 
         $this->gateway->createCase($dummyOrderId);
-
     }
 
     public function testCreateCaseNormalFlow()
@@ -184,7 +183,6 @@ class GatewayTest extends TestCase
             ]);
 
         $this->gateway->submitCaseForGuarantee($dummySygnifydCaseId);
-
     }
 
     public function testSubmitCaseForGuaranteeWithFailedApiCall()
@@ -280,6 +278,43 @@ class GatewayTest extends TestCase
                 $e->getMessage()
             ));
         }
+    }
+
+    /**
+     * Checks a test case when guarantee for a case is successfully canceled
+     *
+     * @covers \Magento\Signifyd\Model\SignifydGateway\Gateway::cancelGuarantee
+     */
+    public function testCancelGuarantee()
+    {
+        $caseId = 123;
+
+        $this->apiClient->expects(self::once())
+            ->method('makeApiCall')
+            ->with('/cases/' . $caseId . '/guarantee', 'PUT', ['guaranteeDisposition' => Gateway::GUARANTEE_CANCELED])
+            ->willReturn(['disposition' => Gateway::GUARANTEE_CANCELED]);
+
+        $result = $this->gateway->cancelGuarantee($caseId);
+        self::assertEquals(Gateway::GUARANTEE_CANCELED, $result);
+    }
+
+    /**
+     * Checks a case when API request returns unexpected guarantee disposition.
+     *
+     * @covers \Magento\Signifyd\Model\SignifydGateway\Gateway::cancelGuarantee
+     * @expectedException \Magento\Signifyd\Model\SignifydGateway\GatewayException
+     * @expectedExceptionMessage API returned unexpected disposition: DECLINED.
+     */
+    public function testCancelGuaranteeWithUnexpectedDisposition()
+    {
+        $caseId = 123;
+
+        $this->apiClient->expects(self::once())
+            ->method('makeApiCall')
+            ->with('/cases/' . $caseId . '/guarantee', 'PUT', ['guaranteeDisposition' => Gateway::GUARANTEE_CANCELED])
+            ->willReturn(['disposition' => Gateway::GUARANTEE_DECLINED]);
+
+        $this->gateway->cancelGuarantee($caseId);
     }
 
     public function supportedGuaranteeDispositionsProvider()
