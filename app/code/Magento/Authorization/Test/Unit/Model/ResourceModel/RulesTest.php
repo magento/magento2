@@ -101,7 +101,7 @@ class RulesTest extends \PHPUnit_Framework_TestCase
 
         $this->aclBuilderMock = $this->getMockBuilder(\Magento\Framework\Acl\Builder::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['getConfigCache'])
             ->getMock();
 
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
@@ -123,6 +123,10 @@ class RulesTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
+
+        $this->aclBuilderMock->expects($this->any())
+            ->method('getConfigCache')
+            ->will($this->returnValue($this->cacheMock));
 
         $this->ruleMock = $this->getMockBuilder(\Magento\Authorization\Model\Rules::class)
             ->disableOriginalConstructor()
