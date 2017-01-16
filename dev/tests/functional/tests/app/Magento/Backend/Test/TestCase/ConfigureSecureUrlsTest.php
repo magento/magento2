@@ -93,20 +93,14 @@ class ConfigureSecureUrlsTest extends Injectable
      *
      * @param FixtureFactory $fixtureFactory
      * @param SystemConfigEdit $configurationAdminPage
-     * @param Cache $cache
-     * @param StaticContent $staticContent
      * @return void
      */
     public function __inject(
         FixtureFactory $fixtureFactory,
-        SystemConfigEdit $configurationAdminPage,
-        Cache $cache,
-        StaticContent $staticContent
+        SystemConfigEdit $configurationAdminPage
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->configurationAdminPage = $configurationAdminPage;
-        $this->cache = $cache;
-        $this->staticContent = $staticContent;
     }
 
     /**
@@ -135,7 +129,14 @@ class ConfigureSecureUrlsTest extends Injectable
         $this->configurationAdminPage->getPageActions()->save();
         $_ENV['app_backend_url'] = str_replace('http', 'https', $_ENV['app_backend_url']);
 
+        $this->configurationAdminPage = $this->objectManager->create(
+            \Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit::class
+        );
+
+        $this->cache = $this->objectManager->create(\Magento\Mtf\Util\Command\Cli\Cache::class);
         $this->cache->flush(['config', 'full_page']);
+
+        $this->staticContent = $this->objectManager->create(\Magento\Mtf\Util\Command\Cli\StaticContent::class);
         $this->staticContent->deploy();
     }
 
