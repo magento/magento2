@@ -110,11 +110,48 @@ class Gateway
             ]
         );
 
-        if (!isset($guaranteeCreationResult['disposition'])) {
+        $disposition = $this->processDispositionResult($guaranteeCreationResult);
+        return $disposition;
+    }
+
+    /**
+     * Sends request to cancel guarantee and returns disposition.
+     *
+     * @see https://www.signifyd.com/docs/api/#/reference/guarantees/submit-a-case-for-guarantee/cancel-guarantee
+     * @param int $caseId
+     * @return string
+     * @throws GatewayException
+     */
+    public function cancelGuarantee($caseId)
+    {
+        $result = $this->apiClient->makeApiCall(
+            '/cases/' . $caseId . '/guarantee',
+            'PUT',
+            [
+                'guaranteeDisposition' => self::GUARANTEE_CANCELED
+            ]
+        );
+
+        $disposition = $this->processDispositionResult($result);
+        return $disposition;
+    }
+
+    /**
+     * Processes result from Signifyd API.
+     * Throws the GatewayException is result does not contain guarantee disposition in response or
+     * disposition has unknown status.
+     *
+     * @param array $result
+     * @return string
+     * @throws GatewayException
+     */
+    private function processDispositionResult(array $result)
+    {
+        if (!isset($result['disposition'])) {
             throw new GatewayException('Expected field "disposition" missed.');
         }
 
-        $disposition = strtoupper($guaranteeCreationResult['disposition']);
+        $disposition = strtoupper($result['disposition']);
 
         if (!in_array($disposition, [
             self::GUARANTEE_APPROVED,

@@ -6,20 +6,20 @@
 namespace Magento\Signifyd\Api;
 
 /**
- * Signifyd guarantee creation interface
+ * Signifyd guarantee canceling interface.
  *
- * Interface allows submit previously created Signifyd case for a guaranty.
+ * Interface allows to submit request to cancel previously created guarantee.
  * Implementation should send request to Signifyd API and update existing case entity with guarantee infromation.
  *
  * @api
  */
-interface GuaranteeCreationServiceInterface
+interface GuaranteeCancelingServiceInterface
 {
     /**
-     * Request Signifyd guarantee for order
+     * Cancels Signifyd guarantee for an order.
      *
-     * @param int $orderId
+     * @param $orderId
      * @return bool
      */
-    public function createForOrder($orderId);
+    public function cancelForOrder($orderId);
 }

@@ -122,7 +122,8 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
         $this->historyFactory->expects(self::never())
             ->method('save');
 
-        $this->updater->addComment($this->caseEntity, new Phrase(''));
+        $phrase = '';
+        $this->updater->addComment($this->caseEntity, __($phrase));
     }
 
     /**
