@@ -5,6 +5,7 @@
  */
 namespace Magento\Signifyd\Test\Unit\Model;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
@@ -121,7 +122,7 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
         $this->historyFactory->expects(self::never())
             ->method('save');
 
-        $this->updater->addComment($this->caseEntity, __(''));
+        $this->updater->addComment($this->caseEntity, new Phrase(''));
     }
 
     /**

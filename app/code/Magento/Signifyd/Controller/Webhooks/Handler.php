@@ -52,6 +52,7 @@ class Handler extends Action
      * @var CaseRepositoryInterface
      */
     private $caseRepository;
+
     /**
      * @var Config
      */
