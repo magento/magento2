@@ -166,7 +166,7 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Case scores and corresponding class name data provider
-
+     *
      * @return array
      */
     public function getScoreClassDataProvider()
