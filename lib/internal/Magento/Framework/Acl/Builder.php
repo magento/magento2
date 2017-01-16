@@ -65,6 +65,10 @@ class Builder
      */
     public function getAcl()
     {
+        if ($this->_acl instanceof \Magento\Framework\Acl) {
+            return $this->_acl;
+        }
+
         try {
             $this->_acl = $this->_aclFactory->create();
             foreach ($this->_loaderPool as $loader) {
