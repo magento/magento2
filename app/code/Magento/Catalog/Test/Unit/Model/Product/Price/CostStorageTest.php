@@ -252,7 +252,7 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
     public function testUpdateWithNegativeCost()
     {
         $sku = 'sku_1';
-        $this->costInterface->expects($this->exactly(3))->method('getSku')->willReturn($sku);
+        $this->costInterface->expects($this->exactly(5))->method('getSku')->willReturn($sku);
         $this->invalidSkuChecker
             ->expects($this->exactly(1))
             ->method('retrieveInvalidSkuList')
@@ -267,7 +267,7 @@ class CostStorageTest extends \PHPUnit_Framework_TestCase
             ->with(['attributeCode' => 'cost'])
             ->willReturn($this->pricePersistence);
         $this->pricePersistence->expects($this->atLeastOnce())->method('update');
-        $this->costInterface->expects($this->exactly(3))->method('getCost')->willReturn(-15);
+        $this->costInterface->expects($this->exactly(4))->method('getCost')->willReturn(-15);
         $this->validationResult
             ->expects($this->atLeastOnce())
             ->method('getFailedItems');
