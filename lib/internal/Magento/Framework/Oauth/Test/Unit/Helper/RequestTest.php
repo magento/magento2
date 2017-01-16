@@ -7,6 +7,7 @@
  */
 namespace Magento\Framework\Oauth\Test\Unit\Helper;
 
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Phrase;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
@@ -117,6 +118,72 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'hostWithPort' => [
                 'url' => 'http://localhost:81/',
                 'host' => 'localhost:81'
+            ]
+        ];
+    }
+
+    /**
+     * Test that the OAuth parameters are correctly extracted from the Authorization header.
+     *
+     * @param $authHeaderValue
+     * @param $expectedParams
+     * @dataProvider dataProviderForTestPrepareRequestOAuthHeader
+     */
+    public function testPrepareRequestOAuthHeader($authHeaderValue, $expectedParams)
+    {
+        $httpRequestMock = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $httpRequestMock->expects($this->once())->method('getScheme')->willReturn('https');
+        $httpRequestMock->expects($this->once())->method('getHttpHost')->willReturn('example.com');
+        $httpRequestMock->expects($this->once())->method('getRequestUri')->willReturn('/');
+
+        $httpRequestMock->expects($this->any())
+            ->method('getHeader')
+            ->willReturnCallback(function ($header) use ($authHeaderValue) {
+                switch ($header) {
+                    case 'Authorization':
+                        return $authHeaderValue;
+                    case \Zend_Http_Client::CONTENT_TYPE:
+                        return \Zend_Http_Client::ENC_URLENCODED;
+                    default:
+                        return null;
+                }
+            });
+
+        $this->assertEquals($expectedParams, $this->oauthRequestHelper->prepareRequest($httpRequestMock));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForTestPrepareRequestOAuthHeader()
+    {
+        return [
+            [
+                null,
+                []
+            ],
+            [
+                '',
+                []
+            ],
+            [
+                'OAuth oauth_consumer_key="x",oauth_token="x", Basic d2luZHNvcm0yOldpTmRzb1JTbWlUSDAwMTQ=',
+                ['oauth_consumer_key' => 'x', 'oauth_token' => 'x']
+            ],
+            [
+                'Basic d2luZHNvcm0yOldpTmRzb1JTbWlUSDAwMTQ=, OAuth oauth_consumer_key="x",oauth_token="x"',
+                ['oauth_consumer_key' => 'x', 'oauth_token' => 'x']
+            ],
+            [
+                'Basic d2luZHNvcm0yOldpTmRzb1JTbWlUSDAwMTQ=, oauth oauth_consumer_key="x", oauth_token="x"',
+                ['oauth_consumer_key' => 'x', 'oauth_token' => 'x']
+            ],
+            [
+                'oauth oauth_consumer_key="x", oauth_token="x", Basic d2luZHNvcm0yOldpTmRzb1JTbWlUSDAwMTQ=',
+                ['oauth_consumer_key' => 'x', 'oauth_token' => 'x']
             ]
         ];
     }
