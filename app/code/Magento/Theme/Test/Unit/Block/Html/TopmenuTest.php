@@ -202,6 +202,10 @@ HTML;
     }
 
     /**
+     * Create Tree Node mock object
+     *
+     * Helper method, that provides unified logic of creation of Tree Node mock objects.
+     *
      * @param bool $isCurrentItem
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
