@@ -55,7 +55,6 @@ class Modal extends Block
      */
     protected $dismissWarningSelector = '.action-secondary';
 
-
     /**
      * Modal overlay selector.
      *
