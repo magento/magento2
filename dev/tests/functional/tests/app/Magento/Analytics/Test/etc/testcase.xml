@@ -14,4 +14,9 @@
         <step name="declineSubscription" module="Magento_Analytics" next="configAnalytics" />
         <step name="configAnalytics" module="Magento_Analytics" />
     </scenario>
+    <scenario name="RestoreAnalyticsSubscriptionTest" firstStep="skipSubscription">
+        <step name="skipSubscription" module="Magento_Analytics" next="configAnalytics" />
+        <step name="configAnalytics" module="Magento_Analytics" next="restoreConfigAnalytics" />
+        <step name="restoreConfigAnalytics" module="Magento_Analytics" />
+    </scenario>
 </config>
