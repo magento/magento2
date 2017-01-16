@@ -39,6 +39,7 @@
         <env name="basedir" value="var/log" />
         <env name="credentials_file_path" value="./credentials.xml.dist" />
         <env name="mage_mode" value="developer" />
+        <env name="magento_timezone" value="America/Los_Angeles" />
     </php>
 
 </phpunit>
