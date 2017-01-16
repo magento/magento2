@@ -11,5 +11,5 @@
             <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled" />
             <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsStatusDisabled" />
         </variation>
-</testCase>
+    </testCase>
 </config>

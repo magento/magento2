@@ -22,18 +22,25 @@ class AcceptSubscriptionStep implements TestStepInterface
      */
     private $dashboard;
 
+    /**
+     * AcceptSubscriptionStep constructor.
+     *
+     * @param Dashboard $dashboard
+     */
     public function __construct(Dashboard $dashboard)
     {
         $this->dashboard = $dashboard;
     }
 
     /**
-     * Confirm Subscription step
+     * Skip Subscription step.
+     *
+     * @return void
      */
     public function run()
     {
         $this->dashboard->open();
-        $this->dashboard->getSubscriptionForm()->enableCheckbox();
+        $this->dashboard->getSubscriptionBlock()->enableCheckbox();
         $this->dashboard->getModalBlock()->acceptWarning();
     }
 }

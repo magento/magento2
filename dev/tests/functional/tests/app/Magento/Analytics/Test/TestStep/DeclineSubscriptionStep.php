@@ -29,11 +29,13 @@ class DeclineSubscriptionStep implements TestStepInterface
 
     /**
      * Decline Subscription step
+     *
+     * @return void
      */
     public function run()
     {
         $this->dashboard->open();
-        $this->dashboard->getSubscriptionForm()->enableCheckbox();
+        $this->dashboard->getSubscriptionBlock()->enableCheckbox();
         $this->dashboard->getModalBlock()->dismissWarning();
     }
 }

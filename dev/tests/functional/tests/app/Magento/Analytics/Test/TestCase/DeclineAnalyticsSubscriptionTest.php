@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Test\TestCase;
 
 use Magento\Mtf\TestCase\Scenario;
+
 /**
  * Steps:
  * 1. Log in to backend.

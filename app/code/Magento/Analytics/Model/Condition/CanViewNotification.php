@@ -20,7 +20,7 @@ class CanViewNotification implements ConditionInterface
      *
      * @var int
      */
-    private $notificationInterval = 604800;
+    private $notificationInterval = 30;
 
     /**
      * @var NotificationTime

@@ -5,13 +5,13 @@
  */
 namespace Magento\Analytics\Test\Block\Adminhtml\Dashboard\Analytics;
 
-use Magento\Mtf\Block\Form;
+use Magento\Ui\Test\Block\Adminhtml\Modal;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Create new category.
+ * Subscription block.
  */
-class SubscriptionForm extends Form
+class SubscriptionBlock extends Modal
 {
     /**
      * Modal checkbox
@@ -27,6 +27,16 @@ class SubscriptionForm extends Form
      */
     public function enableCheckbox()
     {
-        $this->_rootElement->find($this->checkbox, Locator::SELECTOR_CSS, 'checkbox')->setValue([1]);
+        $this->_rootElement->find($this->checkbox, Locator::SELECTOR_CSS, 'checkbox')->setValue('Yes');
+    }
+
+    /**
+     * Disable checkbox in modal window.
+     *
+     * @return void
+     */
+    public function disableCheckbox()
+    {
+        $this->_rootElement->find($this->checkbox, Locator::SELECTOR_CSS, 'checkbox')->setValue('No');
     }
 }

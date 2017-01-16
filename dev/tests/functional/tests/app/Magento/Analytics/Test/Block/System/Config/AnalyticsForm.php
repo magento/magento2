@@ -24,11 +24,38 @@ class AnalyticsForm extends Form
      */
     private $analyticsStatusLabel = '#row_analytics_general_label .value';
 
+    /**
+     * @var string
+     */
+    private $submitButton = '#save';
+
+    /**
+     * @return array|string
+     */
     public function isAnalyticsEnabled()
     {
         return $this->_rootElement->find($this->analyticsStatus, Locator::SELECTOR_CSS)->getValue();
     }
 
+    /**
+     * @return array|string
+     */
+    public function enableAnalytics()
+    {
+        return $this->_rootElement->find($this->analyticsStatus, Locator::SELECTOR_CSS, 'select')->setValue('Yes');
+    }
+
+    /**
+     * @return array|string
+     */
+    public function saveConfig()
+    {
+        return $this->browser->find($this->submitButton)->click();
+    }
+
+    /**
+     * @return array|string
+     */
     public function getAnalyticsStatus()
     {
         return $this->_rootElement->find($this->analyticsStatusLabel, Locator::SELECTOR_CSS)->getText();

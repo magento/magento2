@@ -9,8 +9,7 @@ use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Navigate to menu Stores>Configuration>General>Analytics->General
- *
+ * Navigate to menu Stores > Configuration > General > Analytics > General
  */
 class ConfigAnalyticsStep implements TestStepInterface
 {
@@ -32,6 +31,8 @@ class ConfigAnalyticsStep implements TestStepInterface
 
     /**
      * Open Config Analytics settings menu.
+     *
+     * @return void
      */
     public function run()
     {

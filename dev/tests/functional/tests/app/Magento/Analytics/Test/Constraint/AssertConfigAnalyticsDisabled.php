@@ -14,14 +14,16 @@ use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
 class AssertConfigAnalyticsDisabled extends AbstractConstraint
 {
     /**
-     * Assert Analytics is disabled in Stores>Configuration>General>Analytics menu.
+     * Assert Analytics is disabled in Stores > Configuration > General > Analytics menu.
+     *
      * @param ConfigAnalytics $configAnalytics
+     * @return void
      */
     public function processAssert(ConfigAnalytics $configAnalytics)
     {
         \PHPUnit_Framework_Assert::assertFalse(
             (bool)$configAnalytics->getAnalyticsForm()->isAnalyticsEnabled(),
-            'Magento Analytics is disabled'
+            'Magento Analytics is enabled'
         );
     }
 
@@ -32,6 +34,6 @@ class AssertConfigAnalyticsDisabled extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Magento Analytics is not disabled in Stores>Configuration>General>Analytics->General menu';
+        return 'Magento Analytics is disabled in Stores > Configuration > General > Analytics > General menu.';
     }
 }
