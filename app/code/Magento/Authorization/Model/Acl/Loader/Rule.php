@@ -26,7 +26,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
     private $_rootResource;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface
+     * @var \Magento\Framework\Acl\Data\CacheInterface
      */
     private $cache;
 
@@ -39,7 +39,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $data
-     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param \Magento\Framework\Acl\Data\CacheInterface $cache
      * @param Json $serializer
      * @SuppressWarnings(PHPMD.UnusedFormalParameter):
      */
@@ -47,12 +47,12 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Framework\App\ResourceConnection $resource,
         array $data = [],
-        \Magento\Framework\Config\CacheInterface $cache = null,
+        \Magento\Framework\Acl\Data\CacheInterface $cache = null,
         Json $serializer = null
     ) {
         $this->_resource = $resource;
         $this->_rootResource = $rootResource;
-        $this->cache = $cache ?: ObjectManager::getInstance()->get(\Magento\Framework\Config\CacheInterface::class);
+        $this->cache = $cache ?: ObjectManager::getInstance()->get(\Magento\Framework\Acl\Data\CacheInterface::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
@@ -101,7 +101,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
 
         $rulesArr = $connection->fetchAll($select);
 
-        $this->cache->save($this->serializer->serialize($rulesArr), self::ACL_RULE_CACHE_KEY, ['acl_cache']);
+        $this->cache->save($this->serializer->serialize($rulesArr), self::ACL_RULE_CACHE_KEY);
 
         return $rulesArr;
     }

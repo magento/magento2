@@ -92,8 +92,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
         $this->_treeBuilderMock->expects($this->once())->method('build')->will($this->returnValue('ExpectedResult'));
         $this->cacheMock->expects($this->once())->method('save')->with(
             json_encode('ExpectedResult'),
-            \Magento\Framework\Acl\AclResource\Provider::ACL_RESOURCES_CACHE_KEY,
-            ['acl_cache']
+            \Magento\Framework\Acl\AclResource\Provider::ACL_RESOURCES_CACHE_KEY
         );
         $this->assertEquals('ExpectedResult', $this->_model->getAclResources());
     }

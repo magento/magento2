@@ -103,6 +103,7 @@
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
     <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
     <preference for="Magento\Framework\Acl\CacheInterface" type="Magento\Framework\Acl\Cache" />
+    <preference for="Magento\Framework\Acl\Data\CacheInterface" type="Magento\Framework\Acl\Data\Cache" />
     <preference for="Magento\Framework\App\AreaInterface" type="Magento\Framework\App\Area" />
     <preference for="Magento\Framework\Setup\ModuleDataSetupInterface" type="Magento\Setup\Module\DataSetup" />
     <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization" />

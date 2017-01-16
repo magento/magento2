@@ -33,7 +33,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
     protected $_roleFactory;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface
+     * @var \Magento\Framework\Acl\Data\CacheInterface
      */
     private $cache;
 
@@ -46,20 +46,20 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
      * @param \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory
      * @param \Magento\Authorization\Model\Acl\Role\UserFactory $roleFactory
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param \Magento\Framework\Acl\Data\CacheInterface $cache
      * @param Json $serializer
      */
     public function __construct(
         \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory,
         \Magento\Authorization\Model\Acl\Role\UserFactory $roleFactory,
         \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Framework\Config\CacheInterface $cache = null,
+        \Magento\Framework\Acl\Data\CacheInterface $cache = null,
         Json $serializer = null
     ) {
         $this->_resource = $resource;
         $this->_groupFactory = $groupFactory;
         $this->_roleFactory = $roleFactory;
-        $this->cache = $cache ?: ObjectManager::getInstance()->get(\Magento\Framework\Config\CacheInterface::class);
+        $this->cache = $cache ?: ObjectManager::getInstance()->get(\Magento\Framework\Acl\Data\CacheInterface::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
@@ -109,7 +109,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
             ->order('tree_level');
 
         $rolesArray = $connection->fetchAll($select);
-        $this->cache->save($this->serializer->serialize($rolesArray), self::ACL_ROLES_CACHE_KEY, ['acl_cache']);
+        $this->cache->save($this->serializer->serialize($rolesArray), self::ACL_ROLES_CACHE_KEY);
         return $rolesArray;
     }
 }

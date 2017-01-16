@@ -49,7 +49,7 @@ class RulesTest extends \PHPUnit_Framework_TestCase
     private $aclCacheMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $cacheMock;
 
@@ -119,7 +119,7 @@ class RulesTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Config\CacheInterface::class)
+        $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Acl\Data\CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -163,7 +163,7 @@ class RulesTest extends \PHPUnit_Framework_TestCase
 
         $this->cacheMock->expects($this->once())
             ->method('clean')
-            ->with(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['acl_cache']);
+            ->with(\Zend_Cache::CLEANING_MODE_MATCHING_TAG);
 
         $this->model->saveRel($this->ruleMock);
     }

@@ -424,8 +424,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->roleMock->expects($this->atLeastOnce())->method('getId')->willReturn($roleId);
         $this->dbAdapterMock->expects($this->once())->method('describeTable')->willReturn([1, 2, 3]);
         $this->cacheMock->expects($this->once())->method('clean')->with(
-            \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            ['acl_cache']
+            \Zend_Cache::CLEANING_MODE_MATCHING_TAG
         );
         $this->assertInstanceOf(
             \Magento\User\Model\ResourceModel\User::class,

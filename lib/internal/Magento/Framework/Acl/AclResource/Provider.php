@@ -27,7 +27,7 @@ class Provider implements ProviderInterface
     protected $_resourceTreeBuilder;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface
+     * @var \Magento\Framework\Acl\Data\CacheInterface
      */
     private $cache;
 
@@ -39,13 +39,13 @@ class Provider implements ProviderInterface
     /**
      * @param \Magento\Framework\Config\ReaderInterface $configReader
      * @param TreeBuilder $resourceTreeBuilder
-     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param \Magento\Framework\Acl\Data\CacheInterface $cache
      * @param Json $serializer
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $configReader,
         TreeBuilder $resourceTreeBuilder,
-        \Magento\Framework\Config\CacheInterface $cache = null,
+        \Magento\Framework\Acl\Data\CacheInterface $cache = null,
         Json $serializer = null
     ) {
         $this->_configReader = $configReader;
@@ -66,7 +66,7 @@ class Provider implements ProviderInterface
         $aclResourceConfig = $this->_configReader->read();
         if (!empty($aclResourceConfig['config']['acl']['resources'])) {
             $tree = $this->_resourceTreeBuilder->build($aclResourceConfig['config']['acl']['resources']);
-            $this->cache->save($this->serializer->serialize($tree), self::ACL_RESOURCES_CACHE_KEY, ['acl_cache']);
+            $this->cache->save($this->serializer->serialize($tree), self::ACL_RESOURCES_CACHE_KEY);
             return $tree;
         }
         return [];

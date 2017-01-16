@@ -36,7 +36,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface
+     * @var \Magento\Framework\Acl\Data\CacheInterface
      */
     private $cache;
 
@@ -48,7 +48,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
-     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param \Magento\Framework\Acl\Data\CacheInterface $cache
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -56,14 +56,14 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null,
-        \Magento\Framework\Config\CacheInterface $cache = null
+        \Magento\Framework\Acl\Data\CacheInterface $cache = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_aclCache = $aclCache;
         $this->_roleFactory = $roleFactory;
         $this->dateTime = $dateTime;
         $this->cache = $cache ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Config\CacheInterface::class
+            \Magento\Framework\Acl\Data\CacheInterface::class
         );
     }
 
@@ -225,7 +225,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             $insertData = $this->_prepareDataForTable($data, $this->getTable('authorization_role'));
             $this->getConnection()->insert($this->getTable('authorization_role'), $insertData);
-            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['acl_cache']);
+            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG);
         }
     }
 
