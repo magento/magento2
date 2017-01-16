@@ -46,8 +46,14 @@ class Match implements QueryInterface
     {
         $queryValue = $this->prepareQuery($requestQuery->getValue(), $conditionType);
         $queries = $this->buildQueries($requestQuery->getMatches(), $queryValue);
+        $requestQueryBoost = $requestQuery->getBoost() ?: 1;
         foreach ($queries as $query) {
-            $selectQuery['bool'][$query['condition']][]= $query['body'];
+            $queryBody = $query['body'];
+            foreach ($queryBody['match'] as $field => $matchQuery) {
+                $matchQuery['boost'] = $requestQueryBoost + $matchQuery['boost'];
+                $queryBody['match'][$field] = $matchQuery;
+            }
+            $selectQuery['bool'][$query['condition']][]= $queryBody;
         }
         return $selectQuery;
     }
@@ -72,6 +78,15 @@ class Match implements QueryInterface
     }
 
     /**
+     * Creates valid ElasticSearch search conditions from Match queries.
+     *
+     * The purpose of this method is to create a structure which represents valid search query
+     * for a full-text search.
+     * It sets search query condition, the search query itself, and sets the search query boost.
+     *
+     * The search query boost is an optional in the search query and therefore it will be set to 1 by default
+     * if none passed with a match query.
+     *
      * @param array $matches
      * @param array $queryValue
      * @return array
@@ -88,7 +103,10 @@ class Match implements QueryInterface
                 'condition' => $queryValue['condition'],
                 'body' => [
                     'match' => [
-                        $resolvedField => $queryValue['value'],
+                        $resolvedField => [
+                            'query' => $queryValue['value'],
+                            'boost' => isset($match['boost']) ? $match['boost'] : 1,
+                        ],
                     ],
                 ],
             ];

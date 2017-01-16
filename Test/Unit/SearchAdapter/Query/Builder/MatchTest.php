@@ -68,19 +68,39 @@ class MatchTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuild()
     {
+        $expectedResult = [
+            'bool' => [
+                'must_not' => [
+                    [
+                        'match' => [
+                            'some_field' => [
+                                'query' => 'query_value',
+                                'boost' => 43,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->fieldMapper->expects($this->once())
+            ->method('getFieldName')
+            ->with('some_field', ['type' => FieldMapperInterface::TYPE_QUERY])
+            ->willReturnArgument(0);
+
+        /** @var \Magento\Framework\Search\Request\Query\Match|\PHPUnit_Framework_MockObject_MockObject $query */
         $query = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\Match::class)
             ->setMethods(['getValue', 'getMatches'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $query->expects($this->once())->method('getValue')->willReturn('query_value');
-        $query->expects($this->once())->method('getMatches')->willReturn([['field' => 'some_field'], ]);
+        $query->expects($this->once())->method('getMatches')->willReturn([['field' => 'some_field', 'boost' => 42]]);
 
         $this->preprocessorInterface->expects($this->any())
             ->method('process')
             ->with('query_value')
             ->willReturn('query_value');
-
-        $this->model->build([], $query, 'not');
+        $this->assertEquals($expectedResult, $this->model->build([], $query, 'not'));
     }
 }
