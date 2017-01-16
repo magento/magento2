@@ -144,10 +144,10 @@ class Request
      */
     protected function _processHeader($authHeaderValue, &$protocolParams)
     {
-        if ($authHeaderValue && 'oauth' === strtolower(substr($authHeaderValue, 0, 5))) {
-            $authHeaderValue = substr($authHeaderValue, 6);
-            // ignore 'OAuth ' at the beginning
-
+        $oauthValuePosition = stripos(($authHeaderValue ? $authHeaderValue : ''), 'oauth ');
+        if ($authHeaderValue && $oauthValuePosition !== false) {
+            // Ignore anything before and including 'OAuth ' (trailing values validated later)
+            $authHeaderValue = substr($authHeaderValue, $oauthValuePosition + 6);
             foreach (explode(',', $authHeaderValue) as $paramStr) {
                 $nameAndValue = explode('=', trim($paramStr), 2);
 
