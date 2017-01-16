@@ -20,6 +20,7 @@ class Condition implements FilterInterface
      * @var StructureManager
      */
     private $structureManager;
+
     /**
      * @var ConditionPool
      */

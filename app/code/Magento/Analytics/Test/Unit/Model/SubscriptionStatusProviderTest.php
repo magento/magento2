@@ -19,6 +19,7 @@ class SubscriptionStatusProviderTest extends \PHPUnit_Framework_TestCase
      * @var System|\PHPUnit_Framework_MockObject_MockObject
      */
     private $systemConfigMock;
+
     /**
      * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
      */

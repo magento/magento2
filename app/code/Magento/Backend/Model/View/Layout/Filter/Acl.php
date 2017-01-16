@@ -55,6 +55,8 @@ class Acl implements FilterInterface
      *
      * @param ScheduledStructure $scheduledStructure
      * @param Structure $structure
+     *
+     * @return void
      */
     public function filterAclElements(ScheduledStructure $scheduledStructure, Structure $structure)
     {

@@ -30,6 +30,7 @@ class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
      * @var AnalyticsApiUserProvider|\PHPUnit_Framework_MockObject_MockObject
      */
     private $analyticsApiUserProviderMock;
+
     /**
      * @var TokenGenerator
      */

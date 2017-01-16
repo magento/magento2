@@ -17,6 +17,7 @@ class ConditionPool
      * @var ConditionInterface[]
      */
     private $conditions;
+
     /**
      * @var ObjectManagerInterface
      */
