@@ -89,17 +89,17 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
      */
     private function getRulesArray()
     {
- 	    $rulesCachedData = $this->cache->load(self::ACL_RULE_CACHE_KEY);
- 	    if ($rulesCachedData) {
- 	        return $this->serializer->unserialize($rulesCachedData);
- 	    }
+        $rulesCachedData = $this->cache->load(self::ACL_RULE_CACHE_KEY);
+        if ($rulesCachedData) {
+            return $this->serializer->unserialize($rulesCachedData);
+        }
 
- 	    $ruleTable = $this->_resource->getTableName("authorization_rule");
- 	    $connection = $this->_resource->getConnection();
- 	    $select = $connection->select()
+        $ruleTable = $this->_resource->getTableName("authorization_rule");
+        $connection = $this->_resource->getConnection();
+        $select = $connection->select()
             ->from(['r' => $ruleTable]);
 
- 	    $rulesArr = $connection->fetchAll($select);
+        $rulesArr = $connection->fetchAll($select);
 
         $this->cache->save($this->serializer->serialize($rulesArr), self::ACL_RULE_CACHE_KEY, ['acl_cache']);
 

@@ -72,15 +72,12 @@ class RoleTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-
-
         $this->selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $this->selectMock->expects($this->any())
             ->method('from')
             ->will($this->returnValue($this->selectMock));
 
         $this->_adapterMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
-
 
         $this->serializerMock = $this->getMock(
             \Magento\Framework\Serialize\Serializer\Json::class,

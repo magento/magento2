@@ -96,20 +96,20 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
      */
     private function getRolesArray()
     {
- 	    $rolesCachedData = $this->cache->load(self::ACL_ROLES_CACHE_KEY);
- 	    if ($rolesCachedData) {
- 	        return $this->serializer->unserialize($rolesCachedData);
- 	    }
+        $rolesCachedData = $this->cache->load(self::ACL_ROLES_CACHE_KEY);
+        if ($rolesCachedData) {
+            return $this->serializer->unserialize($rolesCachedData);
+        }
 
- 	    $roleTableName = $this->_resource->getTableName('authorization_role');
- 	    $connection = $this->_resource->getConnection();
+        $roleTableName = $this->_resource->getTableName('authorization_role');
+        $connection = $this->_resource->getConnection();
 
         $select = $connection->select()
             ->from($roleTableName)
             ->order('tree_level');
 
- 	    $rolesArray = $connection->fetchAll($select);
- 	    $this->cache->save($this->serializer->serialize($rolesArray), self::ACL_ROLES_CACHE_KEY, ['acl_cache']);
- 	    return $rolesArray;
+        $rolesArray = $connection->fetchAll($select);
+        $this->cache->save($this->serializer->serialize($rolesArray), self::ACL_ROLES_CACHE_KEY, ['acl_cache']);
+        return $rolesArray;
  	}
 }

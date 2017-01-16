@@ -66,7 +66,9 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_rootResource = $rootResource;
         $this->_aclCache = $aclCache;
         $this->_logger = $logger;
-        $this->cache = $cache;
+        $this->cache = $cache ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Config\CacheInterface::class
+        );
     }
 
     /**

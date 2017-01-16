@@ -8,6 +8,8 @@ namespace Magento\Authorization\Test\Unit\Model\ResourceModel;
 
 /**
  * Unit test for Rules resource model.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RulesTest extends \PHPUnit_Framework_TestCase
 {
@@ -206,7 +208,6 @@ class RulesTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->with('authorization_rule', ['role_id = ?' => self::TEST_ROLE_ID])
             ->will($this->throwException($exception));
-
 
         $this->connectionMock->expects($this->once())->method('rollBack');
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
