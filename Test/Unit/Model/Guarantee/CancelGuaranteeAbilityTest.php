@@ -163,7 +163,7 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->cancelGuaranteeAbility->isAvailable($orderId));
     }
 
-    private function isAvailableWithCanceledGuaranteeDataProvider()
+    public function isAvailableWithCanceledGuaranteeDataProvider()
     {
         return [
             [CaseEntity::GUARANTEE_DECLINED], [CaseEntity::GUARANTEE_CANCELED]
