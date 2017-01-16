@@ -53,15 +53,13 @@ class StoreId extends DataSource
      *
      * @param string $key [optional]
      * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getData($key = null)
     {
         if (null === $this->data) {
             $this->processData();
         }
-        return parent::getData();
+        return parent::getData($key);
     }
 
     /**

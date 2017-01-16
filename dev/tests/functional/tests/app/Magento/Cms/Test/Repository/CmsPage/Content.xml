@@ -18,6 +18,7 @@
                 </item>
             </field>
         </dataset>
+
         <dataset name="compared_products_grid">
             <field name="widget" xsi:type="array">
                 <item name="widget_type" xsi:type="string">Recently Compared Products</item>
@@ -25,6 +26,7 @@
                 <item name="template" xsi:type="string">Compared Products Grid Template</item>
             </field>
         </dataset>
+
         <dataset name="new_products_grid">
             <field name="widget" xsi:type="array">
                 <item name="widget_type" xsi:type="string">Catalog New Products List</item>
@@ -34,6 +36,7 @@
                 <item name="template" xsi:type="string">New Products Grid Template</item>
             </field>
         </dataset>
+
         <dataset name="all_widgets">
             <field name="widget_1" xsi:type="array">
                 <item name="widget_type" xsi:type="string">CMS Page Link</item>
