@@ -89,9 +89,9 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
      */
     private function getRulesArray()
     {
- 	    $rulesArr = $this->cache->load(self::ACL_RULE_CACHE_KEY);
- 	    if ($rulesArr) {
- 	        return $this->serializer->unserialize($rulesArr);
+ 	    $rulesCachedData = $this->cache->load(self::ACL_RULE_CACHE_KEY);
+ 	    if ($rulesCachedData) {
+ 	        return $this->serializer->unserialize($rulesCachedData);
  	    }
 
  	    $ruleTable = $this->_resource->getTableName("authorization_rule");
