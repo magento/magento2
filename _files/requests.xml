@@ -89,7 +89,7 @@
                 <filterReference clause="must" ref="pid"/>
             </query>
             <query xsi:type="filteredQuery" name="filtered_query_rm">
-                <queryReference clause= "must" ref="fulltext_search_query_rm"/>
+                <queryReference clause="must" ref="fulltext_search_query_rm"/>
             </query>
             <query xsi:type="filteredQuery" name="filtered_query_filter_rm">
                 <filterReference clause="must" ref="bool_filter_rm"/>
@@ -403,6 +403,46 @@
             <filter xsi:type="termFilter" name="test_configurable_filter" field="test_configurable" value="$test_configurable$"/>
         </filters>
         <aggregations/>
+        <from>0</from>
+        <size>10</size>
+    </request>
+    <request query="search_boost" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="search_boost" boost="1">
+                <queryReference clause="should" ref="search_boost_name_query"/>
+                <queryReference clause="should" ref="search_boost_description_query"/>
+            </query>
+
+            <query xsi:type="matchQuery" name="search_boost_name_query" value="$query$" boost="1">
+                <match field="name"/>
+            </query>
+            <query xsi:type="matchQuery" name="search_boost_description_query" value="$query$" boost="1">
+                <match field="description"/>
+            </query>
+        </queries>
+        <from>0</from>
+        <size>10</size>
+    </request>
+    <request query="search_boost_name" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="search_boost_name" boost="1">
+                <queryReference clause="should" ref="search_boost_name_query"/>
+                <queryReference clause="should" ref="search_boost_description_query"/>
+            </query>
+
+            <query xsi:type="matchQuery" name="search_boost_name_query" value="$query$" boost="20">
+                <match field="name"/>
+            </query>
+            <query xsi:type="matchQuery" name="search_boost_description_query" value="$query$" boost="1">
+                <match field="description"/>
+            </query>
+        </queries>
         <from>0</from>
         <size>10</size>
     </request>

@@ -203,6 +203,10 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @param string $nameQuery
+     * @param string $descriptionQuery
+     * @param array $rangeFilter
+     * @param int $expectedRecordsCount
      */
     public function testSimpleAdvancedSearch(
         $nameQuery,
@@ -294,6 +298,19 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
         // Reindex Elastic Search since date_attribute data fixture added new fields to be indexed
         $this->reindexAll();
         parent::testAdvancedSearchCompositeProductWithDisabledChild();
+    }
+
+    /**
+     * @magentoDataFixture Magento/Framework/Search/_files/search_weight_products.php
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     */
+    public function testSearchQueryBoost()
+    {
+        // Reindex Elastic Search since date_attribute data fixture added new fields to be indexed
+        $this->reindexAll();
+        parent::testSearchQueryBoost();
     }
 
     /**
