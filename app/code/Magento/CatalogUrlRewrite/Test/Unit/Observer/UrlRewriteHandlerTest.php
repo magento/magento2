@@ -13,7 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
-use \Magento\UrlRewrite\Model\MergeDataProvider;
+use Magento\UrlRewrite\Model\MergeDataProvider;
 
 class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
 {

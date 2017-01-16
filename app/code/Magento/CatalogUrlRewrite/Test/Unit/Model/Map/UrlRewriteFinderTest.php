@@ -17,6 +17,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class UrlRewriteFinderTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
 {
