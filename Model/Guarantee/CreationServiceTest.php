@@ -10,7 +10,6 @@ use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use Magento\TestFramework\Helper\Bootstrap;
