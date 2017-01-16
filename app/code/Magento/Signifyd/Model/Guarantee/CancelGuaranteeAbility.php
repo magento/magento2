@@ -65,8 +65,7 @@ class CancelGuaranteeAbility
             return false;
         }
 
-        // Added by story acceptance criteria.
-        // According to Signifyd API, a Guarantee can be canceled for canceled orders
+        // Magento does not provide an ability to cancel Guarantees for canceled orders.
         if (in_array($order->getState(), [Order::STATE_CANCELED])) {
             return false;
         }
