@@ -13,7 +13,10 @@ define([
     return Select.extend({
         defaults: {
             size: 5,
-            elementTmpl: 'ui/form/element/multiselect'
+            elementTmpl: 'ui/form/element/multiselect',
+            listens: {
+                value: 'setDifferedFromDefault setPrepareToSendData'
+            }
         },
 
         /**
@@ -36,6 +39,15 @@ define([
             }
 
             return _.isString(value) ? value.split(',') : value;
+        },
+
+        setPrepareToSendData: function (data) {
+
+            if (!data.length) {
+                data = '';
+            }
+
+            this.source.set(this.dataScope + '-prepared-for-send', data);
         },
 
         /**
