@@ -8,9 +8,13 @@
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
-use Magento\Catalog\Model\Category;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Class CategoryUrlRewriteGeneratorTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */

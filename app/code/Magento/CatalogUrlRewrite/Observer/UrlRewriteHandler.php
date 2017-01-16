@@ -5,8 +5,6 @@
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-
 class UrlRewriteHandler
 {
     /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider */
@@ -130,7 +128,7 @@ class UrlRewriteHandler
      * @param int $storeId
      * @param bool $saveRewriteHistory
      * @param int|null $rootCategoryId
-     * @return UrlRewrite[]
+     * @return array
      */
     public function getCategoryProductsUrlRewrites(
         \Magento\Catalog\Model\Category $category,
@@ -187,15 +185,17 @@ class UrlRewriteHandler
         foreach ($categoryIds as $categoryId) {
             $this->urlPersist->deleteByData(
                 [
-                    UrlRewrite::ENTITY_ID => $categoryId,
-                    UrlRewrite::ENTITY_TYPE =>
+                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_ID =>
+                        $categoryId,
+                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_TYPE =>
                         \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator::ENTITY_TYPE,
                 ]
             );
             $this->urlPersist->deleteByData(
                 [
-                    UrlRewrite::METADATA => $this->serializer->serialize(['category_id' => $categoryId]),
-                    UrlRewrite::ENTITY_TYPE =>
+                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::METADATA =>
+                        $this->serializer->serialize(['category_id' => $categoryId]),
+                    \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::ENTITY_TYPE =>
                         \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE,
                 ]
             );
