@@ -97,7 +97,8 @@ class CaseEntity extends AbstractModel implements CaseInterface
      */
     public function isGuaranteeEligible()
     {
-        return $this->getData('guarantee_eligible');
+        $value = $this->getData('guarantee_eligible');
+        return ($value === null) ? $value : (bool) $value;
     }
 
     /**
