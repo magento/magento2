@@ -12,8 +12,15 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 /**
  * Assert js validation message is present for required field.
  */
-class AssertCreditCardJsValidationMessagesIsPresent extends AbstractConstraint
+class AssertCreditCardJsValidationMessageIsPresent extends AbstractConstraint
 {
+    /**
+     * Error container selector.
+     *
+     * @var string
+     */
+    protected $errorSelector = '.hosted-error';
+
     /**
      * Assert js validation message is present for required field.
      *
@@ -27,7 +34,7 @@ class AssertCreditCardJsValidationMessagesIsPresent extends AbstractConstraint
 
         /** @var \Magento\Mtf\Client\ElementInterface $field */
         foreach ($requiredFields as $field) {
-            $errorContainer = $field->find(".hosted-error");
+            $errorContainer = $field->find($this->errorSelector);
             if ($errorContainer->isVisible()) {
                 \PHPUnit_Framework_Assert::assertEquals(
                     $expectedErrorMessage,

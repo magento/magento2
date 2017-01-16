@@ -16,4 +16,9 @@
             <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
+    <type name="Magento\Braintree\Test\Constraint\AssertCreditCardJsValidationMessageIsPresent">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
 </config>
