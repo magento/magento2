@@ -41,8 +41,14 @@ define([
             return _.isString(value) ? value.split(',') : value;
         },
 
+        /**
+         * Sets the prepared data to dataSource
+         * by path, where key is component link to dataSource with
+         * suffix "-prepared-for-send"
+         *
+         * @param {Array} data - current component value
+         */
         setPrepareToSendData: function (data) {
-
             if (!data.length) {
                 data = '';
             }
