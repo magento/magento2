@@ -57,7 +57,7 @@ class GeneratedFiles
     }
 
     /**
-     * Clean var/generation, var/di and var/cache
+     * Clean generated/code, generated/metadata and var/cache
      *
      * @return void
      */
@@ -81,12 +81,12 @@ class GeneratedFiles
             $generationPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::GENERATION));
             $diPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::DI));
 
-            // Clean var/generation dir
+            // Clean generated/code dir
             if ($this->write->isDirectory($generationPath)) {
                 $this->write->delete($generationPath);
             }
 
-            // Clean var/di
+            // Clean generated/metadata
             if ($this->write->isDirectory($diPath)) {
                 $this->write->delete($diPath);
             }
@@ -101,7 +101,7 @@ class GeneratedFiles
     }
 
     /**
-     * Create flag for cleaning up var/generation, var/di and var/cache directories for subsequent
+     * Create flag for cleaning up generated/code, generated/metadata and var/cache directories for subsequent
      * regeneration of this content
      *
      * @return void
