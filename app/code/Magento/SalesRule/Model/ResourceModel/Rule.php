@@ -347,7 +347,7 @@ class Rule extends AbstractResource
     {
         $result = [];
         if (preg_match_all(
-            '~s:32:"salesrule/rule_condition_product";s:9:"attribute";s:\d+:"(.*?)"~s',
+            '~s:46:"Magento\SalesRule\Model\Rule\Condition\Product";s:9:"attribute";s:\d+:"(.*?)"~s',
             $serializedString,
             $matches
         )
