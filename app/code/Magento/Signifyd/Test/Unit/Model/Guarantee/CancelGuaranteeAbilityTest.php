@@ -110,7 +110,7 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests case when GuaranteeEligible for Case is true or null
-
+     *
      * @param mixed $guaranteeEligible
      * @dataProvider isAvailableWithGuarantyIsEligibleDataProvider
      */
