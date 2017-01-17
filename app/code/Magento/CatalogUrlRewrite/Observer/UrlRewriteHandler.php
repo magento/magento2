@@ -13,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
 class UrlRewriteHandler
 {
@@ -39,25 +40,34 @@ class UrlRewriteHandler
      */
     private $categoryBasedProductRewriteGenerator;
 
+    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    private $mergeDataProviderPrototype;
+
     /**
      * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      */
     public function __construct(
         \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider,
         CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator,
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         UrlPersistInterface $urlPersist,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        MergeDataProviderFactory $mergeDataProviderFactory = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
         $this->productCollectionFactory = $productCollectionFactory;
+        if (!isset($mergeDataProviderFactory)) {
+            $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
+        }
+        $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }
 
     /**
@@ -68,10 +78,10 @@ class UrlRewriteHandler
      */
     public function generateProductUrlRewrites(Category $category)
     {
+        $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $this->isSkippedProduct = [];
         $saveRewriteHistory = $category->getData('save_rewrites_history');
         $storeId = $category->getStoreId();
-        $productUrls = [];
         if ($category->getAffectedProductIds()) {
             $this->isSkippedProduct = $category->getAffectedProductIds();
             $collection = $this->productCollectionFactory->create()
@@ -84,38 +94,54 @@ class UrlRewriteHandler
             foreach ($collection as $product) {
                 $product->setStoreId($storeId);
                 $product->setData('save_rewrites_history', $saveRewriteHistory);
-                $productUrls = array_merge($productUrls, $this->productUrlRewriteGenerator->generate($product));
+                $mergeDataProvider->merge(
+                    $this->productUrlRewriteGenerator->generate($product, $category->getEntityId())
+                );
             }
         } else {
-            $productUrls = array_merge(
-                $productUrls,
-                $this->getCategoryProductsUrlRewrites($category, $storeId, $saveRewriteHistory)
+            $mergeDataProvider->merge(
+                $this->getCategoryProductsUrlRewrites(
+                    $category,
+                    $storeId,
+                    $saveRewriteHistory,
+                    $category->getEntityId()
+                )
             );
         }
         foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
-            $productUrls = array_merge(
-                $productUrls,
-                $this->getCategoryProductsUrlRewrites($childCategory, $storeId, $saveRewriteHistory)
+            $mergeDataProvider->merge(
+                $this->getCategoryProductsUrlRewrites(
+                    $childCategory,
+                    $storeId,
+                    $saveRewriteHistory,
+                    $category->getEntityId()
+                )
             );
         }
-        return $productUrls;
+
+        return $mergeDataProvider->getData();
     }
 
     /**
      * @param Category $category
      * @param int $storeId
      * @param bool $saveRewriteHistory
+     * @param int|null $rootCategoryId
      * @return UrlRewrite[]
      */
-    public function getCategoryProductsUrlRewrites(Category $category, $storeId, $saveRewriteHistory)
-    {
+    public function getCategoryProductsUrlRewrites(
+        Category $category,
+        $storeId,
+        $saveRewriteHistory,
+        $rootCategoryId = null
+    ) {
+        $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $category->getProductCollection()
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('visibility')
             ->addAttributeToSelect('url_key')
             ->addAttributeToSelect('url_path');
-        $productUrls = [];
         foreach ($productCollection as $product) {
             if (in_array($product->getId(), $this->isSkippedProduct)) {
                 continue;
@@ -123,12 +149,12 @@ class UrlRewriteHandler
             $this->isSkippedProduct[] = $product->getId();
             $product->setStoreId($storeId);
             $product->setData('save_rewrites_history', $saveRewriteHistory);
-            $productUrls = array_merge(
-                $productUrls,
-                $this->getCategoryBasedProductRewriteGenerator()->generate($product, $category)
+            $mergeDataProvider->merge(
+                $this->getCategoryBasedProductRewriteGenerator()->generate($product, $category, $rootCategoryId)
             );
         }
-        return $productUrls;
+
+        return $mergeDataProvider->getData();
     }
 
     /**
