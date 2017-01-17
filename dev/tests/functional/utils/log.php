@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-if (!isset($_GET['fileName'])) {
-    throw new \InvalidArgumentException('Argument "fileName" must be set.');
+if (!isset($_GET['name'])) {
+    throw new \InvalidArgumentException('The name of log file is required for getting logs.');
 }
 
-$fileName = urldecode($_GET['fileName']);
-$file = file_get_contents('../../../../var/log/' . $fileName);
+$name = urldecode($_GET['name']);
+$file = file_get_contents('../../../../var/log/' . $name);
 
 echo serialize($file);

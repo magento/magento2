@@ -6,7 +6,6 @@
 
 namespace Magento\Mtf\Util\Command\File;
 
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
@@ -35,15 +34,15 @@ class Log
     }
 
     /**
-     * Get file content.
+     * Get content of log file in var/log folder by file name.
      *
-     * @param string $fileName
+     * @param string $name
      * @return array
      */
-    public function getFileContent($fileName)
+    public function getFileContent($name)
     {
         $curl = $this->transport;
-        $curl->write($this->prepareUrl($fileName), [], CurlInterface::GET);
+        $curl->write($this->prepareUrl($name), [], CurlTransport::GET);
         $data = $curl->read();
         $curl->close();
 
@@ -53,11 +52,11 @@ class Log
     /**
      * Prepare url.
      *
-     * @param string $fileName
+     * @param string $name
      * @return string
      */
-    private function prepareUrl($fileName)
+    private function prepareUrl($name)
     {
-        return $_ENV['app_frontend_url'] . self::URL . '?fileName=' . urlencode($fileName);
+        return $_ENV['app_frontend_url'] . self::URL . '?name=' . urlencode($name);
     }
 }
