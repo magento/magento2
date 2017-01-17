@@ -19,6 +19,17 @@ define([
             expect(utils.convertToMomentFormat(format)).toBe(momentFormat);
         });
 
+        it('Check "filterFormData" method', function () {
+            var suffix = 'prepared-for-send',
+                separator = '-',
+                data = {
+                    key: 'value-prepared-before-save'
+                };
+            expect(utils.filterFormData(data, suffix, separator)).toEqual(data);
+            expect(utils.filterFormData(data, suffix)).toEqual(data);
+            expect(utils.filterFormData(data)).toEqual(data);
+        });
+
         it('Check convertToMomentFormat function for all Magento supported locales', function () {
 
             var fixture,
