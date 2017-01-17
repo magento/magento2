@@ -8,12 +8,12 @@ namespace Magento\Signifyd\Model\CaseServices;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
+use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Signifyd\Model\SignifydGateway\ApiClient;
+use Magento\Signifyd\Model\SignifydGateway\Client\RequestBuilder;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -37,9 +37,9 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     private $order;
 
     /**
-     * @var ZendClient|MockObject
+     * @var RequestBuilder|MockObject
      */
-    private $client;
+    private $requestBuilder;
 
     /**
      * @var LoggerInterface|MockObject
@@ -58,22 +58,14 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
-        $this->client = $this->getMockBuilder(ZendClient::class)
+        $this->requestBuilder = $this->getMockBuilder(RequestBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setHeaders', 'setRawData', 'setMethod', 'setUri', 'request', 'getLastRequest'])
+            ->setMethods(['doRequest'])
             ->getMock();
-
-        $clientFactory = $this->getMockBuilder(ZendClientFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $clientFactory->expects(static::once())
-            ->method('create')
-            ->willReturn($this->client);
 
         $apiClient = $this->objectManager->create(
             ApiClient::class,
-            ['clientFactory' => $clientFactory]
+            ['requestBuilder' => $this->requestBuilder]
         );
 
         $gateway = $this->objectManager->create(
@@ -90,7 +82,7 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
             CreationService::class,
             [
                 'signifydGateway' => $gateway,
-                'logger' => $this->logger
+                'logger'          => $this->logger
             ]
         );
     }
@@ -102,23 +94,15 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     public function testCreateForOrderWithEmptyResponse()
     {
         $order = $this->getOrder();
-        $requestData = [
-            'purchase' => [
-                'orderId' => $order->getEntityId()
-            ]
-        ];
+        $exceptionMessage = 'Response is not valid JSON: Decoding failed: Syntax error';
 
-        $response = new \Zend_Http_Response(200, []);
-        $this->client->expects(static::once())
-            ->method('request')
-            ->willReturn($response);
-        $this->client->expects(static::atLeastOnce())
-            ->method('getLastRequest')
-            ->willReturn(json_encode($requestData));
+        $this->requestBuilder->expects(static::once())
+            ->method('doRequest')
+            ->willThrowException(new ApiCallException($exceptionMessage));
 
         $this->logger->expects(static::once())
             ->method('error')
-            ->with('Response is not valid JSON: Decoding failed: Syntax error');
+            ->with($exceptionMessage);
 
         $result = $this->service->createForOrder($order->getEntityId());
         static::assertTrue($result);
@@ -131,31 +115,20 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     public function testCreateForOrderWithBadResponse()
     {
         $order = $this->getOrder();
-        $requestData = [
-            'purchase' => [
-                'orderId' => $order->getEntityId()
-            ]
-        ];
         $responseData = [
             'messages' => [
                 'Something wrong'
             ]
         ];
+        $exceptionMessage = 'Bad Request - The request could not be parsed. Response: ' . json_encode($responseData);
 
-        $response = new \Zend_Http_Response(400, [], json_encode($responseData));
-        $this->client->expects(static::once())
-            ->method('request')
-            ->willReturn($response);
-        $this->client->expects(static::atLeastOnce())
-            ->method('getLastRequest')
-            ->willReturn(json_encode($requestData));
+        $this->requestBuilder->expects(static::once())
+            ->method('doRequest')
+            ->willThrowException(new ApiCallException($exceptionMessage));
 
         $this->logger->expects(static::once())
             ->method('error')
-            ->with(
-                'Bad Request - The request could not be parsed. Response: ' .
-                json_encode($responseData)
-            );
+            ->with($exceptionMessage);
 
         $result = $this->service->createForOrder($order->getEntityId());
         static::assertTrue($result);
@@ -169,10 +142,9 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     {
         $order = $this->getOrder();
 
-        $response = new \Zend_Http_Response(200, [], '{}');
-        $this->client->expects(static::once())
-            ->method('request')
-            ->willReturn($response);
+        $this->requestBuilder->expects(static::once())
+            ->method('doRequest')
+            ->willReturn([]);
 
         $this->logger->expects(static::once())
             ->method('error')
@@ -190,10 +162,9 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     {
         $order = $this->getOrder();
 
-        $response = new \Zend_Http_Response(200, [], json_encode(['investigationId' => 123123]));
-        $this->client->expects(static::once())
-            ->method('request')
-            ->willReturn($response);
+        $this->requestBuilder->expects(static::once())
+            ->method('doRequest')
+            ->willReturn(['investigationId' => 123123]);
 
         $this->logger->expects(static::never())
             ->method('error');
@@ -211,6 +182,7 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Get stored order
+     *
      * @return OrderInterface
      */
     private function getOrder()
