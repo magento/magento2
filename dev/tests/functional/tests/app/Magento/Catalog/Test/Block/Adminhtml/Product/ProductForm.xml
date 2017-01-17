@@ -45,7 +45,10 @@
             <visibility>
                 <input>select</input>
             </visibility>
-            <news_from_date />
+            <news_from_date>
+                <selector>[name="product[news_from_date]"]</selector>
+                <strategy>css selector</strategy>
+            </news_from_date>
             <news_to_date>
                 <selector>[name="product[news_to_date]"]</selector>
                 <strategy>css selector</strategy>
@@ -190,6 +193,12 @@
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
         <selector>[data-index='schedule-design-update']</selector>
         <strategy>css selector</strategy>
+        <fields>
+            <custom_design_from>
+                <selector>[name="product[custom_design_from]"]</selector>
+                <strategy>css selector</strategy>
+            </custom_design_from>
+        </fields>
     </schedule-design-update>
     <customer-options>
         <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options</class>
