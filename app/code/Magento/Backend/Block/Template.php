@@ -70,17 +70,12 @@ class Template extends \Magento\Framework\View\Element\Template
      *
      * @param string $moduleName Full module name
      * @return boolean
+     * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isOutputEnabled($moduleName = null)
     {
-        if ($moduleName === null) {
-            $moduleName = $this->getModuleName();
-        }
-
-        return !$this->_scopeConfig->isSetFlag(
-            'advanced/modules_disable_output/' . $moduleName,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return true;
     }
 
     /**
