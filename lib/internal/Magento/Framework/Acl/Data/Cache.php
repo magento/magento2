@@ -36,12 +36,12 @@ class Cache implements CacheInterface
      * Cache constructor.
      *
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param \Magento\Framework\Acl\Builder\Proxy $aclBuilder
+     * @param \Magento\Framework\Acl\Builder $aclBuilder
      * @param string $cacheTag
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
-        \Magento\Framework\Acl\Builder\Proxy $aclBuilder,
+        \Magento\Framework\Acl\Builder $aclBuilder,
         $cacheTag = self::ACL_DATA_CACHE_TAG
     ) {
         $this->cache = $cache;

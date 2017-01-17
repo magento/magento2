@@ -19,7 +19,8 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Acl\CacheInterface
-     * @deprecated
+     * @deprecated since 2.2 due to native serialization elimination.
+     * Use data cache \Magento\Framework\Acl\Data\CacheInterface instead.
      */
     protected $_aclCache;
 

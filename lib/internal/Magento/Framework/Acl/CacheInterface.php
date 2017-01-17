@@ -10,6 +10,7 @@ namespace Magento\Framework\Acl;
  *
  * @api
  * @deprecated due to elimination of native PHP unserialization usage in 2.2.
+ * Use data cache \Magento\Framework\Acl\Data\CacheInterface instead.
  */
 interface CacheInterface
 {

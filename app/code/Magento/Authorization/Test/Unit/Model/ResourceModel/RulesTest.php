@@ -9,6 +9,9 @@ namespace Magento\Authorization\Test\Unit\Model\ResourceModel;
 /**
  * Unit test for Rules resource model.
  *
+ * Covers control flow logic.
+ * The resource saving is covered with integration test in \Magento\Authorization\Model\RulesTest.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RulesTest extends \PHPUnit_Framework_TestCase
