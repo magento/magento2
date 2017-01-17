@@ -14,10 +14,9 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertSubscriptionPopupNotExist extends AbstractConstraint
 {
     /**
-     * Assert that subscription form is absent on dashboard for user which doesn't have permissions on it.
+     * Assert that subscription form is absent on dashboard} for user which doesn't have permissions on it.
      *
      * @param Dashboard $dashboard
-     *
      * @return void
      */
     public function processAssert(Dashboard $dashboard)

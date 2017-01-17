@@ -5,10 +5,7 @@
  */
 namespace Magento\Analytics\Test\TestCase;
 
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Scenario;
-use Magento\User\Test\Fixture\User;
-
 /**
  * Preconditions:
  * 1. Create admin user without permissions subscribe to Magento BI.

@@ -5,8 +5,8 @@
  */
 namespace Magento\User\Test\TestStep;
 
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\User\Test\Fixture\User;
 
 /**
  * Create new user.
@@ -14,23 +14,18 @@ use Magento\Mtf\TestStep\TestStepInterface;
 class CreateUserStep implements TestStepInterface
 {
     /**
-     * @var FixtureFactory
+     * User fixture.
+     *
+     * @var User
      */
-    private $fixtureFactory;
+    private $user;
 
     /**
-     * @var array
+      * @param User $user
      */
-    private $userParams;
-
-    /**
-     * @param FixtureFactory $fixtureFactory
-     * @param array $user
-     */
-    public function __construct(FixtureFactory $fixtureFactory, $user = [])
+    public function __construct(User $user)
     {
-        $this->fixtureFactory = $fixtureFactory;
-        $this->userParams = $user;
+        $this->user = $user;
     }
 
     /**
@@ -40,13 +35,8 @@ class CreateUserStep implements TestStepInterface
      */
     public function run()
     {
-        $arguments = [];
-        if (isset($this->userParams['dataset'])) {
-            $arguments['dataset'] = trim($this->userParams['dataset']);
-        }
-        $user = $this->fixtureFactory->createByCode('user', $this->userParams);
-        $user->persist();
+        $this->user->persist();
 
-        return ['user' => $user];
+        return ['user' => $this->user];
     }
 }
