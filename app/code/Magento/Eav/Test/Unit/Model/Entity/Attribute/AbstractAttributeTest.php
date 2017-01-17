@@ -149,7 +149,19 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
         $modelClassName = \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class;
         $model = $this->getMockForAbstractClass($modelClassName, [], '', false);
+
+        $serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+
+        $reflection = new \ReflectionClass($modelClassName);
+        $reflectionProperty = $reflection->getProperty('serializer');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($model, $serializerMock);
+
         $model->setData(\Magento\Eav\Api\Data\AttributeInterface::VALIDATE_RULES, $rule);
+
+        $serializerMock->method('unserialize')
+            ->with($rule)
+            ->willReturn($expected);
 
         $this->assertEquals($expected, $model->getValidationRules());
 
