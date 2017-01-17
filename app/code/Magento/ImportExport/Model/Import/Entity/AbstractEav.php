@@ -176,7 +176,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
                 'table' => $attribute->getBackend()->getTable(),
                 'is_required' => $attribute->getIsRequired(),
                 'is_static' => $attribute->isStatic(),
-                'rules' => $attribute->getValidateRules() ? unserialize($attribute->getValidateRules()) : null,
+                'rules' => $attribute->getValidateRules() ? json_decode($attribute->getValidateRules(), true) : null,
                 'type' => \Magento\ImportExport\Model\Import::getAttributeType($attribute),
                 'options' => $this->getAttributeOptions($attribute),
             ];
