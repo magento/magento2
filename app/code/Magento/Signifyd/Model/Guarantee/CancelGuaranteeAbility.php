@@ -48,11 +48,11 @@ class CancelGuaranteeAbility
     public function isAvailable($orderId)
     {
         $case = $this->caseManagement->getByOrderId($orderId);
-        if (null === $case) {
+        if ($case === null) {
             return false;
         }
 
-        if ($case->isGuaranteeEligible() === true) {
+        if ($case->isGuaranteeEligible() !== false) {
             return false;
         }
 
