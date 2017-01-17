@@ -62,18 +62,21 @@ class UpgradeData implements UpgradeDataInterface
      * @param CustomerSetupFactory $customerSetupFactory
      * @param IndexerRegistry $indexerRegistry
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param FieldDataConverterFactory $fieldDataConverterFactory
+     * @param FieldDataConverterFactory|null $fieldDataConverterFactory
      */
     public function __construct(
         CustomerSetupFactory $customerSetupFactory,
         IndexerRegistry $indexerRegistry,
         \Magento\Eav\Model\Config $eavConfig,
-        FieldDataConverterFactory $fieldDataConverterFactory
+        FieldDataConverterFactory $fieldDataConverterFactory = null
     ) {
         $this->customerSetupFactory = $customerSetupFactory;
         $this->indexerRegistry = $indexerRegistry;
         $this->eavConfig = $eavConfig;
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
+
+        if ($this->fieldDataConverterFactory === null) {
+            $this->fieldDataConverterFactory = ObjectManager::getInstance()->create(FieldDataConverterFactory::class);
+        }
     }
 
     /**
