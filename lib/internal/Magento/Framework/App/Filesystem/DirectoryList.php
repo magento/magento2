@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App\Filesystem;
 
+use Magento\Framework\Code\Generator\Io;
+
 /**
  * A Magento application specific list of directories
  */
@@ -120,8 +122,8 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::VAR_DIR => [parent::PATH => 'var'],
             self::CACHE => [parent::PATH => 'var/cache'],
             self::LOG => [parent::PATH => 'var/log'],
-            self::DI => [parent::PATH => 'var/di'],
-            self::GENERATION => [parent::PATH => 'var/generation'],
+            self::DI => [parent::PATH => 'generated/metadata'],
+            self::GENERATION => [parent::PATH => Io::DEFAULT_DIRECTORY],
             self::SESSION => [parent::PATH => 'var/session'],
             self::MEDIA => [parent::PATH => 'pub/media', parent::URL_PATH => 'pub/media'],
             self::STATIC_VIEW => [parent::PATH => 'pub/static', parent::URL_PATH => 'pub/static'],
