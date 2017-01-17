@@ -190,10 +190,10 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
                 $this->validationResult->addFailedItem(
                     $id,
                     __(
-                        'Invalid attribute %fieldName = %fieldValue.',
-                        ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                        'Invalid attribute Cost = %cost. Row ID: SKU = %SKU, Store ID: %storeId.',
+                        ['cost' => $price->getCost(), 'SKU' => $price->getSku(), 'storeId' => $price->getStoreId()]
                     ),
-                    ['fieldName' => 'Cost', 'fieldValue' => $price->getCost()]
+                    ['cost' => $price->getCost(), 'SKU' => $price->getSku(), 'storeId' => $price->getStoreId()]
                 );
             }
             try {
@@ -201,7 +201,11 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 $this->validationResult->addFailedItem(
                     $id,
-                    __('Requested store is not found.')
+                    __(
+                        'Requested store is not found. Row ID: SKU = %SKU, Store ID: %storeId.',
+                        ['SKU' => $price->getSku(), 'storeId' => $price->getStoreId()]
+                    ),
+                    ['SKU' => $price->getSku(), 'storeId' => $price->getStoreId()]
                 );
             }
         }

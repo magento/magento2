@@ -143,21 +143,47 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
                 $this->validationResult->addFailedItem(
                     $key,
                     __(
-                        'Requested product doesn\'t exist: %sku',
-                        ['sku' => '%sku']
+                        'Requested product doesn\'t exist. '
+                        . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
+                        [
+                            'SKU' => $price->getSku(),
+                            'storeId' => $price->getStoreId(),
+                            'priceFrom' => $price->getPriceFrom(),
+                            'priceTo' => $price->getPriceTo()
+                        ]
                     ),
-                    ['sku' => $price->getSku()]
+                    [
+                        'SKU' => $price->getSku(),
+                        'storeId' => $price->getStoreId(),
+                        'priceFrom' => $price->getPriceFrom(),
+                        'priceTo' => $price->getPriceTo()
+                    ]
                 );
             }
-            $this->checkPrice($price->getPrice(), $key);
-            $this->checkDate($price->getPriceFrom(), 'Price From', $key);
-            $this->checkDate($price->getPriceTo(), 'Price To', $key);
+            $this->checkPrice($price, $key);
+            $this->checkDate($price, $price->getPriceFrom(), 'Price From', $key);
+            $this->checkDate($price, $price->getPriceTo(), 'Price To', $key);
             try {
                 $this->storeRepository->getById($price->getStoreId());
             } catch (NoSuchEntityException $e) {
                 $this->validationResult->addFailedItem(
                     $key,
-                    __('Requested store is not found.')
+                    __(
+                        'Requested store is not found. '
+                        . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
+                        [
+                            'SKU' => $price->getSku(),
+                            'storeId' => $price->getStoreId(),
+                            'priceFrom' => $price->getPriceFrom(),
+                            'priceTo' => $price->getPriceTo()
+                        ]
+                    ),
+                    [
+                        'SKU' => $price->getSku(),
+                        'storeId' => $price->getStoreId(),
+                        'priceFrom' => $price->getPriceFrom(),
+                        'priceTo' => $price->getPriceTo()
+                    ]
                 );
             }
         }
@@ -172,21 +198,35 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
     /**
      * Check that date value is correct and add error to aggregator if it contains incorrect data.
      *
+     * @param \Magento\Catalog\Api\Data\SpecialPriceInterface $price
      * @param string $value
      * @param string $label
      * @param int $key
      * @return void
      */
-    private function checkDate($value, $label, $key)
+    private function checkDate(\Magento\Catalog\Api\Data\SpecialPriceInterface $price, $value, $label, $key)
     {
         if ($value && !$this->isCorrectDateValue($value)) {
             $this->validationResult->addFailedItem(
                 $key,
                 __(
-                    'Invalid attribute %fieldName = %fieldValue.',
-                    ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                    'Invalid attribute %label = %priceTo. '
+                    . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
+                    [
+                        'label' => $label,
+                        'SKU' => $price->getSku(),
+                        'storeId' => $price->getStoreId(),
+                        'priceFrom' => $price->getPriceFrom(),
+                        'priceTo' => $price->getPriceTo()
+                    ]
                 ),
-                ['fieldName' => $label, 'fieldValue' => $value]
+                [
+                    'label' => $label,
+                    'SKU' => $price->getSku(),
+                    'storeId' => $price->getStoreId(),
+                    'priceFrom' => $price->getPriceFrom(),
+                    'priceTo' => $price->getPriceTo()
+                ]
             );
         }
     }
@@ -195,20 +235,33 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
      * Check that provided price value is not empty and not lower then zero and add error to aggregator if price
      * contains not valid data.
      *
-     * @param float $price
+     * @param \Magento\Catalog\Api\Data\SpecialPriceInterface $price
      * @param int $key
      * @return void
      */
-    private function checkPrice($price, $key)
+    private function checkPrice(\Magento\Catalog\Api\Data\SpecialPriceInterface $price, $key)
     {
-        if (null === $price || $price < 0) {
+        if (null === $price->getPrice() || $price->getPrice() < 0) {
             $this->validationResult->addFailedItem(
                 $key,
                 __(
-                    'Invalid attribute %fieldName = %fieldValue.',
-                    ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                    'Invalid attribute Price = %price. '
+                    . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
+                    [
+                        'price' => $price->getPrice(),
+                        'SKU' => $price->getSku(),
+                        'storeId' => $price->getStoreId(),
+                        'priceFrom' => $price->getPriceFrom(),
+                        'priceTo' => $price->getPriceTo()
+                    ]
                 ),
-                ['fieldName' => 'Price', 'fieldValue' => $price]
+                [
+                    'price' => $price->getPrice(),
+                    'SKU' => $price->getSku(),
+                    'storeId' => $price->getStoreId(),
+                    'priceFrom' => $price->getPriceFrom(),
+                    'priceTo' => $price->getPriceTo()
+                ]
             );
         }
     }
@@ -216,14 +269,14 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
     /**
      * Retrieve SKU by product ID.
      *
-     * @param int $id
+     * @param int $productId
      * @param array $skus
-     * @return int|null
+     * @return string|null
      */
-    private function retrieveSkuById($id, array $skus)
+    private function retrieveSkuById($productId, array $skus)
     {
         foreach ($this->productIdLocator->retrieveProductIdsBySkus($skus) as $sku => $ids) {
-            if (false !== array_key_exists($id, $ids)) {
+            if (isset($ids[$productId])) {
                 return $sku;
             }
         }
