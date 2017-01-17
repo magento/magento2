@@ -301,7 +301,7 @@ class Rule extends AbstractResource
     public function setActualProductAttributes($rule, $attributes)
     {
         $connection = $this->getConnection();
-        $connection->delete($this->getTable('salesrule_product_attribute'), ['rule_id=?' => $rule->getId()]);
+        $connection->delete($this->getTable('salesrule_product_attribute'), ['row_id=?' => $rule->getId()]);
 
         //Getting attribute IDs for attribute codes
         $attributeIds = [];
@@ -323,7 +323,7 @@ class Rule extends AbstractResource
                 foreach ($rule->getWebsiteIds() as $websiteId) {
                     foreach ($attributeIds as $attribute) {
                         $data[] = [
-                            'rule_id' => $rule->getId(),
+                            'row_id' => $rule->getId(),
                             'website_id' => $websiteId,
                             'customer_group_id' => $customerGroupId,
                             'attribute_id' => $attribute,
@@ -347,7 +347,7 @@ class Rule extends AbstractResource
     {
         $result = [];
         if (preg_match_all(
-            '~s:4[67]:"\\?Magento\\SalesRule\\Model\\Rule\\Condition\\Product";s:9:"attribute";s:\d+:"(.*?)"~s',
+            '~s:4[67]:"\\\\?Magento\\\\SalesRule\\\\Model\\\\Rule\\\\Condition\\\\Product";s:9:"attribute";s:\d+:"(.*?)"~s',
             $serializedString,
             $matches
         )
