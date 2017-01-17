@@ -6,6 +6,7 @@
 namespace Magento\Setup\Module\Di\Code\Reader\Decorator;
 
 use Magento\Setup\Module\Di\Compiler\Log\Log;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class Interceptions
@@ -71,7 +72,8 @@ class Interceptions implements \Magento\Setup\Module\Di\Code\Reader\ClassesScann
         $nameList = [];
         foreach ($this->classesScanner->getList($path) as $className) {
             try {
-                if (!strpos($path, 'generation')) { // validate all classes except classes in var/generation dir
+                // validate all classes except classes in generated/code dir
+                if (!strpos($path, DirectoryList::getDefaultConfig()[DirectoryList::GENERATION][DirectoryList::PATH])) {
                     $this->validator->validate($className);
                 }
                 $nameList[] = $className;

@@ -63,7 +63,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config::class, ['getValue'], [], '', false, false);
+        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false, false);
         $this->cacheState = $this->getMock(
             \Magento\Framework\App\Cache\State::class,
             ['isEnabled'],
@@ -188,8 +188,6 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
     {
         $this->eventManager->expects($this->exactly(2))->method('dispatch')
             ->will($this->returnValue(true));
-        $this->scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
-            ->willReturn(false);
         $this->cacheState->expects($this->atLeastOnce())->method('isEnabled')->withAnyParameters()
             ->willReturn(false);
         $this->catalogConfig->expects($this->once())->method('getProductAttributes')
