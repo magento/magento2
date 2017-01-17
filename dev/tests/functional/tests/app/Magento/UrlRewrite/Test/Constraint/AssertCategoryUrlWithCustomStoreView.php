@@ -42,10 +42,10 @@ class AssertCategoryUrlWithCustomStoreView extends AbstractConstraint
             $childCategory->getName()
         );
         $actualUrl = strtolower($parentCategory->getUrlKey() . '/' . $categoryUpdates->getUrlKey());
-        $result = (bool)strpos($browser->getUrl(), $actualUrl);
 
-        \PHPUnit_Framework_Assert::assertTrue(
-            $result,
+        \PHPUnit_Framework_Assert::assertContains(
+            $browser->getUrl(),
+            $actualUrl,
             "Category URL is not correct."
         );
     }
