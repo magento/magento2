@@ -1262,7 +1262,7 @@ class Installer
     }
 
     /**
-     * Clear var/generation and reset object manager
+     * Clear generated/code and reset object manager
      *
      * @return void
      */
