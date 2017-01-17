@@ -35,7 +35,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @return void
      */
-    protected function createQueueLockTable(SchemaSetupInterface $setup)
+    private function createQueueLockTable(SchemaSetupInterface $setup)
     {
         $installer = $setup;
 
