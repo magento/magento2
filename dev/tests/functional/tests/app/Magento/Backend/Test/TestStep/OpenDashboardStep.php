@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Test\TestStep;
+namespace Magento\Backend\Test\TestStep;
 
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\TestStep\TestStepInterface;
@@ -25,7 +25,6 @@ class OpenDashboardStep implements TestStepInterface
      */
     public function __construct(Dashboard $dashboard)
     {
-
         $this->dashboard = $dashboard;
     }
 

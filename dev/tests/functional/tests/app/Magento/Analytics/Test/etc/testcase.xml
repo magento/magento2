@@ -19,8 +19,9 @@
         <step name="configAnalytics" module="Magento_Analytics" next="restoreConfigAnalytics" />
         <step name="restoreConfigAnalytics" module="Magento_Analytics" />
     </scenario>
-    <scenario name="AnalyticsSubscriptionCheckPermissionsTest" firstStep="loginUserOnBackend">
+    <scenario name="AnalyticsSubscriptionCheckPermissionsTest" firstStep="createUser">
+        <step name="createUser" module="Magento_User" next="loginUserOnBackend" />
         <step name="loginUserOnBackend" module="Magento_User" next="openDashboard" />
-        <step name="openDashboard" module="Magento_Analytics" />
+        <step name="openDashboard" module="Magento_Backend" />
     </scenario>
 </config>

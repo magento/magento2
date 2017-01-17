@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Analytics\Test\TestCase\AnalyticsSubscriptionCheckPermissionsTest" summary="Manage Subscription Permissions to Magento Analytics" ticketId="MAGETWO-63206">
         <variation name="AnalyticsSubscriptionCheckPermissionsTestVariation1" summary="User with limited permissions can't see subscription window">
+            <data name="user/dataset" xsi:type="string">custom_admin_with_role_without_subscription_permissions</data>
             <constraint name="Magento\Analytics\Test\Constraint\AssertSubscriptionPopupNotExist" />
         </variation>
     </testCase>

@@ -17,45 +17,15 @@ use Magento\User\Test\Fixture\User;
  * 1. Login to the admin panel with the newly created admin user.
  * 2. Navigate to dashboard.
  * 3. Assert that subscription pop-up is not visible.
+ *
+ * @ZephyrId MAGETWO-63206
  */
 class AnalyticsSubscriptionCheckPermissionsTest extends Scenario
 {
     /* tags */
     const MVP = 'no';
+    const SEVERITY = 'S1';
     /* end tags */
-
-    /**
-     * @var FixtureFactory
-     */
-    private $fixtureFactory;
-
-    /**
-     * Preconditions for test.
-     *
-     * @param FixtureFactory $fixtureFactory
-     * @return array
-     */
-    public function __prepare(FixtureFactory $fixtureFactory)
-    {
-        $this->fixtureFactory = $fixtureFactory;
-        $user = $fixtureFactory
-            ->createByCode('user', ['dataset' => 'custom_admin_with_role_without_subscription_permissions']);
-        $user->persist();
-
-        return ['user' => $user];
-    }
-
-    /**
-     * Inject additional arguments.
-     *
-     * @param User $user
-     *
-     * @return array
-     */
-    public function __inject(User $user)
-    {
-        return ['user' => $user];
-    }
 
     /**
      * Test execution.
