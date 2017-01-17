@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CurrencySymbol\Setup;
 
 use Magento\CurrencySymbol\Model\System\Currencysymbol;
@@ -15,11 +14,12 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
+ * Data upgrade script
+ *
  * @codeCoverageIgnore
  */
 class UpgradeData implements UpgradeDataInterface
 {
-
     /**
      * @var FieldDataConverterFactory
      */
@@ -31,6 +31,8 @@ class UpgradeData implements UpgradeDataInterface
     private $queryModifierFactory;
 
     /**
+     * Constructor
+     *
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
      */

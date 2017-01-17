@@ -276,13 +276,13 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
                 'code' => 'USD',
                 'expectedSymbol' => '$',
                 'serializedCustomSymbols' => '{"USD":"$"}',
-                ['USD' => '$'],
+                'unserializedCustomSymbols' => ['USD' => '$'],
             ],
             'nonexistent custom symbol' => [
                 'code' => 'UAH',
                 'expectedSymbol' => false,
                 'serializedCustomSymbols' => '{"USD":"$"}',
-                ['USD' => '$'],
+                'unserializedCustomSymbols' => ['USD' => '$'],
             ],
         ];
     }
