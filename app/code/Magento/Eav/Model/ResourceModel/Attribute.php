@@ -45,7 +45,7 @@ abstract class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribu
     {
         $validateRules = $object->getData('validate_rules');
         if (is_array($validateRules)) {
-            $object->setData('validate_rules', json_encode($validateRules));
+            $object->setData('validate_rules', $this->getSerializer()->serialize($validateRules));
         }
         return parent::_beforeSave($object);
     }

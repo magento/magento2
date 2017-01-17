@@ -8,6 +8,7 @@ namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Entity/Attribute/Model - attribute abstract
@@ -117,6 +118,13 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     protected $dataObjectHelper;
 
     /**
+     * Serializer Instance.
+     *
+     * @var Json
+     */
+    protected $serializer;
+
+    /**
      * Array of attribute types that have empty string as a possible value.
      *
      * @var array
@@ -183,6 +191,21 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $this->optionDataFactory = $optionDataFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
+    }
+
+    /**
+     * Get Serializer instance.
+     * @deprecated
+     *
+     * @return Json
+     */
+    protected function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->create(Json::class);
+        }
+
+        return $this->serializer;
     }
 
     /**
@@ -1252,7 +1275,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         if (is_array($rules)) {
             return $rules;
         } elseif (!empty($rules)) {
-            return json_decode($rules, true);
+            return $this->getSerializer()->unserialize($rules);
         }
 
         return [];

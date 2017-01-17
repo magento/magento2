@@ -103,7 +103,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         if (is_array($rules)) {
             return $rules;
         } elseif (!empty($rules)) {
-            return json_decode($rules, true);
+            return $this->getSerializer()->unserialize($rules);
         }
         return [];
     }
@@ -119,7 +119,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         if (empty($rules)) {
             $rules = null;
         } elseif (is_array($rules)) {
-            $rules = json_encode($rules);
+            $rules = $this->getSerializer()->serialize($rules);
         }
         $this->setData('validate_rules', $rules);
 
