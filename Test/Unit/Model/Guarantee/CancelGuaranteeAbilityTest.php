@@ -109,9 +109,12 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests case when GuaranteeEligible for Case is true
+     * Tests case when GuaranteeEligible for Case is true or null
+
+     * @param mixed $guaranteeEligible
+     * @dataProvider isAvailableWithGuarantyIsEligibleDataProvider
      */
-    public function testIsAvailableWithGuarantyEligibleTrue()
+    public function testIsAvailableWithGuarantyIsEligible($guaranteeEligible)
     {
         $orderId = 123;
 
@@ -122,7 +125,7 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
 
         $case->expects($this->once())
             ->method('isGuaranteeEligible')
-            ->willReturn(true);
+            ->willReturn($guaranteeEligible);
 
         $this->caseManagement->expects($this->once())
             ->method('getByOrderId')
@@ -130,6 +133,13 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
             ->willReturn($case);
 
         $this->assertFalse($this->cancelGuaranteeAbility->isAvailable($orderId));
+    }
+
+    public function isAvailableWithGuarantyIsEligibleDataProvider()
+    {
+        return [
+            [null], [true]
+        ];
     }
 
     /**
