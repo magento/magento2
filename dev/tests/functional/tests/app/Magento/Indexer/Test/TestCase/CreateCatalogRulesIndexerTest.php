@@ -53,6 +53,7 @@ use Magento\Catalog\Test\TestStep\CreateProductsStep;
  *
  * @ZephyrId MAGETWO-39072
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateCatalogRulesIndexerTest extends Injectable
 {
