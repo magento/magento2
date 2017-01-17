@@ -48,10 +48,12 @@
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\Install\Test\Constraint\AssertSecureUrlEnabled" />
         </variation>
-        <variation name="InstallTestVariation6" summary="Install with default values">
+        <variation name="InstallTestVariation6" summary="Install with default values and check DI compile" ticketId="MAGETWO-62817">
             <data name="user/dataset" xsi:type="string">default</data>
+            <data name="diCompile" xsi:type="boolean">true</data>
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
+            <constraint name="Magento\Install\Test\Constraint\AssertGenerationFilePathCheck" />
         </variation>
     </testCase>
 </config>
