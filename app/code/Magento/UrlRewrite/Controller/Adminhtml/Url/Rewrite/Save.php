@@ -6,8 +6,6 @@
  */
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
-use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -63,7 +61,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
                 $model->setEntityType($productId ? self::ENTITY_TYPE_PRODUCT : self::ENTITY_TYPE_CATEGORY)
                     ->setEntityId($productId ?: $categoryId);
                 if ($productId && $categoryId) {
-                    $model->setMetadata(serialize(['category_id' => $categoryId]));
+                    $model->setMetadata(['category_id' => $categoryId]);
                 }
             }
             $model->setTargetPath($this->getTargetPath($model));
