@@ -16,7 +16,7 @@ define([
                 orderId: 1
             };
 
-        beforeEach(function() {
+        beforeEach(function () {
             button = new RequestButton({
                 requestURL: requestURL,
                 data: requestData
