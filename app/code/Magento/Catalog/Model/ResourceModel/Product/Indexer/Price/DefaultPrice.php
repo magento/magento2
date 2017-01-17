@@ -235,11 +235,26 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param string|null $type product type, all if null
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function prepareFinalPriceDataForType($entityIds, $type)
     {
         $this->_prepareDefaultFinalPriceTable();
+
+        $select = $this->getSelect($entityIds, $type);
+        $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
+        $this->getConnection()->query($query);
+        return $this;
+    }
+
+    /**
+     * @param int|array $entityIds the entity ids limitation
+     * @param string|null $type product type, all if null
+     * @return \Magento\Framework\DB\Select
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    protected function getSelect($entityIds = null, $type = null)
+    {
         $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
         $select = $connection->select()->from(
@@ -371,10 +386,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                 'store_field' => new \Zend_Db_Expr('cs.store_id'),
             ]
         );
-
-        $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
-        $connection->query($query);
-        return $this;
+        return $select;
     }
 
     /**
