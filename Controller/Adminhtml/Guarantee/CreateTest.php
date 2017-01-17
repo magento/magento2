@@ -49,7 +49,7 @@ class CreateTest extends AbstractBackendController
     public function testExecuteSuccess()
     {
         $orderId = $this->getOrderId();
-        $this->getRequest()->setPostValue('orderId', $orderId);
+        $this->getRequest()->setPostValue('order_id', $orderId);
 
         $this->creationService->expects($this->once())
             ->method('createForOrder')
@@ -75,7 +75,7 @@ class CreateTest extends AbstractBackendController
     public function testExecuteWithEmptyOrderId()
     {
         $orderId = '';
-        $this->getRequest()->setPostValue('orderId', $orderId);
+        $this->getRequest()->setPostValue('order_id', $orderId);
 
         $this->creationService->expects($this->never())
             ->method('createForOrder');
@@ -99,7 +99,7 @@ class CreateTest extends AbstractBackendController
     public function testExecuteWithCreationServiceFail()
     {
         $orderId = $this->getOrderId();
-        $this->getRequest()->setPostValue('orderId', $orderId);
+        $this->getRequest()->setPostValue('order_id', $orderId);
 
         $this->creationService->expects($this->once())
             ->method('createForOrder')
@@ -110,7 +110,7 @@ class CreateTest extends AbstractBackendController
 
         $this->assertRedirect($this->stringContains('backend/sales/order/view'));
         $this->assertSessionMessages(
-            $this->equalTo(['Sorry, we can&#039;t submit order for Guarantee.']),
+            $this->equalTo(['Sorry, we cannot submit order for Guarantee.']),
             MessageInterface::TYPE_ERROR
         );
     }
