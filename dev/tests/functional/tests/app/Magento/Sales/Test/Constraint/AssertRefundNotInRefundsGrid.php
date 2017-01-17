@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,7 @@ class AssertRefundNotInRefundsGrid extends AbstractConstraint
     public function processAssert(CreditMemoIndex $creditMemoIndex, OrderInjectable $order, array $ids)
     {
         $creditMemoIndex->open();
-        $amount = $order->getPrice();
+        $amount = $order->getPrice()['refund'];
         $orderId = $order->getId();
         foreach ($ids['creditMemoIds'] as $key => $creditMemoId) {
             $filter = [
