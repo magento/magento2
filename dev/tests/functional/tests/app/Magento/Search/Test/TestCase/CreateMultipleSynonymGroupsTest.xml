@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Search\Test\TestCase\CreateMultipleSynonymGroupsTest" summary="Create Multiple Synonym Groups" ticketId="MAGETWO-47264">
         <variation name="CreateMultipleSynonymGroupsTestVariation1" summary="Create multiple synonym groups and check search by keywords" ticketId="MAGETWO-47264">
+            <data name="issue" xsi:type="string">MAGETWO-63120: Search icon is disabled on collapsed toolbar</data>
             <data name="synonymGroups/0" xsi:type="string">synonym_group_1</data>
             <data name="synonymGroups/1" xsi:type="string">synonym_group_2</data>
             <data name="synonymGroups/2" xsi:type="string">synonym_group_3</data>
