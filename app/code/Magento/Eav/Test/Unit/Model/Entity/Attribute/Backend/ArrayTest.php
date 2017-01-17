@@ -37,9 +37,10 @@ class ArrayTest extends \PHPUnit_Framework_TestCase
     public function testValidate($data)
     {
         $this->_attribute->expects($this->atLeastOnce())->method('getAttributeCode')->will($this->returnValue('code'));
-        $product = new \Magento\Framework\DataObject(['code' => $data]);
+        $product = new \Magento\Framework\DataObject(['code' => $data, 'empty' => '']);
         $this->_model->validate($product);
         $this->assertEquals('1,2,3', $product->getCode());
+        $this->assertEquals(null, $product->getEmpty());
     }
 
     public static function attributeValueDataProvider()
