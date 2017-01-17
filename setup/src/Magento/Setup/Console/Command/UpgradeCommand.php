@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class UpgradeCommand extends AbstractSetupCommand
 {
     /**
-     * Option to skip deletion of var/generation directory
+     * Option to skip deletion of generated/code directory
      */
     const INPUT_KEY_KEEP_GENERATED = 'keep-generated';
 
