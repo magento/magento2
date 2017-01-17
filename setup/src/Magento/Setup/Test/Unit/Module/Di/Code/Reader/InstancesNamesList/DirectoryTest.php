@@ -66,7 +66,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
             $this->classReaderMock,
             $this->classesScanner,
             $this->validatorMock,
-            '/var/generation'
+            '/generated/code'
         );
     }
 
@@ -111,7 +111,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetListNoValidation()
     {
-        $path = '/var/generation';
+        $path = '/generated/code';
 
         $classes = ['NameSpace1\ClassName1', 'NameSpace1\ClassName2'];
 

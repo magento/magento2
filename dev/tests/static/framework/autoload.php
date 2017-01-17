@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+use \Magento\Framework\App\Filesystem\DirectoryList;
+
 $baseDir = realpath(__DIR__ . '/../../../../');
 require $baseDir . '/app/autoload.php';
 $testsBaseDir = $baseDir . '/dev/tests/static';
@@ -16,4 +18,6 @@ $autoloadWrapper->addPsr4(
         $testsBaseDir . '/../integration/framework/Magento/TestFramework/',
     ]
 );
-$autoloadWrapper->addPsr4('Magento\\', $baseDir . '/var/generation/Magento/');
+
+$generatedCode = DirectoryList::getDefaultConfig()[DirectoryList::GENERATION][DirectoryList::PATH];
+$autoloadWrapper->addPsr4('Magento\\', $baseDir . '/' . $generatedCode . '/Magento/');
