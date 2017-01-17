@@ -44,6 +44,7 @@ class CancelingService implements GuaranteeCancelingServiceInterface
 
     /**
      * CancelingService constructor.
+     *
      * @param CaseManagementInterface $caseManagement
      * @param UpdatingServiceFactory $serviceFactory
      * @param Gateway $gateway
@@ -57,7 +58,6 @@ class CancelingService implements GuaranteeCancelingServiceInterface
         CancelGuaranteeAbility $cancelGuaranteeAbility,
         LoggerInterface $logger
     ) {
-
         $this->caseManagement = $caseManagement;
         $this->serviceFactory = $serviceFactory;
         $this->gateway = $gateway;
