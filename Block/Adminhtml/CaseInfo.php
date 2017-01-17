@@ -159,7 +159,13 @@ class CaseInfo extends Template
     public function getCaseGuaranteeEligible()
     {
         return $this->getCaseProperty('', function () {
-            return $this->getCaseEntity()->isGuaranteeEligible() ? __('Yes') : __('No');
+            $value = $this->getCaseEntity()->isGuaranteeEligible();
+
+            if ($value === null) {
+                return '';
+            }
+
+            return $value ? __('Yes') : __('No');
         });
     }
 
