@@ -94,7 +94,7 @@ class CancelingServiceTest extends \PHPUnit_Framework_TestCase
      * Checks a test case, when Signifyd gateway throws an exception.
      *
      * @covers \Magento\Signifyd\Model\Guarantee\CancelingService::cancelForOrder
-     * @magentoDataFixture Magento/Signifyd/_files/case.php
+     * @magentoDataFixture Magento/Signifyd/_files/approved_case.php
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
      */
     public function testCancelForOrderWithFailedRequest()
@@ -103,9 +103,6 @@ class CancelingServiceTest extends \PHPUnit_Framework_TestCase
         /** @var CaseRepositoryInterface $caseRepository */
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         $caseEntity = $caseRepository->getByCaseId(self::$caseId);
-        $caseEntity->setGuaranteeDisposition(CaseInterface::GUARANTEE_PENDING);
-        $caseEntity->setGuaranteeEligible(false);
-        $caseRepository->save($caseEntity);
 
         $this->gateway->expects(self::once())
             ->method('cancelGuarantee')
@@ -124,7 +121,7 @@ class CancelingServiceTest extends \PHPUnit_Framework_TestCase
      * Checks a test case, when request to cancel is submitted and case entity is updated successfully.
      *
      * @covers \Magento\Signifyd\Model\Guarantee\CancelingService::cancelForOrder
-     * @magentoDataFixture Magento/Signifyd/_files/case.php
+     * @magentoDataFixture Magento/Signifyd/_files/approved_case.php
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
      */
     public function testCancelForOrder()
@@ -132,9 +129,6 @@ class CancelingServiceTest extends \PHPUnit_Framework_TestCase
         /** @var CaseRepositoryInterface $caseRepository */
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         $caseEntity = $caseRepository->getByCaseId(self::$caseId);
-        $caseEntity->setGuaranteeDisposition(CaseInterface::GUARANTEE_PENDING);
-        $caseEntity->setGuaranteeEligible(false);
-        $caseRepository->save($caseEntity);
 
         $this->gateway->expects(self::once())
             ->method('cancelGuarantee')

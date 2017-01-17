@@ -49,7 +49,7 @@ class Create extends Action
      */
     public function execute()
     {
-        $orderId = (int)$this->getRequest()->getParam('orderId');
+        $orderId = (int)$this->getRequest()->getParam('order_id');
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if (empty($orderId)) {
@@ -65,7 +65,7 @@ class Create extends Action
             );
         } else {
             $this->messageManager->addErrorMessage(
-                __('Sorry, we can\'t submit order for Guarantee.')
+                __('Sorry, we cannot submit order for Guarantee.')
             );
         }
 

@@ -7,8 +7,8 @@ namespace Magento\Signifyd\Controller\Adminhtml\Guarantee;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Signifyd\Api\GuaranteeCancelingServiceInterface;
 use Magento\Signifyd\Model\Guarantee\CancelGuaranteeAbility;
-use Magento\Signifyd\Model\Guarantee\CancelingService;
 
 /**
  * Responsible for canceling Signifyd guarantee for order.
@@ -18,7 +18,7 @@ use Magento\Signifyd\Model\Guarantee\CancelingService;
 class Cancel extends Action
 {
     /**
-     * @var CancelingService
+     * @var GuaranteeCancelingServiceInterface
      */
     private $cancelingService;
 
@@ -29,12 +29,12 @@ class Cancel extends Action
 
     /**
      * @param Context $context
-     * @param CancelingService $cancelingService
+     * @param GuaranteeCancelingServiceInterface $cancelingService
      * @param CancelGuaranteeAbility $guaranteeAbility
      */
     public function __construct(
         Context $context,
-        CancelingService $cancelingService,
+        GuaranteeCancelingServiceInterface $cancelingService,
         CancelGuaranteeAbility $guaranteeAbility
     ) {
         parent::__construct($context);
@@ -49,7 +49,7 @@ class Cancel extends Action
      */
     public function execute()
     {
-        $orderId = (int)$this->getRequest()->getParam('orderId');
+        $orderId = (int) $this->getRequest()->getParam('order_id');
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if (empty($orderId)) {
@@ -65,7 +65,7 @@ class Cancel extends Action
             );
         } else {
             $this->messageManager->addErrorMessage(
-                __('Sorry, we can\'t cancel Guarantee for order.')
+                __('Sorry, we cannot cancel Guarantee for order.')
             );
         }
 
