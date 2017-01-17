@@ -84,7 +84,7 @@ class Builder
     /**
      * Remove cached ACL instance.
      */
-    public function clearCachedAcl()
+    public function resetRuntimeAcl()
     {
         $this->_acl = null;
         return $this;

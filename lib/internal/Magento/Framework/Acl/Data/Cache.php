@@ -31,6 +31,7 @@ class Cache implements CacheInterface
      * Cache constructor.
      *
      * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param \Magento\Framework\Acl\Builder\Proxy $aclBuilder
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
@@ -77,7 +78,7 @@ class Cache implements CacheInterface
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
-        $this->aclBuilder->clearCachedAcl();
+        $this->aclBuilder->resetRuntimeAcl();
         return $this->cache->clean($mode, $tags + [self::ACL_DATA_CACHE_TAG]);
     }
 
