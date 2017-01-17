@@ -23,11 +23,18 @@ class BraintreeCc extends PaymentCc
      * @var array
      */
     protected $braintreeForm = [
-        "cc_number" => "#braintree-hosted-field-number",
-        "cc_exp_month" => "#braintree-hosted-field-expirationMonth",
-        "cc_exp_year" => "#braintree-hosted-field-expirationYear",
-        "cc_cid" => "#braintree-hosted-field-cvv",
+        "cc_number" => "//div/*[@id='braintree-hosted-field-number']",
+        "cc_exp_month" => "//div/*[@id='braintree-hosted-field-expirationMonth']",
+        "cc_exp_year" => "//div/*[@id='braintree-hosted-field-expirationYear']",
+        "cc_cid" => "//div/*[@id='braintree-hosted-field-cvv']",
     ];
+
+    /**
+     * Error container selector.
+     *
+     * @var string
+     */
+    protected $errorSelector = "/../../div[@class='hosted-error']";
 
     /**
      * Fill Braintree credit card form.
@@ -44,11 +51,14 @@ class BraintreeCc extends PaymentCc
             $element = $this->browser->find('body');
             $this->browser->waitUntil(
                 function () use ($element, $iframe) {
-                    $fieldElement = $element->find($iframe);
+                    $fieldElement = $element->find($iframe, Locator::SELECTOR_XPATH);
                     return $fieldElement->isVisible() ? true : null;
                 }
             );
-            $iframeLocator = ObjectManager::getInstance()->create(Locator::class, ['value' => $iframe]);
+            $iframeLocator = ObjectManager::getInstance()->create(Locator::class, [
+                'value' => $iframe,
+                'strategy' => 'xpath'
+            ]);
             $this->browser->switchToFrame($iframeLocator);
             $element = $this->browser->find('body');
             $this->browser->waitUntil(
@@ -63,12 +73,19 @@ class BraintreeCc extends PaymentCc
     }
 
     /**
-     * Returns form's required elements.
+     * Returns visible error messages.
      *
-     * @return \Magento\Mtf\Client\ElementInterface[]
+     * @param array $messages
+     * @return array
      */
-    public function getRequiredFields()
+    public function getVisibleMessages($messages)
     {
-        return $this->_rootElement->getElements("div.field.required");
+        foreach ($messages as $field => $message) {
+            $selector = $this->braintreeForm[$field] . $this->errorSelector;
+            $errorElement = $this->_rootElement->find($selector, 'xpath');
+            $messages[$field] = $errorElement->isVisible() ? $errorElement->getText() : null;
+        }
+
+        return $messages;
     }
 }

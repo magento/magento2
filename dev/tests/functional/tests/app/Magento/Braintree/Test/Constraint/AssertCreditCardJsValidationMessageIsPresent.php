@@ -15,33 +15,22 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertCreditCardJsValidationMessageIsPresent extends AbstractConstraint
 {
     /**
-     * Error container selector.
-     *
-     * @var string
-     */
-    protected $errorSelector = '.hosted-error';
-
-    /**
      * Assert js validation message is present for required field.
      *
      * @param CheckoutOnepage $checkoutOnepage
-     * @param string $expectedErrorMessage
+     * @param array $expectedErrorMessages
      * @return void
      */
-    public function processAssert(CheckoutOnepage $checkoutOnepage, $expectedErrorMessage)
+    public function processAssert(CheckoutOnepage $checkoutOnepage, $expectedErrorMessages)
     {
-        $requiredFields = $checkoutOnepage->getBraintreeBlock()->getRequiredFields();
+        $errorMessages = $checkoutOnepage->getBraintreeBlock()->getVisibleMessages($expectedErrorMessages);
 
-        /** @var \Magento\Mtf\Client\ElementInterface $field */
-        foreach ($requiredFields as $field) {
-            $errorContainer = $field->find($this->errorSelector);
-            if ($errorContainer->isVisible()) {
-                \PHPUnit_Framework_Assert::assertEquals(
-                    $expectedErrorMessage,
-                    $errorContainer->getText(),
-                    'Wrong js validation error message is displayed.'
-                );
-            }
+        foreach ($errorMessages as $field => $message) {
+            \PHPUnit_Framework_Assert::assertEquals(
+                $expectedErrorMessages[$field],
+                $errorMessages[$field],
+                'Wrong js validation error message is displayed.'
+            );
         }
     }
 

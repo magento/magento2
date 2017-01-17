@@ -48,7 +48,7 @@
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="creditCard/dataset" xsi:type="string">mastercard_default</data>
-            <data name="expectedErrorMessage" xsi:type="string">Please, enter valid Credit Card Number</data>
+            <data name="expectedErrorMessages/cc_number" xsi:type="string">Please, enter valid Credit Card Number</data>
             <data name="configData" xsi:type="string">braintree, braintree_cctypes_AE_VI</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Braintree\Test\Constraint\AssertCreditCardJsValidationMessageIsPresent" />
