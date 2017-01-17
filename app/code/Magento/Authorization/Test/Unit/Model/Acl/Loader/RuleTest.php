@@ -23,7 +23,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     protected $_rootResourceMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $cacheMock;
 
@@ -70,7 +70,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->cacheMock = $this->getMock(
-            \Magento\Framework\Config\CacheInterface::class,
+            \Magento\Framework\Acl\Data\CacheInterface::class,
             [],
             [],
             '',

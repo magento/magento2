@@ -44,7 +44,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     protected $roleMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $cacheMock;
 
@@ -90,7 +90,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Config\CacheInterface::class)
+        $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Acl\Data\CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

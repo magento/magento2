@@ -128,7 +128,7 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
 
             $connection->commit();
-            $this->cache->clean();
+            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $connection->rollBack();
             throw $e;
