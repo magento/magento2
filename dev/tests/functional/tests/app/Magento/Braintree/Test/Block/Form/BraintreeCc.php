@@ -23,10 +23,10 @@ class BraintreeCc extends PaymentCc
      * @var array
      */
     protected $braintreeForm = [
-        "cc_number" => "//div/*[@id='braintree-hosted-field-number']",
-        "cc_exp_month" => "//div/*[@id='braintree-hosted-field-expirationMonth']",
-        "cc_exp_year" => "//div/*[@id='braintree-hosted-field-expirationYear']",
-        "cc_cid" => "//div/*[@id='braintree-hosted-field-cvv']",
+        "cc_number" => "//*[@id='braintree-hosted-field-number']",
+        "cc_exp_month" => "//*[@id='braintree-hosted-field-expirationMonth']",
+        "cc_exp_year" => "//*[@id='braintree-hosted-field-expirationYear']",
+        "cc_cid" => "//*[@id='braintree-hosted-field-cvv']",
     ];
 
     /**
@@ -57,7 +57,7 @@ class BraintreeCc extends PaymentCc
             );
             $iframeLocator = ObjectManager::getInstance()->create(Locator::class, [
                 'value' => $iframe,
-                'strategy' => 'xpath'
+                'strategy' => Locator::SELECTOR_XPATH
             ]);
             $this->browser->switchToFrame($iframeLocator);
             $element = $this->browser->find('body');
@@ -78,14 +78,15 @@ class BraintreeCc extends PaymentCc
      * @param array $messages
      * @return array
      */
-    public function getVisibleMessages($messages)
+    public function getVisibleMessages(array $messages)
     {
+        $textMessages = [];
         foreach ($messages as $field => $message) {
             $selector = $this->braintreeForm[$field] . $this->errorSelector;
-            $errorElement = $this->_rootElement->find($selector, 'xpath');
-            $messages[$field] = $errorElement->isVisible() ? $errorElement->getText() : null;
+            $errorElement = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
+            $textMessages[$field] = $errorElement->isVisible() ? $errorElement->getText() : null;
         }
 
-        return $messages;
+        return $textMessages;
     }
 }

@@ -35,7 +35,6 @@ class OnePageCheckoutFromMiniShoppingCartTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const TEST_TYPE = '3rd_party_test';
     const SEVERITY = 'S1';
     /* end tags */
 

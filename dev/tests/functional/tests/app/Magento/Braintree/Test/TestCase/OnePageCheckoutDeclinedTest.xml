@@ -39,6 +39,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
         </variation>
         <variation name="OnePageCheckoutBraintreeDeclinedTestVariation3" summary="Checkout with Braintree Credit Card with specific allowed credit card types" ticketId="MAGETWO-38400">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
@@ -50,8 +51,7 @@
             <data name="creditCard/dataset" xsi:type="string">mastercard_default</data>
             <data name="expectedErrorMessages/cc_number" xsi:type="string">Please, enter valid Credit Card Number</data>
             <data name="configData" xsi:type="string">braintree, braintree_cctypes_AE_VI</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
-            <constraint name="Magento\Braintree\Test\Constraint\AssertCreditCardJsValidationMessageIsPresent" />
+            <constraint name="Magento\Braintree\Test\Constraint\AssertCreditCardJsValidationMessagesArePresent" />
         </variation>
     </testCase>
 </config>

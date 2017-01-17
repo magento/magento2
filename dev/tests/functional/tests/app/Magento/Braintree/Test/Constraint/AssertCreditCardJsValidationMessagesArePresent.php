@@ -12,7 +12,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 /**
  * Assert js validation message is present for required field.
  */
-class AssertCreditCardJsValidationMessageIsPresent extends AbstractConstraint
+class AssertCreditCardJsValidationMessagesArePresent extends AbstractConstraint
 {
     /**
      * Assert js validation message is present for required field.
@@ -21,7 +21,7 @@ class AssertCreditCardJsValidationMessageIsPresent extends AbstractConstraint
      * @param array $expectedErrorMessages
      * @return void
      */
-    public function processAssert(CheckoutOnepage $checkoutOnepage, $expectedErrorMessages)
+    public function processAssert(CheckoutOnepage $checkoutOnepage, array $expectedErrorMessages)
     {
         $errorMessages = $checkoutOnepage->getBraintreeBlock()->getVisibleMessages($expectedErrorMessages);
 
@@ -29,7 +29,7 @@ class AssertCreditCardJsValidationMessageIsPresent extends AbstractConstraint
             \PHPUnit_Framework_Assert::assertEquals(
                 $expectedErrorMessages[$field],
                 $errorMessages[$field],
-                'Wrong js validation error message is displayed.'
+                "Wrong js validation error message is displayed for field: $field."
             );
         }
     }
