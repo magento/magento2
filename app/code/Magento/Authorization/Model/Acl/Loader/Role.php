@@ -35,7 +35,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface
      */
-    private $cache;
+    private $aclDataCache;
 
     /**
      * @var Json
@@ -46,20 +46,22 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
      * @param \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory
      * @param \Magento\Authorization\Model\Acl\Role\UserFactory $roleFactory
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Framework\Acl\Data\CacheInterface $cache
+     * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      * @param Json $serializer
      */
     public function __construct(
         \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory,
         \Magento\Authorization\Model\Acl\Role\UserFactory $roleFactory,
         \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Framework\Acl\Data\CacheInterface $cache = null,
+        \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null,
         Json $serializer = null
     ) {
         $this->_resource = $resource;
         $this->_groupFactory = $groupFactory;
         $this->_roleFactory = $roleFactory;
-        $this->cache = $cache ?: ObjectManager::getInstance()->get(\Magento\Framework\Acl\Data\CacheInterface::class);
+        $this->aclDataCache = $aclDataCache ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Acl\Data\CacheInterface::class
+        );
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
@@ -96,7 +98,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
      */
     private function getRolesArray()
     {
-        $rolesCachedData = $this->cache->load(self::ACL_ROLES_CACHE_KEY);
+        $rolesCachedData = $this->aclDataCache->load(self::ACL_ROLES_CACHE_KEY);
         if ($rolesCachedData) {
             return $this->serializer->unserialize($rolesCachedData);
         }
@@ -109,7 +111,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
             ->order('tree_level');
 
         $rolesArray = $connection->fetchAll($select);
-        $this->cache->save($this->serializer->serialize($rolesArray), self::ACL_ROLES_CACHE_KEY);
+        $this->aclDataCache->save($this->serializer->serialize($rolesArray), self::ACL_ROLES_CACHE_KEY);
         return $rolesArray;
     }
 }

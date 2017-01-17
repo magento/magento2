@@ -83,6 +83,8 @@ class Builder
 
     /**
      * Remove cached ACL instance.
+     *
+     * @return $this
      */
     public function resetRuntimeAcl()
     {

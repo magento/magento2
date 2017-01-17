@@ -29,7 +29,7 @@ class Provider implements ProviderInterface
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface
      */
-    private $cache;
+    private $aclDataCache;
 
     /**
      * @var Json
@@ -39,18 +39,20 @@ class Provider implements ProviderInterface
     /**
      * @param \Magento\Framework\Config\ReaderInterface $configReader
      * @param TreeBuilder $resourceTreeBuilder
-     * @param \Magento\Framework\Acl\Data\CacheInterface $cache
+     * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      * @param Json $serializer
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $configReader,
         TreeBuilder $resourceTreeBuilder,
-        \Magento\Framework\Acl\Data\CacheInterface $cache = null,
+        \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null,
         Json $serializer = null
     ) {
         $this->_configReader = $configReader;
         $this->_resourceTreeBuilder = $resourceTreeBuilder;
-        $this->cache = $cache ?: ObjectManager::getInstance()->get(\Magento\Framework\Config\CacheInterface::class);
+        $this->aclDataCache = $aclDataCache ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Config\CacheInterface::class
+        );
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
@@ -59,14 +61,14 @@ class Provider implements ProviderInterface
      */
     public function getAclResources()
     {
-        $tree = $this->cache->load(self::ACL_RESOURCES_CACHE_KEY);
+        $tree = $this->aclDataCache->load(self::ACL_RESOURCES_CACHE_KEY);
         if ($tree) {
             return $this->serializer->unserialize($tree);
         }
         $aclResourceConfig = $this->_configReader->read();
         if (!empty($aclResourceConfig['config']['acl']['resources'])) {
             $tree = $this->_resourceTreeBuilder->build($aclResourceConfig['config']['acl']['resources']);
-            $this->cache->save($this->serializer->serialize($tree), self::ACL_RESOURCES_CACHE_KEY);
+            $this->aclDataCache->save($this->serializer->serialize($tree), self::ACL_RESOURCES_CACHE_KEY);
             return $tree;
         }
         return [];

@@ -46,7 +46,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $cacheMock;
+    private $aclDataCacheMock;
 
     protected function setUp()
     {
@@ -90,7 +90,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Acl\Data\CacheInterface::class)
+        $this->aclDataCacheMock = $this->getMockBuilder(\Magento\Framework\Acl\Data\CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -103,7 +103,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
                 'aclCache' => $this->aclCacheMock,
                 'roleFactory' => $this->roleFactoryMock,
                 'dateTime' => $this->dateTimeMock,
-                'cache' => $this->cacheMock,
+                'aclDataCache' => $this->aclDataCacheMock,
             ]
         );
     }
@@ -423,9 +423,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->roleMock->expects($this->once())->method('load')->willReturn($this->roleMock);
         $this->roleMock->expects($this->atLeastOnce())->method('getId')->willReturn($roleId);
         $this->dbAdapterMock->expects($this->once())->method('describeTable')->willReturn([1, 2, 3]);
-        $this->cacheMock->expects($this->once())->method('clean')->with(
-            \Zend_Cache::CLEANING_MODE_MATCHING_TAG
-        );
+        $this->aclDataCacheMock->expects($this->once())->method('clean');
         $this->assertInstanceOf(
             \Magento\User\Model\ResourceModel\User::class,
             $this->invokeMethod($this->model, '_afterSave', [$methodUserMock])

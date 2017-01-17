@@ -62,7 +62,7 @@ class Cache implements CacheInterface
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
-        return $this->cache->save($data, $identifier, $tags + [self::ACL_DATA_CACHE_TAG], $lifeTime);
+        return $this->cache->save($data, $identifier, array_merge($tags, [self::ACL_DATA_CACHE_TAG]), $lifeTime);
     }
 
     /**
@@ -76,10 +76,10 @@ class Cache implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
+    public function clean($mode = \Zend_Cache::CLEANING_MODE_MATCHING_TAG, array $tags = [])
     {
         $this->aclBuilder->resetRuntimeAcl();
-        return $this->cache->clean($mode, $tags + [self::ACL_DATA_CACHE_TAG]);
+        return $this->cache->clean($mode, array_merge($tags, [self::ACL_DATA_CACHE_TAG]));
     }
 
     /**

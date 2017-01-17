@@ -25,7 +25,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $cacheMock;
+    private $aclDataCacheMock;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
@@ -69,7 +69,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->cacheMock = $this->getMock(
+        $this->aclDataCacheMock = $this->getMock(
             \Magento\Framework\Acl\Data\CacheInterface::class,
             [],
             [],
@@ -82,7 +82,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             $this->_rootResourceMock,
             $this->_resourceMock,
             [],
-            $this->cacheMock,
+            $this->aclDataCacheMock,
             $this->serializerMock
         );
     }
@@ -93,7 +93,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->_resourceMock->expects($this->never())
             ->method('getConnection');
 
-        $this->cacheMock->expects($this->once())
+        $this->aclDataCacheMock->expects($this->once())
             ->method('load')
             ->with(\Magento\Authorization\Model\Acl\Loader\Rule::ACL_RULE_CACHE_KEY)
             ->will(

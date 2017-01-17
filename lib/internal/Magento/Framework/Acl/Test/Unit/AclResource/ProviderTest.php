@@ -30,7 +30,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $cacheMock;
+    private $aclDataCacheMock;
 
     protected function setUp()
     {
@@ -69,7 +69,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->cacheMock = $this->getMock(
+        $this->aclDataCacheMock = $this->getMock(
             \Magento\Framework\Acl\Data\CacheInterface::class,
             [],
             [],
@@ -80,7 +80,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Framework\Acl\AclResource\Provider(
             $this->_configReaderMock,
             $this->_treeBuilderMock,
-            $this->cacheMock,
+            $this->aclDataCacheMock,
             $this->serializerMock
         );
     }
@@ -90,7 +90,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
         $aclResourceConfig['config']['acl']['resources'] = ['ExpectedValue'];
         $this->_configReaderMock->expects($this->once())->method('read')->will($this->returnValue($aclResourceConfig));
         $this->_treeBuilderMock->expects($this->once())->method('build')->will($this->returnValue('ExpectedResult'));
-        $this->cacheMock->expects($this->once())->method('save')->with(
+        $this->aclDataCacheMock->expects($this->once())->method('save')->with(
             json_encode('ExpectedResult'),
             \Magento\Framework\Acl\AclResource\Provider::ACL_RESOURCES_CACHE_KEY
         );
@@ -101,7 +101,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->_configReaderMock->expects($this->never())->method('read');
         $this->_treeBuilderMock->expects($this->never())->method('build');
-        $this->cacheMock->expects($this->once())
+        $this->aclDataCacheMock->expects($this->once())
             ->method('load')
             ->with(\Magento\Framework\Acl\AclResource\Provider::ACL_RESOURCES_CACHE_KEY)
             ->will($this->returnValue(json_encode('ExpectedResult')));

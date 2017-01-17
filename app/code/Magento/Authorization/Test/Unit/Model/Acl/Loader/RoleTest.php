@@ -35,7 +35,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $cacheMock;
+    private $aclDataCacheMock;
 
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
@@ -106,7 +106,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->cacheMock = $this->getMock(
+        $this->aclDataCacheMock = $this->getMock(
             \Magento\Framework\Acl\Data\CacheInterface::class,
             [],
             [],
@@ -118,7 +118,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
             $this->_groupFactoryMock,
             $this->_roleFactoryMock,
             $this->_resourceMock,
-            $this->cacheMock,
+            $this->aclDataCacheMock,
             $this->serializerMock
         );
     }
@@ -193,7 +193,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
         $this->_resourceMock->expects($this->never())->method('getConnection');
         $this->_resourceMock->expects($this->never())->method('getTableName');
         $this->_adapterMock->expects($this->never())->method('fetchAll');
-        $this->cacheMock->expects($this->once())
+        $this->aclDataCacheMock->expects($this->once())
             ->method('load')
             ->with(\Magento\Authorization\Model\Acl\Loader\Role::ACL_ROLES_CACHE_KEY)
             ->will(

@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Acl\Test\Unit;
 
+use Magento\Framework\Acl\Builder;
+
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -101,5 +103,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             $this->throwException(new \InvalidArgumentException())
         );
         $this->_model->getAcl();
+    }
+
+    public function testResetRuntimeAcl()
+    {
+        $this->assertInstanceOf(Builder::class, $this->_model->resetRuntimeAcl());
     }
 }

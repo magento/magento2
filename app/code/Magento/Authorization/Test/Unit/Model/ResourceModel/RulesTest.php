@@ -51,7 +51,7 @@ class RulesTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $cacheMock;
+    private $aclDataCacheMock;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
@@ -119,14 +119,14 @@ class RulesTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Acl\Data\CacheInterface::class)
+        $this->aclDataCacheMock = $this->getMockBuilder(\Magento\Framework\Acl\Data\CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $this->aclBuilderMock->expects($this->any())
             ->method('getConfigCache')
-            ->will($this->returnValue($this->cacheMock));
+            ->will($this->returnValue($this->aclDataCacheMock));
 
         $this->ruleMock = $this->getMockBuilder(\Magento\Authorization\Model\Rules::class)
             ->disableOriginalConstructor()
@@ -144,7 +144,7 @@ class RulesTest extends \PHPUnit_Framework_TestCase
             $this->rootResourceMock,
             $this->aclCacheMock,
             'connection',
-            $this->cacheMock
+            $this->aclDataCacheMock
         );
     }
 
@@ -161,9 +161,8 @@ class RulesTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock->expects($this->once())
             ->method('commit');
 
-        $this->cacheMock->expects($this->once())
-            ->method('clean')
-            ->with(\Zend_Cache::CLEANING_MODE_MATCHING_TAG);
+        $this->aclDataCacheMock->expects($this->once())
+            ->method('clean');
 
         $this->model->saveRel($this->ruleMock);
     }
