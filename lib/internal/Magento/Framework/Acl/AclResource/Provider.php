@@ -37,16 +37,23 @@ class Provider implements ProviderInterface
     private $serializer;
 
     /**
+     * @var string
+     */
+    private $cacheKey;
+
+    /**
      * @param \Magento\Framework\Config\ReaderInterface $configReader
      * @param TreeBuilder $resourceTreeBuilder
      * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      * @param Json $serializer
+     * @param string $cacheKey
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $configReader,
         TreeBuilder $resourceTreeBuilder,
         \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null,
-        Json $serializer = null
+        Json $serializer = null,
+        $cacheKey = self::ACL_RESOURCES_CACHE_KEY
     ) {
         $this->_configReader = $configReader;
         $this->_resourceTreeBuilder = $resourceTreeBuilder;
@@ -54,6 +61,7 @@ class Provider implements ProviderInterface
             \Magento\Framework\Config\CacheInterface::class
         );
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->cacheKey = $cacheKey;
     }
 
     /**
@@ -61,14 +69,14 @@ class Provider implements ProviderInterface
      */
     public function getAclResources()
     {
-        $tree = $this->aclDataCache->load(self::ACL_RESOURCES_CACHE_KEY);
+        $tree = $this->aclDataCache->load($this->cacheKey);
         if ($tree) {
             return $this->serializer->unserialize($tree);
         }
         $aclResourceConfig = $this->_configReader->read();
         if (!empty($aclResourceConfig['config']['acl']['resources'])) {
             $tree = $this->_resourceTreeBuilder->build($aclResourceConfig['config']['acl']['resources']);
-            $this->aclDataCache->save($this->serializer->serialize($tree), self::ACL_RESOURCES_CACHE_KEY);
+            $this->aclDataCache->save($this->serializer->serialize($tree), $this->cacheKey);
             return $tree;
         }
         return [];

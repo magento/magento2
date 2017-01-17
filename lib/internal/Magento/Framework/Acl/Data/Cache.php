@@ -28,17 +28,25 @@ class Cache implements CacheInterface
     private $aclBuilder;
 
     /**
+     * @var string
+     */
+    private $cacheTag;
+
+    /**
      * Cache constructor.
      *
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Framework\Acl\Builder\Proxy $aclBuilder
+     * @param string $cacheTag
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
-        \Magento\Framework\Acl\Builder\Proxy $aclBuilder
+        \Magento\Framework\Acl\Builder\Proxy $aclBuilder,
+        $cacheTag = self::ACL_DATA_CACHE_TAG
     ) {
         $this->cache = $cache;
         $this->aclBuilder = $aclBuilder;
+        $this->cacheTag = $cacheTag;
     }
 
     /**
@@ -62,7 +70,7 @@ class Cache implements CacheInterface
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
-        return $this->cache->save($data, $identifier, array_merge($tags, [self::ACL_DATA_CACHE_TAG]), $lifeTime);
+        return $this->cache->save($data, $identifier, array_merge($tags, [$this->cacheTag]), $lifeTime);
     }
 
     /**
@@ -79,7 +87,7 @@ class Cache implements CacheInterface
     public function clean($mode = \Zend_Cache::CLEANING_MODE_MATCHING_TAG, array $tags = [])
     {
         $this->aclBuilder->resetRuntimeAcl();
-        return $this->cache->clean($mode, array_merge($tags, [self::ACL_DATA_CACHE_TAG]));
+        return $this->cache->clean($mode, array_merge($tags, [$this->cacheTag]));
     }
 
     /**

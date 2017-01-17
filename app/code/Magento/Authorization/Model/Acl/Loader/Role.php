@@ -43,18 +43,25 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
     private $serializer;
 
     /**
+     * @var string
+     */
+    private $cacheKey;
+
+    /**
      * @param \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory
      * @param \Magento\Authorization\Model\Acl\Role\UserFactory $roleFactory
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      * @param Json $serializer
+     * @param string $cacheKey
      */
     public function __construct(
         \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory,
         \Magento\Authorization\Model\Acl\Role\UserFactory $roleFactory,
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null,
-        Json $serializer = null
+        Json $serializer = null,
+        $cacheKey = self::ACL_ROLES_CACHE_KEY
     ) {
         $this->_resource = $resource;
         $this->_groupFactory = $groupFactory;
@@ -63,6 +70,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
             \Magento\Framework\Acl\Data\CacheInterface::class
         );
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->cacheKey = $cacheKey;
     }
 
     /**
@@ -98,7 +106,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
      */
     private function getRolesArray()
     {
-        $rolesCachedData = $this->aclDataCache->load(self::ACL_ROLES_CACHE_KEY);
+        $rolesCachedData = $this->aclDataCache->load($this->cacheKey);
         if ($rolesCachedData) {
             return $this->serializer->unserialize($rolesCachedData);
         }
@@ -111,7 +119,7 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
             ->order('tree_level');
 
         $rolesArray = $connection->fetchAll($select);
-        $this->aclDataCache->save($this->serializer->serialize($rolesArray), self::ACL_ROLES_CACHE_KEY);
+        $this->aclDataCache->save($this->serializer->serialize($rolesArray), $this->cacheKey);
         return $rolesArray;
     }
 }

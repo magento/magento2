@@ -36,11 +36,17 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
     private $serializer;
 
     /**
+     * @var string
+     */
+    private $cacheKey;
+
+    /**
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $data
      * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      * @param Json $serializer
+     * @param string $cacheKey
      * @SuppressWarnings(PHPMD.UnusedFormalParameter):
      */
     public function __construct(
@@ -48,7 +54,8 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
         \Magento\Framework\App\ResourceConnection $resource,
         array $data = [],
         \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null,
-        Json $serializer = null
+        Json $serializer = null,
+        $cacheKey = self::ACL_RULE_CACHE_KEY
     ) {
         $this->_resource = $resource;
         $this->_rootResource = $rootResource;
@@ -56,6 +63,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
             \Magento\Framework\Acl\Data\CacheInterface::class
         );
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->cacheKey = $cacheKey;
     }
 
     /**
@@ -91,7 +99,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
      */
     private function getRulesArray()
     {
-        $rulesCachedData = $this->aclDataCache->load(self::ACL_RULE_CACHE_KEY);
+        $rulesCachedData = $this->aclDataCache->load($this->cacheKey);
         if ($rulesCachedData) {
             return $this->serializer->unserialize($rulesCachedData);
         }
@@ -103,7 +111,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
 
         $rulesArr = $connection->fetchAll($select);
 
-        $this->aclDataCache->save($this->serializer->serialize($rulesArr), self::ACL_RULE_CACHE_KEY);
+        $this->aclDataCache->save($this->serializer->serialize($rulesArr), $this->cacheKey);
 
         return $rulesArr;
     }
