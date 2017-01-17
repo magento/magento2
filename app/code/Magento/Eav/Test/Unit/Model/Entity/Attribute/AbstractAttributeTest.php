@@ -144,24 +144,24 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValidationRulesWhenRuleIsSerialized()
     {
-        $rule = serialize('some value');
-        $expected = 'some test result';
+        $rule = json_encode(['some value']);
+        $expected = ['some value'];
 
         $modelClassName = \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class;
         $model = $this->getMockForAbstractClass($modelClassName, [], '', false);
 
-        $serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        //$serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
 
         $reflection = new \ReflectionClass($modelClassName);
         $reflectionProperty = $reflection->getProperty('serializer');
         $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($model, $serializerMock);
+        //$reflectionProperty->setValue($model, $serializerMock);
 
         $model->setData(\Magento\Eav\Api\Data\AttributeInterface::VALIDATE_RULES, $rule);
 
-        $serializerMock->method('unserialize')
+        /*$serializerMock->method('unserialize')
             ->with($rule)
-            ->willReturn($expected);
+            ->willReturn($expected);*/
 
         $this->assertEquals($expected, $model->getValidationRules());
 

@@ -1275,7 +1275,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         if (is_array($rules)) {
             return $rules;
         } elseif (!empty($rules)) {
-            return $this->getSerializer()->unserialize($rules);
+            return json_decode($rules, true);
         }
 
         return [];
