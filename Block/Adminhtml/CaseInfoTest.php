@@ -102,7 +102,7 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     {
         $this->order->loadByIncrementId('100000001');
 
-        static::assertContains('Submit Guarantee request', $this->getBlockContents());
+        static::assertContains('Submit Guarantee Request', $this->getBlockContents());
     }
 
     /**
