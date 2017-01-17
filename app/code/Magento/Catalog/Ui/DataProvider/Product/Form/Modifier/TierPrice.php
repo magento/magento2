@@ -95,7 +95,7 @@ class TierPrice extends AbstractModifier
         $priceMeta['arguments']['data']['config']['visible'] = $firstOption
             && $firstOption['value'] == ProductPriceOptionsInterface::VALUE_FIXED;
         $priceMeta['arguments']['data']['config']['validation'] = [
-            'validate-number' => true,
+            'validate-zero-or-greater' => true
         ];
         return [
             'price_value' => [
