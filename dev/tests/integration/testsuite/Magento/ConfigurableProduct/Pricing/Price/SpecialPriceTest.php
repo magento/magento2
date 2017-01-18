@@ -5,6 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
@@ -38,14 +39,14 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
     public function testSortingProductsWithoutSpecialPrice()
     {
         $childProduct = $this->productRepository->get('simple_77', true);
-        $childProduct->setData('price', 5);
+        $childProduct->setPrice(5);
         $this->productRepository->save($childProduct);
 
         /** @var ProductCollection $collection */
         $collection = $this->productCollectionFactory->create();
         $collection
             ->setVisibility([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH])
-            ->setOrder('price', Collection::SORT_ORDER_DESC);
+            ->setOrder(ProductInterface::PRICE, Collection::SORT_ORDER_DESC);
 
         /** @var Product[] $items */
         $items = array_values($collection->getItems());
@@ -60,15 +61,18 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
     public function testSortingProductIfChildHasSpecialPrice()
     {
         $specialPrice = 2;
+        /** @var Product $childProduct */
         $childProduct = $this->productRepository->get('simple_20', true);
-        $childProduct->setData('special_price', $specialPrice)->setData('price', 5);
+        $childProduct
+            ->setPrice(5)
+            ->setData('special_price', $specialPrice);
         $this->productRepository->save($childProduct);
 
         /** @var ProductCollection $collection */
         $collection = $this->productCollectionFactory->create();
         $collection
             ->setVisibility([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH])
-            ->setOrder('price', Collection::SORT_ORDER_DESC);
+            ->setOrder(ProductInterface::PRICE, Collection::SORT_ORDER_DESC);
 
         /** @var Product[] $items */
         $items = array_values($collection->getItems());
