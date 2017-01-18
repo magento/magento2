@@ -31,5 +31,19 @@
             <data name="configData" xsi:type="string">braintree, braintree_cctypes_AE_VI</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
         </variation>
+        <variation name="OnePageCheckoutFromMiniShoppingCartBraintreeTestVariation3" summary="Checkout with Braintree Credit Card with specific allowed countries" ticketId="MAGETWO-38437">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
+            <data name="configData" xsi:type="string">braintree, braintree_specific_country_GB</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+        </variation>
     </testCase>
 </config>
