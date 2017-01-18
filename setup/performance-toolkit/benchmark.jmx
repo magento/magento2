@@ -3853,7 +3853,7 @@ vars.put("loadType", "Guest");</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Email Available ${__property(activeAdminThread)}(${testLabel})" enabled="true">
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Email Available${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
         <collectionProp name="Arguments.arguments">
