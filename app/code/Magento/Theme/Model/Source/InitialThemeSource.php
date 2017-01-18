@@ -7,9 +7,9 @@ namespace Magento\Theme\Model\Source;
 
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\DataObject;
 use Magento\Theme\Model\ResourceModel\Theme;
 use Magento\Theme\Model\ResourceModel\ThemeFactory;
+use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
 /**
  * Class InitialThemeSource.
@@ -33,6 +33,13 @@ class InitialThemeSource implements ConfigSourceInterface
     private $themeFactory;
 
     /**
+     * A data object factory.
+     *
+     * @var DataObjectFactory
+     */
+    private $dataObjectFactory;
+
+    /**
      * Array with theme data.
      *
      * @var array
@@ -42,11 +49,16 @@ class InitialThemeSource implements ConfigSourceInterface
     /**
      * @param DeploymentConfig $deploymentConfig A deployment config
      * @param ThemeFactory $themeFactory A theme factory
+     * @param DataObjectFactory $dataObjectFactory A data object factory
      */
-    public function __construct(DeploymentConfig $deploymentConfig, ThemeFactory $themeFactory)
-    {
+    public function __construct(
+        DeploymentConfig $deploymentConfig,
+        ThemeFactory $themeFactory,
+        DataObjectFactory $dataObjectFactory
+    ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->themeFactory = $themeFactory;
+        $this->dataObjectFactory = $dataObjectFactory;
     }
 
     /**
@@ -75,7 +87,7 @@ class InitialThemeSource implements ConfigSourceInterface
                 }
             }
 
-            $this->data = new DataObject($themes);
+            $this->data = $this->dataObjectFactory->create($themes);
         }
 
         return $this->data->getData($path) ?: [];

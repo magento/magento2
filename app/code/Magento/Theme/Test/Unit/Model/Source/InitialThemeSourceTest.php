@@ -6,12 +6,14 @@
 namespace Magento\Theme\Test\Unit\Model\Source;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\DataObject;
 use Magento\Theme\Model\ResourceModel\Theme;
 use Magento\Theme\Model\ResourceModel\ThemeFactory;
 use Magento\Theme\Model\Source\InitialThemeSource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Magento\Framework\DB\Select;
+use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
 class InitialThemeSourceTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,6 +31,16 @@ class InitialThemeSourceTest extends \PHPUnit_Framework_TestCase
      * @var ThemeFactory|Mock
      */
     private $themeFactoryMock;
+
+    /**
+     * @var DataObjectFactory|Mock
+     */
+    private $dataObjectFactoryMock;
+
+    /**
+     * @var DataObject|Mock
+     */
+    private $dataObjectMock;
 
     /**
      * @var Theme|Mock
@@ -62,6 +74,12 @@ class InitialThemeSourceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMockForAbstractClass();
+        $this->dataObjectFactoryMock = $this->getMockBuilder(DataObjectFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dataObjectMock = $this->getMockBuilder(DataObject::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->themeMock->expects($this->any())
             ->method('getConnection')
@@ -81,7 +99,8 @@ class InitialThemeSourceTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new InitialThemeSource(
             $this->deploymentConfigMock,
-            $this->themeFactoryMock
+            $this->themeFactoryMock,
+            $this->dataObjectFactoryMock
         );
     }
 
@@ -138,41 +157,46 @@ class InitialThemeSourceTest extends \PHPUnit_Framework_TestCase
                     ],
                 ]
             );
+        $this->dataObjectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'Magento/backend' => [
+                        'parent_id' => null,
+                        'theme_path' => 'Magento/backend',
+                        'theme_title' => 'Magento 2 backend',
+                        'preview_image' => null,
+                        'is_featured' => '0',
+                        'area' => 'adminhtml',
+                        'type' => '0',
+                        'code' => 'Magento/backend',
+                    ],
+                    'Magento/blank' => [
+                        'parent_id' => null,
+                        'theme_path' => 'Magento/blank',
+                        'theme_title' => 'Magento Blank',
+                        'preview_image' => 'preview_image_587df6c4cc9c2.jpeg',
+                        'is_featured' => '0',
+                        'area' => 'frontend',
+                        'type' => '0',
+                        'code' => 'Magento/blank',
+                    ],
+                    'Magento/luma' => [
+                        'parent_id' => 'Magento/blank',
+                        'theme_path' => 'Magento/luma',
+                        'theme_title' => 'Magento Luma',
+                        'preview_image' => 'preview_image_587df6c4e073d.jpeg',
+                        'is_featured' => '0',
+                        'area' => 'frontend',
+                        'type' => '0',
+                        'code' => 'Magento/luma',
+                    ],
+                ]
+            )
+            ->willReturn($this->dataObjectMock);
+        $this->dataObjectMock->expects($this->once())
+            ->method('getData');
 
-        $this->assertSame(
-            [
-                'Magento/backend' => [
-                    'parent_id' => null,
-                    'theme_path' => 'Magento/backend',
-                    'theme_title' => 'Magento 2 backend',
-                    'preview_image' => null,
-                    'is_featured' => '0',
-                    'area' => 'adminhtml',
-                    'type' => '0',
-                    'code' => 'Magento/backend',
-                ],
-                'Magento/blank' => [
-                    'parent_id' => null,
-                    'theme_path' => 'Magento/blank',
-                    'theme_title' => 'Magento Blank',
-                    'preview_image' => 'preview_image_587df6c4cc9c2.jpeg',
-                    'is_featured' => '0',
-                    'area' => 'frontend',
-                    'type' => '0',
-                    'code' => 'Magento/blank',
-                ],
-                'Magento/luma' => [
-                    'parent_id' => 'Magento/blank',
-                    'theme_path' => 'Magento/luma',
-                    'theme_title' => 'Magento Luma',
-                    'preview_image' => 'preview_image_587df6c4e073d.jpeg',
-                    'is_featured' => '0',
-                    'area' => 'frontend',
-                    'type' => '0',
-                    'code' => 'Magento/luma',
-                ],
-            ],
-            $this->model->get()
-        );
+        $this->model->get();
     }
 }
