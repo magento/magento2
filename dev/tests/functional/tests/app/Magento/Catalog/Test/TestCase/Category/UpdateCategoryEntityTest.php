@@ -9,6 +9,7 @@ namespace Magento\Catalog\Test\TestCase\Category;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 
@@ -66,24 +67,35 @@ class UpdateCategoryEntityTest extends Injectable
     protected $testStepFactory;
 
     /**
+     * Fixture create factory.
+     *
+     * @var FixtureFactory
+     */
+    protected $fixtureFactory;
+
+    /**
      * Inject page end prepare default category.
      *
      * @param Category $initialCategory
      * @param CatalogCategoryIndex $catalogCategoryIndex
      * @param CatalogCategoryEdit $catalogCategoryEdit
      * @param TestStepFactory $testStepFactory
+     * @param FixtureFactory $fixtureFactory
      * @return array
      */
     public function __inject(
         Category $initialCategory,
         CatalogCategoryIndex $catalogCategoryIndex,
         CatalogCategoryEdit $catalogCategoryEdit,
-        TestStepFactory $testStepFactory
+        TestStepFactory $testStepFactory,
+        FixtureFactory $fixtureFactory
     ) {
         $this->catalogCategoryIndex = $catalogCategoryIndex;
         $this->catalogCategoryEdit = $catalogCategoryEdit;
         $this->testStepFactory = $testStepFactory;
+        $this->fixtureFactory = $fixtureFactory;
         $initialCategory->persist();
+
         return ['initialCategory' => $initialCategory];
     }
 
@@ -93,7 +105,7 @@ class UpdateCategoryEntityTest extends Injectable
      * @param Category $category
      * @param Category $initialCategory
      * @param string $configData
-     * @return void
+     * @return array
      */
     public function test(Category $category, Category $initialCategory, $configData = null)
     {
@@ -110,6 +122,49 @@ class UpdateCategoryEntityTest extends Injectable
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);
         $this->catalogCategoryEdit->getEditForm()->fill($category);
         $this->catalogCategoryEdit->getFormPageActions()->save();
+
+        return ['category' => $this->prepareCategory($category, $initialCategory)];
+    }
+
+    /**
+     *  Prepare category fixture with updated data.
+     *
+     * @param Category $category
+     * @param Category $initialCategory
+     * @return Category
+     */
+    private function prepareCategory(Category $category, Category $initialCategory)
+    {
+        $parentCategory = null;
+        $cmsBlock = null;
+        $store = null;
+
+        foreach ([$initialCategory, $category] as $item) {
+            $parentSource = $item->getDataFieldConfig('parent_id')['source'];
+            if (is_a($parentSource, Category\ParentId::class) && $parentSource->getParentCategory()) {
+                $parentCategory = $parentSource->getParentCategory();
+            }
+
+            $cmsBlockSource = $category->getDataFieldConfig('landing_page')['source'];
+            if (is_a($cmsBlockSource, Category\LandingPage::class) && $cmsBlockSource->getCmsBlock()) {
+                $cmsBlock = $cmsBlockSource->getCmsBlock();
+            }
+
+            $storeSource = $category->getDataFieldConfig('store_id')['source'];
+            if (is_a($storeSource, Category\StoreId::class) && $storeSource->getStore()) {
+                $store = $storeSource->getStore();
+            }
+        }
+
+        $data = array_merge(
+            $initialCategory->getData(),
+            $category->getData(),
+            ['parent_id' => ['source' => $parentCategory]],
+            ['landing_page' => ['source' => $cmsBlock]],
+            ['store_id' => ['source' => $store]]
+        );
+
+        return $this->fixtureFactory->create(Category::class, ['data' => $data]);
     }
 
     /**
