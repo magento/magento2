@@ -23,6 +23,7 @@
         </variation>
         <variation name="OnePageCheckoutUsingRegisterLink" summary="Customer is redirected to checkout on login if guest is disabled, flow with registration new Customer" ticketId="MAGETWO-49917">
             <data name="issue" xsi:type="string">MAGETWO-59816: Redirect works improperly in a browser incognito mode</data>
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">register_customer</data>
             <data name="checkoutMethod" xsi:type="string">register_before_checkout</data>
@@ -37,6 +38,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
         </variation>
         <variation name="OnePageCheckoutTestVariation1" summary="Checkout as UK guest with virtual product and downloadable product using coupon for not logged in customers">
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="products/1" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
@@ -56,7 +58,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation2" summary="US customer during checkout using coupon for all customer groups">
-            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
             <data name="customer/dataset" xsi:type="string">default</data>
@@ -78,6 +80,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation3" summary="Checkout as UK guest with simple product" ticketId="MAGETWO-42603, MAGETWO-43282, MAGETWO-43318">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_with_qty_25</data>
             <data name="expectedQty/0" xsi:type="string">0</data>
             <data name="expectedStockStatus/0" xsi:type="string">out of stock</data>
@@ -102,6 +105,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation4" summary="One Page Checkout Products with Special Prices" ticketId="MAGETWO-12429">
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_with_special_price</data>
             <data name="products/1" xsi:type="string">configurableProduct::product_with_special_price</data>
@@ -124,7 +128,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
         </variation>
         <variation name="OnePageCheckoutTestVariation5" summary="Guest Checkout using Check/Money Order and Free Shipping with Prices/Taxes Verifications" ticketId="MAGETWO-12412">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, stable:no, severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="products/1" xsi:type="string">configurableProduct::with_one_option</data>
             <data name="products/2" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
@@ -148,6 +152,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation6" summary="Checkout as UK guest with virtual product using coupon for not logged in customers with Zero Subtotal Checkout payment method">
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_with_fixed_price_discount_coupon</data>
             <data name="customer/dataset" xsi:type="string">default</data>
@@ -167,6 +172,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation7" summary="Checkout as UK guest with condition available product qty = ordered product qty">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_with_qty_25</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email</data>
@@ -186,6 +192,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductsOutOfStock" />
         </variation>
         <variation name="OnePageCheckoutTestVariation8" summary="Checkout as UK customer with different shipping/billing address and register checkout method">
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">register</data>
@@ -201,7 +208,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation9" summary="One Page Checkout Products with different shipping/billing address and Tier Prices" ticketId="MAGETWO-42604">
-            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="tag" xsi:type="string">stable:no, severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::simple_with_tier_price_and_order_qty_3</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
@@ -220,6 +227,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation10" summary="One Page Checkout with all product types" ticketId="MAGETWO-17475">
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="products/1" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <data name="products/2" xsi:type="string">configurableProduct::with_one_option</data>
@@ -240,6 +248,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutUsingSingInLink" summary="Login during checkout using 'Sign In' link" ticketId="MAGETWO-42547">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">customer_UK_US_addresses</data>
             <data name="checkoutMethod" xsi:type="string">sign_in</data>
@@ -260,6 +269,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
         </variation>
         <variation name="OnePageCheckoutUsingNonDefaultAddress" summary="Checkout as Customer using non default address" ticketId="MAGETWO-42602">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">customer_US_DE_UK</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
@@ -281,6 +291,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
         </variation>
         <variation name="OnePageCheckoutUsingNewAddress" summary="Checkout as Customer using New address" ticketId="MAGETWO-42601">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">johndoe_with_addresses</data>
             <data name="checkoutMethod" xsi:type="string">sign_in</data>
@@ -299,6 +310,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderAddresses" />
         </variation>
         <variation name="OnePageCheckoutTestVariation11" summary="Checkout as Customer using default address" ticketId="MAGETWO-42600, MAGETWO-42546">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">customer_UK_US_addresses</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
