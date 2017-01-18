@@ -55,10 +55,13 @@ class BraintreeCc extends PaymentCc
                     return $fieldElement->isVisible() ? true : null;
                 }
             );
-            $iframeLocator = ObjectManager::getInstance()->create(Locator::class, [
-                'value' => $iframe,
-                'strategy' => Locator::SELECTOR_XPATH
-            ]);
+            $iframeLocator = ObjectManager::getInstance()->create(
+                Locator::class,
+                [
+                    'value' => $iframe,
+                    'strategy' => Locator::SELECTOR_XPATH
+                ]
+            );
             $this->browser->switchToFrame($iframeLocator);
             $element = $this->browser->find('body');
             $this->browser->waitUntil(
