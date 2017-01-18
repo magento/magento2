@@ -105,8 +105,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation4" summary="One Page Checkout Products with Special Prices" ticketId="MAGETWO-12429">
-            <data name="tag" xsi:type="string">severity:S0</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_with_special_price</data>
             <data name="products/1" xsi:type="string">configurableProduct::product_with_special_price</data>
             <data name="customer/dataset" xsi:type="string">default</data>
