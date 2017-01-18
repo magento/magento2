@@ -10,12 +10,12 @@ use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert js validation message is present for required field.
+ * Assert js validation error messages are present for required fields.
  */
 class AssertCreditCardJsValidationMessagesArePresent extends AbstractConstraint
 {
     /**
-     * Assert js validation message is present for required field.
+     * Assert js validation error messages are present for required fields.
      *
      * @param CheckoutOnepage $checkoutOnepage
      * @param array $expectedErrorMessages
@@ -41,6 +41,6 @@ class AssertCreditCardJsValidationMessagesArePresent extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Js validation error message is correct for required field.';
+        return 'Js validation error messages are correct for required fields.';
     }
 }
