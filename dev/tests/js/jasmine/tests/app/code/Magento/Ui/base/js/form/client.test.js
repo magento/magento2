@@ -53,62 +53,45 @@ define([
 
                 expect(type).toEqual('object');
             });
-            it('Check "beforeSave" method. Check call "filterFormData" inside themselves.', function () {
+            it('Check "beforeSave" method. ' +
+                'Check calls "filterFormData", "serialize" and "ajax" inside themselves.', function () {
                 var data = {
                         key: {
                             anotherKey: 'value'
                         },
                         anotherKey: []
-                    };
-
-                obj.urls.beforeSave = 'requestPath';
-                obj.selectorPrefix = 'selectorPrefix';
-                obj.messagesClass = 'messagesClass';
-                utils.filterFormData = jasmine.createSpy().and.returnValue(utils.filterFormData(data));
-
-                obj.save(data);
-                expect(utils.filterFormData).toHaveBeenCalledWith(data);
-            });
-            it('Check "beforeSave" method. Check call "serialize" inside themselves.', function () {
-                var data = {
-                        key: {
-                            anotherKey: 'value'
-                        },
-                        anotherKey: []
-                    };
-
-                obj.urls.beforeSave = 'requestPath';
-                obj.selectorPrefix = 'selectorPrefix';
-                obj.messagesClass = 'messagesClass';
-                utils.serialize = jasmine.createSpy().and.returnValue(utils.serialize(data));
-
-                obj.save(data);
-                expect(utils.serialize).toHaveBeenCalledWith(data);
-            });
-            it('Check "beforeSave" method. Check call "ajax" inside themselves.', function () {
-                var data = {
-                        key: {
-                            anotherKey: 'value'
-                        },
-                        'anotherKey-prepared-for-send': []
                     },
-                    result = {
-                        url: obj.urls.beforeSave,
-                        data: {
-                            'key[anotherKey]': 'value',
-                            'form_key': 'magentoFormKey'
-                        },
-                        success: jasmine.any(Function),
-                        complete: jasmine.any(Function)
-                    };
+                    params;
 
                 obj.urls.beforeSave = 'requestPath';
                 obj.selectorPrefix = 'selectorPrefix';
                 obj.messagesClass = 'messagesClass';
+
+                params = {
+                    url: obj.urls.beforeSave,
+                    data: _.extend(data, {
+                        form_key: 'magentoFormKey'
+                    }),
+                    success: jasmine.any(Function),
+                    complete: jasmine.any(Function)
+                };
+
+                utils.filterFormData = jasmine.createSpy().and.returnValue(data);
+                utils.serialize = jasmine.createSpy().and.returnValue(data);
                 $.ajax = jasmine.createSpy();
 
                 obj.save(data);
-                expect($.ajax).toHaveBeenCalledWith(result);
+                expect(utils.filterFormData).toHaveBeenCalledWith(data);
+                expect(utils.serialize).toHaveBeenCalledWith(data);
+                expect($.ajax).toHaveBeenCalledWith(params);
+
+            });
+            it('Check call "beforeSave" method without parameters', function () {
+                $.ajax = jasmine.createSpy();
+                obj.urls.beforeSave = null;
+                obj.save();
+
+                expect($.ajax).not.toHaveBeenCalled();
             });
         });
 
