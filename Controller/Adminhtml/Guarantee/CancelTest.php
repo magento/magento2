@@ -88,7 +88,7 @@ class CancelTest extends AbstractBackendController
 
         self::assertRedirect(self::stringContains('backend/sales/order/view'));
         self::assertSessionMessages(
-            self::equalTo(['Sorry, we cannot cancel Guarantee for order.']),
+            self::equalTo(['Sorry, we cannot cancel Guarantee for your order.']),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -119,7 +119,7 @@ class CancelTest extends AbstractBackendController
 
         self::assertRedirect(self::stringContains('backend/sales/order/view'));
         self::assertSessionMessages(
-            self::equalTo(['Sorry, we cannot cancel Guarantee for order.']),
+            self::equalTo(['Sorry, we cannot cancel Guarantee for your order.']),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -150,7 +150,7 @@ class CancelTest extends AbstractBackendController
 
         self::assertRedirect(self::stringContains('backend/sales/order/view'));
         self::assertSessionMessages(
-            self::equalTo(['Guarantee has been cancelled for order.']),
+            self::equalTo(['Guarantee has been cancelled for your order.']),
             MessageInterface::TYPE_SUCCESS
         );
     }
