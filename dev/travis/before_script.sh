@@ -64,7 +64,7 @@ case $TEST_SUITE in
             --output-file="$changed_files_ce" \
             --base-path="$TRAVIS_BUILD_DIR" \
             --repo='https://github.com/magento/magento2.git' \
-            --branch='develop'
+            --branch='2.1'
         cat "$changed_files_ce" | sed 's/^/  + including /'
 
         cd ../../..
