@@ -11,12 +11,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
- * Class AssertOrderCommentsHistoryNotifyStatus
+ * Assert that comment has appropriate notification status in Comments History section on order page in Admin.
  */
 class AssertOrderCommentsHistoryNotifyStatus extends AbstractConstraint
 {
     /**
-     * Assert that comment about refunded amount exist in Comments History section on order page in Admin.
+     * Assert that comment has appropriate notification status in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
@@ -35,8 +35,13 @@ class AssertOrderCommentsHistoryNotifyStatus extends AbstractConstraint
             $data['form_data']['send_email'],
             FILTER_VALIDATE_BOOLEAN
         ) : false;
+
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
+
         \PHPUnit_Framework_Assert::assertContains(
-            $salesOrderView->getOrderHistoryBlock()->getNotifiedStatus(),
+            $latestComment['is_customer_notified'],
             (bool)$sendMail ? 'Customer Notified' : 'Customer Not Notified'
         );
     }

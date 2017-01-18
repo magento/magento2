@@ -96,6 +96,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEntityStores($productData, $categoryData, $expectedStores)
     {
+        $this->markTestSkipped('Skipped until MAGETWO-63018');
         $args = [];
         if ($productData) {
             $args['product'] = $this->objectManager->create(
@@ -121,6 +122,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEntityStoresProductStoresException()
     {
+        $this->markTestSkipped('Skipped until MAGETWO-63018');
         $args = [
             'product' => $this->objectManager->create(
                 \Magento\Catalog\Model\Product::class,
