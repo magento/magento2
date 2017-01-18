@@ -39,7 +39,7 @@ class CaseInfo extends Template
     private $createGuaranteeAbility;
 
     /**
-     * @var CreateGuaranteeAbility
+     * @var CancelGuaranteeAbility
      */
     private $cancelGuaranteeAbility;
 
