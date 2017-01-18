@@ -14,9 +14,6 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Data\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
-/**
- * @magentoDbIsolation enabled
- */
 class SpecialPriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -39,11 +36,15 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_simple_77.php
      */
-    public function testSortingProductsWithoutSpecialPrice()
+    public function testSortingOfProductsWithoutSpecialPrice()
     {
-        $childProduct = $this->productRepository->get('simple_77', true);
-        $childProduct->setPrice(5);
-        $this->productRepository->save($childProduct);
+        /** @var Product $simpleProduct */
+        $simpleProduct = $this->productRepository->get('simple_77', true);
+        $simpleProduct
+            ->setOptions([])
+            ->setTierPrice([])
+            ->setPrice(5);
+        $this->productRepository->save($simpleProduct);
 
         /** @var ProductCollection $collection */
         $collection = $this->productCollectionFactory->create();
@@ -61,14 +62,22 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_simple_77.php
      */
-    public function testSortingProductIfChildHasSpecialPrice()
+    public function testSortingOfProductsIfChildHasSpecialPrice()
     {
-        $specialPrice = 2;
+        /** @var Product $simpleProduct */
+        $simpleProduct = $this->productRepository->get('simple_77', true);
+        $simpleProduct
+            ->setOptions([])
+            ->setTierPrice([])
+            ->setPrice(5);
+        $this->productRepository->save($simpleProduct);
+
         /** @var Product $childProduct */
-        $childProduct = $this->productRepository->get('simple_20', true);
+        $childProduct = $this->productRepository->get('simple_10', true);
         $childProduct
-            ->setPrice(5)
-            ->setData('special_price', $specialPrice);
+            ->setOptions([])
+            ->setTierPrice([])
+            ->setData('special_price', 2);
         $this->productRepository->save($childProduct);
 
         /** @var ProductCollection $collection */
