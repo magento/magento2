@@ -53,7 +53,7 @@ class AssertProductInventoryThreshold extends AbstractConstraint
                 \PHPUnit_Framework_Assert::assertEquals(
                     sprintf(self::SUCCESS_MESSAGE, $thresholdItem['expected']),
                     $catalogProductView->getViewBlock()->getThresholdMessage(),
-                    'Product inventory threshold message display is not correct.'
+                    'Product inventory success message is not displayed.'
                 );
             }
         }
