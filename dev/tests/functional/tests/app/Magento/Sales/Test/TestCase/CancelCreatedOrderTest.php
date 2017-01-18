@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,6 +49,13 @@ class CancelCreatedOrderTest extends Injectable
     protected $salesOrderView;
 
     /**
+     * Configuration setting.
+     *
+     * @var string
+     */
+    private $configData;
+
+    /**
      * Inject pages.
      *
      * @param OrderIndex $orderIndex
@@ -72,6 +79,7 @@ class CancelCreatedOrderTest extends Injectable
     public function test(OrderInjectable $order, TestStepFactory $stepFactory, $configData)
     {
         // Preconditions
+        $this->configData = $configData;
         $stepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]
@@ -86,5 +94,18 @@ class CancelCreatedOrderTest extends Injectable
         return [
             'customer' => $order->getDataFieldConfig('customer_id')['source']->getCustomer(),
         ];
+    }
+
+    /**
+     * Reset config settings to default.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        $this->objectManager->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData, 'rollback' => true]
+        )->run();
     }
 }

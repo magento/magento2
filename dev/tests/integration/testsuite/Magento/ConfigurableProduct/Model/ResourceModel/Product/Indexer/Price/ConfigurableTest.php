@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
@@ -54,6 +54,42 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         // update in global scope
         $currentStoreId = $this->storeManager->getStore()->getId();
         $this->storeManager->setCurrentStore(Store::ADMIN_CODE);
+        $this->productRepository->save($childProduct);
+        $this->storeManager->setCurrentStore($currentStoreId);
+
+        /** @var Collection $collection */
+        $collection = Bootstrap::getObjectManager()->get(CollectionFactory::class)
+            ->create();
+        $configurableProduct = $collection
+            ->addIdFilter([1])
+            ->addMinimalPrice()
+            ->load()
+            ->getFirstItem();
+        $this->assertEquals(20, $configurableProduct->getMinimalPrice());
+    }
+
+    /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
+    public function testGetProductFinalPriceIfOneOfChildIsDisabledPerStore()
+    {
+        /** @var Collection $collection */
+        $collection = Bootstrap::getObjectManager()->get(CollectionFactory::class)
+            ->create();
+        $configurableProduct = $collection
+            ->addIdFilter([1])
+            ->addMinimalPrice()
+            ->load()
+            ->getFirstItem();
+        $this->assertEquals(10, $configurableProduct->getMinimalPrice());
+
+        $childProduct = $this->productRepository->getById(10, false, null, true);
+        $childProduct->setStatus(Status::STATUS_DISABLED);
+
+        // update in default store scope
+        $currentStoreId = $this->storeManager->getStore()->getId();
+        $defaultStore = $this->storeManager->getDefaultStoreView();
+        $this->storeManager->setCurrentStore($defaultStore->getId());
         $this->productRepository->save($childProduct);
         $this->storeManager->setCurrentStore($currentStoreId);
 

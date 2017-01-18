@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -503,6 +503,44 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             $defaultShipping,
             $customer->getDefaultShipping(),
             'default_shipping customer attribute did not updated'
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDbIsolation enabled
+     */
+    public function testUpdateDefaultShippingAndDefaultBillingTest()
+    {
+        $customerId = 1;
+        $customerData = [
+            "id" => 1,
+            "website_id" => 1,
+            "email" => "roni_cost@example.com",
+            "firstname" => "1111",
+            "lastname" => "Boss",
+            "middlename" => null,
+            "gender" => 0
+        ];
+
+        $customerEntity = $this->customerFactory->create(['data' => $customerData]);
+
+        $customer = $this->customerRepository->getById($customerId);
+        $oldDefaultBilling = $customer->getDefaultBilling();
+        $oldDefaultShipping = $customer->getDefaultShipping();
+
+        $savedCustomer = $this->customerRepository->save($customerEntity);
+
+        $this->assertEquals(
+            $savedCustomer->getDefaultBilling(),
+            $oldDefaultBilling,
+            'Default billing shoud not be overridden'
+        );
+
+        $this->assertEquals(
+            $savedCustomer->getDefaultShipping(),
+            $oldDefaultShipping,
+            'Default shipping shoud not be overridden'
         );
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -47,6 +47,8 @@
         <field name="msrp" is_required="0" />
         <field name="msrp_display_actual_price_type" is_required="0" />
         <field name="name" is_required="1" group="product-details" />
+        <field name="use_default_name" group="product-details" />
+        <field name="use_default_price" group="product-details" />
         <field name="old_id" is_required="0" />
         <field name="options_container" is_required="0" />
         <field name="page_layout" is_required="0" />
@@ -70,6 +72,7 @@
         <field name="url_path" is_required="0" />
         <field name="visibility" is_required="0" group="product-details" />
         <field name="weight" is_required="0" group="product-details" />
+        <field name="additional_attributes" is_required="0" group="product-details" />
         <field name="id" group="null" />
         <field name="type_id" />
         <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />

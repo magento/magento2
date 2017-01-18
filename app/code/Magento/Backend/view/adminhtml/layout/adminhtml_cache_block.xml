@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -23,10 +23,12 @@
                             <item name="enable" xsi:type="array">
                                 <item name="label" xsi:type="string" translate="true">Enable</item>
                                 <item name="url" xsi:type="string">adminhtml/*/massEnable</item>
+                                <item name="visible" xsi:type="object">Magento\Backend\Block\Cache\Grid\Massaction\ProductionModeVisibilityChecker</item>
                             </item>
                             <item name="disable" xsi:type="array">
                                 <item name="label" xsi:type="string" translate="true">Disable</item>
                                 <item name="url" xsi:type="string">adminhtml/*/massDisable</item>
+                                <item name="visible" xsi:type="object">Magento\Backend\Block\Cache\Grid\Massaction\ProductionModeVisibilityChecker</item>
                             </item>
                             <item name="refresh" xsi:type="array">
                                 <item name="label" xsi:type="string" translate="true">Refresh</item>

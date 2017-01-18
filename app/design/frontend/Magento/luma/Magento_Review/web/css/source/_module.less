@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -40,10 +40,24 @@
 
     .review-control-vote {
         .lib-rating-vote();
+
         &:before {
             .lib-rating-icons-content(
                 @_icon-content: @icon-star-empty
             );
+        }
+    }
+
+    //
+    //  Account Review list page
+    //  -----------------------------------------
+
+    .products-reviews-toolbar {
+        position: relative;
+
+        .toolbar-amount {
+            position: relative;
+            text-align: center;
         }
     }
 
@@ -95,6 +109,7 @@
         .fieldset &-legend.legend {
             border-bottom: 0;
             line-height: 1.3;
+            margin-bottom: @indent__base;
             padding: 0;
 
             span {
@@ -105,8 +120,6 @@
                 display: block;
                 font-weight: 600;
             }
-
-            margin-bottom: @indent__base;
         }
 
         .fieldset &-field-ratings {
@@ -189,6 +202,7 @@
             margin-bottom: @indent__base;
         }
     }
+
     .page-main {
         .column {
             .review-add {
@@ -284,9 +298,6 @@
             a:not(:last-child) {
                 margin-right: 30px;
             }
-
-            .action.view span {
-            }
         }
     }
 
@@ -331,6 +342,7 @@
         .items {
             .item {
                 .lib-css(margin-bottom, @indent__base);
+
                 &:last-child {
                     margin-bottom: 0;
                 }
@@ -339,6 +351,7 @@
 
         .product-name {
             display: inline-block;
+
             &:not(:last-child) {
                 .lib-css(margin-bottom, @indent__xs);
             }
@@ -413,9 +426,6 @@
             margin-right: 3%;
             max-width: 285px;
             width: 30%;
-        }
-
-        .product-info {
         }
 
         .review-details {

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -284,6 +284,42 @@
             <field name="address" xsi:type="array">
                 <item name="dataset" xsi:type="string">UK_address_default_billing, US_address_default_shipping</item>
             </field>
+        </dataset>
+
+        <dataset name="AVS_street_match_address">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="street" xsi:type="string">24285 Elm</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">90230</field>
+        </dataset>
+
+        <dataset name="AVS_street_does_not_match_address">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="street" xsi:type="string">49354 Main</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">90230</field>
+        </dataset>
+
+        <dataset name="AVS_zip_match_address">
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="street" xsi:type="string">49 Main</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">00382</field>
         </dataset>
     </repository>
 </config>

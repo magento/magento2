@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Express;
@@ -34,7 +34,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify that an order placed with an existing customer can re-use the customer addresses.
      *
-     * @magentoDataFixture Magento/Paypal/_files/quote_payment_express_with_customer.php
+     * @magentoDataFixture Magento/Paypal/_files/quote_express_with_customer.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
@@ -74,7 +74,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify that after placing the order, addresses are associated with the order and the quote is a guest quote.
      *
-     * @magentoDataFixture Magento/Paypal/_files/quote_payment_express.php
+     * @magentoDataFixture Magento/Paypal/_files/quote_express.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */

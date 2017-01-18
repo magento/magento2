@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup;
@@ -130,7 +130,7 @@ class FilePermissions
     }
 
     /**
-     * Check all sub-directories and files except for var/generation and var/di
+     * Check all sub-directories and files except for generated/code and generated/metadata
      *
      * @param string $directory
      * @return bool

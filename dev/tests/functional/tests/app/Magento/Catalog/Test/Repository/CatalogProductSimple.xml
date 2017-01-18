@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -42,6 +42,37 @@
                 <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="name" xsi:type="string">Product \&#39;!@#$%^&amp;*()+:;\\|}{][?=-~` %isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
+            <field name="is_virtual" xsi:type="string">No</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">25</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">560</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">simple_order_default</item>
+            </field>
+        </dataset>
+
+        <dataset name="product_with_long_name">
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Product with long name %isolation%%isolation%%isolation%%isolation%%isolation%%isolation%%isolation%%isolation%%isolation%%isolation%%isolation%%isolation%%isolation%%isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
             <field name="is_virtual" xsi:type="string">No</field>
             <field name="product_has_weight" xsi:type="string">This item has weight</field>
@@ -1307,6 +1338,39 @@
             </field>
         </dataset>
 
+        <dataset name="simple_10_dollar_buy_all">
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Simple Product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">1</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">10</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">simple_order_default</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+        </dataset>
+
         <dataset name="simple_with_tier_price_and_order_qty_3">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
@@ -1368,7 +1432,163 @@
             <field name="url_key" xsi:type="string">overnight-duffle</field>
         </dataset>
 
-        <dataset name="simple_with_weight_10_for_salesrule">
+        <dataset name="with_percent_and_fixed_custom_option">
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Simple Product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">56.78</item>
+            </field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">1</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="custom_options" xsi:type="array">
+                <item name="dataset" xsi:type="string">percent_and_fixed_radio_options</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">with_fixed_custom_option</item>
+            </field>
+        </dataset>
+
+        <dataset name="with_fixed_custom_option_price_100">
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Simple Product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">100</item>
+            </field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">1</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="custom_options" xsi:type="array">
+                <item name="dataset" xsi:type="string">text_and_two_custom_options</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">text_and_two_custom_options</item>
+            </field>
+        </dataset>
+
+        <dataset name="with_custom_options_and_price_56_78">
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Simple Product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">56.78</item>
+            </field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">1</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="custom_options" xsi:type="array">
+                <item name="dataset" xsi:type="string">percent_and_fixed_radio_options</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">with_percent_custom_option</item>
+            </field>
+        </dataset>
+
+        <dataset name="product_with_price_20_01">
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Simple Product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">25</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">20.01</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">simple_order_default</item>
+            </field>
+        </dataset>
+
+        <dataset name="product_with_price_79_99">
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Simple Product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">25</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">79.99</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">simple_order_default</item>
+            </field>
+        </dataset>
+
+        <dataset name="simple_with_weight_10">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -1376,6 +1596,36 @@
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
             <field name="product_has_weight" xsi:type="string">This item has weight</field>
             <field name="weight" xsi:type="string">10</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">25</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">560</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">simple_order_default</item>
+            </field>
+        </dataset>
+
+        <dataset name="default_with_weight_2">
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Simple Product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">2</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">25</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
@@ -1430,69 +1680,154 @@
             </field>
         </dataset>
 
-        <dataset name="with_fixed_custom_option">
+        <dataset name="default_qty_3">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="name" xsi:type="string">Simple Product %isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">56.78</item>
-            </field>
             <field name="product_has_weight" xsi:type="string">This item has weight</field>
             <field name="weight" xsi:type="string">1</field>
             <field name="quantity_and_stock_status" xsi:type="array">
-                <item name="qty" xsi:type="string">1</item>
+                <item name="qty" xsi:type="string">3</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">560</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="dataset" xsi:type="string">default</item>
                 </item>
             </field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
-            <field name="category_ids" xsi:type="array">
-                <item name="dataset" xsi:type="string">default_subcategory</item>
-            </field>
-            <field name="custom_options" xsi:type="array">
-                <item name="dataset" xsi:type="string">percent_and_fixed_radio_options</item>
-            </field>
             <field name="checkout_data" xsi:type="array">
-                <item name="dataset" xsi:type="string">with_fixed_custom_option</item>
+                <item name="dataset" xsi:type="string">simple_order_default</item>
             </field>
         </dataset>
 
-        <dataset name="with_percent_custom_option">
+        <dataset name="default_qty_1">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="name" xsi:type="string">Simple Product %isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">56.78</item>
-            </field>
             <field name="product_has_weight" xsi:type="string">This item has weight</field>
             <field name="weight" xsi:type="string">1</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">1</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">560</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="dataset" xsi:type="string">default</item>
                 </item>
             </field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
-            <field name="category_ids" xsi:type="array">
-                <item name="dataset" xsi:type="string">default_subcategory</item>
-            </field>
-            <field name="custom_options" xsi:type="array">
-                <item name="dataset" xsi:type="string">percent_and_fixed_radio_options</item>
-            </field>
             <field name="checkout_data" xsi:type="array">
-                <item name="dataset" xsi:type="string">with_percent_custom_option</item>
+                <item name="dataset" xsi:type="string">simple_order_default</item>
             </field>
         </dataset>
 
+        <dataset name="default_qty_2">
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Simple Product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">2</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">560</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">simple_order_default</item>
+            </field>
+        </dataset>
+
+        <dataset name="default_in_custom_website">
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Simple Product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">25</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">560</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">custom_store</item>
+                </item>
+            </field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">simple_order_default</item>
+            </field>
+        </dataset>
+
+        <dataset name="product_with_additional_website">
+            <field name="sku" xsi:type="string">simple_product_with_category_%isolation%</field>
+            <field name="name" xsi:type="string">Simple product with category %isolation%</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">777</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">10</item>
+                <item name="dataset" xsi:type="string" />
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="dataset" xsi:type="string">custom_store</item>
+                </item>
+            </field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+        </dataset>
     </repository>
 </config>

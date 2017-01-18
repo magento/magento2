@@ -1,15 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
+use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
+use Magento\Framework\App\Config\ScopeCodeResolver;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Theme\Model\Design\Config\DataLoader;
 use Magento\Theme\Model\Design\Config\DataProvider;
 use Magento\Theme\Model\Design\Config\MetadataLoader;
 use Magento\Theme\Model\ResourceModel\Design\Config\Collection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -32,8 +39,29 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $collection;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $requestMock;
+
+    /**
+     * @var ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeCodeResolverMock;
+
+    /**
+     * @var SettingChecker|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $settingCheckerMock;
+
     protected function setUp()
     {
+        $this->objectManager = new ObjectManager($this);
         $this->dataLoader = $this->getMockBuilder(\Magento\Theme\Model\Design\Config\DataProvider\DataLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -56,6 +84,16 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->collection);
 
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->scopeCodeResolverMock = $this->getMockBuilder(ScopeCodeResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->settingCheckerMock = $this->getMockBuilder(SettingChecker::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new DataProvider(
             'scope',
             'scope',
@@ -63,6 +101,21 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $this->dataLoader,
             $this->metadataLoader,
             $collectionFactory
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'request',
+            $this->requestMock
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'scopeCodeResolver',
+            $this->scopeCodeResolverMock
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'settingChecker',
+            $this->settingCheckerMock
         );
     }
 
@@ -77,5 +130,120 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($data);
 
         $this->assertEquals($data, $this->model->getData());
+    }
+
+    /**
+     * @param array $inputMeta
+     * @param array $expectedMeta
+     * @param array $request
+     * @dataProvider getMetaDataProvider
+     */
+    public function testGetMeta(array $inputMeta, array $expectedMeta, array $request)
+    {
+        $this->requestMock->expects($this->any())
+            ->method('getParams')
+            ->willReturn($request);
+        $this->scopeCodeResolverMock->expects($this->any())
+            ->method('resolve')
+            ->with('stores', 1)
+            ->willReturn('default');
+        $this->settingCheckerMock->expects($this->any())
+            ->method('isReadOnly')
+            ->withConsecutive(
+                ['design/head/welcome', 'stores', 'default'],
+                ['design/head/logo', 'stores', 'default'],
+                ['design/head/head', 'stores', 'default']
+            )
+            ->willReturnOnConsecutiveCalls(
+                true,
+                false,
+                true
+            );
+
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'meta',
+            $inputMeta
+        );
+
+        $this->assertSame($expectedMeta, $this->model->getMeta());
+    }
+
+    /**
+     * @return array
+     */
+    public function getMetaDataProvider()
+    {
+        return [
+            [
+                [
+                    'option1'
+                ],
+                [
+                    'option1'
+                ],
+                [
+                    'scope' => 'default'
+                ]
+            ],
+            [
+                [
+                    'other_settings' => [
+                        'children' => [
+                            'head' => [
+                                'children' => [
+                                    'head_welcome' => [
+
+                                    ],
+                                    'head_logo' => [
+
+                                    ],
+                                    'head_head' => [
+
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'other_settings' => [
+                        'children' => [
+                            'head' => [
+                                'children' => [
+                                    'head_welcome' => [
+                                        'arguments' => [
+                                            'data' => [
+                                                'config' => [
+                                                    'disabled' => true,
+                                                    'is_disable_inheritance' => true,
+                                                ]
+                                            ]
+                                        ]
+                                    ],
+                                    'head_logo' => [
+
+                                    ],
+                                    'head_head' => [
+                                        'arguments' => [
+                                            'data' => [
+                                                'config' => [
+                                                    'disabled' => true,
+                                                    'is_disable_inheritance' => true,
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'scope' => 'stores',
+                    'scope_id' => 1
+                ]
+            ]
+        ];
     }
 }
