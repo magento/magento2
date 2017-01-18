@@ -449,8 +449,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         $existingMediaGallery = $product->getMediaGallery('images');
         $newEntries = [];
+        $entriesById = [];
         if (!empty($existingMediaGallery)) {
-            $entriesById = [];
             foreach ($mediaGalleryEntries as $entry) {
                 if (isset($entry['value_id'])) {
                     $entriesById[$entry['value_id']] = $entry;
@@ -498,9 +498,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $this->processNewMediaGalleryEntry($product, $newEntry);
 
             $finalGallery = $product->getData('media_gallery');
-            $lastGalleryId = key(array_slice($finalGallery['images'], -1, 1, true));
-            $mergedInfo = array_replace_recursive($newEntry, $finalGallery['images'][$lastGalleryId]);
-            $finalGallery['images'][$lastGalleryId] = $mergedInfo;
+            $newEntryId = key(array_diff_key($product->getData('media_gallery')['images'], $entriesById));
+            $newEntry = array_replace_recursive($newEntry, $finalGallery['images'][$newEntryId]);
+            $entriesById[$newEntryId] = $newEntry;
+            $finalGallery['images'][$newEntryId] = $newEntry;
             $product->setData('media_gallery', $finalGallery);
         }
         return $this;
@@ -538,7 +539,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);
-        if (isset($productDataArray['media_gallery_entries'])) {
+        if (isset($productDataArray['media_gallery'])) {
             $this->processMediaGallery($product, $productDataArray['media_gallery']['images']);
         }
 
