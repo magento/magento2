@@ -23,7 +23,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartItemsQty" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation2">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S2</data>
             <data name="productsData/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <data name="cart/data/grand_total" xsi:type="string">761</data>
             <data name="cart/data/subtotal" xsi:type="string">756</data>
@@ -36,7 +36,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation3">
-            <data name="tag" xsi:type="string">severity:S0</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S0</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <data name="cart/data/grand_total" xsi:type="string">345</data>
             <data name="cart/data/subtotal" xsi:type="string">340</data>
@@ -49,7 +49,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation4">
-            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S1</data>
             <data name="productsData/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="cart/data/grand_total" xsi:type="string">50</data>
             <data name="cart/data/subtotal" xsi:type="string">50</data>
@@ -62,7 +62,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation5">
-            <data name="tag" xsi:type="string">severity:S0</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S0</data>
             <data name="productsData/0" xsi:type="string">configurableProduct::default</data>
             <data name="cart/data/grand_total" xsi:type="string">135</data>
             <data name="cart/data/subtotal" xsi:type="string">120</data>
@@ -88,7 +88,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation7">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S2</data>
             <data name="productsData/0" xsi:type="string">groupedProduct::three_simple_products</data>
             <data name="cart/data/grand_total" xsi:type="string">1950</data>
             <data name="cart/data/subtotal" xsi:type="string">1920</data>
@@ -109,7 +109,6 @@
             <data name="productsData/4" xsi:type="string">configurableProduct::default</data>
             <data name="productsData/5" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <data name="productsData/6" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
-            <data name="cart/data/grand_total" xsi:type="string">3473.43</data>
             <data name="cart/data/grand_total" xsi:type="string">3473.43</data>
             <data name="cart/data/subtotal" xsi:type="string">3408.43</data>
             <data name="configData" xsi:type="string">enable_https_frontend_admin_with_url</data>
