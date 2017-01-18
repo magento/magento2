@@ -113,7 +113,11 @@ class SignUp
     }
 
     /**
-     * Delete Analytics cron config
+     * Delete cron schedule setting into config.
+     *
+     * Delete cron schedule setting for subscription handler into config and
+     * re-initialize config cache to avoid auto-generate new schedule items.
+     *
      * @return bool
      */
     private function deleteAnalyticsCronExpr()
