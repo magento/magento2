@@ -14,6 +14,9 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Data\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * @magentoDbIsolation enabled
+ */
 class SpecialPriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
