@@ -16,6 +16,11 @@
             <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
+    <type name="Magento\Braintree\Test\Constraint\AssertDeviceDataIsPresentInBraintreeRequest">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
     <type name="Magento\Braintree\Test\Constraint\AssertCreditCardJsValidationMessagesArePresent">
         <arguments>
             <argument name="severity" xsi:type="string">S1</argument>
