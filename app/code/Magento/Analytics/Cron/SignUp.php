@@ -7,6 +7,7 @@ namespace Magento\Analytics\Cron;
 
 use Magento\Analytics\Model\AnalyticsConnector;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\AdminNotification\Model\InboxFactory;
 use Magento\AdminNotification\Model\ResourceModel\Inbox as InboxResource;
@@ -43,25 +44,36 @@ class SignUp
     private $flagManager;
 
     /**
+     * Reinitable Config Model.
+     *
+     * @var ReinitableConfigInterface
+     */
+    private $reinitableConfig;
+
+    /**
      * SignUp constructor.
+     *
      * @param AnalyticsConnector $analyticsConnector
      * @param WriterInterface $configWriter
      * @param InboxFactory $inboxFactory
      * @param InboxResource $inboxResource
      * @param FlagManager $flagManager
+     * @param ReinitableConfigInterface $reinitableConfig
      */
     public function __construct(
         AnalyticsConnector $analyticsConnector,
         WriterInterface $configWriter,
         InboxFactory $inboxFactory,
         InboxResource $inboxResource,
-        FlagManager $flagManager
+        FlagManager $flagManager,
+        ReinitableConfigInterface $reinitableConfig
     ) {
         $this->analyticsConnector = $analyticsConnector;
         $this->configWriter = $configWriter;
         $this->inboxFactory = $inboxFactory;
         $this->inboxResource = $inboxResource;
         $this->flagManager = $flagManager;
+        $this->reinitableConfig = $reinitableConfig;
     }
 
     /**
@@ -107,6 +119,7 @@ class SignUp
     private function deleteAnalyticsCronExpr()
     {
         $this->configWriter->delete(SubscriptionHandler::CRON_STRING_PATH);
+        $this->reinitableConfig->reinit();
         return true;
     }
 }

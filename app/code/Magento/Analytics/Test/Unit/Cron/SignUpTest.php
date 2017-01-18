@@ -7,6 +7,7 @@ namespace Magento\Analytics\Test\Unit\Cron;
 
 use Magento\Analytics\Model\AnalyticsConnector;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\AdminNotification\Model\InboxFactory;
 use Magento\AdminNotification\Model\ResourceModel\Inbox as InboxResource;
@@ -50,6 +51,11 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
     private $flagManagerMock;
 
     /**
+     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $reinitableConfigMock;
+
+    /**
      * @var SignUp
      */
     private $signUp;
@@ -75,13 +81,17 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
         $this->inboxMock =  $this->getMockBuilder(Inbox::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->reinitableConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->signUp = new SignUp(
             $this->analyticsConnectorMock,
             $this->configWriterMock,
             $this->inboxFactoryMock,
             $this->inboxResourceMock,
-            $this->flagManagerMock
+            $this->flagManagerMock,
+            $this->reinitableConfigMock
         );
     }
 
@@ -102,10 +112,7 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
             ->with('signUp')
             ->willReturn(true);
-        $this->configWriterMock->expects($this->once())
-            ->method('delete')
-            ->with(SubscriptionHandler::CRON_STRING_PATH)
-            ->willReturn(true);
+        $this->addDeleteAnalyticsCronExprAsserts();
         $this->flagManagerMock->expects($this->once())
             ->method('deleteFlag')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
@@ -118,10 +125,7 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
             ->method('getFlagData')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE)
             ->willReturn(null);
-        $this->configWriterMock->expects($this->once())
-            ->method('delete')
-            ->with(SubscriptionHandler::CRON_STRING_PATH)
-            ->willReturn(true);
+        $this->addDeleteAnalyticsCronExprAsserts();
         $this->assertFalse($this->signUp->execute());
     }
 
@@ -132,10 +136,7 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
             ->method('getFlagData')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE)
             ->willReturn($attemptsCount);
-        $this->configWriterMock->expects($this->once())
-            ->method('delete')
-            ->with(SubscriptionHandler::CRON_STRING_PATH)
-            ->willReturn(true);
+        $this->addDeleteAnalyticsCronExprAsserts();
         $this->flagManagerMock->expects($this->once())
             ->method('deleteFlag')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
@@ -148,5 +149,23 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->inboxMock);
         $this->assertFalse($this->signUp->execute());
+    }
+
+    /**
+     * Add assertions for method deleteAnalyticsCronExpr.
+     *
+     * @return void
+     */
+    private function addDeleteAnalyticsCronExprAsserts()
+    {
+        $this->configWriterMock
+            ->expects($this->once())
+            ->method('delete')
+            ->with(SubscriptionHandler::CRON_STRING_PATH)
+            ->willReturn(true);
+        $this->reinitableConfigMock
+            ->expects($this->once())
+            ->method('reinit')
+            ->willReturnSelf();
     }
 }
