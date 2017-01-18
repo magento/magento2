@@ -74,9 +74,9 @@ class UpgradeData implements UpgradeDataInterface
         $this->indexerRegistry = $indexerRegistry;
         $this->eavConfig = $eavConfig;
 
-        if ($this->fieldDataConverterFactory === null) {
-            $this->fieldDataConverterFactory = ObjectManager::getInstance()->create(FieldDataConverterFactory::class);
-        }
+        $this->fieldDataConverterFactory = $fieldDataConverterFactory ?: ObjectManager::getInstance()->get(
+            FieldDataConverterFactory::class
+        );
     }
 
     /**
