@@ -31,6 +31,8 @@ sub vcl_recv {
             error 400 "X-Magento-Tags-Pattern header required";
         }
         ban("obj.http.X-Magento-Tags ~ " + req.http.X-Magento-Tags-Pattern);
+        # The preceding will purge all magento site's from the cache, or the following can be used instead fo only clear the current domain.
+        # ban("obj.http.X-Magento-Tags ~ " + req.http.X-Magento-Tags-Pattern + " && obj.http.X-Req-Host == " + req.http.host);
         error 200 "Purged";
     }
 
@@ -92,6 +94,8 @@ sub vcl_fetch {
     if (req.url ~ "\.js$" || beresp.http.content-type ~ "text") {
         set beresp.do_gzip = true;
     }
+    
+    set beresp.http.X-Req-Host = bereq.http.host;
 
     # cache only successfully responses and 404s
     if (beresp.status != 200 && beresp.status != 404) {
@@ -136,4 +140,5 @@ sub vcl_deliver {
     unset resp.http.X-Varnish;
     unset resp.http.Via;
     unset resp.http.Link;
+    unset resp.http.X-Req-Host;
 }
