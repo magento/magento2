@@ -34,9 +34,30 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
+    public function testPriceInfoIfChildHasSpecialPrice()
+    {
+        $specialPrice = 2;
+
+        /** @var Product $childProduct */
+        $childProduct = $this->productRepository->get('simple_10', true);
+        $childProduct->setData('special_price', $specialPrice);
+        $this->productRepository->save($childProduct);
+
+        /** @var Product $configurableProduct */
+        $configurableProduct = $this->productRepository->get('configurable', true);
+        $priceInfo = $configurableProduct->getPriceInfo();
+        /** @var FinalPrice $finalPrice */
+        $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
+
+        self::assertEquals($specialPrice, $finalPrice->getMinimalPrice()->getValue());
+    }
+
+    /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_simple_77.php
      */
-    public function testSortingOfProductsWithoutSpecialPrice()
+    public function testSortingOfProductsIfChildHasNotSpecialPrice()
     {
         /** @var Product $simpleProduct */
         $simpleProduct = $this->productRepository->get('simple_77', true);
@@ -74,10 +95,7 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
 
         /** @var Product $childProduct */
         $childProduct = $this->productRepository->get('simple_10', true);
-        $childProduct
-            ->setOptions([])
-            ->setTierPrice([])
-            ->setData('special_price', 2);
+        $childProduct->setData('special_price', 2);
         $this->productRepository->save($childProduct);
 
         /** @var ProductCollection $collection */
