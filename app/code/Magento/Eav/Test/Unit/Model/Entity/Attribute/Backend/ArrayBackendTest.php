@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
 
-class ArrayTest extends \PHPUnit_Framework_TestCase
+class ArrayBackendTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend
