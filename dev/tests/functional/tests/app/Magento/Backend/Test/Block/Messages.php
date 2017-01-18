@@ -40,7 +40,7 @@ class Messages extends Block
      *
      * @var string
      */
-    protected $errorMessage = '[data-ui-id$=message-error], .message-error, #order-errors span.title';
+    protected $errorMessage = '[data-ui-id$=message-error], .message-error';
 
     /**
      * Notice message selector.

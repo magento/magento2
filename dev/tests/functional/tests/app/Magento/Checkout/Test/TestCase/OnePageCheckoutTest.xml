@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest" summary="OnePageCheckout within Offline Payment Methods" ticketId="MAGETWO-27485">
         <variation name="OnePageCheckoutUsingLoginPopup" summary="Customer is redirected to checkout on login if guest is disabled, flow for existed Customer" ticketId="MAGETWO-49916">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">johndoe_with_addresses</data>
             <data name="checkoutMethod" xsi:type="string">login</data>

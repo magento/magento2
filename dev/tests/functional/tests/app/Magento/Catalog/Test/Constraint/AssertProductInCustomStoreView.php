@@ -14,7 +14,7 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Assert that product name is correct in Custom adn Default store views.
+ * Assert that product name is correct in Custom and Default store views.
  */
 class AssertProductInCustomStoreView extends AbstractAssertForm
 {

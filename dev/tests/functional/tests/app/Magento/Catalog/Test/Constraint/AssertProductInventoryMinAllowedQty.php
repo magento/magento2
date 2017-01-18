@@ -50,7 +50,7 @@ class AssertProductInventoryMinAllowedQty extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $catalogProductView->getMessagesBlock()->getErrorMessage(),
             sprintf($this->errorMessage, $minQty),
-            'Limiting min qty is not working correctly.'
+            'The minimum purchase warning message is not appears.'
         );
 
         $catalogProductView->getViewBlock()->setQtyAndClickAddToCart($minQty);

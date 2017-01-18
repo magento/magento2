@@ -50,7 +50,7 @@ class AssertProductInventoryMaxAllowedQty extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $catalogProductView->getMessagesBlock()->getErrorMessage(),
             sprintf($this->errorMessage, $maxQty),
-            'Limiting max qty is not working correctly.'
+            'The maximum purchase warning message is not appears.'
         );
 
         $catalogProductView->getViewBlock()->setQtyAndClickAddToCart($maxQty);
