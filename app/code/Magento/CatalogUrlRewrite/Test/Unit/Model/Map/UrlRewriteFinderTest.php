@@ -13,9 +13,12 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class UrlRewriteFinderTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,12 +37,16 @@ class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
     /** @var UrlRewriteFinder|\PHPUnit_Framework_MockObject_MockObject */
     private $model;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
+
     protected function setUp()
     {
+        $this->serializerMock = $this->getMock(Json::class, [], [], '', false);
         $this->databaseMapPoolMock = $this->getMock(DatabaseMapPool::class, [], [], '', false);
         $this->urlFinderMock = $this->getMock(UrlFinderInterface::class);
         $this->urlRewriteFactoryMock = $this->getMock(UrlRewriteFactory::class, ['create'], [], '', false);
-        $this->urlRewritePrototypeMock = new UrlRewrite();
+        $this->urlRewritePrototypeMock = new UrlRewrite([], $this->serializerMock);
 
         $this->urlRewriteFactoryMock->expects($this->any())
             ->method('create')
