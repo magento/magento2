@@ -10,17 +10,20 @@
 define([
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/form/client'
-], function (_, registry, Constr) {
+    'Magento_Ui/js/form/client',
+    'jquery',
+    'mageUtils'
+], function (_, registry, Constr, $, utils) {
     'use strict';
 
     describe('Magento_Ui/js/form/client', function () {
-
         var obj = new Constr({
             provider: 'provName',
             name: '',
             index: ''
         });
+
+        window.FORM_KEY = 'magentoFormKey';
 
         registry.set('provName', {
             on: function () {
@@ -50,7 +53,65 @@ define([
 
                 expect(type).toEqual('object');
             });
+            it('Check "beforeSave" method. Check call "filterFormData" inside themselves.', function () {
+                var data = {
+                        key: {
+                            anotherKey: 'value'
+                        },
+                        anotherKey: []
+                    };
+
+                obj.urls.beforeSave = 'requestPath';
+                obj.selectorPrefix = 'selectorPrefix';
+                obj.messagesClass = 'messagesClass';
+                utils.filterFormData = jasmine.createSpy().and.returnValue(utils.filterFormData(data));
+
+                obj.save(data);
+                expect(utils.filterFormData).toHaveBeenCalledWith(data);
+            });
+            it('Check "beforeSave" method. Check call "serialize" inside themselves.', function () {
+                var data = {
+                        key: {
+                            anotherKey: 'value'
+                        },
+                        anotherKey: []
+                    };
+
+                obj.urls.beforeSave = 'requestPath';
+                obj.selectorPrefix = 'selectorPrefix';
+                obj.messagesClass = 'messagesClass';
+                utils.serialize = jasmine.createSpy().and.returnValue(utils.serialize(data));
+
+                obj.save(data);
+                expect(utils.serialize).toHaveBeenCalledWith(data);
+            });
+            it('Check "beforeSave" method. Check call "ajax" inside themselves.', function () {
+                var data = {
+                        key: {
+                            anotherKey: 'value'
+                        },
+                        'anotherKey-prepared-for-send': []
+                    },
+                    result = {
+                        url: obj.urls.beforeSave,
+                        data: {
+                            'key[anotherKey]': 'value',
+                            'form_key': 'magentoFormKey'
+                        },
+                        success: jasmine.any(Function),
+                        complete: jasmine.any(Function)
+                    };
+
+                obj.urls.beforeSave = 'requestPath';
+                obj.selectorPrefix = 'selectorPrefix';
+                obj.messagesClass = 'messagesClass';
+                $.ajax = jasmine.createSpy();
+
+                obj.save(data);
+                expect($.ajax).toHaveBeenCalledWith(result);
+            });
         });
+
         describe('"initialize" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initialize')).toBeDefined();

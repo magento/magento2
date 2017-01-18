@@ -28,6 +28,7 @@ define([
             expect(utils.filterFormData(data, suffix, separator)).toEqual(data);
             expect(utils.filterFormData(data, suffix)).toEqual(data);
             expect(utils.filterFormData(data)).toEqual(data);
+            expect(utils.filterFormData()).toEqual({});
         });
 
         it('Check convertToMomentFormat function for all Magento supported locales', function () {

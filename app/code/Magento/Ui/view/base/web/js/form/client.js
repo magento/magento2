@@ -22,9 +22,7 @@ define([
     function beforeSave(data, url, selectorPrefix, messagesClass) {
         var save = $.Deferred();
 
-        data = utils.filterFormData(data)
         data = utils.serialize(utils.filterFormData(data));
-
         data['form_key'] = window.FORM_KEY;
 
         if (!url || url === 'undefined') {
