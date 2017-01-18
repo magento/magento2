@@ -12,10 +12,10 @@
         <strategy>css selector</strategy>
         <wrapper>general</wrapper>
         <fields>
-            <default_name>
+            <use_default_name>
                 <selector>#group_4name_default</selector>
                 <input>checkbox</input>
-            </default_name>
+            </use_default_name>
             <is_active>
                 <input>select</input>
             </is_active>

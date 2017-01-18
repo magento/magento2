@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,6 +43,13 @@ class AssertCategoryPage extends AbstractConstraint
     protected $browser;
 
     /**
+     * Category with updated data.
+     *
+     * @var Category
+     */
+    protected $finalCategory;
+
+    /**
      * Assert that displayed category data on category page equals to passed from fixture.
      *
      * @param Category $category
@@ -62,9 +69,9 @@ class AssertCategoryPage extends AbstractConstraint
         $this->browser = $browser;
         $this->categoryViewPage = $categoryView;
         $categoryData = $this->prepareData($fixtureFactory, $category, $initialCategory);
-        $this->browser->open($this->getCategoryUrl($category));
-        $this->assertGeneralInformation($category, $categoryData);
-        $this->assertDisplaySetting($category, $categoryData);
+        $this->browser->open($this->getCategoryUrl($this->finalCategory));
+        $this->assertGeneralInformation($this->finalCategory, $categoryData);
+        $this->assertDisplaySetting($this->finalCategory, $categoryData);
     }
 
     /**
@@ -90,6 +97,29 @@ class AssertCategoryPage extends AbstractConstraint
         );
         $product->persist();
 
+        $parentCategory = null;
+        $cmsBlock = null;
+        foreach ([$initialCategory, $category] as $item) {
+            $parentSource = $item->getDataFieldConfig('parent_id')['source'];
+            if (is_a($parentSource, Category\ParentId::class) && $parentSource->getParentCategory()) {
+                $parentCategory = $parentSource->getParentCategory();
+            }
+
+            $cmsBlockSource = $category->getDataFieldConfig('landing_page')['source'];
+            if (is_a($cmsBlockSource, Category\LandingPage::class) && $cmsBlockSource->getCmsBlock()) {
+                $cmsBlock = $cmsBlockSource->getCmsBlock();
+            }
+        }
+
+        $data = array_merge(
+            $initialCategory->getData(),
+            $category->getData(),
+            ['parent_id' => ['source' => $parentCategory]],
+            ['landing_page' => ['source' => $cmsBlock]]
+        );
+
+        $this->finalCategory = $fixtureFactory->create(Category::class, ['data' => $data]);
+
         return array_merge($initialCategory->getData(), $category->getData());
     }
 
@@ -108,7 +138,7 @@ class AssertCategoryPage extends AbstractConstraint
                 : trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $category->getName())), '-');
 
             $category = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
-            if (1 == $category->getParentId()) {
+            if ($category !== null && 1 == $category->getParentId()) {
                 $category = null;
             }
         }

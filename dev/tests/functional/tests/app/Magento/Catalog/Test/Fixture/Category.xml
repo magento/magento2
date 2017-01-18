@@ -34,7 +34,7 @@
         <field name="meta_description" is_required="" group="general_information" />
         <field name="id" group="null" />
         <field name="name" group="general_information" />
-        <field name="default_name" group="general_information" is_required="" />
+        <field name="use_default_name" group="general_information" is_required="" />
         <field name="is_active" group="general_information" />
         <field name="is_anchor" group="display_setting" />
         <field name="url_key" group="general_information" />
