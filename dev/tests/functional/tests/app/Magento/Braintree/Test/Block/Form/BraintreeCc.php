@@ -84,7 +84,7 @@ class BraintreeCc extends PaymentCc
     public function getVisibleMessages(array $messages)
     {
         $textMessages = [];
-        foreach ($messages as $field => $message) {
+        foreach (array_keys($messages) as $field) {
             $selector = $this->braintreeForm[$field] . $this->errorSelector;
             $errorElement = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
             $textMessages[$field] = $errorElement->isVisible() ? $errorElement->getText() : null;

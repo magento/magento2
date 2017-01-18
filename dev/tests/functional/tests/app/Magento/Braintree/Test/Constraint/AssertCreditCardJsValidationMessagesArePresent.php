@@ -25,7 +25,7 @@ class AssertCreditCardJsValidationMessagesArePresent extends AbstractConstraint
     {
         $errorMessages = $checkoutOnepage->getBraintreeBlock()->getVisibleMessages($expectedErrorMessages);
 
-        foreach ($errorMessages as $field => $message) {
+        foreach (array_keys($errorMessages) as $field) {
             \PHPUnit_Framework_Assert::assertEquals(
                 $expectedErrorMessages[$field],
                 $errorMessages[$field],
