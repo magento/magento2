@@ -237,7 +237,7 @@
             <argument name="sources" xsi:type="array">
                 <item name="themes" xsi:type="array">
                     <item name="source" xsi:type="object">Magento\Theme\Model\Source\InitialThemeSource</item>
-                    <item name="namespace" xsi:type="const">Magento\Theme\App\Config\Type\Themes::CONFIG_TYPE</item>
+                    <item name="namespace" xsi:type="string">themes</item>
                 </item>
             </argument>
         </arguments>
