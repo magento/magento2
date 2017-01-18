@@ -130,7 +130,7 @@ class FilePermissions
     }
 
     /**
-     * Check all sub-directories and files except for var/generation and var/di
+     * Check all sub-directories and files except for generated/code and generated/metadata
      *
      * @param string $directory
      * @return bool
