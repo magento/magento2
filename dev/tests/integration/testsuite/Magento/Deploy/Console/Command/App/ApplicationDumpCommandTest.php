@@ -91,7 +91,6 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             'test_sensitive',
             $config['system']['default']['web']['test']
         );
-
     }
 
     /**

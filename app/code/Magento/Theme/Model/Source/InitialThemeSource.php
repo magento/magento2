@@ -63,6 +63,21 @@ class InitialThemeSource implements ConfigSourceInterface
 
     /**
      * Retrieves configuration data array.
+     * Example:
+     *  ```
+     *  ['Magento/backend' =>
+     *      [
+     *          'parent_id' => NULL,
+     *          'theme_path' => 'Magento/backend',
+     *          'theme_title' => 'Magento 2 backend',
+     *          'preview_image' => NULL,
+     *          'is_featured' => '0',
+     *          'area' => 'adminhtml',
+     *          'type' => '0',
+     *          'code' => 'Magento/backend',
+     *      ]
+     *  ]
+     *  ```
      *
      * @param string $path The path to theme configuration.
      * @return array The data array with theme configurations.
