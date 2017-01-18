@@ -35,7 +35,7 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @var Registry
      *
-     * @deprecated The property can be removed in a future major release.
+     * @deprecated The property can be removed in a future release.
      */
     protected $registry;
 
