@@ -184,6 +184,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @deprecated Remove unused dependency.
      */
     protected $productRepository;
 
@@ -778,38 +779,23 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         }
 
         $products = [];
-        foreach ($this->getItemsCollection() as $item) {
+        $itemsCollection = $this->getItemsCollection();
+        foreach ($itemsCollection as $item) {
             $products[] = $item->getProductId();
         }
 
         if (!empty($products)) {
-            /*
-             * @TODO ACPAOC: Use product collection here, but ensure that product
-             * is loaded with order store id, otherwise there'll be problems with isSalable()
-             * for composite products
-             *
-             */
-            /*
-            $productsCollection = $this->_productFactory->create()->getCollection()
+            $productsCollection = $this->productListFactory->create()
                 ->setStoreId($this->getStoreId())
                 ->addIdFilter($products)
-                ->addAttributeToSelect('status')
                 ->load();
 
-            foreach ($productsCollection as $product) {
-                if (!$product->isSalable()) {
+            foreach ($itemsCollection as $item) {
+                $product = $productsCollection->getItemById($item->getProductId());
+                if (!$product) {
                     return false;
                 }
-            }
-            */
-
-            foreach ($products as $productId) {
-                try {
-                    $product = $this->productRepository->getById($productId, false, $this->getStoreId());
-                    if (!$ignoreSalable && !$product->isSalable()) {
-                        return false;
-                    }
-                } catch (NoSuchEntityException $noEntityException) {
+                if (!$ignoreSalable && !$product->isSalable()) {
                     return false;
                 }
             }
