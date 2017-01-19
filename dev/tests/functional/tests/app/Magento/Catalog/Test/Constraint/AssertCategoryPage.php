@@ -46,7 +46,6 @@ class AssertCategoryPage extends AbstractConstraint
      * Assert that displayed category data on category page equals to passed from fixture.
      *
      * @param Category $category
-     * @param Category $initialCategory
      * @param FixtureFactory $fixtureFactory
      * @param CatalogCategoryView $categoryView
      * @param BrowserInterface $browser
@@ -54,17 +53,16 @@ class AssertCategoryPage extends AbstractConstraint
      */
     public function processAssert(
         Category $category,
-        Category $initialCategory,
         FixtureFactory $fixtureFactory,
         CatalogCategoryView $categoryView,
         BrowserInterface $browser
     ) {
         $this->browser = $browser;
         $this->categoryViewPage = $categoryView;
-        $categoryData = $this->prepareData($fixtureFactory, $category, $initialCategory);
+        $this->prepareData($fixtureFactory, $category);
         $this->browser->open($this->getCategoryUrl($category));
-        $this->assertGeneralInformation($category, $categoryData);
-        $this->assertDisplaySetting($category, $categoryData);
+        $this->assertGeneralInformation($category);
+        $this->assertDisplaySetting($category);
     }
 
     /**
@@ -72,10 +70,9 @@ class AssertCategoryPage extends AbstractConstraint
      *
      * @param FixtureFactory $fixtureFactory
      * @param Category $category
-     * @param Category $initialCategory
-     * @return array
+     * @return void
      */
-    protected function prepareData(FixtureFactory $fixtureFactory, Category $category, Category $initialCategory)
+    protected function prepareData(FixtureFactory $fixtureFactory, Category $category)
     {
         $product = $fixtureFactory->createByCode(
             'catalogProductSimple',
@@ -83,14 +80,12 @@ class AssertCategoryPage extends AbstractConstraint
                 'dataset' => 'default',
                 'data' => [
                     'category_ids' => [
-                        'category' => $initialCategory,
+                        'category' => $category,
                     ],
                 ]
             ]
         );
         $product->persist();
-
-        return $category->getData();
     }
 
     /**
@@ -120,10 +115,9 @@ class AssertCategoryPage extends AbstractConstraint
      * Assert category general information.
      *
      * @param Category $category
-     * @param array $categoryData
      * @return void
      */
-    protected function assertGeneralInformation(Category $category, array $categoryData)
+    protected function assertGeneralInformation(Category $category)
     {
         $categoryUrl = $this->getCategoryUrl($category);
         \PHPUnit_Framework_Assert::assertEquals(
@@ -134,24 +128,24 @@ class AssertCategoryPage extends AbstractConstraint
             . "\nActual: " . $this->browser->getUrl()
         );
 
-        if (isset($categoryData['name'])) {
+        if ($category->getName()) {
             $title = $this->categoryViewPage->getTitleBlock()->getTitle();
             \PHPUnit_Framework_Assert::assertEquals(
-                $categoryData['name'],
+                $category->getName(),
                 $title,
                 'Wrong page title.'
-                . "\nExpected: " . $categoryData['name']
+                . "\nExpected: " . $category->getName()
                 . "\nActual: " . $title
             );
         }
 
-        if (isset($categoryData['description'])) {
+        if ($category->getDescription()) {
             $description = $this->categoryViewPage->getViewBlock()->getDescription();
             \PHPUnit_Framework_Assert::assertEquals(
-                $categoryData['description'],
+                $category->getDescription(),
                 $description,
                 'Wrong category description.'
-                . "\nExpected: " . $categoryData['description']
+                . "\nExpected: " . $category->getDescription()
                 . "\nActual: " . $description
             );
         }
@@ -161,15 +155,14 @@ class AssertCategoryPage extends AbstractConstraint
      * Assert category display settings.
      *
      * @param Category $category
-     * @param array $categoryData
      * @return void
      */
-    protected function assertDisplaySetting(Category $category, array $categoryData)
+    protected function assertDisplaySetting(Category $category)
     {
         if (
-            isset($categoryData['landing_page'])
-            && isset($categoryData['display_mode'])
-            && in_array($categoryData['display_mode'], $this->visibleCmsBlockMode)
+            $category->getLandingPage()
+            && $category->getDisplayMode()
+            && in_array($category->getDisplayMode(), $this->visibleCmsBlockMode)
         ) {
             /** @var LandingPage $sourceLandingPage */
             $sourceLandingPage = $category->getDataFieldConfig('landing_page')['source'];
@@ -184,8 +177,8 @@ class AssertCategoryPage extends AbstractConstraint
                 . "\nActual: " . $pageContent
             );
         }
-        if (isset($categoryData['default_sort_by'])) {
-            $sortBy = strtolower($categoryData['default_sort_by']);
+        if ($category->getDefaultSortBy()) {
+            $sortBy = strtolower($category->getDefaultSortBy());
             $sortType = $this->categoryViewPage->getTopToolbar()->getSelectSortType();
             \PHPUnit_Framework_Assert::assertEquals(
                 $sortBy,
@@ -196,9 +189,9 @@ class AssertCategoryPage extends AbstractConstraint
             );
         }
 
-        if (isset($categoryData['available_sort_by'])) {
+        if ($category->getAvailableSortBy()) {
             $availableSortType = array_filter(
-                $categoryData['available_sort_by'],
+                $category->getAvailableSortBy(),
                 function (&$value) {
                     return $value !== '-' && ucfirst($value);
                 }
