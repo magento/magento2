@@ -52,10 +52,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     // @codingStandardsIgnoreStart
     /**
-     * @magentoConfigFixture current_store system/full_page_cache/varnish/backend_host example.com
-     * @magentoConfigFixture current_store system/full_page_cache/varnish/backend_port 8080
-     * @magentoConfigFixture current_store system/full_page_cache/varnish/access_list 127.0.0.1,192.168.0.1,127.0.0.2
-     * @magentoConfigFixture current_store design/theme/ua_regexp {"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}
+     * @magentoConfigFixture default_store system/full_page_cache/varnish/backend_host example.com
+     * @magentoConfigFixture default_store system/full_page_cache/varnish/backend_port 8080
+     * @magentoConfigFixture default_store system/full_page_cache/varnish/access_list 127.0.0.1,192.168.0.1,127.0.0.2
+     * @magentoConfigFixture default_store design/theme/ua_regexp {"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}
      * @magentoAppIsolation enabled
      */
     // @codingStandardsIgnoreEnd
