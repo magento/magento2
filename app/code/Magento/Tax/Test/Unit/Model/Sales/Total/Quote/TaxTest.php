@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,7 +38,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testCollect($itemData, $appliedRatesData, $taxDetailsData, $quoteDetailsData,
-        $addressData, $verifyData
+                                $addressData, $verifyData
     ) {
         $this->markTestIncomplete('Source code is not testable. Need to be refactored before unit testing');
         $shippingAssignmentMock = $this->getMock(\Magento\Quote\Api\Data\ShippingAssignmentInterface::class);
@@ -247,8 +247,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $address = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAssociatedTaxables',
-                          'getQuote', 'getBillingAddress', 'getRegionId',
-                          '__wakeup', 'getCustomAttributesCodes'])
+                'getQuote', 'getBillingAddress', 'getRegionId',
+                '__wakeup', 'getCustomAttributesCodes'])
             ->getMock();
         $item
             ->expects($this->any())
@@ -613,13 +613,36 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $objectManager = new ObjectManager($this);
+
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+
+        $serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+
         /** @var \Magento\Tax\Model\Sales\Total\Quote\Tax $taxTotalsCalcModel */
         $taxTotalsCalcModel = $objectManager->getObject(
             \Magento\Tax\Model\Sales\Total\Quote\Tax::class,
-            ['taxConfig' => $taxConfig]
+            [
+                'taxConfig' => $taxConfig,
+                'serializer' => $serializer
+            ]
         );
 
-        $appliedTaxes = unserialize($appliedTaxesData);
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['convertPrice', '__wakeup'])
@@ -641,7 +664,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $totalsMock
             ->expects($this->once())
             ->method('getAppliedTaxes')
-            ->will($this->returnValue($appliedTaxes));
+            ->will($this->returnValue($appliedTaxesData));
         $totalsMock
             ->expects($this->any())
             ->method('getGrandTotal')
@@ -675,6 +698,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $totalsArray = $taxTotalsCalcModel->fetch($quote, $totalsMock);
         $this->assertArrayHasKey('value', $totalsArray[0]);
         $this->assertEquals($taxAmount, $totalsArray[0]['value']);
+        $this->assertEquals(json_decode($appliedTaxesData, true), $totalsArray[0]['full_info']);
     }
 
     /**
@@ -685,10 +709,26 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderFetchArray()
     {
-        $appliedDataString = 'a:1:{s:7:"TX Rate";a:9:{s:6:"amount";d:80;s:11:"base_amount";d:80;s:7:"percent";';
-        $appliedDataString .= 'd:10;s:2:"id";s:7:"TX Rate";s:5:"rates";a:1:{i:0;a:3:{s:7:"percent";d:10;s:4:"code";';
-        $appliedDataString .= 's:7:"TX Rate";s:5:"title";s:7:"TX Rate";}}s:7:"item_id";s:1:"1";s:9:"item_type";';
-        $appliedDataString .= 's:7:"product";s:18:"associated_item_id";N;s:7:"process";i:0;}}';
+        $appliedDataString = [
+            'amount' => 80.0,
+            'base_amount' => 80.0,
+            'percent' => 10.0,
+            'id' => 'TX Rate',
+            'rates' => [
+                0 => [
+                    'percent' => 10.0,
+                    'code' => 'TX Rate',
+                    'title' => 'TX Rate',
+                ],
+            ],
+            'item_id' => '1',
+            'item_type' => 'product',
+            'associated_item_id' => NULL,
+            'process' => 0,
+        ];
+
+        $appliedDataString = json_encode($appliedDataString);
+
         $data = [
             'default' => [
                 'appliedTaxesData' => $appliedDataString,

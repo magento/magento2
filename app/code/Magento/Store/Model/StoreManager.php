@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -233,12 +233,12 @@ class StoreManager implements
      */
     public function reinitStores()
     {
-        $this->scopeConfig->clean();
         $this->currentStoreId = null;
+        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [StoreResolver::CACHE_TAG, Store::CACHE_TAG]);
+        $this->scopeConfig->clean();
         $this->storeRepository->clean();
         $this->websiteRepository->clean();
         $this->groupRepository->clean();
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [StoreResolver::CACHE_TAG]);
     }
 
     /**

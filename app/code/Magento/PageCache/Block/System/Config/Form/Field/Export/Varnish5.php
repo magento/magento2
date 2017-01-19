@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Block\System\Config\Form\Field\Export;
@@ -8,7 +8,7 @@ namespace Magento\PageCache\Block\System\Config\Form\Field\Export;
 /**
  * Class Export
  */
-class Varnish3 extends \Magento\PageCache\Block\System\Config\Form\Field\Export
+class Varnish5 extends \Magento\PageCache\Block\System\Config\Form\Field\Export
 {
     /**
      * Return Varnish version to this class
@@ -17,6 +17,6 @@ class Varnish3 extends \Magento\PageCache\Block\System\Config\Form\Field\Export
      */
     public function getVarnishVersion()
     {
-        return 3;
+        return 5;
     }
 }

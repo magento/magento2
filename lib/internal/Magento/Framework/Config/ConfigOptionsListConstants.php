@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,6 +49,12 @@ class ConfigOptionsListConstants
     const INPUT_KEY_SKIP_DB_VALIDATION = 'skip-db-validation';
     const INPUT_KEY_CACHE_HOSTS = 'http-cache-hosts';
     /**#@-*/
+
+    /**#@+
+     * Input keys for cache configuration
+     */
+    const KEY_CACHE_FRONTEND = 'cache/frontend';
+    const CONFIG_PATH_BACKEND_OPTIONS = 'backend_options';
 
     /** @deprecated */
     const INPUT_KEY_DEFINITION_FORMAT = 'definition-format';
