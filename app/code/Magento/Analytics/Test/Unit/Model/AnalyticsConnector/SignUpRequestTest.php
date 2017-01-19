@@ -85,7 +85,7 @@ class SignUpRequestTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $responseRawData = json_encode(
-                        [
+            [
                 'token' => 'MAToken'
             ]
         );

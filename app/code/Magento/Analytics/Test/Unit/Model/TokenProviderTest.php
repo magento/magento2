@@ -14,7 +14,6 @@ use Magento\Integration\Model\Integration;
 use Magento\Analytics\Model\TokenProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-
 /**
  * Class TokenProviderTest
  */
