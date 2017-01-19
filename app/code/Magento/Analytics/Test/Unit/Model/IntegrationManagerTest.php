@@ -28,6 +28,11 @@ class IntegrationManagerTest extends \PHPUnit_Framework_TestCase
     private $configMock;
 
     /**
+     * @var Integration|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $integrationMock;
+
+    /**
      * @var IntegrationManager
      */
     private $integrationManager;
@@ -38,6 +43,9 @@ class IntegrationManagerTest extends \PHPUnit_Framework_TestCase
         $this->integrationServiceMock = $this->getMockBuilder(IntegrationServiceInterface::class)
             ->getMock();
         $this->configMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->integrationMock = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->integrationManager = $objectManagerHelper->getObject(
@@ -74,15 +82,45 @@ class IntegrationManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->integrationManager->createIntegration());
     }
 
-    public function testActivateIntegration()
+    public function testActivateIntegrationSuccess()
     {
-        $this->configMock->expects($this->once())
+        $this->integrationServiceMock->expects($this->once())
+            ->method('findByName')
+            ->with('ma-integration-user')
+            ->willReturn($this->integrationMock);
+        $this->integrationMock->expects($this->exactly(2))
+            ->method('getId')
+            ->willReturn(100500);
+        $integrationData = $this->getIntegrationUserData(Integration::STATUS_ACTIVE);
+        $integrationData['integration_id'] = 100500;
+        $this->configMock->expects($this->exactly(2))
             ->method('getConfigDataValue')
             ->with('analytics/integration_name', null, null)
             ->willReturn('ma-integration-user');
         $this->integrationServiceMock->expects($this->once())
             ->method('update')
-            ->with($this->getIntegrationUserData(Integration::STATUS_ACTIVE));
+            ->with($integrationData);
         $this->assertTrue($this->integrationManager->activateIntegration());
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testActivateIntegrationFailure_NoSuchEntity()
+    {
+        $this->integrationServiceMock->expects($this->once())
+            ->method('findByName')
+            ->with('ma-integration-user')
+            ->willReturn($this->integrationMock);
+        $this->integrationMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(null);
+        $this->configMock->expects($this->once())
+            ->method('getConfigDataValue')
+            ->with('analytics/integration_name', null, null)
+            ->willReturn('ma-integration-user');
+        $this->integrationServiceMock->expects($this->never())
+            ->method('update');
+        $this->integrationManager->activateIntegration();
     }
 }

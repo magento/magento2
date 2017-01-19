@@ -6,6 +6,7 @@
 
 namespace Magento\Analytics\Model;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Config\Model\Config;
 use Magento\Integration\Model\Integration;
@@ -50,13 +51,22 @@ class IntegrationManager
     }
 
     /**
-     * Activate integration user for MA
+     * Activate predefined integration user
      *
      * @return bool
+     * @throws NoSuchEntityException
      */
     public function activateIntegration()
     {
-        $this->integrationService->update($this->getIntegrationData(Integration::STATUS_ACTIVE));
+        $integration = $this->integrationService->findByName(
+            $this->config->getConfigDataValue('analytics/integration_name')
+        );
+        if (!$integration->getId()) {
+            throw new NoSuchEntityException(__('Cannot find predefined integration user!'));
+        }
+        $integrationData = $this->getIntegrationData(Integration::STATUS_ACTIVE);
+        $integrationData['integration_id'] = $integration->getId();
+        $this->integrationService->update($integrationData);
         return true;
     }
 
