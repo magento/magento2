@@ -61,7 +61,7 @@ class FlyweightFactory
         } else {
             $themeModel = $this->_loadByPath($themeKey, $area);
         }
-        if (!$themeModel->getId()) {
+        if (!$themeModel->getCode()) {
             throw new \LogicException("Unable to load theme by specified key: '{$themeKey}'");
         }
         $this->_addTheme($themeModel);
