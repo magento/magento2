@@ -227,7 +227,7 @@
         "psr-0": {
             "": [
                 "app/code/",
-                "var/generation"
+                "generated/code"
             ]
         },
         "files": [

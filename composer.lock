@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "54bdb5a5df907478f68748e0e0df96dc",
-    "content-hash": "37af560fb7f83ed0ad5e14ee462336c6",
+    "hash": "e5946b0500f46fab5f05e46957258ed4",
+    "content-hash": "07be52ec4880d0390acff2dd605a194d",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -633,16 +633,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.12.16-patch1",
+            "version": "1.12.16-patch2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "b4502f38f88ff2bc22a906c108cc3da18dcce12f"
+                "reference": "6a4cbd21245ad1854d17cccde542acd70ebdfb9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/b4502f38f88ff2bc22a906c108cc3da18dcce12f",
-                "reference": "b4502f38f88ff2bc22a906c108cc3da18dcce12f",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/6a4cbd21245ad1854d17cccde542acd70ebdfb9c",
+                "reference": "6a4cbd21245ad1854d17cccde542acd70ebdfb9c",
                 "shasum": ""
             },
             "require": {
@@ -676,7 +676,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2016-09-14 12:04:33"
+            "time": "2017-01-17 16:40:08"
         },
         {
             "name": "monolog/monolog",
