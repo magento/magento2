@@ -131,7 +131,7 @@ define([
                 })).toBeUndefined();
                 expect($('body').notification.calls.allArgs()).toEqual([['clear'], ['add', notificationArguments]]);
             });
-            it('Check call "beforeSave" method. Check "complete" ajax callback with error response.' , function () {
+            it('Check call "beforeSave" method. Check "complete" ajax callback.' , function () {
                 var request;
 
                 $.ajax = jasmine.createSpy().and.callFake(function (req) {
