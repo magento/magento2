@@ -83,14 +83,27 @@ abstract class AbstractSource implements
      */
     public function getOptionId($value)
     {
-        foreach ($this->getAllOptions() as $option) {
-            if (strcasecmp($option['label'], $value) == 0 || $option['value'] == $value) {
+        $options = $this->getAllOptions();
+
+        // First check for match on label:
+        foreach ($options as $option) {
+            if (strcasecmp($option['label'], $value) === 0) {
                 return $option['value'];
             }
         }
+
+        // Then check on match on ID:
+        if (is_numeric($value)) {
+            foreach ($options as $option) {
+                if ((int) $option['value'] == (int) $value) {
+                    return $option['value'];
+                }
+            }
+        }
+
         return null;
     }
-
+    
     /**
      * Add Value Sort To Collection Select
      *
