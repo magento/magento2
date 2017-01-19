@@ -27,7 +27,8 @@ class IntegrationManager
     private $integrationService;
 
     /**
-     * IntegrationManager constructor.
+     * IntegrationManager constructor
+     *
      * @param Config $config
      * @param IntegrationServiceInterface $integrationService
      */

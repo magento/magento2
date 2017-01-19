@@ -77,7 +77,7 @@ class TokenProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetToken_NewIntegration()
+    public function testGetTokenNewIntegration()
     {
         $this->configMock->expects($this->once())
             ->method('getConfigDataValue')
@@ -105,7 +105,7 @@ class TokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('IntegrationToken', $this->tokenProvider->getToken());
     }
 
-    public function testGetToken_ExistingIntegration()
+    public function testGetTokenExistingIntegration()
     {
         $this->configMock->expects($this->once())
             ->method('getConfigDataValue')

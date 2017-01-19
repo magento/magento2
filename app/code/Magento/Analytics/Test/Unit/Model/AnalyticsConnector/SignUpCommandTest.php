@@ -87,7 +87,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->signUpCommand->execute());
     }
 
-    public function testExecuteFailure_CannotGenerateToken()
+    public function testExecuteFailureCannotGenerateToken()
     {
         $this->tokenProviderMock->expects($this->once())
             ->method('getToken')
@@ -104,7 +104,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->signUpCommand->execute());
     }
 
-    public function testExecuteFailure_ResponseIsEmpty()
+    public function testExecuteFailureResponseIsEmpty()
     {
         $this->tokenProviderMock->expects($this->once())
             ->method('getToken')

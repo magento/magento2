@@ -124,7 +124,7 @@ class SignUpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('MAToken', $this->signUpRequest->call('IntegrationToken'));
     }
 
-    public function testCallFailure_EmptyResponse()
+    public function testCallFailureEmptyResponse()
     {
         $requestRawData = json_encode(
             [
@@ -169,7 +169,7 @@ class SignUpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $this->signUpRequest->call('IntegrationToken'));
     }
 
-    public function testCallFailure_Exception()
+    public function testCallFailureException()
     {
         $exception = new \Exception('exception');
         $requestRawData = json_encode(

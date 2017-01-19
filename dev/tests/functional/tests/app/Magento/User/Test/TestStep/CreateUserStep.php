@@ -21,7 +21,7 @@ class CreateUserStep implements TestStepInterface
     private $user;
 
     /**
-      * @param User $user
+     * @param User $user
      */
     public function __construct(User $user)
     {

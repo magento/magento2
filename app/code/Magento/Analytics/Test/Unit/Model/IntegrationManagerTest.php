@@ -106,7 +106,7 @@ class IntegrationManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function testActivateIntegrationFailure_NoSuchEntity()
+    public function testActivateIntegrationFailureNoSuchEntity()
     {
         $this->integrationServiceMock->expects($this->once())
             ->method('findByName')
