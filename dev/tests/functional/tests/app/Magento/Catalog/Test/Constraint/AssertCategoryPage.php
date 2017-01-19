@@ -11,7 +11,6 @@ use Magento\Catalog\Test\Fixture\Category\LandingPage;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Assert that displayed category data on category page equals to passed from fixture.
@@ -46,46 +45,21 @@ class AssertCategoryPage extends AbstractConstraint
      * Assert that displayed category data on category page equals to passed from fixture.
      *
      * @param Category $category
-     * @param FixtureFactory $fixtureFactory
      * @param CatalogCategoryView $categoryView
      * @param BrowserInterface $browser
      * @return void
      */
     public function processAssert(
         Category $category,
-        FixtureFactory $fixtureFactory,
         CatalogCategoryView $categoryView,
         BrowserInterface $browser
     ) {
         $this->browser = $browser;
         $this->categoryViewPage = $categoryView;
-        $this->prepareData($fixtureFactory, $category);
         $this->browser->open($this->getCategoryUrl($category));
+        
         $this->assertGeneralInformation($category);
         $this->assertDisplaySetting($category);
-    }
-
-    /**
-     * Prepare comparison data.
-     *
-     * @param FixtureFactory $fixtureFactory
-     * @param Category $category
-     * @return void
-     */
-    protected function prepareData(FixtureFactory $fixtureFactory, Category $category)
-    {
-        $product = $fixtureFactory->createByCode(
-            'catalogProductSimple',
-            [
-                'dataset' => 'default',
-                'data' => [
-                    'category_ids' => [
-                        'category' => $category,
-                    ],
-                ]
-            ]
-        );
-        $product->persist();
     }
 
     /**
