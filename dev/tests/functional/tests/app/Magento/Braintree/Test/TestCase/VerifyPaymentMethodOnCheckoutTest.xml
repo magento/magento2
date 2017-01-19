@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\VerifyPaymentMethodOnCheckoutTest" summary="Verifies payment method availability on One Page Checkout">
-        <variation name="VerifyPaymentMethodOnCheckoutTestVariation1" summary="Checkout with Braintree Credit Card with specific allowed countries" ticketId="MAGETWO-38437">
+        <variation name="VerifyPaymentMethodOnCheckoutBraintreeTestVariation1" summary="Checkout with Braintree Credit Card with specific allowed countries" ticketId="MAGETWO-38437">
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
