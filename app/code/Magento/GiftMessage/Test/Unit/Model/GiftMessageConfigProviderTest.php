@@ -5,6 +5,7 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 use Magento\Store\Model\ScopeInterface as Scope;
 use Magento\Customer\Model\Context as CustomerContext;
@@ -13,6 +14,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 
 /**
  * GiftMessage config provider test
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,7 +70,7 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
         $this->localeFormatMock = $this->getMock(\Magento\Framework\Locale\FormatInterface::class, [], [], '', false);
         $this->formKeyMock = $this->getMock(\Magento\Framework\Data\Form\FormKey::class, [], [], '', false);
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class, [], [], '', false);
+        $this->scopeConfigMock = $this->getMock(ScopeConfigInterface::class, [], [], '', false);
         $contextMock = $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false);
         $this->cartRepositoryMock = $this->getMock(
             \Magento\GiftMessage\Api\CartRepositoryInterface::class,

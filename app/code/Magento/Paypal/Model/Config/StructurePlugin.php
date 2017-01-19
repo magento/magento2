@@ -55,6 +55,7 @@ class StructurePlugin
     /**
      * @param ScopeDefiner $scopeDefiner
      * @param BackendHelper $helper
+     * @param PaymentSectionModifier|null $paymentSectionModifier
      */
     public function __construct(
         ScopeDefiner $scopeDefiner,

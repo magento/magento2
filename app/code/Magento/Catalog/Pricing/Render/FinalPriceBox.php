@@ -93,7 +93,7 @@ class FinalPriceBox extends BasePriceBox
     {
         $moduleManager = $this->getModuleManager();
 
-        if (!$moduleManager->isEnabled('Magento_Msrp') || !$moduleManager->isOutputEnabled('Magento_Msrp') ) {
+        if (!$moduleManager->isEnabled('Magento_Msrp') || !$moduleManager->isOutputEnabled('Magento_Msrp')) {
             return false;
         }
 

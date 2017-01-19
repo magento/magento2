@@ -45,4 +45,3 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($builder, $builder->addColumn('test', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER));
     }
 }
-

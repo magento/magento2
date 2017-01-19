@@ -168,6 +168,9 @@ class PaymentSectionModifierTest extends \PHPUnit_Framework_TestCase
         return $availableGroups;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function caseProvider()
     {
         return [
