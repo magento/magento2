@@ -380,5 +380,21 @@
                 </item>
             </field>
         </dataset>
+
+        <dataset name="braintree_countrycreditcard_US_MS_GB_VI">
+            <field name="payment/braintree/countrycreditcard" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">a:2:{s:2:"US";a:1:{i:0;s:2:"MC";}s:2:"GB";a:1:{i:0;s:2:"VI";}}</item>
+            </field>
+        </dataset>
+
+        <dataset name="braintree_countrycreditcard_US_MS_GB_VI_rollback">
+            <field name="payment/braintree/countrycreditcard" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="string">a:0:{}</item>
+            </field>
+        </dataset>
     </repository>
 </config>
