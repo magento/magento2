@@ -11,6 +11,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Class AnalyticsTokenTest
+ */
 class AnalyticsTokenTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -76,7 +79,7 @@ class AnalyticsTokenTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testSetToken()
+    public function testStoreToken()
     {
         $value = 'jjjj0000';
 
@@ -90,7 +93,7 @@ class AnalyticsTokenTest extends \PHPUnit_Framework_TestCase
             ->method('reinit')
             ->willReturnSelf();
 
-        $this->assertTrue($this->tokenModel->setToken($value));
+        $this->assertTrue($this->tokenModel->storeToken($value));
     }
 
     /**

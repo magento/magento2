@@ -38,6 +38,7 @@ class AnalyticsConnector
 
     /**
      * Create the instance of the command and execute it.
+     *
      * @param string $commandName
      * @return bool
      * @throws NotFoundException

@@ -66,13 +66,13 @@ class AnalyticsToken
     }
 
     /**
-     * Set Magento BI token value.
+     * Stores Magento BI token value.
      *
      * @param string $value
      *
      * @return bool
      */
-    public function setToken($value)
+    public function storeToken($value)
     {
         $this->configWriter->save($this->tokenPath, $value);
         $this->reinitableConfig->reinit();
