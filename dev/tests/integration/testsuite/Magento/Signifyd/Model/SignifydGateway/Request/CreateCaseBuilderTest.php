@@ -152,9 +152,11 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                 'aggregateOrderDollars' => 150.0
             ],
             'seller' => $this->getSellerData(),
-            'clientVersion' => [
-                'platform' => $productMetadata->getName() . ' ' . $productMetadata->getEdition(),
-                'platformVersion' => $productMetadata->getVersion()
+            'platformAndClient' => [
+                'storePlatform' => $productMetadata->getName() . ' ' . $productMetadata->getEdition(),
+                'storePlatformVersion' => $productMetadata->getVersion(),
+                'signifydClientApp' => $productMetadata->getName(),
+                'signifydClientAppVersion' => '1.0'
             ]
         ];
 
@@ -221,9 +223,11 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             'seller' => $this->getSellerData(),
-            'clientVersion' => [
-                'platform' => $productMetadata->getName() . ' ' . $productMetadata->getEdition(),
-                'platformVersion' => $productMetadata->getVersion()
+            'platformAndClient' => [
+                'storePlatform' => $productMetadata->getName() . ' ' . $productMetadata->getEdition(),
+                'storePlatformVersion' => $productMetadata->getVersion(),
+                'signifydClientApp' => $productMetadata->getName(),
+                'signifydClientAppVersion' => '1.0'
             ]
         ];
 
