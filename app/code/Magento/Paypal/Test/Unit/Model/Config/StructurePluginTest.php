@@ -33,7 +33,6 @@ class StructurePluginTest extends \PHPUnit_Framework_TestCase
 
         $this->paymentSectionModifier = $this->getMockBuilder(PaymentSectionModifier::class)->getMock();
 
-
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->_model = $objectManagerHelper->getObject(
             'Magento\Paypal\Model\Config\StructurePlugin',

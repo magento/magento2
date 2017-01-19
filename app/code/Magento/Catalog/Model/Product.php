@@ -2616,6 +2616,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Set the associated products
      * @param array $productIds
+     * @return void
      */
     public function setAssociatedProductIds(array $productIds)
     {

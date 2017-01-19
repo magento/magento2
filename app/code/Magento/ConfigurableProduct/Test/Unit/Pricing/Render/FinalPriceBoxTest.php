@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class FinalPriceBoxTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 {
@@ -71,6 +72,9 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     /** @var  Manager|\PHPUnit_Framework_MockObject_MockObject */
     private $moduleManager;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->product = $this->getMock(

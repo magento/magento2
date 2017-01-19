@@ -133,7 +133,6 @@ class Transparent extends Payflowpro implements TransparentInterface
         return $this->responseValidator;
     }
 
-
     /**
      * Do not validate payment form using server methods
      *
