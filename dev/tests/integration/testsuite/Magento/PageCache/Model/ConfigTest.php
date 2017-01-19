@@ -61,7 +61,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     // @codingStandardsIgnoreEnd
     public function testGetVclFile()
     {
-        $result = $this->config->getVclFile(Config::VARNISH_3_CONFIGURATION_PATH);
+        $result = $this->config->getVclFile(Config::VARNISH_5_CONFIGURATION_PATH);
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $result);
     }
 }
