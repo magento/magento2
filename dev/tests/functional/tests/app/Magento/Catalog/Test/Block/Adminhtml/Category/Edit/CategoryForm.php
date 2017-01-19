@@ -38,6 +38,13 @@ class CategoryForm extends FormTabs
     protected $confirmModal = '.confirm._show[data-role=modal]';
 
     /**
+     * Category edit title.
+     *
+     * @var string
+     */
+    protected $categoryTitle = '.category-edit-title h3.title';
+
+    /**
      * Fill form with tabs.
      *
      * @param FixtureInterface $fixture
@@ -58,5 +65,26 @@ class CategoryForm extends FormTabs
         }
 
         return $this->fillTabs($tabs, $element);
+    }
+
+    /**
+     * Return category Id.
+     *
+     * @return string
+     */
+    public function getCategoryId()
+    {
+        $titleElement = $this->_rootElement->find($this->categoryTitle);
+        $title = '';
+        if ($titleElement->isVisible()) {
+            $title = $titleElement->getText();
+        }
+
+        $categoryId = '';
+        if (preg_match('/ID:\s*(?<id>\d+)/', $title, $matches)) {
+            $categoryId = $matches['id'];
+        }
+
+        return $categoryId;
     }
 }
