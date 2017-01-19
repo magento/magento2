@@ -39,7 +39,13 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $configMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $localeFormatMock = $this->getMock(\Magento\Framework\Locale\FormatInterface::class, [], [], '', false);
         $groupManagement = $this->getMock(\Magento\Customer\Api\GroupManagementInterface::class, [], [], '', false);
-        $metadataPool = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
+        $scopeOverriddenValue = $this->getMock(
+            \Magento\Catalog\Model\Attribute\ScopeOverriddenValue::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice::class,
             [
@@ -50,7 +56,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 'localeFormat' => $localeFormatMock,
                 'catalogProductType' => $productTypeMock,
                 'groupManagement' => $groupManagement,
-                'metadataPool' => $metadataPool
+                'scopeOverriddenValue' => $scopeOverriddenValue
             ]
         );
         $resource = $this->getMock(\StdClass::class, ['getMainTable']);

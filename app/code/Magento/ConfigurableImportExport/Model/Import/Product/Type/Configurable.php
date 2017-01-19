@@ -388,13 +388,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             )->joinLeft(
                 ['o' => $optionTable],
                 $this->connection->quoteIdentifier(
-                    'o.attribute_id'
+                    'm.attribute_id'
                 ) . ' = ' . $this->connection->quoteIdentifier(
                     'o.attribute_id'
                 ),
                 ['option_id']
             )->where(
-                'product_id IN ( ? )',
+                'm.product_id IN ( ? )',
                 $productIds
             );
 
