@@ -110,7 +110,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const TEMPLATE_MINIFICATION_DIR = 'html';
 
     /**
-     * Generated code.
+     * Directory name for generated data.
      */
     const GENERATED = 'generated';
 
