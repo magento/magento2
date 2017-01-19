@@ -112,9 +112,12 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider executeDataProvider
+     *
+     * @param bool $isSubscriptionEnabled
      * @return void
      */
-    public function testExecuteSuccess()
+    public function testExecute($isSubscriptionEnabled)
     {
         $successResult = [
             'success' => true,
@@ -125,17 +128,19 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getParam')
             ->with($this->subscriptionApprovedField)
-            ->willReturn(true);
+            ->willReturn($isSubscriptionEnabled);
 
-        $this->subscriptionModelMock
-            ->expects($this->once())
-            ->method('enable')
-            ->willReturn(true);
-
-        $this->notificationTimeMock
-            ->expects($this->once())
-            ->method('unsetLastTimeNotificationValue')
-            ->willReturn(true);
+        if ($isSubscriptionEnabled) {
+            $this->subscriptionModelMock
+                ->expects($this->once())
+                ->method('enable')
+                ->willReturn(true);
+        } else {
+            $this->notificationTimeMock
+                ->expects($this->once())
+                ->method('unsetLastTimeNotificationValue')
+                ->willReturn(true);
+        }
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
@@ -209,6 +214,17 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
         return [
             [new LocalizedException(__('TestMessage'))],
             [new \Exception('TestMessage')],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function executeDataProvider()
+    {
+        return [
+            [true],
+            [false],
         ];
     }
 }

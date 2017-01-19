@@ -7,6 +7,7 @@ namespace Magento\Analytics\Model\Config\Backend\Enabled;
 
 use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Config\Value;
 
@@ -54,22 +55,36 @@ class SubscriptionHandler
     private $analyticsToken;
 
     /**
+     * Resource for managing last notification time about subscription to Magento Analytics.
+     *
+     * @var NotificationTime
+     */
+    private $notificationTime;
+
+    /**
      * @param WriterInterface $configWriter
      * @param FlagManager $flagManager
      * @param AnalyticsToken $analyticsToken
+     * @param NotificationTime $notificationTime
      */
     public function __construct(
         WriterInterface $configWriter,
         FlagManager $flagManager,
-        AnalyticsToken $analyticsToken
+        AnalyticsToken $analyticsToken,
+        NotificationTime $notificationTime
     ) {
         $this->configWriter = $configWriter;
         $this->flagManager = $flagManager;
         $this->analyticsToken = $analyticsToken;
+        $this->notificationTime = $notificationTime;
     }
 
     /**
      * Performs change subscription environment on config value change.
+     *
+     * Activate process of subscription handling
+     * if subscription was activated and Analytics token has not been received
+     * or interrupt subscription handling.
      *
      * @param Value $configValue
      *
@@ -77,13 +92,14 @@ class SubscriptionHandler
      */
     public function process(Value $configValue)
     {
-        if ($configValue->isValueChanged()) {
+        if ($configValue->isValueChanged() && !$this->analyticsToken->isTokenExist()) {
             $enabled = $configValue->getData('value');
 
-            if ($enabled && !$this->analyticsToken->isTokenExist()) {
+            if ($enabled) {
                 $this->setCronSchedule();
                 $this->setAttemptsFlag();
-            } elseif (!$enabled) {
+                $this->notificationTime->unsetLastTimeNotificationValue();
+            } else {
                 $this->unsetAttemptsFlag();
             }
         }

@@ -86,8 +86,9 @@ class Activate extends Action
         try {
             if ($this->getRequest()->getParam($this->subscriptionApprovedField)) {
                 $this->subscription->enable();
+            } else {
+                $this->notificationTime->unsetLastTimeNotificationValue();
             }
-            $this->notificationTime->unsetLastTimeNotificationValue();
             $responseContent = [
                 'success' => true,
                 'error_message' => '',

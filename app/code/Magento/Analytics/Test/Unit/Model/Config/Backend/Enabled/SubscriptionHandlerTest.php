@@ -9,7 +9,7 @@ namespace Magento\Analytics\Test\Unit\Model\Config\Backend\Enabled;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Analytics\Model\FlagManager;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -22,11 +22,6 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
     private $flagManagerMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $configMock;
-
-    /**
      * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configWriterMock;
@@ -37,9 +32,14 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
     private $tokenMock;
 
     /**
-     * @var Value
+     * @var NotificationTime|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $configValue;
+    private $notificationTimeMock;
+
+    /**
+     * @var Value|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configValueMock;
 
     /**
      * @var ObjectManagerHelper
@@ -65,10 +65,6 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -77,14 +73,15 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->notificationTimeMock = $this->getMockBuilder(NotificationTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->configValue = $this->objectManagerHelper->getObject(
-            Value::class,
-            [
-                'config' => $this->configMock,
-            ]
-        );
+        $this->configValueMock = $this->getMockBuilder(Value::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->subscriptionHandler = $this->objectManagerHelper->getObject(
             SubscriptionHandler::class,
@@ -93,59 +90,94 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
                 'configWriter' => $this->configWriterMock,
                 'attemptsInitValue' => $this->attemptsInitValue,
                 'analyticsToken' => $this->tokenMock,
+                'notificationTime' => $this->notificationTimeMock,
             ]
         );
     }
 
     /**
+     * @param int|null $value null means that $value was not changed
+     * @param bool $isTokenExist
+     * 
+     * @dataProvider processDataProvider
+     */
+    public function testProcess($value, $isTokenExist)
+    {
+        $this->configValueMock
+            ->expects($this->once())
+            ->method('isValueChanged')
+            ->willReturn(is_int($value));
+        $this->tokenMock
+            ->expects(is_int($value) ? $this->once() : $this->never())
+            ->method('isTokenExist')
+            ->willReturn($isTokenExist);
+        if (is_int($value) && !$isTokenExist) {
+            $this->configValueMock
+                ->expects($this->once())
+                ->method('getData')
+                ->with('value')
+                ->willReturn($value);
+
+            if ($value === 1) {
+                $this->addProcessWithEnabledTrueAsserts();
+            } elseif ($value === 0) {
+                $this->addProcessWithEnabledFalseAsserts();
+            }
+        }
+        $this->assertTrue(
+            $this->subscriptionHandler->process($this->configValueMock)
+        );
+    }
+
+    /**
+     * Add assertions for method process in case when new config value equals 1.
+     *
      * @return void
      */
-    public function testProcessWithEnabledTrue()
+    private function addProcessWithEnabledTrueAsserts()
     {
-        $this->configValue->setValue(1);
-        $this->configMock
-            ->expects($this->atLeastOnce())
-            ->method('getValue')
-            ->willReturn(0);
-        $this->tokenMock
-            ->expects($this->once())
-            ->method('isTokenExist')
-            ->willReturn(false);
-
         $this->configWriterMock
             ->expects($this->once())
+            ->with(SubscriptionHandler::CRON_STRING_PATH, "0 * * * *")
             ->method('save');
-
         $this->flagManagerMock
             ->expects($this->once())
             ->method('saveFlag')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $this->attemptsInitValue)
             ->willReturn(true);
-
-        $this->assertTrue(
-            $this->subscriptionHandler->process($this->configValue)
-        );
+        $this->notificationTimeMock
+            ->expects($this->once())
+            ->method('unsetLastTimeNotificationValue')
+            ->willReturn(true);
     }
 
     /**
+     * Add assertions for method process in case when new config value equals 0.
+     *
      * @return void
      */
-    public function testProcessWithEnabledFalse()
+    private function addProcessWithEnabledFalseAsserts()
     {
-        $this->configValue->setValue(0);
-        $this->configMock
-            ->expects($this->atLeastOnce())
-            ->method('getValue')
-            ->willReturn(1);
-
         $this->flagManagerMock
             ->expects($this->once())
             ->method('deleteFlag')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE)
             ->willReturn(true);
+    }
 
-        $this->assertTrue(
-            $this->subscriptionHandler->process($this->configValue)
-        );
+    /**
+     * Data provider for process test.
+     *
+     * @return array
+     */
+    public function processDataProvider()
+    {
+        return [
+            [null, true],
+            [null, false],
+            [0, true],
+            [1, true],
+            [0, false],
+        ];
     }
 }

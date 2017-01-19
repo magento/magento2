@@ -69,7 +69,9 @@ class FlagManager
     public function deleteFlag($flagCode)
     {
         $flag = $this->getFlagObject($flagCode);
-        $this->flagResource->delete($flag);
+        if ($flag->getId()) {
+            $this->flagResource->delete($flag);
+        }
         return true;
     }
 

@@ -75,13 +75,25 @@ class FlagManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->flagManager->saveFlag($flagCode, 10));
     }
 
-    public function testDeleteFlag()
+    /**
+     * @dataProvider flagExistDataProvider
+     *
+     * @param bool $isFlagExist
+     */
+    public function testDeleteFlag($isFlagExist)
     {
         $flagCode = "flag";
         $this->setupFlagObject($flagCode);
-        $this->flagResourceMock->expects($this->once())
-            ->method('delete')
-            ->with($this->flagMock);
+        $this->flagMock
+            ->expects($this->once())
+            ->method('getId')
+            ->willReturn($isFlagExist);
+        if ($isFlagExist) {
+            $this->flagResourceMock
+                ->expects($this->once())
+                ->method('delete')
+                ->with($this->flagMock);
+        }
         $this->assertTrue($this->flagManager->deleteFlag($flagCode));
     }
 
@@ -94,5 +106,18 @@ class FlagManagerTest extends \PHPUnit_Framework_TestCase
         $this->flagResourceMock->expects($this->once())
             ->method('load')
             ->with($this->flagMock, $flagCode, 'flag_code');
+    }
+
+    /**
+     * Provide variations of the flag existence.
+     *
+     * @return array
+     */
+    public function flagExistDataProvider()
+    {
+        return [
+            [true],
+            [false]
+        ];
     }
 }
