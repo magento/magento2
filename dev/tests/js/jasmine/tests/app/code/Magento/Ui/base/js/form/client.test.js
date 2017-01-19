@@ -12,7 +12,8 @@ define([
     'uiRegistry',
     'Magento_Ui/js/form/client',
     'jquery',
-    'mageUtils'
+    'mageUtils',
+    'jquery/ui'
 ], function (_, registry, Constr, $, utils) {
     'use strict';
 
@@ -78,8 +79,8 @@ define([
 
                 utils.filterFormData = jasmine.createSpy().and.returnValue(data);
                 utils.serialize = jasmine.createSpy().and.returnValue(data);
-                $.ajax = jasmine.createSpy();
 
+                $.ajax = jasmine.createSpy();
                 obj.save(data);
                 expect(utils.filterFormData).toHaveBeenCalledWith(data);
                 expect(utils.serialize).toHaveBeenCalledWith(data);
@@ -92,6 +93,56 @@ define([
                 obj.save();
 
                 expect($.ajax).not.toHaveBeenCalled();
+            });
+            it('Check call "beforeSave" method. Check "success" ajax callback with success response.' , function () {
+                var request;
+
+                $.ajax = jasmine.createSpy().and.callFake(function (req) {
+                    request = req.success;
+                });
+                $.fn.notification = jasmine.createSpy();
+                obj.urls.beforeSave = 'requestPath';
+                obj.save();
+
+                expect(request({error: false})).toBe(true);
+                expect($('body').notification).not.toHaveBeenCalledWith('clear');
+            });
+
+            it('Check call "beforeSave" method. Check "success" ajax callback with error response.' , function () {
+                var request,
+                    notificationArguments;
+
+                $.ajax = jasmine.createSpy().and.callFake(function (req) {
+                    request = req.success;
+                });
+                $.fn.notification = jasmine.createSpy();
+                obj.urls.beforeSave = 'requestPath';
+                obj.save();
+
+                notificationArguments = {
+                    error: true,
+                    message: 1,
+                    insertMethod: jasmine.any(Function)
+                };
+
+                expect(request({
+                    error: true,
+                    messages: [1]
+                })).toBeUndefined();
+                expect($('body').notification.calls.allArgs()).toEqual([['clear'], ['add', notificationArguments]]);
+            });
+            it('Check call "beforeSave" method. Check "complete" ajax callback with error response.' , function () {
+                var request;
+
+                $.ajax = jasmine.createSpy().and.callFake(function (req) {
+                    request = req.complete;
+                });
+                $.fn.trigger = jasmine.createSpy();
+                obj.urls.beforeSave = 'requestPath';
+                obj.save();
+
+                expect(request()).toBeUndefined();
+                expect($('body').trigger).toHaveBeenCalledWith('processStop');
             });
         });
 
