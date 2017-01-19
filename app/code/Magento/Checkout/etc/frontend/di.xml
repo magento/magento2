@@ -47,6 +47,7 @@
         <arguments>
             <argument name="configProviders" xsi:type="array">
                 <item name="checkout_default_config_provider" xsi:type="object">Magento\Checkout\Model\DefaultConfigProvider</item>
+                <item name="cart_checkout_default_config_provider" xsi:type="object">Magento\Checkout\Model\Cart\CheckoutConfigProvider</item>
             </argument>
         </arguments>
     </type>

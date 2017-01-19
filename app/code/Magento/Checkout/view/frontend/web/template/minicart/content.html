@@ -27,6 +27,10 @@
 
     <!-- ko if: getCartParam('summary_count') -->
         <div class="items-total">
+            <!-- ko if: maxItemsToDisplay < getCartParam('summary_count') -->
+                <!-- ko text: maxItemsToDisplay --><!-- /ko -->
+                <!-- ko i18n: 'of' --><!-- /ko -->
+            <!-- /ko -->
             <span class="count"><!-- ko text: getCartParam('summary_count') --><!-- /ko --></span>
             <!-- ko if: getCartParam('summary_count') == 1 -->
                 <!-- ko i18n: 'item' --><!-- /ko -->
@@ -69,7 +73,7 @@
     <!-- ko if: getCartParam('summary_count') -->
     <strong class="subtitle"><!-- ko i18n: 'Recently added item(s)' --><!-- /ko --></strong>
     <div data-action="scroll" class="minicart-items-wrapper">
-        <ol id="mini-cart" class="minicart-items" data-bind="foreach: { data: getCartParam('items'), as: 'item' }">
+        <ol id="mini-cart" class="minicart-items" data-bind="foreach: { data: getCartItems(), as: 'item' }">
             <!-- ko foreach: $parent.getRegion($parent.getItemRenderer(item.product_type)) -->
                 <!-- ko template: {name: getTemplate(), data: item, afterRender: function() {$parents[1].initSidebar()}} --><!-- /ko -->
             <!-- /ko -->
