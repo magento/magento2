@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Test\TestCase;
 
 use Magento\Mtf\TestCase\Scenario;
+
 /**
  * Preconditions:
  * 1. Create admin user without permissions subscribe to Magento BI.
