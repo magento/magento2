@@ -19,7 +19,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
             'theme_title' => 'Test physical theme',
             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
             'type' => ThemeInterface::TYPE_PHYSICAL,
-            'code' => 'physical'
+            'code' => 'physical',
         ],
         'virtual' => [
             'parent_id' => null,
@@ -27,7 +27,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
             'theme_title' => 'Test virtual theme',
             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
             'type' => ThemeInterface::TYPE_VIRTUAL,
-            'code' => 'virtual'
+            'code' => 'virtual',
         ],
         'staging' => [
             'parent_id' => null,
@@ -35,7 +35,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
             'theme_title' => 'Test staging theme',
             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
             'type' => ThemeInterface::TYPE_STAGING,
-            'code' => 'staging'
+            'code' => 'staging',
         ],
     ];
 

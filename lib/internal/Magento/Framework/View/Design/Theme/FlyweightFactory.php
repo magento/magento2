@@ -48,8 +48,8 @@ class FlyweightFactory
      * by specific path (e.g. adminhtml/Magento/backend) or by identifier (theme primary key) and return it
      * Can be used to deploy static or in other setup commands, even if Magento is not installed yet.
      *
-     * @param string $themeKey - Should looks like Magento/backend or should be theme primary key
-     * @param string $area - Can be adminhtml, frontend, etc...
+     * @param string $themeKey  Should looks like Magento/backend or should be theme primary key
+     * @param string $area  Can be adminhtml, frontend, etc...
      * @return \Magento\Framework\View\Design\ThemeInterface
      * @throws \InvalidArgumentException when incorrect themeKey was specified
      * @throws \LogicException when theme with appropriate themeKey was not found
