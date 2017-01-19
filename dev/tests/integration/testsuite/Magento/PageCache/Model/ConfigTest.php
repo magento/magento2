@@ -50,6 +50,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * @magentoConfigFixture default/system/full_page_cache/varnish/backend_host example.com
      * @magentoConfigFixture default/system/full_page_cache/varnish/backend_port 8080
@@ -57,6 +58,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @magentoConfigFixture current_store design/theme/ua_regexp {"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}
      * @magentoAppIsolation enabled
      */
+    // @codingStandardsIgnoreEnd
     public function testGetVclFile()
     {
         $result = $this->config->getVclFile(Config::VARNISH_5_CONFIGURATION_PATH);
