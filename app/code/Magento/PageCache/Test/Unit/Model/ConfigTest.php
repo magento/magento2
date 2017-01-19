@@ -82,19 +82,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_BACKEND_HOST,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                         null,
                         'example.com',
                     ],
                     [
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_BACKEND_PORT,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                         null,
                         '8080'
                     ],
                     [
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_ACCESS_LIST,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                         null,
                         '127.0.0.1, 192.168.0.1,127.0.0.2'
                     ],
@@ -103,6 +103,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                         null,
                         'serializedConfig'
+                    ],
+                    [
+                        \Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER,
+                        \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                        null,
+                        'X_Forwarded_Proto: https'
+                    ],
+                    [
+                        \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_GRACE_PERIOD,
+                        \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                        null,
+                        120
                     ],
                 ]
             )
@@ -134,7 +146,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('unserialize')
             ->with('serializedConfig')
             ->willReturn([['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']]);
-        $test = $this->config->getVclFile(Config::VARNISH_3_CONFIGURATION_PATH);
+        $test = $this->config->getVclFile(Config::VARNISH_5_CONFIGURATION_PATH);
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $test);
     }
 

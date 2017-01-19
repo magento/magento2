@@ -17,6 +17,8 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\DB\FieldDataConverterFactory;
+use Magento\Framework\DB\DataConverter\SerializedToJson;
 
 /**
  * @codeCoverageIgnore
@@ -52,18 +54,29 @@ class UpgradeData implements UpgradeDataInterface
     private $storeManager;
 
     /**
+     * @var FieldDataConverterFactory
+     */
+    private $fieldDataConverterFactory;
+
+    /**
      * @param CustomerSetupFactory $customerSetupFactory
      * @param IndexerRegistry $indexerRegistry
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param FieldDataConverterFactory|null $fieldDataConverterFactory
      */
     public function __construct(
         CustomerSetupFactory $customerSetupFactory,
         IndexerRegistry $indexerRegistry,
-        \Magento\Eav\Model\Config $eavConfig
+        \Magento\Eav\Model\Config $eavConfig,
+        FieldDataConverterFactory $fieldDataConverterFactory = null
     ) {
         $this->customerSetupFactory = $customerSetupFactory;
         $this->indexerRegistry = $indexerRegistry;
         $this->eavConfig = $eavConfig;
+
+        $this->fieldDataConverterFactory = $fieldDataConverterFactory ?: ObjectManager::getInstance()->get(
+            FieldDataConverterFactory::class
+        );
     }
 
     /**
@@ -131,6 +144,15 @@ class UpgradeData implements UpgradeDataInterface
                 $setup->getConnection()->rollBack();
                 throw $e;
             }
+        }
+        if (version_compare($context->getVersion(), '2.0.11', '<')) {
+            $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
+            $fieldDataConverter->convert(
+                $setup->getConnection(),
+                $setup->getTable('customer_eav_attribute'),
+                'attribute_id',
+                'validate_rules'
+            );
         }
 
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
