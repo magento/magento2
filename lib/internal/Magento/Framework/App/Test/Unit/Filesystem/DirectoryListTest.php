@@ -7,7 +7,6 @@
 namespace Magento\Framework\App\Test\Unit\Filesystem;
 
 use \Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Code\Generator\Io;
 
 class DirectoryListTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,38 +41,28 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultConfig()
     {
-        $this->assertEquals(
-            [
-                DirectoryList::ROOT => [DirectoryList::PATH => ''],
-                DirectoryList::APP => [DirectoryList::PATH => 'app'],
-                DirectoryList::CONFIG => [DirectoryList::PATH => 'app/etc'],
-                DirectoryList::LIB_INTERNAL => [DirectoryList::PATH => 'lib/internal'],
-                DirectoryList::VAR_DIR => [DirectoryList::PATH => 'var'],
-                DirectoryList::CACHE => [DirectoryList::PATH => 'var/cache'],
-                DirectoryList::LOG => [DirectoryList::PATH => 'var/log'],
-                DirectoryList::DI => [DirectoryList::PATH => 'generated/metadata'],
-                DirectoryList::GENERATION => [DirectoryList::PATH => Io::DEFAULT_DIRECTORY],
-                DirectoryList::SESSION => [DirectoryList::PATH => 'var/session'],
-                DirectoryList::MEDIA => [DirectoryList::PATH => 'pub/media', DirectoryList::URL_PATH => 'pub/media'],
-                DirectoryList::STATIC_VIEW => [
-                    DirectoryList::PATH => 'pub/static',
-                    DirectoryList::URL_PATH => 'pub/static'
-                ],
-                DirectoryList::PUB => [DirectoryList::PATH => 'pub', DirectoryList::URL_PATH => 'pub'],
-                DirectoryList::LIB_WEB => [DirectoryList::PATH => 'lib/web'],
-                DirectoryList::TMP => [DirectoryList::PATH => 'var/tmp'],
-                DirectoryList::UPLOAD => [
-                    DirectoryList::PATH => 'pub/media/upload',
-                    DirectoryList::URL_PATH => 'pub/media/upload'
-                ],
-                DirectoryList::TMP_MATERIALIZATION_DIR => [DirectoryList::PATH => 'var/view_preprocessed'],
-                DirectoryList::TEMPLATE_MINIFICATION_DIR => [DirectoryList::PATH => 'var/view_preprocessed/html'],
-                DirectoryList::SETUP => [DirectoryList::PATH => 'setup/src'],
-                DirectoryList::COMPOSER_HOME => [DirectoryList::PATH => 'var/composer_home'],
-                DirectoryList::GENERATED => [DirectoryList::PATH => 'generated'],
-                DirectoryList::SYS_TMP => [DirectoryList::PATH => '']
-            ],
-            DirectoryList::getDefaultConfig()
-        );
+        $defaultConfig = DirectoryList::getDefaultConfig();
+
+        $this->assertArrayHasKey(DirectoryList::GENERATED, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::DI, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::GENERATION, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::ROOT, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::APP, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::CONFIG, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::LIB_INTERNAL, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::VAR_DIR, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::CACHE, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::LOG, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::SESSION, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::MEDIA, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::STATIC_VIEW, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::PUB, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::LIB_WEB, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::TMP, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::UPLOAD, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::TEMPLATE_MINIFICATION_DIR, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::TMP_MATERIALIZATION_DIR, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::SETUP, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::COMPOSER_HOME, $defaultConfig);
     }
 }
