@@ -15,6 +15,7 @@
             <cart>
                 <delete_quote_after>30</delete_quote_after>
                 <redirect_to_cart>0</redirect_to_cart>
+                <number_items_to_display_pager>20</number_items_to_display_pager>
             </cart>
             <cart_link>
                 <use_qty>1</use_qty>
