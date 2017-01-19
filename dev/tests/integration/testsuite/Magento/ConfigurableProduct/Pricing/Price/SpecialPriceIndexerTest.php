@@ -37,22 +37,15 @@ class SpecialPriceIndexerTest extends \PHPUnit_Framework_TestCase
         $this->indexerProcessor = Bootstrap::getObjectManager()->get(Processor::class);
     }
 
-    protected function tearDown()
-    {
-        $this->indexerProcessor->getIndexer()->setScheduled(false);
-    }
-
     /**
      * Use collection to check data in index
+     * Do not use magentoDbIsolation because index statement changing "tears" transaction (triggers creating)
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/enable_price_index_schedule.php
      */
     public function testFullReindexIfChildHasSpecialPrice()
     {
-        // Disable update on save
-        $this->indexerProcessor->getIndexer()->setScheduled(true);
-
         $specialPrice = 2;
         /** @var Product $childProduct */
         $childProduct = $this->productRepository->get('simple_10', true);
@@ -69,7 +62,6 @@ class SpecialPriceIndexerTest extends \PHPUnit_Framework_TestCase
         $items = array_values($collection->getItems());
         self::assertEquals(10, $items[0]->getData('min_price'));
 
-        // Reindex
         $this->indexerProcessor->reindexAll();
 
         /** @var ProductCollection $collection */
