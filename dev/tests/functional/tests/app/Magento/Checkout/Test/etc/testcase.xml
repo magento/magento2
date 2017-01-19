@@ -56,10 +56,9 @@
         <step name="placeOrder" module="Magento_Checkout" next="createCustomerAccount" />
         <step name="createCustomerAccount" module="Magento_Checkout" />
     </scenario>
-    <scenario name="OnePageCheckoutFromMiniShoppingCartNoPaymentMethodTest" firstStep="setupConfiguration">
+    <scenario name="VerifyPaymentMethodOnCheckoutTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
-        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
-        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
         <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckoutFromMiniShoppingCart" />
         <step name="proceedToCheckoutFromMiniShoppingCart" module="Magento_Checkout" next="createCustomer" />
         <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />

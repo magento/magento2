@@ -15,26 +15,27 @@ use Magento\Mtf\TestCase\Scenario;
  * 3. Create products.
  *
  * Steps:
- * 1. Go to Frontend.
+ * 1. Go to Storefront.
  * 2. Add products to the cart.
  * 3. Click the 'Proceed to Checkout' button on mini shopping cart.
  * 4. Select checkout method according to dataset.
- * 5. Fill billing information and select the 'Ship to this address' option.
+ * 5. Fill Shipping address.
  * 6. Select shipping method.
  * 7. Perform assertions.
  *
  * @group One_Page_Checkout
  * @ZephyrId MAGETWO-38437
  */
-class OnePageCheckoutFromMiniShoppingCartNoPaymentMethodTest extends Scenario
+class VerifyPaymentMethodOnCheckoutTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
+    const TEST_TYPE = '3rd_party_test';
     const SEVERITY = 'S1';
     /* end tags */
 
     /**
-     * Verifies that payment method not available on OnePage Checkout.
+     * Verifies payment method availability on One Page Checkout.
      *
      * @return void
      */

@@ -10,22 +10,22 @@ use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert payment method is not available on OnePage Checkout.
+ * Assert payment method is absent on Checkout Payment Page.
  */
 class AssertPaymentMethodIsAbsentOnPaymentPage extends AbstractConstraint
 {
     /**
-     * Assert payment method is not available on OnePage Checkout.
+     * Assert payment method is absent on Checkout Payment Page.
      *
      * @param CheckoutOnepage $checkoutOnepage
      * @param array $payment
      * @return void
      */
-    public function processAssert(CheckoutOnepage $checkoutOnepage, $payment)
+    public function processAssert(CheckoutOnepage $checkoutOnepage, array $payment)
     {
         \PHPUnit_Framework_Assert::assertFalse(
             $checkoutOnepage->getPaymentBlock()->isVisiblePaymentMethod($payment),
-            'Payment method' . $payment['method']. ' is present on payment method block.'
+            'Payment method' . $payment['method']. ' is present on Checkout Payment Page.'
         );
     }
 
@@ -36,6 +36,6 @@ class AssertPaymentMethodIsAbsentOnPaymentPage extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Payment method is not available on OnePage Checkout';
+        return 'Payment method is absent on Checkout Payment Page';
     }
 }
