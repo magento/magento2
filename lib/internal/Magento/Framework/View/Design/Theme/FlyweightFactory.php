@@ -44,8 +44,8 @@ class FlyweightFactory
     /**
      * Creates or returns a shared model of theme
      *
-     * Tries to find theme in File System by specific path or load theme from DB
-     * by specific path (e.g. adminhtml/Magento/backend) or by identifier (theme primary key)
+     * Search for theme in File System by specific path or load theme from DB
+     * by specific path (e.g. adminhtml/Magento/backend) or by identifier (theme primary key) and return it
      * Can be used to deploy static or in other setup commands, even if Magento is not installed yet.
      *
      * @param string $themeKey - Should looks like Magento/backend or should be theme primary key
