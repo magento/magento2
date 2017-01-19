@@ -75,7 +75,7 @@ class SignUpRequest
      * Extracts token from the response
      *
      * @param HttpResponse $response
-     * @returns string|false
+     * @return string|false
      */
     private function extractResponseToken(HttpResponse $response)
     {
@@ -106,7 +106,7 @@ class SignUpRequest
         $httpClient->setRawData($this->getRequestJson($integrationToken));
         $httpClient->setMethod(HttpClient::POST);
         try {
-           $token = $this->extractResponseToken($httpClient->request());
+            $token = $this->extractResponseToken($httpClient->request());
             if (!$token) {
                 $this->logger->warning('The attempt of subscription was unsuccessful on step sign-up.');
             }

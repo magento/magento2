@@ -16,7 +16,7 @@ use Magento\Analytics\Cron\SignUp;
 use Magento\AdminNotification\Model\Inbox;
 
 /**
- * Class SignUpCommandTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SignUpTest extends \PHPUnit_Framework_TestCase
 {
