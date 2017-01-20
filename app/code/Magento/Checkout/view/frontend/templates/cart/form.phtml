@@ -18,7 +18,7 @@
     <?php echo $block->getBlockHtml('formkey'); ?>
     <div class="cart table-wrapper<?php echo $mergedCells == 2 ? ' detailed' : ''; ?>">
         <?php if ($block->getPagerHtml()): ?>
-            <div class="cart-products-toolbar toolbar" data-attribute="cart-products-toolbar-top"><?php echo $block->getPagerHtml(); ?></div>
+            <div class="cart-products-toolbar cart-products-toolbar-top toolbar" data-attribute="cart-products-toolbar-top"><?php echo $block->getPagerHtml(); ?></div>
         <?php endif ?>
         <table id="shopping-cart-table"
                class="cart items data table"
@@ -38,7 +38,7 @@
             <?php endforeach ?>
         </table>
         <?php if ($block->getPagerHtml()): ?>
-            <div class="cart-products-toolbar toolbar bottom" data-attribute="cart-products-toolbar-bottom"><?php echo $block->getPagerHtml(); ?></div>
+            <div class="cart-products-toolbar cart-products-toolbar-bottom toolbar" data-attribute="cart-products-toolbar-bottom"><?php echo $block->getPagerHtml(); ?></div>
         <?php endif ?>
     </div>
     <div class="cart main actions">
