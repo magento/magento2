@@ -28,7 +28,7 @@
     <!-- ko if: getCartParam('summary_count') -->
         <div class="items-total">
             <!-- ko if: maxItemsToDisplay < getCartParam('summary_count') -->
-                <!-- ko text: maxItemsToDisplay --><!-- /ko -->
+                <span class="count"><!-- ko text: maxItemsToDisplay --><!-- /ko --></span>
                 <!-- ko i18n: 'of' --><!-- /ko -->
             <!-- /ko -->
             <span class="count"><!-- ko text: getCartParam('summary_count') --><!-- /ko --></span>
@@ -37,6 +37,9 @@
             <!-- /ko -->
             <!-- ko if: getCartParam('summary_count') > 1 -->
                 <!-- ko i18n: 'items' --><!-- /ko -->
+            <!-- /ko -->
+            <!-- ko if: maxItemsToDisplay < getCartParam('summary_count') -->
+                <!-- ko i18n: 'displayed' --><!-- /ko -->
             <!-- /ko -->
         </div>
 
