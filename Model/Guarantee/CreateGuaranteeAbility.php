@@ -99,11 +99,8 @@ class CreateGuaranteeAbility
     {
         $orderCreateDate = $this->dateTimeFactory->create($order->getCreatedAt(), new \DateTimeZone('UTC'));
         $currentDate = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
-        if ($orderCreateDate->diff($currentDate)->days >= $days) {
-            return true;
-        }
 
-        return false;
+        return $orderCreateDate->diff($currentDate)->days >= $days;
     }
 
     /**
