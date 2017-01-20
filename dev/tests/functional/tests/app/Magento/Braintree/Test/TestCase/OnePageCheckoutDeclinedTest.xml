@@ -53,5 +53,19 @@
             <data name="configData" xsi:type="string">braintree, braintree_cctypes_AE_VI</data>
             <constraint name="Magento\Braintree\Test\Constraint\AssertCreditCardJsValidationMessagesArePresent" />
         </variation>
+        <variation name="OnePageCheckoutBraintreeDeclinedTestVariation4" summary="Checkout with Braintree Credit Card with specific allowed credit card types per country" ticketId="MAGETWO-38438">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">customer_UK_1_default_billing_address</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">mastercard_default</data>
+            <data name="expectedErrorMessages/cc_number" xsi:type="string">Please, enter valid Credit Card Number</data>
+            <data name="configData" xsi:type="string">braintree, braintree_countrycreditcard_US_MS_GB_VI</data>
+            <constraint name="Magento\Braintree\Test\Constraint\AssertCreditCardJsValidationMessagesArePresent" />
+        </variation>
     </testCase>
 </config>
