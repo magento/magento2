@@ -57,6 +57,10 @@
                 <selector>[name="use_default[name]"]</selector>
                 <input>checkbox</input>
             </use_default_name>
+            <use_default_price>
+                <selector>[name="use_default[price]"]</selector>
+                <input>checkbox</input>
+            </use_default_price>
         </fields>
     </product-details>
     <advanced-pricing>

@@ -1,49 +1,62 @@
 <?php
-/***
+/**
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Console;
-
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Console\GenerationDirectoryAccess;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Phrase;
 use Magento\Setup\Console\Command\DiCompileCommand;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Input\ArgvInput;
+use Zend\ServiceManager\ServiceManager;
 
 class CompilerPreparation
 {
-    /** @var \Zend\ServiceManager\ServiceManager */
+    /**
+     * @var ServiceManager
+     */
     private $serviceManager;
 
-    /** @var ArgvInput */
+    /**
+     * @var ArgvInput
+     */
     private $input;
 
-    /** @var File */
+    /**
+     * @var File
+     */
     private $filesystemDriver;
 
     /**
-     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     * @var GenerationDirectoryAccess
+     */
+    private $generationDirectoryAccess;
+
+    /**
+     * @param ServiceManager $serviceManager
      * @param ArgvInput $input
      * @param File $filesystemDriver
      */
     public function __construct(
-        \Zend\ServiceManager\ServiceManager $serviceManager,
-        \Symfony\Component\Console\Input\ArgvInput $input,
-        \Magento\Framework\Filesystem\Driver\File $filesystemDriver
+        ServiceManager $serviceManager,
+        ArgvInput $input,
+        File $filesystemDriver
     ) {
-        $this->serviceManager   = $serviceManager;
-        $this->input            = $input;
+        $this->serviceManager = $serviceManager;
+        $this->input = $input;
         $this->filesystemDriver = $filesystemDriver;
     }
 
     /**
-     * Determine whether a CLI command is for compilation, and if so, clear the directory
+     * Determine whether a CLI command is for compilation, and if so, clear the directory.
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException if generation directory is read-only
      * @return void
      */
     public function handleCompilerEnvironment()
@@ -63,10 +76,30 @@ class CompilerPreparation
         $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATION);
         $compileDirList[] = $directoryList->getPath(DirectoryList::DI);
 
+        if (!$this->getGenerationDirectoryAccess()->check()) {
+            throw new FileSystemException(
+                new Phrase('Generation directory can not be written.')
+            );
+        }
+
         foreach ($compileDirList as $compileDir) {
             if ($this->filesystemDriver->isExists($compileDir)) {
                 $this->filesystemDriver->deleteDirectory($compileDir);
             }
         }
+    }
+
+    /**
+     * Retrieves generation directory access checker.
+     *
+     * @return GenerationDirectoryAccess the generation directory access checker
+     */
+    private function getGenerationDirectoryAccess()
+    {
+        if (null === $this->generationDirectoryAccess) {
+            $this->generationDirectoryAccess = new GenerationDirectoryAccess($this->serviceManager);
+        }
+
+        return $this->generationDirectoryAccess;
     }
 }

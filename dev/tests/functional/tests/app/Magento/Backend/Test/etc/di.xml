@@ -11,6 +11,16 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\Test\Constraint\AssertHttpsUsedOnBackend">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Test\Constraint\AssertHttpsUsedOnFrontend">
+        <arguments>
+            <argument name="severity" xsi:type="string">middle</argument>
+        </arguments>
+    </type>
     <type name="Magento\Backend\Test\Constraint\AssertStoreCanBeLocalized">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
