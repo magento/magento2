@@ -41,7 +41,7 @@
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
-            <data name="configData" xsi:type="string">braintree, braintree_paypal_skip_order_review, braintree_countrycreditcard_US_MS_GB_VI</data>
+            <data name="configData" xsi:type="string">braintree, braintree_countrycreditcard_US_MS_GB_VI</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
         </variation>
     </testCase>
