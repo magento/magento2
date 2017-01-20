@@ -18,42 +18,42 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\GiftMessage\Model\OrderItemRepository|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderItemRepository;
+    private $orderItemRepository;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderFactoryMock;
+    private $orderFactoryMock;
 
     /**
      * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderMock;
+    private $orderMock;
 
     /**
      * @var \Magento\GiftMessage\Helper\Message|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $helperMock;
+    private $helperMock;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManagerMock;
+    private $storeManagerMock;
 
     /**
      * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeMock;
+    private $storeMock;
 
     /**
      * @var \Magento\GiftMessage\Model\MessageFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $messageFactoryMock;
+    private $messageFactoryMock;
 
     /**
      * @var \Magento\GiftMessage\Model\Save|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $giftMessageSaveModelMock;
+    private $giftMessageSaveModelMock;
 
     protected function setUp()
     {

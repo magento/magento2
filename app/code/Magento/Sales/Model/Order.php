@@ -788,6 +788,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $productsCollection = $this->productListFactory->create()
                 ->setStoreId($this->getStoreId())
                 ->addIdFilter($products)
+                ->addAttributeToSelect('status')
                 ->load();
 
             foreach ($itemsCollection as $item) {
