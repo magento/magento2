@@ -95,11 +95,11 @@ class Grid extends \Magento\Checkout\Block\Cart
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        if ($this->getItemsCount() > 0 && !$this->getCustomItems()) {
-            $availableLimit = $this->_scopeConfig->getValue(
-                self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
+        $availableLimit = $this->_scopeConfig->getValue(
+            self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        if ($this->getItemsCount() > $availableLimit && !$this->getCustomItems()) {
             $itemsCollection = $this->getItemsForGrid();
             /** @var  \Magento\Theme\Block\Html\Pager $pager */
             $pager = $this->getLayout()->createBlock(\Magento\Theme\Block\Html\Pager::class);
