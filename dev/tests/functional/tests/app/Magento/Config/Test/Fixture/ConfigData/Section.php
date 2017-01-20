@@ -98,10 +98,38 @@ class Section extends DataSource
                 $this->prepareScopeData();
                 unset($this->fixtureData['scope']);
             }
-            $this->data = $this->fixtureData;
+            $this->data = $this->replacePlaceholders($this->fixtureData);
         }
 
         return parent::getData($key);
+    }
+
+    /**
+     * Replace placeholders in parameters array.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function replacePlaceholders(array $data)
+    {
+        foreach ($data as &$params) {
+            $params = array_map(function ($value) {
+                if (is_string($value)) {
+                    $value = str_replace(
+                        '{{basic_url_to_secure}}',
+                        preg_replace('/(http[s]?)/', 'https', $_ENV['app_frontend_url']),
+                        $value
+                    );
+                    $value = str_replace(
+                        '{{basic_url_to_unsecure}}',
+                        preg_replace('/(http[s]?)/', 'http', $_ENV['app_frontend_url']),
+                        $value
+                    );
+                }
+                return $value;
+            }, $params);
+        }
+        return $data;
     }
 
     /**
