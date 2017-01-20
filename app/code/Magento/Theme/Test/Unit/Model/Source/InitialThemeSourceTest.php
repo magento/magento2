@@ -75,6 +75,7 @@ class InitialThemeSourceTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMockForAbstractClass();
         $this->dataObjectFactoryMock = $this->getMockBuilder(DataObjectFactory::class)
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectMock = $this->getMockBuilder(DataObject::class)
