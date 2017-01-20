@@ -103,9 +103,12 @@ class DataProvider implements DataProviderInterface
             $read = $this->fileReadFactory->create($filePath[0], \Magento\Framework\Filesystem\DriverPool::FILE);
             $content = $read->readAll();
             foreach ($this->getPhrases($content) as $phrase) {
-                $translatedPhrase = $this->translate->render([$phrase], []);
-                if ($phrase != $translatedPhrase) {
-                    $dictionary[$phrase] = $translatedPhrase;
+                try {
+                    $translatedPhrase = $this->translate->render([$phrase], []);
+                    if ($phrase != $translatedPhrase) {
+                        $dictionary[$phrase] = $translatedPhrase;
+                    }
+                } catch (\Exception $e) {
                 }
             }
         }
