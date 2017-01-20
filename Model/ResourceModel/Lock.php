@@ -13,6 +13,12 @@ use \Magento\Framework\MessageQueue\Lock\WriterInterface;
  */
 class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements ReaderInterface, WriterInterface
 {
+    /**#@+
+     * Constants
+     */
+    const QUEUE_LOCK_TABLE = 'queue_lock';
+    /**#@-*/
+
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
@@ -55,7 +61,7 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     protected function _construct()
     {
-        $this->_init('queue_lock', 'id');
+        $this->_init(self::QUEUE_LOCK_TABLE, 'id');
     }
 
     /**
@@ -88,6 +94,6 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     {
         $date = (new \DateTime())->setTimestamp($this->dateTime->gmtTimestamp());
         $date->add(new \DateInterval('PT' . $this->interval . 'S'));
-        $this->getConnection()->delete($this->getTable('queue_lock'), ['created_at <= ?' => $date]);
+        $this->getConnection()->delete($this->getTable(self::QUEUE_LOCK_TABLE), ['created_at <= ?' => $date]);
     }
 }
