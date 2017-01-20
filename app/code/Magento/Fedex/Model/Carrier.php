@@ -1570,9 +1570,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'progressdetail' => [],
         ];
 
-        if (!empty($trackInfo->ShipTimestamp)) {
-            $datetime = \DateTime::createFromFormat(\DateTime::ISO8601, $trackInfo->ShipTimestamp);
-            $result['shippeddate'] = $datetime->format('Y-m-d');
+        if (!empty($trackInfo->ShipTimestamp) && ($datetime = $this->parseDate($trackInfo->ShipTimestamp)) !== false) {
+            $result['shippeddate'] = gmdate('Y-m-d', $datetime->getTimestamp());
         }
 
         $result['signedby'] = !empty($trackInfo->DeliverySignatureName) ?
@@ -1588,8 +1587,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $datetime = $this->getDeliveryDateTime($trackInfo);
         if ($datetime) {
-            $result['deliverydate'] = $datetime->format('Y-m-d');
-            $result['deliverytime'] = $datetime->format('H:i:s');
+            $result['deliverydate'] = gmdate('Y-m-d', $datetime->getTimestamp());
+            $result['deliverytime'] = gmdate('H:i:s', $datetime->getTimestamp());
         }
 
         $address = null;
@@ -1636,7 +1635,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $timestamp = $trackInfo->ActualDeliveryTimestamp;
         }
 
-        return $timestamp ? \DateTime::createFromFormat(\DateTime::ISO8601, $timestamp) : null;
+        return $timestamp ? $this->parseDate($timestamp) : null;
     }
 
     /**
@@ -1685,10 +1684,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'deliverylocation' => null
             ];
 
-            if (!empty($event->Timestamp)) {
-                $datetime = \DateTime::createFromFormat(\DateTime::ISO8601, $event->Timestamp);
-                $item['deliverydate'] = $datetime->format('Y-m-d');
-                $item['deliverytime'] = $datetime->format('H:i:s');
+            if (!empty($event->Timestamp) && ($datetime = $this->parseDate($event->Timestamp)) !== false) {
+                $item['deliverydate'] = gmdate('Y-m-d', $datetime->getTimestamp());
+                $item['deliverytime'] = gmdate('H:i:s', $datetime->getTimestamp());
             }
 
             if (!empty($event->Address)) {
@@ -1715,5 +1713,32 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $error->setErrorMessage($errorMessage);
         $result = $this->getResult();
         $result->append($error);
+    }
+
+    /**
+     * Parses datetime string from FedEx response.
+     * According to FedEx API, datetime string should be in \DateTime::ATOM format, but
+     * sometimes FedEx returns datetime without timezone and in that case timezone will be set as UTC.
+     *
+     * @param string $timestamp
+     * @return bool|\DateTime
+     */
+    private function parseDate($timestamp)
+    {
+        $formats = [\DateTime::ATOM, 'Y-m-d\TH:i:s'];
+        $tz = date_default_timezone_get();
+
+        foreach ($formats as $format) {
+            // set UTC timezone for a case if timestamp does not contain any timezone
+            date_default_timezone_set('UTC');
+            $dateTime = \DateTime::createFromFormat($format, $timestamp);
+            if ($dateTime !== false) {
+                date_default_timezone_set($tz);
+                return $dateTime;
+            }
+        }
+
+        date_default_timezone_set($tz);
+        return false;
     }
 }
