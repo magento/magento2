@@ -118,6 +118,7 @@ class DummyDataProvider implements DataProviderInterface
      * @param string $fieldName
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
@@ -130,6 +131,7 @@ class DummyDataProvider implements DataProviderInterface
      * @param string $fieldSetName
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldSetMetaInfo($fieldSetName)
     {
@@ -140,6 +142,7 @@ class DummyDataProvider implements DataProviderInterface
      * @param string $fieldSetName
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
@@ -182,9 +185,11 @@ class DummyDataProvider implements DataProviderInterface
      * @param \Magento\Framework\Api\Filter $filter
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
-    {}
+    {
+    }
 
     /**
      * Add ORDER BY to the end or to the beginning
@@ -193,9 +198,11 @@ class DummyDataProvider implements DataProviderInterface
      * @param string $direction
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addOrder($field, $direction)
-    {}
+    {
+    }
 
     /**
      * Set Query limit
@@ -204,9 +211,11 @@ class DummyDataProvider implements DataProviderInterface
      * @param int $size
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setLimit($offset, $size)
-    {}
+    {
+    }
 
     /**
      * Returns search criteria
