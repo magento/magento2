@@ -44,6 +44,35 @@ class Webapi extends AbstractWebapi implements CustomerInterface
     ];
 
     /**
+     * Attributes that has a setter while creating customer using web api.
+     *
+     * @var array
+     */
+    protected $basicAttributes = [
+        'id',
+        'confirmation',
+        'created_at',
+        'updated_at',
+        'created_in',
+        'dob',
+        'email',
+        'firstname',
+        'gender',
+        'group_id',
+        'lastname',
+        'middlename',
+        'prefix',
+        'store_id',
+        'suffix',
+        'taxvat',
+        'website_id',
+        'default_billing',
+        'default_shipping',
+        'addresses',
+        'disable_auto_group_change',
+    ];
+
+    /**
      * Create customer via Web API.
      *
      * @param FixtureInterface|null $customer
@@ -79,11 +108,13 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         $data['customer'] = $this->replaceMappingData($customer->getData());
         $data['customer']['group_id'] = $this->getCustomerGroup($customer);
         $data['password'] = $data['customer']['password'];
-        $data['customer']['website_id'] = $this->getCustomerWebsite($customer);
+        if ($customer->hasData('website_id')) {
+            $data['customer']['website_id'] = $this->getCustomerWebsite($customer);
+        }
         unset($data['customer']['password']);
         unset($data['customer']['password_confirmation']);
         $data = $this->prepareAddressData($data);
-
+        $data = $this->prepareExtensionAttributes($data);
         return $data;
     }
 
@@ -193,5 +224,23 @@ class Webapi extends AbstractWebapi implements CustomerInterface
     private function getCustomerWebsite(Customer $customer)
     {
         return $customer->getDataFieldConfig('website_id')['source']->getWebsite()->getWebsiteId();
+    }
+
+    /**
+     * Prepare extension attributes for the customer.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function prepareExtensionAttributes($data)
+    {
+        foreach ($data['customer'] as $fieldName => $fieldValue) {
+            if (!in_array($fieldName, $this->basicAttributes)) {
+                $data['customer']['extension_attributes'][$fieldName] = $fieldValue;
+                unset($data['customer'][$fieldName]);
+            }
+        }
+
+        return $data;
     }
 }
