@@ -83,6 +83,10 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
             $params['order_success'] = $helper->getSuccessOrderUrl($result);
         }
 
+        //load layout before processing the payment method so created blocks don't affect rendering
+        $this->_view->addPageLayoutHandles();
+        $this->_view->loadLayout(false);
+
         try {
             if (!empty($data['store_id'])) {
                 $paymentMethod->setStore($data['store_id']);
@@ -110,9 +114,9 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
             $params['redirect'] = $helper->getRedirectIframeUrl($result);
         }
 
+        //registering parameter for iframe content
         $this->_coreRegistry->register(Iframe::REGISTRY_KEY, $params);
-        $this->_view->addPageLayoutHandles();
-        $this->_view->loadLayout(false)->renderLayout();
+        $this->_view->renderLayout();
     }
 
     /**

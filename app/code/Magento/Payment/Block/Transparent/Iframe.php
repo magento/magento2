@@ -38,14 +38,17 @@ class Iframe extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Preparing layout
+     * Override this method in descendants to produce html
      *
-     * @return $this
+     * @return string
      */
-    protected function _prepareLayout()
+    protected function _toHtml()
     {
-        $params = $this->coreRegistry->registry(self::REGISTRY_KEY);
+        $params = $this->getParams();
+        if (empty($params)) {
+            $params = $this->coreRegistry->registry(self::REGISTRY_KEY);
+        }
         $this->setParams($params);
-        return parent::_prepareLayout();
+        return parent::_toHtml();
     }
 }
