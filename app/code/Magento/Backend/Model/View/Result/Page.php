@@ -11,43 +11,6 @@ use Magento\Framework\View;
 class Page extends View\Result\Page
 {
     /**
-     * Constructor
-     *
-     * @param View\Element\Template\Context $context
-     * @param View\LayoutFactory $layoutFactory
-     * @param View\Layout\ReaderPool $layoutReaderPool
-     * @param Translate\InlineInterface $translateInline
-     * @param View\Layout\BuilderFactory $layoutBuilderFactory
-     * @param View\Layout\GeneratorPool $generatorPool
-     * @param View\Page\Config\RendererFactory $pageConfigRendererFactory
-     * @param View\Page\Layout\Reader $pageLayoutReader
-     * @param string $template
-     */
-    public function __construct(
-        View\Element\Template\Context $context,
-        View\LayoutFactory $layoutFactory,
-        View\Layout\ReaderPool $layoutReaderPool,
-        Translate\InlineInterface $translateInline,
-        View\Layout\BuilderFactory $layoutBuilderFactory,
-        View\Layout\GeneratorPool $generatorPool,
-        View\Page\Config\RendererFactory $pageConfigRendererFactory,
-        View\Page\Layout\Reader $pageLayoutReader,
-        $template
-    ) {
-        parent::__construct(
-            $context,
-            $layoutFactory,
-            $layoutReaderPool,
-            $translateInline,
-            $layoutBuilderFactory,
-            $generatorPool,
-            $pageConfigRendererFactory,
-            $pageLayoutReader,
-            $template
-        );
-    }
-
-    /**
      * Define active menu item in menu block
      *
      * @param string $itemId current active menu item
