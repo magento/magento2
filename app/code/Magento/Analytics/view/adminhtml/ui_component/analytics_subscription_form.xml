@@ -24,10 +24,8 @@
 
     <dataSource name="analytics_subscription_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Cms\Model\Page\DataProvider</argument>
+            <argument name="class" xsi:type="string">Magento\Analytics\Ui\DataProvider\DummyDataProvider</argument>
             <argument name="name" xsi:type="string">analytics_subscription_form_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">page_id</argument>
-            <argument name="requestFieldName" xsi:type="string">page_id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="submit_url" xsi:type="url" path="analytics/subscription/activate"/>
