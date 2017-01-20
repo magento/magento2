@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Module\Output;
 
+/**
+ * @deprecated
+ */
 interface ConfigInterface
 {
     /**

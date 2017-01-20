@@ -23,4 +23,12 @@
     <type name="Magento\UrlRewrite\Model\StorageInterface">
         <plugin name="storage_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage"/>
     </type>
+    <type name="Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder">
+        <arguments>
+            <argument name="urlRewriteClassNames" xsi:type="array">
+                <item name="product" xsi:type="string">Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap</item>
+                <item name="category" xsi:type="string">Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
