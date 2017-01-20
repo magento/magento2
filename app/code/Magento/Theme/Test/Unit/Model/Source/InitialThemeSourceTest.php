@@ -15,6 +15,9 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InitialThemeSourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
