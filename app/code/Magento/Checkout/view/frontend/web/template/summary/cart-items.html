@@ -36,8 +36,12 @@
         </div>
     </div>
     <!-- ko if: maxCartItemsToDisplay < getItemsQty() -->
-        <a class="action edit" data-bind="attr: {href: cartUrl}">
-            <span data-bind="i18n: 'View and edit cart'"></span>
-        </a>
+    <div class="actions-toolbar">
+        <div class="secondary">
+            <a class="action viewcart" data-bind="attr: {href: cartUrl}">
+                <span data-bind="i18n: 'View and edit cart'"></span>
+            </a>
+        </div>
+    </div>
     <!-- /ko -->
 </div>
