@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Model;
@@ -13,7 +13,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
 
 /**
- * Generate static files, compile; clear var/generation, var/di/, var/view_preprocessed and pub/static directories
+ * Generate static files, compile
+ * Сlear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -129,7 +130,7 @@ class Filesystem
     public function regenerateStatic(
         OutputInterface $output
     ) {
-        // Сlear var/generation, var/di/, var/view_preprocessed and pub/static directories
+        // Сlear generated/code, generated/metadata/, var/view_preprocessed and pub/static directories
         $this->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
@@ -315,7 +316,7 @@ class Filesystem
      */
     public function lockStaticResources()
     {
-        // Lock /var/generation, /var/di/ and /var/view_preprocessed directories
+        // Lock /generated/code, /generated/metadata/ and /var/view_preprocessed directories
         $this->changePermissions(
             [
                 DirectoryList::GENERATION,

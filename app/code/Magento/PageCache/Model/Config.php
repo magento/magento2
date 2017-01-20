@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model;
@@ -41,6 +41,8 @@ class Config
 
     const XML_VARNISH_PAGECACHE_BACKEND_HOST = 'system/full_page_cache/varnish/backend_host';
 
+    const XML_VARNISH_PAGECACHE_GRACE_PERIOD = 'system/full_page_cache/varnish/grace_period';
+
     const XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX = 'design/theme/ua_regexp';
 
     /**
@@ -49,9 +51,9 @@ class Config
     protected $_scopeConfig;
 
     /**
-     * XML path to Varnish 3 config template path
+     * XML path to Varnish 5 config template path
      */
-    const VARNISH_3_CONFIGURATION_PATH = 'system/full_page_cache/varnish3/path';
+    const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
 
     /**
      * XML path to Varnish 4 config template path
@@ -138,14 +140,8 @@ class Config
     protected function _getReplacements()
     {
         return [
-            '/* {{ host }} */' => $this->_scopeConfig->getValue(
-                self::XML_VARNISH_PAGECACHE_BACKEND_HOST,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ),
-            '/* {{ port }} */' => $this->_scopeConfig->getValue(
-                self::XML_VARNISH_PAGECACHE_BACKEND_PORT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ),
+            '/* {{ host }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_HOST),
+            '/* {{ port }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_PORT),
             '/* {{ ips }} */' => $this->_getAccessList(),
             '/* {{ design_exceptions_code }} */' => $this->_getDesignExceptions(),
             // http headers get transformed by php `X-Forwarded-Proto: https`
@@ -154,11 +150,9 @@ class Config
             '/* {{ ssl_offloaded_header }} */' => str_replace(
                 '_',
                 '-',
-                $this->_scopeConfig->getValue(
-                    \Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            )
+                $this->_scopeConfig->getValue(\Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER)
+            ),
+            '/* {{ grace_period }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_GRACE_PERIOD)
         ];
     }
 
@@ -176,10 +170,7 @@ class Config
     {
         $result = '';
         $tpl = "    \"%s\";";
-        $accessList = $this->_scopeConfig->getValue(
-            self::XML_VARNISH_PAGECACHE_ACCESS_LIST,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        $accessList = $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_ACCESS_LIST);
         if (!empty($accessList)) {
             $result = [];
             $ips = explode(',', $accessList);
