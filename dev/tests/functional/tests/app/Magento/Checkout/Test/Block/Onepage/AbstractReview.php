@@ -220,6 +220,30 @@ abstract class AbstractReview extends Block
     }
 
     /**
+     * Get cart item.
+     *
+     * @param string $productName
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    public function getItemElement($productName)
+    {
+        return $this->_rootElement->find(
+            sprintf($this->productItemByName, $productName),
+            Locator::SELECTOR_XPATH
+        );
+    }
+
+    /**
+     * Click to expand cart items block
+     *
+     * @return void
+     */
+    public function expandItemsBlock()
+    {
+        $this->_rootElement->find('.items-in-cart')->click();
+    }
+
+    /**
      * Get Grand Total excluding tax text.
      *
      * @return string

@@ -129,5 +129,23 @@
             <data name="issue" xsi:type="string">MAGETWO-61592 - [Shopping Cart] Top destinations are not displayed in the shopping cart summary</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertTopDestinationsInSelect" />
         </variation>
+        <variation name="AddProductsToShoppingCartEntityTestVariationWithCartItemsDisplayDefaultLimitation" summary="Verify visible items count in minicart and checkout summary block according to configuration">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/1" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/2" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/3" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/4" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/5" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/6" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/7" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/8" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/9" xsi:type="string">catalogProductSimple::default</data>
+            <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">8</data>
+            <data name="checkoutSummaryMaxVisibleCartItemsCount" xsi:type="number">8</data>
+            <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
+        </variation>
     </testCase>
 </config>
