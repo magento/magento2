@@ -438,8 +438,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * @param ProductInterface $product
-     * @param array $mediaGalleryEntries
+     * Process Media gallery data before save product.
+     *
+     * Compare Media Gallery Entries Data with existing Media Gallery
+     * * If Media entry has not value_id set it as new
+     * * If Existing entry 'value_id' absent in Media Gallery set 'removed' flag
+     * * Merge Existing and new media gallery
+     *
+     * @param ProductInterface $product contains only existing media gallery items
+     * @param array $mediaGalleryEntries array which contains all media gallery items
      * @return $this
      * @throws InputException
      * @throws StateException
