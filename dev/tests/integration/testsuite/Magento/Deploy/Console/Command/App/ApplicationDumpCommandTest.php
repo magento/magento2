@@ -101,17 +101,11 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function validateThemesSection(array $config)
     {
-        // Clearing the dynamic fields.
-        foreach (array_keys($config['themes']) as $themeKey) {
-            $config['themes'][$themeKey]['preview_image'] = null;
-        }
-
         $this->assertEquals(
             [
                 'parent_id' => null,
                 'theme_path' => 'Magento/backend',
                 'theme_title' => 'Magento 2 backend',
-                'preview_image' => null,
                 'is_featured' => '0',
                 'area' => 'adminhtml',
                 'type' => '0',
@@ -124,7 +118,6 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
                 'parent_id' => null,
                 'theme_path' => 'Magento/blank',
                 'theme_title' => 'Magento Blank',
-                'preview_image' => null,
                 'is_featured' => '0',
                 'area' => 'frontend',
                 'type' => '0',
@@ -137,7 +130,6 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
                 'parent_id' => 'Magento/blank',
                 'theme_path' => 'Magento/luma',
                 'theme_title' => 'Magento Luma',
-                'preview_image' => null,
                 'is_featured' => '0',
                 'area' => 'frontend',
                 'type' => '0',

@@ -64,13 +64,13 @@ class InitialThemeSource implements ConfigSourceInterface
     /**
      * Retrieves configuration data array.
      * Example:
-     *  ```
+     *
+     *  ```php
      *  ['Magento/backend' =>
      *      [
      *          'parent_id' => NULL,
      *          'theme_path' => 'Magento/backend',
      *          'theme_title' => 'Magento 2 backend',
-     *          'preview_image' => NULL,
      *          'is_featured' => '0',
      *          'area' => 'adminhtml',
      *          'type' => '0',
@@ -93,7 +93,7 @@ class InitialThemeSource implements ConfigSourceInterface
             $themes = [];
 
             foreach ($rawThemes as $themeRow) {
-                unset($themeRow['theme_id']);
+                unset($themeRow['theme_id'], $themeRow['preview_image']);
 
                 $themes[$themeRow['code']] = $themeRow;
 
