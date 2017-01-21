@@ -3,19 +3,19 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\CurrencySymbol\Setup;
 
-namespace Magento\Theme\Setup;
-
+use Magento\CurrencySymbol\Model\System\Currencysymbol;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\Select\QueryModifierFactory;
-use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Theme\Model\Data\Design\Config;
 
 /**
+ * Data upgrade script
+ *
  * @codeCoverageIgnore
  */
 class UpgradeData implements UpgradeDataInterface
@@ -31,25 +31,17 @@ class UpgradeData implements UpgradeDataInterface
     private $queryModifierFactory;
 
     /**
-     * @var IndexerRegistry
-     */
-    protected $indexerRegistry;
-
-    /**
-     * UpgradeData constructor
+     * Constructor
      *
-     * @param IndexerRegistry $indexerRegistry
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      * @param QueryModifierFactory $queryModifierFactory
      */
     public function __construct(
-        IndexerRegistry $indexerRegistry,
         FieldDataConverterFactory $fieldDataConverterFactory,
         QueryModifierFactory $queryModifierFactory
     ) {
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
         $this->queryModifierFactory = $queryModifierFactory;
-        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -57,32 +49,25 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $setup->startSetup();
-        $indexer = $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID);
-        $indexer->reindexAll();
-        if (version_compare($context->getVersion(), '2.0.2', '<')) {
-            $this->upgradeToVersionTwoZeroTwo($setup);
+        if (version_compare($context->getVersion(), '2.0.1', '<')) {
+            $this->convertSerializedCustomCurrencySymbolToJson($setup);
         }
-        $setup->endSetup();
     }
 
     /**
-     * Upgrade to version 2.0.2, convert data for `value` field in `core_config_data table`
-     * from php-serialized to JSON format
+     * Converts custom currency symbol configuration in core_config_data table from serialized to JSON format
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
      */
-    private function upgradeToVersionTwoZeroTwo(ModuleDataSetupInterface $setup)
+    private function convertSerializedCustomCurrencySymbolToJson(ModuleDataSetupInterface $setup)
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $queryModifier = $this->queryModifierFactory->create(
             'in',
             [
                 'values' => [
-                    'path' => [
-                        'design/theme/ua_regexp',
-                    ]
+                    'path' => [Currencysymbol::XML_PATH_CUSTOM_CURRENCY_SYMBOL]
                 ]
             ]
         );
