@@ -162,6 +162,10 @@
         <wrapper>product</wrapper>
         <fields>
             <url_key/>
+            <use_default_url_key>
+                <selector>[name="use_default[url_key]"]</selector>
+                <input>checkbox</input>
+            </use_default_url_key>
         </fields>
     </search-engine-optimization>
     <related>

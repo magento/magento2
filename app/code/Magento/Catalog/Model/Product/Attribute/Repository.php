@@ -134,10 +134,6 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                 }
                 $attribute->setDefaultFrontendLabel($frontendLabel);
             }
-            if (!$attribute->getIsUserDefined()) {
-                // Unset attribute field for system attributes
-                $attribute->setApplyTo(null);
-            }
         } else {
             $attribute->setAttributeId(null);
 
