@@ -79,6 +79,13 @@ class Product extends Form
     protected $price = '.price';
 
     /**
+     * Locator value for item Price in Product Grid.
+     *
+     * @var string
+     */
+    protected $priceInGrid = '.products-grid .price';
+
+    /**
      * Fill item with details.
      *
      * @param array $fields
@@ -159,7 +166,7 @@ class Product extends Form
      */
     public function hoverProductBlock()
     {
-        $this->_rootElement->find($this->price)->hover();
+        $this->_rootElement->find($this->priceInGrid)->hover();
     }
 
     /**

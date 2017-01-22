@@ -16,7 +16,7 @@ use Magento\Catalog\Test\Fixture\Category;
 class CategoryId extends DataSource
 {
     /**
-     * Category fixture
+     * Category fixture.
      *
      * @var Category
      */
@@ -46,7 +46,7 @@ class CategoryId extends DataSource
     }
 
     /**
-     * Return Category fixture
+     * Return Category fixture.
      *
      * @return Category
      */

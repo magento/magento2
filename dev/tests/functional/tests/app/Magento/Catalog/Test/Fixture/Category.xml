@@ -20,7 +20,7 @@
         <field name="created_at" is_required="" />
         <field name="updated_at" is_required="" />
         <field name="id" group="null" />
-        <field name="store_id" source="Magento\Catalog\Test\Fixture\Category\StoreId" />
+        <field name="store_id" is_required="" group="null" source="Magento\Catalog\Test\Fixture\Category\StoreId" />
         <field name="parent_id" is_required="" group="null" source="Magento\Catalog\Test\Fixture\Category\ParentId" />
         <field name="path" is_required="" group="null" />
         <field name="children_count" is_required="" />
