@@ -92,7 +92,6 @@ class UpdateCategoryEntityTest extends Injectable
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);
         $this->catalogCategoryEdit->getEditForm()->fill($category);
         $this->catalogCategoryEdit->getFormPageActions()->save();
-
         return ['category' => $this->prepareCategory($category, $initialCategory)];
     }
 
@@ -109,11 +108,16 @@ class UpdateCategoryEntityTest extends Injectable
             ? $category->getDataFieldConfig('parent_id')['source']->getParentCategory()
             : $initialCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
 
+        $rewriteData = ['parent_id' => ['source' => $parentCategory]];
+        if ($category->hasData('store_id')) {
+            $rewriteData['store_id'] = ['source' => $category->getDataFieldConfig('store_id')['source']->getStore()];
+        }
+
         $data = [
             'data' => array_merge(
                 $initialCategory->getData(),
                 $category->getData(),
-                ['parent_id' => ['source' => $parentCategory]]
+                $rewriteData
             )
         ];
 
