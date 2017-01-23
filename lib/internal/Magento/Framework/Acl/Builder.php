@@ -29,6 +29,7 @@ class Builder
      * ACL cache
      *
      * @var \Magento\Framework\Acl\CacheInterface
+     * @deprecated
      */
     protected $_cache;
 
@@ -64,20 +65,30 @@ class Builder
      */
     public function getAcl()
     {
+        if ($this->_acl instanceof \Magento\Framework\Acl) {
+            return $this->_acl;
+        }
+
         try {
-            if ($this->_cache->has()) {
-                $this->_acl = $this->_cache->get();
-            } else {
-                $this->_acl = $this->_aclFactory->create();
-                foreach ($this->_loaderPool as $loader) {
-                    $loader->populateAcl($this->_acl);
-                }
-                $this->_cache->save($this->_acl);
+            $this->_acl = $this->_aclFactory->create();
+            foreach ($this->_loaderPool as $loader) {
+                $loader->populateAcl($this->_acl);
             }
         } catch (\Exception $e) {
             throw new \LogicException('Could not create an acl object: ' . $e->getMessage());
         }
 
         return $this->_acl;
+    }
+
+    /**
+     * Remove cached ACL instance.
+     *
+     * @return $this
+     */
+    public function resetRuntimeAcl()
+    {
+        $this->_acl = null;
+        return $this;
     }
 }
