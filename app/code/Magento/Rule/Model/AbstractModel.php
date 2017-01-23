@@ -52,7 +52,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     /**
      * @var \Magento\Framework\Serialize\Serializer\Json
      */
-    private $serializer;
+    protected $serializer;
 
     /**
      * Getter for rule combine conditions instance
