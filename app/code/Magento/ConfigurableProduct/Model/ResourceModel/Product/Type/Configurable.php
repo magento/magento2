@@ -11,6 +11,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -208,13 +211,50 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Load options for attribute
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $superAttribute
+     * @param AbstractAttribute $superAttribute
      * @param int $productId
      * @return array
      */
     public function getAttributeOptions($superAttribute, $productId)
     {
         $scope  = $this->getScopeResolver()->getScope();
+        $select = $this->getAttributeOptionsSelect($superAttribute, $productId, $scope);
+
+        return $this->getConnection()->fetchAll($select);
+    }
+
+    /**
+     * Load in stock options for attribute
+     *
+     * @param AbstractAttribute $superAttribute
+     * @param int $productId
+     * @return array
+     */
+    public function getInStockAttributeOptions($superAttribute, $productId)
+    {
+        $scope  = $this->getScopeResolver()->getScope();
+        $select = $this->getAttributeOptionsSelect($superAttribute, $productId, $scope);
+        $select->join(
+            ['stock_status' => $this->getTable('cataloginventory_stock_status')],
+            'stock_status.product_id = entity.row_id',
+            []
+        )->where(
+            'stock_status.stock_status = 1'
+        );
+
+        return $this->getConnection()->fetchAll($select);
+    }
+
+    /**
+     * Get load options for attribute select
+     *
+     * @param AbstractAttribute $superAttribute
+     * @param int $productId
+     * @param ScopeInterface $scope
+     * @return Select
+     */
+    private function getAttributeOptionsSelect($superAttribute, $productId, $scope)
+    {
         $select = $this->getConnection()->select()->from(
             ['super_attribute' => $this->getTable('catalog_product_super_attribute')],
             [
@@ -284,7 +324,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $superAttribute->getAttributeId()
         );
 
-        return $this->getConnection()->fetchAll($select);
+        return $select;
     }
 
     /**
