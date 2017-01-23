@@ -129,5 +129,18 @@
             <data name="issue" xsi:type="string">MAGETWO-61592 - [Shopping Cart] Top destinations are not displayed in the shopping cart summary</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertTopDestinationsInSelect" />
         </variation>
+        <variation name="AddProductsToShoppingCartEntityTestVariation10" summary="Verify Pager is presented on Shopping Cart page with non-default system configuration" ticketId="MAGETWO-63340">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/1" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/3" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/4" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/5" xsi:type="string">catalogProductSimple::default</data>
+            <data name="configData" xsi:type="string">modify_pages_number_on_shopping_cart</data>
+            <data name="cart/data/subtotal" xsi:type="string">2800.00</data>
+            <data name="cart/data/pages_config" xsi:type="string">1</data>
+            <constraint name="\Magento\Checkout\Test\Constraint\AssertPagersPresentInShoppingCart" />
+            <constraint name="\Magento\Checkout\Test\Constraint\AssertPagersSummaryText" />
+        </variation>
     </testCase>
 </config>

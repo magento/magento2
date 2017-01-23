@@ -21,11 +21,22 @@ class AssertPagersSummaryText extends AbstractConstraint
      *
      * @param CheckoutCart $checkoutCart
      * @param \Magento\Checkout\Test\Fixture\Cart $cart
+     * @param string|null $configData
      */
-    public function processAssert(CheckoutCart $checkoutCart, \Magento\Checkout\Test\Fixture\Cart $cart)
-    {
+    public function processAssert(
+        CheckoutCart $checkoutCart,
+        \Magento\Checkout\Test\Fixture\Cart $cart,
+        $configData = null
+    ) {
         $checkoutCart->open();
-        $pagerSize = 20; //to do add here ability to config on depend of configData $cart
+        $pagerSize = 20;
+        if ($configData) {
+            $configDataArray = $this->objectManager
+                    ->get(\Magento\Config\Test\Repository\ConfigData::class)
+                    ->get($configData);
+            $configDataArrayValue = array_shift($configDataArray);
+            $pagerSize = $configDataArrayValue['value'];
+        }
         $totalItems = 0;
         $items = $cart->getItems();
         /** @var  $item */
