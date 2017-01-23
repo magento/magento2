@@ -17,7 +17,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
      * Process Website model save
      *
      * @param array $postData
-     * @return void
+     * @return array
      */
     private function processWebsiteSave($postData)
     {
@@ -33,6 +33,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
 
         $websiteModel->save();
         $this->messageManager->addSuccess(__('You saved the website.'));
+
+        return $postData;
     }
 
     /**
@@ -40,7 +42,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
      *
      * @param array $postData
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return void
+     * @return array
      */
     private function processStoreSave($postData)
     {
@@ -71,6 +73,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
         $this->_objectManager->get(\Magento\Store\Model\StoreManager::class)->reinitStores();
         $this->_eventManager->dispatch($eventName, ['store' => $storeModel]);
         $this->messageManager->addSuccess(__('You saved the store view.'));
+
+        return $postData;
     }
 
     /**
@@ -78,7 +82,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
      *
      * @param array $postData
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return void
+     * @return array
      */
     private function processGroupSave($postData)
     {
@@ -100,6 +104,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
         $groupModel->save();
         $this->_eventManager->dispatch('store_group_save', ['group' => $groupModel]);
         $this->messageManager->addSuccess(__('You saved the store.'));
+
+        return $postData;
     }
 
     /**
@@ -118,13 +124,13 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
             try {
                 switch ($postData['store_type']) {
                     case 'website':
-                        $this->processWebsiteSave($postData);
+                        $postData = $this->processWebsiteSave($postData);
                         break;
                     case 'group':
-                        $this->processGroupSave($postData);
+                        $postData = $this->processGroupSave($postData);
                         break;
                     case 'store':
-                        $this->processStoreSave($postData);
+                        $postData = $this->processStoreSave($postData);
                         break;
                     default:
                         $redirectResult->setPath('adminhtml/*/');
