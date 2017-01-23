@@ -74,6 +74,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $resourceRuleCollection = $this->objectManager->create(RuleCollection::class);
         $resourceRuleCollection->addFilter('is_active', 1);
         $this->assertEquals(2, $resourceRuleCollection->count());
+
         $resourceRuleCollection = $this->objectManager->create(RuleCollection::class);
         $resourceRuleCollection->addFilter('is_active', 1);
         $resourceRuleCollection->addFilter('name', 'test_rule');
