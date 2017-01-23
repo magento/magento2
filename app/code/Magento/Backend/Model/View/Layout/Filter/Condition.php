@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\View\Layout\Filter;
@@ -13,6 +13,10 @@ use Magento\Backend\Model\View\Layout\ConditionPool;
 
 /**
  * Class Condition
+ *
+ * Filter layout structure according to declared visibility conditions
+ * Removes elements from structure if condition validation returns false
+ * @see how to create and register visibility condition in \Magento\Backend\Model\View\Layout\ConditionInterface
  */
 class Condition implements FilterInterface
 {

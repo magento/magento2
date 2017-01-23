@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,9 @@ use Magento\Framework\Intl\DateTimeFactory;
 
 /**
  * Class CanViewNotification
+ *
+ * Dynamic validator for UI signUp notification form, manage Ui component visibility.
+ * Return true if last notification was shipped seven days ago.
  */
 class CanViewNotification implements ConditionInterface
 {

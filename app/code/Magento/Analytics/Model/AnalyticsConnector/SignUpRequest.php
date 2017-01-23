@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,9 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class SignUpRequest
+ *
+ * Perform direct call to MA services for subscription.
+ * In case of success returns MA access token.
  */
 class SignUpRequest
 {

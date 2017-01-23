@@ -27,6 +27,9 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                 switch ($postData['store_type']) {
                     case 'website':
                         $postData['website']['name'] = $this->filterManager->removeTags($postData['website']['name']);
+                        /**
+                         * @var $websiteModel \Magento\Store\Model\Website
+                         */
                         $websiteModel = $this->_objectManager->create(\Magento\Store\Model\Website::class);
                         if ($postData['website']['website_id']) {
                             $websiteModel->load($postData['website']['website_id']);

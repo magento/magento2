@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\View\Layout;
@@ -10,6 +10,12 @@ use Magento\Framework\View\Layout\ScheduledStructure;
 
 /**
  * Class Filter
+ *
+ * Composite filter for layout elements (blocks, uiComponents)
+ * Is used for managing layout elements visibility at backend
+ * Called at \Magento\Backend\Model\View\Layout\GeneratorPool::buildStructure
+ *
+ * @see details in \Magento\Backend\Model\View\Layout\FilterInterface
  */
 class Filter implements FilterInterface
 {

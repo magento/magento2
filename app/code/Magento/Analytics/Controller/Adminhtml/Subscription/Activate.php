@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,6 +17,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class Activate
+ *
+ * Activates subscription with Free Tier program
  */
 class Activate extends Action
 {

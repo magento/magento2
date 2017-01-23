@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Analytics\Block\Adminhtml\System\Config;
@@ -11,6 +11,9 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Class SubscriptionStatusLabel.
+ *
+ * Provides labels for subscription status
+ * Status can be reviewed in System Configuration
  */
 class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -52,6 +55,8 @@ class SubscriptionStatusLabel extends \Magento\Config\Block\System\Config\Form\F
     }
 
     /**
+     * Prepare label for subscription status
+     *
      * @return string
      */
     private function prepareLabelValue()

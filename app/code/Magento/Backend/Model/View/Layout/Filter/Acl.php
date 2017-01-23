@@ -15,6 +15,15 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Acl
+ *
+ * Manage visibility of ui components and blocks at the backend according to ACL resources.
+ * If user role has corresponding resource block will be displayed.
+ *
+ * @see usage details in \Magento\Backend\Model\View\Layout\FilterInterface description
+ *
+ * Example of declaration in layout
+ *
+ * <uiComponent name="form" acl="Resource::name" />
  */
 class Acl implements FilterInterface
 {

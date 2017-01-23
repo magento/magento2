@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,8 @@ use Magento\Config\Model\Config;
 
 /**
  * Class TokenProvider
+ *
+ * Generates token for integration at Magento side
  */
 class TokenProvider
 {
