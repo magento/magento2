@@ -54,6 +54,11 @@ define([
                     }
                     break;
 
+                case 'select-multiple':
+                    var name = item.name.substring(0,(item.name.length - 2)); //remove [] from the name ending
+                    result[name] = Array.prototype.slice.call(item.selectedOptions).map(function(o) {return o.value;});
+                    break;
+
                 default:
                     result[item.name] = item.value;
             }
