@@ -82,6 +82,7 @@ class FilePermissions
                 DirectoryList::VAR_DIR,
                 DirectoryList::MEDIA,
                 DirectoryList::STATIC_VIEW,
+                DirectoryList::GENERATED,
             ];
             foreach ($data as $code) {
                 $this->installationWritableDirectories[$code] = $this->directoryList->getPath($code);
