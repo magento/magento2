@@ -26,7 +26,7 @@ class AssertPagersNotPresentInShoppingCart extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertFalse(
             $checkoutCart->getTopPagerBlock()->getPagesBlock()->isVisible(),
             'The top pager on the top of Items Grid is visible'
-            );
+        );
         \PHPUnit_Framework_Assert::assertFalse(
             $checkoutCart->getBottomPagerBlock()->getPagesBlock()->isVisible(),
             'The top pager on the bottom of Items Grid is visible'
