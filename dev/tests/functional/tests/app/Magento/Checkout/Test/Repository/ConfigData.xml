@@ -15,6 +15,7 @@
                 <item name="value" xsi:type="string">0</item>
             </field>
         </dataset>
+
         <dataset name="disable_guest_checkout_rollback">
             <field name="checkout/options/guest_checkout" xsi:type="array">
                 <item name="scope" xsi:type="string">checkout</item>
@@ -23,6 +24,7 @@
                 <item name="value" xsi:type="string">1</item>
             </field>
         </dataset>
+
         <dataset name="disable_customer_redirect_after_logging">
             <field name="customer/startup/redirect_dashboard" xsi:type="array">
                 <item name="scope" xsi:type="string">customer</item>
@@ -31,9 +33,28 @@
                 <item name="value" xsi:type="string">0</item>
             </field>
         </dataset>
+
         <dataset name="disable_customer_redirect_after_logging_rollback">
             <field name="customer/startup/redirect_dashboard" xsi:type="array">
                 <item name="scope" xsi:type="string">customer</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="string">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="disable_display_shopping_cart_sidebar">
+            <field name="checkout/sidebar/display" xsi:type="array">
+                <item name="scope" xsi:type="string">checkout</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="string">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="disable_display_shopping_cart_sidebar_rollback">
+            <field name="checkout/sidebar/display" xsi:type="array">
+                <item name="scope" xsi:type="string">checkout</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Yes</item>
                 <item name="value" xsi:type="string">1</item>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Reports\Test\TestCase\RefreshReportsStatisticsTest" summary="Refresh reports statistics" ticketId="MAGETWO-40919">
+        <variation name="RefreshReportsStatisticsTestVariation1" summary="Refresh Statistics for the Last Day">
+            <data name="issue" xsi:type="string">MAGETWO-63069 Reports feature Refresh Lifetime Statistics does not work on Magento with split DB</data>
+            <data name="action" xsi:type="string">Refresh Statistics for the Last Day</data>
+            <data name="configData" xsi:type="string">website_with_custom_timezone</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertRecentStatisticsUpdatedMessage" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertReportsUpdatedTimezone" />
+        </variation>
+        <variation name="RefreshReportsStatisticsTestVariation2" summary="Refresh Lifetime Statistics">
+            <data name="issue" xsi:type="string">MAGETWO-63069 Reports feature Refresh Lifetime Statistics does not work on Magento with split DB</data>
+            <data name="action" xsi:type="string">Refresh Lifetime Statistics</data>
+            <data name="configData" xsi:type="string">website_with_custom_timezone</data>
+            <constraint name="Magento\Reports\Test\Constraint\AssertLifetimeStatisticsUpdatedMessage" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertReportsUpdatedTimezone" />
+        </variation>
+    </testCase>
+</config>

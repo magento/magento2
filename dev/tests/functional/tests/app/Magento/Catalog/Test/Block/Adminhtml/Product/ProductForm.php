@@ -108,6 +108,11 @@ class ProductForm extends FormSections
                         $this->getNewCategoryModalForm()->addNewCategory($category);
                     }
                 }
+                if (empty($sections['product-details']['category_ids']['value'])) {
+                    // We need to clear 'category_ids' key in case of category(es) absence in Product Fixture
+                    // to avoid force clear related form input on edit product page
+                    unset($sections['product-details']['category_ids']);
+                }
             }
             $this->fillContainers($sections, $element);
         }
