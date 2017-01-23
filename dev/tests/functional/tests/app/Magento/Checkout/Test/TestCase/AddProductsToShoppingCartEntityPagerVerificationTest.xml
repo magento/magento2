@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\AddProductsToShoppingCartEntityPagerVerificationTest" summary="Add Products to Shopping Cart" ticketId="MAGETWO-25382">
+        <variation name="AddProductsToShoppingCartEntityPagerVerificationTestVariation1" summary="Verify pager is NOT presented on Shopping Cart page if qty of products = 20, by default system configuration" ticketId="MAGETWO-63337">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="cart/data/grand_total" xsi:type="string">11200.00</data>
+            <data name="cart/data/subtotal" xsi:type="string">11300.00</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersNotPresentInShoppingCart"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
+        </variation>
+        <variation name="AddProductsToShoppingCartEntityPagerVerificationTestVariation2" summary="Verify pager is presented on Shopping Cart page if items qty=21, by default system configuration" ticketId="MAGETWO-63338">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="cart/data/grand_total" xsi:type="string">11865.00</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersPresentInShoppingCart"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersSummaryText"/>
+        </variation>
+        <variation name="AddProductsToShoppingCartEntityPagerVerificationTestVariation3" summary="Verify pager is disapeared from Shopping Cart page if change qty from 21 to 20, by default system configuration" ticketId="MAGETWO-63339">
+            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="productsData/0" xsi:type="string">catalogProductSimple::default</data>
+            <data name="itemsToRemove" xsi:type="string">1</data>
+            <data name="cart/data/grand_total" xsi:type="string">11200.00</data>
+            <data name="cart/data/subtotal" xsi:type="string">11300.00</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPagersNotPresentInShoppingCart"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
+        </variation>
+    </testCase>
+</config>
