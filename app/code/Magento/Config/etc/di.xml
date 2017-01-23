@@ -190,4 +190,11 @@
             <argument name="placeholder" xsi:type="object">Magento\Config\Model\Placeholder\Environment</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="configShowCommand" xsi:type="object">Magento\Config\Console\Command\ConfigShowCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
