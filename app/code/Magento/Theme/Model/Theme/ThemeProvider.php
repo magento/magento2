@@ -75,21 +75,20 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
         }
 
         /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
-        $theme = $this->cache->load('theme'. $fullPath);
+        $theme = $this->loadThemeFromCache('theme'. $fullPath);
         if ($theme) {
-            $this->themes[$fullPath] = unserialize($theme);
-            return $this->themes[$fullPath];
+            $this->themes[$fullPath] = $theme;
+            return $theme;
         }
         $themeCollection = $this->collectionFactory->create();
-        $item = $themeCollection->getThemeByFullPath($fullPath);
-        if ($item->getId()) {
-            $themeData = serialize($item);
-            $this->cache->save($themeData, 'theme' . $fullPath);
-            $this->cache->save($themeData, 'theme-by-id-' . $item->getId());
-            $this->themes[$fullPath] = $item;
+        $theme = $themeCollection->getThemeByFullPath($fullPath);
+        if ($theme->getId()) {
+            $this->saveThemeToCache($theme, 'theme' . $fullPath);
+            $this->saveThemeToCache($theme, 'theme-by-id-' . $theme->getId());
+            $this->themes[$fullPath] = $theme;
         }
 
-        return $item;
+        return $theme;
     }
 
     /**
@@ -113,19 +112,46 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
         if (isset($this->themes[$themeId])) {
             return $this->themes[$themeId];
         }
-        $theme = $this->cache->load('theme-by-id-' . $themeId);
+        $theme = $this->loadThemeFromCache('theme-by-id-' . $themeId);
         if ($theme) {
-            $this->themes[$themeId] = unserialize($theme);
-            return $this->themes[$themeId];
+            $this->themes[$themeId] = $theme;
+            return $theme;
         }
-        /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
-        $themeModel = $this->themeFactory->create();
-        $themeModel->load($themeId);
-        if ($themeModel->getId()) {
-            $this->cache->save(serialize($themeModel), 'theme-by-id-' . $themeId);
-            $this->themes[$themeId] = $themeModel;
+        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        $theme = $this->themeFactory->create();
+        $theme->load($themeId);
+        if ($theme->getId()) {
+            $this->saveThemeToCache($theme, 'theme-by-id-' . $themeId);
+            $this->themes[$themeId] = $theme;
         }
-        return $themeModel;
+        return $theme;
+    }
+
+    /**
+     * @param $cacheId
+     * @return \Magento\Framework\View\Design\ThemeInterface|null
+     */
+    private function loadThemeFromCache($cacheId)
+    {
+        $themeData = $this->cache->load($cacheId);
+        if ($themeData) {
+            $themeData = json_decode($themeData, true);
+            /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
+            $theme = $this->themeFactory->create()->populateFromArray($themeData);
+            return $theme;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param \Magento\Theme\Model\Theme $theme
+     * @param $cacheId
+     */
+    private function saveThemeToCache(\Magento\Theme\Model\Theme $theme, $cacheId)
+    {
+        $themeData = json_encode($theme->toArray());
+        $this->cache->save($themeData, $cacheId);
     }
 
     /**
