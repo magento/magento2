@@ -12,38 +12,31 @@
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::sku</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
         </variation>
-        <variation name="SearchEntityResultsTestVariation2">
-            <data name="description" xsi:type="string">Search simple product</data>
+        <variation name="SearchEntityResultsTestVariation2" summary="Search simple product and add to cart" ticketId="MAGETWO-43235">
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::simple</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
-        <variation name="SearchEntityResultsTestVariation3">
-            <data name="description" xsi:type="string">Search virtual product</data>
+        <variation name="SearchEntityResultsTestVariation3" summary="Search virtual product and add to cart" ticketId="MAGETWO-43235">
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductVirtual::default::virtual</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
-        <variation name="SearchEntityResultsTestVariation4">
-            <data name="description" xsi:type="string">Search configurable product</data>
+        <variation name="SearchEntityResultsTestVariation4" summary="Search configurable product and add to cart" ticketId="MAGETWO-43235">
             <data name="catalogSearch/data/query_text/value" xsi:type="string">configurableProduct::default::configurable</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
-        <variation name="SearchEntityResultsTestVariation5">
-            <data name="description" xsi:type="string">Search downloadable product</data>
+        <variation name="SearchEntityResultsTestVariation5" summary="Search downloadable product and add to cart" ticketId="MAGETWO-43235">
             <data name="catalogSearch/data/query_text/value" xsi:type="string">downloadableProduct::default::downloadable</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
-        <variation name="SearchEntityResultsTestVariation6">
-            <data name="description" xsi:type="string">Search grouped product</data>
-            <data name="catalogSearch/data/query_text/value" xsi:type="string">groupedProduct::default::grouped</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult" />
+        <variation name="SearchEntityResultsTestVariation6" summary="Search grouped product and add to cart" ticketId="MAGETWO-43235">
+            <data name="catalogSearch/data/query_text/value" xsi:type="string">groupedProduct::withSimpleProducts_without_qty::grouped</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
-        <variation name="SearchEntityResultsTestVariation7">
-            <data name="description" xsi:type="string">Search bundle dynamic product</data>
+        <variation name="SearchEntityResultsTestVariation7" summary="Search bundle dynamic product and add to cart" ticketId="MAGETWO-43235">
             <data name="catalogSearch/data/query_text/value" xsi:type="string">bundleProduct::bundle_dynamic_product::bundle</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductAddedToCartFromSearchResults" />
         </variation>
-        <variation name="SearchEntityResultsTestVariation8">
-            <data name="description" xsi:type="string">Search fixed product</data>
+        <variation name="SearchEntityResultsTestVariation8" summary="Search fixed product">
             <data name="catalogSearch/data/query_text/value" xsi:type="string">bundleProduct::bundle_fixed_product::bundle</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult" />
         </variation>

@@ -68,6 +68,7 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
             BP . '/var',
             BP . '/pub/media',
             BP . '/pub/static',
+            BP . '/generated'
         ];
 
         $this->assertEquals($expected, $this->filePermissions->getInstallationWritableDirectories());
@@ -157,6 +158,7 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
             BP . '/var',
             BP . '/pub/media',
             BP . '/pub/static',
+            BP . '/generated'
         ];
 
         $this->assertEquals(
@@ -231,6 +233,11 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
             ->method('getPath')
             ->with(DirectoryList::STATIC_VIEW)
             ->will($this->returnValue(BP . '/pub/static'));
+        $this->directoryListMock
+            ->expects($this->at(4))
+            ->method('getPath')
+            ->with(DirectoryList::GENERATED)
+            ->will($this->returnValue(BP . '/generated'));
     }
 
     public function setUpDirectoryWriteInstallation()
