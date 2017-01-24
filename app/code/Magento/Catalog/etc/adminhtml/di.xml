@@ -174,4 +174,9 @@
             <argument name="productPriceOptions" xsi:type="object">Magento\Catalog\Model\Config\Source\Product\Options\TierPrice</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
+        <arguments>
+            <argument name="scopeOverriddenValue" xsi:type="object">Magento\Catalog\Model\Attribute\ScopeOverriddenValue</argument>
+        </arguments>
+    </type>
 </config>

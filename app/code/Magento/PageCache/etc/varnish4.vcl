@@ -8,6 +8,13 @@ backend default {
     .host = "/* {{ host }} */";
     .port = "/* {{ port }} */";
     .first_byte_timeout = 600s;
+    .probe = {
+        .url = "/pub/health_check.php";
+        .timeout = 2s;
+        .interval = 5s;
+        .window = 10;
+        .threshold = 5;
+   }
 }
 
 acl purge {
@@ -46,6 +53,14 @@ sub vcl_recv {
     if (req.url ~ "/checkout" || req.url ~ "/catalogsearch") {
         return (pass);
     }
+
+    # Bypass health check requests
+    if (req.url ~ "/pub/health_check.php") {
+        return (pass);
+    }
+
+    # Set initial grace period usage status
+    set req.http.grace = "none";
 
     # normalize url in case of leading HTTP scheme and domain
     set req.url = regsub(req.url, "^http[s]?://", "");
@@ -103,6 +118,9 @@ sub vcl_hash {
 }
 
 sub vcl_backend_response {
+
+    set beresp.grace = 3d;
+
     if (beresp.http.content-type ~ "text") {
         set beresp.do_esi = true;
     }
@@ -134,7 +152,6 @@ sub vcl_backend_response {
             set beresp.http.Pragma = "no-cache";
             set beresp.http.Expires = "-1";
             set beresp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
-            set beresp.grace = 1m;
         }
     }
 
@@ -153,6 +170,7 @@ sub vcl_deliver {
     if (resp.http.X-Magento-Debug) {
         if (resp.http.x-varnish ~ " ") {
             set resp.http.X-Magento-Cache-Debug = "HIT";
+            set resp.http.Grace = req.http.grace;
         } else {
             set resp.http.X-Magento-Cache-Debug = "MISS";
         }
@@ -167,4 +185,25 @@ sub vcl_deliver {
     unset resp.http.X-Varnish;
     unset resp.http.Via;
     unset resp.http.Link;
+}
+
+sub vcl_hit {
+    if (obj.ttl >= 0s) {
+        # Hit within TTL period
+        return (deliver);
+    }
+    if (std.healthy(req.backend_hint)) {
+        if (obj.ttl + /* {{ grace_period }} */s > 0s) {
+            # Hit after TTL expiration, but within grace period
+            set req.http.grace = "normal (healthy server)";
+            return (deliver);
+        } else {
+            # Hit after TTL and grace expiration
+            return (fetch);
+        }
+    } else {
+        # server is not healthy, retrieve from cache
+        set req.http.grace = "unlimited (unhealthy server)";
+        return (deliver);
+    }
 }
