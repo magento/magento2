@@ -24,7 +24,7 @@ class AssertItemsCounterInMiniShoppingCart extends AbstractConstraint
         $sidebar->openMiniCart();
 
         \PHPUnit_Framework_Assert::assertEquals(
-            $sidebar->getItemsCounter(),
+            $sidebar->getItemsQty(),
             $totalItemsCountInShoppingCart,
             'Wrong quantity of Cart items in mini shopping cart'
         );

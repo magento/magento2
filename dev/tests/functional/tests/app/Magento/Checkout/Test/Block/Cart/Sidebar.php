@@ -189,16 +189,6 @@ class Sidebar extends Block
     }
 
     /**
-     * Returns minicart items counter value
-     *
-     * @return string
-     */
-    public function getItemsCounter()
-    {
-        return $this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->getText();
-    }
-
-    /**
      * Returns message with count of visible items
      *
      * @return string
