@@ -11,6 +11,7 @@ namespace Magento\Config\Test\Unit\Block\System\Config;
 use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 
 /**
  * Test System config form block
@@ -435,6 +436,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedValue
      * @param string|null $placeholderValue
      * @param int $hasBackendModel
+     * @param bool $isDisabled
+     * @param bool $isReadOnly
+     * @param bool $expectedDisable
      *
      * @dataProvider initFieldsDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -446,7 +450,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $inherit,
         $expectedValue,
         $placeholderValue,
-        $hasBackendModel
+        $hasBackendModel,
+        $isDisabled,
+        $isReadOnly,
+        $expectedDisable
     ) {
         // Parameters initialization
         $fieldsetMock = $this->getMock(
@@ -600,8 +607,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'can_use_default_value' => false,
             'can_use_website_value' => false,
             'can_restore_to_default' => false,
-            'disabled' => false,
-            'is_disable_inheritance' => false
+            'disabled' => $expectedDisable,
+            'is_disable_inheritance' => $expectedDisable
         ];
 
         $formFieldMock->expects($this->once())->method('setRenderer')->with($fieldRendererMock);
@@ -623,17 +630,23 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $settingCheckerMock = $this->getMockBuilder(SettingChecker::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $settingCheckerMock->expects($this->once())
+        $settingCheckerMock->expects($this->any())
             ->method('isReadOnly')
-            ->willReturn(false);
-
+            ->willReturn($isReadOnly);
         $settingCheckerMock->expects($this->once())
             ->method('getPlaceholderValue')
             ->willReturn($placeholderValue);
 
+        $elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
+            ->getMockForAbstractClass();
+        $elementVisibilityMock->expects($this->once())
+            ->method('isDisabled')
+            ->willReturn($isDisabled);
+
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $helper->setBackwardCompatibleProperty($this->object, 'settingChecker', $settingCheckerMock);
+        $helper->setBackwardCompatibleProperty($this->object, 'elementVisibility', $elementVisibilityMock);
 
         $this->object->initFields($fieldsetMock, $groupMock, $sectionMock, $fieldPrefix, $labelPrefix);
     }
@@ -644,9 +657,54 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function initFieldsDataProvider()
     {
         return [
-            [['section1/group1/field1' => 'some_value'], false, null, false, 'some_value', null, 1],
-            [[], 'Config Value', 'some/config/path', true, 'Config Value', null, 0],
-            [[], 'Config Value', 'some/config/path', true, 'Placeholder Value', 'Placeholder Value', 0]
+            [
+                ['section1/group1/field1' => 'some_value'],
+                false,
+                null,
+                false,
+                'some_value',
+                null,
+                1,
+                false,
+                false,
+                false
+            ],
+            [
+                [],
+                'Config Value',
+                'some/config/path',
+                true,
+                'Config Value',
+                null,
+                0,
+                true,
+                false,
+                true
+            ],
+            [
+                [],
+                'Config Value',
+                'some/config/path',
+                true,
+                'Placeholder Value',
+                'Placeholder Value',
+                0,
+                false,
+                true,
+                true
+            ],
+            [
+                [],
+                'Config Value',
+                'some/config/path',
+                true,
+                'Placeholder Value',
+                'Placeholder Value',
+                0,
+                true,
+                true,
+                true
+            ]
         ];
     }
 }

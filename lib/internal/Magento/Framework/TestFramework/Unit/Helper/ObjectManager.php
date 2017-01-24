@@ -333,11 +333,12 @@ class ObjectManager
      * @param object $object
      * @param string $propertyName
      * @param object $propertyValue
+     * @param string $className
      * @return void
      */
-    public function setBackwardCompatibleProperty($object, $propertyName, $propertyValue)
+    public function setBackwardCompatibleProperty($object, $propertyName, $propertyValue, $className = '')
     {
-        $reflection = new \ReflectionClass(get_class($object));
+        $reflection = new \ReflectionClass($className ? $className : get_class($object));
         $reflectionProperty = $reflection->getProperty($propertyName);
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $propertyValue);

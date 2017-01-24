@@ -7,6 +7,7 @@ namespace Magento\Config\Model\Config\Structure;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
 
 abstract class AbstractElement implements ElementInterface
 {
@@ -35,6 +36,11 @@ abstract class AbstractElement implements ElementInterface
      * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
+
+    /**
+     * @var ElementVisibilityInterface
+     */
+    private $elementVisibility;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -141,6 +147,11 @@ abstract class AbstractElement implements ElementInterface
      */
     public function isVisible()
     {
+        $path = trim($this->getPath(), '/');
+        if ($this->getElementVisibility()->isHidden($path)) {
+            return false;
+        }
+
         if (isset($this->_data['if_module_enabled']) &&
             !$this->moduleManager->isOutputEnabled($this->_data['if_module_enabled'])) {
             return false;
@@ -202,5 +213,20 @@ abstract class AbstractElement implements ElementInterface
     public function getPath($fieldPrefix = '')
     {
         return $this->_getPath($this->getId(), $fieldPrefix);
+    }
+
+    /**
+     * Get instance of ElementVisibilityInterface.
+     *
+     * @return ElementVisibilityInterface
+     * @deprecated
+     */
+    public function getElementVisibility()
+    {
+        if (null === $this->elementVisibility) {
+            $this->elementVisibility = ObjectManager::getInstance()->get(ElementVisibilityInterface::class);
+        }
+
+        return $this->elementVisibility;
     }
 }

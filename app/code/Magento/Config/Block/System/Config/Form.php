@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 
 /**
  * System config form block
@@ -112,6 +113,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @var DeploymentConfig
      */
     private $appConfig;
+
+    /**
+     * @var ElementVisibilityInterface
+     */
+    private $elementVisibility;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -355,7 +361,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
 
-        $isReadOnly = $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
+        $path = trim($field->getPath(), '/');
+        $isReadOnly = $this->getElementVisibility()->isDisabled($path);
+        $isReadOnly = $isReadOnly
+            ?: $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
         $formField = $fieldset->addField(
             $elementId,
             $field->getType(),
@@ -804,5 +813,20 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $data = new DataObject(isset($appConfig[$scope][$scopeCode]) ? $appConfig[$scope][$scopeCode] : []);
         }
         return $data->getData($path);
+    }
+
+    /**
+     * Get instance of ElementVisibilityInterface.
+     *
+     * @return ElementVisibilityInterface
+     * @deprecated
+     */
+    public function getElementVisibility()
+    {
+        if (null === $this->elementVisibility) {
+            $this->elementVisibility = ObjectManager::getInstance()->get(ElementVisibilityInterface::class);
+        }
+
+        return $this->elementVisibility;
     }
 }
