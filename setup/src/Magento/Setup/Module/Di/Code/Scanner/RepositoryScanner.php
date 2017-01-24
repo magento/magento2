@@ -37,18 +37,19 @@ class RepositoryScanner implements ScannerInterface
                 if (
                     $forType !== null
                     && $replacementType !== null
-                    && (substr($forType->nodeValue, -19) == 'RepositoryInterface')
+                    && (substr($forType->nodeValue, -19) === 'RepositoryInterface')
                 ) {
-                    if (!class_exists($replacementType->nodeValue, false)
-                        && !AutoloaderRegistry::getAutoloader()->loadClass($replacementType->nodeValue)) {
-                        $persistor = str_replace('\\Repository', 'InterfacePersistor', $replacementType->nodeValue);
-                        $factory = str_replace('\\Repository', 'InterfaceFactory', $replacementType->nodeValue);
-                        $searchResultFactory
-                            = str_replace('\\Repository', 'SearchResultInterfaceFactory', $replacementType->nodeValue);
+                    $nodeValue = ltrim($replacementType->nodeValue, '\\');
+                    if (!class_exists($nodeValue, false)
+                        && !AutoloaderRegistry::getAutoloader()->loadClass($nodeValue)
+                    ) {
+                        $persistor = str_replace('\\Repository', 'InterfacePersistor', $nodeValue);
+                        $factory = str_replace('\\Repository', 'InterfaceFactory', $nodeValue);
+                        $searchResultFactory = str_replace('\\Repository', 'SearchResultInterfaceFactory', $nodeValue);
                         $repositoryClassNames[$persistor] = $persistor;
                         $repositoryClassNames[$factory] = $factory;
                         $repositoryClassNames[$searchResultFactory] = $searchResultFactory;
-                        $repositoryClassNames[$replacementType->nodeValue] = $replacementType->nodeValue;
+                        $repositoryClassNames[$nodeValue] = $nodeValue;
                     }
                 }
             }
