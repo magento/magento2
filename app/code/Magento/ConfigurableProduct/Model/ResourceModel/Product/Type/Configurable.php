@@ -14,6 +14,8 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
 
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -42,19 +44,27 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $scopeResolver;
 
     /**
+     * @var StockRegistryInterface
+     */
+    private $stockRegistry;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation
      * @param string $connectionName
      * @param ScopeResolverInterface $scopeResolver
+     * @param StockRegistryInterface $stockRegistry
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation,
         $connectionName = null,
-        ScopeResolverInterface $scopeResolver = null
+        ScopeResolverInterface $scopeResolver = null,
+        StockRegistryInterface $stockRegistry = null
     ) {
         $this->catalogProductRelation = $catalogProductRelation;
         $this->scopeResolver = $scopeResolver;
+        $this->stockRegistry = $stockRegistry ?: ObjectManager::getInstance()->get(StockRegistryInterface::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -215,7 +225,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $productId
      * @return array
      */
-    public function getAttributeOptions($superAttribute, $productId)
+    public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {
         $scope  = $this->getScopeResolver()->getScope();
         $select = $this->getAttributeOptionsSelect($superAttribute, $productId, $scope);
@@ -230,19 +240,21 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $productId
      * @return array
      */
-    public function getInStockAttributeOptions($superAttribute, $productId)
+    public function getInStockAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {
         $scope  = $this->getScopeResolver()->getScope();
         $select = $this->getAttributeOptionsSelect($superAttribute, $productId, $scope);
-        $select->join(
-            ['stock_status' => $this->getTable('cataloginventory_stock_status')],
-            'stock_status.product_id = entity.row_id',
-            []
-        )->where(
-            'stock_status.stock_status = 1'
-        );
+        $options = $this->getConnection()->fetchAll($select);
+        // workaround as we do not have bulk method to get all statuses by id
+        foreach ($options as $key => $option) {
+            $status = $this->stockRegistry->getProductStockStatusBySku($option['sku']);
+            if ($status == StockStatus::STATUS_OUT_OF_STOCK) {
+                unset($options[$key]);
+            }
+        }
+        $options = array_values($options);
 
-        return $this->getConnection()->fetchAll($select);
+        return $options;
     }
 
     /**
@@ -253,7 +265,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param ScopeInterface $scope
      * @return Select
      */
-    private function getAttributeOptionsSelect($superAttribute, $productId, $scope)
+    private function getAttributeOptionsSelect(AbstractAttribute $superAttribute, $productId, ScopeInterface $scope)
     {
         $select = $this->getConnection()->select()->from(
             ['super_attribute' => $this->getTable('catalog_product_super_attribute')],

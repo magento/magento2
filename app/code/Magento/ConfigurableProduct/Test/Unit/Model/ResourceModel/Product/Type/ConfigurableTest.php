@@ -7,10 +7,14 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product\Type
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\DB\Select;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Catalog\Model\Product;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -52,44 +56,100 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected $metadataMock;
 
+    /**
+     * @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeResolver;
+
+    /**
+     * @var StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stockRegistryMock;
+
+    /**
+     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $select;
+
+    /**
+     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $connectionMock;
+
+    /**
+     * @var AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $abstractAttribute;
+
+    /**
+     * @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scope;
+
+    /**
+     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $product;
+
     protected function setUp()
     {
-        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
-
-        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
-        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
-        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $this->relation = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Relation::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->metadataMock = $this->getMock(\Magento\Framework\EntityManager\EntityMetadata::class, [], [], '', false);
-        $this->metadataPoolMock = $this->getMock(
-            \Magento\Framework\EntityManager\MetadataPool::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->setMethods(['select', 'fetchAll'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->select = $this->getMockBuilder(Select::class)
+            ->setMethods(['from', 'joinInner', 'joinLeft', 'where',])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->connectionMock->expects($this->any())
+            ->method('select')
+            ->willReturn($this->select);
+        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
+        $this->relation = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Relation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->metadataMock = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->with(ProductInterface::class)
             ->willReturn($this->metadataMock);
+        $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
+            ->setMethods(['getBackendTable', 'getAttributeId'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->scope = $this->getMockBuilder(ScopeInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->product = $this->getMockBuilder(Product::class)
+            ->setMethods(['__sleep', '__wakeup', 'getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->configurable = $this->objectManagerHelper->getObject(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class,
+            Configurable::class,
             [
                 'resource' => $this->resource,
                 'catalogProductRelation' => $this->relation,
-                'scopeResolver' => $this->getMockForAbstractClass(\Magento\Framework\App\ScopeResolverInterface::class)
+                'scopeResolver' => $this->scopeResolver,
+                'stockRegistry' => $this->stockRegistryMock
             ]
         );
-        $reflection = new \ReflectionClass(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class
-        );
+        $reflection = new \ReflectionClass(Configurable::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->configurable, $this->metadataPoolMock);
@@ -97,244 +157,149 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveProducts()
     {
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $mainProduct */
-        $mainProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->setMethods(['__sleep', '__wakeup', 'getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
-            
-            $this->metadataMock->expects($this->once())
-                ->method('getLinkField')
-                ->willReturn('link');
-            $mainProduct->expects($this->once())
-                ->method('getData')
-                ->with('link')
-                ->willReturn(3);
-
-        $select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
-
-        $this->connection->method('select')->willReturn($select);
-        $select->method('from')->willReturnSelf();
-        $select->method('where')->willReturnSelf();
-
-        $statement  = $this->getMockBuilder(\Zend_Db_Statement::class)->disableOriginalConstructor()->getMock();
-        $select->method('query')->willReturn($statement);
-        $statement->method('fetchAll')->willReturn([1]);
-
-        $this->configurable->saveProducts($mainProduct, [1, 2, 3]);
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testGetConfigurableOptions()
-    {
-        $scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)->getMock();
-        $scope->expects($this->any())->method('getId')->willReturn(123);
-
-        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)->getMockForAbstractClass();
-        $scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
-
-        $configurable = $this->getMock(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class,
-            [
-                'getTable',
-                'getConnection',
-            ],
-            [
-                $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock(),
-                $this->relation,
-                null,
-                $scopeResolver
-            ],
-            '',
-            true
-        );
-
-        $reflection = new \ReflectionClass(Configurable::class);
-        $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($configurable, $this->metadataPoolMock);
-
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->setMethods(
-                [
-                    '__sleep',
-                    '__wakeup',
-                    'getData',
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->metadataMock->expects($this->once())
             ->method('getLinkField')
             ->willReturn('link');
-        $product->expects($this->once())
+        $this->product->expects($this->once())
+            ->method('getData')
+            ->with('link')
+            ->willReturn(3);
+
+        $this->connectionMock->method('select')->willReturn($this->select);
+        $this->select->method('from')->willReturnSelf();
+        $this->select->method('where')->willReturnSelf();
+
+        $statement  = $this->getMockBuilder(\Zend_Db_Statement::class)->disableOriginalConstructor()->getMock();
+        $this->select->method('query')->willReturn($statement);
+        $statement->method('fetchAll')->willReturn([1]);
+
+        $this->configurable->saveProducts($this->product, [1, 2, 3]);
+    }
+
+    public function testGetInStockAttributeOptions()
+    {
+        $options = [
+            [
+                'sku' => 'Configurable1-Black',
+                'product_id' => 4,
+                'attribute_code' => 'color',
+                'value_index' => '13',
+                'option_title' => 'Black'
+            ],
+            [
+                'sku' => 'Configurable1-White',
+                'product_id' => 4,
+                'attribute_code' => 'color',
+                'value_index' => '14',
+                'option_title' => 'White'
+            ],
+            [
+                'sku' => 'Configurable1-Red',
+                'product_id' => 4,
+                'attribute_code' => 'color',
+                'value_index' => '15',
+                'option_title' => 'Red'
+            ]
+        ];
+        $expectedOptions = [
+            [
+                'sku' => 'Configurable1-White',
+                'product_id' => 4,
+                'attribute_code' => 'color',
+                'value_index' => '14',
+                'option_title' => 'White'
+            ],
+            [
+                'sku' => 'Configurable1-Red',
+                'product_id' => 4,
+                'attribute_code' => 'color',
+                'value_index' => '15',
+                'option_title' => 'Red'
+            ]
+        ];
+        $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($this->scope);
+        $this->scope->expects($this->any())->method('getId')->willReturn(123);
+
+        $this->select->expects($this->any())->method('from')->willReturnSelf();
+        $this->select->expects($this->any())->method('joinInner')->willReturnSelf();
+        $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
+        $this->select->expects($this->any())->method('where')->willReturnSelf();
+
+        $this->abstractAttribute->expects($this->any())
+            ->method('getBackendTable')
+            ->willReturn('getBackendTable value');
+        $this->abstractAttribute->expects($this->any())
+            ->method('getAttributeId')
+            ->willReturn('getAttributeId value');
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn($options);
+
+        $this->stockRegistryMock->expects($this->any())
+            ->method('getProductStockStatusBySku')
+            ->willReturnMap(
+                [
+                    ['Configurable1-Black', null, 0],
+                    ['Configurable1-White', null, 1],
+                    ['Configurable1-Red', null, 1]
+                ]
+            );
+
+        $this->assertEquals(
+            $expectedOptions,
+            $this->configurable->getInStockAttributeOptions($this->abstractAttribute, 1)
+        );
+    }
+
+    public function testGetConfigurableOptions()
+    {
+        $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($this->scope);
+        $this->scope->expects($this->any())->method('getId')->willReturn(123);
+
+        $this->metadataMock->expects($this->once())
+            ->method('getLinkField')
+            ->willReturn('link');
+        $this->product->expects($this->once())
             ->method('getData')
             ->with('link')
             ->willReturn('getId value');
-        $configurable->expects($this->exactly(7))
-            ->method('getTable')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
-                        ['catalog_product_entity', 'catalog_product_entity value'],
-                        ['catalog_product_super_link', 'catalog_product_super_link value'],
-                        ['eav_attribute', 'eav_attribute value'],
-                        ['catalog_product_entity', 'catalog_product_entity value'],
-                        ['eav_attribute_option_value', 'eav_attribute_option_value value'],
-                        ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value']
-                    ]
-                )
-            );
-        $select = $this->getMock(
-            \Magento\Framework\DB\Select::class,
-            [
-                'from',
-                'joinInner',
-                'joinLeft',
-                'where',
-            ],
-            [],
-            '',
-            false
-        );
-        $select->expects($this->once())
-            ->method('from')
-            ->with(
-                ['super_attribute' => 'catalog_product_super_attribute value'],
-                [
-                    'sku' => 'entity.sku',
-                    'product_id' => 'product_entity.entity_id',
-                    'attribute_code' => 'attribute.attribute_code',
-                    'option_title' => null,
-                    'value_index' => 'entity_value.value',
-                    'default_title' => 'default_option_value.value',
-                ]
-            )
-            ->will($this->returnSelf());
 
-        $superAttribute = $this->getMock(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class,
-            [
-                'getBackendTable',
-                'getAttributeId',
-            ],
-            [],
-            '',
-            false
-        );
-        $superAttribute->expects($this->any())
+        $this->abstractAttribute->expects($this->any())
             ->method('getBackendTable')
             ->willReturn('getBackendTable value');
-        $superAttribute->expects($this->any())
+        $this->abstractAttribute->expects($this->any())
             ->method('getAttributeId')
             ->willReturn('getAttributeId value');
         $attributes = [
-            $superAttribute,
+            $this->abstractAttribute,
         ];
-        $select->expects($this->exactly(5))
-            ->method('joinInner')
-            ->will($this->returnSelf())
-            ->withConsecutive(
-                [
-                    ['product_entity' => 'catalog_product_entity value'],
-                    'product_entity.link = super_attribute.product_id',
-                    []
-                ],
-                [
-                    ['product_link' => 'catalog_product_super_link value'],
-                    'product_link.parent_id = super_attribute.product_id',
-                    []
-                ],
-                [
-                    ['attribute' => 'eav_attribute value'],
-                    'attribute.attribute_id = super_attribute.attribute_id',
-                    []
-                ],
-                [
-                    ['entity' => 'catalog_product_entity value'],
-                    'entity.entity_id = product_link.product_id',
-                    []
-                ],
-                [
-                    ['entity_value' => 'getBackendTable value'],
-                    implode(
-                        ' AND ',
-                        [
-                            'entity_value.attribute_id = super_attribute.attribute_id',
-                            'entity_value.store_id = 0',
-                            'entity_value.link = entity.link'
-                        ]
-                    ),
-                    []
-                ]
-            );
-        $select->expects($this->exactly(2))
-            ->method('joinLeft')
-            ->will($this->returnSelf())
-            ->withConsecutive(
-                [
-                    ['option_value' => 'eav_attribute_option_value value'],
-                    implode(
-                        ' AND ',
-                        [
-                            'option_value.option_id = entity_value.value',
-                            'option_value.store_id = ' . 123
-                        ]
-                    ),
-                    []
-                ],
-                [
-                    ['default_option_value' => 'eav_attribute_option_value value'],
-                    implode(
-                        ' AND ',
-                        [
-                            'default_option_value.option_id = entity_value.value',
-                            'default_option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
-                        ]
-                    ),
-                    []
-                ]
-            );
-        $select->expects($this->exactly(2))
-            ->method('where')
-            ->will($this->returnSelf())
-            ->withConsecutive(
-                [
-                    'super_attribute.product_id = ?',
-                    'getId value'
-                ],
-                [
-                    'attribute.attribute_id = ?',
-                    'getAttributeId value'
-                ]
-            );
 
-        $readerAdapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
-            ->setMethods([
-                'select',
-                'fetchAll',
-            ])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $readerAdapter->expects($this->once())
+        $this->select->expects($this->once())
+            ->method('from')
+            ->willReturnSelf();
+        $this->select->expects($this->exactly(5))
+            ->method('joinInner')
+            ->willReturnSelf();
+        $this->select->expects($this->exactly(2))
+            ->method('joinLeft')
+            ->willReturnSelf();
+        $this->select->expects($this->exactly(2))
+            ->method('where')
+            ->willReturnSelf();
+
+        $this->connectionMock->expects($this->once())
             ->method('select')
-            ->willReturn($select);
-        $readerAdapter->expects($this->once())
+            ->willReturn($this->select);
+        $this->connectionMock->expects($this->once())
             ->method('fetchAll')
-            ->with($select)
+            ->with($this->select)
             ->willReturn('fetchAll value');
 
-        $configurable->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($readerAdapter);
         $expectedAttributesOptionsData = [
             'getAttributeId value' => 'fetchAll value',
         ];
-        $actualAttributesOptionsData = $configurable->getConfigurableOptions($product, $attributes);
+        $actualAttributesOptionsData = $this->configurable->getConfigurableOptions($this->product, $attributes);
         $this->assertEquals($expectedAttributesOptionsData, $actualAttributesOptionsData);
     }
 }
