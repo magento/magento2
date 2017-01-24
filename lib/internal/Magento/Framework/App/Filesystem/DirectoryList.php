@@ -110,6 +110,11 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const TEMPLATE_MINIFICATION_DIR = 'html';
 
     /**
+     * Directory name for generated data.
+     */
+    const GENERATED = 'generated';
+
+    /**
      * {@inheritdoc}
      */
     public static function getDefaultConfig()
@@ -135,6 +140,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::TEMPLATE_MINIFICATION_DIR => [parent::PATH => 'var/view_preprocessed/html'],
             self::SETUP => [parent::PATH => 'setup/src'],
             self::COMPOSER_HOME => [parent::PATH => 'var/composer_home'],
+            self::GENERATED => [parent::PATH => 'generated'],
         ];
         return parent::getDefaultConfig() + $result;
     }
