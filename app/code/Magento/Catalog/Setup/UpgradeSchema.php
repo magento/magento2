@@ -66,7 +66,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '2.1.4', '<')) {
-            $this->resetCatalogCategoryProductIndexTmpTable($setup);
+            $this->recreateCatalogCategoryProductIndexTmpTable($setup);
         }
 
         $setup->endSetup();
@@ -393,7 +393,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @return void
      */
-    private function resetCatalogCategoryProductIndexTmpTable(SchemaSetupInterface $setup)
+    private function recreateCatalogCategoryProductIndexTmpTable(SchemaSetupInterface $setup)
     {
         $tableName = $setup->getTable('catalog_category_product_index_tmp');
 
