@@ -91,5 +91,6 @@
         <field name="product_has_weight" group="product-details" />
         <field name="attributes" />
         <field name="fpt" is_required="0" group="product-details" repository="Magento\Catalog\Test\Repository\Product\Fpt" />
+        <field name="website_data" is_required="0" repository="Magento\Catalog\Test\Repository\CatalogProductSimple\WebsiteData" />
     </fixture>
 </config>
