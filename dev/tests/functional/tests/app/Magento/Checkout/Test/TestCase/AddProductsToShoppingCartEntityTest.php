@@ -95,16 +95,12 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      * @param array $productsData
      * @param array $cart
      * @param string|null $configData [optional]
-     * @param int|null $minicartMaxVisibleCartItemsCount [optional]
-     * @param int|null $checkoutSummaryMaxVisibleCartItemsCount [optional]
      * @return array
      */
     public function test(
         array $productsData,
         array $cart,
-        $configData = null,
-        $minicartMaxVisibleCartItemsCount = null,
-        $checkoutSummaryMaxVisibleCartItemsCount = null
+        $configData = null
     ) {
         // Preconditions
         $this->configData = $configData;
@@ -118,11 +114,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
         $this->addToCart($products);
 
         $cart['data']['items'] = ['products' => $products];
-        return [
-            'cart' => $this->fixtureFactory->createByCode('cart', $cart),
-            'minicartMaxVisibleCartItemsCount' => $minicartMaxVisibleCartItemsCount,
-            'checkoutSummaryMaxVisibleCartItemsCount' => $checkoutSummaryMaxVisibleCartItemsCount
-        ];
+        return ['cart' => $this->fixtureFactory->createByCode('cart', $cart)];
     }
 
     /**

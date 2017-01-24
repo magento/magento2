@@ -59,7 +59,7 @@ define(
              *
              * @returns {Number}
              */
-            getItemsQty: function () {
+            getItemsCounter: function () {
                 return parseFloat(this.totals['items_qty']);
             },
 

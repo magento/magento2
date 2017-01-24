@@ -26,7 +26,7 @@
                     <source_model>\Magento\Checkout\Model\Adminhtml\BillingAddressDisplayOptions</source_model>
                 </field>
                 <field id="max_items_display_count" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Maximum cart items to display</label>
+                    <label>Maximum Cart Items to Display</label>
                     <comment>This setting regulates how many items will be displayed in Summary block</comment>
                 </field>
             </group>
@@ -57,7 +57,7 @@
                     <label>Maximum Display Recently Added Item(s)</label>
                 </field>
                 <field id="max_items_display_count" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Maximum cart items to display</label>
+                    <label>Maximum Cart Items to Display</label>
                     <comment>This setting regulates how many items will be displayed in Mini Cart block</comment>
                 </field>
             </group>

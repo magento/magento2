@@ -7,15 +7,15 @@
 <div class="block items-in-cart" data-bind="mageInit: {'collapsible':{'openedState': 'active', 'active': isItemsBlockExpanded()}}">
     <div class="title" data-role="title">
         <strong role="heading">
-            <!-- ko if: maxCartItemsToDisplay < getItemsQty() -->
+            <!-- ko if: maxCartItemsToDisplay < getItemsCounter() -->
                 <!-- ko text: maxCartItemsToDisplay --><!-- /ko -->
                 <!-- ko i18n: 'of' --><!-- /ko -->
             <!-- /ko -->
-            <span data-bind="text: getItemsQty()"></span>
-            <!-- ko if: getItemsQty() == 1 -->
+            <span data-bind="text: getItemsCounter()"></span>
+            <!-- ko if: getItemsCounter() == 1 -->
                 <!-- ko i18n: 'Item in Cart' --><!-- /ko -->
             <!-- /ko -->
-            <!-- ko if: getItemsQty() > 1 -->
+            <!-- ko if: getItemsCounter() > 1 -->
                 <!-- ko i18n: 'Items in Cart' --><!-- /ko -->
             <!-- /ko -->
         </strong>
@@ -35,11 +35,11 @@
             </ol>
         </div>
     </div>
-    <!-- ko if: maxCartItemsToDisplay < getItemsQty() -->
+    <!-- ko if: maxCartItemsToDisplay < getItemsCounter() -->
     <div class="actions-toolbar">
         <div class="secondary">
             <a class="action viewcart" data-bind="attr: {href: cartUrl}">
-                <span data-bind="i18n: 'View and edit cart'"></span>
+                <span data-bind="i18n: 'Go to Cart'"></span>
             </a>
         </div>
     </div>

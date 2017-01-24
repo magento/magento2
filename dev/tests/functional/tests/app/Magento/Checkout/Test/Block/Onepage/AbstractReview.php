@@ -134,6 +134,20 @@ abstract class AbstractReview extends Block
     protected $waitElement = '.loading-mask';
 
     /**
+     * Selector for cart items block
+     *
+     * @var string
+     */
+    protected $itemsBlockSelector = '.items-in-cart';
+
+    /**
+     * Selector for items counter
+     *
+     * @var string
+     */
+    protected $itemsCounterSelector = '.items-in-cart .title';
+
+    /**
      * @constructor
      * @param SimpleElement $element
      * @param BlockFactory $blockFactory
@@ -240,7 +254,27 @@ abstract class AbstractReview extends Block
      */
     public function expandItemsBlock()
     {
-        $this->_rootElement->find('.items-in-cart')->click();
+        $this->_rootElement->find($this->itemsBlockSelector)->click();
+    }
+
+    /**
+     * Returns checkout summary block items counter value
+     *
+     * @return string
+     */
+    public function getVisibleItemsCounter()
+    {
+        return $this->_rootElement->find($this->itemsCounterSelector)->getText();
+    }
+
+    /**
+     * Returns go to cart link element
+     *
+     * @return \Magento\Mtf\Client\ElementInterface
+     */
+    public function getGoToCartLink()
+    {
+        return $this->_rootElement->find('.action.viewcart');
     }
 
     /**
