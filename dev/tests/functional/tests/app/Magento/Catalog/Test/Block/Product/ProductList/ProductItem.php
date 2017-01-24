@@ -80,6 +80,7 @@ class ProductItem extends Block
      */
     public function isVisibleAddToCardButton()
     {
+        $this->_rootElement->hover();
         return $this->_rootElement->find($this->addToCard, Locator::SELECTOR_CSS)->isVisible();
     }
 
@@ -90,6 +91,7 @@ class ProductItem extends Block
      */
     public function clickAddToCart()
     {
+        $this->_rootElement->hover();
         $this->_rootElement->find($this->addToCard, Locator::SELECTOR_CSS)->click();
     }
 
