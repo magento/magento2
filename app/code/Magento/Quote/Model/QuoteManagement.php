@@ -456,6 +456,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $order->setShippingAddress($shippingAddress);
             $order->setShippingMethod($quote->getShippingAddress()->getShippingMethod());
         }
+        $order=$this->quoteAddressToOrder->convert($quote->getBillingAddress(), $orderData);
         $billingAddress = $this->quoteAddressToOrderAddress->convert(
             $quote->getBillingAddress(),
             [
