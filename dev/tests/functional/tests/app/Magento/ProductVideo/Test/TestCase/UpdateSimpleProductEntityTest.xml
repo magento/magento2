@@ -13,6 +13,7 @@
             <data name="initialProduct/dataset" xsi:type="string">product_with_video_youtube</data>
             <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
             <data name="product/data/media_gallery/images" xsi:type="string" />
+            <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNoImageInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoCategoryView" />
@@ -24,6 +25,7 @@
             <data name="initialProduct/dataset" xsi:type="string">product_with_video_vimeo</data>
             <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
             <data name="product/data/media_gallery/images" xsi:type="string" />
+            <data name="configData" xsi:type="string">play_if_base</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNoImageInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoCategoryView" />
@@ -35,8 +37,7 @@
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
             <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://youtu.be/WMp2PvU2qi8</data>
-            <data name="product/data/media_gallery/images/0/video_title" xsi:type="string">Foo Test 1</data>
-            <data name="product/data/media_gallery/images/0/video_description" xsi:type="string">This is a test "Foo Test 1"</data>
+            <data name="product/data/media_gallery/images/0/video_title" xsi:type="string">Foo Fighters - Congregation</data>
             <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoCategoryView" />
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoProductView" />
@@ -48,31 +49,7 @@
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
             <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/21776334</data>
-            <data name="product/data/media_gallery/images/0/video_title" xsi:type="string">Foo Test 2</data>
-            <data name="product/data/media_gallery/images/0/video_description" xsi:type="string">This is a test "Foo Test 2"</data>
-            <data name="configData" xsi:type="string">play_if_base</data>
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoCategoryView" />
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoProductView" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-        </variation>
-        <variation name="AddVideoToPCFTestVariation3">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
-            <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
-            <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
-            <data name="product/data/sku" xsi:type="string">sku_simple_product_with_video_%isolation%</data>
-            <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://youtu.be/WMp2PvU2qi8</data>
-            <data name="product/data/media_gallery/images/0/video_title" xsi:type="string">Foo Test 1</data>
-            <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoCategoryView" />
-            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoProductView" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-        </variation>
-        <variation name="AddVideoToPCFTestVariation4">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
-            <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
-            <data name="product/data/sku" xsi:type="string">simple_product_with_category_%isolation%</data>
-            <data name="product/data/media_gallery/images/0/video_url" xsi:type="string">https://vimeo.com/21776334</data>
-            <data name="product/data/media_gallery/images/0/video_title" xsi:type="string">Foo Test 2</data>
+            <data name="product/data/media_gallery/images/0/video_title" xsi:type="string">Foo Fighters - "Walk" - Official Music Video (HD)</data>
             <data name="configData" xsi:type="string">play_if_base</data>
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoCategoryView" />
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoProductView" />

@@ -32,7 +32,7 @@ class AssertNoVideoProductView extends AbstractConstraint
         $browser->open($_ENV['app_frontend_url'] . $initialProduct->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->isGalleryVisible();
         \PHPUnit_Framework_Assert::assertFalse(
-            $catalogProductView->getViewBlock()->isGalleryVisible(),
+            $catalogProductView->getViewBlock()->isVideoVisible(),
             'Product video is displayed on product view when it should not.'
         );
     }
