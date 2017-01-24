@@ -139,10 +139,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsVirtual($type, $isVirtual)
     {
-        /** @var $themeModel \Magento\Theme\Model\Theme */
-        $themeModel = $this->getMock(\Magento\Theme\Model\Theme::class, ['__wakeup'], [], '', false);
-        $themeModel->setType($type);
-        $this->assertEquals($isVirtual, $themeModel->isVirtual());
+        $this->_model->setType($type);
+        $this->assertEquals($isVirtual, $this->_model->isVirtual());
     }
 
     /**
@@ -165,10 +163,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsPhysical($type, $isPhysical)
     {
-        /** @var $themeModel \Magento\Theme\Model\Theme */
-        $themeModel = $this->getMock(\Magento\Theme\Model\Theme::class, ['__wakeup'], [], '', false);
-        $themeModel->setType($type);
-        $this->assertEquals($isPhysical, $themeModel->isPhysical());
+        $this->_model->setType($type);
+        $this->assertEquals($isPhysical, $this->_model->isPhysical());
     }
 
     /**
@@ -191,10 +187,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsVisible($type, $isVisible)
     {
-        /** @var $themeModel \Magento\Theme\Model\Theme */
-        $themeModel = $this->getMock(\Magento\Theme\Model\Theme::class, ['__wakeup'], [], '', false);
-        $themeModel->setType($type);
-        $this->assertEquals($isVisible, $themeModel->isVisible());
+        $this->_model->setType($type);
+        $this->assertEquals($isVisible, $this->_model->isVisible());
     }
 
     /**
@@ -219,7 +213,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsDeletable($themeType, $isDeletable)
     {
-        $themeModel = $this->getMock(\Magento\Theme\Model\Theme::class, ['getType', '__wakeup'], [], '', false);
+        $themeModel = $this->getMock(\Magento\Theme\Model\Theme::class, ['getType'], [], '', false);
         $themeModel->expects($this->once())->method('getType')->will($this->returnValue($themeType));
         /** @var $themeModel \Magento\Theme\Model\Theme */
         $this->assertEquals($isDeletable, $themeModel->isDeletable());
@@ -485,5 +479,72 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setParentTheme('parent_theme');
         $this->assertEquals('parent_theme', $this->_model->getParentTheme());
+    }
+
+
+    /**
+     * @param array $themeData
+     * @param array $expected
+     * @dataProvider toArrayDataProvider
+     */
+    public function testToArray(array $themeData, array $expected)
+    {
+        $this->_model->setData($themeData);
+        $this->assertEquals($expected, $this->_model->toArray());
+    }
+
+    public function toArrayDataProvider()
+    {
+        $parentTheme = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $childTheme = clone $parentTheme;
+
+        $parentTheme->expects($this->once())
+            ->method('toArray')
+            ->willReturn('parent_theme');
+
+        $childTheme->expects($this->exactly(2))
+            ->method('toArray')
+            ->willReturn('child_theme');
+
+        return [
+            'null' => [[], []],
+            'valid' => [
+                ['theme_data' => 'theme_data'],
+                ['theme_data' => 'theme_data']
+            ],
+            'valid with parent' => [
+                [
+                    'theme_data' => 'theme_data',
+                    'parent_theme' => $parentTheme
+                ],
+                [
+                    'theme_data' => 'theme_data',
+                    'parent_theme' => 'parent_theme'
+                ]
+            ],
+            'valid with children' => [
+                [
+                    'theme_data' => 'theme_data',
+                    'inherited_themes' => [
+                        'key1' => $childTheme,
+                        'key2' => $childTheme
+                    ]
+                ],
+                [
+                    'theme_data' => 'theme_data',
+                    'inherited_themes' => [
+                        'key1' => 'child_theme',
+                        'key2' => 'child_theme'
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    public function testPopulateFromArray()
+    {
+
     }
 }
