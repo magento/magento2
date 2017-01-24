@@ -48,7 +48,8 @@ class SectionTest extends \PHPUnit_Framework_TestCase
         $objectManager->setBackwardCompatibleProperty(
             $this->_model,
             'elementVisibility',
-            $this->elementVisibilityMock
+            $this->elementVisibilityMock,
+            \Magento\Config\Model\Config\Structure\AbstractElement::class
         );
     }
 

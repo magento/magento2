@@ -442,6 +442,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider initFieldsDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testInitFields(
         $backendConfigValue,

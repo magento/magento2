@@ -25,19 +25,6 @@ class ElementVisibilityTest extends \PHPUnit_Framework_TestCase
      */
     private $secondVisibilityMock;
 
-    /**
-     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
-     * @expectedExceptionMessage stdClass is not instance on Magento\Config\Model\Config\Structure\ElementVisibilityInterface
-     */
-    public function testException()
-    {
-        $visibility = [
-            'stdClass' => new \StdClass()
-        ];
-
-        $model = new ElementVisibility($visibility);
-    }
-
     protected function setUp()
     {
         $this->firstVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
@@ -46,6 +33,21 @@ class ElementVisibilityTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->model = new ElementVisibility([$this->firstVisibilityMock, $this->secondVisibilityMock]);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
+     * @codingStandardsIgnoreStart
+     * @expectedExceptionMessage stdClass is not instance on Magento\Config\Model\Config\Structure\ElementVisibilityInterface
+     * @codingStandardsIgnoreEnd
+     */
+    public function testException()
+    {
+        $visibility = [
+            'stdClass' => new \StdClass()
+        ];
+
+        new ElementVisibility($visibility);
     }
 
     /**
