@@ -40,7 +40,7 @@ abstract class AbstractFlatState
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
-        $isAvailable = false
+        $isAvailable = true
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->indexerRegistry = $indexerRegistry;

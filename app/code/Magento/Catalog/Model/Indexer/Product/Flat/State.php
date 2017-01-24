@@ -32,7 +32,7 @@ class State extends \Magento\Catalog\Model\Indexer\AbstractFlatState
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Catalog\Helper\Product\Flat\Indexer $flatIndexerHelper,
-        $isAvailable = false
+        $isAvailable = true
     ) {
         parent::__construct($scopeConfig, $indexerRegistry, $isAvailable);
         $this->_productFlatIndexerHelper = $flatIndexerHelper;
