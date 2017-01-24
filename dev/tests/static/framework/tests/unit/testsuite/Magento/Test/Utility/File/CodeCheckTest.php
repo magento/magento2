@@ -12,11 +12,11 @@ class CodeCheckTest extends \PHPUnit_Framework_TestCase
     /**
      * @var CodeCheck
      */
-    private $checkCode;
+    private $codeCheck;
 
     protected function setUp()
     {
-        $this->checkCode = new CodeCheck();
+        $this->codeCheck = new CodeCheck();
     }
 
     /**
@@ -28,7 +28,7 @@ class CodeCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             $isClassUsed,
-            $this->checkCode->isClassUsed('MyClass', $fileContent)
+            $this->codeCheck->isClassUsed('MyClass', $fileContent)
         );
     }
 
@@ -58,7 +58,7 @@ class CodeCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             $isDirectDescendant,
-            $this->checkCode->isDirectDescendant($fileContent, 'MyClass')
+            $this->codeCheck->isDirectDescendant($fileContent, 'MyClass')
         );
     }
 
