@@ -8,12 +8,16 @@
 
 require __DIR__ . '/../../../Magento/Store/_files/core_fixturestore.php';
 
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+$objectManager->get(\Magento\Framework\Indexer\IndexerRegistry::class)
+    ->get('catalogsearch_fulltext')
+    ->reindexAll();
+
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_duplicated.php';
 /** @var \Magento\Catalog\Model\Product $product */
 
 $addressData = include __DIR__ . '/address_data.php';
-
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 $billingAddress = $objectManager->create(\Magento\Sales\Model\Order\Address::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
