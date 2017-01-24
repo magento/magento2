@@ -1,0 +1,15 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Analytics:etc/reports.xsd">
+    <report name="left-join-not-exists" connection="sales">
+        <source name="sales_order" alias="sales">
+            <attribute name="entity_id"/>
+            <link-source name="sales_order_address" alias="billing" link-type="left">
+                <using glue="and">
+                    <condition attribute="parent_id" operator="eq" type="identifier">entity_id</condition>
+                </using>
+                <filter glue="and">
+                    <condition attribute="entity_id" operator="null" />
+                </filter>
+            </link-source>
+        </source>
+    </report>
+</config>

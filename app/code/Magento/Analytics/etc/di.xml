@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Analytics\ReportXML\ConfigInterface" type="Magento\Analytics\ReportXML\Config" />
     <type name="Magento\Analytics\Model\AnalyticsConnector">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -23,6 +24,29 @@
     <type name="Magento\Analytics\Model\Subscription">
         <arguments>
             <argument name="configValueResource" xsi:type="object">Magento\Config\Model\ResourceModel\Config\Data</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\ReportXml\Config\Reader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="xml" xsi:type="object">Magento\Analytics\ReportXml\Config\Reader\Xml</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\ReportXml\Config\Converter">
+        <arguments>
+            <argument name="converters" xsi:type="array">
+                <item name="xml" xsi:type="object">Magento\Analytics\ReportXml\Config\Converter\Xml</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\ReportXml\QueryFactory">
+        <arguments>
+            <argument name="assemblers" xsi:type="array">
+                <item name="from" xsi:type="object">Magento\Analytics\ReportXml\DB\Assembler\FromAssembler</item>
+                <item name="filter" xsi:type="object">Magento\Analytics\ReportXml\DB\Assembler\FilterAssembler</item>
+                <item name="join" xsi:type="object">Magento\Analytics\ReportXml\DB\Assembler\JoinAssembler</item>
+            </argument>
         </arguments>
     </type>
 </config>
