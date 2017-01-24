@@ -140,8 +140,10 @@
             <data name="productsData/6" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/7" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/8" xsi:type="string">catalogProductSimple::default</data>
-            <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">8</data>
-            <data name="totalItemsCountInShoppingCart" xsi:type="number">9</data>
+            <data name="productsData/9" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/10" xsi:type="string">catalogProductSimple::default</data>
+            <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">10</data>
+            <data name="totalItemsCountInShoppingCart" xsi:type="number">11</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
@@ -157,8 +159,10 @@
             <data name="productsData/5" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/6" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/7" xsi:type="string">catalogProductSimple::default</data>
-            <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">8</data>
-            <data name="totalItemsCountInShoppingCart" xsi:type="number">8</data>
+            <data name="productsData/8" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/9" xsi:type="string">catalogProductSimple::default</data>
+            <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">10</data>
+            <data name="totalItemsCountInShoppingCart" xsi:type="number">10</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
@@ -174,8 +178,10 @@
             <data name="productsData/5" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/6" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/7" xsi:type="string">catalogProductSimple::default</data>
-            <data name="checkoutSummaryMaxVisibleCartItemsCount" xsi:type="number">8</data>
-            <data name="totalItemsCountInShoppingCart" xsi:type="number">8</data>
+            <data name="productsData/8" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/9" xsi:type="string">catalogProductSimple::default</data>
+            <data name="checkoutSummaryMaxVisibleCartItemsCount" xsi:type="number">10</data>
+            <data name="totalItemsCountInShoppingCart" xsi:type="number">10</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
@@ -193,8 +199,10 @@
             <data name="productsData/6" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/7" xsi:type="string">catalogProductSimple::default</data>
             <data name="productsData/8" xsi:type="string">catalogProductSimple::default</data>
-            <data name="checkoutSummaryMaxVisibleCartItemsCount" xsi:type="number">8</data>
-            <data name="totalItemsCountInShoppingCart" xsi:type="number">9</data>
+            <data name="productsData/9" xsi:type="string">catalogProductSimple::default</data>
+            <data name="productsData/10" xsi:type="string">catalogProductSimple::default</data>
+            <data name="checkoutSummaryMaxVisibleCartItemsCount" xsi:type="number">10</data>
+            <data name="totalItemsCountInShoppingCart" xsi:type="number">11</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />

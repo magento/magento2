@@ -34,9 +34,11 @@
             <data name="products/6" xsi:type="string">catalogProductSimple::default</data>
             <data name="products/7" xsi:type="string">catalogProductSimple::default</data>
             <data name="products/8" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/9" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/10" xsi:type="string">catalogProductSimple::default</data>
             <data name="deletedProductIndex" xsi:type="string">0</data>
-            <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">8</data>
-            <data name="totalItemsCountInShoppingCart" xsi:type="number">8</data>
+            <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">10</data>
+            <data name="totalItemsCountInShoppingCart" xsi:type="number">10</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductAbsentInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
         </variation>
