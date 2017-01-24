@@ -7,7 +7,6 @@ namespace Magento\Analytics\Test\Unit\Model\AnalyticsConnector;
 
 use Magento\Analytics\Model\AnalyticsConnector\SignUpCommand;
 use Magento\Analytics\Model\AnalyticsConnector\SignUpRequest;
-use Magento\Analytics\Model\TokenProvider;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\IntegrationManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -33,11 +32,6 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
     private $integrationManagerMock;
 
     /**
-     * @var TokenProvider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $tokenProviderMock;
-
-    /**
      * @var SignUpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     private $signUpRequestMock;
@@ -50,9 +44,6 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         $this->integrationManagerMock = $this->getMockBuilder(IntegrationManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->tokenProviderMock = $this->getMockBuilder(TokenProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->signUpRequestMock = $this->getMockBuilder(SignUpRequest::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -62,7 +53,6 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
             [
                 'analyticsToken' => $this->analyticsTokenMock,
                 'integrationManager' => $this->integrationManagerMock,
-                'tokenProvider' => $this->tokenProviderMock,
                 'signUpRequest' => $this->signUpRequestMock
             ]
         );
@@ -70,8 +60,8 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteSuccess()
     {
-        $this->tokenProviderMock->expects($this->once())
-            ->method('getToken')
+        $this->integrationManagerMock->expects($this->once())
+            ->method('generateToken')
             ->willReturn('IntegrationToken');
         $this->integrationManagerMock->expects($this->once())
             ->method('activateIntegration')
@@ -89,8 +79,8 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFailureCannotGenerateToken()
     {
-        $this->tokenProviderMock->expects($this->once())
-            ->method('getToken')
+        $this->integrationManagerMock->expects($this->once())
+            ->method('generateToken')
             ->willReturn(false);
         $this->integrationManagerMock->expects($this->never())
             ->method('activateIntegration')
@@ -106,8 +96,8 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFailureResponseIsEmpty()
     {
-        $this->tokenProviderMock->expects($this->once())
-            ->method('getToken')
+        $this->integrationManagerMock->expects($this->once())
+            ->method('generateToken')
             ->willReturn('IntegrationToken');
         $this->integrationManagerMock->expects($this->once())
             ->method('activateIntegration')

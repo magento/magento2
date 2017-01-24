@@ -10,7 +10,6 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Analytics\Model\NotificationTime;
-use Magento\Analytics\Model\IntegrationManager;
 
 /**
  * @codeCoverageIgnore
@@ -23,22 +22,14 @@ class InstallData implements InstallDataInterface
     private $notificationTime;
 
     /**
-     * @var IntegrationManager
-     */
-    private $integrationManager;
-
-    /**
      * InstallData constructor.
      *
      * @param NotificationTime $notificationTime
-     * @param IntegrationManager $integrationManager\
      */
     public function __construct(
-        NotificationTime $notificationTime,
-        IntegrationManager $integrationManager
+        NotificationTime $notificationTime
     ) {
         $this->notificationTime = $notificationTime;
-        $this->integrationManager = $integrationManager;
     }
 
     /**
@@ -48,6 +39,5 @@ class InstallData implements InstallDataInterface
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $this->notificationTime->storeLastTimeNotification(1);
-        $this->integrationManager->createIntegration();
     }
 }
