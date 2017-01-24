@@ -112,6 +112,7 @@
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
             <argument name="cacheTags" xsi:type="array">
                 <item name="storeTag" xsi:type="const">Magento\Store\Model\Store::CACHE_TAG</item>
+                <item name="configTag" xsi:type="const">Magento\Framework\App\Config::CACHE_TAG</item>
             </argument>
             <argument name="cacheLifetime" xsi:type="boolean">false</argument>
         </arguments>
@@ -122,6 +123,7 @@
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
             <argument name="cacheTags" xsi:type="array">
                 <item name="storeTag" xsi:type="const">Magento\Store\Model\Store::CACHE_TAG</item>
+                <item name="configTag" xsi:type="const">Magento\Framework\App\Config::CACHE_TAG</item>
             </argument>
             <argument name="cacheLifetime" xsi:type="boolean">false</argument>
         </arguments>
@@ -132,6 +134,7 @@
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
             <argument name="cacheTags" xsi:type="array">
                 <item name="storeTag" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</item>
+                <item name="configTag" xsi:type="const">Magento\Framework\App\Config::CACHE_TAG</item>
             </argument>
             <argument name="cacheLifetime" xsi:type="boolean">false</argument>
         </arguments>

@@ -18,7 +18,9 @@ class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Des
         $menuModel = $this->getMock(
             \Magento\Backend\Model\Menu::class,
             [],
-            [$this->getMock(\Psr\Log\LoggerInterface::class)]
+            [$this->getMock(\Psr\Log\LoggerInterface::class)],
+            '',
+            false
         );
         $menuModel->expects($this->once())
             ->method('getParentItems')

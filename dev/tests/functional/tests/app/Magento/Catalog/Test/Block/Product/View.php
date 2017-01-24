@@ -209,6 +209,33 @@ class View extends AbstractConfigureBlock
     private $videoContainer = 'div.fotorama-video-container';
 
     /**
+     * Threshold message selector.
+     *
+     * @var string
+     */
+    private $thresholdMessage = '.availability.only';
+
+    /**
+     * Checks if threshold message is displayed.
+     *
+     * @return bool
+     */
+    public function isThresholdMessageDisplayed()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->isVisible();
+    }
+
+    /**
+     * Gets threshold message.
+     *
+     * @return string
+     */
+    public function getThresholdMessage()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->getText();
+    }
+
+    /**
      * Get block price.
      *
      * @return Price
