@@ -10,6 +10,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Config\Model\Config;
 use Magento\Integration\Model\Integration;
+use Magento\Integration\Api\OauthServiceInterface;
 
 /**
  * Class IntegrationManager
@@ -31,28 +32,25 @@ class IntegrationManager
     private $integrationService;
 
     /**
+     * @var OauthServiceInterface
+     */
+    private $oauthService;
+
+    /**
      * IntegrationManager constructor
      *
      * @param Config $config
      * @param IntegrationServiceInterface $integrationService
+     * @param OauthServiceInterface $oauthService
      */
     public function __construct(
         Config $config,
-        IntegrationServiceInterface $integrationService
+        IntegrationServiceInterface $integrationService,
+        OauthServiceInterface $oauthService
     ) {
         $this->integrationService = $integrationService;
         $this->config = $config;
-    }
-
-    /**
-     * Creates new integration user for MA
-     *
-     * @return bool
-     */
-    public function createIntegration()
-    {
-        $this->integrationService->create($this->getIntegrationData());
-        return true;
+        $this->oauthService = $oauthService;
     }
 
     /**
@@ -73,6 +71,37 @@ class IntegrationManager
         $integrationData['integration_id'] = $integration->getId();
         $this->integrationService->update($integrationData);
         return true;
+    }
+
+    /**
+     * This method execute Generate Token command and enable integration
+     *
+     * @return bool|string
+     */
+    public function generateToken()
+    {
+        $consumerId = $this->generateIntegration()->getConsumerId();
+        $accessToken = $this->oauthService->getAccessToken($consumerId);
+        if (!$accessToken && $this->oauthService->createAccessToken($consumerId, true)) {
+            $accessToken = $this->oauthService->getAccessToken($consumerId);
+        }
+        return $accessToken;
+    }
+
+    /**
+     * Returns consumer Id for MA integration user
+     *
+     * @return \Magento\Integration\Model\Integration
+     */
+    private function generateIntegration()
+    {
+        $integration = $this->integrationService->findByName(
+            $this->config->getConfigDataValue('analytics/integration_name')
+        );
+        if (!$integration->getId()) {
+            $integration = $this->integrationService->create($this->getIntegrationData());
+        }
+        return $integration;
     }
 
     /**

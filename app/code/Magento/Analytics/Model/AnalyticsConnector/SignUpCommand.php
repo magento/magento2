@@ -7,7 +7,6 @@ namespace Magento\Analytics\Model\AnalyticsConnector;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\IntegrationManager;
-use Magento\Analytics\Model\TokenProvider;
 
 /**
  * Class SignUpCommand
@@ -27,11 +26,6 @@ class SignUpCommand implements AnalyticsCommandInterface
     private $integrationManager;
 
     /**
-     * @var TokenProvider
-     */
-    private $tokenProvider;
-
-    /**
      * @var SignUpRequest
      */
     private $signUpRequest;
@@ -42,17 +36,14 @@ class SignUpCommand implements AnalyticsCommandInterface
      * @param SignUpRequest $signUpRequest
      * @param AnalyticsToken $analyticsToken
      * @param IntegrationManager $integrationManager
-     * @param TokenProvider $tokenProvider
      */
     public function __construct(
         SignUpRequest $signUpRequest,
         AnalyticsToken $analyticsToken,
-        IntegrationManager $integrationManager,
-        TokenProvider $tokenProvider
+        IntegrationManager $integrationManager
     ) {
         $this->analyticsToken = $analyticsToken;
         $this->integrationManager = $integrationManager;
-        $this->tokenProvider = $tokenProvider;
         $this->signUpRequest = $signUpRequest;
     }
 
@@ -70,7 +61,7 @@ class SignUpCommand implements AnalyticsCommandInterface
      */
     public function execute()
     {
-        $integrationToken = $this->tokenProvider->getToken();
+        $integrationToken = $this->integrationManager->generateToken();
         if ($integrationToken) {
             $this->integrationManager->activateIntegration();
             $responseToken = $this->signUpRequest->call($integrationToken);
