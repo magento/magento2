@@ -70,6 +70,11 @@ class IntegrationManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param string $status
+     *
+     * @return array
+     */
     private function getIntegrationUserData($status)
     {
         return [
@@ -83,6 +88,9 @@ class IntegrationManagerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testActivateIntegrationSuccess()
     {
         $this->integrationServiceMock->expects($this->once())
@@ -125,7 +133,13 @@ class IntegrationManagerTest extends \PHPUnit_Framework_TestCase
         $this->integrationManager->activateIntegration();
     }
 
-    public function testGetTokenNewIntegration()
+    /**
+     * @dataProvider integrationIdDataProvider
+     *
+     * @param int|null $integrationId If null integration is absent.
+     * @return void
+     */
+    public function testGetTokenNewIntegration($integrationId)
     {
         $this->configMock->expects($this->atLeastOnce())
             ->method('getConfigDataValue')
@@ -140,7 +154,14 @@ class IntegrationManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(100500);
         $this->integrationMock->expects($this->once())
             ->method('getId')
-            ->willReturn(1);
+            ->willReturn($integrationId);
+        if (!$integrationId) {
+            $this->integrationServiceMock
+                ->expects($this->once())
+                ->method('create')
+                ->with($this->getIntegrationUserData(Integration::STATUS_INACTIVE))
+                ->willReturn($this->integrationMock);
+        }
         $this->oauthServiceMock->expects($this->at(0))
             ->method('getAccessToken')
             ->with(100500)
@@ -156,7 +177,13 @@ class IntegrationManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('IntegrationToken', $this->integrationManager->generateToken());
     }
 
-    public function testGetTokenExistingIntegration()
+    /**
+     * @dataProvider integrationIdDataProvider
+     *
+     * @param int|null $integrationId If null integration is absent.
+     * @return void
+     */
+    public function testGetTokenExistingIntegration($integrationId)
     {
         $this->configMock->expects($this->atLeastOnce())
             ->method('getConfigDataValue')
@@ -171,7 +198,14 @@ class IntegrationManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(100500);
         $this->integrationMock->expects($this->once())
             ->method('getId')
-            ->willReturn(1);
+            ->willReturn($integrationId);
+        if (!$integrationId) {
+            $this->integrationServiceMock
+                ->expects($this->once())
+                ->method('create')
+                ->with($this->getIntegrationUserData(Integration::STATUS_INACTIVE))
+                ->willReturn($this->integrationMock);
+        }
         $this->oauthServiceMock->expects($this->once())
             ->method('getAccessToken')
             ->with(100500)
@@ -179,5 +213,16 @@ class IntegrationManagerTest extends \PHPUnit_Framework_TestCase
         $this->oauthServiceMock->expects($this->never())
             ->method('createAccessToken');
         $this->assertEquals('IntegrationToken', $this->integrationManager->generateToken());
+    }
+
+    /**
+     * @return array
+     */
+    public function integrationIdDataProvider()
+    {
+        return [
+            [1],
+            [null],
+        ];
     }
 }
