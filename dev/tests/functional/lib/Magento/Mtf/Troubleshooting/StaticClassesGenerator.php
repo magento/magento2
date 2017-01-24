@@ -50,6 +50,7 @@ class StaticClassesGenerator extends \Symfony\Component\Console\Command\Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

@@ -18,7 +18,7 @@ class ScopeConfig extends Primary
      *
      * @param string $filename
      * @param string $scope
-     * @return \Magento\Mtf\Util\Iterator\File|array
+     * @return File|array
      */
     public function get($filename, $scope)
     {
