@@ -5,11 +5,11 @@
  */
 namespace Magento\Signifyd\Block\Adminhtml;
 
+use Magento\Backend\Block\Template;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\LayoutInterface;
-use Magento\Sales\Block\Adminhtml\Order\View\AdditionalInfo as OrderAdditionalInfo;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderRepository;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -174,8 +174,8 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
         $block = $this->layout->createBlock(CaseInfo::class, 'order_case_info', ['context' => $this->getContext()]);
         $block->setTemplate('Magento_Signifyd::case_info.phtml');
 
-        /** @var OrderAdditionalInfo $parent */
-        $parent = $this->layout->createBlock(OrderAdditionalInfo::class, 'order_additional_info');
+        /** @var Template $parent */
+        $parent = $this->layout->createBlock(Template::class, 'order_additional_info');
         $parent->setChild('order_case_info', $block);
 
         return $block->toHtml();
