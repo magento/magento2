@@ -88,11 +88,11 @@ class PhpRule implements RuleInterface
         if (!in_array($fileType, ['php', 'template'])) {
             return [];
         }
-
-        $pattern = '~\b(?<class>(?<module>(' . implode(
-            '_|',
+        
+        $pattern = '~\b(?<class>(?<module>((' . implode(
+            '|',
             Files::init()->getNamespaces()
-        ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
+        ) . ')[_|\\\\]?)[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
 
         $dependenciesInfo = [];
         if (preg_match_all($pattern, $contents, $matches)) {
