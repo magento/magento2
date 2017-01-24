@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model;
@@ -129,6 +129,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
         }
 
         $tokenModel->setIsActive(false);
+        $tokenModel->setIsVisible(false);
         $tokenModel->save();
 
         return true;

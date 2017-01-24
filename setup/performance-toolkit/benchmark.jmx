@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -3853,7 +3853,7 @@ vars.put("loadType", "Guest");</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Email Available ${__property(activeAdminThread)}(${testLabel})" enabled="true">
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Email Available${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
         <collectionProp name="Arguments.arguments">
@@ -3918,7 +3918,7 @@ vars.put("loadType", "Guest");</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Estimate Shipping Methods ${__property(activeAdminThread)}(${testLabel})" enabled="true">
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Estimate Shipping Methods${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
         <collectionProp name="Arguments.arguments">
@@ -3983,7 +3983,7 @@ vars.put("loadType", "Guest");</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Billing/Shipping Information ${__property(activeAdminThread)}(${testLabel})" enabled="true">
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Billing/Shipping Information${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
         <collectionProp name="Arguments.arguments">
@@ -4048,7 +4048,7 @@ vars.put("loadType", "Guest");</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Payment Info/Place Order ${__property(activeAdminThread)}(${testLabel})" enabled="true">
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Payment Info/Place Order${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
         <collectionProp name="Arguments.arguments">
@@ -5264,7 +5264,7 @@ vars.put("loadType", "Customer");</stringProp>
     </GaussianRandomTimer>
     <hashTree/>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Estimate Shipping Methods ${__property(activeAdminThread)}(${testLabel})" enabled="true">
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Estimate Shipping Methods${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
         <collectionProp name="Arguments.arguments">

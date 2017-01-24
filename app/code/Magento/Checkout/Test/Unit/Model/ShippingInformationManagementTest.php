@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Model;
@@ -11,6 +11,11 @@ namespace Magento\Checkout\Test\Unit\Model;
  */
 class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -34,37 +39,12 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $addressValidatorMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $loggerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $addressRepositoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scopeConfigMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $shippingAddressMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $totalsCollectorMock;
 
     /**
      * @var \Magento\Checkout\Model\ShippingInformationManagement
@@ -103,6 +83,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->paymentMethodManagementMock = $this->getMock(\Magento\Quote\Api\PaymentMethodManagementInterface::class);
         $this->paymentDetailsFactoryMock = $this->getMock(
             \Magento\Checkout\Model\PaymentDetailsFactory::class,
@@ -113,18 +94,6 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
         );
         $this->cartTotalsRepositoryMock = $this->getMock(\Magento\Quote\Api\CartTotalRepositoryInterface::class);
         $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->addressValidatorMock = $this->getMock(
-            \Magento\Quote\Model\QuoteAddressValidator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->addressRepositoryMock = $this->getMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->totalsCollectorMock =
-            $this->getMock(\Magento\Quote\Model\Quote\TotalsCollector::class, [], [], '', false);
         $this->shippingAddressMock = $this->getMock(
             \Magento\Quote\Model\Quote\Address::class,
             [
@@ -140,7 +109,8 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
                 'importCustomerAddressData',
                 'save',
                 'getShippingRateByCode',
-                'getShippingMethod'
+                'getShippingMethod',
+                'setLimitCarrier'
             ],
             [],
             '',
@@ -175,22 +145,29 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingFactoryMock =
             $this->getMock(\Magento\Quote\Model\ShippingFactory::class, ['create'], [], '', false);
 
-        $this->prepareObjectManager([
-            [\Magento\Quote\Model\ShippingAssignmentFactory::class, $this->shippingAssignmentFactoryMock],
-            [\Magento\Quote\Api\Data\CartExtensionFactory::class, $this->cartExtensionFactoryMock],
-            [\Magento\Quote\Model\ShippingFactory::class, $this->shippingFactoryMock],
-        ]);
-
-        $this->model = new \Magento\Checkout\Model\ShippingInformationManagement(
-            $this->paymentMethodManagementMock,
-            $this->paymentDetailsFactoryMock,
-            $this->cartTotalsRepositoryMock,
-            $this->quoteRepositoryMock,
-            $this->addressValidatorMock,
-            $this->loggerMock,
-            $this->addressRepositoryMock,
-            $this->scopeConfigMock,
-            $this->totalsCollectorMock
+        $this->model = $this->objectManager->getObject(
+            \Magento\Checkout\Model\ShippingInformationManagement::class,
+            [
+                'paymentMethodManagement' => $this->paymentMethodManagementMock,
+                'paymentDetailsFactory' => $this->paymentDetailsFactoryMock,
+                'cartTotalsRepository' => $this->cartTotalsRepositoryMock,
+                'quoteRepository' => $this->quoteRepositoryMock,
+            ]
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'shippingAssignmentFactory',
+            $this->shippingAssignmentFactoryMock
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'cartExtensionFactory',
+            $this->cartExtensionFactoryMock
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'shippingFactory',
+            $this->shippingFactoryMock
         );
     }
 
@@ -232,7 +209,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
     private function setShippingAssignmentsMocks($shippingMethod)
     {
         $this->quoteMock->expects($this->once())->method('getExtensionAttributes')->willReturn(null);
-
+        $this->shippingAddressMock->expects($this->once())->method('setLimitCarrier');
         $this->cartExtensionMock = $this->getMock(
             \Magento\Quote\Api\Data\CartExtension::class,
             ['getShippingAssignments', 'setShippingAssignments'],
@@ -456,21 +433,5 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             $paymentDetailsMock,
             $this->model->saveAddressInformation($cartId, $addressInformationMock)
         );
-    }
-
-    /**
-     * @param array $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

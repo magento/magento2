@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,6 +10,14 @@
         <arguments>
             <argument name="compositeModules" xsi:type="array">
                 <item name="productalert" xsi:type="string">Magento_ProductAlert</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="catalog/productalert_cron/error_email" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -90,6 +90,10 @@
                 <input>input</input>
                 <selector>input[name='url_key']</selector>
             </url_key>
+            <use_default_url_key>
+                <input>checkbox</input>
+                <selector>input[name='use_default[url_key]']</selector>
+            </use_default_url_key>
             <meta_title>
                 <input>input</input>
                 <selector>input[name='meta_title']</selector>

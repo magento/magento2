@@ -1,10 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Theme;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Design\Theme\ListInterface;
+use Magento\Framework\App\DeploymentConfig;
+
+/**
+ * Provide data for theme grid and for theme edit page
+ */
 class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProviderInterface
 {
     /**
@@ -26,6 +33,16 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      * @var \Magento\Framework\View\Design\ThemeInterface[]
      */
     private $themes;
+
+    /**
+     * @var ListInterface
+     */
+    private $themeList;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
 
     /**
      * ThemeProvider constructor.
@@ -52,6 +69,11 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
         if (isset($this->themes[$fullPath])) {
             return $this->themes[$fullPath];
         }
+
+        if (! $this->getDeploymentConfig()->isDbAvailable()) {
+            return $this->getThemeList()->getThemeByFullPath($fullPath);
+        }
+
         /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
         $theme = $this->cache->load('theme'. $fullPath);
         if ($theme) {
@@ -104,5 +126,29 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
             $this->themes[$themeId] = $themeModel;
         }
         return $themeModel;
+    }
+
+    /**
+     * @deprecated
+     * @return ListInterface
+     */
+    private function getThemeList()
+    {
+        if ($this->themeList === null) {
+            $this->themeList = ObjectManager::getInstance()->get(ListInterface::class);
+        }
+        return $this->themeList;
+    }
+
+    /**
+     * @deprecated
+     * @return DeploymentConfig
+     */
+    private function getDeploymentConfig()
+    {
+        if ($this->deploymentConfig === null) {
+            $this->deploymentConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
     }
 }

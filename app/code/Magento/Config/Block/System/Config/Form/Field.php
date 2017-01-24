@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,8 @@
 namespace Magento\Config\Block\System\Config\Form;
 
 /**
+ * Render field html element in Stores Configuration
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
@@ -97,6 +99,7 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
         $htmlId = $element->getHtmlId();
         $namePrefix = preg_replace('#\[value\](\[\])?$#', '', $element->getName());
         $checkedHtml = $element->getInherit() == 1 ? 'checked="checked"' : '';
+        $disabled = $element->getIsDisableInheritance() == true ? ' disabled="disabled"' : '';
 
         $html = '<td class="use-default">';
         $html .= '<input id="' .
@@ -105,7 +108,7 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
             $namePrefix .
             '[inherit]" type="checkbox" value="1"' .
             ' class="checkbox config-inherit" ' .
-            $checkedHtml .
+            $checkedHtml . $disabled .
             ' onclick="toggleValueElements(this, Element.previous(this.parentNode))" /> ';
         $html .= '<label for="' . $htmlId . '_inherit" class="inherit">' . $this->_getInheritCheckboxLabel(
             $element

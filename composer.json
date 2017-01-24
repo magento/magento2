@@ -72,7 +72,7 @@
         "phpunit/phpunit": "4.1.0",
         "squizlabs/php_codesniffer": "1.5.3",
         "phpmd/phpmd": "@stable",
-        "pdepend/pdepend": "2.2.2",
+        "pdepend/pdepend": "2.4.0",
         "friendsofphp/php-cs-fixer": "~1.2",
         "lusitanian/oauth": "~0.3 <=0.7.0",
         "sebastian/phpcpd": "2.0.0"
@@ -151,7 +151,7 @@
         "magento/module-rss": "100.2.0-dev",
         "magento/module-rule": "100.2.0-dev",
         "magento/module-sales": "100.2.0-dev",
-        "magento/module-sales-inventory": "100.0.0-dev",
+        "magento/module-sales-inventory": "100.2.0-dev",
         "magento/module-sales-rule": "100.2.0-dev",
         "magento/module-sales-sequence": "100.2.0-dev",
         "magento/module-sample-data": "100.2.0-dev",
@@ -217,9 +217,6 @@
             "tinymce/tinymce": "lib/web/tiny_mce"
         }
     },
-    "config": {
-        "use-include-path": true
-    },
     "autoload": {
         "psr-4": {
             "Magento\\Framework\\": "lib/internal/Magento/Framework/",
@@ -227,10 +224,18 @@
             "Magento\\": "app/code/Magento/"
         },
         "psr-0": {
-            "": "app/code/"
+            "": [
+                "app/code/",
+                "generated/code"
+            ]
         },
         "files": [
             "app/etc/NonComposerComponentRegistration.php"
+        ],
+        "exclude-from-classmap": [
+            "**/dev/**",
+            "**/update/**",
+            "**/Test/**"
         ]
     },
     "autoload-dev": {

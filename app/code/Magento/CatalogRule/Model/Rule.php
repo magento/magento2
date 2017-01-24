@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Api\Data\RuleInterface;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\DataObject\IdentityInterface;
 
 /**
@@ -137,7 +139,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     protected $ruleConditionConverter;
 
     /**
-     * Rule constructor.
+     * Rule constructor
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -157,6 +160,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $relatedCacheTypes
      * @param array $data
+     * @param ExtensionAttributesFactory|null $extensionFactory
+     * @param AttributeValueFactory|null $customAttributeFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -179,7 +184,9 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
-        array $data = []
+        array $data = [],
+        ExtensionAttributesFactory $extensionFactory = null,
+        AttributeValueFactory $customAttributeFactory = null
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_storeManager = $storeManager;
@@ -201,7 +208,9 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
             $localeDate,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $extensionFactory,
+            $customAttributeFactory
         );
     }
 
@@ -558,14 +567,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $result = [];
         foreach ($array1 as $key => $value) {
             if (array_key_exists($key, $array2)) {
-                if (is_array($value)) {
-                    if ($value != $array2[$key]) {
-                        $result[$key] = true;
-                    }
-                } else {
-                    if ($value != $array2[$key]) {
-                        $result[$key] = true;
-                    }
+                if ($value != $array2[$key]) {
+                    $result[$key] = true;
                 }
             } else {
                 $result[$key] = true;

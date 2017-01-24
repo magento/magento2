@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*global define*/
@@ -79,7 +79,6 @@ define(
                     fieldsetName = 'checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset';
 
                 this._super();
-                shippingRatesValidator.initFields(fieldsetName);
 
                 if (!quote.isVirtual()) {
                     stepNavigator.registerStep(
@@ -120,6 +119,7 @@ define(
                     checkoutProvider.on('shippingAddress', function (shippingAddressData) {
                         checkoutData.setShippingAddressFromData(shippingAddressData);
                     });
+                    shippingRatesValidator.initFields(fieldsetName);
                 });
 
                 return this;
@@ -242,7 +242,7 @@ define(
                     emailValidationResult = customer.isLoggedIn();
 
                 if (!quote.shippingMethod()) {
-                    this.errorValidationMessage($.mage.__('Please specify a shipping method.'));
+                    this.errorValidationMessage($t('Please specify a shipping method.'));
 
                     return false;
                 }

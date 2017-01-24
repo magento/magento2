@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Pricing\Price;
@@ -59,6 +59,38 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
         // update in global scope
         $currentStoreId = $this->storeManager->getStore()->getId();
         $this->storeManager->setCurrentStore(Store::ADMIN_CODE);
+        $this->productRepository->save($lowestPriceChildProduct);
+        $this->storeManager->setCurrentStore($currentStoreId);
+
+        $lowestPriceChildrenProducts = $this->lowestPriceOptionsProvider->getProducts($configurableProduct);
+        $this->assertCount(1, $lowestPriceChildrenProducts);
+        $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
+        $this->assertEquals(20, $lowestPriceChildrenProduct->getPrice());
+    }
+
+    /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
+    public function testGetProductsIfOneOfChildIsDisabledPerStore()
+    {
+        $configurableProduct = $this->productRepository->getById(1, false, null, true);
+        $lowestPriceChildrenProducts = $this->lowestPriceOptionsProvider->getProducts($configurableProduct);
+        $this->assertCount(1, $lowestPriceChildrenProducts);
+        $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
+        $this->assertEquals(10, $lowestPriceChildrenProduct->getPrice());
+
+        // load full aggregation root
+        $lowestPriceChildProduct = $this->productRepository->get(
+            $lowestPriceChildrenProduct->getSku(),
+            false,
+            null,
+            true
+        );
+        $lowestPriceChildProduct->setStatus(Status::STATUS_DISABLED);
+        // update in default store scope
+        $currentStoreId = $this->storeManager->getStore()->getId();
+        $defaultStore = $this->storeManager->getDefaultStoreView();
+        $this->storeManager->setCurrentStore($defaultStore->getId());
         $this->productRepository->save($lowestPriceChildProduct);
         $this->storeManager->setCurrentStore($currentStoreId);
 

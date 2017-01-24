@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Ui\Test\TestCase\GridFilteringTest" summary="Grid UI Component Filtering" ticketId="MAGETWO-41328">
         <variation name="SalesOrderGridFiltering">
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Verify sales order grid filtering</data>
             <data name="steps" xsi:type="array">
@@ -33,6 +34,7 @@
             <constraint name="\Magento\Ui\Test\Constraint\AssertGridFiltering"/>
         </variation>
         <variation name="SalesInvoiceGridFiltering">
+            <data name="tag" xsi:type="string">severity:S3</data>
             <data name="description" xsi:type="string">Verify sales invoice grid filtering</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateInvoiceStep</item>
@@ -56,6 +58,7 @@
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFiltering"/>
         </variation>
         <variation name="SalesShipmentGridFiltering">
+            <data name="tag" xsi:type="string">severity:S3</data>
             <data name="description" xsi:type="string">Verify sales shipment grid filtering</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="string">Magento\Sales\Test\TestStep\CreateShipmentStep</item>
@@ -79,6 +82,7 @@
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFiltering"/>
         </variation>
         <variation name="SalesCreditMemoGridFiltering">
+            <data name="tag" xsi:type="string">severity:S3</data>
             <data name="description" xsi:type="string">Verify sales credit memo grid filtering</data>
             <data name="steps" xsi:type="array">
                 <item name="0" xsi:type="array">

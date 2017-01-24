@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,6 +14,7 @@
     <preference for="Magento\Bundle\Api\ProductOptionManagementInterface" type="Magento\Bundle\Model\OptionManagement" />
     <preference for="Magento\Bundle\Api\Data\OptionInterface" type="Magento\Bundle\Model\Option" />
     <preference for="Magento\Bundle\Api\Data\BundleOptionInterface" type="Magento\Bundle\Model\BundleOption" />
+    <preference for="Magento\Bundle\Pricing\Adjustment\SelectionPriceListProviderInterface" type="Magento\Bundle\Pricing\Adjustment\DefaultSelectionPriceListProvider" />
     <type name="Magento\Bundle\Model\Source\Option\Type">
         <arguments>
             <argument name="options" xsi:type="array">
@@ -126,6 +127,13 @@
         <arguments>
             <argument name="processorPool" xsi:type="array">
                 <item name="bundle" xsi:type="object">Magento\Bundle\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Price\SpecialPriceStorage">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="2" xsi:type="string">bundle</item>
             </argument>
         </arguments>
     </type>

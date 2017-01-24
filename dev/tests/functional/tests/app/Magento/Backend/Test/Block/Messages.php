@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,14 +40,14 @@ class Messages extends Block
      *
      * @var string
      */
-    protected $errorMessage = '[data-ui-id$=message-error]';
+    protected $errorMessage = '[data-ui-id$=message-error], .message-error';
 
     /**
      * Notice message selector.
      *
      * @var string
      */
-    protected $noticeMessage = '[data-ui-id$=message-notice]';
+    protected $noticeMessage = '[data-ui-id$=message-notice], .message-notice';
 
     /**
      * Warning message selector.
@@ -121,9 +121,9 @@ class Messages extends Block
      */
     public function getErrorMessage()
     {
-        return $this->_rootElement
-            ->find($this->errorMessage, Locator::SELECTOR_CSS)
-            ->getText();
+        $this->waitForElementVisible($this->errorMessage);
+
+        return $this->_rootElement->find($this->errorMessage)->getText();
     }
 
     /**
@@ -167,6 +167,16 @@ class Messages extends Block
     }
 
     /**
+     * Check for success message.
+     *
+     * @return bool
+     */
+    public function assertSuccessMessage()
+    {
+        return $this->waitForElementVisible($this->successMessage, Locator::SELECTOR_CSS);
+    }
+
+    /**
      * Check for notice message.
      *
      * @return bool
@@ -185,6 +195,24 @@ class Messages extends Block
     {
         $this->waitForElementVisible($this->noticeMessage);
         return $this->_rootElement->find($this->noticeMessage)->getText();
+    }
+
+    /**
+     * Get all notice messages which are present on the page.
+     *
+     * @return array
+     */
+    public function getNoticeMessages()
+    {
+        $this->waitForElementVisible($this->noticeMessage);
+        $elements = $this->_rootElement->getElements($this->noticeMessage);
+
+        $messages = [];
+        foreach ($elements as $element) {
+            $messages[] = $element->getText();
+        }
+
+        return $messages;
     }
 
     /**

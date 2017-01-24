@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,6 +21,13 @@ class Summary extends \Magento\Catalog\Test\Block\Product\View
     private $configuredPriceBlockSelector = '.price-configured_price';
 
     /**
+     * Summary items selector.
+     *
+     * @var string
+     */
+    private $summaryItemsSelector = '.bundle li div div';
+
+    /**
      * Get configured price block.
      *
      * @return ConfiguredPrice
@@ -31,5 +38,15 @@ class Summary extends \Magento\Catalog\Test\Block\Product\View
             ConfiguredPrice::class,
             ['element' => $this->_rootElement->find($this->configuredPriceBlockSelector)]
         );
+    }
+
+    /**
+     * Get Bundle Summary row items.
+     *
+     * @return \Magento\Mtf\Client\ElementInterface[]
+     */
+    public function getSummaryItems()
+    {
+        return $this->_rootElement->getElements($this->summaryItemsSelector);
     }
 }

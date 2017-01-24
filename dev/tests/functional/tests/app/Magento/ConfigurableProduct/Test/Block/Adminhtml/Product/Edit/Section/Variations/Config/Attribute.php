@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -177,6 +177,7 @@ class Attribute extends Form
 
         //select attributes
         $this->getAttributesGrid()->resetFilter();
+        $this->getTemplateBlock()->waitLoader();
         $attributesList = $this->browser->find($this->selectedAttributes)->getText();
         if ($attributesList != '--') {
             $this->getAttributesGrid()->deselectAttributes();

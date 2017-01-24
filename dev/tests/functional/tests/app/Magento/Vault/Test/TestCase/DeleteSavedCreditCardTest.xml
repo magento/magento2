@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -17,23 +17,29 @@
             <data name="payments" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="method" xsi:type="string">braintree</item>
-                    <item name="creditCardClass" xsi:type="string">credit_card_braintree</item>
                     <item name="creditCard" xsi:type="array">
-                        <item name="dataset" xsi:type="string">visa_braintree</item>
+                        <item name="dataset" xsi:type="string">visa_default</item>
+                        <item name="data" xsi:type="array">
+                            <item name="payment_code" xsi:type="string">braintree</item>
+                        </item>
                     </item>
                 </item>
                 <item name="1" xsi:type="array">
                     <item name="method" xsi:type="string">payflowpro</item>
-                    <item name="creditCardClass" xsi:type="string">credit_card</item>
                     <item name="creditCard" xsi:type="array">
-                        <item name="dataset" xsi:type="string">amex_default</item>
+                        <item name="dataset" xsi:type="string">visa_alt</item>
+                        <item name="data" xsi:type="array">
+                        <item name="payment_code" xsi:type="string">payment</item>
+                    </item>
                     </item>
                 </item>
                 <item name="2" xsi:type="array">
                     <item name="method" xsi:type="string">braintree</item>
-                    <item name="creditCardClass" xsi:type="string">credit_card_braintree</item>
                     <item name="creditCard" xsi:type="array">
-                        <item name="dataset" xsi:type="string">visa_braintree</item>
+                        <item name="dataset" xsi:type="string">visa_default</item>
+                        <item name="data" xsi:type="array">
+                            <item name="payment_code" xsi:type="string">braintree</item>
+                        </item>
                     </item>
                     <item name="vault" xsi:type="array">
                         <item name="method" xsi:type="string">braintree_cc_vault</item>
@@ -41,9 +47,11 @@
                 </item>
                 <item name="3" xsi:type="array">
                     <item name="method" xsi:type="string">payflowpro</item>
-                    <item name="creditCardClass" xsi:type="string">credit_card</item>
                     <item name="creditCard" xsi:type="array">
-                        <item name="dataset" xsi:type="string">amex_default</item>
+                        <item name="dataset" xsi:type="string">visa_alt</item>
+                        <item name="data" xsi:type="array">
+                            <item name="payment_code" xsi:type="string">payment</item>
+                        </item>
                     </item>
                     <item name="vault" xsi:type="array">
                         <item name="method" xsi:type="string">payflowpro_cc_vault</item>

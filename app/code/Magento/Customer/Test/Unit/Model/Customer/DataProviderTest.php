@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Customer;
@@ -688,6 +688,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $filename = '/filename.ext1';
         $viewUrl = 'viewUrl';
+        $mime = 'image/png';
 
         $expectedData = [
             $customerId => [
@@ -699,6 +700,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                             'size' => 1,
                             'url' => $viewUrl,
                             'name' => 'filename.ext1',
+                            'type' => $mime,
                         ],
                     ],
                 ],
@@ -778,6 +780,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getViewUrl')
             ->with('/filename.ext1', 'image')
             ->willReturn($viewUrl);
+        $this->fileProcessor->expects($this->once())
+            ->method('getMimeType')
+            ->with($filename)
+            ->willReturn($mime);
 
         $objectManager = new ObjectManager($this);
         $dataProvider = $objectManager->getObject(

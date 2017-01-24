@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -7,11 +7,12 @@ define([
     'jquery',
     'underscore',
     'mage/template',
+    'mage/translate',
     'priceUtils',
     'priceBox',
     'jquery/ui',
     'jquery/jquery.parsequery'
-], function ($, _, mageTemplate) {
+], function ($, _, mageTemplate, $t, priceUtils) {
     'use strict';
 
     $.widget('mage.configurable', {
@@ -38,7 +39,10 @@ define([
              *
              * @type {String}
              */
-            gallerySwitchStrategy: 'replace'
+            gallerySwitchStrategy: 'replace',
+            tierPriceTemplateSelector: '#tier-prices-template',
+            tierPriceBlockSelector: '[data-role="tier-price-block"]',
+            tierPriceTemplate: ''
         },
 
         /**
@@ -84,6 +88,7 @@ define([
                 options.priceFormat = priceBoxOptions.priceFormat;
             }
             options.optionTemplate = mageTemplate(options.optionTemplate);
+            options.tierPriceTemplate = $(this.options.tierPriceTemplateSelector).html();
 
             options.settings = options.spConfig.containerId ?
                 $(options.spConfig.containerId).find(options.superSelector) :
@@ -259,6 +264,7 @@ define([
             }
             this._reloadPrice();
             this._displayRegularPriceBlock(this.simpleProduct);
+            this._displayTierPriceBlock(this.simpleProduct);
             this._changeProductImage();
         },
 
@@ -513,6 +519,31 @@ define([
             var galleryObject = element.data('gallery');
 
             this.options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+        },
+
+        /**
+         * Show or hide tier price block
+         *
+         * @param {*} optionId
+         * @private
+         */
+        _displayTierPriceBlock: function (optionId) {
+            if (typeof optionId != 'undefined' &&
+                this.options.spConfig.optionPrices[optionId].tierPrices != []
+            ) {
+                var options = this.options.spConfig.optionPrices[optionId];
+                if (this.options.tierPriceTemplate) {
+                    var tierPriceHtml = mageTemplate(this.options.tierPriceTemplate, {
+                        'tierPrices': options.tierPrices,
+                        '$t': $t,
+                        'currencyFormat': this.options.spConfig.currencyFormat,
+                        'priceUtils': priceUtils
+                    });
+                    $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+                }
+            } else {
+                $(this.options.tierPriceBlockSelector).hide();
+            }
         }
     });
 

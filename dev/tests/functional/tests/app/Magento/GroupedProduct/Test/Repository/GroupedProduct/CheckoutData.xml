@@ -1,12 +1,39 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\GroupedProduct\Test\Repository\GroupedProduct\CheckoutData">
+        <dataset name="default">
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="name" xsi:type="string">product_key_0</item>
+                    <item name="qty" xsi:type="string">2</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="name" xsi:type="string">product_key_1</item>
+                    <item name="qty" xsi:type="string">1</item>
+                </item>
+            </field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="array">
+                    <item name="product_key_0" xsi:type="string">100</item>
+                    <item name="product_key_1" xsi:type="string">560</item>
+                </item>
+                <item name="qty" xsi:type="array">
+                    <item name="product_key_0" xsi:type="string">2</item>
+                    <item name="product_key_1" xsi:type="string">1</item>
+                </item>
+                <item name="subtotal" xsi:type="array">
+                    <item name="product_key_0" xsi:type="string">200</item>
+                    <item name="product_key_1" xsi:type="string">560</item>
+                </item>
+            </field>
+        </dataset>
+
         <dataset name="grouped_three_simple_products">
             <field name="options" xsi:type="array">
                 <item name="0" xsi:type="array">

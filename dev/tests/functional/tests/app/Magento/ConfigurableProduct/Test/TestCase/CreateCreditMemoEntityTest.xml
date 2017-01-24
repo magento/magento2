@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -14,6 +14,7 @@
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">configurableProduct::configurable_with_qty_1</data>
             <data name="order/data/price/dataset" xsi:type="string">full_refund</data>
+            <data name="configData" xsi:type="string"/>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertProductQtyDecreasedAfterCreditmemo" />
         </variation>

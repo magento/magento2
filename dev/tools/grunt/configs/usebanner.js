@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -7,7 +7,7 @@
 
 function printCopyright(lang) {
     var copyrightText = {
-            firstLine: 'Copyright © 2016 Magento. All rights reserved.',
+            firstLine: 'Copyright © 2013-2017 Magento, Inc. All rights reserved.',
             secondLine: 'See COPYING.txt for license details.'
         },
         nlWin = '\r\n';

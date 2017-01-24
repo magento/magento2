@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -34,6 +34,22 @@
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="selectPaymentMethodForOrder" />
         <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" />
+    </scenario>
+    <scenario name="VoidAuthorizationTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax" />
+        <step name="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckout" />
+        <step name="clickProceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
+        <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
+        <step name="placeOrder" module="Magento_Checkout" next="voidAuthorization" />
+        <step name="voidAuthorization" module="Magento_Sales" />
     </scenario>
     <scenario name="PrintOrderFrontendGuestTest" firstStep="createProducts">
         <step name="createProducts" module="Magento_Catalog" next="createCustomer" />
@@ -69,5 +85,34 @@
         <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" next="createInvoice" />
         <step name="createInvoice" module="Magento_Sales" />
+    </scenario>
+    <scenario name="CreateOnlineCreditMemoTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrder" />
+        <step name="placeOrder" module="Magento_Checkout" next="createInvoice" />
+        <step name="createInvoice" module="Magento_Sales" next="createOnlineCreditMemo" />
+        <step name="createOnlineCreditMemo" module="Magento_Sales" />
+    </scenario>
+    <scenario name="CloseOrderTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress"/>
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
+        <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrder" />
+        <step name="placeOrder" module="Magento_Checkout" next="createInvoice" />
+        <step name="createInvoice" module="Magento_Sales" next="createShipment" />
+        <step name="createShipment" module="Magento_Sales" />
     </scenario>
 </config>

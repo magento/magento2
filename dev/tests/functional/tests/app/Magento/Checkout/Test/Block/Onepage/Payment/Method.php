@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,13 +34,6 @@ class Method extends Block
      * @var string
      */
     protected $billingAddressSelector = '.payment-method-billing-address';
-
-    /**
-     * Save credit card check box.
-     *
-     * @var string
-     */
-    protected $vaultCheckbox = '#%s_enable_vault';
 
     /**
      * PayPal load spinner.
@@ -136,18 +129,5 @@ class Method extends Block
             \Magento\Checkout\Test\Block\Onepage\Payment\Method\Billing::class,
             ['element' => $element]
         );
-    }
-
-    /**
-     * Save credit card.
-     *
-     * @param string $paymentMethod
-     * @param string $creditCardSave
-     * @return void
-     */
-    public function saveCreditCard($paymentMethod, $creditCardSave)
-    {
-        $saveCard = sprintf($this->vaultCheckbox, $paymentMethod);
-        $this->_rootElement->find($saveCard, Locator::SELECTOR_CSS, 'checkbox')->setValue($creditCardSave);
     }
 }

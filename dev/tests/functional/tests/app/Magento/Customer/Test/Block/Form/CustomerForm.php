@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,6 +37,21 @@ class CustomerForm extends Form
      * @var string
      */
     protected $validationText = '.mage-error[for="%s"]';
+
+    /**
+     * Fixture mapping and fields revision.
+     *
+     * @param array|null $fields
+     * @param string|null $parent
+     * @return array
+     */
+    protected function dataMapping(array $fields = null, $parent = null)
+    {
+        if (isset($fields['website_id'])) {
+            unset($fields['website_id']);
+        }
+        return parent::dataMapping($fields, $parent);
+    }
 
     /**
      * Click on save button.
