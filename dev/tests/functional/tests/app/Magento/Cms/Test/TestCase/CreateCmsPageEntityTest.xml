@@ -27,7 +27,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageSuccessSaveMessage" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
         </variation>
-       <variation name="CreateCmsPageEntityTestVariation3">
+        <variation name="CreateCmsPageEntityTestVariation3">
             <data name="description" xsi:type="string">Create page with widget and system variable</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
