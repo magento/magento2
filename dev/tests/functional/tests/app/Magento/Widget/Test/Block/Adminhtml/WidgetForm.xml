@@ -30,5 +30,10 @@
         <products_count />
         <cache_lifetime />
         <page_size />
+        <serialized_conditions>
+            <selector>.rule-tree</selector>
+            <strategy>css selector</strategy>
+            <input>widgetconditions</input>
+        </serialized_conditions>
     </fields>
 </mapping>

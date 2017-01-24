@@ -19,6 +19,20 @@
             </field>
         </dataset>
 
+        <dataset name="product_list_with_attribute_set_condition">
+            <field name="widget_1" xsi:type="array">
+                <item name="widget_type" xsi:type="string">Catalog Products List</item>
+                <item name="title" xsi:type="string">Catalog Products List %isolation%</item>
+                <item name="template" xsi:type="string">Products Grid Template</item>
+                <item name="entities" xsi:type="array">
+                    <item name="0" xsi:type="string">catalogProductSimple::default</item>
+                </item>
+                <item name="conditions" xsi:type="array">
+                    <item name="attribute_set_id" xsi:type="string">[Attribute Set|is|%attribute_set_id%]</item>
+                </item>
+            </field>
+        </dataset>
+
         <dataset name="all_widgets">
             <field name="widget_1" xsi:type="array">
                 <item name="widget_type" xsi:type="string">CMS Page Link</item>
