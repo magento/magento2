@@ -12,10 +12,10 @@ class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Paymen
      * Response action.
      * Action for Authorize.net SIM Relay Request.
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        $this->_responseAction('adminhtml');
+        return $this->_responseAction('adminhtml');
     }
 }

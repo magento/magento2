@@ -22,6 +22,8 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
      * @param string $errorMsg
      * @param string[] $params
      *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Authorizenet/_files/authorizenet_enabled_setting.php
      * @dataProvider responseActionAuthorizeCaptureDeclineDataProvider
      */
@@ -58,13 +60,14 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains($expectedString, $output);
     }
 
-
     /**
      * Tests the controller for success
      *
      * @param string $hash
      * @param string[] $params
      *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Authorizenet/_files/authorizenet_enabled_setting.php
      * @magentoDataFixture Magento/Authorizenet/_files/order.php
      * @dataProvider responseActionAuthorizeCaptureSuccessDataProvider
@@ -179,7 +182,7 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
                 'post' => $postArray
             ],
 
-            'error_transaction_not found' => [
+            'error_transaction_not_found' => [
                 'invoice_num' => 87,
                 'x_MD5_Hash' => 'BBC3D75DA467F7DF6A1E174CD491CF81',
                 'error_msg' => 'This%20payment%20didn%27t%20work%20out%20because%20'
@@ -240,7 +243,7 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
             'is_secure' => null
         ];
         return [
-            'error_hash' => [
+            'success' => [
                 'x_MD5_Hash' => '35DCF749F7760193FB8254886E1D1522',
                 'post' => $postArray
             ],
