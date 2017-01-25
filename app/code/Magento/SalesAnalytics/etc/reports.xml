@@ -15,6 +15,7 @@
             <attribute name="coupon_code"/>
             <attribute name="created_at"/>
             <attribute name="store_id"/>
+            <attribute name="email"/>
             <link-source name="sales_order_address" alias="billing" link-type="left">
                 <attribute name="email"/>
                 <using glue="and">
