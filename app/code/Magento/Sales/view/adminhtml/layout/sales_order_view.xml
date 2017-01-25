@@ -23,7 +23,7 @@
                 <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Info" name="order_tab_info" template="order/view/tab/info.phtml">
                     <block class="Magento\Sales\Block\Adminhtml\Order\View\Messages" name="order_messages"/>
                     <block class="Magento\Sales\Block\Adminhtml\Order\View\Info" name="order_info" template="order/view/info.phtml"/>
-                    <block class="Magento\Backend\Block\Template" name="order_additional_info" template="Magento_Theme::container.phtml"/>
+                    <container name="order_additional_info"/>
                     <block class="Magento\Sales\Block\Adminhtml\Order\View\Items" name="order_items" template="order/view/items.phtml">
                         <arguments>
                             <argument name="columns" xsi:type="array">
