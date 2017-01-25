@@ -10,9 +10,11 @@ use Magento\Cms\Test\Page\Adminhtml\CmsPageIndex;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageNew;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 
+/**
+ * Class AssertCmsPageWidgetConditions makes assert that widget conditions are properly saved on CMS page.
+ */
 class AssertCmsPageWidgetConditions extends AbstractAssertForm
 {
-
     /**
      * Assert that widget conditions are properly saved on CMS page.
      *
