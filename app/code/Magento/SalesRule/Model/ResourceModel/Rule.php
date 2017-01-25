@@ -10,6 +10,7 @@ use \Magento\SalesRule\Model\Rule as SalesRule;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Rule\Model\ResourceModel\AbstractResource;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Sales Rule resource model
@@ -56,13 +57,15 @@ class Rule extends AbstractResource
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon
      * @param string $connectionName
      * @param \Magento\Framework\DataObject|null $associatedEntityMapInstance
+     * @param Json $serializer Optional parameter for backward compatibility
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon,
         $connectionName = null,
-        \Magento\Framework\DataObject $associatedEntityMapInstance = null
+        \Magento\Framework\DataObject $associatedEntityMapInstance = null,
+        Json $serializer = null
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
@@ -70,6 +73,8 @@ class Rule extends AbstractResource
             \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class
         );
         $this->_associatedEntitiesMap = $associatedEntitiesMapInstance->getData();
+        /* we already have serialized field in AbstractResource, so we don't have to declare it here */
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -157,8 +162,8 @@ class Rule extends AbstractResource
 
         // Save product attributes used in rule
         $ruleProductAttributes = array_merge(
-            $this->getProductAttributes(serialize($object->getConditions()->asArray())),
-            $this->getProductAttributes(serialize($object->getActions()->asArray()))
+            $this->getProductAttributes($this->serializer->serialize($object->getConditions()->asArray())),
+            $this->getProductAttributes($this->serializer->serialize($object->getActions()->asArray()))
         );
         if (count($ruleProductAttributes)) {
             $this->setActualProductAttributes($object, $ruleProductAttributes);
@@ -345,19 +350,14 @@ class Rule extends AbstractResource
      */
     public function getProductAttributes($serializedString)
     {
-        $result = [];
-        if (preg_match_all(
-            '~s:32:"salesrule/rule_condition_product";s:9:"attribute";s:\d+:"(.*?)"~s',
+        // we need 4 backslashes to match 1 in regexp, see http://www.php.net/manual/en/regexp.reference.escape.php
+        preg_match_all(
+            '~"Magento\\\\\\\\SalesRule\\\\\\\\Model\\\\\\\\Rule\\\\\\\\Condition\\\\\\\\Product","attribute":"(.*?)"~',
             $serializedString,
             $matches
-        )
-        ) {
-            foreach ($matches[1] as $attributeCode) {
-                $result[] = $attributeCode;
-            }
-        }
-
-        return $result;
+        );
+        // we always have $matches like [[],[]]
+        return array_values($matches[1]);
     }
 
     /**

@@ -186,4 +186,62 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->with($this->rule);
         $this->assertEquals($this->model->delete($this->rule), $this->model);
     }
+
+    /**
+     * Check that can parse JSON string correctly.
+     *
+     * @param string $testString
+     * @param array $expects
+     * @dataProvider dataProviderForProductAttributes
+     */
+    public function testGetProductAttributes($testString, $expects)
+    {
+        $result = $this->model->getProductAttributes($testString);
+        $this->assertEquals($expects, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForProductAttributes()
+    {
+        return [
+            [
+                json_encode([
+                    'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+                    'attribute' => 'some_attribute',
+                ]),
+                [
+                    'some_attribute',
+                ]
+            ],
+            [
+                json_encode([
+                    [
+                        'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+                        'attribute' => 'some_attribute',
+                    ],
+                    [
+                        'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+                        'attribute' => 'some_attribute2',
+                    ],
+                ]),
+                [
+                    'some_attribute',
+                    'some_attribute2',
+                ]
+            ],
+            [
+                json_encode([
+                    'type' => 'Magento\SalesRule\Model\Rule\Condition\Product\Found',
+                    'attribute' => 'some_attribute',
+                ]),
+                []
+            ],
+            [
+                json_encode([]),
+                []
+            ],
+        ];
+    }
 }
