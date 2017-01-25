@@ -102,7 +102,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * @param \Magento\Theme\Model\ResourceModel\Theme $resource
      * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $resourceCollection
      * @param array $data
-     *
+     * @param ThemeFactory $themeModelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
