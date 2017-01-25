@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Console\Command;
 
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Console\Cli;
@@ -114,7 +115,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             [
-                'website',
+                ScopeInterface::SCOPE_WEBSITES,
                 'base',
                 [
                     'web/test/test_value_1' => 'http://website.test/',

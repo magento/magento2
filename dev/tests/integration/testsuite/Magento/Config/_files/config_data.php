@@ -5,18 +5,19 @@
  */
 
 use Magento\Config\Model\Config\Factory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $configData = [
-    'default' => [
+    ScopeConfigInterface::SCOPE_TYPE_DEFAULT => [
         '' => [
             'web/test/test_value_1' => 'http://default.test/',
             'web/test/test_value_2' => 'someValue',
             'web/test/test_value_3' => 100,
         ]
     ],
-    'websites' => [
+    ScopeInterface::SCOPE_WEBSITES => [
         'base' => [
             'web/test/test_value_1' => 'http://website.test/',
             'web/test/test_value_2' => 'someWebsiteValue',
