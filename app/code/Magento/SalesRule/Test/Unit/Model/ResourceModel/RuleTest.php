@@ -208,7 +208,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 json_encode([
-                    'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                     'attribute' => 'some_attribute',
                 ]),
                 [
@@ -218,11 +218,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             [
                 json_encode([
                     [
-                        'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                         'attribute' => 'some_attribute',
                     ],
                     [
-                        'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                         'attribute' => 'some_attribute2',
                     ],
                 ]),
@@ -233,7 +233,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 json_encode([
-                    'type' => 'Magento\SalesRule\Model\Rule\Condition\Product\Found',
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                     'attribute' => 'some_attribute',
                 ]),
                 []
