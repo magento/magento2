@@ -19,14 +19,15 @@ $fields = [
     'Service Type' => 'getService',
     'Weight' => 'getWeight',
 ];
+$number = is_object($track) ? $track->getTracking() : $track['number'];
 ?>
-<table class="data table order tracking" id="tracking-table-popup-<?php /* @noEscape */ echo $track->getTracking(); ?>">
+<table class="data table order tracking" id="tracking-table-popup-<?php /* @noEscape */ echo $number; ?>">
     <caption class="table-caption"><?php echo $block->escapeHtml(__('Order tracking')); ?></caption>
     <tbody>
     <?php if (is_object($track)): ?>
         <tr>
             <th class="col label" scope="row"><?php echo $block->escapeHtml(__('Tracking Number:')); ?></th>
-            <td class="col value"><?php echo $block->escapeHtml($track->getTracking()); ?></td>
+            <td class="col value"><?php echo $block->escapeHtml($number); ?></td>
         </tr>
         <?php if ($track->getCarrierTitle()): ?>
             <tr>

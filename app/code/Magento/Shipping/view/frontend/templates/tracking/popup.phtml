@@ -31,7 +31,7 @@ $results = $block->getTrackingInfo();
                         ?>
                         <?php /* @noEscape */ echo $block->getChildHtml('shipping.tracking.details.' . $counter); ?>
                     </div>
-                    <?php if (!empty($track->getProgressdetail())): ?>
+                    <?php if (is_object($track) && !empty($track->getProgressdetail())): ?>
                         <?php
                             $block->addChild('shipping.tracking.progress.'. $counter, Template::class, [
                                 'track' => $track,
