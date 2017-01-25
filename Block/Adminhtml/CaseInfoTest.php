@@ -170,13 +170,12 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
      */
     private function getBlockContents()
     {
-        /** @var CaseInfo $block */
-        $block = $this->layout->createBlock(CaseInfo::class, 'order_case_info', ['context' => $this->getContext()]);
-        $block->setTemplate('Magento_Signifyd::case_info.phtml');
+        $this->layout->addContainer('order_additional_info', 'Container');
 
-        /** @var Template $parent */
-        $parent = $this->layout->createBlock(Template::class, 'order_additional_info');
-        $parent->setChild('order_case_info', $block);
+        /** @var CaseInfo $block */
+        $block = $this->layout->addBlock(CaseInfo::class, 'order_case_info', 'order_additional_info');
+        $block->setAttribute('context', $this->getContext());
+        $block->setTemplate('Magento_Signifyd::case_info.phtml');
 
         return $block->toHtml();
     }
