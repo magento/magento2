@@ -1,0 +1,24 @@
+{
+    "name": "magento/module-customer-analytics",
+    "description": "N/A",
+    "require": {
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6",
+        "magento/module-customer": "100.2.*",
+        "magento/module-analytics": "100.0.*",
+        "magento/framework": "100.2.*"
+    },
+    "type": "magento2-module",
+    "version": "100.0.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\CustomerAnalytics\\": ""
+        }
+    }
+}
