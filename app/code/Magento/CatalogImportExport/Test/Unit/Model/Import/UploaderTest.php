@@ -158,13 +158,13 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
     public function testMoveFileUrlDrivePool($fileUrl, $expectedHost, $expectedDriverPool, $expectedScheme)
     {
 
-        $driverPool = $this->getMock('Magento\Framework\Filesystem\DriverPool', ['getDriver']);
+        $driverPool = $this->getMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
         $driverMock = $this->getMock($expectedDriverPool, ['readAll']);
         $driverMock->expects($this->any())->method('isExists')->willReturn(true);
         $driverMock->expects($this->any())->method('readAll')->willReturn(null);
         $driverPool->expects($this->any())->method('getDriver')->willReturn($driverMock);
 
-        $readFactory = $this->getMockBuilder('Magento\Framework\Filesystem\File\ReadFactory')
+        $readFactory = $this->getMockBuilder(\Magento\Framework\Filesystem\File\ReadFactory::class)
             ->setConstructorArgs(
                 [
                     $driverPool,
@@ -173,10 +173,11 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $readFactory->expects($this->any())->method('create')->with($expectedHost, $expectedScheme)->willReturn($driverMock);
+        $readFactory->expects($this->any())->method('create')
+            ->with($expectedHost, $expectedScheme)
+            ->willReturn($driverMock);
 
-
-        $uploaderMock = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Uploader')
+        $uploaderMock = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
             ->setConstructorArgs([
                 $this->coreFileStorageDb,
                 $this->coreFileStorage,
@@ -186,7 +187,6 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
                 $readFactory,
             ])
             ->getMock();
-
 
         $uploaderMock->move($fileUrl);
     }
