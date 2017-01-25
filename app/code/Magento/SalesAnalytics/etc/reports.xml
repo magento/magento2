@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Analytics:etc/reports.xsd">
+    <report name="orders" connection="sales">
+        <source name="sales_order" alias="sales">
+            <attribute name="entity_id"/>
+            <attribute name="base_grand_total"/>
+            <attribute name="base_tax_amount"/>
+            <attribute name="base_shipping_amount"/>
+            <attribute name="coupon_code"/>
+            <attribute name="created_at"/>
+            <attribute name="store_id"/>
+            <link-source name="sales_order_address" alias="billing" link-type="left">
+                <attribute name="email"/>
+                <using glue="and">
+                    <condition attribute="parent_id" operator="eq" type="identifier">entity_id</condition>
+                </using>
+                <filter glue="and">
+                    <condition attribute="entity_id" operator="null" />
+                </filter>
+            </link-source>
+            <link-source name="sales_order_address" alias="shipping" link-type="left">
+                <using glue="and">
+                    <condition attribute="parent_id" operator="eq" type="identifier">entity_id</condition>
+                </using>
+                <filter glue="and">
+                    <condition attribute="entity_id" operator="null" />
+                </filter>
+            </link-source>
+        </source>
+    </report>
+</config>
