@@ -6,9 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Analytics:etc/analytics.xsd">
-    <file name="modules">
+    <file name="customers">
         <providers>
-            <reportProvider class="Magento\Analytics\ReportXml\ReportProvider" name="modules" />
+            <reportProvider class="Magento\Analytics\ReportXml\ReportProvider" name="customers" />
         </providers>
     </file>
 </config>

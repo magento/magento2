@@ -24,7 +24,7 @@ class Xml extends Filesystem implements ReaderInterface
      * @var array
      */
     protected $_idAttributes = [
-        '/config/analytics' => 'name',
+        '/config/file' => 'name',
     ];
 
     /**
