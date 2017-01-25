@@ -7,6 +7,7 @@ namespace Magento\Backend\Model\View\Layout;
 
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Pool of generators for structural elements
@@ -17,6 +18,11 @@ class GeneratorPool extends \Magento\Framework\View\Layout\GeneratorPool
      * @var Filter\Acl
      */
     protected $aclFilter;
+
+    /**
+     * @var FilterInterface
+     */
+    private $filter;
 
     /**
      * @param ScheduledStructure\Helper $helper
@@ -45,6 +51,17 @@ class GeneratorPool extends \Magento\Framework\View\Layout\GeneratorPool
     }
 
     /**
+     * @return FilterInterface
+     */
+    private function getFilter()
+    {
+        if (!$this->filter) {
+            $this->filter = ObjectManager::getInstance()->get(FilterInterface::class);
+        }
+        return $this->filter;
+    }
+
+    /**
      * Build structure that is based on scheduled structure
      *
      * @param ScheduledStructure $scheduledStructure
@@ -54,7 +71,7 @@ class GeneratorPool extends \Magento\Framework\View\Layout\GeneratorPool
     protected function buildStructure(ScheduledStructure $scheduledStructure, Structure $structure)
     {
         parent::buildStructure($scheduledStructure, $structure);
-        $this->aclFilter->filterAclElements($scheduledStructure, $structure);
+        $this->getFilter()->filterElement($scheduledStructure, $structure);
         return $this;
     }
 }
