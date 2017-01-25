@@ -51,7 +51,6 @@ class StaticClassesGenerator extends \Symfony\Component\Console\Command\Command
      * @param OutputInterface $output
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -60,9 +59,9 @@ class StaticClassesGenerator extends \Symfony\Component\Console\Command\Command
             ['output' => $output]
         );
         $output->writeln("Generating static classes...");
-        passthru('php generate.php', $exitCode);
+        exec('php ' . MTF_BP . DIRECTORY_SEPARATOR . 'utils' . DIRECTORY_SEPARATOR . 'generate.php', $error, $exitCode);
         if ($exitCode) {
-            exit($exitCode);
+            $output->outputMessages(['error' => $error]);
         }
         $output->writeln('Static classes generation is finished.');
     }
