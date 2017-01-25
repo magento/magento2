@@ -46,7 +46,7 @@ class UpgradeData implements UpgradeDataInterface
     {
         $setup->startSetup();
 
-        if (version_compare($context->getVersion(), '2.0.1', '<')) {
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
             $this->convertSerializedDataToJson($setup);
         }
 
