@@ -39,7 +39,7 @@ class ReportProvider
     public function getReport($name)
     {
         $query = $this->queryFactory->create($name);
-        $connection = $this->resourceConnection->getConnectionByName($query->getConnectionName());
+        $connection = $this->resourceConnection->getConnection($query->getConnectionName());
         $statement = $connection->query($query->getQueryString());
         return new \IteratorIterator($statement);
 
