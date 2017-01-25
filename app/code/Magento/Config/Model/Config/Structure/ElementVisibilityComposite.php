@@ -8,25 +8,34 @@ namespace Magento\Config\Model\Config\Structure;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 
 /**
- * Contains list of classes which implement ElementVisibilityInterface for checking of visibility of form elements.
+ * Contains list of classes which implement ElementVisibilityInterface for
+ * checking of visibility of form elements on Configuration page.
  */
-class ElementVisibility implements ElementVisibilityInterface
+class ElementVisibilityComposite implements ElementVisibilityInterface
 {
     /**
+     * List of objects which implements ElementVisibilityInterface for
+     * checking of visibility of form elements on Configuration page.
+     *
      * @var ElementVisibilityInterface[]
      */
     private $visibility = [];
 
     /**
-     * @param ElementVisibilityInterface[] $visibility
-     * @throws ConfigurationMismatchException
+     * @param ElementVisibilityInterface[] $visibility List of objects which implement ElementVisibilityInterface.
+     * @throws ConfigurationMismatchException It is thrown if some object from list $visibility
+     * implements the wrong interface.
      */
     public function __construct(array $visibility = [])
     {
         foreach ($visibility as $name => $item) {
             if (!$item instanceof ElementVisibilityInterface) {
                 throw new ConfigurationMismatchException(
-                    __('%1 is not instance on %2', $name, ElementVisibilityInterface::class)
+                    __(
+                        '%1: Instance of %2 is expected, got %3 instead',
+                        $name,
+                        ElementVisibilityInterface::class, get_class($item)
+                    )
                 );
             }
         }
@@ -35,7 +44,7 @@ class ElementVisibility implements ElementVisibilityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isHidden($path)
     {
@@ -49,7 +58,7 @@ class ElementVisibility implements ElementVisibilityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isDisabled($path)
     {

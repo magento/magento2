@@ -147,8 +147,7 @@ abstract class AbstractElement implements ElementInterface
      */
     public function isVisible()
     {
-        $path = trim($this->getPath(), '/');
-        if ($this->getElementVisibility()->isHidden($path)) {
+        if ($this->getElementVisibility()->isHidden($this->getPath())) {
             return false;
         }
 

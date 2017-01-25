@@ -6,7 +6,7 @@
 namespace Magento\Config\Model\Config\Structure;
 
 /**
- * Checks visibility of form elements by their paths in the structure.
+ * Checks visibility of form elements on Configuration page by their paths in the structure.
  */
 interface ElementVisibilityInterface
 {
@@ -20,7 +20,7 @@ interface ElementVisibilityInterface
     /**
      * Check whether form element is disabled by path.
      *
-     * @param string $path
+     * @param string $path The path of form element in the structure
      * @return bool
      */
     public function isDisabled($path);
@@ -28,7 +28,7 @@ interface ElementVisibilityInterface
     /**
      * Check whether form element is hidden from form by path.
      *
-     * @param string $path
+     * @param string $path The path of form element in the structure
      * @return bool
      */
     public function isHidden($path);

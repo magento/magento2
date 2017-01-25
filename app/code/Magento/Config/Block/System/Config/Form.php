@@ -361,8 +361,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
 
-        $path = trim($field->getPath(), '/');
-        $isReadOnly = $this->getElementVisibility()->isDisabled($path);
+        $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath());
         $isReadOnly = $isReadOnly
             ?: $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
         $formField = $fieldset->addField(
@@ -816,10 +815,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Get instance of ElementVisibilityInterface.
+     * Gets instance of ElementVisibilityInterface.
      *
      * @return ElementVisibilityInterface
-     * @deprecated
+     * @deprecated Added to not break backward compatibility of the constructor signature
+     *             by injecting the new dependency directly.
+     *             The method can be removed in a future major release, when constructor signature can be changed.
      */
     public function getElementVisibility()
     {

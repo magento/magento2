@@ -5,10 +5,10 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
 
-use Magento\Config\Model\Config\Structure\ProductionVisibility;
+use Magento\Config\Model\Config\Structure\ConcealInProductionConfigList;
 use Magento\Framework\App\State;
 
-class ProductionVisibilityTest extends \PHPUnit_Framework_TestCase
+class ConcealInProductionConfigListTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var State|\PHPUnit_Framework_MockObject_MockObject
@@ -16,7 +16,7 @@ class ProductionVisibilityTest extends \PHPUnit_Framework_TestCase
     private $stateMock;
 
     /**
-     * @var ProductionVisibility
+     * @var ConcealInProductionConfigList
      */
     private $model;
 
@@ -27,11 +27,15 @@ class ProductionVisibilityTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $configs = [
-            'first/path' => ProductionVisibility::DISABLED,
-            'second/path' => ProductionVisibility::HIDDEN,
+            'first/path' => ConcealInProductionConfigList::DISABLED,
+            'second/path' => ConcealInProductionConfigList::HIDDEN,
+            'third' => ConcealInProductionConfigList::DISABLED,
+            'third/path' => 'no',
+            'third/path/field' => ConcealInProductionConfigList::DISABLED,
+            'first/path/field' => 'no',
         ];
 
-        $this->model = new ProductionVisibility($this->stateMock, $configs);
+        $this->model = new ConcealInProductionConfigList($this->stateMock, $configs);
     }
 
     /**
@@ -55,9 +59,17 @@ class ProductionVisibilityTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['first/path', State::MODE_PRODUCTION, true],
+            ['first/path/field', State::MODE_PRODUCTION, false],
+            ['first/path/field2', State::MODE_PRODUCTION, true],
             ['first/path', State::MODE_DEFAULT, false],
             ['some/path', State::MODE_PRODUCTION, false],
             ['second/path', State::MODE_PRODUCTION, false],
+            ['third', State::MODE_PRODUCTION, true],
+            ['third/path2', State::MODE_PRODUCTION, true],
+            ['third/path2/field', State::MODE_PRODUCTION, true],
+            ['third/path', State::MODE_PRODUCTION, false],
+            ['third/path/field', State::MODE_PRODUCTION, true],
+            ['third/path/field2', State::MODE_PRODUCTION, false],
         ];
     }
 
