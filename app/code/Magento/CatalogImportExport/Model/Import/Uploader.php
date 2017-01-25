@@ -6,6 +6,7 @@
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
@@ -15,6 +16,18 @@ use Magento\Framework\Filesystem\DriverPool;
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
+
+    /**
+     * HTTP scheme
+     * used to compare against the filename and select the proper DriverPool adapter
+     */
+    const HTTP_SCHEME   = 'http://';
+    /**
+     * HTTPS scheme
+     * used to compare against the filename and select the proper DriverPool adapter
+     */
+    const HTTPS_SCHEME  = 'https://';
+
     /**
      * Temp directory.
      *
@@ -145,7 +158,17 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         }
         if (preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
             $url = str_replace($matches[0], '', $fileName);
-            $read = $this->_readFactory->create($url, DriverPool::HTTP);
+
+            if ($matches[0] === self::HTTP_SCHEME) {
+                $read = $this->_readFactory->create($url, DriverPool::HTTP);
+            } elseif ($matches[0] === self::HTTPS_SCHEME) {
+                $read = $this->_readFactory->create($url, DriverPool::HTTPS);
+            } else {
+                throw new LocalizedException(
+                    __('No adapted DriverPool for File \'%1\'.', $fileName)
+                );
+            }
+
             $fileName = preg_replace('/[^a-z0-9\._-]+/i', '', $fileName);
             $this->_directory->writeFile(
                 $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName),
