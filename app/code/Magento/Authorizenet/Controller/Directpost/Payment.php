@@ -66,26 +66,25 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      * Action for Authorize.net SIM Relay Request.
      *
      * @param string $area
-     * @return void
+     * @param \Magento\Authorizenet\Model\Directpost $paymentMethod
+     * @return \Magento\Framework\Controller\ResultInterface
      */
-    protected function _responseAction($area = 'frontend')
+    protected function _responseAction($area = 'frontend', \Magento\Authorizenet\Model\Directpost $paymentMethod = null)
     {
         $helper = $this->dataFactory->create($area);
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage =  $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_PAGE);
 
         $params = [];
-        $data = $this->getRequest()->getPostValue();
-        /* @var $paymentMethod \Magento\Authorizenet\Model\DirectPost */
-        $paymentMethod = $this->_objectManager->create(\Magento\Authorizenet\Model\Directpost::class);
+        $data = $this->getRequest()->getParams();
+
+        $paymentMethod = $this->getPaymentMethod($paymentMethod);
 
         $result = [];
         if (!empty($data['x_invoice_num'])) {
             $result['x_invoice_num'] = $data['x_invoice_num'];
             $params['order_success'] = $helper->getSuccessOrderUrl($result);
         }
-
-        //load layout before processing the payment method so created blocks don't affect rendering
-        $this->_view->addPageLayoutHandles();
-        $this->_view->loadLayout(false);
 
         try {
             if (!empty($data['store_id'])) {
@@ -116,7 +115,19 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
 
         //registering parameter for iframe content
         $this->_coreRegistry->register(Iframe::REGISTRY_KEY, $params);
-        $this->_view->renderLayout();
+        return $resultPage;
+    }
+
+    /**
+     * @param \Magento\Authorizenet\Model\Directpost|null $paymentMethod
+     * @return \Magento\Authorizenet\Model\Directpost
+     */
+    private function getPaymentMethod(\Magento\Authorizenet\Model\Directpost $paymentMethod = null)
+    {
+        if (empty($paymentMethod)) {
+            $paymentMethod = $this->_objectManager->create(\Magento\Authorizenet\Model\Directpost::class);
+        }
+        return $paymentMethod;
     }
 
     /**
