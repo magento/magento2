@@ -42,7 +42,7 @@ class ConfigShowCommand extends Command
      * @param ScopeConfigInterface $appConfig
      * @param ValidatorInterface $scopeValidator
      */
-    public function  __construct(
+    public function __construct(
         ScopeConfigInterface $appConfig,
         ValidatorInterface $scopeValidator
     ) {
