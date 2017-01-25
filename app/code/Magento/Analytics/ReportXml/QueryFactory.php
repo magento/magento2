@@ -65,7 +65,13 @@ class QueryFactory
         $this->objectManager = $objectManager;
     }
 
-    private function getQueryConnection($queryConfig)
+    /**
+     * Returns query connection name according to configuration
+     *
+     * @param string $queryConfig
+     * @return string
+     */
+    private function getQueryConnectionName($queryConfig)
     {
         $connectionName = 'default';
         if (isset($queryConfig['connection'])) {
@@ -74,11 +80,17 @@ class QueryFactory
         return $connectionName;
     }
 
+    /**
+     * Create query according to configuration settings
+     *
+     * @param $queryName
+     * @return Query
+     */
     private function constructQuery($queryName)
     {
         $queryConfig = $this->config->get($queryName);
         $selectBuilder = $this->selectBuilderFactory->create();
-        $selectBuilder->setConnectionName($this->getQueryConnection($queryConfig));
+        $selectBuilder->setConnectionName($this->getQueryConnectionName($queryConfig));
         foreach ($this->assemblers as $assembler) {
             $selectBuilder = $assembler->assemble($selectBuilder, $queryConfig);
         }
@@ -94,8 +106,9 @@ class QueryFactory
     }
 
     /**
-     * @param string $queryName
+     * Creates query by name
      *
+     * @param string $queryName
      * @return Query
      */
     public function create($queryName)
