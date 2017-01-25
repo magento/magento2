@@ -16,20 +16,27 @@ use Magento\Framework\App\ScopeInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
+use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
+use Magento\Catalog\Model\Product as ProductModel;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Catalog product relation
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Relation
+     * @var ProductRelation
      */
     protected $catalogProductRelation;
 
     /**
      * Product metadata pool
      *
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var MetadataPool
      */
     private $metadataPool;
 
@@ -49,15 +56,15 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $stockRegistry;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation
+     * @param DbContext $context
+     * @param ProductRelation $catalogProductRelation
      * @param string $connectionName
      * @param ScopeResolverInterface $scopeResolver
      * @param StockRegistryInterface $stockRegistry
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation,
+        DbContext $context,
+        ProductRelation $catalogProductRelation,
         $connectionName = null,
         ScopeResolverInterface $scopeResolver = null,
         StockRegistryInterface $stockRegistry = null
@@ -100,7 +107,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Save configurable product relations
      *
-     * @param \Magento\Catalog\Model\Product $mainProduct the parent id
+     * @param ProductModel $mainProduct the parent id
      * @param array $productIds the children id array
      * @return $this
      */
@@ -203,7 +210,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Collect product options with values according to the product instance and attributes, that were received
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param ProductModel $product
      * @param array $attributes
      * @return array
      */
@@ -248,7 +255,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         // workaround as we do not have bulk method to get all statuses by id
         foreach ($options as $key => $option) {
             $status = $this->stockRegistry->getProductStockStatusBySku($option['sku']);
-            if ($status == StockStatus::STATUS_OUT_OF_STOCK) {
+            if ($status !== null && $status == StockStatus::STATUS_OUT_OF_STOCK) {
                 unset($options[$key]);
             }
         }
@@ -355,13 +362,13 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get product metadata pool
      *
      * @deprecated
-     * @return \Magento\Framework\EntityManager\MetadataPool
+     * @return MetadataPool
      */
     private function getMetadataPool()
     {
         if (!$this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+            $this->metadataPool = ObjectManager::getInstance()
+                ->get(MetadataPool::class);
         }
         return $this->metadataPool;
     }
@@ -376,7 +383,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         if (!$this->productEntityLinkField) {
             $this->productEntityLinkField = $this->getMetadataPool()
-                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getMetadata(ProductInterface::class)
                 ->getLinkField();
         }
         return $this->productEntityLinkField;

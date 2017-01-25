@@ -98,7 +98,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder(Select::class)
-            ->setMethods(['from', 'joinInner', 'joinLeft', 'where',])
+            ->setMethods(['from', 'joinInner', 'joinLeft', 'where'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->connectionMock->expects($this->any())
