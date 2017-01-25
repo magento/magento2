@@ -11,6 +11,8 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\CatalogRule\Api\Data\RuleInterface;
 
 class UpgradeData implements UpgradeDataInterface
 {
@@ -20,14 +22,22 @@ class UpgradeData implements UpgradeDataInterface
     private $fieldDataConverterFactory;
 
     /**
-     * Constructor
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * UpgradeData constructor.
      *
      * @param FieldDataConverterFactory $fieldDataConverterFactory
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
-        FieldDataConverterFactory $fieldDataConverterFactory
+        FieldDataConverterFactory $fieldDataConverterFactory,
+        MetadataPool $metadataPool
     ) {
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -54,16 +64,18 @@ class UpgradeData implements UpgradeDataInterface
     public function convertSerializedDataToJson($setup)
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
+        $metadata = $this->metadataPool->getMetadata(RuleInterface::class);
+
         $fieldDataConverter->convert(
             $setup->getConnection(),
             $setup->getTable('catalogrule'),
-            'rule_id',
+            $metadata->getLinkField(),
             'conditions_serialized'
         );
         $fieldDataConverter->convert(
             $setup->getConnection(),
             $setup->getTable('catalogrule'),
-            'rule_id',
+            $metadata->getLinkField(),
             'actions_serialized'
         );
     }
