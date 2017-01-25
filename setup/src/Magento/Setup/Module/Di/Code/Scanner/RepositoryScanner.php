@@ -3,6 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Module\Di\Code\Scanner;
 
 use Magento\Framework\Autoload\AutoloaderRegistry;
@@ -39,6 +40,8 @@ class RepositoryScanner implements ScannerInterface
                     && $replacementType !== null
                     && (substr($forType->nodeValue, -19) === 'RepositoryInterface')
                 ) {
+                    // backward compatibility workaround for composer below 1.3.0
+                    // (https://github.com/composer/composer/issues/5923)
                     $nodeValue = ltrim($replacementType->nodeValue, '\\');
                     if (!class_exists($nodeValue, false)
                         && !AutoloaderRegistry::getAutoloader()->loadClass($nodeValue)

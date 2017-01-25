@@ -448,7 +448,7 @@
     <preference for="Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface" type="Magento\Catalog\Model\ProductWebsiteLinkRepository" />
     <preference for="\Magento\Catalog\Api\CategoryLinkRepositoryInterface" type="\Magento\Catalog\Model\CategoryLinkRepository" />
     <preference for="Magento\Catalog\Api\Data\ProductCustomOptionInterface" type="Magento\Catalog\Model\Product\Option" />
-    <preference for="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface" type="\Magento\Catalog\Model\Product\Option\Repository" />
+    <preference for="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface" type="Magento\Catalog\Model\Product\Option\Repository" />
     <preference for="Magento\Catalog\Api\Data\ProductCustomOptionTypeInterface" type="Magento\Catalog\Model\Product\Option\Type" />
     <preference for="Magento\Catalog\Api\ProductTierPriceManagementInterface" type="\Magento\Catalog\Model\Product\TierPriceManagement" />
     <preference for="Magento\Catalog\Api\Data\ProductTierPriceInterface" type="Magento\Catalog\Model\Product\TierPrice" />
