@@ -8,6 +8,11 @@ namespace Magento\Analytics\ReportXml;
 
 use \Magento\Framework\App\ResourceConnection;
 
+/**
+ * Class ReportProvider
+ *
+ * Providers for reports data
+ */
 class ReportProvider
 {
     /**
@@ -27,8 +32,16 @@ class ReportProvider
         $this->resourceConnection = $resourceConnection;
     }
 
-    public function getReport($name, $criteria)
+    /**
+     * @param string $name
+     * @return \IteratorIterator
+     */
+    public function getReport($name)
     {
-        
+        $query = $this->queryFactory->create($name);
+        $connection = $this->resourceConnection->getConnectionByName($query->getConnectionName());
+        $statement = $connection->query($query->getQueryString());
+        return new \IteratorIterator($statement);
+
     }
 }

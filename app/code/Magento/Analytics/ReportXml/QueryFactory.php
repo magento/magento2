@@ -113,7 +113,7 @@ class QueryFactory
      */
     public function create($queryName)
     {
-        $cached = $this->queryCache->load($queryName);
+        $cached = null; //$this->queryCache->load($queryName);
         if ($cached) {
             return $this->objectManager->create(Query::class, json_decode($cached, true));
         }

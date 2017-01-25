@@ -3,6 +3,7 @@
         <source name="sales_order" alias="sales">
             <attribute name="entity_id"/>
             <link-source name="sales_order_address" alias="billing" link-type="left">
+                <attribute alias="order_id_value" name="order_id"/>
                 <using glue="and">
                     <condition attribute="parent_id" operator="eq" type="identifier">entity_id</condition>
                 </using>
