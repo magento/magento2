@@ -34,7 +34,8 @@ class ElementVisibilityComposite implements ElementVisibilityInterface
                     __(
                         '%1: Instance of %2 is expected, got %3 instead',
                         $name,
-                        ElementVisibilityInterface::class, get_class($item)
+                        ElementVisibilityInterface::class,
+                        get_class($item)
                     )
                 );
             }
