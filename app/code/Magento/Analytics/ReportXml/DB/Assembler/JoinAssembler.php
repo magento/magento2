@@ -89,10 +89,7 @@ class JoinAssembler implements AssemblerInterface
                     ]
                 );
             }
-            $columns = $this->columnsResolver->getColumns(
-                $selectBuilder,
-                isset($join['attribute']) ? $join['attribute'] : []
-            );
+            $columns = $this->columnsResolver->getColumns($selectBuilder, isset($join['attribute']) ? $join : []);
             $selectBuilder->setColumns(array_merge($selectBuilder->getColumns(), $columns));
         }
         $selectBuilder->setFilters($filters);

@@ -3,6 +3,7 @@
         <source name="sales_order" alias="sales">
             <attribute name="entity_id"/>
             <link-source name="sales_order_address" alias="billing" link-type="left">
+                <attribute alias="billing_address_id" name="entity_id"/>
                 <using glue="and">
                     <condition attribute="parent_id" operator="eq" type="identifier">entity_id</condition>
                 </using>
@@ -10,6 +11,13 @@
                     <condition attribute="entity_id" operator="null" />
                 </filter>
             </link-source>
+        </source>
+    </report>
+    <report name="modules" connection="default">
+        <source name="setup_module">
+            <attribute name="module" alias="module_name"/>
+            <attribute name="schema_version"/>
+            <attribute name="data_version"/>
         </source>
     </report>
 </config>
