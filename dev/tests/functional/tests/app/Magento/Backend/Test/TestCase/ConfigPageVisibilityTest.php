@@ -9,14 +9,14 @@ use Magento\Mtf\TestCase\Injectable;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 
 /**
- * Verify visibility of Locale field and Developer section on Configuration page.
+ * Verify visibility of form elements on Configuration page.
  *
  * @ZephyrId MAGETWO-63625, MAGETWO-63624
  */
 class ConfigPageVisibilityTest extends Injectable
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

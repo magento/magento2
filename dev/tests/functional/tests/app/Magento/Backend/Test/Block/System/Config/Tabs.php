@@ -9,7 +9,7 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Tabs.
+ * Block of tabs on Stores > Settings > Configuration page.
  */
 class Tabs extends Block
 {
@@ -18,47 +18,43 @@ class Tabs extends Block
      *
      * @var string
      */
-    private $topTab = ".//*//strong[contains(., '%s')]/parent::div";
+    private $topTab = ".//div[@role='tab' and *[contains(.,'%s')]]";
 
     /**
      * Selector of block with sub tabs.
      *
      * @var string
      */
-    private $subTabs = ".//*//strong[contains(., '%s')]/parent::div/parent::div/ul";
+    private $subTabs = "./following-sibling::ul";
 
     /**
-     * Selector of specific sub tab.
+     * Selector of specific sub tab name.
      *
      * @var string
      */
-    private $subTab = 'li:nth-of-type(%s)';
+    private $subTabName = 'li a span';
 
     /**
-     * Get list of sub tabs of tab.
+     * Get list of sub tabs names of tab.
      *
      * @param string $tab
      * @return array
      */
-    public function getSubTabs($tab)
+    public function getSubTabsNames($tab)
     {
-        $subTabs = [];
-        $textSelector = 'a span';
+        $subTabsNames = [];
 
-        $subTabsBlock = $this->_rootElement->find(sprintf($this->subTabs, $tab), Locator::SELECTOR_XPATH);
+        $topTab = $this->_rootElement->find(sprintf($this->topTab, $tab), Locator::SELECTOR_XPATH);
+        $subTabsBlock = $topTab->find($this->subTabs, Locator::SELECTOR_XPATH);
 
         if (!$subTabsBlock->isVisible()) {
-            $this->_rootElement->find(sprintf($this->topTab, $tab), Locator::SELECTOR_XPATH)->click();
+            $topTab->click();
         }
 
-        $count = 1;
-        while ($subTabsBlock->find(sprintf($this->subTab, $count))->isVisible()) {
-            $subTabs[] = $subTabsBlock->find(sprintf($this->subTab, $count))
-                ->find($textSelector)
-                ->getText();
-            $count++;
+        foreach ($subTabsBlock->getElements($this->subTabName) as $elements) {
+            $subTabsNames[] = $elements->getText();
         }
 
-        return $subTabs;
+        return $subTabsNames;
     }
 }

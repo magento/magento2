@@ -78,6 +78,6 @@ class ConcealInProductionConfigList implements ElementVisibilityInterface
      */
     private function normalizePath($path)
     {
-        return trim($path ,'/');
+        return trim($path, '/');
     }
 }
