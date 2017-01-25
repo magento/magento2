@@ -19,18 +19,8 @@
                 <attribute name="email"/>
                 <using glue="and">
                     <condition attribute="parent_id" operator="eq" type="identifier">entity_id</condition>
+                    <condition attribute="address_type" operator="eq" type="value">billing</condition>
                 </using>
-                <filter glue="and">
-                    <condition attribute="entity_id" operator="null" />
-                </filter>
-            </link-source>
-            <link-source name="sales_order_address" alias="shipping" link-type="left">
-                <using glue="and">
-                    <condition attribute="parent_id" operator="eq" type="identifier">entity_id</condition>
-                </using>
-                <filter glue="and">
-                    <condition attribute="entity_id" operator="null" />
-                </filter>
             </link-source>
         </source>
     </report>
