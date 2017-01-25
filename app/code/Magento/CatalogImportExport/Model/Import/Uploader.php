@@ -148,7 +148,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     /**
      * Proceed moving a file from TMP to destination folder
      *
-     * @param $fileName
+     * @param string $fileName
      * @param bool $renameFileOff
      * @return array
      */
