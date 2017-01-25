@@ -148,7 +148,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     /**
      * Proceed moving a file from TMP to destination folder
      *
-     * @param string $fileName
+     * @param $fileName
      * @param bool $renameFileOff
      * @return array
      */
@@ -162,12 +162,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 
             if ($matches[0] === self::HTTP_SCHEME) {
                 $read = $this->_readFactory->create($url, DriverPool::HTTP);
-            } elseif ($matches[0] === self::HTTPS_SCHEME) {
-                $read = $this->_readFactory->create($url, DriverPool::HTTPS);
             } else {
-                throw new LocalizedException(
-                    __('No adapted DriverPool for File \'%1\'.', $fileName)
-                );
+                $read = $this->_readFactory->create($url, DriverPool::HTTPS);
             }
 
             $fileName = preg_replace('/[^a-z0-9\._-]+/i', '', $fileName);
