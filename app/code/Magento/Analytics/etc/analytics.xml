@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Analytics:etc/analytics.xsd">
+    <file name="orders">
+        <providers>
+            <reportProvider class="Magento\Analytics\ReportXml\ReportProvider" name="orders" />
+        </providers>
+    </file>
+    <file name="customers">
+        <providers>
+            <reportProvider class="Magento\Analytics\ReportXml\ReportProvider" name="customers" />
+        </providers>
+    </file>
+</config>

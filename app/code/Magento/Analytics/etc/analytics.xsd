@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="file" type="fileDeclaration" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="uniqueFileName">
+            <xs:selector xpath="file" />
+            <xs:field xpath="@name" />
+        </xs:unique>
+    </xs:element>
+    <xs:complexType name="fileDeclaration">
+        <xs:sequence>
+            <xs:element name="providers" type="providers" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="name" type="fileName" use="required"/>
+        <xs:attribute name="prefix" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="providers">
+        <xs:sequence>
+            <xs:element name="reportProvider" type="reportProvider" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="customProvider" type="customProvider" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="provider" abstract="true">
+        <xs:attribute name="class" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="reportProvider">
+        <xs:complexContent>
+            <xs:extension base="provider">
+                <xs:attribute name="name" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="customProvider">
+        <xs:complexContent>
+            <xs:extension base="provider" />
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="fileName">
+        <xs:annotation>
+            <xs:documentation>
+                File name attribute can has only [a-zA-Z0-9/_].
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9/_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

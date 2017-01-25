@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Analytics\ReportXML\ConfigInterface" type="Magento\Analytics\ReportXML\Config" />
+    <preference for="Magento\Analytics\Model\ConfigInterface" type="Magento\Analytics\Model\Config" />
     <type name="Magento\Analytics\Model\AnalyticsConnector">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -47,6 +48,29 @@
                 <item name="filter" xsi:type="object">Magento\Analytics\ReportXml\DB\Assembler\FilterAssembler</item>
                 <item name="join" xsi:type="object">Magento\Analytics\ReportXml\DB\Assembler\JoinAssembler</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Config\Reader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="xml" xsi:type="object">Magento\Analytics\Model\Config\Reader\Xml</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Config">
+        <arguments>
+            <argument name="data" xsi:type="object">Magento\Analytics\Model\Config\Data</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Config\Reader\Xml">
+        <arguments>
+            <argument name="schemaLocator" xsi:type="object">Magento\Analytics\Model\Config\SchemaLocator</argument>
+            <argument name="converter" xsi:type="object">Magento\Analytics\ReportXml\Config\Converter\Xml</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Analytics\Model\Config\Reader</argument>
         </arguments>
     </type>
 </config>
