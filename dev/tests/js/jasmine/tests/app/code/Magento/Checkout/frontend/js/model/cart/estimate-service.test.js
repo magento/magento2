@@ -44,8 +44,7 @@ define([
                     })
                 )
             }
-        },
-        estimateService;
+        };
 
     window.checkoutConfig = {
         quoteData: {},
@@ -54,11 +53,9 @@ define([
 
     beforeEach(function (done) {
         injector.mock(mocks);
-        injector.require(['Magento_Checkout/js/model/cart/estimate-service'], function (Constr) {
-            estimateService = Constr;
+        injector.require(['Magento_Checkout/js/model/cart/estimate-service'], function () {
             done();
         });
-
     });
 
     describe('Magento_Checkout/js/model/cart/estimate-service', function () {
@@ -85,7 +82,6 @@ define([
                     return 'address_type_test';
                 }
             });
-
             expect(mocks['Magento_Checkout/js/model/shipping-service'].setShippingRates).toHaveBeenCalledWith(rates);
             expect(mocks['Magento_Checkout/js/model/cart/totals-processor/default'].estimateTotals).not
                 .toHaveBeenCalled();
