@@ -37,7 +37,7 @@ define([
         });
 
         describe('onPagesChange method', function () {
-            it('Check calls "onPagesChange" method', function () {
+            it('Check call "onPagesChange" method', function () {
                 paging.updateCursor = jasmine.createSpy();
                 paging.onPagesChange();
                 expect(paging.updateCursor).toHaveBeenCalled();
