@@ -7,7 +7,7 @@
     },
     "suggest": {
         "magento/module-analytics": "100.0.*",
-        "magento/module-sales": "100.0.*",
+        "magento/module-sales": "100.0.*"
     },
     "type": "magento2-module",
     "version": "100.0.0-dev",
