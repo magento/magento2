@@ -58,6 +58,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     protected $appState;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\ThemeFactory
+     */
+    private $themeModelFactory;
+
     protected function setUp()
     {
         $customizationConfig = $this->getMock(\Magento\Theme\Model\Config\Customization::class, [], [], '', false);
@@ -96,6 +101,13 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->themeModelFactory = $this->getMock(
+            \Magento\Theme\Model\ThemeFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->validator = $this->getMock(\Magento\Framework\View\Design\Theme\Validator::class, [], [], '', false);
         $this->appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
 
@@ -111,6 +123,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 'domainFactory' => $this->domainFactory,
                 'validator' => $this->validator,
                 'appState' => $this->appState,
+                'themeModelFactory' => $this->themeModelFactory
             ]
         );
 
@@ -543,8 +556,59 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     */
     public function testPopulateFromArray()
     {
+        // data
+        $validThemeData = ['theme_data' => 'theme_data'];
+        $validWithParentThemeData = [
+            'theme_data' => 'theme_data',
+            'parent_theme' => [
+                'theme_data' => 'theme_data'
+            ]
+        ];
+        $validWithChildrenThemeData = [
+            'theme_data' => 'theme_data',
+            'inherited_themes' => [
+                'key1' => ['theme_data' => 'theme_data'],
+                'key2' => ['theme_data' => 'theme_data']
+            ]
+        ];
 
+        //mocks
+        $themeMock = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $themeMock->expects($this->exactly(3))
+            ->method('populateFromArray')
+            ->withConsecutive(
+                [$validWithParentThemeData['parent_theme']],
+                [$validWithChildrenThemeData['inherited_themes']['key1']],
+                [$validWithChildrenThemeData['inherited_themes']['key2']]
+            )
+            ->willReturnSelf();
+        $this->themeModelFactory->expects($this->exactly(3))
+            ->method('create')
+            ->willReturn($themeMock);
+
+        // test valid theme
+        $this->_model->populateFromArray($validThemeData);
+        $this->assertEquals($validThemeData, $this->_model->getData());
+
+        // test valid theme with parent
+        $this->_model->populateFromArray($validWithParentThemeData);
+        $expected = array_merge($validWithParentThemeData, ['parent_theme' => $themeMock]);
+        $this->assertEquals($expected, $this->_model->getData());
+
+        // test valid theme with children
+        $this->_model->populateFromArray($validWithChildrenThemeData);
+        $expected = array_merge($validWithChildrenThemeData, [
+            'inherited_themes' => [
+                'key1' => $themeMock,
+                'key2' => $themeMock
+            ]
+        ]);
+        $this->assertEquals($expected, $this->_model->getData());
     }
 }

@@ -6,6 +6,7 @@
 namespace Magento\Theme\Model\Theme;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\App\DeploymentConfig;
 
@@ -45,20 +46,28 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     private $deploymentConfig;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * ThemeProvider constructor.
      *
      * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      * @param \Magento\Framework\App\CacheInterface $cache
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory,
         \Magento\Theme\Model\ThemeFactory $themeFactory,
-        \Magento\Framework\App\CacheInterface $cache
+        \Magento\Framework\App\CacheInterface $cache,
+        Json $serializer = null
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->themeFactory = $themeFactory;
         $this->cache = $cache;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -128,15 +137,18 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     }
 
     /**
-     * @param $cacheId
-     * @return \Magento\Framework\View\Design\ThemeInterface|null
+     * Method to load Theme model from cache. If located, the theme will be unserialized and converted
+     * back to an object, via the populateFromArray method of the Theme object.
+     *
+     * @param string $cacheId
+     * @return \Magento\Theme\Model\Theme|null
      */
     private function loadThemeFromCache($cacheId)
     {
         $themeData = $this->cache->load($cacheId);
         if ($themeData) {
-            $themeData = json_decode($themeData, true);
-            /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
+            $themeData = $this->serializer->unserialize($themeData);
+            /** @var $theme \Magento\Theme\Model\Theme */
             $theme = $this->themeFactory->create()->populateFromArray($themeData);
             return $theme;
         }
@@ -145,12 +157,16 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     }
 
     /**
+     * Method to save Theme model to the cache. Model will be converted to an array via the toArray method
+     * of the Theme object, then serialized.
+     *
      * @param \Magento\Theme\Model\Theme $theme
-     * @param $cacheId
+     * @param string $cacheId
+     * @return void
      */
     private function saveThemeToCache(\Magento\Theme\Model\Theme $theme, $cacheId)
     {
-        $themeData = json_encode($theme->toArray());
+        $themeData = $this->serializer->serialize($theme->toArray());
         $this->cache->save($themeData, $cacheId);
     }
 

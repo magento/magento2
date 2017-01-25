@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 
@@ -79,6 +80,11 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     protected $_customFactory;
 
     /**
+     * @var ThemeFactory
+     */
+    private $_themeModelFactory;
+
+    /**
      * @var ThemeInterface[]
      */
     protected $inheritanceSequence;
@@ -109,7 +115,8 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory,
         \Magento\Theme\Model\ResourceModel\Theme $resource = null,
         ThemeCollection $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ThemeFactory $themeModelFactory = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_themeFactory = $themeFactory;
@@ -118,6 +125,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         $this->_validator = $validator;
         $this->_customFactory = $customizationFactory;
         $this->addData(['type' => self::TYPE_VIRTUAL]);
+        $this->_themeModelFactory = $themeModelFactory ?: ObjectManager::getInstance()->get(ThemeFactory::class);
     }
 
     /**
@@ -414,29 +422,29 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * stored under the parent_theme and inherited_themes keys
      *
      * @param array $data
-     * @return void
+     * @return Theme
      */
     public function populateFromArray(array $data)
     {
         $this->_data = $data;
         if (isset($data['parent_theme'])) {
-            $theme = $this->getThemeInstance($this->getParentId());
-            $this->_data['parent_theme'] = $theme->populateFromArray($data['parent_theme']);
+            $this->_data['parent_theme'] = $this->getThemeInstance()->populateFromArray($data['parent_theme']);
         }
 
         if (isset($data['inherited_themes'])) {
             foreach ($data['inherited_themes'] as $key => $inheritedTheme) {
-                $theme = $this->getThemeInstance($key);
-                $this->_data['inherited_themes'][$key] = $theme->populateFromArray($inheritedTheme);
+                $this->_data['inherited_themes'][$key] = $this->getThemeInstance()->populateFromArray($inheritedTheme);
             }
         }
+
+        return $this;
     }
 
     /**
      * @return ThemeInterface|null
      */
-    private function getThemeInstance($themeId)
+    private function getThemeInstance()
     {
-        return $this->_themeFactory->create($themeId);
+        return $this->_themeModelFactory->create();
     }
 }
