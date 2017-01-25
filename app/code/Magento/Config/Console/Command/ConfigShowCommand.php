@@ -58,7 +58,7 @@ class ConfigShowCommand extends Command
     {
         $this->addArgument(
             self::INPUT_ARGUMENT_PATH,
-            InputArgument::REQUIRED,
+            InputArgument::OPTIONAL,
             'Configuration path for example group/section/field_name'
         );
         $this->addOption(
@@ -96,13 +96,13 @@ class ConfigShowCommand extends Command
 
         try {
             $this->scopeValidator->isValid($scope, $scopeCode);
-            $value = $this->appConfig->getValue($configPath, $scope, $scopeCode);
+            $configValue = $this->appConfig->getValue($configPath, $scope, $scopeCode);
         } catch (LocalizedException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return Cli::RETURN_FAILURE;
         }
 
-        if ($value === null) {
+        if ($configValue === null) {
             $output->writeln(sprintf(
                 '<error>%s</error>',
                 __('Configuration for path: "%1" doesn\'t exist', $configPath)->render()
@@ -110,7 +110,32 @@ class ConfigShowCommand extends Command
             return Cli::RETURN_FAILURE;
         }
 
-        $output->writeln($value);
+        $this->outputResult($output, $configValue, $configPath);
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Output single configuration value or list of values if array given.
+     *
+     * @param OutputInterface $output
+     * @param mixed $configValue single value or array of values
+     * @param $configPath base configuration path
+     * @param int $level depth level for nested configuration
+     * @return void
+     */
+    private function outputResult(OutputInterface $output, $configValue, $configPath, $level = 0)
+    {
+        $margin = str_repeat(" ", max($level - 1, 0) * 2);
+        if (is_string($configValue)) {
+            $output->writeln(sprintf("%s%s - %s", $margin, $configPath, $configValue));
+        } else if (is_array($configValue)) {
+            if ($level > 0) {
+                $output->writeln(sprintf("%s%s:", $margin, $configPath ?: 'config'));
+            }
+            foreach ($configValue as $name => $value) {
+                $childPath = empty($configPath) ? $name : ($configPath . '/' . $name);
+                $this->outputResult($output, $value, $childPath, $level + 1);
+            }
+        }
     }
 }
