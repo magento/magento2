@@ -13,18 +13,16 @@ define([
 
     var injector = new Squire(),
         result = {
-
             totals: 10
         },
         totals = {
-
             grandTotal: 5
         },
         address = {
-            'countryId': 'US',
-            'region': null,
-            'regionId': 'California',
-            'postcode': 90210
+            countryId: 'US',
+            region: null,
+            regionId: 'California',
+            postcode: 90210
         },
         mocks = {
             'Magento_Checkout/js/model/resource-url-manager': {
@@ -33,31 +31,25 @@ define([
                 )
             },
             'Magento_Checkout/js/model/quote': {
-                shippingMethod: ko.observable(
-                    {
-                        'method_code': 'flatrate',
-                        'carrier_code': 'flatrate'
-                    }
+                shippingMethod: ko.observable({
+                    'method_code': 'flatrate',
+                    'carrier_code': 'flatrate'
+                }
                 ),
                 setTotals: jasmine.createSpy()
             },
             'mage/storage': {
-                post: function () {
-
-                }
+                post: function () {}
             },
             'Magento_Checkout/js/model/totals': {
                 isLoading: jasmine.createSpy()
             },
             'Magento_Checkout/js/model/error-processor': {
-
                 process: jasmine.createSpy()
             },
             'Magento_Checkout/js/model/cart/cache': {
-                isChanged: function () {
-                },
-                get: function () {
-                },
+                isChanged: function () {},
+                get: function () {},
                 set: jasmine.createSpy()
             },
             'Magento_Customer/js/customer-data': {
@@ -85,18 +77,14 @@ define([
             defaultProcessor = Constr;
             done();
         });
-
     });
 
     describe('Magento_Checkout/js/model/cart/totals-processor/default', function () {
 
         it('estimateTotals if data was cached', function () {
-            spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'isChanged').and.returnValues(
-                false, false, false, false, false
-            );
+            spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'isChanged').and.returnValue(false);
             spyOn(mocks['Magento_Customer/js/customer-data'], 'get').and.returnValue(
                 ko.observable({
-
                     'data_id': 1
                 })
             );
@@ -105,7 +93,6 @@ define([
             expect(defaultProcessor.estimateTotals(address)).toBeUndefined();
             expect(mocks['Magento_Checkout/js/model/quote'].setTotals).toHaveBeenCalledWith(totals);
             expect(mocks['mage/storage'].post).not.toHaveBeenCalled();
-
         });
 
         it('estimateTotals if data wasn\'t cached and request was successfully sent', function () {
@@ -113,19 +100,14 @@ define([
                 true
             );
             spyOn(mocks['Magento_Customer/js/customer-data'], 'get').and.returnValue(
-                ko.observable(
-                    {
-
-                        'data_id': 1
-                    })
+                ko.observable({
+                    'data_id': 1
+                })
             );
             spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'get');
             spyOn(mocks['mage/storage'], 'post').and.callFake(function () {
-                var deffered = new $.Deferred();
-
-                return deffered.resolve(result);
+                return new $.Deferred().resolve(result);
             });
-
             expect(defaultProcessor.estimateTotals(address)).toBeUndefined();
             expect(mocks['Magento_Checkout/js/model/quote'].setTotals).toHaveBeenCalledWith(totals);
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(0)[0]).toBe(true);
@@ -133,7 +115,6 @@ define([
             expect(mocks['mage/storage'].post).toHaveBeenCalled();
             expect(mocks['Magento_Checkout/js/model/cart/cache'].get).not.toHaveBeenCalled();
             expect(mocks['Magento_Checkout/js/model/cart/cache'].set).toHaveBeenCalledWith('cart-data', data);
-
         });
 
         it('estimateTotals if data wasn\'t cached and request returns error', function () {
@@ -141,27 +122,21 @@ define([
                 true
             );
             spyOn(mocks['Magento_Customer/js/customer-data'], 'get').and.returnValue(
-                ko.observable(
-                    {
-                        'data_id': 1
-                    })
+                ko.observable({
+                    'data_id': 1
+                })
             );
             spyOn(mocks['Magento_Checkout/js/model/cart/cache'], 'get');
             spyOn(mocks['mage/storage'], 'post').and.callFake(function () {
-                var deffered = new $.Deferred();
-
-                return deffered.reject('Error Message');
+                return new $.Deferred().reject('Error Message');
             });
-
             expect(defaultProcessor.estimateTotals(address)).toBeUndefined();
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(0)[0]).toBe(true);
             expect(mocks['Magento_Checkout/js/model/totals'].isLoading.calls.argsFor(1)[0]).toBe(false);
             expect(mocks['mage/storage'].post).toHaveBeenCalled();
             expect(mocks['Magento_Checkout/js/model/cart/cache'].get).not.toHaveBeenCalled();
             expect(mocks['Magento_Checkout/js/model/error-processor'].process).toHaveBeenCalledWith('Error Message');
-
         });
     });
-
 });
 
