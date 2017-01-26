@@ -105,15 +105,14 @@ class SetupConfigurationStep implements TestStepInterface
             /** @var ConfigData $config */
             $config = $this->fixtureFactory->createByCode('configData', ['dataset' => $configDataSet . $prefix]);
             if ($config->hasData('section')) {
+                $config->persist();
                 $result = array_merge($result, $config->getSection());
+            }
+            if ($this->flushCache) {
+                $this->cache->flush();
             }
         }
         $config = $this->fixtureFactory->createByCode('configData', ['data' => $result]);
-        $config->persist();
-
-        if ($this->flushCache) {
-            $this->cache->flush();
-        }
 
         return ['config' => $config];
     }
