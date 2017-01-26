@@ -28,7 +28,7 @@ class Response extends \Magento\Authorizenet\Controller\Directpost\Payment
         \Magento\Authorizenet\Model\DirectpostFactory $directpostFactory = null
     ) {
         parent::__construct($context, $coreRegistry, $dataFactory);
-        $this->directpostFactory = $directpostFactory ?:$this->_objectManager->create(DirectpostFactory::class);
+        $this->directpostFactory = $directpostFactory ? : $this->_objectManager->create(DirectpostFactory::class);
     }
 
     /**

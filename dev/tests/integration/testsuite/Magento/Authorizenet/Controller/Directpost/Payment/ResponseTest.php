@@ -11,6 +11,7 @@ namespace Magento\Authorizenet\Controller\Directpost\Payment;
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @magentoDataFixture Magento/Authorizenet/_files/authorizenet_enabled_setting.php
  */
 class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -22,9 +23,6 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
      * @param string $errorMsg
      * @param string[] $params
      *
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Authorizenet/_files/authorizenet_enabled_setting.php
      * @dataProvider responseActionAuthorizeCaptureDeclineDataProvider
      */
     public function testResponseActionAuthorizeCaptureDecline($invoiceNum, $hash, $errorMsg, $params)
@@ -43,7 +41,7 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
         )->setRouteName(
             $controllerModule
         )->setRequestUri("/{$controllerModule}/{$controllerName}/{$controllerAction}")
-        ->setParams($params);
+            ->setParams($params);
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -54,7 +52,7 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
         $output = $response->getLayout()->getOutput();
 
         $expectedString = "{$controllerModule}/{$controllerName}/redirect/x_invoice_num/{$params['x_invoice_num']}/"
-        . "success/0/error_msg/{$errorMsg}/controller_action_name/{$controllerName}/";
+            . "success/0/error_msg/{$errorMsg}/controller_action_name/{$controllerName}/";
 
         $this->assertContains('window.location', $output);
         $this->assertContains($expectedString, $output);
@@ -66,10 +64,6 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
      * @param string $hash
      * @param string[] $params
      *
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Authorizenet/_files/authorizenet_enabled_setting.php
-     * @magentoDataFixture Magento/Authorizenet/_files/order.php
      * @dataProvider responseActionAuthorizeCaptureSuccessDataProvider
      */
     public function testResponseActionAuthorizeCaptureSuccess($hash, $params)
@@ -112,6 +106,70 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
                 'directpostFactory' => $directpostFactory
             ]
         );
+
+        $response = $controller->execute();
+        $output = $response->getLayout()->getOutput();
+
+        $expectedString = "{$controllerModule}/{$controllerName}/redirect/x_invoice_num/{$params['x_invoice_num']}/"
+            . "success/1/controller_action_name/{$controllerName}/";
+
+        $this->assertContains('window.location', $output);
+        $this->assertContains($expectedString, $output);
+    }
+
+    /**
+     * Tests the controller for created blocks used for sending emails that should not affect layout response
+     *
+     * @param string $hash
+     * @param string[] $params
+     *
+     * @dataProvider responseActionAuthorizeCaptureSuccessDataProvider
+     */
+    public function testBlockCreationAffectingResult($hash, $params)
+    {
+        $controllerName = 'directpost_payment';
+        $controllerModule = 'authorizenet';
+        $controllerAction = 'response';
+        $params['x_invoice_num'] = 100000002;
+        $params['x_MD5_Hash'] = $hash;
+        $this->getRequest()->setControllerName(
+            $controllerName
+        )->setControllerModule(
+            $controllerModule
+        )->setActionName(
+            $controllerAction
+        )->setRouteName(
+            $controllerModule
+        )->setRequestUri("/{$controllerModule}/{$controllerName}/{$controllerAction}")
+            ->setParams($params);
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $directpostFactory = $this->getMockBuilder(\Magento\Authorizenet\Model\DirectpostFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $directpost = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $directpostFactory->expects(static::once())
+            ->method('create')
+            ->willReturn($directpost);
+        $directpost->expects(static::once())
+            ->method('process');
+
+        /** @var \Magento\Authorizenet\Controller\Directpost\Payment\Response $controller */
+        $controller = $objectManager->create(
+            \Magento\Authorizenet\Controller\Directpost\Payment\Response::class,
+            [
+                'directpostFactory' => $directpostFactory
+            ]
+        );
+
+        /** @var \Magento\Authorizenet\Block\Adminhtml\Order\View\Info\FraudDetails $block */
+        $block = $objectManager->get(\Magento\Framework\View\LayoutInterface::class)
+            ->createBlock(\Magento\Authorizenet\Block\Adminhtml\Order\View\Info\FraudDetails::class);
+        $block->setTemplate('Magento_Payment::order/view/info/fraud_details.phtml');
 
         $response = $controller->execute();
         $output = $response->getLayout()->getOutput();
@@ -178,17 +236,9 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
                 'invoice_num' => '1231231',
                 'x_MD5_Hash' => 'F9AE81A5DA36057D1312D71C904FCCF2',
                 'error_msg' => 'The%20transaction%20was%20declined%20because%20the%20'
-                . 'response%20hash%20validation%20failed.',
+                    . 'response%20hash%20validation%20failed.',
                 'post' => $postArray
-            ],
-
-            'error_transaction_not_found' => [
-                'invoice_num' => 87,
-                'x_MD5_Hash' => 'BBC3D75DA467F7DF6A1E174CD491CF81',
-                'error_msg' => 'This%20payment%20didn%27t%20work%20out%20because%20'
-                    . 'we%20can%27t%20find%20this%20order.',
-                'post' => $postArray
-            ],
+            ]
         ];
     }
 
