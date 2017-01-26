@@ -6,8 +6,6 @@
 
 namespace Magento\Widget\Test\Unit\Helper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-
 /**
  * Class ConditionsTest
  */
@@ -18,10 +16,26 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
      */
     protected $conditions;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->conditions = $objectManagerHelper->getObject(\Magento\Widget\Helper\Conditions::class);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer->method('serialize')->willReturnCallback(function ($value) {
+            return json_encode($value);
+        });
+        $this->serializer->method('unserialize')->willReturnCallback(function ($value) {
+            return json_decode($value, true);
+        });
+        $this->conditions = new \Magento\Widget\Helper\Conditions(
+            $this->serializer
+        );
     }
 
     public function testEncodeDecode()

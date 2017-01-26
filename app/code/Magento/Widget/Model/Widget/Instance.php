@@ -6,6 +6,8 @@
 namespace Magento\Widget\Model\Widget;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Widget Instance Model
@@ -108,6 +110,27 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected $conditionsHelper;
 
     /**
+     * Instance of serializer interface.
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * Product type model instance.
+     *
+     * @var \Magento\Catalog\Model\Product\Type
+     */
+    private $_productType;
+
+    /**
+     * Widget config reader instance.
+     *
+     * @var \Magento\Widget\Model\Config\Reader
+     */
+    private $_reader;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Escaper $escaper
@@ -124,6 +147,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $relatedCacheTypes
      * @param array $data
+     * @param Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -142,7 +166,8 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->_escaper = $escaper;
         $this->_viewFileSystem = $viewFileSystem;
@@ -155,6 +180,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         $this->conditionsHelper = $conditionsHelper;
         $this->_directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_namespaceResolver = $namespaceResolver;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -250,7 +276,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                     \Magento\Framework\Math\Random::CHARS_LOWERS
                 );
             }
-            $this->setData('widget_parameters', serialize($parameters));
+            $this->setData('widget_parameters', $this->serializer->serialize($parameters));
         }
         $this->setData('page_groups', $tmpPageGroups);
         $this->setData('page_group_ids', $pageGroupIds);
@@ -372,7 +398,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     public function getWidgetParameters()
     {
         if (is_string($this->getData('widget_parameters'))) {
-            return unserialize($this->getData('widget_parameters'));
+            return $this->serializer->unserialize($this->getData('widget_parameters'));
         } elseif (null === $this->getData('widget_parameters')) {
             return [];
         }
