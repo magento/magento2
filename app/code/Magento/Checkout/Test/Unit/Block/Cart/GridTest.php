@@ -84,6 +84,15 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $this->pagerBlockMock = $this->getMockBuilder(\Magento\Theme\Block\Html\Pager::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->any())->method('getAllVisibleItems')->willReturn([]);
+        $this->scopeConfigMock->expects($this->at(0))
+            ->method('getValue')
+            ->with(
+                \Magento\Checkout\Block\Cart\Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                null
+            )->willReturn(20);
         $this->block = $objectManagerHelper->getObject(
             \Magento\Checkout\Block\Cart\Grid::class,
             [
@@ -117,7 +126,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $availableLimit = 20;
         $this->getMockItemsForGrid();
         $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn($itemsCount);
-        $this->scopeConfigMock->expects($this->once())
+        $this->scopeConfigMock->expects($this->at(1))
             ->method('getValue')
             ->with(
                 \Magento\Checkout\Block\Cart\Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
@@ -149,6 +158,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     public function testGetItems()
     {
         $this->getMockItemsForGrid();
+        $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(20);
         $this->itemCollectionMock->expects($this->once())->method('getItems')->willReturn(['expected']);
         $this->assertEquals(['expected'], $this->block->getItems());
     }
@@ -159,7 +169,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->itemCollectionMock);
-        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
+        $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
         $this->itemCollectionMock->expects($this->once())->method('setQuote')->with($this->quoteMock)->willReturnSelf();
         $this->itemCollectionMock
             ->expects($this->once())
@@ -197,4 +207,10 @@ class GridTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals([$itemMock], $this->block->getItems());
     }
+
+    public function testGetItemsWhenPagerNotVisible()
+    {
+        $this->assertEquals([], $this->block->getItems());
+    }
+
 }

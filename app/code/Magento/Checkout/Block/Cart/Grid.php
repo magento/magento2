@@ -36,6 +36,13 @@ class Grid extends \Magento\Checkout\Block\Cart
     private $joinAttributeProcessor;
 
     /**
+     * Is display pager on shopping cart page
+     *
+     * @var bool
+     */
+    private $isDisplayPager;
+
+    /**
      * Grid constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
@@ -81,7 +88,7 @@ class Grid extends \Magento\Checkout\Block\Cart
      */
     protected function _construct()
     {
-        if ($this->getCustomItems()) {
+        if (!$this->isDisplayPagerOnPage()) {
             parent::_construct();
         }
         if ($this->hasData('template')) {
@@ -95,11 +102,11 @@ class Grid extends \Magento\Checkout\Block\Cart
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        $availableLimit = $this->_scopeConfig->getValue(
-            self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        if (!$this->getCustomItems()) {
+        if ($this->isDisplayPagerOnPage()) {
+            $availableLimit = (int)$this->_scopeConfig->getValue(
+                self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
             $itemsCollection = $this->getItemsForGrid();
             /** @var  \Magento\Theme\Block\Html\Pager $pager */
             $pager = $this->getLayout()->createBlock(\Magento\Theme\Block\Html\Pager::class);
@@ -136,9 +143,27 @@ class Grid extends \Magento\Checkout\Block\Cart
      */
     public function getItems()
     {
-        if ($this->getCustomItems()) {
+        if (!$this->isDisplayPagerOnPage()) {
             return parent::getItems();
         }
         return $this->getItemsForGrid()->getItems();
+    }
+
+    /**
+     * Verify if display pager on shopping cart
+     * If cart block has custom_items and items qty in the shopping cart<limit from stores configuration
+     *
+     * @return bool
+     */
+    private function isDisplayPagerOnPage()
+    {
+        if (!$this->isDisplayPager) {
+            $availableLimit = (int)$this->_scopeConfig->getValue(
+                self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            $this->isDisplayPager = !$this->getCustomItems() && $availableLimit < $this->getItemsCount();
+        }
+        return $this->isDisplayPager;
     }
 }
