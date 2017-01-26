@@ -7,8 +7,8 @@
 <div class="block items-in-cart" data-bind="mageInit: {'collapsible':{'openedState': 'active', 'active': isItemsBlockExpanded()}}">
     <div class="title" data-role="title">
         <strong role="heading">
-            <translate args="maxCartItemsToDisplay" if="axCartItemsToDisplay < getItemsQty()"/>
-            <translate args="'of'" if="axCartItemsToDisplay < getItemsQty()"/>
+            <translate args="maxCartItemsToDisplay" if="maxCartItemsToDisplay < getItemsQty()"/>
+            <translate args="'of'" if="maxCartItemsToDisplay < getItemsQty()"/>
             <span data-bind="text: getItemsQty()"></span>
             <translate args="'Item in Cart'" if="getItemsQty() == 1"/>
             <translate args="'Items in Cart'" if="getItemsQty() > 1"/>
