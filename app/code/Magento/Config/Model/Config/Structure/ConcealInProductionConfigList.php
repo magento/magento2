@@ -8,7 +8,7 @@ namespace Magento\Config\Model\Config\Structure;
 use Magento\Framework\App\State;
 
 /**
- * Defines status of visibility of form elements on Store > Settings > Configuration page
+ * Defines status of visibility of form elements on Stores > Settings > Configuration page
  * in Admin Panel in Production mode.
  */
 class ConcealInProductionConfigList implements ElementVisibilityInterface
