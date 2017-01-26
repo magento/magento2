@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,10 @@ namespace Magento\Checkout\Test\Unit\Model\Cart;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Checkout\Model\Cart\CheckoutConfigProvider;
+use Magento\Checkout\Model\Cart\CheckoutSummaryConfigProvider;
 use Magento\Store\Model\ScopeInterface;
 
-class CheckoutConfigProviderTest extends \PHPUnit_Framework_TestCase
+class CheckoutSummaryConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\UrlInterface
@@ -24,7 +24,7 @@ class CheckoutConfigProviderTest extends \PHPUnit_Framework_TestCase
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\Checkout\Model\Cart\CheckoutConfigProvider
+     * @var \Magento\Checkout\Model\Cart\CheckoutSummaryConfigProvider
      */
     private $model;
 
@@ -32,7 +32,7 @@ class CheckoutConfigProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
-        $this->model = new CheckoutConfigProvider($this->urlBuilderMock, $this->scopeConfigMock);
+        $this->model = new CheckoutSummaryConfigProvider($this->urlBuilderMock, $this->scopeConfigMock);
     }
 
     public function testGetConfig()

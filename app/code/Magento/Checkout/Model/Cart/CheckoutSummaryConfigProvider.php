@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,10 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
-class CheckoutConfigProvider implements ConfigProviderInterface
+/**
+ * Class CheckoutSummaryConfigProvider provides configuration for checkout summary block
+ */
+class CheckoutSummaryConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var UrlInterface

@@ -7,41 +7,31 @@
 <div class="block items-in-cart" data-bind="mageInit: {'collapsible':{'openedState': 'active', 'active': isItemsBlockExpanded()}}">
     <div class="title" data-role="title">
         <strong role="heading">
-            <!-- ko if: maxCartItemsToDisplay < getItemsCounter() -->
-                <!-- ko text: maxCartItemsToDisplay --><!-- /ko -->
-                <!-- ko i18n: 'of' --><!-- /ko -->
-            <!-- /ko -->
-            <span data-bind="text: getItemsCounter()"></span>
-            <!-- ko if: getItemsCounter() == 1 -->
-                <!-- ko i18n: 'Item in Cart' --><!-- /ko -->
-            <!-- /ko -->
-            <!-- ko if: getItemsCounter() > 1 -->
-                <!-- ko i18n: 'Items in Cart' --><!-- /ko -->
-            <!-- /ko -->
+            <translate args="maxCartItemsToDisplay" if="axCartItemsToDisplay < getItemsQty()"/>
+            <translate args="'of'" if="axCartItemsToDisplay < getItemsQty()"/>
+            <span data-bind="text: getItemsQty()"></span>
+            <translate args="'Item in Cart'" if="getItemsQty() == 1"/>
+            <translate args="'Items in Cart'" if="getItemsQty() > 1"/>
         </strong>
     </div>
     <div class="content minicart-items" data-role="content">
         <div class="minicart-items-wrapper overflowed">
             <ol class="minicart-items">
-                <!-- ko foreach: items() -->
-                <li class="product-item">
-                    <div class="product">
-                        <!-- ko foreach: $parent.elems() -->
-                        <!-- ko template: getTemplate() --><!-- /ko -->
-                        <!-- /ko -->
-                    </div>
-                </li>
-                <!-- /ko -->
+                <each args="items()">
+                    <li class="product-item">
+                        <div class="product">
+                            <each args="$parent.elems()" render=""/>
+                        </div>
+                    </li>
+                </each>
             </ol>
         </div>
     </div>
-    <!-- ko if: maxCartItemsToDisplay < getItemsCounter() -->
-    <div class="actions-toolbar">
+    <div class="actions-toolbar" if="maxCartItemsToDisplay < getItemsQty()">
         <div class="secondary">
             <a class="action viewcart" data-bind="attr: {href: cartUrl}">
                 <span data-bind="i18n: 'View and Edit Cart'"></span>
             </a>
         </div>
     </div>
-    <!-- /ko -->
 </div>

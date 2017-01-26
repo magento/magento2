@@ -4,6 +4,7 @@
  */
 
 /* eslint max-nested-callbacks: 0 */
+// jscs:disable jsDoc
 define(['squire'], function (Squire) {
     'use strict';
 
@@ -21,10 +22,6 @@ define(['squire'], function (Squire) {
                 name: '',
                 index: '',
                 cart: {
-                    /**
-                     * Returns array of cart items
-                     * @returns []
-                     */
                     items: function () {
                         return [
                             {

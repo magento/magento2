@@ -174,7 +174,7 @@ define([
         getCartItems: function () {
             var items = this.getCartParam('items') || [];
 
-            items = items.slice(-this.maxItemsToDisplay);
+            items = items.slice(parseInt(-this.maxItemsToDisplay, 10));
 
             return items;
         }

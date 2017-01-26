@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class AssertVisibleItemsQtyInMiniShoppingCart extends AbstractConstraint
 
         $presentItems = 0;
         /** @var Item $item */
-        foreach ($cart->getItems() as $key => $item) {
+        foreach (array_keys($cart->getItems()) as $key) {
             /** @var CatalogProductSimple $product */
             $product = $products[$key];
             if ($sidebar->getCartItem($product)->isVisible()) {

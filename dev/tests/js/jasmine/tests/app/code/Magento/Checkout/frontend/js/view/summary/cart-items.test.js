@@ -4,24 +4,18 @@
  */
 
 /* eslint max-nested-callbacks: 0 */
+// jscs:disable jsDoc
 define(['squire'], function (Squire) {
     'use strict';
 
     var injector = new Squire(),
         mocks = {
             'Magento_Checkout/js/model/totals': {
-                /**
-                 * @returns {*}
-                 */
                 totals: function () {
                     return {
                         'items_qty': 13.0765
                     };
                 },
-
-                /**
-                 * @returns {*}
-                 */
                 getItems: function () {
                     var observable = function () {};
 
@@ -31,20 +25,12 @@ define(['squire'], function (Squire) {
                 }
             },
             'Magento_Checkout/js/model/quote': {
-                /**
-                 * @returns {Boolean}
-                 */
                 isVirtual: function () {
-
                     return false;
                 }
             },
             'Magento_Checkout/js/model/step-navigator': {
-                /**
-                 * @returns {Boolean}
-                 */
                 isProcessed: function () {
-
                     return true;
                 }
             }
@@ -91,19 +77,14 @@ define(['squire'], function (Squire) {
 
         describe('"setItems" method', function () {
             it('Check for return value.', function () {
-                var items = [
-                    {
-                        itemId: 1
-                    },
-                    {
+                var items = [{
+                    itemId: 1
+                }, {
+                    itemId: 2
+                }],
+                    expectedResult = JSON.stringify([{
                         itemId: 2
-                    }
-                    ],
-                    expectedResult = JSON.stringify([
-                        {
-                            itemId: 2
-                        }
-                    ]);
+                    }]);
 
                 expect(obj.setItems(items)).toBeUndefined();
                 expect(JSON.stringify(obj.itemsTestStorage)).toBe(expectedResult);

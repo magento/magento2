@@ -25,20 +25,30 @@ define(
             cartUrl: window.checkoutConfig.cartUrl,
 
             /**
-             * Component init
+             * @deprecated Please use observable property (this.items())
+             */
+            getItems: totals.getItems(),
+
+            /**
+             * Returns cart items count
+             *
+             * @returns {Number}
+             */
+            getItemsQty: function () {
+                return parseFloat(this.totals['items_qty']);
+            },
+
+            /**
+             * @inheritdoc
              */
             initialize: function () {
-                var self = this;
-
                 this._super();
-
                 // Set initial items to observable field
                 this.setItems(totals.getItems()());
-
                 // Subscribe for items data changes and refresh items in view
                 totals.getItems().subscribe(function (items) {
-                    self.setItems(items);
-                });
+                    this.setItems(items);
+                }.bind(this));
             },
 
             /**
@@ -47,20 +57,10 @@ define(
              * @param {Object} items
              */
             setItems: function (items) {
-
                 if (items && items.length > 0) {
-                    items = items.slice(-this.maxCartItemsToDisplay);
+                    items = items.slice(parseInt(-this.maxCartItemsToDisplay, 10));
                 }
                 this.items(items);
-            },
-
-            /**
-             * Returns cart items count
-             *
-             * @returns {Number}
-             */
-            getItemsCounter: function () {
-                return parseFloat(this.totals['items_qty']);
             },
 
             /**
