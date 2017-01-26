@@ -494,7 +494,6 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('parent_theme', $this->_model->getParentTheme());
     }
 
-
     /**
      * @param array $themeData
      * @param array $expected
