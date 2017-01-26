@@ -9,6 +9,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
 use Magento\Framework\DB\Select\QueryModifierInterface;
+use Magento\Framework\DB\Select;
 
 /**
  * Convert field data from one representation to another
@@ -40,7 +41,35 @@ class FieldDataConverter
     }
 
     /**
-     * Convert field data from one representation to another
+     * Get converter select
+     *
+     * @param AdapterInterface $connection
+     * @param string $table
+     * @param string $identifier
+     * @param string $field
+     * @param QueryModifierInterface|null $queryModifier
+     *
+     * @return Select
+     */
+    public function getSelect(
+        AdapterInterface $connection,
+        $table,
+        $identifier,
+        $field,
+        QueryModifierInterface $queryModifier = null
+    ) {
+        $select = $connection->select()
+            ->from($table, [$identifier, $field])
+            ->where($field . ' IS NOT NULL');
+        if ($queryModifier) {
+            $queryModifier->modify($select);
+        }
+
+        return $select;
+    }
+
+    /**
+     * Convert table field data from one representation to another uses DataConverterInterface
      *
      * @param AdapterInterface $connection
      * @param string $table
@@ -56,12 +85,7 @@ class FieldDataConverter
         $field,
         QueryModifierInterface $queryModifier = null
     ) {
-        $select = $connection->select()
-            ->from($table, [$identifier, $field])
-            ->where($field . ' IS NOT NULL');
-        if ($queryModifier) {
-            $queryModifier->modify($select);
-        }
+        $select = $this->getSelect($connection, $table, $identifier, $field, $queryModifier);
         $iterator = $this->queryGenerator->generate($identifier, $select);
         foreach ($iterator as $selectByRange) {
             $rows = $connection->fetchAll($selectByRange);
