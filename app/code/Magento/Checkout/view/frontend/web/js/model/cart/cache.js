@@ -5,8 +5,8 @@
 
 /**
  * Cart adapter for customer data storage.
- * It is store cart data in customer data(localStorage) without save on server.
- * Adapter created for caching shipping and totals data, that eliminates unneeded requests for calculation.
+ * It stores cart data in customer data(localStorage) without saving on server.
+ * Adapter is created for shipping rates and totals data caching. It eliminates unneeded calculations requests.
  */
 define([
     'underscore',
@@ -42,6 +42,21 @@ define([
          */
         setData = function (checkoutData) {
             storage.set(cacheKey, checkoutData);
+        },
+
+        /**
+         * Build method name base on name, prefix and suffix.
+         *
+         * @param {String} name
+         * @param {String} prefix
+         * @param {String} suffix
+         * @return {String}
+         */
+        getMethodName = function (name, prefix, suffix) {
+            prefix = prefix || '';
+            suffix = suffix || '';
+
+            return prefix + name.charAt(0).toUpperCase() + name.slice(1) + suffix;
         };
 
     if (_.isEmpty(getData())) {
@@ -68,13 +83,11 @@ define([
          * @return {*}
          */
         get: function (key) {
-            var methodName;
+            var methodName = getMethodName(key, '_get');
 
             if (key === cacheKey) {
                 return getData();
             }
-
-            methodName = '_get' + key.charAt(0).toUpperCase() + key.slice(1);
 
             if (this[methodName]) {
                 return this[methodName]();
@@ -95,7 +108,8 @@ define([
          * @param {*} value
          */
         set: function (key, value) {
-            var methodName, obj;
+            var methodName = getMethodName(key, '_set'),
+                obj;
 
             if (key === cacheKey) {
                 _.each(value, function (val, k) {
@@ -104,8 +118,6 @@ define([
 
                 return;
             }
-
-            methodName = '_set' + key.charAt(0).toUpperCase() + key.slice(1);
 
             if (this[methodName]) {
                 this[methodName](value);
@@ -127,15 +139,13 @@ define([
          * @param {String} key
          */
         clear: function (key) {
-            var methodName;
+            var methodName = getMethodName(key, '_clear');
 
             if (key === cacheKey) {
                 setData(this.cartData);
 
                 return;
             }
-
-            methodName = '_clear' + key.charAt(0).toUpperCase() + key.slice(1);
 
             if (this[methodName]) {
                 this[methodName]();
@@ -157,7 +167,7 @@ define([
          * @return {Boolean}
          */
         isChanged: function (key, value) {
-            var methodName = '_is' + key.charAt(0).toUpperCase() + key.slice(1) + 'Changed';
+            var methodName = getMethodName(key, '_is', 'Changed');
 
             if (this[methodName]) {
                 return this[methodName](value);
