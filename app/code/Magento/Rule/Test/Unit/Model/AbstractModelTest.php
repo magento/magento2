@@ -10,6 +10,8 @@ namespace Magento\Rule\Test\Unit\Model;
  * Class AbstractModelTest. Unit test for \Magento\Rule\Model\AbstractModel
  *
  * @package Magento\Rule\Test\Unit\Model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractModelTest extends \PHPUnit_Framework_TestCase
 {
