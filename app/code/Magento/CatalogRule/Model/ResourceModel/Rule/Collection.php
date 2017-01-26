@@ -107,7 +107,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @return $this
-     * @throws \Exception
      */
     protected function _afterLoad()
     {
