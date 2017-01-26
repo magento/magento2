@@ -6,8 +6,6 @@
 
 namespace Magento\Analytics\ReportXml;
 
-use \Magento\Framework\App\ResourceConnection;
-
 /**
  * Class ReportProvider
  *
@@ -19,17 +17,18 @@ class ReportProvider
      * @var QueryFactory
      */
     private $queryFactory;
+
     /**
-     * @var ResourceConnection
+     * @var ConnectionFactory
      */
-    private $resourceConnection;
+    private $connectionFactory;
 
     public function __construct(
         QueryFactory $queryFactory,
-        ResourceConnection $resourceConnection
+        ConnectionFactory $connectionFactory
     ) {
         $this->queryFactory = $queryFactory;
-        $this->resourceConnection = $resourceConnection;
+        $this->connectionFactory = $connectionFactory;
     }
 
     /**
@@ -39,7 +38,7 @@ class ReportProvider
     public function getReport($name)
     {
         $query = $this->queryFactory->create($name);
-        $connection = $this->resourceConnection->getConnection($query->getConnectionName());
+        $connection = $this->connectionFactory->getConnection($query->getConnectionName());
         $statement = $connection->query($query->getQueryString());
         return new \IteratorIterator($statement);
 
