@@ -69,7 +69,7 @@ class FieldDataConverter
     }
 
     /**
-     * Convert field data from one representation to another
+     * Convert table field data from one representation to another uses DataConverterInterface
      *
      * @param AdapterInterface $connection
      * @param string $table
