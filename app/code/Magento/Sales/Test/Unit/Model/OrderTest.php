@@ -429,13 +429,16 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
         $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStoreId', 'addIdFilter', 'load', 'getItemById'])
+            ->setMethods(['setStoreId', 'addIdFilter', 'load', 'getItemById', 'addAttributeToSelect'])
             ->getMock();
         $productCollection->expects($this->once())
             ->method('setStoreId')
             ->willReturnSelf();
         $productCollection->expects($this->once())
             ->method('addIdFilter')
+            ->willReturnSelf();
+        $productCollection->expects($this->once())
+            ->method('addAttributeToSelect')
             ->willReturnSelf();
         $productCollection->expects($this->once())
             ->method('load')
@@ -494,7 +497,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
         $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStoreId', 'addIdFilter', 'load', 'getItemById'])
+            ->setMethods(['setStoreId', 'addIdFilter', 'load', 'getItemById', 'addAttributeToSelect'])
             ->getMock();
         $productCollection->expects($this->once())
             ->method('setStoreId')
@@ -513,6 +516,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($productCollection);
 
+        $productCollection->expects($this->once())
+            ->method('addAttributeToSelect')
+            ->willReturnSelf();
         $this->assertFalse($this->order->canReorder());
     }
 
@@ -539,7 +545,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
         $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStoreId', 'addIdFilter', 'load', 'getItemById'])
+            ->setMethods(['setStoreId', 'addIdFilter', 'load', 'getItemById', 'addAttributeToSelect'])
             ->getMock();
         $productCollection->expects($this->once())
             ->method('setStoreId')
@@ -558,6 +564,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($productCollection);
 
+        $productCollection->expects($this->once())
+            ->method('addAttributeToSelect')
+            ->willReturnSelf();
         $this->assertFalse($this->order->canReorder());
     }
 
