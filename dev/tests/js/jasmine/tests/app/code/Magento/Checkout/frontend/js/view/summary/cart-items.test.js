@@ -37,12 +37,12 @@ define(['squire'], function (Squire) {
         },
         obj;
 
-    window.checkoutConfig = {
-        maxCartItemsToDisplay: 1,
-        cartUrl: 'url/to/cart'
-    };
-
     beforeEach(function (done) {
+        window.checkoutConfig = {
+            maxCartItemsToDisplay: 1,
+            cartUrl: 'url/to/cart'
+        };
+
         injector.mock(mocks);
         injector.require(['Magento_Checkout/js/view/summary/cart-items'], function (Constr) {
             obj = new Constr({

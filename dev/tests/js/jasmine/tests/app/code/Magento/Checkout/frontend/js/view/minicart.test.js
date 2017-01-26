@@ -11,11 +11,11 @@ define(['squire'], function (Squire) {
     var injector = new Squire(),
         obj;
 
-    window.checkout = {
-        maxItemsToDisplay: 1
-    };
-
     beforeEach(function (done) {
+        window.checkout = {
+            maxItemsToDisplay: 1
+        };
+
         injector.require(['Magento_Checkout/js/view/minicart'], function (Constr) {
             obj = new Constr({
                 provider: 'provName',
