@@ -23,6 +23,9 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
      */
     private $themeCollection;
 
+    /**
+     * @var CacheInterface
+     */
     private $cache;
 
     protected function setUp()
