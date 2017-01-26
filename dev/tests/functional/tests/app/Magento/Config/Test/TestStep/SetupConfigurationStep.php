@@ -6,6 +6,7 @@
 
 namespace Magento\Config\Test\TestStep;
 
+use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Mtf\Util\Command\Cli\Cache;
@@ -101,18 +102,20 @@ class SetupConfigurationStep implements TestStepInterface
         $result = [];
 
         foreach ($configData as $configDataSet) {
+            /** @var ConfigData $config */
             $config = $this->fixtureFactory->createByCode('configData', ['dataset' => $configDataSet . $prefix]);
             if ($config->hasData('section')) {
-                $config->persist();
-                $result[] = $config;
-            }
-            if ($this->flushCache) {
-                $this->cache->flush();
+                $result = array_merge($result, $config->getSection());
             }
         }
+        $config = $this->fixtureFactory->createByCode('configData', ['data' => $result]);
+        $config->persist();
 
+        if ($this->flushCache) {
+            $this->cache->flush();
+        }
 
-        return ['config' => $result];
+        return ['config' => $config];
     }
 
     /**

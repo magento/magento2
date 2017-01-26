@@ -41,4 +41,11 @@
         <step name="fillBillingInformation" module="Magento_Checkout" next="clickPlaceOrderButton" />
         <step name="clickPlaceOrderButton" module="Magento_Checkout" />
     </scenario>
+    <scenario name="ShoppingCartPagerTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="mergePreconditionProducts" />
+        <step name="mergePreconditionProducts" module="Magento_Catalog" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="removeProductsFromTheCart" />
+        <step name="removeProductsFromTheCart" module="Magento_Checkout" />
+    </scenario>
 </config>

@@ -10,13 +10,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutCart;
 
 /**
- * Class AssertPagersPresentInShoppingCart
- * Assert that pagers are visible on checkout/cart/index page
+ * Assert that pagers are visible on checkout/cart/index page.
  */
 class AssertPagersPresentInShoppingCart extends AbstractConstraint
 {
     /**
-     * Verify that pagers aren't visible on the shopping cart page
+     * Verify that pagers are visible on the shopping cart page.
      *
      * @param CheckoutCart $checkoutCart
      */
@@ -25,11 +24,11 @@ class AssertPagersPresentInShoppingCart extends AbstractConstraint
         $checkoutCart->open();
         \PHPUnit_Framework_Assert::assertTrue(
             $checkoutCart->getTopPagerBlock()->getPagesBlock()->isVisible(),
-            'The top pager on the top of Items Grid is not visible'
+            'The top pager of Items Grid is not visible.'
         );
         \PHPUnit_Framework_Assert::assertTrue(
             $checkoutCart->getBottomPagerBlock()->getPagesBlock()->isVisible(),
-            'The top pager on the bottom of Items Grid is not visible'
+            'The bottom pager of Items Grid is not visible.'
         );
     }
 
@@ -38,6 +37,6 @@ class AssertPagersPresentInShoppingCart extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Pager isn\'t visible on the shopping cart page';
+        return 'Pager present on the shopping cart page.';
     }
 }

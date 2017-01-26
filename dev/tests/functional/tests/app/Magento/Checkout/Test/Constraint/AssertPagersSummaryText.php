@@ -6,53 +6,39 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
+use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Checkout\Test\Fixture\Cart;
 
 /**
- * Class AssertPagersSummaryText
- * Assert pagers summary text on checkout/cart/index page
+ * Assert pagers summary text on checkout/cart/index page.
  */
 class AssertPagersSummaryText extends AbstractConstraint
 {
+    const PAGER_SUMMARY_TEXT = "Items 1 to %s of %s total";
+
     /**
-     * Verify that pagers summary text on the pagers
+     * Verify that pagers summary text on the shopping cart is correct.
      *
      * @param CheckoutCart $checkoutCart
      * @param \Magento\Checkout\Test\Fixture\Cart $cart
-     * @param string|null $configData
+     * @param ConfigData $config
      */
-    public function processAssert(
-        CheckoutCart $checkoutCart,
-        \Magento\Checkout\Test\Fixture\Cart $cart,
-        $configData = null
-    ) {
+    public function processAssert(CheckoutCart $checkoutCart, Cart $cart, ConfigData $config)
+    {
         $checkoutCart->open();
-        $pagerSize = 20;
-        if ($configData) {
-            $configDataArray = $this->objectManager
-                    ->get(\Magento\Config\Test\Repository\ConfigData::class)
-                    ->get($configData);
-            $configDataArrayValue = array_shift($configDataArray);
-            $pagerSize = $configDataArrayValue['value'];
-        }
-        $totalItems = 0;
-        $items = $cart->getItems();
-        /** @var  $item */
-        foreach ($items as $item) {
-            /** @var FixtureInterface $item */
-            $checkoutItem = $item->getData();
-            $totalItems += $checkoutItem['qty'];
-        }
-        $checkoutCart->getTopPagerBlock()->getAmountToolbar()->getText();
-        \PHPUnit_Framework_Assert::assertSame(
-            "Items 1 to $pagerSize of $totalItems total",
+        $configSection = $config->getSection();
+        $pagerSize = $configSection['checkout/cart/number_items_to_display_pager']['value'];
+        $totalItems = count($cart->getItems());
+
+        \PHPUnit_Framework_Assert::assertEquals(
+            sprintf(self::PAGER_SUMMARY_TEXT, $pagerSize, $totalItems),
             $checkoutCart->getTopPagerBlock()->getAmountToolbar()->getText(),
             'Top Pager summary text isn\'t satisfy test data'
         );
-        \PHPUnit_Framework_Assert::assertSame(
-            "Items 1 to $pagerSize of $totalItems total",
+        \PHPUnit_Framework_Assert::assertEquals(
+            sprintf(self::PAGER_SUMMARY_TEXT, $pagerSize, $totalItems),
             $checkoutCart->getBottomPagerBlock()->getAmountToolbar()->getText(),
             'Bottom Pager summary text isn\'t satisfy test data'
         );
@@ -63,6 +49,6 @@ class AssertPagersSummaryText extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Pagers summary text isn\'t satisfy test data' ;
+        return 'Pagers summary text on the shopping cart is correct.' ;
     }
 }
