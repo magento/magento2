@@ -28,11 +28,12 @@ class NavigateMenuTest extends Injectable
      *
      * @param Dashboard $dashboard
      * @param string $menuItem
+     * @param bool $waitElementNotVisible
      * @return void
      */
-    public function test(Dashboard $dashboard, $menuItem)
+    public function test(Dashboard $dashboard, $menuItem, $waitElementNotVisible = true)
     {
         $dashboard->open();
-        $dashboard->getMenuBlock()->navigate($menuItem);
+        $dashboard->getMenuBlock()->navigate($menuItem, $waitElementNotVisible);
     }
 }
