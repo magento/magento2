@@ -11,6 +11,8 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Rule\Model\ResourceModel\AbstractResource;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
  * Sales Rule resource model
@@ -52,12 +54,18 @@ class Rule extends AbstractResource
     protected $entityManager;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon
      * @param string $connectionName
      * @param \Magento\Framework\DataObject|null $associatedEntityMapInstance
      * @param Json $serializer Optional parameter for backward compatibility
+     * @param MetadataPool $metadataPool Optional parameter for backward compatibility
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -65,7 +73,8 @@ class Rule extends AbstractResource
         \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon,
         $connectionName = null,
         \Magento\Framework\DataObject $associatedEntityMapInstance = null,
-        Json $serializer = null
+        Json $serializer = null,
+        MetadataPool $metadataPool = null
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
@@ -73,7 +82,8 @@ class Rule extends AbstractResource
             \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class
         );
         $this->_associatedEntitiesMap = $associatedEntitiesMapInstance->getData();
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -305,7 +315,11 @@ class Rule extends AbstractResource
     public function setActualProductAttributes($rule, $attributes)
     {
         $connection = $this->getConnection();
-        $connection->delete($this->getTable('salesrule_product_attribute'), ['rule_id=?' => $rule->getId()]);
+        $metadata = $this->metadataPool->getMetadata(RuleInterface::class);
+        $connection->delete(
+            $this->getTable('salesrule_product_attribute'),
+            [$metadata->getLinkField() . '=?' => $rule->getData($metadata->getLinkField())]
+        );
 
         //Getting attribute IDs for attribute codes
         $attributeIds = [];
@@ -327,7 +341,7 @@ class Rule extends AbstractResource
                 foreach ($rule->getWebsiteIds() as $websiteId) {
                     foreach ($attributeIds as $attribute) {
                         $data[] = [
-                            'rule_id' => $rule->getId(),
+                            $metadata->getLinkField() => $rule->getData($metadata->getLinkField()),
                             'website_id' => $websiteId,
                             'customer_group_id' => $customerGroupId,
                             'attribute_id' => $attribute,

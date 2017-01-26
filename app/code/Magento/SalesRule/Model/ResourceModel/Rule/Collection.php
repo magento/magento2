@@ -282,6 +282,22 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     public function addAttributeInConditionFilter($attributeCode)
     {
         $match = sprintf('%%%s%%', substr($this->serializer->serialize(['attribute' => $attributeCode]), 1, -1));
+        /**
+         * Information about conditions and actions stored in table as JSON encoded array
+         * in fields conditions_serialized and actions_serialized.
+         * If you want to find rules that contains some particular attribute, the easiest way to do so is serialize
+         * attribute code in the same way as it stored in the serialized columns and execute SQL search
+         * with like condition.
+         * Table
+         * +-------------------------------------------------------------------+
+         * |     conditions_serialized       |         actions_serialized      |
+         * +-------------------------------------------------------------------+
+         * | {..."attribute":"attr_name"...} | {..."attribute":"attr_name"...} |
+         * +---------------------------------|---------------------------------+
+         * From attribute code "attr_code", will be generated such SQL:
+         * `condition_serialized` LIKE '%"attribute":"attr_name"%'
+         *      OR `actions_serialized` LIKE '%"attribute":"attr_name"%'
+         */
         $field = $this->_getMappedField('conditions_serialized');
         $cCond = $this->_getConditionSql($field, ['like' => $match]);
         $field = $this->_getMappedField('actions_serialized');
