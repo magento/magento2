@@ -43,7 +43,6 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
         foreach ($this->themeCollection as $theme) {
             $theme = $this->themeProvider->getThemeById($theme->getId());
             $this->assertNotEmpty($this->cache->load('theme-by-id-' . $theme->getId()));
-            $this->assertNotEmpty($this->cache->load('theme' . $theme->getFullPath()));
             $this->assertEquals(
                 $theme,
                 $this->themeProvider->getThemeById($theme->getId())
@@ -55,8 +54,9 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Theme $theme */
         foreach ($this->themeCollection as $theme) {
-            $theme = $this->themeProvider->getThemeById($theme->getFullPath());
+            $theme = $this->themeProvider->getThemeByFullPath($theme->getFullPath());
             $this->assertNotEmpty($this->cache->load('theme-by-id-' . $theme->getId()));
+            $this->assertNotEmpty($this->cache->load('theme' . $theme->getFullPath()));
             $this->assertEquals(
                 $theme,
                 $this->themeProvider->getThemeById($theme->getFullPath())
