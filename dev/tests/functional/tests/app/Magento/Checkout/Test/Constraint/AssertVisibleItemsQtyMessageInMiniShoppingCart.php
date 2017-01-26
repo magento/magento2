@@ -14,12 +14,12 @@ class AssertVisibleItemsQtyMessageInMiniShoppingCart extends AbstractConstraint
     /**
      * Items counter default message
      */
-    const ITEMS_COUNTER_MASSAGE = "%s items";
+    const ITEMS_COUNTER_MASSAGE = "%s Items in Cart";
 
     /**
      * Items counter message with limitations
      */
-    const VISIBLE_ITEMS_COUNTER_MASSAGE = "%s of %s items displayed";
+    const VISIBLE_ITEMS_COUNTER_MASSAGE = "%s of %s Items in Cart";
 
     /**
      * Assert that quantity of visible Cart items are the same as minicart configuration value.
