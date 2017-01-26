@@ -10,8 +10,9 @@
  */
 define([
     'underscore',
-    'Magento_Customer/js/customer-data'
-], function (_, storage) {
+    'Magento_Customer/js/customer-data',
+    'mageUtils'
+], function (_, storage, utils) {
     'use strict';
 
     var cacheKey = 'cart-data',
@@ -44,7 +45,7 @@ define([
         };
 
     if (_.isEmpty(getData())) {
-        setData(cartData);
+        setData(utils.copy(cartData));
     }
 
     /**
