@@ -29,7 +29,6 @@ class RemoveProductsFromTheCartStep implements TestStepInterface
      */
     private $cartPage;
 
-
     /**
      * Quantity of items that should be removed from shoping cart.
      *
