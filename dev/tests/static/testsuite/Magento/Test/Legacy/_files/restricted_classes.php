@@ -126,7 +126,7 @@ return [
         ]
     ],
     'ArrayObject' => [
-        'replacement' => 'ArrayObject with overwritten serialize/unserialize methods',
+        'replacement' => 'Custom class, extended from ArrayObject with overwritten serialize/unserialize methods',
         'exclude' => [
             [
                 'type' => 'module',
@@ -192,6 +192,27 @@ return [
                 'type' => 'library',
                 'name' => 'magento/framework',
                 'path' => 'Indexer/Action/Base.php'
+            ]
+        ]
+    ],
+    'Magento\Framework\View\Element\UiComponent\ArrayObjectFactory' => [
+        'replacement' => 'Factory that creates custom class, extended from ArrayObject with overwritten '
+            . 'serialize/unserialize methods',
+        'exclude' => [
+            [
+                'type' => 'module',
+                'name' => 'Magento_Ui',
+                'path' => 'Model/Manager.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Ui',
+                'path' => 'Test/Unit/Model/ManagerTest.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'View/Element/UiComponent/Config/Provider/Component/Definition.php'
             ]
         ]
     ]
