@@ -18,9 +18,6 @@ define([
         miniCart;
 
     miniCart = $('[data-block=\'minicart\']');
-    miniCart.on('dropdowndialogopen', function () {
-        initSidebar();
-    });
 
     /**
      * @return {Boolean}
@@ -73,8 +70,13 @@ define([
         });
     }
 
+    miniCart.on('dropdowndialogopen', function () {
+        initSidebar();
+    });
+
     return Component.extend({
         shoppingCartUrl: window.checkout.shoppingCartUrl,
+        maxItemsToDisplay: window.checkout.maxItemsToDisplay,
         cart: {},
 
         /**
@@ -92,11 +94,12 @@ define([
                 this.update(updatedCart);
                 initSidebar();
             }, this);
-            $('[data-block="minicart"]').on('contentLoading', function (event) {
+            $('[data-block="minicart"]').on('contentLoading', function () {
                 addToCartCalls++;
                 self.isLoading(true);
             });
-            if (cartData().website_id !== window.checkout.websiteId) {
+
+            if (cartData()['website_id'] !== window.checkout.websiteId) {
                 customerData.reload(['cart'], false);
             }
 
@@ -117,6 +120,7 @@ define([
          */
         closeSidebar: function () {
             var minicart = $('[data-block="minicart"]');
+
             minicart.on('click', '[data-action="close"]', function (event) {
                 event.stopPropagation();
                 minicart.find('[data-role="dropdownDialog"]').dropdownDialog('close');
@@ -161,6 +165,18 @@ define([
             }
 
             return this.cart[name]();
+        },
+
+        /**
+         * Returns array of cart items, limited by 'maxItemsToDisplay' setting
+         * @returns []
+         */
+        getCartItems: function () {
+            var items = this.getCartParam('items') || [];
+
+            items = items.slice(parseInt(-this.maxItemsToDisplay, 10));
+
+            return items;
         }
     });
 });
