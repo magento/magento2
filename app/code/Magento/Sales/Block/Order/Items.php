@@ -82,16 +82,18 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * Determine if the pager should be displayed for order items list
+     * To be called from templates(after _prepareLayout())
      *
      * @return bool
      */
-    private function isPagerDisplayed()
+    public function isPagerDisplayed()
     {
         return $this->itemCollection->getSize() > $this->itemsPerPage;
     }
 
     /**
      * Get visible items for current page.
+     * To be called from templates(after _prepareLayout())
      *
      * @return \Magento\Framework\DataObject[]
      */
@@ -102,6 +104,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * Get pager HTML according to our requirements
+     * To be called from templates(after _prepareLayout())
      *
      * @return string HTML output
      */

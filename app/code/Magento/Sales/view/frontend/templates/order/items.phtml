@@ -12,11 +12,13 @@
     <table class="data table table-order-items" id="my-orders-table" summary="<?php /* @escapeNotVerified */ echo __('Items Ordered') ?>">
         <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Ordered') ?></caption>
         <thead>
-            <tr>
-                <td colspan="5" class="order-pager-wrapper order-pager-wrapper-top">
-                    <?php echo $block->getPagerHtml() ?>
-                </td>
-            </tr>
+            <?php if($block->isPagerDisplayed()): ?>
+                <tr>
+                    <td colspan="5" class="order-pager-wrapper order-pager-wrapper-top">
+                        <?php echo $block->getPagerHtml() ?>
+                    </td>
+                </tr>
+            <?php endif ?>
             <tr>
                 <th class="col name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
                 <th class="col sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
@@ -62,11 +64,13 @@
             </tbody>
         <?php endforeach; ?>
         <tfoot>
-            <tr>
-                <td colspan="5" class="order-pager-wrapper order-pager-wrapper-bottom">
-                    <?php echo $block->getPagerHtml();?>
-                </td>
-            </tr>
+            <?php if($block->isPagerDisplayed()): ?>
+                <tr>
+                    <td colspan="5" class="order-pager-wrapper order-pager-wrapper-bottom">
+                        <?php echo $block->getPagerHtml();?>
+                    </td>
+                </tr>
+            <?php endif ?>
             <?php echo $block->getChildHtml('order_totals') ?>
         </tfoot>
     </table>
