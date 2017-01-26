@@ -117,7 +117,7 @@ class ConfigShowCommand extends Command
     /**
      * Output single configuration value or list of values if array given.
      *
-     * @param OutputInterface $output
+     * @param OutputInterface $output An OutputInterface instance
      * @param mixed $configValue single value or array of values
      * @param $configPath base configuration path
      * @param int $level depth level for nested configuration
