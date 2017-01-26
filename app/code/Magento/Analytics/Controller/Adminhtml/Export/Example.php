@@ -12,6 +12,8 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Archive;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Analytics\Model\Config;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class Example extends Action
 {
@@ -34,11 +36,26 @@ class Example extends Action
      * @var Config
      */
     private $config;
+    /**
+     * @var FileFactory
+     */
+    private $fileFactory;
 
+    /**
+     * Example constructor.
+     *
+     * @param Action\Context $context
+     * @param Filesystem $filesystem
+     * @param ReportProvider $reportProvider
+     * @param FileFactory $fileFactory
+     * @param Archive $archive
+     * @param Config $config
+     */
     public function __construct(
         Action\Context $context,
         Filesystem $filesystem,
         ReportProvider $reportProvider,
+        FileFactory $fileFactory,
         Archive $archive,
         Config $config
     ) {
@@ -47,6 +64,7 @@ class Example extends Action
         $this->reportProvider = $reportProvider;
         $this->archive = $archive;
         $this->config = $config;
+        $this->fileFactory = $fileFactory;
     }
 
     /**
@@ -58,7 +76,7 @@ class Example extends Action
     public function execute()
     {
         $path = 'analytics/';
-        $directory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::TMP);
         foreach($this->config->get() as $file) {
             foreach ($file['providers'] as $provider) {
                 $providerObject = $this->_objectManager->get($provider[0]['class']);
@@ -74,7 +92,13 @@ class Example extends Action
                 $stream->close();
             }
         }
-//        $archiveFile = $directory->getAbsolutePath($path). 'analytics.tgz';
-//        $this->archive->pack($directory->getAbsolutePath($path), $archiveFile, false);
+        $archiveFile = $directory->getAbsolutePath(). 'analytics.tgz';
+        $this->archive->pack($directory->getAbsolutePath($path), $archiveFile, true);
+        $directory->delete('analytics/');
+        return $this->fileFactory->create(
+            $archiveFile,
+            $directory->readFile('analytics.tgz'),
+            DirectoryList::VAR_DIR
+        );
     }
 }
