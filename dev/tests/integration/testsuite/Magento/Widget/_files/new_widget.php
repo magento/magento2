@@ -11,10 +11,17 @@ $resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
 $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->get(\Magento\Widget\Model\Widget\Instance::class);
 
+// Set default theme as work ground for MAGETWO-63643
+/** @var \Magento\Framework\View\Design\ThemeInterface $theme */
+$theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Framework\View\Design\ThemeInterface::class
+);
+$theme->load('Magento/luma', 'theme_path');
+
 $model->setData(
     [
         'instance_type' => 'Magento\\Widget\\NewSampleWidget',
-        'theme_id' => '4',
+        'theme_id' => $theme->getId(),
         'title' => 'New Sample widget title',
         'store_ids' => [
             0 => '0',

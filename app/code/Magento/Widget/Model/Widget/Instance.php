@@ -117,20 +117,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     private $serializer;
 
     /**
-     * Product type model instance.
-     *
-     * @var \Magento\Catalog\Model\Product\Type
-     */
-    private $_productType;
-
-    /**
-     * Widget config reader instance.
-     *
-     * @var \Magento\Widget\Model\Config\Reader
-     */
-    private $_reader;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Escaper $escaper
