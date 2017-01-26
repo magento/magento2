@@ -12,12 +12,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ScopePathResolver;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Stdlib\ArrayManager;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * {@inheritdoc}
@@ -56,11 +54,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
     private $inputMock;
 
     /**
-     * @var OutputInterface|Mock
-     */
-    private $outputMock;
-
-    /**
      * @var ScopePathResolver|Mock
      */
     private $scopePathResolverMock;
@@ -83,8 +76,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
         $this->scopePathResolverMock = $this->getMockBuilder(ScopePathResolver::class)
             ->disableOriginalConstructor()
@@ -160,19 +151,14 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
                 ],
                 true
             );
-        $this->outputMock->expects($this->once())
-            ->method('writeln')
-            ->with('<info>Value was locked.</info>');
 
-        $this->assertSame(
-            Cli::RETURN_SUCCESS,
-            $this->model->process(
-                $this->inputMock,
-                $this->outputMock
-            )
-        );
+        $this->model->process($this->inputMock);
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Value is already locked.
+     */
     public function testProcessToBeAlreadyLocked()
     {
         $path = 'test/test/test';
@@ -195,22 +181,17 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('system/default/test/test/test')
             ->willReturn([]);
-        $this->outputMock->expects($this->once())
-            ->method('writeln')
-            ->with('<error>Value is already locked.</error>');
         $this->scopePathResolverMock->expects($this->once())
             ->method('resolve')
             ->willReturn('system/default/test/test/test');
 
-        $this->assertSame(
-            Cli::RETURN_FAILURE,
-            $this->model->process(
-                $this->inputMock,
-                $this->outputMock
-            )
-        );
+        $this->model->process($this->inputMock);
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Filesystem is not writable.
+     */
     public function testProcessNotReadableFs()
     {
         $path = 'test/test/test';
@@ -246,22 +227,8 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
         $this->deploymentConfigWriterMock->expects($this->once())
             ->method('saveConfig')
-            ->willThrowException(new FileSystemException(__('Filesystem is not writable')));
-        $this->outputMock->expects($this->once())
-            ->method('writeln')
-            ->with(
-                '<error>'
-                . 'Unable to set the value because config file is not writable. '
-                . 'Make sure config file is writable by your current user and try again.'
-                . '</error>'
-            );
+            ->willThrowException(new FileSystemException(__('Filesystem is not writable.')));
 
-        $this->assertSame(
-            Cli::RETURN_FAILURE,
-            $this->model->process(
-                $this->inputMock,
-                $this->outputMock
-            )
-        );
+        $this->model->process($this->inputMock);
     }
 }

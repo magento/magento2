@@ -15,10 +15,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ScopePathResolver;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ScopeResolverPool;
-use Magento\Framework\Console\Cli;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Config\Model\ResourceModel\Config\Data\Collection;
 
 /**
@@ -78,11 +76,6 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
     private $inputMock;
 
     /**
-     * @var OutputInterface|Mock
-     */
-    private $outputMock;
-
-    /**
      * {@inheritdoc}
      */
     protected function setUp()
@@ -111,8 +104,6 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
         $this->scopePathResolverMock = $this->getMockBuilder(ScopePathResolver::class)
             ->disableOriginalConstructor()
@@ -159,12 +150,14 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         $this->scopePathResolverMock->expects($this->once())
             ->method('resolve')
             ->willReturn('system/default/test/test/test');
-        $this->deploymentConfigMock->expects($this->exactly(2))
+        $this->deploymentConfigMock->expects($this->once())
             ->method('get')
             ->willReturnMap([
-                ['db', null, 'exists'],
                 ['system/default/test/test/test', null],
             ]);
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
         $this->collection->expects($this->once())
             ->method('getItems')
             ->willReturn([]);
@@ -178,19 +171,14 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->configMock->expects($this->once())
             ->method('save');
-        $this->outputMock->expects($this->once())
-            ->method('writeln')
-            ->with('<info>Value was saved.</info>');
 
-        $this->assertSame(
-            Cli::RETURN_SUCCESS,
-            $this->model->process(
-                $this->inputMock,
-                $this->outputMock
-            )
-        );
+        $this->model->process($this->inputMock);
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Magento is not installed yet.
+     */
     public function testProcessNotInstalled()
     {
         $path = 'test/test/test';
@@ -210,23 +198,16 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
                 [ConfigSetCommand::OPTION_FORCE, false],
             ]);
         $this->deploymentConfigMock->expects($this->once())
-            ->method('get')
-            ->willReturnMap([
-                ['db', null, null],
-            ]);
-        $this->outputMock->expects($this->once())
-            ->method('writeln')
-            ->with('<error>Magento is not installed yet.</error>');
+            ->method('isAvailable')
+            ->willReturn(false);
 
-        $this->assertSame(
-            Cli::RETURN_FAILURE,
-            $this->model->process(
-                $this->inputMock,
-                $this->outputMock
-            )
-        );
+        $this->model->process($this->inputMock);
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Effective value already locked.
+     */
     public function testProcessLockedValue()
     {
         $path = 'test/test/test';
@@ -245,7 +226,10 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
                 [ConfigSetCommand::OPTION_SCOPE_CODE, null],
                 [ConfigSetCommand::OPTION_FORCE, false],
             ]);
-        $this->deploymentConfigMock->expects($this->exactly(2))
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $this->deploymentConfigMock->expects($this->once())
             ->method('get')
             ->willReturnMap([
                 ['db', null, 'exists'],
@@ -254,19 +238,14 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         $this->scopePathResolverMock->expects($this->once())
             ->method('resolve')
             ->willReturn('system/default/test/test/test');
-        $this->outputMock->expects($this->once())
-            ->method('writeln')
-            ->with('<error>Effective value already locked.</error>');
 
-        $this->assertSame(
-            Cli::RETURN_FAILURE,
-            $this->model->process(
-                $this->inputMock,
-                $this->outputMock
-            )
-        );
+        $this->model->process($this->inputMock);
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Config value is already exists.
+     */
     public function testProcessDuplicate()
     {
         $path = 'test/test/test';
@@ -285,25 +264,18 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
                 [ConfigSetCommand::OPTION_SCOPE_CODE, null],
                 [ConfigSetCommand::OPTION_FORCE, false],
             ]);
-        $this->deploymentConfigMock->expects($this->exactly(2))
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $this->deploymentConfigMock->expects($this->once())
             ->method('get')
             ->willReturnMap([
-                ['db', null, 'exists'],
                 ['system/default/test/test/test', null],
             ]);
         $this->collection->expects($this->once())
             ->method('getItems')
             ->willReturn(['item1']);
-        $this->outputMock->expects($this->once())
-            ->method('writeln')
-            ->with('<error>Config value is already exists.</error>');
 
-        $this->assertSame(
-            Cli::RETURN_FAILURE,
-            $this->model->process(
-                $this->inputMock,
-                $this->outputMock
-            )
-        );
+        $this->model->process($this->inputMock);
     }
 }

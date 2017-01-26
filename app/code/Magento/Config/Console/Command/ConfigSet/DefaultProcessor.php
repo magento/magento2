@@ -9,9 +9,8 @@ use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverPool;
-use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Config\Model\ConfigFactory;
 use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
 use Magento\Framework\App\DeploymentConfig;
@@ -96,7 +95,7 @@ class DefaultProcessor implements ConfigSetProcessorInterface
      *
      * {@inheritdoc}
      */
-    public function process(InputInterface $input, OutputInterface $output)
+    public function process(InputInterface $input)
     {
         $path = $input->getArgument(ConfigSetCommand::ARG_PATH);
         $value = $input->getArgument(ConfigSetCommand::ARG_VALUE);
@@ -105,22 +104,16 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         $force = $input->getOption(ConfigSetCommand::OPTION_FORCE);
         $scopeId = $this->getScopeId($scope, $scopeCode);
 
-        if (!$this->deploymentConfig->get('db')) {
-            $output->writeln('<error>Magento is not installed yet.</error>');
-
-            return Cli::RETURN_FAILURE;
+        if (!$this->deploymentConfig->isAvailable()) {
+            throw new LocalizedException(__('Magento is not installed yet.'));
         }
 
         if ($this->isLocked($path, $scope, $scopeCode)) {
-            $output->writeln('<error>Effective value already locked.</error>');
-
-            return Cli::RETURN_FAILURE;
+            throw new LocalizedException(__('Effective value already locked.'));
         }
 
         if ($this->getConfigItems($path, $scope, $scopeId) && !$force) {
-            $output->writeln('<error>Config value is already exists.</error>');
-
-            return Cli::RETURN_FAILURE;
+            throw new LocalizedException((__('Config value is already exists.')));
         }
 
         $value = $this->metadataProcessor->prepareValue($value, $path);
@@ -133,10 +126,6 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         }
 
         $config->save();
-
-        $output->writeln('<info>Value was saved.</info>');
-
-        return Cli::RETURN_SUCCESS;
     }
 
     /**

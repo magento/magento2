@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -16,8 +16,8 @@ class ConfigSetProcessorFactory
     /**#@+
      * Constants for processors.
      *
-     * default - saves configuration
-     * lock - locks configuration
+     * default - save configuration
+     * lock - save and lock configuration
      */
     const TYPE_DEFAULT = 'default';
     const TYPE_LOCK = 'lock';
@@ -54,18 +54,18 @@ class ConfigSetProcessorFactory
      *
      * @param string $processor The name of processor
      * @return ConfigSetProcessorInterface New processor instance
-     * @throws LocalizedException If processor type is not exists in processors array
+     * @throws ConfigurationMismatchException If processor type is not exists in processors array
      */
     public function create($processor)
     {
         if (!isset($this->processors[$processor])) {
-            throw new LocalizedException(__('Class for type "%1" was not declared', $processor));
+            throw new ConfigurationMismatchException(__('Class for type "%1" was not declared', $processor));
         }
 
         $object = $this->objectManager->create($this->processors[$processor]);
 
         if (!$object instanceof ConfigSetProcessorInterface) {
-            throw new LocalizedException(
+            throw new ConfigurationMismatchException(
                 __('%1 does not implement %2', get_class($object), ConfigSetProcessorInterface::class)
             );
         }

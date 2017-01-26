@@ -6,14 +6,11 @@
 namespace Magento\Config\Console\Command\ConfigSet;
 
 use Magento\Config\Console\Command\ConfigSetCommand;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Console\Cli;
-use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\ScopePathResolver;
@@ -84,7 +81,7 @@ class LockProcessor implements ConfigSetProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process(InputInterface $input, OutputInterface $output)
+    public function process(InputInterface $input)
     {
         $path = $input->getArgument(ConfigSetCommand::ARG_PATH);
         $value = $input->getArgument(ConfigSetCommand::ARG_VALUE);
@@ -94,33 +91,16 @@ class LockProcessor implements ConfigSetProcessorInterface
         $scopePath = $this->scopePathResolver->resolve($path, $scope, $scopeCode, 'system');
 
         if ($this->deploymentConfig->get($scopePath) !== null && !$force) {
-            $output->writeln('<error>Value is already locked.</error>');
-
-            return Cli::RETURN_FAILURE;
+            throw new LocalizedException(__('Value is already locked.'));
         }
 
         $value = $this->metadataProcessor->prepareValue($value, $path);
 
-        try {
-            $this->deploymentConfigWriter->saveConfig(
-                [
-                    ConfigFilePool::APP_CONFIG => $this->arrayManager->set($scopePath, [], $value)
-                ],
-                true
-            );
-        } catch (FileSystemException $exception) {
-            $output->writeln(
-                '<error>'
-                . 'Unable to set the value because config file is not writable. '
-                . 'Make sure config file is writable by your current user and try again.'
-                . '</error>'
-            );
-
-            return Cli::RETURN_FAILURE;
-        }
-
-        $output->writeln('<info>Value was locked.</info>');
-
-        return Cli::RETURN_SUCCESS;
+        $this->deploymentConfigWriter->saveConfig(
+            [
+                ConfigFilePool::APP_CONFIG => $this->arrayManager->set($scopePath, [], $value)
+            ],
+            true
+        );
     }
 }

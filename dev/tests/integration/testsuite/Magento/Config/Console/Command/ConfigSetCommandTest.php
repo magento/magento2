@@ -267,6 +267,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      * @param string $value
      * @param string $scope
      * @param string $scopeCode
+     * @magentoDbIsolation enabled
      * @dataProvider runExtendedDataProvider
      */
     public function testRunExtended(
@@ -356,6 +357,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      * @param string $value
      * @param string $scope
      * @param string $scopeCode
+     * @magentoDbIsolation enabled
      * @dataProvider getRunScopeValidationDataProvider
      */
     public function testRunScopeValidation(

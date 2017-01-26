@@ -40,6 +40,7 @@ class ScopePathResolver
     public function resolve($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null, $type = null)
     {
         $path = trim($path, '/');
+        $scope = trim($scope, 's');
         $scopePath = $type ? $type . '/' . $scope : $scope;
 
         if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {

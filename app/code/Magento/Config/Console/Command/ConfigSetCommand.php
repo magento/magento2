@@ -78,14 +78,14 @@ class ConfigSetCommand extends Command
                     static::OPTION_SCOPE,
                     null,
                     InputArgument::OPTIONAL,
-                    'Scope of configuration (default, website, store, etc.)',
+                    'Scope of configuration (default, website, store)',
                     ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 ),
                 new InputOption(
                     static::OPTION_SCOPE_CODE,
                     null,
                     InputArgument::OPTIONAL,
-                    'Scope code of configuration'
+                    'Scope code of configuration (website code or store view code)'
                 ),
                 new InputOption(
                     static::OPTION_LOCK,
@@ -97,7 +97,7 @@ class ConfigSetCommand extends Command
                     static::OPTION_FORCE,
                     'f',
                     InputOption::VALUE_NONE,
-                    'Force command to ignore duplicate or lock errors'
+                    'Force command to ignore duplicate errors'
                 )
             ]);
 
@@ -116,16 +116,24 @@ class ConfigSetCommand extends Command
                 $input->getOption(static::OPTION_SCOPE),
                 $input->getOption(static::OPTION_SCOPE_CODE)
             );
+
+            $processor = $input->getOption(static::OPTION_LOCK)
+                ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
+                : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT);
+            $message = $input->getOption(static::OPTION_LOCK)
+                ? 'Value was locked.'
+                : 'Value was saved.';
+
+            // The processing flow depends in --lock option.
+            $processor->process($input);
+
+            $output->writeln('<info>' . $message . '</info>');
+
+            return Cli::RETURN_SUCCESS;
         } catch (LocalizedException $exception) {
             $output->writeln('<error>' . $exception->getMessage() . '</error>');
 
             return Cli::RETURN_FAILURE;
         }
-
-        $processor = $input->getOption(static::OPTION_LOCK)
-            ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
-            : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT);
-
-        return $processor->process($input, $output);
     }
 }

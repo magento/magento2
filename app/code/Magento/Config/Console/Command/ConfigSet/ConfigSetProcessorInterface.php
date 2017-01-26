@@ -5,23 +5,22 @@
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
+use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Interface ConfigSetProcessorInterface.
- *
  * Allows to process different flows of config:set command.
+ *
+ * @see \Magento\Config\Console\Command\ConfigSetCommand
  */
 interface ConfigSetProcessorInterface
 {
     /**
      * Processes config:set command.
-     * Returns 0 on success and 1 otherwise.
      *
-     * @param InputInterface $input An input parameter
-     * @param OutputInterface $output An output parameter
-     * @return int The code of operation, 0 on success or 1 on failure
+     * @param InputInterface $input An input console parameter
+     * @return void
+     * @throws LocalizedException An exception on processing error
      */
-    public function process(InputInterface $input, OutputInterface $output);
+    public function process(InputInterface $input);
 }
