@@ -9,8 +9,23 @@ namespace Magento\Backend\Model\View\Layout\Filter;
 
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Backend\Model\View\Layout\FilterInterface;
+use Magento\Backend\Model\View\Layout\StructureManager;
+use Magento\Framework\App\ObjectManager;
 
-class Acl
+/**
+ * Class Acl
+ *
+ * Manage visibility of ui components and blocks at the backend according to ACL resources.
+ * If user role has corresponding resource block will be displayed.
+ *
+ * @see usage details in \Magento\Backend\Model\View\Layout\FilterInterface description
+ *
+ * Example of declaration in layout
+ *
+ * <uiComponent name="form" acl="Resource::name" />
+ */
+class Acl implements FilterInterface
 {
     /**
      * Authorization
@@ -18,6 +33,11 @@ class Acl
      * @var \Magento\Framework\AuthorizationInterface
      */
     protected $authorization;
+
+    /**
+     * @var StructureManager
+     */
+    private $structureManager;
 
     /**
      * @param \Magento\Framework\AuthorizationInterface $authorization
@@ -28,11 +48,24 @@ class Acl
     }
 
     /**
+     * @return StructureManager
+     */
+    private function getStructureManager()
+    {
+        if (!$this->structureManager) {
+            $this->structureManager = ObjectManager::getInstance()->get(StructureManager::class);
+        }
+        return $this->structureManager;
+    }
+
+    /**
      * Delete elements that have "acl" attribute but value is "not allowed"
      * In any case, the "acl" attribute will be unset
      *
      * @param ScheduledStructure $scheduledStructure
      * @param Structure $structure
+     *
+     * @return void
      */
     public function filterAclElements(ScheduledStructure $scheduledStructure, Structure $structure)
     {
@@ -61,14 +94,18 @@ class Acl
         $elementName,
         $isChild = false
     ) {
-        $elementsToRemove = array_keys($structure->getChildren($elementName));
-        $scheduledStructure->unsetElement($elementName);
-        foreach ($elementsToRemove as $element) {
-            $this->removeElement($scheduledStructure, $structure, $element, true);
-        }
-        if (!$isChild) {
-            $structure->unsetElement($elementName);
-        }
+        $this->getStructureManager()->removeElement($scheduledStructure, $structure, $elementName, $isChild);
         return $this;
+    }
+
+    /**
+     * @param ScheduledStructure $scheduledStructure
+     * @param Structure $structure
+     * @return bool
+     */
+    public function filterElement(ScheduledStructure $scheduledStructure, Structure $structure)
+    {
+        $this->filterAclElements($scheduledStructure, $structure);
+        return true;
     }
 }

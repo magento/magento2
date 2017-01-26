@@ -6,35 +6,17 @@
 
 namespace Magento\Mtf\App\State;
 
-use Magento\Mtf\ObjectManager;
-
 /**
  * Example Application State class.
  */
 class State1 extends AbstractState
 {
     /**
-     * Object Manager.
-     *
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
-    /**
      * Data for configuration state.
      *
      * @var string
      */
     protected $config ='admin_session_lifetime_1_hour, wysiwyg_disabled, admin_account_sharing_enable, log_to_file';
-
-    /**
-     * @construct
-     * @param ObjectManager $objectManager
-     */
-    public function __construct(ObjectManager $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
 
     /**
      * Apply set up configuration profile.
