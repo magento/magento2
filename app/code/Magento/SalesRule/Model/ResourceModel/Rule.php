@@ -73,7 +73,6 @@ class Rule extends AbstractResource
             \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class
         );
         $this->_associatedEntitiesMap = $associatedEntitiesMapInstance->getData();
-        /* we already have serialized field in AbstractResource, so we don't have to declare it here */
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $connectionName);
     }
