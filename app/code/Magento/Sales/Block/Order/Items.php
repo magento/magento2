@@ -33,6 +33,11 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     private $itemCollectionFactory;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $globalConfig;
+
+    /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Item\Collection|null
      */
     private $itemCollection;
@@ -41,57 +46,45 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @param int $itemsPerPage
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $globalConfig
      * @param \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory|null $itemCollectionFactory
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = [],
-        $itemsPerPage = 20,
-        $itemCollectionFactory = null
+        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig = null,
+        \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory $itemCollectionFactory = null
     ) {
         $this->_coreRegistry = $registry;
-        $this->itemsPerPage = $itemsPerPage;
-        $this->itemCollectionFactory = $itemCollectionFactory;
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->itemCollectionFactory = $itemCollectionFactory ?: $objectManager
+            ->get(\Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory::class);
+        $this->globalConfig = $globalConfig ?: $objectManager
+            ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         parent::__construct($context, $data);
     }
 
     /**
-     * Get order item collection factory.
-     * Backward compatible way to add new dependency.
+     * Init pager block and item collection with page size and current page number
      *
-     * @return \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory
+     * @return $this
      */
-    private function getItemCollectionFactory()
+    protected function _prepareLayout()
     {
-        if ($this->itemCollectionFactory === null) {
-            $this->itemCollectionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory::class);
-        }
-        return $this->itemCollectionFactory;
-    }
+        $this->itemsPerPage = $this->globalConfig->getValue('sales/orders/items_per_page');
 
-    /**
-     * Create collection and init it with page and item filters.
-     * Only visible order items are filtered
-     * Page filters are also applied
-     *
-     * @return \Magento\Sales\Model\ResourceModel\Order\Item\Collection|null
-     */
-    private function getCollection()
-    {
-        if ($this->itemCollection != null) {
-            return $this->itemCollection;
-        }
-        $this->itemCollection = $this->getItemCollectionFactory()->create();
+        $this->itemCollection = $this->itemCollectionFactory->create();
         $this->itemCollection->setOrderFilter($this->getOrder());
         $this->itemCollection->filterByParent(null);
+
         /** @var \Magento\Theme\Block\Html\Pager $pagerBlock */
         $pagerBlock = $this->getChildBlock('sales_order_item_pager');
         $pagerBlock->setLimit($this->itemsPerPage);
+        //here pager updates collection parameters
         $pagerBlock->setCollection($this->itemCollection);
-        return $this->itemCollection;
+
+        return parent::_prepareLayout();
     }
 
     /**
@@ -101,7 +94,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      */
     private function isPagerDisplayed()
     {
-        return $this->getCollection()->getSize() > $this->itemsPerPage;
+        return $this->itemCollection->getSize() > $this->itemsPerPage;
     }
 
     /**
@@ -111,7 +104,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getItems()
     {
-        return $this->getCollection()->getItems();
+        return $this->itemCollection->getItems();
     }
 
     /**
@@ -121,8 +114,6 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getPagerHtml()
     {
-        // make sure collection is initialized with page data
-        $this->getCollection();
         /** @var \Magento\Theme\Block\Html\Pager $pagerBlock */
         $pagerBlock = $this->getChildBlock('sales_order_item_pager');
         $pagerBlock->setAvailableLimit([$this->itemsPerPage]);
