@@ -22,7 +22,8 @@ class ElementVisibilityComposite implements ElementVisibilityInterface
     private $visibility = [];
 
     /**
-     * @param ElementVisibilityInterface[] $visibility List of objects which implement ElementVisibilityInterface.
+     * @param ElementVisibilityInterface[] $visibility List of objects which define visibility status of form elements
+     * under its own conditions.
      * @throws ConfigurationMismatchException It is thrown if some object from list $visibility
      * implements the wrong interface.
      */
