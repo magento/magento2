@@ -8,12 +8,26 @@ namespace Magento\Config\Model\Config\Structure;
 use Magento\Framework\App\State;
 
 /**
- * Contains list of elements paths which should be hidden or disabled on Configuration page in Production mode.
+ * Defines status of visibility of form elements on Store > Settings > Configuration page
+ * in Admin Panel in Production mode.
  */
 class ConcealInProductionConfigList implements ElementVisibilityInterface
 {
     /**
-     * The list of paths of form elements in the structure.
+     * The list of form element paths with concrete visibility status.
+     *
+     * E.g.
+     *
+     * ```php
+     * [
+     *      'general/locale/code' => ElementVisibilityInterface::DISABLED,
+     *      'general/country' => ElementVisibilityInterface::HIDDEN,
+     * ];
+     * ```
+     *
+     * It means that:
+     *  - field Locale (in group Locale Options in section General) will be disabled
+     *  - group Country Options (in section General) will be hidden
      *
      * @var array
      */
@@ -28,7 +42,7 @@ class ConcealInProductionConfigList implements ElementVisibilityInterface
 
     /**
      * @param State $state The object that has information about the state of the system
-     * @param array $configs The list of paths of form elements in the structure
+     * @param array $configs The list of form element paths with concrete visibility status.
      */
     public function __construct(State $state, array $configs = [])
     {
@@ -73,7 +87,7 @@ class ConcealInProductionConfigList implements ElementVisibilityInterface
     /**
      * Returns normalized path.
      *
-     * @param string $path The path will be normalized
+     * @param string $path The path to be normalized
      * @return string The normalized path
      */
     private function normalizePath($path)

@@ -9,7 +9,7 @@ use Magento\Framework\Exception\ConfigurationMismatchException;
 
 /**
  * Contains list of classes which implement ElementVisibilityInterface for
- * checking of visibility of form elements on Configuration page.
+ * checking of visibility of form elements on Store > Settings > Configuration page in Admin Panel.
  */
 class ElementVisibilityComposite implements ElementVisibilityInterface
 {

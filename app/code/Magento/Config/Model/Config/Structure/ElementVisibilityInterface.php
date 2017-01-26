@@ -6,7 +6,8 @@
 namespace Magento\Config\Model\Config\Structure;
 
 /**
- * Checks visibility of form elements on Configuration page by their paths in the structure.
+ * Checks visibility status of form elements on Store > Settings > Configuration page in Admin Panel
+ * by their paths in the structure.
  */
 interface ElementVisibilityInterface
 {
