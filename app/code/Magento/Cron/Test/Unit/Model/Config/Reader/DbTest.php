@@ -50,7 +50,10 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $job1 = ['schedule' => ['cron_expr' => '* * * * *']];
         $job2 = ['schedule' => ['cron_expr' => '1 1 1 1 1']];
         $data = ['crontab' => ['default' => ['jobs' => ['job1' => $job1, 'job2' => $job2]]]];
-        $this->config->expects($this->once())->method('get')->with('system/default')->will($this->returnValue($data));
+        $this->config->expects($this->once())
+            ->method('get')
+            ->with('system', 'default')
+            ->will($this->returnValue($data));
         $expected = [
             'default' => [
                 'job1' => ['schedule' => $job1['schedule']['cron_expr']],
