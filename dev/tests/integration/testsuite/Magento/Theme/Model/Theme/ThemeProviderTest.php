@@ -43,12 +43,10 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
         foreach ($this->themeCollection as $theme) {
             $theme = $this->themeProvider->getThemeById($theme->getId());
             $this->assertNotEmpty($this->cache->load('theme-by-id-' . $theme->getId()));
-            $themeFullPath = $theme->getArea() . '/' . $theme->getThemePath();
-            //$this->assertNotEmpty($this->cache->load('theme' . $themeFullPath));
-            $themeLoadedFromCache = $this->themeProvider->getThemeById($theme->getId());
+            $this->assertNotEmpty($this->cache->load('theme' . $theme->getFullPath()));
             $this->assertEquals(
                 $theme,
-                $themeLoadedFromCache
+                $this->themeProvider->getThemeById($theme->getId())
             );
         }
     }
@@ -57,12 +55,11 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Theme $theme */
         foreach ($this->themeCollection as $theme) {
-            $themeFullPath = $theme->getArea() . '/' . $theme->getThemePath();
+            $theme = $this->themeProvider->getThemeById($theme->getFullPath());
             $this->assertNotEmpty($this->cache->load('theme-by-id-' . $theme->getId()));
-            //$this->assertNotEmpty($this->cache->load('theme' . $themeFullPath));
             $this->assertEquals(
-                $this->themeProvider->getThemeById($themeFullPath),
-                $this->themeProvider->getThemeById($themeFullPath)
+                $theme,
+                $this->themeProvider->getThemeById($theme->getFullPath())
             );
         }
     }
