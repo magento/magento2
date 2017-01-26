@@ -99,7 +99,7 @@ class Grid extends \Magento\Checkout\Block\Cart
             self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        if ($this->getItemsCount() > $availableLimit && !$this->getCustomItems()) {
+        if (!$this->getCustomItems()) {
             $itemsCollection = $this->getItemsForGrid();
             /** @var  \Magento\Theme\Block\Html\Pager $pager */
             $pager = $this->getLayout()->createBlock(\Magento\Theme\Block\Html\Pager::class);
