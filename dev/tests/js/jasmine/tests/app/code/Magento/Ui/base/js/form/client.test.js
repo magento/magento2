@@ -19,10 +19,11 @@ define([
 
     describe('Magento_Ui/js/form/client', function () {
         var obj = new Constr({
-            provider: 'provName',
-            name: '',
-            index: ''
-        });
+                provider: 'provName',
+                name: '',
+                index: ''
+            }),
+            jQueryMethods = {};
 
         window.FORM_KEY = 'magentoFormKey';
 
@@ -33,6 +34,12 @@ define([
             },
             set: function () {
             }
+        });
+
+        afterEach(function () {
+            _.each(jQueryMethods, function (value, key) {
+                $.fn[key] = value;
+            });
         });
 
         describe('"save" method', function () {
@@ -115,6 +122,7 @@ define([
                 $.ajax = jasmine.createSpy().and.callFake(function (req) {
                     request = req.success;
                 });
+                jQueryMethods.notification = $.fn.notification;
                 $.fn.notification = jasmine.createSpy();
                 obj.urls.beforeSave = 'requestPath';
                 obj.save();
@@ -137,6 +145,8 @@ define([
                 $.ajax = jasmine.createSpy().and.callFake(function (req) {
                     request = req.complete;
                 });
+
+                jQueryMethods.trigger = $.fn.trigger;
                 $.fn.trigger = jasmine.createSpy();
                 obj.urls.beforeSave = 'requestPath';
                 obj.save();
