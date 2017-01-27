@@ -8,7 +8,6 @@ namespace Magento\Theme\Model\Theme;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
-use Magento\Framework\App\CacheInterface;
 use Magento\TestFramework\Helper\CacheCleaner;
 
 class ThemeProviderTest extends \PHPUnit_Framework_TestCase
@@ -16,24 +15,24 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ThemeProvider
      */
-    private $themeProvider;
+    private $themeProvider1;
+
+    /**
+     * @var ThemeProvider
+     */
+    private $themeProvider2;
 
     /**
      * @var ThemeCollection
      */
     private $themeCollection;
 
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->themeProvider = $objectManager->create(ThemeProvider::class);
+        $this->themeProvider1 = $objectManager->create(ThemeProvider::class);
+        $this->themeProvider2 = clone $this->themeProvider1;
         $this->themeCollection = $objectManager->create(ThemeCollection::class);
-        $this->cache = $objectManager->create(CacheInterface::class);
         CacheCleaner::clean();
     }
 
@@ -41,11 +40,9 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Theme $theme */
         foreach ($this->themeCollection as $theme) {
-            $theme = $this->themeProvider->getThemeById($theme->getId());
-            $this->assertNotEmpty($this->cache->load('theme-by-id-' . $theme->getId()));
             $this->assertEquals(
-                $theme,
-                $this->themeProvider->getThemeById($theme->getId())
+                $this->themeProvider1->getThemeById($theme->getId())->getData(),
+                $this->themeProvider2->getThemeById($theme->getId())->getData()
             );
         }
     }
@@ -54,12 +51,9 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Theme $theme */
         foreach ($this->themeCollection as $theme) {
-            $theme = $this->themeProvider->getThemeByFullPath($theme->getFullPath());
-            $this->assertNotEmpty($this->cache->load('theme-by-id-' . $theme->getId()));
-            $this->assertNotEmpty($this->cache->load('theme' . $theme->getFullPath()));
             $this->assertEquals(
-                $theme,
-                $this->themeProvider->getThemeById($theme->getFullPath())
+                $this->themeProvider1->getThemeByFullPath($theme->getFullPath())->getData(),
+                $this->themeProvider2->getThemeByFullPath($theme->getFullPath())->getData()
             );
         }
     }
