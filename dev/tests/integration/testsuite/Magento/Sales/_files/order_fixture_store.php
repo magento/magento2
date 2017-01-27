@@ -53,5 +53,5 @@ $order->setIncrementId('100000004')
     ->setShippingAddress($shippingAddress)
     ->setStoreId($objectManager->get(StoreManagerInterface::class)->getStore('fixturestore')->getId())
     ->addItem($orderItem)
-    ->setPayment($payment)
-    ->save();
+    ->setPayment($payment);
+$order->save();
