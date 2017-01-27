@@ -12,7 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\Config\ScopePathResolver;
+use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Config\Model\ResourceModel\ConfigFactory;
 use Magento\Config\Console\Command\ConfigSetCommand;
 
@@ -53,30 +53,30 @@ class DefaultProcessor implements ConfigSetProcessorInterface
     private $metadataProcessor;
 
     /**
-     * The scope path resolver.
+     * The config path resolver.
      *
-     * @var ScopePathResolver
+     * @var ConfigPathResolver
      */
-    private $scopePathResolver;
+    private $configPathResolver;
 
     /**
      * @param ConfigFactory $configFactory The configuration factory
      * @param DeploymentConfig $deploymentConfig The deployment config
      * @param ScopeResolverPool $scopeResolverPool The scope resolver pool
-     * @param ScopePathResolver $scopePathResolver The scope path resolver
+     * @param ConfigPathResolver $configPathResolver The config path resolver
      * @param MetadataProcessor $metadataProcessor The metadata processor
      */
     public function __construct(
         ConfigFactory $configFactory,
         DeploymentConfig $deploymentConfig,
         ScopeResolverPool $scopeResolverPool,
-        ScopePathResolver $scopePathResolver,
+        ConfigPathResolver $configPathResolver,
         MetadataProcessor $metadataProcessor
     ) {
         $this->configFactory = $configFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->scopeResolverPool = $scopeResolverPool;
-        $this->scopePathResolver = $scopePathResolver;
+        $this->configPathResolver = $configPathResolver;
         $this->metadataProcessor = $metadataProcessor;
     }
 
@@ -127,7 +127,7 @@ class DefaultProcessor implements ConfigSetProcessorInterface
      */
     private function isLocked($path, $scope, $scopeCode)
     {
-        $scopePath = $this->scopePathResolver->resolve($path, $scope, $scopeCode, 'system');
+        $scopePath = $this->configPathResolver->resolve($path, $scope, $scopeCode, 'system');
 
         return $this->deploymentConfig->get($scopePath) !== null;
     }

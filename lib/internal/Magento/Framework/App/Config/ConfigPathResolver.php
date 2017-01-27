@@ -8,9 +8,9 @@ namespace Magento\Framework\App\Config;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Resolves scope path by scope and scope code.
+ * Resolves config path by input parameters.
  */
-class ScopePathResolver
+class ConfigPathResolver
 {
     /**
      * The scope code resolver.
@@ -28,7 +28,7 @@ class ScopePathResolver
     }
 
     /**
-     * Creates full scope path for given params.
+     * Creates full config path for given params.
      * If $type variable was provided, it will be used as first part of path.
      *
      * @param string $path The path of configuration
@@ -41,6 +41,11 @@ class ScopePathResolver
     {
         $path = trim($path, '/');
         $scope = rtrim($scope, 's');
+
+        if (in_array($scope, [ScopeInterface::SCOPE_STORE, ScopeInterface::SCOPE_WEBSITE])) {
+            $scope .= 's';
+        }
+
         $scopePath = $type ? $type . '/' . $scope : $scope;
 
         if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
@@ -63,10 +68,6 @@ class ScopePathResolver
      */
     private function normalizeScopeCode($scope, $scopeCode)
     {
-        if (in_array($scope, [ScopeInterface::SCOPE_STORE, ScopeInterface::SCOPE_WEBSITE])) {
-            $scope .= 's';
-        }
-
         if (is_numeric($scopeCode) || $scopeCode === null) {
             $scopeCode = $this->scopeCodeResolver->resolve($scope, $scopeCode);
         } elseif ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {

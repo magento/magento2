@@ -9,7 +9,7 @@ use Magento\Config\Console\Command\ConfigSet\LockProcessor;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config\ScopePathResolver;
+use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
@@ -29,11 +29,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
      * @var LockProcessor
      */
     private $model;
-
-    /**
-     * @var DeploymentConfig|Mock
-     */
-    private $deploymentConfigMock;
 
     /**
      * @var DeploymentConfig\Writer|Mock
@@ -56,7 +51,7 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
     private $inputMock;
 
     /**
-     * @var ScopePathResolver|Mock
+     * @var ConfigPathResolver|Mock
      */
     private $scopePathResolverMock;
 
@@ -65,9 +60,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->deploymentConfigWriterMock = $this->getMockBuilder(DeploymentConfig\Writer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -79,12 +71,11 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
-        $this->scopePathResolverMock = $this->getMockBuilder(ScopePathResolver::class)
+        $this->scopePathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = new LockProcessor(
-            $this->deploymentConfigMock,
             $this->deploymentConfigWriterMock,
             $this->arrayManagerMock,
             $this->metadataProcessorMock,
@@ -107,13 +98,8 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getOption')
             ->willReturnMap([
                 [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT],
-                [ConfigSetCommand::OPTION_SCOPE_CODE, 'test_scope_code'],
-                [ConfigSetCommand::OPTION_FORCE, false]
+                [ConfigSetCommand::OPTION_SCOPE_CODE, 'test_scope_code']
             ]);
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('get')
-            ->with('system/default/test/test/test')
-            ->willReturn(null);
         $this->metadataProcessorMock->expects($this->once())
             ->method('prepareValue')
             ->with($value, $path)
@@ -159,39 +145,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Value is already locked.
-     */
-    public function testProcessToBeAlreadyLocked()
-    {
-        $path = 'test/test/test';
-        $value = 'value';
-
-        $this->inputMock->expects($this->any())
-            ->method('getArgument')
-            ->willReturnMap([
-                [ConfigSetCommand::ARG_PATH, $path],
-                [ConfigSetCommand::ARG_VALUE, $value],
-            ]);
-        $this->inputMock->expects($this->any())
-            ->method('getOption')
-            ->willReturnMap([
-                [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT],
-                [ConfigSetCommand::OPTION_SCOPE_CODE, 'test_scope_code'],
-                [ConfigSetCommand::OPTION_FORCE, false]
-            ]);
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('get')
-            ->with('system/default/test/test/test')
-            ->willReturn([]);
-        $this->scopePathResolverMock->expects($this->once())
-            ->method('resolve')
-            ->willReturn('system/default/test/test/test');
-
-        $this->model->process($this->inputMock);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Filesystem is not writable.
      */
     public function testProcessNotReadableFs()
@@ -210,12 +163,7 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap([
                 [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT],
                 [ConfigSetCommand::OPTION_SCOPE_CODE, 'test_scope_code'],
-                [ConfigSetCommand::OPTION_FORCE, false]
             ]);
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('get')
-            ->with('system/default/test/test/test')
-            ->willReturn(null);
         $this->metadataProcessorMock->expects($this->once())
             ->method('prepareValue')
             ->with($value, $path)

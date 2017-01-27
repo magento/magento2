@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Console\Command;
 
+use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
@@ -212,13 +213,11 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 
         /** @var ConfigSetCommand $command */
         $command = $this->objectManager->create(ConfigSetCommand::class);
+        /** @var ConfigPathResolver $resolver */
+        $resolver = $this->objectManager->get(ConfigPathResolver::class);
         $status = $command->run($this->inputMock, $this->outputMock);
         $config = $this->loadConfig();
-        $configPath = 'system/';
-        $configPath .= $scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-            ? ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-            : $scope . '/' . $scopeCode;
-        $configPath .= '/' . $path;
+        $configPath = $resolver->resolve($path, $scope, $scopeCode, 'system');
 
         $this->assertSame(Cli::RETURN_SUCCESS, $status);
         $this->assertSame($value, $this->arrayManager->get($configPath, $config));

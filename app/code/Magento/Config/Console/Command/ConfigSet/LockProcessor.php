@@ -13,7 +13,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\App\Config\MetadataProcessor;
-use Magento\Framework\App\Config\ScopePathResolver;
+use Magento\Framework\App\Config\ConfigPathResolver;
 
 /**
  * Processes file lock flow of config:set command.
@@ -45,28 +45,28 @@ class LockProcessor implements ConfigSetProcessorInterface
     private $metadataProcessor;
 
     /**
-     * The scope path resolver.
+     * The config path resolver.
      *
-     * @var ScopePathResolver
+     * @var ConfigPathResolver
      */
-    private $scopePathResolver;
+    private $configPathResolver;
 
     /**
      * @param Writer $writer The deployment config writer
      * @param ArrayManager $arrayManager An array manager
      * @param MetadataProcessor $metadataProcessor The metadata processor
-     * @param ScopePathResolver $scopePathResolver The scope path resolver
+     * @param ConfigPathResolver $configPathResolver The config path resolver
      */
     public function __construct(
         Writer $writer,
         ArrayManager $arrayManager,
         MetadataProcessor $metadataProcessor,
-        ScopePathResolver $scopePathResolver
+        ConfigPathResolver $configPathResolver
     ) {
         $this->deploymentConfigWriter = $writer;
         $this->arrayManager = $arrayManager;
         $this->metadataProcessor = $metadataProcessor;
-        $this->scopePathResolver = $scopePathResolver;
+        $this->configPathResolver = $configPathResolver;
     }
 
     /**
@@ -81,14 +81,14 @@ class LockProcessor implements ConfigSetProcessorInterface
         $value = $input->getArgument(ConfigSetCommand::ARG_VALUE);
         $scope = $input->getOption(ConfigSetCommand::OPTION_SCOPE);
         $scopeCode = $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE);
-        $scopePath = $this->scopePathResolver->resolve($path, $scope, $scopeCode, 'system');
+        $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode, 'system');
 
         $value = $this->metadataProcessor->prepareValue($value, $path);
 
         try {
             $this->deploymentConfigWriter->saveConfig(
                 [
-                    ConfigFilePool::APP_CONFIG => $this->arrayManager->set($scopePath, [], $value)
+                    ConfigFilePool::APP_CONFIG => $this->arrayManager->set($configPath, [], $value)
                 ],
                 true
             );
