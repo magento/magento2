@@ -57,7 +57,8 @@ class RowCustomizer implements RowCustomizerInterface
                 'configurable_variations' => implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $variations),
                 'configurable_variation_labels' => implode(
                     Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
-                    $variationsLabels)
+                    $variationsLabels
+                )
             ];
         }
     }
