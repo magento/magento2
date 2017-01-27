@@ -4,6 +4,14 @@
  */
 
 /*jscs:disable jsDoc*/
+require.config({
+    map: {
+        '*': {
+            'Magento_Checkout/js/model/resource-url-manager': 'Magento_Checkout/js/model/resource-url-manager'
+        }
+    }
+});
+
 define([
     'squire',
     'ko',
@@ -67,11 +75,11 @@ define([
         },
         defaultProcessor;
 
-    window.checkoutConfig = {
-        quoteData: {},
-        storeCode: 'US'
-    };
     beforeEach(function (done) {
+        window.checkoutConfig = {
+            quoteData: {},
+            storeCode: 'US'
+        };
         injector.mock(mocks);
         injector.require(['Magento_Checkout/js/model/cart/totals-processor/default'], function (Constr) {
             defaultProcessor = Constr;

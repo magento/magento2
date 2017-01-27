@@ -4,6 +4,14 @@
  */
 
 /*jscs:disable jsDoc*/
+require.config({
+    map: {
+        '*': {
+            'Magento_Checkout/js/model/shipping-service': 'Magento_Checkout/js/model/shipping-service'
+        }
+    }
+});
+
 define([
     'squire',
     'ko'
@@ -46,12 +54,11 @@ define([
             }
         };
 
-    window.checkoutConfig = {
-        quoteData: {},
-        storeCode: 'US'
-    };
-
     beforeEach(function (done) {
+        window.checkoutConfig = {
+            quoteData: {},
+            storeCode: 'US'
+        };
         injector.mock(mocks);
         injector.require(['Magento_Checkout/js/model/cart/estimate-service'], function () {
             done();
