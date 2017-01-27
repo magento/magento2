@@ -201,8 +201,8 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     public function testGuestReturnFromPaypal()
     {
         $quote = $this->_getFixtureQuote();
-        $paypalConfigMock = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
-        $apiTypeFactory = $this->getMock('Magento\Paypal\Model\Api\Type\Factory', [], [], '', false);
+        $paypalConfigMock = $this->getMock(\Magento\Paypal\Model\Config::class, [], [], '', false);
+        $apiTypeFactory = $this->getMock(\Magento\Paypal\Model\Api\Type\Factory::class, [], [], '', false);
         $paypalInfo = $this->getMock('Magento\Paypal\Model\Info', [], [], '', false);
         $checkoutModel = $this->_objectManager->create(
             'Magento\Paypal\Model\Express\Checkout',
