@@ -5,6 +5,8 @@
  */
 namespace Magento\Config\Console\Command;
 
+use Magento\Config\Console\Command\ConfigShow\ConfigSourceAggregated;
+use Magento\Framework\App\Config\ScopePathResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -20,19 +22,25 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var ScopeConfigInterface
+     * @var ConfigSourceAggregated
      */
-    private $appConfig;
+    private $config;
 
     /**
      * @var CommandTester
      */
     private $commandTester;
 
+    /**
+     * @var ScopePathResolver
+     */
+    private $pathResolver;
+
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->appConfig = $this->objectManager->get(ScopeConfigInterface::class);
+        $this->config = $this->objectManager->get(ConfigSourceAggregated::class);
+        $this->pathResolver = $this->objectManager->get(ScopePathResolver::class);
 
         $command = $this->objectManager->create(ConfigShowCommand::class);
         $this->commandTester = new CommandTester($command);
@@ -48,9 +56,9 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($scope, $scopeCode, array $configs)
     {
-        foreach ($configs as $configPath => $configValue) {
+        foreach ($configs as $inputPath => $configValue) {
             $arguments = [
-                ConfigShowCommand::INPUT_ARGUMENT_PATH => $configPath
+                ConfigShowCommand::INPUT_ARGUMENT_PATH => $inputPath
             ];
 
             if ($scope !== null) {
@@ -62,7 +70,8 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 
             $this->commandTester->execute($arguments);
 
-            $appConfigValue = $this->appConfig->getValue($configPath, $scope, $scopeCode);
+            $configPath = $this->pathResolver->resolve($inputPath, $scope, $scopeCode);
+            $appConfigValue = $this->config->get($configPath);
             $this->assertEquals(
                 Cli::RETURN_SUCCESS,
                 $this->commandTester->getStatusCode()
