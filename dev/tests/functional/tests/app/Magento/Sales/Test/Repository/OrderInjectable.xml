@@ -281,7 +281,7 @@
 
         <dataset name="twenty_products">
             <field name="entity_id" xsi:type="array">
-                <item name="products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,configurableProduct::with_one_option,configurableProduct::with_one_option</item>
+                <item name="products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default</item>
             </field>
             <field name="customer_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
@@ -305,7 +305,7 @@
 
         <dataset name="twenty_one_products">
             <field name="entity_id" xsi:type="array">
-                <item name="products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,configurableProduct::with_one_option,configurableProduct::with_one_option</item>
+                <item name="products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default, catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default,catalogProductSimple::default</item>
             </field>
             <field name="customer_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>

@@ -19,7 +19,7 @@ use Magento\Mtf\ObjectManager;
 class AssertOrderItemsPagerHiddenOnFrontend extends AbstractConstraint
 {
     /* tags */
-    const SEVERITY = 'low';
+    const SEVERITY = 'S2';
     /* end tags */
 
     /**

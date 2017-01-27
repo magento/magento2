@@ -136,14 +136,14 @@ class View extends Block
      *
      * @var string
      */
-    protected $itemTopPagerSelector = '[data-block=order-items-pager-top]';
+    private $itemTopPagerSelector = '[data-block=order-items-pager-top]';
 
     /**
      * Order items bottom pager selector
      *
      * @var string
      */
-    protected $itemBottomPagerSelector = '[data-block=order-items-pager-bottom]';
+    private $itemBottomPagerSelector = '[data-block=order-items-pager-bottom]';
 
     /**
      * Get item block
