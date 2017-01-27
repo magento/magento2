@@ -9,21 +9,12 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Framework\DB\Select;
-use Magento\Framework\App\ScopeInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
 use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
 use Magento\Catalog\Model\Product as ProductModel;
+use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -34,44 +25,24 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $catalogProductRelation;
 
     /**
-     * Product metadata pool
-     *
-     * @var MetadataPool
+     * @var AttributeOptionProvider
      */
-    private $metadataPool;
-
-    /**
-     * Product entity link field
-     *
-     * @var string
-     */
-    private $productEntityLinkField;
-
-    /** @var ScopeResolverInterface  */
-    private $scopeResolver;
-
-    /**
-     * @var StockRegistryInterface
-     */
-    private $stockRegistry;
+    private $attributeOptionProvider;
 
     /**
      * @param DbContext $context
      * @param ProductRelation $catalogProductRelation
+     * @param AttributeOptionProvider $attributeOptionProvider
      * @param string $connectionName
-     * @param ScopeResolverInterface $scopeResolver
-     * @param StockRegistryInterface $stockRegistry
      */
     public function __construct(
         DbContext $context,
         ProductRelation $catalogProductRelation,
-        $connectionName = null,
-        ScopeResolverInterface $scopeResolver = null,
-        StockRegistryInterface $stockRegistry = null
+        AttributeOptionProvider $attributeOptionProvider,
+        $connectionName = null
     ) {
         $this->catalogProductRelation = $catalogProductRelation;
-        $this->scopeResolver = $scopeResolver;
-        $this->stockRegistry = $stockRegistry ?: ObjectManager::getInstance()->get(StockRegistryInterface::class);
+        $this->attributeOptionProvider = $attributeOptionProvider;
         parent::__construct($context, $connectionName);
     }
 
@@ -97,7 +68,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['e' => $this->getTable('catalog_product_entity')],
             ['e.entity_id']
         )->where(
-            'e.' . $this->getProductEntityLinkField() . '=?',
+            'e.' . $this->attributeOptionProvider->getProductEntityLinkField() . '=?',
             $option->getProductId()
         )->limit(1);
 
@@ -117,7 +88,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             return $this;
         }
 
-        $productId = $mainProduct->getData($this->getProductEntityLinkField());
+        $productId = $mainProduct->getData($this->attributeOptionProvider->getProductEntityLinkField());
 
         $data = [];
         foreach ($productIds as $id) {
@@ -163,7 +134,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['product_id', 'parent_id']
         )->join(
             ['p' => $this->getTable('catalog_product_entity')],
-            'p.' . $this->getProductEntityLinkField() . ' = l.parent_id',
+            'p.' . $this->attributeOptionProvider->getProductEntityLinkField() . ' = l.parent_id',
             []
         )->join(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -196,7 +167,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->from(['l' => $this->getMainTable()], [])
             ->join(
                 ['e' => $this->getTable('catalog_product_entity')],
-                'e.' . $this->getProductEntityLinkField() . ' = l.parent_id',
+                'e.' . $this->attributeOptionProvider->getProductEntityLinkField() . ' = l.parent_id',
                 ['e.entity_id']
             )->where('l.product_id IN(?)', $childId);
 
@@ -217,7 +188,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getConfigurableOptions($product, $attributes)
     {
         $attributesOptionsData = [];
-        $productId = $product->getData($this->getProductEntityLinkField());
+        $productId = $product->getData($this->attributeOptionProvider->getProductEntityLinkField());
         foreach ($attributes as $superAttribute) {
             $attributeId = $superAttribute->getAttributeId();
             $attributesOptionsData[$attributeId] = $this->getAttributeOptions($superAttribute, $productId);
@@ -234,10 +205,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {
-        $scope  = $this->getScopeResolver()->getScope();
-        $select = $this->getAttributeOptionsSelect($superAttribute, $productId, $scope);
-
-        return $this->getConnection()->fetchAll($select);
+        return $this->attributeOptionProvider->getAttributeOptions($superAttribute, $productId);
     }
 
     /**
@@ -249,143 +217,6 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getInStockAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {
-        $scope  = $this->getScopeResolver()->getScope();
-        $select = $this->getAttributeOptionsSelect($superAttribute, $productId, $scope);
-        $options = $this->getConnection()->fetchAll($select);
-        // workaround as we do not have bulk method to get all statuses by id
-        foreach ($options as $key => $option) {
-            $status = $this->stockRegistry->getProductStockStatusBySku($option['sku']);
-            if ($status !== null && $status == StockStatus::STATUS_OUT_OF_STOCK) {
-                unset($options[$key]);
-            }
-        }
-        $options = array_values($options);
-
-        return $options;
-    }
-
-    /**
-     * Get load options for attribute select
-     *
-     * @param AbstractAttribute $superAttribute
-     * @param int $productId
-     * @param ScopeInterface $scope
-     * @return Select
-     */
-    private function getAttributeOptionsSelect(AbstractAttribute $superAttribute, $productId, ScopeInterface $scope)
-    {
-        $select = $this->getConnection()->select()->from(
-            ['super_attribute' => $this->getTable('catalog_product_super_attribute')],
-            [
-                'sku' => 'entity.sku',
-                'product_id' => 'product_entity.entity_id',
-                'attribute_code' => 'attribute.attribute_code',
-                'value_index' => 'entity_value.value',
-                'option_title' => $this->getConnection()->getIfNullSql(
-                    'option_value.value',
-                    'default_option_value.value'
-                ),
-                'default_title' => 'default_option_value.value',
-            ]
-        )->joinInner(
-            ['product_entity' => $this->getTable('catalog_product_entity')],
-            "product_entity.{$this->getProductEntityLinkField()} = super_attribute.product_id",
-            []
-        )->joinInner(
-            ['product_link' => $this->getTable('catalog_product_super_link')],
-            'product_link.parent_id = super_attribute.product_id',
-            []
-        )->joinInner(
-            ['attribute' => $this->getTable('eav_attribute')],
-            'attribute.attribute_id = super_attribute.attribute_id',
-            []
-        )->joinInner(
-            ['entity' => $this->getTable('catalog_product_entity')],
-            'entity.entity_id = product_link.product_id',
-            []
-        )->joinInner(
-            ['entity_value' => $superAttribute->getBackendTable()],
-            implode(
-                ' AND ',
-                [
-                    'entity_value.attribute_id = super_attribute.attribute_id',
-                    'entity_value.store_id = 0',
-                    "entity_value.{$this->getProductEntityLinkField()} = "
-                    . "entity.{$this->getProductEntityLinkField()}"
-                ]
-            ),
-            []
-        )->joinLeft(
-            ['option_value' => $this->getTable('eav_attribute_option_value')],
-            implode(
-                ' AND ',
-                [
-                    'option_value.option_id = entity_value.value',
-                    'option_value.store_id = ' . $scope->getId()
-                ]
-            ),
-            []
-        )->joinLeft(
-            ['default_option_value' => $this->getTable('eav_attribute_option_value')],
-            implode(
-                ' AND ',
-                [
-                    'default_option_value.option_id = entity_value.value',
-                    'default_option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
-                ]
-            ),
-            []
-        )->where(
-            'super_attribute.product_id = ?',
-            $productId
-        )->where(
-            'attribute.attribute_id = ?',
-            $superAttribute->getAttributeId()
-        );
-
-        return $select;
-    }
-
-    /**
-     * @deprecated
-     * @return ScopeResolverInterface
-     */
-    private function getScopeResolver()
-    {
-        if (!($this->scopeResolver instanceof ScopeResolverInterface)) {
-            $this->scopeResolver = ObjectManager::getInstance()->get(ScopeResolverInterface::class);
-        }
-        return $this->scopeResolver;
-    }
-
-    /**
-     * Get product metadata pool
-     *
-     * @deprecated
-     * @return MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (!$this->metadataPool) {
-            $this->metadataPool = ObjectManager::getInstance()
-                ->get(MetadataPool::class);
-        }
-        return $this->metadataPool;
-    }
-
-    /**
-     * Get product entity link field
-     *
-     * @deprecated
-     * @return string
-     */
-    private function getProductEntityLinkField()
-    {
-        if (!$this->productEntityLinkField) {
-            $this->productEntityLinkField = $this->getMetadataPool()
-                ->getMetadata(ProductInterface::class)
-                ->getLinkField();
-        }
-        return $this->productEntityLinkField;
+        return $this->attributeOptionProvider->getInStockAttributeOptions($superAttribute, $productId);
     }
 }
