@@ -44,14 +44,13 @@ class BatchIteratorFactory
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param $uniqueIteratorInstanceName
-     * @param $nonUniqueIteratorInstanceName
+     * @param \Magento\Framework\DB\Query\BatchIterator $uniqueIteratorInstanceName
+     * @param \Magento\Framework\DB\Query\BatchRangeIterator $nonUniqueIteratorInstanceName
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         $nonUniqueIteratorInstanceName = \Magento\Framework\DB\Query\BatchRangeIterator::class,
         $uniqueIteratorInstanceName = \Magento\Framework\DB\Query\BatchIterator::class
-
     ) {
         $this->objectManager = $objectManager;
         $this->uniqueIteratorInstanceName = $uniqueIteratorInstanceName;
