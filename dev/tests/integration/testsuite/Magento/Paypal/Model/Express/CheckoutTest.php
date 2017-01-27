@@ -203,9 +203,9 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $quote = $this->_getFixtureQuote();
         $paypalConfigMock = $this->getMock(\Magento\Paypal\Model\Config::class, [], [], '', false);
         $apiTypeFactory = $this->getMock(\Magento\Paypal\Model\Api\Type\Factory::class, [], [], '', false);
-        $paypalInfo = $this->getMock('Magento\Paypal\Model\Info', [], [], '', false);
+        $paypalInfo = $this->getMock(\Magento\Paypal\Model\Info::class, [], [], '', false);
         $checkoutModel = $this->_objectManager->create(
-            'Magento\Paypal\Model\Express\Checkout',
+            \Magento\Paypal\Model\Express\Checkout::class,
             [
                 'params' => ['quote' => $quote, 'config' => $paypalConfigMock],
                 'apiTypeFactory' => $apiTypeFactory,
@@ -214,7 +214,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         );
 
         $api = $this->getMock(
-            'Magento\Paypal\Model\Api\Nvp',
+            \Magento\Paypal\Model\Api\Nvp::class,
             ['call', 'getExportedShippingAddress', 'getExportedBillingAddress'],
             [],
             '',
