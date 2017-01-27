@@ -18,6 +18,8 @@
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Field"/>
     <preference for="Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface" type="Magento\Framework\Search\Adapter\Aggregation\AggregationResolver"/>
     <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http" />
+    <preference for="Magento\Framework\App\PlainTextRequestInterface" type="Magento\Framework\App\Request\Http" />
+    <preference for="Magento\Framework\App\RequestContentInterface" type="Magento\Framework\App\Request\Http" />
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Framework\App\ResponseInterface" type="Magento\Framework\App\Response\Http" />
     <preference for="Magento\Framework\App\RouterListInterface" type="Magento\Framework\App\RouterList" />
