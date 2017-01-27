@@ -6,12 +6,14 @@
 namespace Magento\Config\Test\Unit\Console\Command;
 
 use Magento\Config\Console\Command\ConfigShowCommand;
+use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Symfony\Component\Console\Tester\CommandTester;
+use Magento\Framework\App\Config\MetadataProcessor;
+use Magento\Framework\App\Config\ScopePathResolver;
 
 class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,9 +23,19 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
     private $scopeValidatorMock;
 
     /**
-     * @var ScopeConfigInterface|MockObject
+     * @var ConfigSourceInterface|MockObject
      */
-    private $appConfigMock;
+    private $configSourceMock;
+
+    /**
+     * @var MetadataProcessor|MockObject
+     */
+    private $metadataProcessorMock;
+
+    /**
+     * @var ScopePathResolver|MockObject
+     */
+    private $pathResolverMock;
 
     /**
      * @var ConfigShowCommand
@@ -32,27 +44,48 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->appConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->metadataProcessorMock = $this->getMockBuilder(MetadataProcessor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->pathResolverMock = $this->getMockBuilder(ScopePathResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->scopeValidatorMock = $this->getMockBuilder(ValidatorInterface::class)
+            ->getMockForAbstractClass();
+        $this->configSourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
             ->getMockForAbstractClass();
 
         $this->command = new ConfigShowCommand(
-            $this->appConfigMock,
-            $this->scopeValidatorMock
+            $this->scopeValidatorMock,
+            $this->configSourceMock,
+            $this->pathResolverMock,
+            $this->metadataProcessorMock
         );
     }
 
     public function testExecute()
     {
         $configPath = 'some/config/path';
+        $resolvedConfigPath = 'someScope/someScopeCode/some/config/path';
         $scope = 'someScope';
         $scopeCode = 'someScopeCode';
 
-        $this->appConfigMock->expects($this->once())
-            ->method('getValue')
+        $this->scopeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with($scope, $scopeCode)
+            ->willReturn(true);
+        $this->pathResolverMock->expects($this->once())
+            ->method('resolve')
             ->with($configPath, $scope, $scopeCode)
+            ->willReturn($resolvedConfigPath);
+        $this->configSourceMock->expects($this->once())
+            ->method('get')
+            ->with($resolvedConfigPath)
             ->willReturn('someValue');
+        $this->metadataProcessorMock->expects($this->once())
+            ->method('processValue')
+            ->with('someValue')
+            ->willReturn('someProcessedValue');
 
         $tester = $this->getConfigShowCommandTester($configPath, $scope, $scopeCode);
 
@@ -61,7 +94,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
             $tester->getStatusCode()
         );
         $this->assertContains(
-            'someValue',
+            'someProcessedValue',
             $tester->getDisplay()
         );
     }

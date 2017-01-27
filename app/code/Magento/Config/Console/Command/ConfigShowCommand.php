@@ -5,7 +5,10 @@
  */
 namespace Magento\Config\Console\Command;
 
+use Magento\Framework\App\Config\ConfigSourceInterface;
+use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\ScopePathResolver;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Magento\Framework\App\Scope\ValidatorInterface;
@@ -34,21 +37,38 @@ class ConfigShowCommand extends Command
     private $scopeValidator;
 
     /**
-     * @var ScopeConfigInterface
+     * @var ConfigSourceInterface
      */
-    private $appConfig;
+    private $configSource;
 
     /**
-     * @param ScopeConfigInterface $appConfig
+     * @var ScopePathResolver
+     */
+    private $pathResolver;
+
+    /**
+     * @var MetadataProcessor
+     */
+    private $metadataProcessor;
+
+    /**
      * @param ValidatorInterface $scopeValidator
+     * @param ConfigSourceInterface $configSource
+     * @param ScopePathResolver $pathResolver
+     * @param MetadataProcessor $metadataProcessor
+     * @internal param ScopeConfigInterface $appConfig
      */
     public function __construct(
-        ScopeConfigInterface $appConfig,
-        ValidatorInterface $scopeValidator
+        ValidatorInterface $scopeValidator,
+        ConfigSourceInterface $configSource,
+        ScopePathResolver $pathResolver,
+        MetadataProcessor $metadataProcessor
     ) {
         parent::__construct();
         $this->scopeValidator = $scopeValidator;
-        $this->appConfig = $appConfig;
+        $this->configSource = $configSource;
+        $this->pathResolver = $pathResolver;
+        $this->metadataProcessor = $metadataProcessor;
     }
 
     /**
@@ -92,11 +112,12 @@ class ConfigShowCommand extends Command
     {
         $scope = $input->getOption(self::INPUT_OPTION_SCOPE);
         $scopeCode = $input->getOption(self::INPUT_OPTION_SCOPE_CODE);
-        $configPath = $input->getArgument(self::INPUT_ARGUMENT_PATH);
+        $inputPath = $input->getArgument(self::INPUT_ARGUMENT_PATH);
 
         try {
             $this->scopeValidator->isValid($scope, $scopeCode);
-            $configValue = $this->appConfig->getValue($configPath, $scope, $scopeCode);
+            $configPath = $this->pathResolver->resolve($inputPath, $scope, $scopeCode);
+            $configValue = $this->configSource->get($configPath);
         } catch (LocalizedException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return Cli::RETURN_FAILURE;
@@ -105,12 +126,12 @@ class ConfigShowCommand extends Command
         if ($configValue === null) {
             $output->writeln(sprintf(
                 '<error>%s</error>',
-                __('Configuration for path: "%1" doesn\'t exist', $configPath)->render()
+                __('Configuration for path: "%1" doesn\'t exist', $inputPath)->render()
             ));
             return Cli::RETURN_FAILURE;
         }
 
-        $this->outputResult($output, $configValue, $configPath);
+        $this->outputResult($output, $configValue, $inputPath);
         return Cli::RETURN_SUCCESS;
     }
 
@@ -127,7 +148,8 @@ class ConfigShowCommand extends Command
     {
         $margin = str_repeat(" ", max($level - 1, 0) * 2);
         if (is_string($configValue)) {
-            $output->writeln(sprintf("%s%s - %s", $margin, $configPath, $configValue));
+            $value = $this->metadataProcessor->processValue($configValue, $configPath);
+            $output->writeln(sprintf("%s%s - %s", $margin, $configPath, $value));
         } else if (is_array($configValue)) {
             if ($level > 0) {
                 $output->writeln(sprintf("%s%s:", $margin, $configPath ?: 'config'));
