@@ -15,12 +15,12 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ThemeProvider
      */
-    private $themeProvider1;
+    private $themeProviderOne;
 
     /**
      * @var ThemeProvider
      */
-    private $themeProvider2;
+    private $themeProviderTwo;
 
     /**
      * @var ThemeCollection
@@ -30,8 +30,8 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->themeProvider1 = $objectManager->create(ThemeProvider::class);
-        $this->themeProvider2 = clone $this->themeProvider1;
+        $this->themeProviderOne = $objectManager->create(ThemeProvider::class);
+        $this->themeProviderTwo = clone $this->themeProviderOne;
         $this->themeCollection = $objectManager->create(ThemeCollection::class);
         CacheCleaner::clean();
     }
@@ -40,9 +40,14 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Theme $theme */
         foreach ($this->themeCollection as $theme) {
+            $theme = $this->themeProviderOne->getThemeById($theme->getId());
             $this->assertSame(
-                $this->themeProvider1->getThemeById($theme->getId())->getData(),
-                $this->themeProvider2->getThemeById($theme->getId())->getData()
+                $theme,
+                $this->themeProviderOne->getThemeById($theme->getId())
+            );
+            $this->assertSame(
+                $theme->getData(),
+                $this->themeProviderTwo->getThemeById($theme->getId())->getData()
             );
         }
     }
@@ -51,9 +56,14 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Theme $theme */
         foreach ($this->themeCollection as $theme) {
+            $theme = $this->themeProviderOne->getThemeByFullPath($theme->getFullPath());
             $this->assertSame(
-                $this->themeProvider1->getThemeByFullPath($theme->getFullPath())->getData(),
-                $this->themeProvider2->getThemeByFullPath($theme->getFullPath())->getData()
+                $theme,
+                $this->themeProviderOne->getThemeByFullPath($theme->getFullPath())
+            );
+            $this->assertSame(
+                $theme->getData(),
+                $this->themeProviderTwo->getThemeByFullPath($theme->getFullPath())->getData()
             );
         }
     }
