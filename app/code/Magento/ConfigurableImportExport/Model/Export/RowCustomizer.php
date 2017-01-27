@@ -41,7 +41,7 @@ class RowCustomizer implements RowCustomizerInterface
                 foreach ($productAttributeOption as $optValues) {
                     $variations[$optValues['sku']][] = $optValues['attribute_code'] . '=' . $optValues['option_title'];
 
-                    if (isset($optValues['super_attribute_label'])) {
+                    if (!empty($optValues['super_attribute_label'])) {
                         $variationsLabels[$optValues['attribute_code']] = $optValues['attribute_code'] . '='
                             . $optValues['super_attribute_label'];
                     }
