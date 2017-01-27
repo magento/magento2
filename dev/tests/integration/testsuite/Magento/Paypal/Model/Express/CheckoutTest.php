@@ -192,6 +192,56 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Verify that guest customer quota has set type of checkout.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/quote_payment_express.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testGuestReturnFromPaypal()
+    {
+        $quote = $this->_getFixtureQuote();
+        $paypalConfigMock = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
+        $apiTypeFactory = $this->getMock('Magento\Paypal\Model\Api\Type\Factory', [], [], '', false);
+        $paypalInfo = $this->getMock('Magento\Paypal\Model\Info', [], [], '', false);
+        $checkoutModel = $this->_objectManager->create(
+            'Magento\Paypal\Model\Express\Checkout',
+            [
+                'params' => ['quote' => $quote, 'config' => $paypalConfigMock],
+                'apiTypeFactory' => $apiTypeFactory,
+                'paypalInfo' => $paypalInfo
+            ]
+        );
+
+        $api = $this->getMock(
+            'Magento\Paypal\Model\Api\Nvp',
+            ['call', 'getExportedShippingAddress', 'getExportedBillingAddress'],
+            [],
+            '',
+            false
+        );
+        $api->expects($this->any())->method('call')->will($this->returnValue([]));
+        $apiTypeFactory->expects($this->any())->method('create')->will($this->returnValue($api));
+
+        $exportedBillingAddress = $this->_getExportedAddressFixture($quote->getBillingAddress()->getData());
+        $api->expects($this->any())
+            ->method('getExportedBillingAddress')
+            ->will($this->returnValue($exportedBillingAddress));
+
+        $exportedShippingAddress = $this->_getExportedAddressFixture($quote->getShippingAddress()->getData());
+        $api->expects($this->any())
+            ->method('getExportedShippingAddress')
+            ->will($this->returnValue($exportedShippingAddress));
+
+        $paypalInfo->expects($this->once())->method('importToPayment')->with($api, $quote->getPayment());
+
+        $quote->getPayment()->setAdditionalInformation(Checkout::PAYMENT_INFO_BUTTON, 1);
+
+        $checkoutModel->returnFromPaypal('token');
+        $this->assertEquals(Onepage::METHOD_GUEST, $quote->getCheckoutMethod());
+    }
+
+    /**
      * Prepare fixture for exported address
      *
      * @param array $addressData

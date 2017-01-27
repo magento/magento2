@@ -545,6 +545,12 @@ class Checkout
             }
             $this->_api->setSuppressShipping(true);
         } else {
+
+            $billingAddress = $this->_quote->getBillingAddress();
+            if ($billingAddress) {
+                $this->_api->setBillingAddress($billingAddress);
+            }
+
             $address = $this->_quote->getShippingAddress();
             $isOverridden = 0;
             if (true === $address->validate()) {
@@ -675,6 +681,7 @@ class Checkout
         $this->_setExportedAddressData($billingAddress, $exportedBillingAddress);
         $billingAddress->setCustomerNote($exportedBillingAddress->getData('note'));
         $quote->setBillingAddress($billingAddress);
+        $quote->setCheckoutMethod($this->getCheckoutMethod());
 
         // import payment info
         $payment = $quote->getPayment();
