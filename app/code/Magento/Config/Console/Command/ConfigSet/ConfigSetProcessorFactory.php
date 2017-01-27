@@ -9,7 +9,10 @@ use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Creates different implementations of config:set processors.
+ * Creates different implementations of config:set processors of type ConfigSetProcessorInterface.
+ *
+ * @see \Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorInterface
+ * @see \Magento\Config\Console\Command\ConfigSetCommand
  */
 class ConfigSetProcessorFactory
 {

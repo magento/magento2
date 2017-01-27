@@ -5,8 +5,8 @@
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
-use Magento\Framework\Exception\CouldNotSaveException;
 use Symfony\Component\Console\Input\InputInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverPool;
@@ -14,11 +14,11 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config\ScopePathResolver;
 use Magento\Config\Model\ResourceModel\ConfigFactory;
-use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
 use Magento\Config\Console\Command\ConfigSetCommand;
 
 /**
  * Processes default flow of config:set command.
+ * This processor saves the value of configuration.
  *
  * {@inheritdoc}
  */
@@ -30,13 +30,6 @@ class DefaultProcessor implements ConfigSetProcessorInterface
      * @var ConfigFactory
      */
     private $configFactory;
-
-    /**
-     * The collection factory.
-     *
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
 
     /**
      * The deployment config.
@@ -68,7 +61,6 @@ class DefaultProcessor implements ConfigSetProcessorInterface
 
     /**
      * @param ConfigFactory $configFactory The configuration factory
-     * @param CollectionFactory $collectionFactory The collection factory
      * @param DeploymentConfig $deploymentConfig The deployment config
      * @param ScopeResolverPool $scopeResolverPool The scope resolver pool
      * @param ScopePathResolver $scopePathResolver The scope path resolver
@@ -76,14 +68,12 @@ class DefaultProcessor implements ConfigSetProcessorInterface
      */
     public function __construct(
         ConfigFactory $configFactory,
-        CollectionFactory $collectionFactory,
         DeploymentConfig $deploymentConfig,
         ScopeResolverPool $scopeResolverPool,
         ScopePathResolver $scopePathResolver,
         MetadataProcessor $metadataProcessor
     ) {
         $this->configFactory = $configFactory;
-        $this->collectionFactory = $collectionFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->scopeResolverPool = $scopeResolverPool;
         $this->scopePathResolver = $scopePathResolver;
@@ -95,6 +85,7 @@ class DefaultProcessor implements ConfigSetProcessorInterface
      * Requires installed application.
      *
      * {@inheritdoc}
+     * @throws StateException
      */
     public function process(InputInterface $input)
     {
@@ -102,19 +93,19 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         $value = $input->getArgument(ConfigSetCommand::ARG_VALUE);
         $scope = $input->getOption(ConfigSetCommand::OPTION_SCOPE);
         $scopeCode = $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE);
-        $force = $input->getOption(ConfigSetCommand::OPTION_FORCE);
         $scopeId = $this->getScopeId($scope, $scopeCode);
 
         if (!$this->deploymentConfig->isAvailable()) {
-            throw new StateException(__('Magento is not installed yet.'));
+            throw new StateException(
+                __(
+                    'Magento is not installed yet and this value can be only saved with --%1 option.',
+                    ConfigSetCommand::OPTION_LOCK
+                )
+            );
         }
 
         if ($this->isLocked($path, $scope, $scopeCode)) {
             throw new CouldNotSaveException(__('Effective value already locked.'));
-        }
-
-        if ($this->getConfigItems($path, $scope, $scopeId) && !$force) {
-            throw new CouldNotSaveException(__('Config value is already exists.'));
         }
 
         if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
@@ -124,25 +115,6 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         $value = $this->metadataProcessor->prepareValue($value, $path);
 
         $this->configFactory->create()->saveConfig($path, $value, $scope, $scopeId);
-    }
-
-    /**
-     * Retrieves configurations by search criteria.
-     *
-     * @param string $path The path to configuration
-     * @param string $scope The scope of configuration
-     * @param int $scopeId The scope identifier of configuration
-     * @return array
-     */
-    private function getConfigItems($path, $scope, $scopeId)
-    {
-        $collection = $this->collectionFactory->create();
-        $collection->addFieldToFilter('path', ['like' => $path])
-            ->addFieldToFilter('scope', ['like' => $scope . '%'])
-            ->addFieldToFilter('scope_id', $scopeId)
-            ->load();
-
-        return $collection->getItems();
     }
 
     /**

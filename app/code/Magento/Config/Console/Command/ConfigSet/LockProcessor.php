@@ -5,31 +5,24 @@
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
+use Symfony\Component\Console\Input\InputInterface;
 use Magento\Config\Console\Command\ConfigSetCommand;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\FileSystemException;
-use Symfony\Component\Console\Input\InputInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\ScopePathResolver;
 
 /**
  * Processes file lock flow of config:set command.
+ * This processor saves the value of configuration and lock it for editing in Admin interface.
  *
  * {@inheritdoc}
  */
 class LockProcessor implements ConfigSetProcessorInterface
 {
-    /**
-     * The deployment config.
-     *
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
     /**
      * The deployment config writer.
      *
@@ -59,20 +52,17 @@ class LockProcessor implements ConfigSetProcessorInterface
     private $scopePathResolver;
 
     /**
-     * @param DeploymentConfig $deploymentConfig The deployment config
      * @param Writer $writer The deployment config writer
      * @param ArrayManager $arrayManager An array manager
      * @param MetadataProcessor $metadataProcessor The metadata processor
-     * @param ScopePathResolver $scopePathResolver
+     * @param ScopePathResolver $scopePathResolver The scope path resolver
      */
     public function __construct(
-        DeploymentConfig $deploymentConfig,
         Writer $writer,
         ArrayManager $arrayManager,
         MetadataProcessor $metadataProcessor,
         ScopePathResolver $scopePathResolver
     ) {
-        $this->deploymentConfig = $deploymentConfig;
         $this->deploymentConfigWriter = $writer;
         $this->arrayManager = $arrayManager;
         $this->metadataProcessor = $metadataProcessor;
@@ -91,12 +81,7 @@ class LockProcessor implements ConfigSetProcessorInterface
         $value = $input->getArgument(ConfigSetCommand::ARG_VALUE);
         $scope = $input->getOption(ConfigSetCommand::OPTION_SCOPE);
         $scopeCode = $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE);
-        $force = $input->getOption(ConfigSetCommand::OPTION_FORCE);
         $scopePath = $this->scopePathResolver->resolve($path, $scope, $scopeCode, 'system');
-
-        if ($this->deploymentConfig->get($scopePath) !== null && !$force) {
-            throw new CouldNotSaveException(__('Value is already locked.'));
-        }
 
         $value = $this->metadataProcessor->prepareValue($value, $path);
 

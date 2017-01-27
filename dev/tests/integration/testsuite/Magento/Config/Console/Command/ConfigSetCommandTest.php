@@ -147,11 +147,10 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
                 [ConfigSetCommand::OPTION_SCOPE, $scope],
                 [ConfigSetCommand::OPTION_SCOPE_CODE, $scopeCode],
             ]);
-        $this->outputMock->expects($this->exactly(2))
+        $this->outputMock->expects($this->once())
             ->method('writeln')
             ->withConsecutive(
-                ['<info>Value was saved.</info>'],
-                ['<error>Config value is already exists.</error>']
+                ['<info>Value was saved.</info>']
             );
 
         /** @var ConfigSetCommand $command */
@@ -159,14 +158,6 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $status = $command->run($this->inputMock, $this->outputMock);
 
         $this->assertSame(Cli::RETURN_SUCCESS, $status);
-        $this->assertSame(
-            $value,
-            $this->scopeConfig->getValue($path, $scope, $scopeCode)
-        );
-
-        $status = $command->run($this->inputMock, $this->outputMock);
-
-        $this->assertSame(Cli::RETURN_FAILURE, $status);
         $this->assertSame(
             $value,
             $this->scopeConfig->getValue($path, $scope, $scopeCode)
@@ -216,7 +207,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             ->method('writeln')
             ->withConsecutive(
                 ['<info>Value was locked.</info>'],
-                ['<error>Value is already locked.</error>']
+                ['<info>Value was locked.</info>']
             );
 
         /** @var ConfigSetCommand $command */
@@ -234,7 +225,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 
         $status = $command->run($this->inputMock, $this->outputMock);
 
-        $this->assertSame(Cli::RETURN_FAILURE, $status);
+        $this->assertSame(Cli::RETURN_SUCCESS, $status);
     }
 
     /**
@@ -249,21 +240,6 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the extended flow.
-     *
-     * 1. Saves the value
-     * 2. Expects the success code and message
-     * 3. Saves duplicated value
-     * 4. Expects the error code and message
-     * 5. Try again with --force option
-     * 6. Expects the success code and message
-     * 7. Locks value in file
-     * 8. Expects the success code and message
-     * 9. Locks duplicated value in file
-     * 10. Expects the error code and message
-     * 11. Try again with --force option
-     * 12. Expects the success code and message
-     * 13. Tries to save value with --force option
-     * 14. Expects the error code and message
      *
      * @param string $path
      * @param string $value
@@ -287,24 +263,11 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             [ConfigSetCommand::OPTION_SCOPE_CODE, $scopeCode]
         ];
         $optionsLock = array_merge($options, [[ConfigSetCommand::OPTION_LOCK, true]]);
-        $optionsForce = array_merge($options, [[ConfigSetCommand::OPTION_FORCE, true]]);
-        $optionsForceLock = array_merge(
-            $options,
-            [[ConfigSetCommand::OPTION_LOCK, true], [ConfigSetCommand::OPTION_FORCE, true]]
-        );
 
         $this->runCommand($arguments, $options, '<info>Value was saved.</info>');
-        $this->runCommand($arguments, $options, '<error>Config value is already exists.</error>', Cli::RETURN_FAILURE);
-        $this->runCommand($arguments, $optionsForce, '<info>Value was saved.</info>');
+        $this->runCommand($arguments, $options, '<info>Value was saved.</info>');
         $this->runCommand($arguments, $optionsLock, '<info>Value was locked.</info>');
-        $this->runCommand($arguments, $optionsLock, '<error>Value is already locked.</error>', Cli::RETURN_FAILURE);
-        $this->runCommand($arguments, $optionsForceLock, '<info>Value was locked.</info>');
-        $this->runCommand(
-            $arguments,
-            $optionsForce,
-            '<error>Effective value already locked.</error>',
-            Cli::RETURN_FAILURE
-        );
+        $this->runCommand($arguments, $optionsLock, '<info>Value was locked.</info>');
     }
 
     /**

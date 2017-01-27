@@ -33,14 +33,14 @@ class ScopePathResolver
      *
      * @param string $path The path of configuration
      * @param string|null $scope The scope of configuration
-     * @param string|null $scopeCode The scope code of configuration
+     * @param string|int|null $scopeCode The scope code of configuration
      * @param string|null $type The type of configuration
      * @return string Resolved configuration path
      */
     public function resolve($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null, $type = null)
     {
         $path = trim($path, '/');
-        $scope = trim($scope, 's');
+        $scope = rtrim($scope, 's');
         $scopePath = $type ? $type . '/' . $scope : $scope;
 
         if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {

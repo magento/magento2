@@ -29,7 +29,6 @@ class ConfigSetCommand extends Command
     const OPTION_SCOPE = 'scope';
     const OPTION_SCOPE_CODE = 'scope-code';
     const OPTION_LOCK = 'lock';
-    const OPTION_FORCE = 'force';
     /**#@-*/
 
     /**
@@ -93,12 +92,6 @@ class ConfigSetCommand extends Command
                     InputOption::VALUE_NONE,
                     'Lock value to prevent it modification via admin configuration'
                 ),
-                new InputOption(
-                    static::OPTION_FORCE,
-                    'f',
-                    InputOption::VALUE_NONE,
-                    'Force command to ignore duplicate errors'
-                )
             ]);
 
         parent::configure();
