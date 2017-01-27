@@ -52,6 +52,7 @@ class BatchRangeIterator implements \Iterator
      * @var int
      */
     private $totalItemCount;
+
     /**
      * @var int
      */
@@ -76,6 +77,7 @@ class BatchRangeIterator implements \Iterator
      * Initialize dependencies.
      *
      * @param Select $select
+     * @param int $batchSize
      * @param string $correlationName
      * @param string $rangeField
      * @param string $rangeFieldAlias
