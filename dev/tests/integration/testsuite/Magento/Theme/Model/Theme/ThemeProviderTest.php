@@ -40,7 +40,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Theme $theme */
         foreach ($this->themeCollection as $theme) {
-            $this->assertEquals(
+            $this->assertSame(
                 $this->themeProvider1->getThemeById($theme->getId())->getData(),
                 $this->themeProvider2->getThemeById($theme->getId())->getData()
             );
@@ -51,7 +51,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Theme $theme */
         foreach ($this->themeCollection as $theme) {
-            $this->assertEquals(
+            $this->assertSame(
                 $this->themeProvider1->getThemeByFullPath($theme->getFullPath())->getData(),
                 $this->themeProvider2->getThemeByFullPath($theme->getFullPath())->getData()
             );
