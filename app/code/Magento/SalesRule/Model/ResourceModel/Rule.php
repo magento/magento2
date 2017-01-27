@@ -15,9 +15,17 @@ use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
  * Sales Rule resource model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rule extends AbstractResource
 {
+    /**
+     * Store associated with rule entities information map
+     *
+     * @var array
+     */
+    protected $_associatedEntitiesMap = [];
+
     /**
      * @var array
      */
@@ -70,7 +78,10 @@ class Rule extends AbstractResource
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
-        $this->_associatedEntitiesMap =  $associatedEntityMapInstance ? $associatedEntityMapInstance->getData() : [] ;
+        $associatedEntitiesMapInstance = $associatedEntityMapInstance ?: ObjectManager::getInstance()->get(
+            \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class
+        );
+        $this->_associatedEntitiesMap = $associatedEntitiesMapInstance->getData();
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         parent::__construct($context, $connectionName);
