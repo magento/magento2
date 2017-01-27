@@ -107,15 +107,16 @@ class BatchRangeIteratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIterations()
     {
-        $iterations = 0;
         $this->connectionMock->expects($this->once())
             ->method('fetchRow')
             ->willReturn(['cnt' => 105]);
 
-        foreach ($this->model as $key => $value) {
-            $iterations++;
-        };
+        $this->model->rewind();
 
-        $this->assertEquals(10, $iterations);
+        $this->assertEquals($this->selectMock, $this->model->current());
+        $this->assertEquals(0, $this->model->key());
+        $this->assertEquals($this->selectMock, $this->model->next());
+        $this->assertTrue($this->model->valid());
+        $this->assertEquals(1, $this->model->key());
     }
 }
