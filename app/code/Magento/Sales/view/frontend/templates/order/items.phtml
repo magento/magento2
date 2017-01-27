@@ -14,7 +14,7 @@
         <thead>
             <?php if($block->isPagerDisplayed()): ?>
                 <tr>
-                    <td colspan="5" class="order-pager-wrapper order-pager-wrapper-top">
+                    <td colspan="5" data-block="order-items-pager-top" class="order-pager-wrapper order-pager-wrapper-top">
                         <?php echo $block->getPagerHtml() ?>
                     </td>
                 </tr>
@@ -66,7 +66,7 @@
         <tfoot>
             <?php if($block->isPagerDisplayed()): ?>
                 <tr>
-                    <td colspan="5" class="order-pager-wrapper order-pager-wrapper-bottom">
+                    <td colspan="5" data-block="order-items-pager-bottom" class="order-pager-wrapper order-pager-wrapper-bottom">
                         <?php echo $block->getPagerHtml();?>
                     </td>
                 </tr>
