@@ -22,6 +22,13 @@ class AbstractItems extends Block
     protected $rowItem = 'tbody';
 
     /**
+     * Locator for "Product" column.
+     *
+     * @var string
+     */
+    protected $product = '.col-product';
+
+    /**
      * Locator for product sku column.
      *
      * @var string
@@ -144,5 +151,20 @@ class AbstractItems extends Block
     private function escapePrice($price)
     {
         return preg_replace('[^0-9\.]', '', $price);
+    }
+
+    /**
+     * Parse product name to title and sku product.
+     *
+     * @param string $product
+     * @return array
+     */
+    protected function parseProductName($product)
+    {
+        $data = array_map('trim', explode('SKU:', str_replace("\n", '', $product)));
+        return [
+            'product' => $data[0],
+            'sku' => isset($data[1]) ? $data[1] : ''
+        ];
     }
 }

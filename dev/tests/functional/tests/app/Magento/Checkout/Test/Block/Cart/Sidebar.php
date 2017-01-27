@@ -151,7 +151,7 @@ class Sidebar extends Block
     }
 
     /**
-     * Get empty minicart message
+     * Get empty minicart message.
      *
      * @return string
      */
@@ -162,13 +162,23 @@ class Sidebar extends Block
     }
 
     /**
-     * Is minicart items quantity block visible
+     * Is minicart items quantity block visible.
      *
      * @return bool
      */
     public function isItemsQtyVisible()
     {
         return $this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Get qty of items in minicart.
+     *
+     * @return int
+     */
+    public function getItemsQty()
+    {
+        return (int)$this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->getText();
     }
 
     /**

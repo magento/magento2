@@ -5,24 +5,43 @@
  */
 namespace Magento\Backend\Test\Unit\Model\View\Layout\Filter;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Backend\Model\View\Layout\Filter\Acl;
+use Magento\Backend\Model\View\Layout\StructureManager;
+use Magento\Framework\AuthorizationInterface;
+
 class AclTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Backend\Model\View\Layout\Filter\Acl
+     * @var Acl
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $authorizationMock;
+    private $authorizationMock;
+
+    /**
+     * @var StructureManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $structureManager;
 
     protected function setUp()
     {
-        $this->authorizationMock = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
+        $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
+            ->getMock();
+        $this->structureManager = $this->getMockBuilder(StructureManager::class)
             ->getMock();
 
-        $this->model = new \Magento\Backend\Model\View\Layout\Filter\Acl($this->authorizationMock);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            Acl::class,
+            [
+                'authorization' => $this->authorizationMock
+            ]
+        );
+        $objectManager->setBackwardCompatibleProperty($this->model, 'structureManager', $this->structureManager);
     }
 
     public function testFilterAclElements()
@@ -86,28 +105,8 @@ class AclTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $structureMock->expects($this->exactly(3))
-            ->method('getChildren')
-            ->willReturnMap(
-                [
-                    ['element_2', ['element_2_child' => []]],
-                    ['element_2_child', []],
-                    ['element_3', []],
-                ]
-            );
-
-        $scheduledStructureMock->expects($this->exactly(3))
-            ->method('unsetElement')
-            ->willReturnMap(
-                [
-                    ['element_2', null],
-                    ['element_2_child', null],
-                    ['element_3', null],
-                ]
-            );
-
-        $structureMock->expects($this->exactly(2))
-            ->method('unsetElement')
+        $this->structureManager->expects($this->exactly(2))
+            ->method('removeElement')
             ->willReturnMap(
                 [
                     ['element_2', true, true],
