@@ -6,7 +6,6 @@
 namespace Magento\SalesRule\Model\ResourceModel;
 
 use Magento\Framework\App\ObjectManager;
-use \Magento\SalesRule\Model\Rule as SalesRule;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Rule\Model\ResourceModel\AbstractResource;
 use Magento\Framework\EntityManager\EntityManager;
@@ -19,13 +18,6 @@ use Magento\SalesRule\Api\Data\RuleInterface;
  */
 class Rule extends AbstractResource
 {
-    /**
-     * Store associated with rule entities information map
-     *
-     * @var array
-     */
-    protected $_associatedEntitiesMap = [];
-
     /**
      * @var array
      */
@@ -78,10 +70,7 @@ class Rule extends AbstractResource
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
-        $associatedEntitiesMapInstance = $associatedEntityMapInstance ?: ObjectManager::getInstance()->get(
-            \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class
-        );
-        $this->_associatedEntitiesMap = $associatedEntitiesMapInstance->getData();
+        $this->_associatedEntitiesMap =  $associatedEntityMapInstance ? $associatedEntityMapInstance->getData() : [] ;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         parent::__construct($context, $connectionName);
@@ -143,7 +132,7 @@ class Rule extends AbstractResource
     /**
      * Load an object
      *
-     * @param SalesRule|AbstractModel $object
+     * @param AbstractModel $object
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
      * @return $this
@@ -376,7 +365,6 @@ class Rule extends AbstractResource
     /**
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Exception
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -389,7 +377,6 @@ class Rule extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Exception
      */
     public function delete(AbstractModel $object)
     {
