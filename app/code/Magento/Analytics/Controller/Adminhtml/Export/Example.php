@@ -53,7 +53,7 @@ class Example extends Action
     public function execute()
     {
         return $this->fileFactory->create(
-            'analytics-export',
+            'analytics-export.tgz',
             $this->export->getArchiveContent(),
             DirectoryList::VAR_DIR
         );

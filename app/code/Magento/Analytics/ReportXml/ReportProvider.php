@@ -6,6 +6,8 @@
 
 namespace Magento\Analytics\ReportXml;
 
+use Magento\Framework\Api\SearchCriteria;
+
 /**
  * Class ReportProvider
  *
@@ -32,14 +34,17 @@ class ReportProvider
     }
 
     /**
+     * Returns report data by name and criteria
+     *
      * @param string $name
+     * @param SearchCriteria|null $criteria
      * @return \IteratorIterator
      */
-    public function getReport($name)
+    public function getReport($name, SearchCriteria $criteria = null)
     {
         $query = $this->queryFactory->create($name);
         $connection = $this->connectionFactory->getConnection($query->getConnectionName());
-        $statement = $connection->query($query->getQueryString());
+        $statement = $connection->query($query->getSelect());
         return new \IteratorIterator($statement);
 
     }

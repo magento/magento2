@@ -6,6 +6,8 @@
 
 namespace Magento\Analytics\ReportXml;
 
+use Magento\Framework\DB\Select;
+
 /**
  * Class Query
  *
@@ -14,9 +16,14 @@ namespace Magento\Analytics\ReportXml;
 class Query implements \JsonSerializable
 {
     /**
-     * @var string
+     * @var Select
      */
-    private $queryString;
+    private $select;
+
+    /**
+     * @var \Magento\Analytics\ReportXml\SelectHydrator
+     */
+    private $selectHydrator;
 
     /**
      * @var string 
@@ -24,41 +31,27 @@ class Query implements \JsonSerializable
     private $connectionName;
 
     /**
-     * @var array
-     */
-    private $parameters = [];
-
-    /**
      * Query constructor.
      *
-     * @param $queryString
+     * @param Select $select
      * @param $connectionName
-     * @param array $parameters
      */
     public function __construct(
-        $queryString,
-        $connectionName,
-        array $parameters
+        Select $select,
+        SelectHydrator $selectHydrator,
+        $connectionName
     ) {
-        $this->queryString = $queryString;
+        $this->select = $select;
         $this->connectionName = $connectionName;
-        $this->parameters = $parameters;
+        $this->selectHydrator = $selectHydrator;
     }
 
     /**
-     * @return string
+     * @return Select
      */
-    public function getQueryString()
+    public function getSelect()
     {
-        return $this->queryString;
-    }
-
-    /**
-     * @param string $queryString
-     */
-    public function setQueryString($queryString)
-    {
-        $this->queryString = $queryString;
+        return $this->select;
     }
 
     /**
@@ -67,30 +60,6 @@ class Query implements \JsonSerializable
     public function getConnectionName()
     {
         return $this->connectionName;
-    }
-
-    /**
-     * @param string $connectionName
-     */
-    public function setConnectionName($connectionName)
-    {
-        $this->connectionName = $connectionName;
-    }
-
-    /**
-     * @return array
-     */
-    public function getParameters()
-    {
-        return $this->parameters;
-    }
-
-    /**
-     * @param array $parameters
-     */
-    public function setParameters($parameters)
-    {
-        $this->parameters = $parameters;
     }
 
     /**
@@ -104,8 +73,7 @@ class Query implements \JsonSerializable
     {
         return [
             'connectionName' => $this->getConnectionName(),
-            'queryString' => $this->getQueryString(),
-            'parameters' => $this->getParameters()
+            'select_parts' => $this->selectHydrator->extract($this->getSelect())
         ];
     }
 }

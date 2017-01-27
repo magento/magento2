@@ -20,4 +20,10 @@
             <attribute name="data_version"/>
         </source>
     </report>
+    <report name="config_data" connection="default">
+        <source name="core_config_data">
+            <attribute name="path"/>
+            <attribute name="value"/>
+        </source>
+    </report>
 </config>
