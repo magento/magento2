@@ -58,13 +58,12 @@ class AssertProductAttributeIsUnique extends AbstractConstraint
         $productForm = $catalogProductEdit->getProductForm();
         $productForm->fill($simpleProduct);
         $catalogProductEdit->getFormPageActions()->save();
-        $failedAttributes = $productForm->getRequireNoticeAttributes($simpleProduct);
+        $actualErrorMessage = $catalogProductEdit->getMessagesBlock()->getErrorMessage();
         $attributeLabel = $attribute->getFrontendLabel();
-        $actualMessage = $this->getActualMessage($failedAttributes, $attributeLabel);
 
         \PHPUnit_Framework_Assert::assertEquals(
             sprintf(self::UNIQUE_MESSAGE, $attributeLabel),
-            $actualMessage,
+            $actualErrorMessage,
             'JS error notice on product edit page is not equal to expected.'
         );
     }
