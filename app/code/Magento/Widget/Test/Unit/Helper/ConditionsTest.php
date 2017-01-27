@@ -26,13 +26,7 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
-        $this->serializer->method('serialize')->willReturnCallback(function ($value) {
-            return json_encode($value);
-        });
-        $this->serializer->method('unserialize')->willReturnCallback(function ($value) {
-            return json_decode($value, true);
-        });
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, null);
         $this->conditions = new \Magento\Widget\Helper\Conditions(
             $this->serializer
         );
