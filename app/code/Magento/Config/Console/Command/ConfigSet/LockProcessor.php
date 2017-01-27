@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
+use Magento\Config\App\Config\Type\System;
 use Symfony\Component\Console\Input\InputInterface;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Framework\App\DeploymentConfig\Writer;
@@ -24,38 +25,30 @@ use Magento\Framework\App\Config\ConfigPathResolver;
 class LockProcessor implements ConfigSetProcessorInterface
 {
     /**
-     * The deployment config writer.
-     *
      * @var Writer
      */
     private $deploymentConfigWriter;
 
     /**
-     * An array manager.
-     *
      * @var ArrayManager
      */
     private $arrayManager;
 
     /**
-     * The metadata processor.
-     *
      * @var MetadataProcessor
      */
     private $metadataProcessor;
 
     /**
-     * The config path resolver.
-     *
      * @var ConfigPathResolver
      */
     private $configPathResolver;
 
     /**
-     * @param Writer $writer The deployment config writer
-     * @param ArrayManager $arrayManager An array manager
-     * @param MetadataProcessor $metadataProcessor The metadata processor
-     * @param ConfigPathResolver $configPathResolver The config path resolver
+     * @param Writer $writer
+     * @param ArrayManager $arrayManager
+     * @param MetadataProcessor $metadataProcessor
+     * @param ConfigPathResolver $configPathResolver
      */
     public function __construct(
         Writer $writer,
@@ -81,7 +74,7 @@ class LockProcessor implements ConfigSetProcessorInterface
         $value = $input->getArgument(ConfigSetCommand::ARG_VALUE);
         $scope = $input->getOption(ConfigSetCommand::OPTION_SCOPE);
         $scopeCode = $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE);
-        $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode, 'system');
+        $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode, System::CONFIG_TYPE);
 
         $value = $this->metadataProcessor->prepareValue($value, $path);
 
@@ -93,7 +86,7 @@ class LockProcessor implements ConfigSetProcessorInterface
                 true
             );
         } catch (FileSystemException $exception) {
-            throw new CouldNotSaveException(__('Filesystem is not writable.'));
+            throw new CouldNotSaveException(__('%1', $exception->getMessage()), $exception);
         }
     }
 }

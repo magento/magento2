@@ -50,7 +50,7 @@ class ConfigPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeCodeResolverMock->expects($this->any())
             ->method('resolve')
-            ->willReturn($scopeCode);
+            ->willReturn($scopeCode ? $scopeCode : 'test_code');
 
         $this->assertSame($expected, $this->model->resolve($path, $scope, $scopeCode, $type));
     }
@@ -60,8 +60,8 @@ class ConfigPathResolverTest extends \PHPUnit_Framework_TestCase
         return [
             ['/test/test/test/', 'default', null, null, 'default/test/test/test'],
             ['test/test/test', 'default', null, 'system', 'system/default/test/test/test'],
-            ['test/test/test', 'website', 'base', 'system', 'system/website/base/test/test/test'],
-            ['test/test/test', 'websites', 'base', 'system', 'system/website/base/test/test/test'],
+            ['test/test/test', 'website', 'base', 'system', 'system/websites/base/test/test/test'],
+            ['test/test/test', 'websites', null, 'system', 'system/websites/test_code/test/test/test'],
         ];
     }
 }

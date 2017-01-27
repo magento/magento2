@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Magento\Config\Console\Command\ConfigSet\DefaultProcessor;
 use Magento\Config\Console\Command\ConfigSetCommand;
@@ -66,6 +67,11 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
     private $inputMock;
 
     /**
+     * @var ReinitableConfigInterface
+     */
+    private $appConfigMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -91,6 +97,8 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         $this->scopePathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->appConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
+            ->getMockForAbstractClass();
 
         $this->configFactoryMock->expects($this->any())
             ->method('create')
@@ -101,7 +109,8 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
             $this->deploymentConfigMock,
             $this->scopeResolverPoolMock,
             $this->scopePathResolverMock,
-            $this->metadataProcessorMock
+            $this->metadataProcessorMock,
+            $this->appConfigMock
         );
     }
 

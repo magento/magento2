@@ -13,14 +13,12 @@ use Magento\Store\Model\ScopeInterface;
 class ConfigPathResolver
 {
     /**
-     * The scope code resolver.
-     *
      * @var ScopeCodeResolver
      */
     private $scopeCodeResolver;
 
     /**
-     * @param ScopeCodeResolver $scopeCodeResolver The scope code resolver
+     * @param ScopeCodeResolver $scopeCodeResolver
      */
     public function __construct(ScopeCodeResolver $scopeCodeResolver)
     {
@@ -32,8 +30,8 @@ class ConfigPathResolver
      * If $type variable was provided, it will be used as first part of path.
      *
      * @param string $path The path of configuration
-     * @param string|null $scope The scope of configuration
-     * @param string|int|null $scopeCode The scope code of configuration
+     * @param string $scope The scope of configuration
+     * @param string|int|null $scopeCode The scope code or identifier of configuration
      * @param string|null $type The type of configuration
      * @return string Resolved configuration path
      */
@@ -42,6 +40,10 @@ class ConfigPathResolver
         $path = trim($path, '/');
         $scope = rtrim($scope, 's');
 
+        /**
+         * Scope name is currently stored in plural form.
+         * Desired behavior will be changed in mayor release.
+         */
         if (in_array($scope, [ScopeInterface::SCOPE_STORE, ScopeInterface::SCOPE_WEBSITE])) {
             $scope .= 's';
         }
@@ -49,31 +51,13 @@ class ConfigPathResolver
         $scopePath = $type ? $type . '/' . $scope : $scope;
 
         if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $scopeCode = $this->normalizeScopeCode($scope, $scopeCode);
-
-            if ($scopeCode) {
-                $scopePath .= '/' . $scopeCode;
+            if (is_numeric($scopeCode) || $scopeCode === null) {
+                $scopeCode = $this->scopeCodeResolver->resolve($scope, $scopeCode);
             }
+
+            $scopePath .= '/' . $scopeCode;
         }
 
         return $scopePath . '/' . $path;
-    }
-
-    /**
-     * Normalizes scope code.
-     *
-     * @param string $scope The scope
-     * @param string $scopeCode The scope code
-     * @return string The normalized scope code
-     */
-    private function normalizeScopeCode($scope, $scopeCode)
-    {
-        if (is_numeric($scopeCode) || $scopeCode === null) {
-            $scopeCode = $this->scopeCodeResolver->resolve($scope, $scopeCode);
-        } elseif ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
-            $scopeCode = $scopeCode->getCode();
-        }
-
-        return $scopeCode;
     }
 }

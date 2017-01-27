@@ -27,22 +27,18 @@ class ConfigSetProcessorFactory
     /**#@-*/
 
     /**
-     * The Object Manager.
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * List of config:set command processors.
-     *
      * @var array
      */
     private $processors;
 
     /**
-     * @param ObjectManagerInterface $objectManager The Object Manager
-     * @param array $processors List of processors
+     * @param ObjectManagerInterface $objectManager
+     * @param array $processors
      */
     public function __construct(
         ObjectManagerInterface $objectManager,

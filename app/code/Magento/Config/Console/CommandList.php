@@ -10,19 +10,19 @@ use Magento\Framework\Console\CommandListInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
+ * Contains a list of commands to be loaded on application bootstrap.
+ *
  * {@inheritdoc}
  */
 class CommandList implements CommandListInterface
 {
     /**
-     * The Object Manager.
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @param ObjectManagerInterface $objectManager The Object Manager
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {

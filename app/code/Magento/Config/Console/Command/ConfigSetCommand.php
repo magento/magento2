@@ -32,22 +32,18 @@ class ConfigSetCommand extends Command
     /**#@-*/
 
     /**
-     * The processor factory.
-     *
      * @var ConfigSetProcessorFactory
      */
     private $configSetProcessorFactory;
 
     /**
-     * The scope validator.
-     *
      * @var ValidatorInterface
      */
     private $validator;
 
     /**
-     * @param ConfigSetProcessorFactory $configSetProcessorFactory The processor factory
-     * @param ValidatorInterface $validator The scope validator
+     * @param ConfigSetProcessorFactory $configSetProcessorFactory
+     * @param ValidatorInterface $validator
      */
     public function __construct(
         ConfigSetProcessorFactory $configSetProcessorFactory,
@@ -60,7 +56,7 @@ class ConfigSetCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {

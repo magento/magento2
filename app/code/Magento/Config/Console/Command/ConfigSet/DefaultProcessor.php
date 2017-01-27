@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\App\Config\MetadataProcessor;
@@ -25,59 +26,57 @@ use Magento\Config\Console\Command\ConfigSetCommand;
 class DefaultProcessor implements ConfigSetProcessorInterface
 {
     /**
-     * The configuration factory.
-     *
      * @var ConfigFactory
      */
     private $configFactory;
 
     /**
-     * The deployment config.
-     *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * The scope resolver pool.
-     *
      * @var ScopeResolverPool
      */
     private $scopeResolverPool;
 
     /**
-     * The metadata processor.
-     *
      * @var MetadataProcessor
      */
     private $metadataProcessor;
 
     /**
-     * The config path resolver.
-     *
      * @var ConfigPathResolver
      */
     private $configPathResolver;
 
     /**
-     * @param ConfigFactory $configFactory The configuration factory
-     * @param DeploymentConfig $deploymentConfig The deployment config
-     * @param ScopeResolverPool $scopeResolverPool The scope resolver pool
-     * @param ConfigPathResolver $configPathResolver The config path resolver
-     * @param MetadataProcessor $metadataProcessor The metadata processor
+     * @var ReinitableConfigInterface
+     */
+    private $appConfig;
+
+    /**
+     * @param ConfigFactory $configFactory
+     * @param DeploymentConfig $deploymentConfig
+     * @param ScopeResolverPool $scopeResolverPool
+     * @param ConfigPathResolver $configPathResolver
+     * @param MetadataProcessor $metadataProcessor
+     * @param ReinitableConfigInterface $appConfig
      */
     public function __construct(
         ConfigFactory $configFactory,
         DeploymentConfig $deploymentConfig,
         ScopeResolverPool $scopeResolverPool,
         ConfigPathResolver $configPathResolver,
-        MetadataProcessor $metadataProcessor
+        MetadataProcessor $metadataProcessor,
+        ReinitableConfigInterface $appConfig
     ) {
         $this->configFactory = $configFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->scopeResolverPool = $scopeResolverPool;
         $this->configPathResolver = $configPathResolver;
         $this->metadataProcessor = $metadataProcessor;
+        $this->appConfig = $appConfig;
     }
 
     /**
@@ -105,7 +104,12 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         }
 
         if ($this->isLocked($path, $scope, $scopeCode)) {
-            throw new CouldNotSaveException(__('Effective value already locked.'));
+            throw new CouldNotSaveException(
+                __(
+                    'Effective value already locked. It can be changed with --%1 option',
+                    ConfigSetCommand::OPTION_LOCK
+                )
+            );
         }
 
         if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
@@ -115,6 +119,7 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         $value = $this->metadataProcessor->prepareValue($value, $path);
 
         $this->configFactory->create()->saveConfig($path, $value, $scope, $scopeId);
+        $this->appConfig->reinit();
     }
 
     /**
