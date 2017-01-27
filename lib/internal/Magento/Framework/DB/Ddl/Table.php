@@ -405,11 +405,12 @@ class Table
      * @param string $refTable      the reference table name
      * @param string $refColumn     the reference table column name
      * @param string $onDelete      the action on delete row
+     * @param string $onUpdate      the action on update row
      * @return $this
      * @throws \Zend_Db_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function addForeignKey($fkName, $column, $refTable, $refColumn, $onDelete = null)
+    public function addForeignKey($fkName, $column, $refTable, $refColumn, $onDelete = null, $onUpdate = null)
     {
         $upperName = strtoupper($fkName);
 
@@ -427,13 +428,23 @@ class Table
             default:
                 $onDelete = self::ACTION_NO_ACTION;
         }
+        switch ($onUpdate) {
+            case self::ACTION_CASCADE:
+            case self::ACTION_RESTRICT:
+            case self::ACTION_SET_DEFAULT:
+            case self::ACTION_SET_NULL:
+                break;
+            default:
+                $onUpdate = self::ACTION_NO_ACTION;
+        }
 
         $this->_foreignKeys[$upperName] = [
             'FK_NAME' => $fkName,
             'COLUMN_NAME' => $column,
             'REF_TABLE_NAME' => $refTable,
             'REF_COLUMN_NAME' => $refColumn,
-            'ON_DELETE' => $onDelete
+            'ON_DELETE' => $onDelete,
+            'ON_UPDATE' => $onUpdate
         ];
 
         return $this;
