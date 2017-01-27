@@ -14,6 +14,8 @@
             <url>
                 <signup>http://drakelair1.corp.magento.com/mamock/signup</signup>
                 <update>http://drakelair1.corp.magento.com/mamock/update</update>
+                <otp>http://drakelair1.corp.magento.com/mamock/otp</otp>
+                <report>http://drakelair1.corp.magento.com/mamock/report</report>
             </url>
             <integration_name>Magento Analytics user</integration_name>
         </analytics>
