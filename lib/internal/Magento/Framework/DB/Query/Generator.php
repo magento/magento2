@@ -28,16 +28,36 @@ class Generator
     }
 
     /**
-     * Generate select query list with predefined items count in each select item.
+     * Generate select query list with predefined items count in each select item
      *
-     * @param string $rangeField
+     * Generates select parameters - batchSize, correlationName, rangeField, rangeFieldAlias, batchStrategy
+     * to obtain instance of iterator. The behavior of the iterator will depend on the parameters passed to it.
+     * For example: by default for $batchStrategy parameter used
+     * \Magento\Framework\DB\Query\BatchIteratorFactory::UNIQUE_FIELD_ITERATOR. This parameter is determine, what
+     * instance of Iterator will be returned.
+     *
+     * Other params:
+     * select - represents the select object, that should be passed into Iterator.
+     * batchSize - sets the number of items in select.
+     * correlationName - is the base table involved in the select.
+     * rangeField - this is the basic field which used to split select.
+     * rangeFieldAlias - alias of range field.
+     *
+     * @see BatchIteratorFactory
+     * @param string $rangeField -  Field which is used for the range mechanism in select
      * @param \Magento\Framework\DB\Select $select
-     * @param int $batchSize
-     * @return BatchIterator
-     * @throws LocalizedException
+     * @param int $batchSize - Determines on how many parts will be divided
+     * the number of values in the select.
+     * @param string $batchStrategy It determines which strategy is chosen
+     * @return \Iterator
+     * @throws LocalizedException Throws if incorrect "FROM" part in \Select exists
      */
-    public function generate($rangeField, \Magento\Framework\DB\Select $select, $batchSize = 100)
-    {
+    public function generate(
+        $rangeField,
+        \Magento\Framework\DB\Select $select,
+        $batchSize = 100,
+        $batchStrategy = \Magento\Framework\DB\Query\BatchIteratorFactory::UNIQUE_FIELD_ITERATOR
+    ) {
         $fromSelect = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (empty($fromSelect)) {
             throw new LocalizedException(
@@ -72,7 +92,8 @@ class Generator
                 'batchSize' => $batchSize,
                 'correlationName' => $fieldCorrelationName,
                 'rangeField' => $rangeField,
-                'rangeFieldAlias' => $rangeFieldAlias
+                'rangeFieldAlias' => $rangeFieldAlias,
+                'batchStrategy' => $batchStrategy
             ]
         );
     }

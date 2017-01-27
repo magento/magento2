@@ -70,7 +70,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'batchSize' => 100,
                 'correlationName' => 'cp',
                 'rangeField' => 'entity_id',
-                'rangeFieldAlias' => 'product_id'
+                'rangeFieldAlias' => 'product_id',
+                'batchStrategy' => 'unique'
             ]
         )->willReturn($this->iteratorMock);
         $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
@@ -126,7 +127,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'batchSize' => 100,
                 'correlationName' => 'cp',
                 'rangeField' => 'entity_id',
-                'rangeFieldAlias' => 'entity_id'
+                'rangeFieldAlias' => 'entity_id',
+                'batchStrategy' => 'unique'
             ]
         )->willReturn($this->iteratorMock);
         $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
@@ -160,7 +162,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'batchSize' => 100,
                 'correlationName' => 'cp',
                 'rangeField' => 'entity_id',
-                'rangeFieldAlias' => 'entity_id'
+                'rangeFieldAlias' => 'entity_id',
+                'batchStrategy' => 'unique'
             ]
         )->willReturn($this->iteratorMock);
         $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));

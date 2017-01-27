@@ -314,7 +314,8 @@ abstract class AbstractAction
         return $this->isRangingNeeded() ? $this->connection->selectsByRange(
             $field,
             $select,
-            $range
+            $range,
+            \Magento\Framework\DB\Query\BatchIteratorFactory::NON_UNIQUE_FIELD_ITERATOR
         ) : [
             $select
         ];
