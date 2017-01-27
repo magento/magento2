@@ -9,7 +9,8 @@ use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\FileSystemException;
 use Symfony\Component\Console\Input\InputInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\App\Config\MetadataProcessor;
@@ -79,6 +80,9 @@ class LockProcessor implements ConfigSetProcessorInterface
     }
 
     /**
+     * Processes lock flow of config:set command.
+     * Requires read access to filesystem.
+     *
      * {@inheritdoc}
      */
     public function process(InputInterface $input)
@@ -91,16 +95,20 @@ class LockProcessor implements ConfigSetProcessorInterface
         $scopePath = $this->scopePathResolver->resolve($path, $scope, $scopeCode, 'system');
 
         if ($this->deploymentConfig->get($scopePath) !== null && !$force) {
-            throw new LocalizedException(__('Value is already locked.'));
+            throw new CouldNotSaveException(__('Value is already locked.'));
         }
 
         $value = $this->metadataProcessor->prepareValue($value, $path);
 
-        $this->deploymentConfigWriter->saveConfig(
-            [
-                ConfigFilePool::APP_CONFIG => $this->arrayManager->set($scopePath, [], $value)
-            ],
-            true
-        );
+        try {
+            $this->deploymentConfigWriter->saveConfig(
+                [
+                    ConfigFilePool::APP_CONFIG => $this->arrayManager->set($scopePath, [], $value)
+                ],
+                true
+            );
+        } catch (FileSystemException $exception) {
+            throw new CouldNotSaveException(__('Filesystem is not writable.'));
+        }
     }
 }

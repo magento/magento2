@@ -15,7 +15,9 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * {@inheritdoc}
+ * Test for ConfigSetCommand.
+ *
+ * @see \Magento\Config\Console\Command\ConfigSetCommand
  */
 class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,7 +42,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $processorMock;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

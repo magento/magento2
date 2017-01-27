@@ -18,7 +18,9 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
- * {@inheritdoc}
+ * Test for LockProcessor.
+ *
+ * @see \Magento\Config\Console\Command\ConfigSet\LockProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LockProcessorTest extends \PHPUnit_Framework_TestCase
@@ -59,7 +61,7 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
     private $scopePathResolverMock;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

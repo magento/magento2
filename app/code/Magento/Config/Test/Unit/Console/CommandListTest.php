@@ -11,7 +11,9 @@ use Magento\Framework\ObjectManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
- * {@inheritdoc}
+ * Test for CommandList.
+ *
+ * @see \Magento\Config\Console\CommandList
  */
 class CommandListTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +28,7 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
     private $objectManagerMock;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {

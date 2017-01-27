@@ -5,16 +5,17 @@
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
-use Magento\Config\Console\Command\ConfigSetCommand;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Symfony\Component\Console\Input\InputInterface;
 use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverPool;
-use Magento\Framework\Exception\LocalizedException;
-use Symfony\Component\Console\Input\InputInterface;
-use Magento\Config\Model\ConfigFactory;
-use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config\ScopePathResolver;
+use Magento\Config\Model\ResourceModel\ConfigFactory;
+use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
+use Magento\Config\Console\Command\ConfigSetCommand;
 
 /**
  * Processes default flow of config:set command.
@@ -105,27 +106,24 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         $scopeId = $this->getScopeId($scope, $scopeCode);
 
         if (!$this->deploymentConfig->isAvailable()) {
-            throw new LocalizedException(__('Magento is not installed yet.'));
+            throw new StateException(__('Magento is not installed yet.'));
         }
 
         if ($this->isLocked($path, $scope, $scopeCode)) {
-            throw new LocalizedException(__('Effective value already locked.'));
+            throw new CouldNotSaveException(__('Effective value already locked.'));
         }
 
         if ($this->getConfigItems($path, $scope, $scopeId) && !$force) {
-            throw new LocalizedException((__('Config value is already exists.')));
+            throw new CouldNotSaveException(__('Config value is already exists.'));
+        }
+
+        if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            $scope = rtrim($scope, 's') . 's';
         }
 
         $value = $this->metadataProcessor->prepareValue($value, $path);
 
-        $config = $this->configFactory->create();
-        $config->setDataByPath($path, $value);
-
-        if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $config->{'set' . ucfirst($scope)}($scopeCode);
-        }
-
-        $config->save();
+        $this->configFactory->create()->saveConfig($path, $value, $scope, $scopeId);
     }
 
     /**

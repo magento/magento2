@@ -5,7 +5,8 @@
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\StateException;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
@@ -20,7 +21,7 @@ interface ConfigSetProcessorInterface
      *
      * @param InputInterface $input An input console parameter
      * @return void
-     * @throws LocalizedException An exception on processing error
+     * @throws CouldNotSaveException|StateException An exception on processing error
      */
     public function process(InputInterface $input);
 }

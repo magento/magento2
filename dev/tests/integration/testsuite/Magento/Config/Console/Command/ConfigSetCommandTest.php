@@ -21,6 +21,8 @@ use Magento\Framework\Filesystem;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
+ * Tests the different flows of config:set command.
+ *
  * {@inheritdoc}
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -72,12 +74,12 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $config;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->scopeConfig = $this->objectManager->create(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
         $this->reader = $this->objectManager->get(Reader::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
@@ -94,7 +96,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function tearDown()
     {

@@ -7,8 +7,8 @@ namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
 use Magento\Config\Console\Command\ConfigSet\DefaultProcessor;
 use Magento\Config\Console\Command\ConfigSetCommand;
-use Magento\Config\Model\Config;
-use Magento\Config\Model\ConfigFactory;
+use Magento\Config\Model\ResourceModel\Config;
+use Magento\Config\Model\ResourceModel\ConfigFactory;
 use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
 use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -20,7 +20,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Magento\Config\Model\ResourceModel\Config\Data\Collection;
 
 /**
- * {@inheritdoc}
+ * Test for DefaultProcessor.
+ *
+ * @see \Magento\Config\Console\Command\ConfigSet\DefaultProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
@@ -76,7 +78,7 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
     private $inputMock;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -166,11 +168,8 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($value, $path)
             ->willReturn($value);
         $this->configMock->expects($this->once())
-            ->method('setDataByPath')
-            ->with($path, $value)
-            ->willReturnSelf();
-        $this->configMock->expects($this->once())
-            ->method('save');
+            ->method('saveConfig')
+            ->with($path, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
 
         $this->model->process($this->inputMock);
     }
