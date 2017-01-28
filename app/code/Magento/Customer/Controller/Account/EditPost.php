@@ -61,11 +61,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     private $emailNotification;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @var AuthenticationInterface
      */
     private $authentication;
@@ -171,8 +166,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $this->messageManager->addError($e->getMessage());
             } catch (UserLockedException $e) {
                 $message = __(
-                    'The account is locked. Please wait and try again or contact %1.',
-                    $this->getScopeConfig()->getValue('contact/email/recipient_email')
+                    'You did not sign in correctly or your account is temporarily disabled.'
                 );
                 $this->session->logout();
                 $this->session->start();
@@ -193,22 +187,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         }
 
         return $resultRedirect->setPath('*/*/edit');
-    }
-
-    /**
-     * Get scope config
-     *
-     * @return ScopeConfigInterface
-     */
-    private function getScopeConfig()
-    {
-        if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
-            return ObjectManager::getInstance()->get(
-                \Magento\Framework\App\Config\ScopeConfigInterface::class
-            );
-        } else {
-            return $this->scopeConfig;
-        }
     }
 
     /**

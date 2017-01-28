@@ -52,6 +52,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'fil_PH', /*Filipino (Philippines)*/
         'fr_BE', /*French (Belgium)*/
         'fr_CA', /*French (Canada)*/
+        'fr_CH', /*French (Switzerland)*/
         'fr_FR', /*French (France)*/
         'gu_IN', /*Gujarati (India)*/
         'he_IL', /*Hebrew (Israel)*/
