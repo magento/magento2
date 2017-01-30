@@ -148,6 +148,13 @@ class Item
     private $_moduleManager;
 
     /**
+     * Menu item target
+     *
+     * @var string|null
+     */
+    protected $target;
+
+    /**
      * @param Item\Validator $validator
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -199,6 +206,16 @@ class Item
     public function getId()
     {
         return $this->_id;
+    }
+
+    /**
+     * Retrieve item target
+     *
+     * @return string
+     */
+    public function getTarget()
+    {
+        return $this->target;
     }
 
     /**
@@ -456,6 +473,7 @@ class Item
             'depends_on_module' => $this->_dependsOnModule,
             'tooltip' => $this->_tooltip,
             'title' => $this->_title,
+            'target' => $this->target,
             'sub_menu' => isset($this->_submenu) ? $this->_submenu->toArray() : null
         ];
     }
@@ -479,6 +497,7 @@ class Item
         $this->_dependsOnModule = $this->_getArgument($data, 'depends_on_module');
         $this->_tooltip = $this->_getArgument($data, 'tooltip', '');
         $this->_title = $this->_getArgument($data, 'title');
+        $this->target = $this->_getArgument($data, 'target');
         if (isset($data['sub_menu'])) {
             $menu = $this->_menuFactory->create();
             $menu->populateFromArray($data['sub_menu']);

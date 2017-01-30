@@ -32,6 +32,8 @@ try {
 HTML;
     exit(1);
 }
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
 /** @var \Magento\Framework\App\Http $app */
