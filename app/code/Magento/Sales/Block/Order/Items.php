@@ -70,11 +70,13 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
 
         /** @var \Magento\Theme\Block\Html\Pager $pagerBlock */
         $pagerBlock = $this->getChildBlock('sales_order_item_pager');
-        $pagerBlock->setLimit($this->itemsPerPage);
-        //here pager updates collection parameters
-        $pagerBlock->setCollection($this->itemCollection);
-        $pagerBlock->setAvailableLimit([$this->itemsPerPage]);
-        $pagerBlock->setShowAmounts($this->isPagerDisplayed());
+        if ($pagerBlock) {
+            $pagerBlock->setLimit($this->itemsPerPage);
+            //here pager updates collection parameters
+            $pagerBlock->setCollection($this->itemCollection);
+            $pagerBlock->setAvailableLimit([$this->itemsPerPage]);
+            $pagerBlock->setShowAmounts($this->isPagerDisplayed());
+        }
 
         return parent::_prepareLayout();
     }
@@ -87,7 +89,8 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function isPagerDisplayed()
     {
-        return $this->itemCollection->getSize() > $this->itemsPerPage;
+        $pagerBlock = $this->getChildBlock('sales_order_item_pager');
+        return $pagerBlock && ($this->itemCollection->getSize() > $this->itemsPerPage);
     }
 
     /**
@@ -111,7 +114,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     {
         /** @var \Magento\Theme\Block\Html\Pager $pagerBlock */
         $pagerBlock = $this->getChildBlock('sales_order_item_pager');
-        return $pagerBlock->toHtml();
+        return $pagerBlock ? $pagerBlock->toHtml() : '';
     }
 
     /**
