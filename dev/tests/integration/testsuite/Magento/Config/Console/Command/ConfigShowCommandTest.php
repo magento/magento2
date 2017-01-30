@@ -5,8 +5,6 @@
  */
 namespace Magento\Config\Console\Command;
 
-use Magento\Config\Console\Command\ConfigShow\ConfigSourceAggregated;
-use Magento\Framework\App\Config\ScopePathResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -22,26 +20,13 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var ConfigSourceAggregated
-     */
-    private $config;
-
-    /**
-     * @var CommandTester
-     */
+    * @var CommandTester
+    */
     private $commandTester;
-
-    /**
-     * @var ScopePathResolver
-     */
-    private $pathResolver;
 
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->config = $this->objectManager->get(ConfigSourceAggregated::class);
-        $this->pathResolver = $this->objectManager->get(ScopePathResolver::class);
-
         $command = $this->objectManager->create(ConfigShowCommand::class);
         $this->commandTester = new CommandTester($command);
     }
@@ -52,7 +37,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
      * @param array $configs
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Config/_files/config_data.php
-     * @dataProvider testExecuteDataProvider
+     * @dataProvider executeDataProvider
      */
     public function testExecute($scope, $scopeCode, array $configs)
     {
@@ -70,48 +55,57 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 
             $this->commandTester->execute($arguments);
 
-            $configPath = $this->pathResolver->resolve($inputPath, $scope, $scopeCode);
-            $appConfigValue = $this->config->get($configPath);
             $this->assertEquals(
                 Cli::RETURN_SUCCESS,
                 $this->commandTester->getStatusCode()
             );
-            $this->assertEquals(
-                $configValue,
-                $appConfigValue
-            );
             $this->assertContains(
-                $appConfigValue,
+                $configValue,
                 $this->commandTester->getDisplay()
             );
         }
     }
 
     /**
+     * @param string $scope
+     * @param string $scopeCode
+     * @param array $configs
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Config/_files/config_data.php
+     * @dataProvider executeDataProvider
      */
-    public function testExecuteConfigGroup()
+    public function testExecuteConfigGroup($scope, $scopeCode, array $configs)
     {
-        $this->commandTester->execute([
+        $arguments = [
             ConfigShowCommand::INPUT_ARGUMENT_PATH => 'web/test'
-        ]);
+        ];
+
+        if ($scope !== null) {
+            $arguments['--' . ConfigShowCommand::INPUT_OPTION_SCOPE] = $scope;
+        }
+        if ($scopeCode !== null) {
+            $arguments['--' . ConfigShowCommand::INPUT_OPTION_SCOPE_CODE] = $scopeCode;
+        }
+
+        $this->commandTester->execute($arguments);
 
         $this->assertEquals(
             Cli::RETURN_SUCCESS,
             $this->commandTester->getStatusCode()
         );
-        $this->assertContains(
-            'http://default.test/',
-            $this->commandTester->getDisplay()
-        );
-        $this->assertContains(
-            'someValue',
-            $this->commandTester->getDisplay()
-        );
+
+        foreach ($configs as $configPath => $configValue) {
+            $this->assertContains(
+                sprintf("%s - %s", $configPath, $configValue),
+                $this->commandTester->getDisplay()
+            );
+        }
     }
 
-    public function testExecuteDataProvider()
+    /**
+     * @return array
+     */
+    public function executeDataProvider()
     {
         return [
             [
@@ -120,7 +114,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                 [
                     'web/test/test_value_1' => 'http://default.test/',
                     'web/test/test_value_2' => 'someValue',
-                    'web/test/test_value_3' => 100,
+                    'web/test/test_value_3' => '100',
                 ]
             ],
             [
@@ -129,7 +123,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                 [
                     'web/test/test_value_1' => 'http://website.test/',
                     'web/test/test_value_2' => 'someWebsiteValue',
-                    'web/test/test_value_3' => 101,
+                    'web/test/test_value_3' => '101',
                 ]
             ]
         ];
