@@ -15,6 +15,8 @@ use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
 
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,12 +31,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Relation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRelation|\PHPUnit_Framework_MockObject_MockObject
      */
     private $relation;
 
@@ -74,12 +76,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['select', 'fetchAll', 'insertOnDuplicate'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->setMethods(['getConnection', 'getTableName'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->relation = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Relation::class)
+        $this->relation = $this->getMockBuilder(ProductRelation::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
