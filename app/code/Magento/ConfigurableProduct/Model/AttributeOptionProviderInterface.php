@@ -6,7 +6,8 @@
 namespace Magento\ConfigurableProduct\Model;
 
 /**
- * Interface to retrieve options for attribute
+ * Interface to retrieve options for attribute was introduced to move methods
+ * to get attribute's options from Configurable collection
  */
 interface AttributeOptionProviderInterface
 {

@@ -11,13 +11,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class OptionProvider
 {
     /**
-     * Product entity link field
-     *
-     * @var string
-     */
-    private $productEntityLinkField;
-
-    /**
      * Product metadata pool
      *
      * @var MetadataPool
@@ -40,11 +33,6 @@ class OptionProvider
      */
     public function getProductEntityLinkField()
     {
-        if (!$this->productEntityLinkField) {
-            $this->productEntityLinkField = $this->metadataPool
-                ->getMetadata(ProductInterface::class)
-                ->getLinkField();
-        }
-        return $this->productEntityLinkField;
+        return $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
     }
 }
