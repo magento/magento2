@@ -547,6 +547,8 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreatePngFromString($pixel1, $expectedColor1, $pixel2, $expectedColor2, $adapterType)
     {
+        $this->markTestSkipped('Invalid imagettfbbox function behaviour on PHP 5.6.29 Travis CI. MAGETWO-62464');
+
         $adapter = $this->_getAdapter($adapterType);
 
         /** @var \Magento\Framework\Filesystem\Directory\ReadFactory readFactory */

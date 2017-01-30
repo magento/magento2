@@ -42,6 +42,9 @@ class LandingPage extends DataSource
 
             $this->data = $cmsBlock->getTitle();
             $this->cmsBlock = $cmsBlock;
+        } else if (isset($data['source']) && $data['source'] instanceof CmsBlock ) {
+            $this->cmsBlock = $data['source'];
+            $this->data = $data['source']->getTitle();
         }
     }
 

@@ -16,6 +16,13 @@ use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 class UninstallDependencyCheck
 {
     /**
+     * Need to exclude these packages from dependencies because of changes in composer/composer package
+     * It consider now that all packages are depends on root package
+     * @var array
+     */
+    private $rootDependencies = ['magento/magento2ce', 'magento/magento2ee'];
+
+    /**
      * @var ComposerInformation
      */
     private $composerInfo;
@@ -61,6 +68,7 @@ class UninstallDependencyCheck
         try {
             $packagesAndTypes = $this->composerInfo->getRootRequiredPackageTypesByName();
             $dependencies = $this->packageDependencyChecker->checkDependencies($packages, true);
+            $dependencies = $this->excludeRootDependencies($dependencies);
             $messages = [];
             $themes = [];
 
@@ -100,5 +108,21 @@ class UninstallDependencyCheck
             $message = str_replace(PHP_EOL, '<br/>', htmlspecialchars($e->getMessage()));
             return ['success' => false, 'error' => $message];
         }
+    }
+
+    /**
+     * Exclude root dependencies like 'magento/magento2ce' or 'magento/magento2ee'
+     *
+     * @param array $dependencies
+     * @return array
+     */
+    private function excludeRootDependencies($dependencies)
+    {
+        $result = [];
+        foreach ($dependencies as $packageName => $packageDependencies) {
+            $result[$packageName] = array_values(array_diff($packageDependencies, $this->rootDependencies));
+        }
+
+        return $result;
     }
 }
