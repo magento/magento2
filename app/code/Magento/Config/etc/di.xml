@@ -190,7 +190,7 @@
             <argument name="placeholder" xsi:type="object">Magento\Config\Model\Placeholder\Environment</argument>
         </arguments>
     </type>
-    <virtualType name="configShowSourceAggregated" type="Magento\Config\Console\Command\ConfigShow\ConfigSourceAggregated">
+    <virtualType name="configShowSourceAggregated" type="Magento\Framework\App\Config\ConfigSourceAggregated">
         <arguments>
             <argument name="sources" xsi:type="array">
                 <item name="dynamic" xsi:type="array">

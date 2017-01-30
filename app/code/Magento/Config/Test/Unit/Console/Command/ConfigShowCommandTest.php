@@ -13,7 +13,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\App\Config\MetadataProcessor;
-use Magento\Framework\App\Config\ScopePathResolver;
+use Magento\Framework\App\Config\ConfigPathResolver;
 
 class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
     private $metadataProcessorMock;
 
     /**
-     * @var ScopePathResolver|MockObject
+     * @var ConfigPathResolver|MockObject
      */
     private $pathResolverMock;
 
@@ -47,7 +47,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
         $this->metadataProcessorMock = $this->getMockBuilder(MetadataProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pathResolverMock = $this->getMockBuilder(ScopePathResolver::class)
+        $this->pathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->scopeValidatorMock = $this->getMockBuilder(ValidatorInterface::class)

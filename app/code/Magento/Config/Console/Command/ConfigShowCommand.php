@@ -8,7 +8,7 @@ namespace Magento\Config\Console\Command;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config\ScopePathResolver;
+use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Magento\Framework\App\Scope\ValidatorInterface;
@@ -42,7 +42,7 @@ class ConfigShowCommand extends Command
     private $configSource;
 
     /**
-     * @var ScopePathResolver
+     * @var ConfigPathResolver
      */
     private $pathResolver;
 
@@ -52,16 +52,21 @@ class ConfigShowCommand extends Command
     private $metadataProcessor;
 
     /**
+     * @var string
+     */
+    private $сonfigPath;
+
+    /**
      * @param ValidatorInterface $scopeValidator
      * @param ConfigSourceInterface $configSource
-     * @param ScopePathResolver $pathResolver
+     * @param ConfigPathResolver $pathResolver
      * @param MetadataProcessor $metadataProcessor
      * @internal param ScopeConfigInterface $appConfig
      */
     public function __construct(
         ValidatorInterface $scopeValidator,
         ConfigSourceInterface $configSource,
-        ScopePathResolver $pathResolver,
+        ConfigPathResolver $pathResolver,
         MetadataProcessor $metadataProcessor
     ) {
         parent::__construct();
@@ -112,11 +117,11 @@ class ConfigShowCommand extends Command
     {
         $scope = $input->getOption(self::INPUT_OPTION_SCOPE);
         $scopeCode = $input->getOption(self::INPUT_OPTION_SCOPE_CODE);
-        $inputPath = $input->getArgument(self::INPUT_ARGUMENT_PATH);
+        $this->сonfigPath = $input->getArgument(self::INPUT_ARGUMENT_PATH);
 
         try {
             $this->scopeValidator->isValid($scope, $scopeCode);
-            $configPath = $this->pathResolver->resolve($inputPath, $scope, $scopeCode);
+            $configPath = $this->pathResolver->resolve($this->сonfigPath, $scope, $scopeCode);
             $configValue = $this->configSource->get($configPath);
         } catch (LocalizedException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
@@ -126,12 +131,12 @@ class ConfigShowCommand extends Command
         if ($configValue === null) {
             $output->writeln(sprintf(
                 '<error>%s</error>',
-                __('Configuration for path: "%1" doesn\'t exist', $inputPath)->render()
+                __('Configuration for path: "%1" doesn\'t exist', $this->сonfigPath)->render()
             ));
             return Cli::RETURN_FAILURE;
         }
 
-        $this->outputResult($output, $configValue, $inputPath);
+        $this->outputResult($output, $configValue, $this->сonfigPath);
         return Cli::RETURN_SUCCESS;
     }
 
@@ -140,23 +145,18 @@ class ConfigShowCommand extends Command
      *
      * @param OutputInterface $output An OutputInterface instance
      * @param mixed $configValue single value or array of values
-     * @param $configPath base configuration path
-     * @param int $level depth level for nested configuration
+     * @param string $configPath base configuration path
      * @return void
      */
-    private function outputResult(OutputInterface $output, $configValue, $configPath, $level = 0)
+    private function outputResult(OutputInterface $output, $configValue, $configPath)
     {
-        $margin = str_repeat(" ", max($level - 1, 0) * 2);
-        if (is_string($configValue)) {
+        if (!is_array($configValue)) {
             $value = $this->metadataProcessor->processValue($configValue, $configPath);
-            $output->writeln(sprintf("%s%s - %s", $margin, $configPath, $value));
+            $output->writeln($this->сonfigPath === $configPath ? $value : sprintf("%s - %s", $configPath, $value));
         } else if (is_array($configValue)) {
-            if ($level > 0) {
-                $output->writeln(sprintf("%s%s:", $margin, $configPath ?: 'config'));
-            }
             foreach ($configValue as $name => $value) {
                 $childPath = empty($configPath) ? $name : ($configPath . '/' . $name);
-                $this->outputResult($output, $value, $childPath, $level + 1);
+                $this->outputResult($output, $value, $childPath);
             }
         }
     }

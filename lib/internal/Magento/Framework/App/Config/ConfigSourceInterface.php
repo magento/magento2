@@ -16,7 +16,7 @@ interface ConfigSourceInterface
      * Retrieve configuration raw data array.
      *
      * @param string $path
-     * @return array
+     * @return string|array
      */
     public function get($path = '');
 }
