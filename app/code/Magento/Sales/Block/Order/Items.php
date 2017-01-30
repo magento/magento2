@@ -50,8 +50,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
         \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory $itemCollectionFactory = null
     ) {
         $this->_coreRegistry = $registry;
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->itemCollectionFactory = $itemCollectionFactory ?: $objectManager
+        $this->itemCollectionFactory = $itemCollectionFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory::class);
         parent::__construct($context, $data);
     }
