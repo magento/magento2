@@ -28,8 +28,13 @@
             <data name="payment/method" xsi:type="string">payflowpro</data>
             <data name="configData" xsi:type="string">paypal_direct</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
-            <data name="data/items_data/0/qty" xsi:type="string">-</data>
-            <data name="data/form_data/do_shipment" xsi:type="string">Yes</data>
+            <data name="order/data/invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="form_data" xsi:type="array">
+                        <item name="do_shipment" xsi:type="string">Yes</item>
+                    </item>
+                </item>
+            </data>
             <data name="status" xsi:type="string">Closed</data>
             <data name="transactions/refund" xsi:type="array">
                 <item name="transactionType" xsi:type="string">Refund</item>

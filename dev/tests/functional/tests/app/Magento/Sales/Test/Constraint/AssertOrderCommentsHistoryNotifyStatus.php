@@ -21,18 +21,17 @@ class AssertOrderCommentsHistoryNotifyStatus extends AbstractConstraint
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
      * @param OrderInjectable $order
-     * @param array $data
      */
     public function processAssert(
         SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
-        OrderInjectable $order,
-        array $data
+        OrderInjectable $order
     ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
-        $sendMail = isset($data['form_data']['send_email']) ? filter_var(
-            $data['form_data']['send_email'],
+        $refundsData = $order->getRefund();
+        $sendMail = isset($refundsData[0]['form_data']['send_email']) ? filter_var(
+            $refundsData[0]['form_data']['send_email'],
             FILTER_VALIDATE_BOOLEAN
         ) : false;
 

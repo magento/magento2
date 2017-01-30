@@ -207,5 +207,6 @@
         <field name="id" />
         <field name="price" is_required="1" group="null" repository="Magento\Sales\Test\Repository\OrderInjectable\Price" />
         <field name="refund" is_required="" />
+        <field name="invoice" is_required="" />
     </fixture>
 </config>

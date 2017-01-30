@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CreateOnlineInvoiceEntityTest" summary="Capture for order placed within Braintree Credit Card">
         <variation name="CreateOnlineInvoiceEntityTestBraintreeVariation1" summary="Full capture of order placed within Braintree Credit Card" ticketId="MAGETWO-38319">
-            <data name="description" xsi:type="string">Full capture of order placed within Braintree Credit Card</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="products/1" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="customer/dataset" xsi:type="string">default</data>
@@ -26,9 +25,6 @@
             <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
-            <data name="data/items_data/0/qty" xsi:type="string">-</data>
-            <data name="data/form_data/do_shipment" xsi:type="string">No</data>
-            <data name="data/form_data/comment_text" xsi:type="string">comments</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
@@ -36,7 +32,6 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
         </variation>
         <variation name="CreateOnlineInvoiceEntityTestBraintreeVariation2" summary="Partial capture for order placed within Braintree Credit Card" ticketId="MAGETWO-38322">
-            <data name="description" xsi:type="string">Partial capture for order placed within Braintree Credit Card</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
@@ -44,7 +39,6 @@
             <data name="saveAddress" xsi:type="string">No</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
-            <data name="isInvoicePartial" xsi:type="string">Yes</data>
             <data name="capturedPrices" xsi:type="array">
                 <item name="0" xsi:type="string">108.25</item>
                 <item name="1" xsi:type="string">118.25</item>
@@ -55,9 +49,25 @@
             <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
-            <data name="data/items_data/0/qty" xsi:type="string">1</data>
-            <data name="data/form_data/do_shipment" xsi:type="string">No</data>
-            <data name="data/form_data/comment_text" xsi:type="string">comments</data>
+            <data name="order/data/invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="items_data" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="qty" xsi:type="string">1</item>
+                        </item>
+                    </item>
+                    <item name="form_data" xsi:type="array">
+                        <item name="do_shipment" xsi:type="string">No</item>
+                        <item name="comment_text" xsi:type="string">comments</item>
+                    </item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="form_data" xsi:type="array">
+                        <item name="do_shipment" xsi:type="string">No</item>
+                        <item name="comment_text" xsi:type="string">comments</item>
+                    </item>
+                </item>
+            </data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />

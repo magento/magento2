@@ -13,23 +13,29 @@
         </dataset>
 
         <dataset name="full_invoice">
-            <field name="0" xsi:type="array">
-                <item name="grand_order_total" xsi:type="string">565</item>
-                <item name="grand_invoice_total" xsi:type="string">565</item>
+            <field name="invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_order_total" xsi:type="string">565</item>
+                    <item name="grand_invoice_total" xsi:type="string">565</item>
+                </item>
             </field>
         </dataset>
 
         <dataset name="full_invoice_with_product_10_dollar">
-            <field name="0" xsi:type="array">
-                <item name="grand_order_total" xsi:type="string">15</item>
-                <item name="grand_invoice_total" xsi:type="string">15</item>
+            <field name="invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_order_total" xsi:type="string">15</item>
+                    <item name="grand_invoice_total" xsi:type="string">15</item>
+                </item>
             </field>
         </dataset>
 
         <dataset name="partial_invoice">
-            <field name="0" xsi:type="array">
-                <item name="grand_order_total" xsi:type="string">210</item>
-                <item name="grand_invoice_total" xsi:type="string">110</item>
+            <field name="invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_order_total" xsi:type="string">210</item>
+                    <item name="grand_invoice_total" xsi:type="string">110</item>
+                </item>
             </field>
         </dataset>
 
@@ -59,9 +65,11 @@
         </dataset>
 
         <dataset name="free_invoice">
-            <field name="0" xsi:type="array">
-                <item name="grand_order_total" xsi:type="string">0</item>
-                <item name="grand_invoice_total" xsi:type="string">0</item>
+            <field name="invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_order_total" xsi:type="string">0</item>
+                    <item name="grand_invoice_total" xsi:type="string">0</item>
+                </item>
             </field>
         </dataset>
 
@@ -77,9 +85,11 @@
                     <item name="grand_creditmemo_total" xsi:type="string">565</item>
                 </item>
             </field>
-            <field name="0" xsi:type="array">
-                <item name="grand_invoice_total" xsi:type="string">565</item>
-                <item name="grand_order_total" xsi:type="string">565</item>
+            <field name="invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_order_total" xsi:type="string">565</item>
+                    <item name="grand_invoice_total" xsi:type="string">565</item>
+                </item>
             </field>
         </dataset>
     </repository>

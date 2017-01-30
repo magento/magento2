@@ -52,10 +52,13 @@ abstract class AbstractAssertItems extends AbstractAssertForm
         }
         /** @var \Magento\Catalog\Test\Fixture\Cart\Item $item */
         foreach ($cart->getItems() as $key => $item) {
+            if (isset($data[$key]['qty']) && $data[$key]['qty'] == 0) {
+                continue;
+            }
             $productsData[] = [
                 'product' => $item->getData()['name'],
                 'sku' => $item->getData()['sku'],
-                'qty' => (isset($data[$key]['qty']) && $data[$key]['qty'] != '-')
+                'qty' => (isset($data[$key]['qty']))
                     ? $data[$key]['qty']
                     : $item->getData()['qty'],
             ];

@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Test\TestStep;
 
+use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreditMemoNew;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
@@ -46,32 +47,31 @@ class CreateCreditMemoStep implements TestStepInterface
     protected $order;
 
     /**
-     * Credit memo data.
+     * Checkout Cart fixture.
      *
-     * @var array|null
+     * @var Cart
      */
-    protected $data;
+    private $cart;
 
     /**
-     * @construct
+     * @param Cart $cart
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
      * @param OrderInjectable $order
      * @param OrderCreditMemoNew $orderCreditMemoNew
-     * @param array|null $data [optional]
      */
     public function __construct(
+        Cart $cart,
         OrderIndex $orderIndex,
         SalesOrderView $salesOrderView,
         OrderInjectable $order,
-        OrderCreditMemoNew $orderCreditMemoNew,
-        $data = null
+        OrderCreditMemoNew $orderCreditMemoNew
     ) {
+        $this->cart = $cart;
         $this->orderIndex = $orderIndex;
         $this->salesOrderView = $salesOrderView;
         $this->order = $order;
         $this->orderCreditMemoNew = $orderCreditMemoNew;
-        $this->data = $data;
     }
 
     /**
@@ -83,18 +83,22 @@ class CreateCreditMemoStep implements TestStepInterface
     {
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        $this->salesOrderView->getPageActions()->orderCreditMemo();
-        if (!empty($this->data)) {
+        $refundsData = $this->order->getRefund() !== null ? $this->order->getRefund() : ['refundData' => []];
+        foreach ($refundsData as $refundData) {
+            $this->salesOrderView->getPageActions()->orderCreditMemo();
             $this->orderCreditMemoNew->getFormBlock()->fillProductData(
-                $this->data,
-                $this->order->getEntityId()['products']
+                $refundData,
+                $this->cart->getItems()
             );
             $this->orderCreditMemoNew->getFormBlock()->updateQty();
-            $this->orderCreditMemoNew->getFormBlock()->fillFormData($this->data);
+            $this->orderCreditMemoNew->getFormBlock()->fillFormData($refundData);
+            $this->orderCreditMemoNew->getFormBlock()->submit();
         }
-        $this->orderCreditMemoNew->getFormBlock()->submit();
 
-        return ['creditMemoIds' => $this->getCreditMemoIds()];
+        return [
+            'ids' => ['creditMemoIds' => $this->getCreditMemoIds()],
+            'customer' => $this->order->getDataFieldConfig('customer_id')['source']->getCustomer()
+        ];
     }
 
     /**

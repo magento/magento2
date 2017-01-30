@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Test\TestStep;
 
+use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceNew;
@@ -62,20 +63,6 @@ class CreateInvoiceStep implements TestStepInterface
     private $order;
 
     /**
-     * Invoice data.
-     *
-     * @var array|null
-     */
-    private $data;
-
-    /**
-     * Whether Invoice is partial.
-     *
-     * @var string
-     */
-    private $isInvoicePartial;
-
-    /**
      * Payment Action.
      *
      * @var string
@@ -83,36 +70,39 @@ class CreateInvoiceStep implements TestStepInterface
     private $paymentAction;
 
     /**
-     * @construct
+     * Checkout Cart fixture.
+     *
+     * @var Cart
+     */
+    private $cart;
+
+    /**
+     * @param Cart $cart
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
      * @param OrderInvoiceNew $orderInvoiceNew
      * @param OrderInvoiceView $orderInvoiceView
      * @param OrderInjectable $order
      * @param OrderShipmentView $orderShipmentView
-     * @param array|null $data [optional]
-     * @param string $isInvoicePartial [optional]
      * @param string $paymentAction
      */
     public function __construct(
+        Cart $cart,
         OrderIndex $orderIndex,
         SalesOrderView $salesOrderView,
         OrderInvoiceNew $orderInvoiceNew,
         OrderInvoiceView $orderInvoiceView,
         OrderInjectable $order,
         OrderShipmentView $orderShipmentView,
-        $data = null,
-        $isInvoicePartial = null,
         $paymentAction = 'authorize'
     ) {
+        $this->cart = $cart;
         $this->orderIndex = $orderIndex;
         $this->salesOrderView = $salesOrderView;
         $this->orderInvoiceNew = $orderInvoiceNew;
         $this->orderInvoiceView = $orderInvoiceView;
         $this->order = $order;
         $this->orderShipmentView = $orderShipmentView;
-        $this->data = $data;
-        $this->isInvoicePartial = $isInvoicePartial;
         $this->paymentAction = $paymentAction;
     }
 
@@ -128,24 +118,19 @@ class CreateInvoiceStep implements TestStepInterface
         }
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        $this->salesOrderView->getPageActions()->invoice();
-        if (!empty($this->data)) {
+        $invoicesData = $this->order->getInvoice() !== null ? $this->order->getInvoice() : ['invoiceData' => []];
+        foreach ($invoicesData as $invoiceData) {
+            $this->salesOrderView->getPageActions()->invoice();
             $this->orderInvoiceNew->getFormBlock()->fillProductData(
-                $this->data,
-                $this->order->getEntityId()['products']
+                $invoiceData,
+                $this->cart->getItems()
             );
             $this->orderInvoiceNew->getFormBlock()->updateQty();
-            $this->orderInvoiceNew->getFormBlock()->fillFormData($this->data);
-            if (isset($this->isInvoicePartial)) {
-                $this->orderInvoiceNew->getFormBlock()->submit();
-                $this->salesOrderView->getPageActions()->invoice();
-            }
+            $this->orderInvoiceNew->getFormBlock()->fillFormData($invoiceData);
+            $this->orderInvoiceNew->getFormBlock()->submit();
         }
-        $this->orderInvoiceNew->getFormBlock()->submit();
         $invoiceIds = $this->getInvoiceIds();
-        if (!empty($this->data)) {
-            $shipmentIds = $this->getShipmentIds();
-        }
+        $shipmentIds = $this->getShipmentIds();
 
         return [
             'ids' => [

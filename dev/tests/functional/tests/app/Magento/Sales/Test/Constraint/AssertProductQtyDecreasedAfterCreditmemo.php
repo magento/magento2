@@ -54,18 +54,17 @@ class AssertProductQtyDecreasedAfterCreditmemo extends AbstractConstraint
      * Assert form data equals fixture data
      *
      * @param OrderInjectable $order
-     * @param array $data
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductEdit $productPage
      * @return void
      */
     public function processAssert(
         OrderInjectable $order,
-        array $data,
         CatalogProductIndex $productGrid,
         CatalogProductEdit $productPage
     ) {
-        $product = $this->getProduct($order, $data);
+        $data = $order->getRefund();
+        $product = $this->getProduct($order, $data[0]);
         $this->objectManager->get(\Magento\Catalog\Test\Constraint\AssertProductForm::class)->processAssert(
             $product,
             $productGrid,

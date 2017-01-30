@@ -89,9 +89,13 @@
                     <item name="grand_creditmemo_total" xsi:type="string">1.08</item>
                 </item>
             </data>
-            <data name="data/items_data" xsi:type="array">
+            <data name="order/data/invoice" xsi:type="array">
                 <item name="0" xsi:type="array">
-                    <item name="qty" xsi:type="string">0</item>
+                    <item name="items_data" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="qty" xsi:type="string">0</item>
+                        </item>
+                    </item>
                 </item>
             </data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />

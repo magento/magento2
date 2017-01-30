@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Braintree\Test\TestCase\InvoicePayPalBraintreeTest" summary="Capture for order placed within PayPal Braintree">
         <variation name="InvoicePayPalBraintreeTestVariation1" summary="Full capture of order placed within Braintree PayPal" ticketId="MAGETWO-48614">
-            <data name="description" xsi:type="string">Full capture of order placed within Braintree PayPal</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="products/1" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="taxRule" xsi:type="string">us_illinois_tax_rule</data>
@@ -23,21 +22,16 @@
             <data name="payment/method" xsi:type="string">braintree_paypal</data>
             <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_skip_order_review</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
-            <data name="data/items_data/0/qty" xsi:type="string">-</data>
-            <data name="data/form_data/do_shipment" xsi:type="string">No</data>
-            <data name="data/form_data/comment_text" xsi:type="string">comments</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceItems" />
         </variation>
         <variation name="InvoicePayPalBraintreeTestVariation2" summary="Partial capture for order placed within Braintree PayPal" ticketId="MAGETWO-48615, MAGETWO-48684">
-            <data name="description" xsi:type="string">Partial capture for order placed within Braintree PayPal</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="taxRule" xsi:type="string">us_illinois_tax_rule</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
-            <data name="isInvoicePartial" xsi:type="string">Yes</data>
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">226.50</item>
             </data>
@@ -47,9 +41,24 @@
             <data name="payment/method" xsi:type="string">braintree_paypal</data>
             <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_skip_order_review</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
-            <data name="data/items_data/0/qty" xsi:type="string">1</data>
-            <data name="data/form_data/do_shipment" xsi:type="string">No</data>
-            <data name="data/form_data/comment_text" xsi:type="string">comments</data>
+            <data name="order/data/invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="items_data" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="qty" xsi:type="string">1</item>
+                        </item>
+                    </item>
+                    <item name="form_data" xsi:type="array">
+                        <item name="do_shipment" xsi:type="string">No</item>
+                        <item name="comment_text" xsi:type="string">comments</item>
+                    </item>
+                </item>
+            </data>
+            <data name="order/data/price/invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_invoice_total" xsi:type="string">118.25</item>
+                </item>
+            </data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="transactions/Capture" xsi:type="array">
                 <item name="transactionType" xsi:type="string">Capture</item>

@@ -48,13 +48,6 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
     private $order;
 
     /**
-     * Credit memo data.
-     *
-     * @var array|null
-     */
-    private $refundData;
-
-    /**
      * Order invoice view page.
      *
      * @var OrderInvoiceView
@@ -75,7 +68,6 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
      * @param OrderInjectable $order
      * @param OrderInvoiceView $orderInvoiceView
      * @param OrderCreditMemoNew $orderCreditMemoNew
-     * @param array|null refundData [optional]
      */
     public function __construct(
         Cart $cart,
@@ -83,8 +75,7 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
         SalesOrderView $salesOrderView,
         OrderInjectable $order,
         OrderInvoiceView $orderInvoiceView,
-        OrderCreditMemoNew $orderCreditMemoNew,
-        $refundData = null
+        OrderCreditMemoNew $orderCreditMemoNew
     ) {
         $this->cart = $cart;
         $this->orderIndex = $orderIndex;
@@ -92,7 +83,6 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
         $this->order = $order;
         $this->orderInvoiceView = $orderInvoiceView;
         $this->orderCreditMemoNew = $orderCreditMemoNew;
-        $this->refundData = $refundData;
     }
 
     /**

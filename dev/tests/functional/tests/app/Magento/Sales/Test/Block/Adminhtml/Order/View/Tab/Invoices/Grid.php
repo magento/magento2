@@ -65,6 +65,7 @@ class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
      */
     public function getIds()
     {
+        $this->resetFilter();
         $result = [];
         $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
         $invoiceIds = $this->_rootElement->getElements($this->invoiceId);
