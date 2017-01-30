@@ -51,8 +51,8 @@ class FlyweightFactory
      * @param string $themeKey Should looks like Magento/backend or should be theme primary key
      * @param string $area Can be adminhtml, frontend, etc...
      * @return \Magento\Framework\View\Design\ThemeInterface
-     * @throws \InvalidArgumentException when incorrect themeKey was specified
-     * @throws \LogicException when theme with appropriate themeKey was not found
+     * @throws \InvalidArgumentException when incorrect $themeKey was specified
+     * @throws \LogicException when theme with appropriate $themeKey was not found
      */
     public function create($themeKey, $area = \Magento\Framework\View\DesignInterface::DEFAULT_AREA)
     {
