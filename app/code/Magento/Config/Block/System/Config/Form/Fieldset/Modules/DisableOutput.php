@@ -3,14 +3,14 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * @method \Magento\Config\Block\System\Config\Form getForm()
- */
 namespace Magento\Config\Block\System\Config\Form\Fieldset\Modules;
 
 /**
- * @deprecated
+ * It displays a list of the inputs with names of the modules on tab Store->Configuration Advanced/Advanced
+ * on the store settings page
+ *
+ * @method \Magento\Config\Block\System\Config\Form getForm()
+ * @deprecated because there are tools to change the module state in the admin panel and magento 2 CLI.
  */
 class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
@@ -53,8 +53,7 @@ class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
     }
 
     /**
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return string
+     * @inheritdoc
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

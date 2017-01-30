@@ -14,7 +14,10 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 
 /**
- * Class Comment. It is used to parse config paths from comment section.
+ * Config file parser
+ *
+ * It is used to parse config paths from
+ * comment section in some configuration file.
  */
 class Comment implements CommentParserInterface
 {
@@ -41,17 +44,43 @@ class Comment implements CommentParserInterface
     }
 
     /**
-     * Retrieves config paths from comment section of the file.
-     * Example of comment:
-     *        * CONFIG__DEFAULT__SOME__CONF__PATH_ONE
-     *        * CONFIG__DEFAULT__SOME__CONF__PATH_TWO
-     * This method will return:
-     *        array(
-     *            'CONFIG__DEFAULT__SOME__CONF__PATH_ONE' => 'some/conf/path_one',
-     *            'CONFIG__DEFAULT__SOME__CONF__PATH_TWO' => 'some/conf/path_two'
-     *        );
+     * Retrieves config array paths from comment section of the config file
      *
-     * @param string $fileName
+     * Example:
+     * some.file.config.php file is located in the directory /<root_app_dir>/app/etc/
+     * File Content some.file.config.php
+     * ```php
+     * return [
+     *  'scopes' => [
+     *      //...
+     *  ],
+     * // ...
+     * // The configuration file doesn't contain sensitive data for security reasons.
+     * // Sensitive data can be stored in the following environment variables:
+     * // CONFIG__DEFAULT__SOME__CONF__PATH_ONE for some/conf/path_one
+     *  'system' => [],
+     * // ...
+     * // CONFIG__DEFAULT__SOME__CONF__PATH_TWO for some/conf/path_two
+     * // ...
+     * ];
+     *  ```
+     * Usage:
+     * ```php
+     * // ...
+     * // $commentParser variable contains an object of type \Magento\Config\Model\Config\Parser\Comment
+     * $fileName = 'some.file.config.php';
+     * $result = $commentParser->execute($fileName);
+     * // ...
+     * ```
+     * The variable $result will be set to
+     * ```php
+     * array(
+     *     'CONFIG__DEFAULT__SOME__CONF__PATH_ONE' => 'some/conf/path_one',
+     *     'CONFIG__DEFAULT__SOME__CONF__PATH_TWO' => 'some/conf/path_two'
+     * );
+     * ```
+     *
+     * @param string $fileName only basename
      * @return array
      * @throws FileSystemException
      */

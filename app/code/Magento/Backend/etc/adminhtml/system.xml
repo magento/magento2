@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
+ * The module configuration file of Magento_Backend
+ *
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -16,6 +18,9 @@
         <tab id="advanced" translate="label" sortOrder="999999">
             <label>Advanced</label>
         </tab>
+        <!--
+        @deprecated because advanced section doesn't display anymore
+        -->
         <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="0" showInWebsite="0" showInStore="0">
             <label>Advanced</label>
             <tab>advanced</tab>

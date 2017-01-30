@@ -70,7 +70,7 @@ class Template extends \Magento\Framework\View\Element\Template
      *
      * @param string $moduleName Full module name
      * @return boolean
-     * @deprecated
+     * @deprecated because there are tools to change the module state in the admin panel and magento 2 CLI.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isOutputEnabled($moduleName = null)

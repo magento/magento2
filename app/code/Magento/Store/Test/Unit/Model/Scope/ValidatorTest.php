@@ -25,6 +25,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private $scopeResolverPoolMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->scopeResolverPoolMock = $this->getMockBuilder(ScopeResolverPool::class)

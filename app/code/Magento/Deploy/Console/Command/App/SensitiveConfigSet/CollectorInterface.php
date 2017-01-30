@@ -10,16 +10,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Interface CollectorInterface
+ * Interface for collection values from user input
  */
 interface CollectorInterface
 {
     /**
-     * Collects values from user input and return result as array.
+     * Collects values from user input and return result as array
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @param array $configPaths list of available config paths.
+     * @param array $configPaths list of available config paths
      * @return array
      * @throws LocalizedException
      */

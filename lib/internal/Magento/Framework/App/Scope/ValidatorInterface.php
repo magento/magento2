@@ -7,6 +7,9 @@ namespace Magento\Framework\App\Scope;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Interface Validator for validating scope and scope code
+ */
 interface ValidatorInterface
 {
     /**

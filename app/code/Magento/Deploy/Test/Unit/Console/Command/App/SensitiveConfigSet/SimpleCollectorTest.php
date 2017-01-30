@@ -42,6 +42,9 @@ class SimpleCollectorTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->questionFactoryMock = $this->getMockBuilder(QuestionFactory::class)

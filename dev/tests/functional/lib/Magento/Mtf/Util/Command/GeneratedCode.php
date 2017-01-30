@@ -6,7 +6,6 @@
 namespace Magento\Mtf\Util\Command;
 
 use Magento\Mtf\Util\Protocol\CurlInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
  * GeneratedCode removes generated code of Magento (like generated/code and generated/metadata).
