@@ -78,28 +78,4 @@ class MetadataProcessorTest extends \PHPUnit_Framework_TestCase
         $expectedResult['some']['config']['path'] = 'processed_value';
         $this->assertEquals($expectedResult, $this->_model->process($data));
     }
-
-    public function testProcessValue()
-    {
-        $this->_modelPoolMock->expects($this->once())
-            ->method('get')
-            ->with('Custom_Backend_Model')
-            ->willReturn($this->_backendModelMock);
-        $this->_backendModelMock->expects($this->once())
-            ->method('processValue')
-            ->with('value')
-            ->willReturn('processed_value');
-
-        $this->assertEquals('processed_value', $this->_model->processValue('value', 'some/config/path'));
-    }
-
-    public function testPrepareValue()
-    {
-        $this->_modelPoolMock->expects($this->once())
-            ->method('get')
-            ->with('Custom_Backend_Model')
-            ->willReturn($this->_backendModelMock);
-
-        $this->_model->prepareValue('value', $this->_model->prepareValue('value', 'some/config/path'));
-    }
 }

@@ -5,17 +5,15 @@
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
-use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\App\Config\MetadataProcessor;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config\ConfigPathResolver;
-use Magento\Config\Model\ResourceModel\ConfigFactory;
 use Magento\Config\Console\Command\ConfigSetCommand;
+use Magento\Config\Model\ConfigFactory;
+use Magento\Config\App\Config\Type\System;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Processes default flow of config:set command.
@@ -36,47 +34,24 @@ class DefaultProcessor implements ConfigSetProcessorInterface
     private $deploymentConfig;
 
     /**
-     * @var ScopeResolverPool
-     */
-    private $scopeResolverPool;
-
-    /**
-     * @var MetadataProcessor
-     */
-    private $metadataProcessor;
-
-    /**
      * @var ConfigPathResolver
      */
     private $configPathResolver;
 
-    /**
-     * @var ReinitableConfigInterface
-     */
-    private $appConfig;
 
     /**
      * @param ConfigFactory $configFactory
      * @param DeploymentConfig $deploymentConfig
-     * @param ScopeResolverPool $scopeResolverPool
      * @param ConfigPathResolver $configPathResolver
-     * @param MetadataProcessor $metadataProcessor
-     * @param ReinitableConfigInterface $appConfig
      */
     public function __construct(
         ConfigFactory $configFactory,
         DeploymentConfig $deploymentConfig,
-        ScopeResolverPool $scopeResolverPool,
-        ConfigPathResolver $configPathResolver,
-        MetadataProcessor $metadataProcessor,
-        ReinitableConfigInterface $appConfig
+        ConfigPathResolver $configPathResolver
     ) {
         $this->configFactory = $configFactory;
         $this->deploymentConfig = $deploymentConfig;
-        $this->scopeResolverPool = $scopeResolverPool;
         $this->configPathResolver = $configPathResolver;
-        $this->metadataProcessor = $metadataProcessor;
-        $this->appConfig = $appConfig;
     }
 
     /**
@@ -92,7 +67,6 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         $value = $input->getArgument(ConfigSetCommand::ARG_VALUE);
         $scope = $input->getOption(ConfigSetCommand::OPTION_SCOPE);
         $scopeCode = $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE);
-        $scopeId = $this->getScopeId($scope, $scopeCode);
 
         if (!$this->deploymentConfig->isAvailable()) {
             throw new StateException(
@@ -112,14 +86,16 @@ class DefaultProcessor implements ConfigSetProcessorInterface
             );
         }
 
-        if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $scope = rtrim($scope, 's') . 's';
+        $config = $this->configFactory->create();
+        $config->setDataByPath($path, $value);
+
+        if (in_array($scope, [ScopeInterface::SCOPE_WEBSITE, ScopeInterface::SCOPE_WEBSITES])) {
+            $config->setWebsite($scopeCode);
+        } elseif (in_array($scope, [ScopeInterface::SCOPE_STORE, ScopeInterface::SCOPE_STORES])) {
+            $config->setStore($scopeCode);
         }
 
-        $value = $this->metadataProcessor->prepareValue($value, $path);
-
-        $this->configFactory->create()->saveConfig($path, $value, $scope, $scopeId);
-        $this->appConfig->reinit();
+        $config->save();
     }
 
     /**
@@ -132,24 +108,8 @@ class DefaultProcessor implements ConfigSetProcessorInterface
      */
     private function isLocked($path, $scope, $scopeCode)
     {
-        $scopePath = $this->configPathResolver->resolve($path, $scope, $scopeCode, 'system');
+        $scopePath = $this->configPathResolver->resolve($path, $scope, $scopeCode, System::CONFIG_TYPE);
 
         return $this->deploymentConfig->get($scopePath) !== null;
-    }
-
-    /**
-     * Retrieves scope identifier by scope and scope code.
-     *
-     * @param string $scope The scope of configuration
-     * @param string $scopeCode The scope code of configuration
-     * @return int Identifier of found scope
-     */
-    private function getScopeId($scope, $scopeCode)
-    {
-        if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            return 0;
-        }
-
-        return $this->scopeResolverPool->get($scope)->getScope($scopeCode)->getId();
     }
 }

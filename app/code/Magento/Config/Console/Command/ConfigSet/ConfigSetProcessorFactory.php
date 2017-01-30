@@ -5,14 +5,15 @@
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
+use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Creates different implementations of config:set processors of type ConfigSetProcessorInterface.
  *
- * @see \Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorInterface
- * @see \Magento\Config\Console\Command\ConfigSetCommand
+ * @see ConfigSetProcessorInterface
+ * @see ConfigSetCommand
  */
 class ConfigSetProcessorFactory
 {
@@ -32,7 +33,10 @@ class ConfigSetProcessorFactory
     private $objectManager;
 
     /**
+     * List of class names that implement config:set processors
+     *
      * @var array
+     * @see ConfigSetProcessorInterface
      */
     private $processors;
 
