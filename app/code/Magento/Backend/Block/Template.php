@@ -63,14 +63,14 @@ class Template extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Check whether or not the module output is enabled
+     * Check whether or not the module output is enabled.
      *
      * Because many module blocks belong to Backend module,
-     * the feature "Disable module output" doesn't cover Admin area
+     * the feature "Disable module output" doesn't cover Admin area.
      *
      * @param string $moduleName Full module name
      * @return boolean
-     * @deprecated because there are tools to change the module state in the admin panel and magento 2 CLI.
+     * @deprecated was removed from Magento
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isOutputEnabled($moduleName = null)

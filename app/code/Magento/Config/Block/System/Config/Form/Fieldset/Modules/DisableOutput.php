@@ -6,11 +6,11 @@
 namespace Magento\Config\Block\System\Config\Form\Fieldset\Modules;
 
 /**
- * It displays a list of the inputs with names of the modules on tab Store->Configuration Advanced/Advanced
- * on the store settings page
+ * Displays a list of the inputs with names of the modules on tab Store->Configuration Advanced/Advanced
+ * on the store settings page.
  *
  * @method \Magento\Config\Block\System\Config\Form getForm()
- * @deprecated because there are tools to change the module state in the admin panel and magento 2 CLI.
+ * @deprecated was removed from Magento
  */
 class DisableOutput extends \Magento\Config\Block\System\Config\Form\Fieldset
 {

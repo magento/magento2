@@ -80,7 +80,7 @@ class Comment implements CommentParserInterface
      * );
      * ```
      *
-     * @param string $fileName only basename
+     * @param string $fileName the basename of file
      * @return array
      * @throws FileSystemException
      */

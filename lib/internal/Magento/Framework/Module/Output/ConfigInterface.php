@@ -6,8 +6,9 @@
 namespace Magento\Framework\Module\Output;
 
 /**
- * Interface for classes to check module configuration
- * @deprecated because there are tools to change the module state in the admin panel and magento 2 CLI
+ * Checks whether the module is enabled in the configuration.
+ *
+ * @deprecated was removed from Magento
  */
 interface ConfigInterface
 {

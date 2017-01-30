@@ -11,7 +11,7 @@ use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 use Magento\Framework\Filesystem;
 
 /**
- * Checks permissions to files and folders
+ * Checks permissions to files and folders.
  */
 class FilePermissions
 {

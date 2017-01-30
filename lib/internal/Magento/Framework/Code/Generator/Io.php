@@ -8,7 +8,7 @@ namespace Magento\Framework\Code\Generator;
 use Magento\Framework\Exception\FileSystemException;
 
 /**
- * Writes the generated code
+ * Manages generated code.
  */
 class Io
 {
