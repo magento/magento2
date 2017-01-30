@@ -66,19 +66,17 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      * Action for Authorize.net SIM Relay Request.
      *
      * @param string $area
-     * @param \Magento\Authorizenet\Model\Directpost $paymentMethod
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return void
      */
-    protected function _responseAction($area = 'frontend', \Magento\Authorizenet\Model\Directpost $paymentMethod = null)
+    protected function _responseAction($area = 'frontend')
     {
         $helper = $this->dataFactory->create($area);
-        /** @var \Magento\Framework\View\Result\Page $resultPage */
-        $resultPage =  $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_PAGE);
 
         $params = [];
         $data = $this->getRequest()->getParams();
 
-        $paymentMethod = $this->getPaymentMethod($paymentMethod);
+        /* @var $paymentMethod \Magento\Authorizenet\Model\DirectPost */
+        $paymentMethod = $this->_objectManager->create(\Magento\Authorizenet\Model\Directpost::class);
 
         $result = [];
         if (!empty($data['x_invoice_num'])) {
@@ -115,19 +113,6 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
 
         //registering parameter for iframe content
         $this->_coreRegistry->register(Iframe::REGISTRY_KEY, $params);
-        return $resultPage;
-    }
-
-    /**
-     * @param \Magento\Authorizenet\Model\Directpost|null $paymentMethod
-     * @return \Magento\Authorizenet\Model\Directpost
-     */
-    private function getPaymentMethod(\Magento\Authorizenet\Model\Directpost $paymentMethod = null)
-    {
-        if (empty($paymentMethod)) {
-            $paymentMethod = $this->_objectManager->create(\Magento\Authorizenet\Model\Directpost::class);
-        }
-        return $paymentMethod;
     }
 
     /**

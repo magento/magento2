@@ -9,9 +9,6 @@ namespace Magento\Authorizenet\Controller\Directpost\Payment;
  * Class ResponseTest
  *
  * @magentoAppArea frontend
- * @magentoDbIsolation enabled
- * @magentoAppIsolation enabled
- * @magentoDataFixture Magento/Authorizenet/_files/authorizenet_enabled_setting.php
  */
 class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -59,65 +56,6 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * Tests the controller for success
-     *
-     * @param string $hash
-     * @param string[] $params
-     *
-     * @dataProvider responseActionAuthorizeCaptureSuccessDataProvider
-     */
-    public function testResponseActionAuthorizeCaptureSuccess($hash, $params)
-    {
-        $controllerName = 'directpost_payment';
-        $controllerModule = 'authorizenet';
-        $controllerAction = 'response';
-        $params['x_invoice_num'] = 100000002;
-        $params['x_MD5_Hash'] = $hash;
-        $this->getRequest()->setControllerName(
-            $controllerName
-        )->setControllerModule(
-            $controllerModule
-        )->setActionName(
-            $controllerAction
-        )->setRouteName(
-            $controllerModule
-        )->setRequestUri("/{$controllerModule}/{$controllerName}/{$controllerAction}")
-            ->setParams($params);
-
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $directpostFactory = $this->getMockBuilder(\Magento\Authorizenet\Model\DirectpostFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $directpost = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $directpostFactory->expects(static::once())
-            ->method('create')
-            ->willReturn($directpost);
-        $directpost->expects(static::once())
-            ->method('process');
-
-        /** @var \Magento\Authorizenet\Controller\Directpost\Payment\Response $controller */
-        $controller = $objectManager->create(
-            \Magento\Authorizenet\Controller\Directpost\Payment\Response::class,
-            [
-                'directpostFactory' => $directpostFactory
-            ]
-        );
-
-        $response = $controller->execute();
-        $output = $response->getLayout()->getOutput();
-
-        $expectedString = "{$controllerModule}/{$controllerName}/redirect/x_invoice_num/{$params['x_invoice_num']}/"
-            . "success/1/controller_action_name/{$controllerName}/";
-
-        $this->assertContains('window.location', $output);
-        $this->assertContains($expectedString, $output);
-    }
-
-    /**
      * Tests the controller for created blocks used for sending emails that should not affect layout response
      *
      * @param string $hash
@@ -145,27 +83,32 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $directpostFactory = $this->getMockBuilder(\Magento\Authorizenet\Model\DirectpostFactory::class)
+        $directpostMock =  $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost::class)
             ->disableOriginalConstructor()
+            ->getMock();
+        $objectManagerMock =  $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->setMethods(['create'])
-            ->getMock();
-        $directpost = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $directpostFactory->expects(static::once())
+            ->getMockForAbstractClass();
+        $objectManagerMock->expects($this->atLeastOnce())
             ->method('create')
-            ->willReturn($directpost);
-        $directpost->expects(static::once())
-            ->method('process');
+            ->with(\Magento\Authorizenet\Model\Directpost::class)
+            ->willReturn($directpostMock);
+        $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Backend\App\Action\Context::class,
+            [
+                'objectManager' => $objectManagerMock
+            ]
+        );
 
         /** @var \Magento\Authorizenet\Controller\Directpost\Payment\Response $controller */
         $controller = $objectManager->create(
             \Magento\Authorizenet\Controller\Directpost\Payment\Response::class,
             [
-                'directpostFactory' => $directpostFactory
+                'context' => $context
             ]
         );
 
+        // create one block for potential layout stack modification that should not affect response
         /** @var \Magento\Authorizenet\Block\Adminhtml\Order\View\Info\FraudDetails $block */
         $block = $objectManager->get(\Magento\Framework\View\LayoutInterface::class)
             ->createBlock(\Magento\Authorizenet\Block\Adminhtml\Order\View\Info\FraudDetails::class);
