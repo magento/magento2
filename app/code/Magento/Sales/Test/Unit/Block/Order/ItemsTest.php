@@ -36,6 +36,11 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
     private $scopeConfigMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $layoutMock;
+
+    /**
      * @var \Magento\Sales\Block\Order\Items
      */
     private $block;
@@ -60,6 +65,7 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->once())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
+
         $this->block = new \Magento\Sales\Block\Order\Items(
             $this->contextMock,
             $this->registryMock,
@@ -71,28 +77,115 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-    }
-
-    public function testPrepareLayout()
-    {
-        $layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->block->setLayout($layoutMock);
     }
 
-    public function testIsPagerDisplayed()
+    /**
+     * Common code for several tests to initialize block state with mocks
+     *
+     * @param int $collectionSize
+     * @param bool $expectPager
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function prepareLayoutMocks($collectionSize, $expectPager)
     {
-        //positive + negative
+        $itemsPerPage = 42;
+        $this->collectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->itemCollectionMock);
+
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with('sales/orders/items_per_page')
+            ->willReturn($itemsPerPage);
+
+        $pagerBlockName = 'BrilliantPager';
+        $this->layoutMock->expects($this->atLeastOnce())
+            ->method('getChildName')
+            ->with(null, 'sales_order_item_pager')
+            ->willReturn($pagerBlockName);
+        $pagerBlockMock = $this->getMockBuilder(\Magento\Theme\Block\Html\Pager::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setShowAmounts', 'setLimit', 'setCollection', 'setAvailableLimit', 'toHtml'])
+            ->getMock();
+        $this->layoutMock->expects($this->atLeastOnce())
+            ->method('getBlock')
+            ->with($pagerBlockName)
+            ->willReturn($pagerBlockMock);
+        $pagerBlockMock->expects($this->once())
+            ->method('setLimit')
+            ->with($itemsPerPage);
+        $pagerBlockMock->expects($this->once())
+            ->method('setCollection')
+            ->with($this->itemCollectionMock);
+        $pagerBlockMock->expects($this->once())
+            ->method('setAvailableLimit')
+            ->with([$itemsPerPage]);
+
+        //isPagerDisplayed() call
+        $this->itemCollectionMock->expects($this->atLeastOnce())
+            ->method('getSize')
+            ->willReturn($collectionSize);
+
+        $pagerBlockMock->expects($this->once())
+            ->method('setShowAmounts')
+            ->with($expectPager);
+
+        $this->block->setLayout($this->layoutMock);
+        return $pagerBlockMock;
+    }
+
+    /**
+     * Simple way to test protected _prepareLayout() method.
+     */
+    public function testPrepareLayout()
+    {
+        $this->prepareLayoutMocks(100, true);
+    }
+
+    /**
+     * @param int $collectionSize
+     * @param bool $expectedState
+     * @dataProvider pagerStates
+     */
+    public function testIsPagerDisplayed($collectionSize, $expectedState)
+    {
+        $this->prepareLayoutMocks($collectionSize, $expectedState);
+        $this->assertEquals($expectedState, $this->block->isPagerDisplayed());
+    }
+
+    /**
+     * Data provider for testIsPagerDisplayed
+     *
+     * @return array
+     */
+    public function pagerStates()
+    {
+        return ([
+            [100, true],
+            [42, false],
+        ]);
     }
 
     public function testGetItems()
     {
-        $this->block->getItems();
+        $collectionItems = [3, 5, 7];
+        $this->prepareLayoutMocks(100, true);
+        $this->itemCollectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn($collectionItems);
+        $this->assertEquals($collectionItems, $this->block->getItems());
     }
 
     public function testGetPagerHtml()
     {
-        $this->block->getPagerHtml();
+        $html = 'some HTML code';
+        $pagerBlockMock = $this->prepareLayoutMocks(100, true);
+        $pagerBlockMock->expects($this->once())
+            ->method('toHtml')
+            ->willReturn($html);
+        $this->assertEquals($html, $this->block->getPagerHtml());
     }
 }
