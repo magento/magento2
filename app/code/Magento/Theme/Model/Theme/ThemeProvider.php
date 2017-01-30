@@ -135,7 +135,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     }
 
     /**
-     * Method to load Theme model from cache
+     * Load Theme model from cache
      *
      * @param string $cacheId
      * @return \Magento\Theme\Model\Theme|null
@@ -153,7 +153,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     }
 
     /**
-     * Method to save Theme model to the cache
+     * Save Theme model to the cache
      *
      * @param \Magento\Theme\Model\Theme $theme
      * @param string $cacheId

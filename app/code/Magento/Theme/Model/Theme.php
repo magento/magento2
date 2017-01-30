@@ -404,7 +404,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * Method to populate Theme object from an array
+     * Populate Theme object from an array
      *
      * @param array $data
      * @return Theme
@@ -426,7 +426,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * Method to get a new Theme model from factory
+     * Create a new Theme model from factory
      *
      * @return \Magento\Theme\Model\Theme
      */
