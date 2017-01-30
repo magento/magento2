@@ -6,15 +6,18 @@
 
 namespace Magento\Deploy\Model\Deploy;
 
-use Magento\Deploy\Model\DeployManager;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
-use \Magento\Framework\RequireJs\Config as RequireJsConfig;
+use Magento\Framework\RequireJs\Config as RequireJsConfig;
+use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\App\ObjectManager;
+use Magento\Translation\Model\Js\Config as TranslationJsConfig;
+use Magento\Framework\TranslateInterface;
 
 class LocaleQuickDeploy implements DeployInterface
 {
@@ -39,15 +42,51 @@ class LocaleQuickDeploy implements DeployInterface
     private $options = [];
 
     /**
+     * @var Repository
+     */
+    private $assetRepo;
+
+    /**
+     * @var Publisher
+     */
+    private $assetPublisher;
+
+    /**
+     * @var TranslationJsConfig
+     */
+    private $translationJsConfig;
+
+    /**
+     * @var TranslateInterface
+     */
+    private $translator;
+
+    /**
      * @param Filesystem $filesystem
      * @param OutputInterface $output
      * @param array $options
+     * @param Repository $assetRepo
+     * @param Publisher $assetPublisher
+     * @param TranslationJsConfig $translationJsConfig
+     * @param TranslateInterface $translator
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, OutputInterface $output, $options = [])
-    {
+    public function __construct(
+        Filesystem $filesystem,
+        OutputInterface $output,
+        $options = [],
+        Repository $assetRepo = null,
+        Publisher $assetPublisher = null,
+        TranslationJsConfig $translationJsConfig = null,
+        TranslateInterface $translator = null
+    ) {
         $this->filesystem = $filesystem;
         $this->output = $output;
         $this->options = $options;
+        $this->assetRepo = $assetRepo ?: ObjectManager::getInstance()->get(Repository::class);
+        $this->assetPublisher = $assetPublisher ?: ObjectManager::getInstance()->get(Publisher::class);
+        $this->translationJsConfig = $translationJsConfig
+            ?: ObjectManager::getInstance()->get(TranslationJsConfig::class);
+        $this->translator = $translator ?: ObjectManager::getInstance()->get(TranslateInterface::class);
     }
 
     /**
@@ -67,13 +106,13 @@ class LocaleQuickDeploy implements DeployInterface
      */
     public function deploy($area, $themePath, $locale)
     {
-        if (isset($this->options[Options::DRY_RUN]) && $this->options[Options::DRY_RUN]) {
+        if (!empty($this->options[Options::DRY_RUN])) {
             return Cli::RETURN_SUCCESS;
         }
 
         $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
 
-        if (!isset($this->options[self::DEPLOY_BASE_LOCALE])) {
+        if (empty($this->options[self::DEPLOY_BASE_LOCALE])) {
             throw new \InvalidArgumentException('Deploy base locale must be set for Quick Deploy');
         }
         $processedFiles = 0;
@@ -88,7 +127,7 @@ class LocaleQuickDeploy implements DeployInterface
         $this->deleteLocaleResource($newLocalePath);
         $this->deleteLocaleResource($newRequireJsPath);
 
-        if (isset($this->options[Options::SYMLINK_LOCALE]) && $this->options[Options::SYMLINK_LOCALE]) {
+        if (!empty($this->options[Options::SYMLINK_LOCALE])) {
             $this->getStaticDirectory()->createSymlink($baseLocalePath, $newLocalePath);
             $this->getStaticDirectory()->createSymlink($baseRequireJsPath, $newRequireJsPath);
 
@@ -98,18 +137,63 @@ class LocaleQuickDeploy implements DeployInterface
                 $this->getStaticDirectory()->readRecursively($baseLocalePath),
                 $this->getStaticDirectory()->readRecursively($baseRequireJsPath)
             );
+            $jsDictionaryEnabled = $this->translationJsConfig->dictionaryEnabled();
             foreach ($localeFiles as $path) {
                 if ($this->getStaticDirectory()->isFile($path)) {
                     $destination = $this->replaceLocaleInPath($path, $baseLocale, $locale);
-                    $this->getStaticDirectory()->copyFile($path, $destination);
+                    if (!$jsDictionaryEnabled || !$this->isJsDictionary($path)) {
+                        $this->getStaticDirectory()->copyFile($path, $destination);
+                    }
                     $processedFiles++;
                 }
+            }
+
+            if ($jsDictionaryEnabled) {
+                $this->deployJsDictionary($area, $themePath, $locale);
+                $processedFiles++;
             }
 
             $this->output->writeln("\nSuccessful copied: {$processedFiles} files; errors: {$errorAmount}\n---\n");
         }
 
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Define if provided path is js dictionary
+     *
+     * @param string $path
+     * @return bool
+     */
+    private function isJsDictionary($path)
+    {
+        return strpos($path, $this->translationJsConfig->getDictionaryFileName()) !== false;
+    }
+
+    /**
+     * Deploy js-dictionary for specific locale, theme and area
+     *
+     * @param string $area
+     * @param string $themePath
+     * @param string $locale
+     * @return void
+     */
+    private function deployJsDictionary($area, $themePath, $locale)
+    {
+        $this->translator->setLocale($locale);
+        $this->translator->loadData($area, true);
+
+        $asset = $this->assetRepo->createAsset(
+            $this->translationJsConfig->getDictionaryFileName(),
+            ['area' => $area, 'theme' => $themePath, 'locale' => $locale]
+        );
+        if ($this->output->isVeryVerbose()) {
+            $this->output->writeln("\tDeploying the file to '{$asset->getPath()}'");
+        } else {
+            $this->output->write('.');
+        }
+
+        $this->assetPublisher->publish($asset);
     }
 
     /**
