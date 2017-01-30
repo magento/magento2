@@ -70,8 +70,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testConfigurableImport($pathToFile, $productName, $optionSkuList)
     {
-        // import data from CSV file
-       // $pathToFile = __DIR__ . '/../../_files/import_configurable.csv';
         $filesystem = $this->objectManager->create(
             \Magento\Framework\Filesystem::class
         );
