@@ -38,7 +38,7 @@ class Menu extends \Magento\Backend\Block\Template
     /**
      * Current selected item
      *
-     * @var \Magento\Backend\Model\Menu\Item|null|bool
+     * @var \Magento\Backend\Model\Menu\Item|null
      */
     protected $_activeItemModel = null;
 

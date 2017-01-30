@@ -14,17 +14,17 @@ class MenuItemCheckerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Item|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $activeMenuItem;
+    private $activeMenuItemMock;
 
     /**
      * @var Item|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $menuItem;
+    private $menuItemMock;
 
     /**
      * @var Menu|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $menu;
+    private $menuMock;
 
     /**
      * @var MenuItemChecker;
@@ -33,10 +33,10 @@ class MenuItemCheckerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->menuItem = $this->getMockBuilder(Item::class)
+        $this->menuItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->activeMenuItem = $this->getMockBuilder(Item::class)
+        $this->activeMenuItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->menuItemChecker = new MenuItemChecker();
@@ -49,20 +49,20 @@ class MenuItemCheckerTest extends \PHPUnit_Framework_TestCase
      * @param bool $expected
      * @dataProvider dataProvider
      */
-    public function testIsItemActive( $activeItemId, $itemId, $isItem, $expected)
+    public function testIsItemActive($activeItemId, $itemId, $isItem, $expected)
     {
-        $this->menu = $this->getMockBuilder(Menu::class)
+        $this->menuMock = $this->getMockBuilder(Menu::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->menuItem->expects($this->any())->method('getId')->willReturn($itemId);
-        $this->activeMenuItem->expects($this->any())->method('getId')->willReturn($activeItemId);
-        $this->menuItem->expects($this->any())->method('getChildren')->willReturn($this->menu);
-        $this->menu->expects($this->any())
+        $this->menuItemMock->expects($this->any())->method('getId')->willReturn($itemId);
+        $this->activeMenuItemMock->expects($this->any())->method('getId')->willReturn($activeItemId);
+        $this->menuItemMock->expects($this->any())->method('getChildren')->willReturn($this->menuMock);
+        $this->menuMock->expects($this->any())
             ->method('get')
             ->with($activeItemId)
-            ->willReturn($isItem ? $this->activeMenuItem : null);
+            ->willReturn($isItem ? $this->activeMenuItemMock : null);
         $this->assertEquals($expected,
-            $this->menuItemChecker->isItemActive($this->activeMenuItem, $this->menuItem, 0)
+            $this->menuItemChecker->isItemActive($this->activeMenuItemMock, $this->menuItemMock, 0)
 
         );
     }
@@ -70,7 +70,7 @@ class MenuItemCheckerTest extends \PHPUnit_Framework_TestCase
     public function testIsItemActiveLevelNotZero()
     {
         $this->assertFalse(
-            $this->menuItemChecker->isItemActive($this->activeMenuItem, $this->menuItem, 1)
+            $this->menuItemChecker->isItemActive($this->activeMenuItemMock, $this->menuItemMock, 1)
 
         );
     }

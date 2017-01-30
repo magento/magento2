@@ -61,10 +61,10 @@ class AnchorRendererTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->anchorRenderer =  $this->objectManagerHelper->getObject(
             AnchorRenderer::class,
-        [
-            'menuItemChecker' => $this->menuItemCheckerMock,
-            'escaper' => $this->escaperMock
-        ]
+            [
+                'menuItemChecker' => $this->menuItemCheckerMock,
+                'escaper' => $this->escaperMock
+            ]
         );
     }
 
@@ -110,7 +110,7 @@ class AnchorRendererTest extends \PHPUnit_Framework_TestCase
         $this->menuItemMock->expects($this->once())->method('getClickCallback')->willReturn($onclick);
         $this->menuItemCheckerMock->expects($this->once())
             ->method('isItemActive')
-            ->with($this->menuItemCheckerMock, $this->menuItemMock, $level)->willReturn(true);
+            ->with($this->activeMenuItemMock, $this->menuItemMock, $level)->willReturn(true);
 
         $expected = '<a href="' . $url . '" ' . $finalTarget . ' ' . 'title="' . $tooltip . '"'
             . ' onclick="' . $onclick . '"'
@@ -123,7 +123,7 @@ class AnchorRendererTest extends \PHPUnit_Framework_TestCase
             $this->anchorRenderer->renderAnchor($this->activeMenuItemMock, $this->menuItemMock, $level));
     }
 
-        public function targetDataProvider()
+    public function targetDataProvider()
     {
         return [
             'item has target' => [true],
