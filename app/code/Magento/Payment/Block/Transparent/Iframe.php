@@ -17,51 +17,38 @@ class Iframe extends \Magento\Framework\View\Element\Template
     /**
      * Core registry
      *
-     * @deprecated
      * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
 
     /**
-     * @var \Magento\Payment\Model\IframeService
-     */
-    private $iframeService;
-
-    /**
+     * Constructor
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @param \Magento\Payment\Model\IframeService|null $iframeService
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = [],
-        \Magento\Payment\Model\IframeService $iframeService = null
+        array $data = []
     ) {
         $this->coreRegistry = $registry;
-        $this->iframeService = $iframeService ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Payment\Model\IframeService::class);
         parent::__construct($context, $data);
     }
 
     /**
-     * Set params once per request
+     * Override this method in descendants to produce html
      *
-     * @return $this
+     * @return string
      */
-    public function setParams(array $params)
+    protected function _toHtml()
     {
-        return $this->iframeService->setParams($params);
-    }
-
-    /**
-     * Return params
-     *
-     * @return $this
-     */
-    public function getParams()
-    {
-        return $this->iframeService->getParams();
+        $params = $this->getParams();
+        if (empty($params)) {
+            $params = $this->coreRegistry->registry(self::REGISTRY_KEY);
+        }
+        $this->setParams($params);
+        return parent::_toHtml();
     }
 }

@@ -46,7 +46,7 @@ class Redirect extends \Magento\Authorizenet\Controller\Directpost\Payment
             unset($params['redirect_parent']);
         }
 
-        $this->_objectManager->get(\Magento\Payment\Model\IframeService::class)->setParams($params);
+        $this->_coreRegistry->register(Iframe::REGISTRY_KEY, $params);
         $this->_view->addPageLayoutHandles();
         $this->_view->loadLayout(false)->renderLayout();
     }

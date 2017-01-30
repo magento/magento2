@@ -17,7 +17,6 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
     /**
      * Core registry
      *
-     * @deprecated
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -28,28 +27,19 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
     protected $dataFactory;
 
     /**
-     * @var \Magento\Payment\Model\IframeService
-     */
-    private $iframeService;
-
-    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Authorizenet\Helper\DataFactory $dataFactory
-     * @param \Magento\Payment\Model\IframeService|null $iframeService
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Authorizenet\Helper\DataFactory $dataFactory,
-        \Magento\Payment\Model\IframeService $iframeService = null
+        \Magento\Authorizenet\Helper\DataFactory $dataFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->dataFactory = $dataFactory;
-        $this->iframeService = $iframeService ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Payment\Model\IframeService::class);
         parent::__construct($context);
     }
 
@@ -76,17 +66,19 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
      * Action for Authorize.net SIM Relay Request.
      *
      * @param string $area
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param \Magento\Authorizenet\Model\Directpost $paymentMethod
+     * @return \Magento\Framework\Controller\ResultInterface
      */
-    protected function _responseAction($area = 'frontend')
+    protected function _responseAction($area = 'frontend', \Magento\Authorizenet\Model\Directpost $paymentMethod = null)
     {
         $helper = $this->dataFactory->create($area);
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage =  $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_PAGE);
 
         $params = [];
         $data = $this->getRequest()->getParams();
 
-        $paymentMethod = $this->_objectManager->create(\Magento\Authorizenet\Model\Directpost::class);
+        $paymentMethod = $this->getPaymentMethod($paymentMethod);
 
         $result = [];
         if (!empty($data['x_invoice_num'])) {
@@ -121,8 +113,21 @@ abstract class Payment extends \Magento\Framework\App\Action\Action
             $params['redirect'] = $helper->getRedirectIframeUrl($result);
         }
 
-        //registering response parameters for iframe content
-        $this->iframeService->setParams($params);
+        //registering parameter for iframe content
+        $this->_coreRegistry->register(Iframe::REGISTRY_KEY, $params);
+        return $resultPage;
+    }
+
+    /**
+     * @param \Magento\Authorizenet\Model\Directpost|null $paymentMethod
+     * @return \Magento\Authorizenet\Model\Directpost
+     */
+    private function getPaymentMethod(\Magento\Authorizenet\Model\Directpost $paymentMethod = null)
+    {
+        if (empty($paymentMethod)) {
+            $paymentMethod = $this->_objectManager->create(\Magento\Authorizenet\Model\Directpost::class);
+        }
+        return $paymentMethod;
     }
 
     /**
