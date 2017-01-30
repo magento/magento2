@@ -6,18 +6,15 @@
 
 namespace Magento\Analytics\Model;
 
-use Magento\Analytics\ReportXml\ReportProvider;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Archive;
-use Magento\Analytics\Model\Config;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class Export
  *
- * Executes export of collected data
- * Iterates registered providers @see etc/analytics.xml
- * Collects data (to TMP folder) and packs them into archive
+ * Execute data collection to $path
+ * Packs collected data in $path and pack them into archive
  * Returns archive content
  */
 class Export
@@ -42,46 +39,29 @@ class Export
     private $filesystem;
 
     /**
-     * @var ProviderFactory
-     */
-    private $providerFactory;
-
-    /**
-     * @var ReportProvider
-     */
-    private $reportProvider;
-
-    /**
      * @var Archive
      */
     private $archive;
-
     /**
-     * @var \Magento\Analytics\Model\Config
+     * @var \Magento\Analytics\Model\ReportWriterInterface
      */
-    private $config;
+    private $reportWriter;
 
     /**
      * Export constructor.
      *
      * @param Filesystem $filesystem
-     * @param ProviderFactory $providerFactory
-     * @param ReportProvider $reportProvider
      * @param Archive $archive
-     * @param \Magento\Analytics\Model\Config $config
+     * @param ReportWriterInterface $reportWriter
      */
     public function __construct(
         Filesystem $filesystem,
-        ProviderFactory $providerFactory,
-        ReportProvider $reportProvider,
         Archive $archive,
-        Config $config
+        ReportWriterInterface $reportWriter
     ) {
         $this->filesystem = $filesystem;
-        $this->providerFactory = $providerFactory;
-        $this->reportProvider = $reportProvider;
         $this->archive = $archive;
-        $this->config = $config;
+        $this->reportWriter = $reportWriter;
     }
 
     /**
@@ -92,21 +72,7 @@ class Export
     public function getArchiveContent()
     {
         $directory = $this->filesystem->getDirectoryWrite(DirectoryList::TMP);
-        foreach($this->config->get() as $file) {
-            foreach ($file['providers'] as $provider) {
-                $providerObject = $this->providerFactory->create($provider[0]['class']);
-                $providerObject->getReport($provider[0]['name']);
-                $file = $this->path . $provider[0]['name'] . md5(microtime()) . '.csv';
-                $directory->create($this->path);
-                $stream = $directory->openFile($file, 'w+');
-                $stream->lock();
-                foreach ($this->reportProvider->getReport($provider[0]['name']) as $row) {
-                    $stream->writeCsv($row);
-                }
-                $stream->unlock();
-                $stream->close();
-            }
-        }
+        $this->reportWriter->write($directory, $this->path);
         $archiveFile = $directory->getAbsolutePath(). $this->archiveName;
         $this->archive->pack($directory->getAbsolutePath($this->path), $archiveFile, true);
         $directory->delete($this->path);
