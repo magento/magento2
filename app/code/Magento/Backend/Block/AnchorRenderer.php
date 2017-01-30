@@ -52,8 +52,8 @@ class AnchorRenderer
         } else {
             $target = $menuItem->getTarget() ? ('target=' . $menuItem->getTarget()) : '';
             $output = '<a href="' . $menuItem->getUrl() . '" ' . $target . ' ' . $this->_renderItemAnchorTitle(
-                    $menuItem
-                ) . $this->_renderItemOnclickFunction(
+                $menuItem
+            ) . $this->_renderItemOnclickFunction(
                     $menuItem
                 ) . ' class="' . ($this->menuItemChecker->isItemActive($activeItem, $menuItem, $level) ? '_active' : '')
                 . '">' . '<span>' . $this->escaper->escapeHtml(__($menuItem->getTitle()))

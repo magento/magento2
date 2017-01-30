@@ -120,7 +120,8 @@ class AnchorRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $expected,
-            $this->anchorRenderer->renderAnchor($this->activeMenuItemMock, $this->menuItemMock, $level));
+            $this->anchorRenderer->renderAnchor($this->activeMenuItemMock, $this->menuItemMock, $level)
+        );
     }
 
     public function targetDataProvider()

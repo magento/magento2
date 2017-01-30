@@ -61,9 +61,9 @@ class MenuItemCheckerTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with($activeItemId)
             ->willReturn($isItem ? $this->activeMenuItemMock : null);
-        $this->assertEquals($expected,
+        $this->assertEquals(
+            $expected,
             $this->menuItemChecker->isItemActive($this->activeMenuItemMock, $this->menuItemMock, 0)
-
         );
     }
 
@@ -71,7 +71,6 @@ class MenuItemCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse(
             $this->menuItemChecker->isItemActive($this->activeMenuItemMock, $this->menuItemMock, 1)
-
         );
     }
 
