@@ -83,7 +83,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
             return $this->getThemeList()->getThemeByFullPath($fullPath);
         }
 
-        /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
         $theme = $this->loadThemeFromCache('theme'. $fullPath);
         if ($theme) {
             $this->themes[$fullPath] = $theme;
@@ -126,7 +125,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
             $this->themes[$themeId] = $theme;
             return $theme;
         }
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         $theme = $this->themeFactory->create();
         $theme->load($themeId);
         if ($theme->getId()) {
@@ -137,8 +135,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     }
 
     /**
-     * Method to load Theme model from cache. If located, the theme will be unserialized and converted
-     * back to an object, via the populateFromArray method of the Theme object.
+     * Method to load Theme model from cache
      *
      * @param string $cacheId
      * @return \Magento\Theme\Model\Theme|null
@@ -148,7 +145,6 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
         $themeData = $this->cache->load($cacheId);
         if ($themeData) {
             $themeData = $this->serializer->unserialize($themeData);
-            /** @var $theme \Magento\Theme\Model\Theme */
             $theme = $this->themeFactory->create()->populateFromArray($themeData);
             return $theme;
         }
@@ -157,8 +153,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     }
 
     /**
-     * Method to save Theme model to the cache. Model will be converted to an array via the toArray method
-     * of the Theme object, then serialized.
+     * Method to save Theme model to the cache
      *
      * @param \Magento\Theme\Model\Theme $theme
      * @param string $cacheId

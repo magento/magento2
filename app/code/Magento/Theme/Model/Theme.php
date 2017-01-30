@@ -82,7 +82,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     /**
      * @var ThemeFactory
      */
-    private $_themeModelFactory;
+    private $themeModelFactory;
 
     /**
      * @var ThemeInterface[]
@@ -124,8 +124,8 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         $this->_imageFactory = $imageFactory;
         $this->_validator = $validator;
         $this->_customFactory = $customizationFactory;
+        $this->themeModelFactory = $themeModelFactory ?: ObjectManager::getInstance()->get(ThemeFactory::class);
         $this->addData(['type' => self::TYPE_VIRTUAL]);
-        $this->_themeModelFactory = $themeModelFactory ?: ObjectManager::getInstance()->get(ThemeFactory::class);
     }
 
     /**
@@ -385,21 +385,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * @param int $modelId
-     * @param null $field
-     * @return $this
-     */
-    public function load($modelId, $field = null)
-    {
-        return parent::load($modelId, $field);
-    }
-
-    /**
-     * Method to convert Theme object to array. Additionally handles nested Themes that could be stored
-     * under the parent_theme and inherited_themes keys
-     *
-     * @param array $keys
-     * @return array
+     * @inheritdoc
      */
     public function toArray(array $keys = [])
     {
@@ -418,8 +404,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * Method to populate Theme object from an array. Additionally handles nested Themes that could be
-     * stored under the parent_theme and inherited_themes keys
+     * Method to populate Theme object from an array
      *
      * @param array $data
      * @return Theme
@@ -441,10 +426,12 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * @return ThemeInterface|null
+     * Method to get a new Theme model from factory
+     *
+     * @return \Magento\Theme\Model\Theme
      */
     private function getThemeInstance()
     {
-        return $this->_themeModelFactory->create();
+        return $this->themeModelFactory->create();
     }
 }

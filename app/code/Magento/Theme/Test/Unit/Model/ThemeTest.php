@@ -556,58 +556,67 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $value
+     * @param array $expected
+     * @param int $expectedCallCount
+     *
+     * @dataProvider populateFromArrayDataProvider
      */
-    public function testPopulateFromArray()
+    public function testPopulateFromArray(array $value, array $expected, $expectedCallCount = 0)
     {
-        // data
-        $validThemeData = ['theme_data' => 'theme_data'];
-        $validWithParentThemeData = [
-            'theme_data' => 'theme_data',
-            'parent_theme' => [
-                'theme_data' => 'theme_data'
-            ]
-        ];
-        $validWithChildrenThemeData = [
-            'theme_data' => 'theme_data',
-            'inherited_themes' => [
-                'key1' => ['theme_data' => 'theme_data'],
-                'key2' => ['theme_data' => 'theme_data']
-            ]
-        ];
-
-        //mocks
         $themeMock = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $themeMock->expects($this->exactly(3))
+        $themeMock->expects($this->exactly($expectedCallCount))
             ->method('populateFromArray')
-            ->withConsecutive(
-                [$validWithParentThemeData['parent_theme']],
-                [$validWithChildrenThemeData['inherited_themes']['key1']],
-                [$validWithChildrenThemeData['inherited_themes']['key2']]
-            )
-            ->willReturnSelf();
-        $this->themeModelFactory->expects($this->exactly(3))
+            ->willReturn('theme_instance');
+
+        $this->themeModelFactory->expects($this->exactly($expectedCallCount))
             ->method('create')
             ->willReturn($themeMock);
 
-        // test valid theme
-        $this->_model->populateFromArray($validThemeData);
-        $this->assertEquals($validThemeData, $this->_model->getData());
-
-        // test valid theme with parent
-        $this->_model->populateFromArray($validWithParentThemeData);
-        $expected = array_merge($validWithParentThemeData, ['parent_theme' => $themeMock]);
+        $this->_model->populateFromArray($value);
         $this->assertEquals($expected, $this->_model->getData());
+    }
 
-        // test valid theme with children
-        $this->_model->populateFromArray($validWithChildrenThemeData);
-        $expected = array_merge($validWithChildrenThemeData, [
-            'inherited_themes' => [
-                'key1' => $themeMock,
-                'key2' => $themeMock
+    public function populateFromArrayDataProvider()
+    {
+        return [
+            'valid data' => [
+                'value' => ['theme_data' => 'theme_data'],
+                'expected' => ['theme_data' => 'theme_data']
+            ],
+            'valid data with parent' => [
+                'value' =>
+                    [
+                        'theme_data' => 'theme_data',
+                        'parent_theme' => [
+                            'theme_data' => 'theme_data'
+                        ]
+                    ],
+                'expected' => [
+                    'theme_data' => 'theme_data',
+                    'parent_theme' => 'theme_instance'
+                ],
+                'expected call count' => 1
+            ],
+            'valid data with children' => [
+                'value' => [
+                    'theme_data' => 'theme_data',
+                    'inherited_themes' => [
+                        'key1' => ['theme_data' => 'theme_data'],
+                        'key2' => ['theme_data' => 'theme_data']
+                    ]
+                ],
+                'expected' => [
+                    'theme_data' => 'theme_data',
+                    'inherited_themes' => [
+                        'key1' => 'theme_instance',
+                        'key2' => 'theme_instance'
+                    ]
+                ],
+                'expected call count' => 2
             ]
-        ]);
-        $this->assertEquals($expected, $this->_model->getData());
+        ];
     }
 }
