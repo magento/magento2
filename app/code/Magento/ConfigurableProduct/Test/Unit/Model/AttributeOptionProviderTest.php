@@ -21,6 +21,9 @@ use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**

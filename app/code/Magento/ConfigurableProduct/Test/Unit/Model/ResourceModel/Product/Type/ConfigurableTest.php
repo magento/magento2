@@ -13,6 +13,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
+use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
@@ -57,6 +58,16 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     private $attributeOptionProvider;
 
+    /**
+     * @var OptionProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $optionProvider;
+
+    /**
+     * @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeResolver;
+
     protected function setUp()
     {
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
@@ -88,6 +99,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->attributeOptionProvider = $this->getMockBuilder(AttributeOptionProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->optionProvider = $this->getMockBuilder(OptionProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $context = $this->getMock(
@@ -106,7 +120,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             Configurable::class,
             [
                 'catalogProductRelation' => $this->relation,
+                'scopeResolver' => $this->scopeResolver,
                 'attributeOptionProvider' => $this->attributeOptionProvider,
+                'optionProvider' => $this->optionProvider,
                 'context' => $context
             ]
         );
@@ -117,7 +133,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())
             ->method('getData')
             ->willReturn(3);
-        $this->attributeOptionProvider->expects($this->once())
+        $this->optionProvider->expects($this->once())
             ->method('getProductEntityLinkField')
             ->willReturnSelf();
         $this->connectionMock->expects($this->once())
@@ -153,7 +169,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->abstractAttribute,
         ];
 
-        $this->attributeOptionProvider->expects($this->once())
+        $this->optionProvider->expects($this->once())
             ->method('getProductEntityLinkField')
             ->willReturn('link');
         $this->attributeOptionProvider->expects($this->once())

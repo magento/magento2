@@ -14,6 +14,9 @@ use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
 use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
 use Magento\Catalog\Model\Product as ProductModel;
 use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
+use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\App\ObjectManager;
 
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -30,19 +33,36 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $attributeOptionProvider;
 
     /**
+     * @var ScopeResolverInterface
+     */
+    private $scopeResolver;
+
+    /**
+     * @var OptionProvider
+     */
+    private $optionProvider;
+
+    /**
      * @param DbContext $context
      * @param ProductRelation $catalogProductRelation
-     * @param AttributeOptionProvider $attributeOptionProvider
      * @param string $connectionName
+     * @param ScopeResolverInterface $scopeResolver
+     * @param AttributeOptionProvider $attributeOptionProvider
+     * @param OptionProvider $optionProvider
      */
     public function __construct(
         DbContext $context,
         ProductRelation $catalogProductRelation,
-        AttributeOptionProvider $attributeOptionProvider,
-        $connectionName = null
+        $connectionName = null,
+        ScopeResolverInterface $scopeResolver = null,
+        AttributeOptionProvider $attributeOptionProvider = null,
+        OptionProvider $optionProvider = null
     ) {
         $this->catalogProductRelation = $catalogProductRelation;
-        $this->attributeOptionProvider = $attributeOptionProvider;
+        $this->scopeResolver = $scopeResolver;
+        $this->attributeOptionProvider = $attributeOptionProvider
+            ?: ObjectManager::getInstance()->get(AttributeOptionProvider::class);
+        $this->optionProvider = $optionProvider ?: ObjectManager::getInstance()->get(OptionProvider::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -68,7 +88,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['e' => $this->getTable('catalog_product_entity')],
             ['e.entity_id']
         )->where(
-            'e.' . $this->attributeOptionProvider->getProductEntityLinkField() . '=?',
+            'e.' . $this->optionProvider->getProductEntityLinkField() . '=?',
             $option->getProductId()
         )->limit(1);
 
@@ -88,7 +108,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             return $this;
         }
 
-        $productId = $mainProduct->getData($this->attributeOptionProvider->getProductEntityLinkField());
+        $productId = $mainProduct->getData($this->optionProvider->getProductEntityLinkField());
 
         $data = [];
         foreach ($productIds as $id) {
@@ -134,7 +154,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['product_id', 'parent_id']
         )->join(
             ['p' => $this->getTable('catalog_product_entity')],
-            'p.' . $this->attributeOptionProvider->getProductEntityLinkField() . ' = l.parent_id',
+            'p.' . $this->optionProvider->getProductEntityLinkField() . ' = l.parent_id',
             []
         )->join(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -167,7 +187,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->from(['l' => $this->getMainTable()], [])
             ->join(
                 ['e' => $this->getTable('catalog_product_entity')],
-                'e.' . $this->attributeOptionProvider->getProductEntityLinkField() . ' = l.parent_id',
+                'e.' . $this->optionProvider->getProductEntityLinkField() . ' = l.parent_id',
                 ['e.entity_id']
             )->where('l.product_id IN(?)', $childId);
 
@@ -188,7 +208,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getConfigurableOptions($product, $attributes)
     {
         $attributesOptionsData = [];
-        $productId = $product->getData($this->attributeOptionProvider->getProductEntityLinkField());
+        $productId = $product->getData($this->optionProvider->getProductEntityLinkField());
         foreach ($attributes as $superAttribute) {
             $attributeId = $superAttribute->getAttributeId();
             $attributesOptionsData[$attributeId] = $this->getAttributeOptions($superAttribute, $productId);

@@ -12,9 +12,9 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\At
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
+use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 
 class AttributeOptionProvider implements AttributeOptionProviderInterface
 {
@@ -27,13 +27,6 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
      * @var Attribute
      */
     private $attributeResource;
-
-    /**
-     * Product entity link field
-     *
-     * @var string
-     */
-    private $productEntityLinkField;
 
     /**
      * Product metadata pool
@@ -53,9 +46,15 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
     private $stockStatusCriteriaFactory;
 
     /**
+     * @var OptionProvider
+     */
+    private $attributeOptionProvider;
+
+    /**
      * @param Attribute $attributeResource
      * @param StockStatusRepositoryInterface $stockStatusRepository
      * @param StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory
+     * @param OptionProvider $attributeOptionProvider,
      * @param ScopeResolverInterface $scopeResolver
      * @param MetadataPool $metadataPool
      */
@@ -63,12 +62,14 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
         Attribute $attributeResource,
         StockStatusRepositoryInterface $stockStatusRepository,
         StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory,
+        OptionProvider $attributeOptionProvider,
         ScopeResolverInterface $scopeResolver = null,
         MetadataPool $metadataPool = null
     ) {
         $this->attributeResource = $attributeResource;
         $this->stockStatusRepository = $stockStatusRepository;
         $this->stockStatusCriteriaFactory = $stockStatusCriteriaFactory;
+        $this->attributeOptionProvider = $attributeOptionProvider;
         $this->scopeResolver = $scopeResolver ?: ObjectManager::getInstance()->get(ScopeResolverInterface::class);
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
     }
@@ -149,7 +150,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
             ]
         )->joinInner(
             ['product_entity' => $this->attributeResource->getTable('catalog_product_entity')],
-            "product_entity.{$this->getProductEntityLinkField()} = super_attribute.product_id",
+            "product_entity.{$this->attributeOptionProvider->getProductEntityLinkField()} = super_attribute.product_id",
             []
         )->joinInner(
             ['product_link' => $this->attributeResource->getTable('catalog_product_super_link')],
@@ -170,8 +171,8 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
                 [
                     'entity_value.attribute_id = super_attribute.attribute_id',
                     'entity_value.store_id = 0',
-                    "entity_value.{$this->getProductEntityLinkField()} = "
-                    . "entity.{$this->getProductEntityLinkField()}"
+                    "entity_value.{$this->attributeOptionProvider->getProductEntityLinkField()} = "
+                    . "entity.{$this->attributeOptionProvider->getProductEntityLinkField()}"
                 ]
             ),
             []
@@ -204,21 +205,5 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
         );
 
         return $select;
-    }
-
-    /**
-     * Get product entity link field
-     *
-     * @deprecated
-     * @return string
-     */
-    public function getProductEntityLinkField()
-    {
-        if (!$this->productEntityLinkField) {
-            $this->productEntityLinkField = $this->metadataPool
-                ->getMetadata(ProductInterface::class)
-                ->getLinkField();
-        }
-        return $this->productEntityLinkField;
     }
 }
