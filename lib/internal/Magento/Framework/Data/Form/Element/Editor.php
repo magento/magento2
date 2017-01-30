@@ -174,7 +174,7 @@ class Editor extends Textarea
                     //<![CDATA[
                     require(["jquery", "mage/translate", "mage/adminhtml/wysiwyg/widget"], function(jQuery){
                         (function($) {
-                            $.mage.translate.add(' . \Zend\Json\Encoder::encode($this->getButtonTranslations()) . ')
+                            $.mage.translate.add(' . \Zend_Json::encode($this->getButtonTranslations()) . ')
                         })(jQuery);
                     });
                     //]]>
