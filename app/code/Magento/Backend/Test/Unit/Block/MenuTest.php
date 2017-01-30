@@ -8,7 +8,6 @@ namespace Magento\Backend\Test\Unit\Block;
 use Magento\Backend\Model\Menu\Item;
 use Magento\Backend\Model\Menu as MenuModel;
 use Magento\Backend\Block\Menu;
-use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Backend\Model\Menu\Filter\IteratorFactory;
 use Magento\Backend\Model\Auth\Session;
@@ -29,11 +28,6 @@ class MenuTest extends \PHPUnit_Framework_TestCase
      * @var MenuModel|\PHPUnit_Framework_MockObject_MockObject
      */
     private $menuModelMock;
-
-    /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $contextMock;
 
     /**
      * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
