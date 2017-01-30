@@ -16,8 +16,7 @@ interface DecoderInterface
      * Decodes the given $data string which is encoded in the JSON format into a PHP type (array, string literal, etc.)
      *
      * @param $data
-     * @param int $decodeType
      * @return mixed
      */
-    public function decode($data, $decodeType = \Zend\Json\Json::TYPE_ARRAY);
+    public function decode($data);
 }
