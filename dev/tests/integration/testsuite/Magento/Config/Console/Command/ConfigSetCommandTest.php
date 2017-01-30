@@ -216,11 +216,10 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         /** @var ConfigPathResolver $resolver */
         $resolver = $this->objectManager->get(ConfigPathResolver::class);
         $status = $command->run($this->inputMock, $this->outputMock);
-        $config = $this->loadConfig();
         $configPath = $resolver->resolve($path, $scope, $scopeCode, 'system');
 
         $this->assertSame(Cli::RETURN_SUCCESS, $status);
-        $this->assertSame($value, $this->arrayManager->get($configPath, $config));
+        $this->assertSame($value, $this->arrayManager->get($configPath, $this->loadConfig()));
 
         $status = $command->run($this->inputMock, $this->outputMock);
 
@@ -238,7 +237,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test the extended flow.
+     * Tests the extended flow.
      *
      * @param string $path
      * @param string $value
@@ -263,10 +262,24 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         ];
         $optionsLock = array_merge($options, [[ConfigSetCommand::OPTION_LOCK, true]]);
 
+        /** @var ConfigPathResolver $resolver */
+        $resolver = $this->objectManager->get(ConfigPathResolver::class);
+        /** @var array $configPath */
+        $configPath = $resolver->resolve($path, $scope, $scopeCode, 'system');
+
         $this->runCommand($arguments, $options, '<info>Value was saved.</info>');
         $this->runCommand($arguments, $options, '<info>Value was saved.</info>');
+
+        $this->assertSame(
+            $value,
+            $this->scopeConfig->getValue($path, $scope, $scopeCode)
+        );
+        $this->assertSame(null, $this->arrayManager->get($configPath, $this->loadConfig()));
+
         $this->runCommand($arguments, $optionsLock, '<info>Value was locked.</info>');
         $this->runCommand($arguments, $optionsLock, '<info>Value was locked.</info>');
+
+        $this->assertSame($value, $this->arrayManager->get($configPath, $this->loadConfig()));
     }
 
     /**
