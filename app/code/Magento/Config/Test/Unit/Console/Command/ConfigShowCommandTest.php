@@ -138,9 +138,9 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $configPath
-     * @param mixed $scope
-     * @param mixed $scopeCode
+     * @param string $configPath
+     * @param null|string $scope
+     * @param null|string $scopeCode
      * @return CommandTester
      */
     private function getConfigShowCommandTester($configPath, $scope = null, $scopeCode = null)

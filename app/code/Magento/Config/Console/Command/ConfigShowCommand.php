@@ -52,11 +52,6 @@ class ConfigShowCommand extends Command
     private $metadataProcessor;
 
     /**
-     * @var string
-     */
-    private $сonfigPath;
-
-    /**
      * @param ValidatorInterface $scopeValidator
      * @param ConfigSourceInterface $configSource
      * @param ConfigPathResolver $pathResolver
@@ -77,7 +72,7 @@ class ConfigShowCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -117,11 +112,11 @@ class ConfigShowCommand extends Command
     {
         $scope = $input->getOption(self::INPUT_OPTION_SCOPE);
         $scopeCode = $input->getOption(self::INPUT_OPTION_SCOPE_CODE);
-        $this->сonfigPath = $input->getArgument(self::INPUT_ARGUMENT_PATH);
+        $inputPath = $input->getArgument(self::INPUT_ARGUMENT_PATH);
 
         try {
             $this->scopeValidator->isValid($scope, $scopeCode);
-            $configPath = $this->pathResolver->resolve($this->сonfigPath, $scope, $scopeCode);
+            $configPath = $this->pathResolver->resolve($inputPath, $scope, $scopeCode);
             $configValue = $this->configSource->get($configPath);
         } catch (LocalizedException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
@@ -131,32 +126,34 @@ class ConfigShowCommand extends Command
         if ($configValue === null) {
             $output->writeln(sprintf(
                 '<error>%s</error>',
-                __('Configuration for path: "%1" doesn\'t exist', $this->сonfigPath)->render()
+                __('Configuration for path: "%1" doesn\'t exist', $inputPath)->render()
             ));
             return Cli::RETURN_FAILURE;
         }
 
-        $this->outputResult($output, $configValue, $this->сonfigPath);
+        $this->outputResult($input, $output, $configValue, $inputPath);
         return Cli::RETURN_SUCCESS;
     }
 
     /**
-     * Output single configuration value or list of values if array given.
+     * Outputs single configuration value or list of values if array given.
      *
-     * @param OutputInterface $output An OutputInterface instance
+     * @param InputInterface $input an InputInterface instance
+     * @param OutputInterface $output an OutputInterface instance
      * @param mixed $configValue single value or array of values
      * @param string $configPath base configuration path
      * @return void
      */
-    private function outputResult(OutputInterface $output, $configValue, $configPath)
+    private function outputResult(InputInterface $input, OutputInterface $output, $configValue, $configPath)
     {
         if (!is_array($configValue)) {
             $value = $this->metadataProcessor->processValue($configValue, $configPath);
-            $output->writeln($this->сonfigPath === $configPath ? $value : sprintf("%s - %s", $configPath, $value));
+            $inputPath = $input->getArgument(self::INPUT_ARGUMENT_PATH);
+            $output->writeln($inputPath === $configPath ? $value : sprintf("%s - %s", $configPath, $value));
         } else if (is_array($configValue)) {
             foreach ($configValue as $name => $value) {
                 $childPath = empty($configPath) ? $name : ($configPath . '/' . $name);
-                $this->outputResult($output, $value, $childPath);
+                $this->outputResult($input, $output, $value, $childPath);
             }
         }
     }
