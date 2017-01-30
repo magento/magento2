@@ -331,7 +331,7 @@ class DataObject implements \ArrayAccess
     public function toJson(array $keys = [])
     {
         $data = $this->toArray($keys);
-        return \Zend_Json::encode($data);
+        return \Zend\Json\Encoder::encode($data);
     }
 
     /**
