@@ -20,8 +20,8 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-    * @var CommandTester
-    */
+     * @var CommandTester
+     */
     private $commandTester;
 
     public function setUp()
