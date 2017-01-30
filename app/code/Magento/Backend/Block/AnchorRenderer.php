@@ -38,12 +38,12 @@ class AnchorRenderer
     /**
      * Render menu item anchor
      *
-     * @param Item $activeItem
+     * @param Item|null $activeItem
      * @param Item $menuItem
      * @param int $level
      * @return string
      */
-    public function renderAnchor(Item $activeItem, Item $menuItem, $level)
+    public function renderAnchor($activeItem, Item $menuItem, $level)
     {
         if ($level == 1 && $menuItem->getUrl() == '#') {
             $output = '<strong class="submenu-group-title" role="presentation">'

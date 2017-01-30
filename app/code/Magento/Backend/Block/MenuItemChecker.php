@@ -15,19 +15,20 @@ class MenuItemChecker
     /**
      * Check whether given item is currently selected
      *
-     * @param Item $activeItem,
+     * @param Item|null $activeItem,
      * @param Item $item
      * @param int $level
      * @return bool
      */
     public function isItemActive(
-        Item $activeItem,
+        $activeItem,
         Item $item,
         $level
     ) {
         $output = false;
 
         if ($level == 0
+            && $activeItem instanceof \Magento\Backend\Model\Menu\Item
             && $this->isActiveItemEqualOrChild($activeItem, $item)
         ) {
             $output = true;
