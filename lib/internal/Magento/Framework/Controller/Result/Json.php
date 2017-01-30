@@ -44,7 +44,7 @@ class Json extends AbstractResult
      */
     public function setData($data, $cycleCheck = false, $options = [])
     {
-        $this->json = \Zend_Json::encode($data, $cycleCheck, $options);
+        $this->json = \Zend\Json\Encoder::encode($data, $cycleCheck, $options);
         return $this;
     }
 

@@ -13,10 +13,11 @@ class Decoder implements DecoderInterface
      * Decodes the given $data string which is encoded in the JSON format.
      *
      * @param string $data
+     * @param int $decodeType
      * @return mixed
      */
-    public function decode($data)
+    public function decode($data, $decodeType = \Zend\Json\Json::TYPE_ARRAY)
     {
-        return \Zend\Json\Decoder::decode($data);
+        return \Zend\Json\Decoder::decode($data, $decodeType);
     }
 }
