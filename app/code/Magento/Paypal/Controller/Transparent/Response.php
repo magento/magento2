@@ -88,7 +88,7 @@ class Response extends \Magento\Framework\App\Action\Action
             $parameters['error_msg'] = $exception->getMessage();
         }
 
-        $this->coreRegistry->register(Iframe::REGISTRY_KEY, $parameters);
+        $this->_objectManager->get(\Magento\Payment\Model\IframeService::class)->setParams($parameters);
 
         $resultLayout = $this->resultLayoutFactory->create();
         $resultLayout->addDefaultHandle();

@@ -129,7 +129,9 @@ class Redirect extends \Magento\Sales\Controller\Adminhtml\Order\Create
             $this->_returnQuote($cancelOrder, $redirectParams['error_msg']);
         }
 
-        $this->_coreRegistry->register(Iframe::REGISTRY_KEY, array_merge($params, $redirectParams));
+        $this->_objectManager->get(\Magento\Payment\Model\IframeService::class)->setParams(
+            array_merge($params, $redirectParams)
+        );
         return $this->resultLayoutFactory->create();
     }
 }
