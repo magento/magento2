@@ -13,7 +13,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 /**
  * Test for CommandList.
  *
- * @see \Magento\Config\Console\CommandList
+ * @see CommandList
  */
 class CommandListTest extends \PHPUnit_Framework_TestCase
 {

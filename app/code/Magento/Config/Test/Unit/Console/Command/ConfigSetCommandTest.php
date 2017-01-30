@@ -17,7 +17,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Test for ConfigSetCommand.
  *
- * @see \Magento\Config\Console\Command\ConfigSetCommand
+ * @see ConfigSetCommand
  */
 class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 {

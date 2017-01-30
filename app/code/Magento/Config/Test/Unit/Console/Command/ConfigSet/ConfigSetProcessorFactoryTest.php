@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
 /**
  * Test for ConfigSetProcessorFactory.
  *
- * @see \Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorFactory
+ * @see ConfigSetProcessorFactory
  */
 class ConfigSetProcessorFactoryTest extends \PHPUnit_Framework_TestCase
 {

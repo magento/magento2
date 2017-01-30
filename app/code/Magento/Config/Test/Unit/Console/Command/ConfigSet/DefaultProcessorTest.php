@@ -5,23 +5,20 @@
  */
 namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
-use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Magento\Config\Console\Command\ConfigSet\DefaultProcessor;
 use Magento\Config\Console\Command\ConfigSetCommand;
-use Magento\Config\Model\ResourceModel\Config;
-use Magento\Config\Model\ResourceModel\ConfigFactory;
-use Magento\Framework\App\Config\MetadataProcessor;
+use Magento\Config\Model\Config;
+use Magento\Config\Model\ConfigFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\ScopeResolverPool;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * Test for DefaultProcessor.
  *
- * @see \Magento\Config\Console\Command\ConfigSet\DefaultProcessor
+ * @see DefaultProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
@@ -47,29 +44,14 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
     private $deploymentConfigMock;
 
     /**
-     * @var ScopeResolverPool|Mock
-     */
-    private $scopeResolverPoolMock;
-
-    /**
      * @var ConfigPathResolver|Mock
      */
-    private $scopePathResolverMock;
-
-    /**
-     * @var MetadataProcessor|Mock
-     */
-    private $metadataProcessorMock;
+    private $configPathResolverMock;
 
     /**
      * @var InputInterface|Mock
      */
     private $inputMock;
-
-    /**
-     * @var ReinitableConfigInterface
-     */
-    private $appConfigMock;
 
     /**
      * @inheritdoc
@@ -86,19 +68,11 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeResolverPoolMock = $this->getMockBuilder(ScopeResolverPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->metadataProcessorMock = $this->getMockBuilder(MetadataProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
-        $this->scopePathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
+        $this->configPathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->appConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
-            ->getMockForAbstractClass();
 
         $this->configFactoryMock->expects($this->any())
             ->method('create')
@@ -107,10 +81,7 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         $this->model = new DefaultProcessor(
             $this->configFactoryMock,
             $this->deploymentConfigMock,
-            $this->scopeResolverPoolMock,
-            $this->scopePathResolverMock,
-            $this->metadataProcessorMock,
-            $this->appConfigMock
+            $this->configPathResolverMock
         );
     }
 
@@ -131,7 +102,7 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
                 [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT],
                 [ConfigSetCommand::OPTION_SCOPE_CODE, null],
             ]);
-        $this->scopePathResolverMock->expects($this->once())
+        $this->configPathResolverMock->expects($this->once())
             ->method('resolve')
             ->willReturn('system/default/test/test/test');
         $this->deploymentConfigMock->expects($this->once())
@@ -142,13 +113,8 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('isAvailable')
             ->willReturn(true);
-        $this->metadataProcessorMock->expects($this->once())
-            ->method('prepareValue')
-            ->with($value, $path)
-            ->willReturn($value);
         $this->configMock->expects($this->once())
-            ->method('saveConfig')
-            ->with($path, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
+            ->method('save');
 
         $this->model->process($this->inputMock);
     }
@@ -211,7 +177,7 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
                 ['db', null, 'exists'],
                 ['system/default/test/test/test', null, 5],
             ]);
-        $this->scopePathResolverMock->expects($this->once())
+        $this->configPathResolverMock->expects($this->once())
             ->method('resolve')
             ->willReturn('system/default/test/test/test');
 

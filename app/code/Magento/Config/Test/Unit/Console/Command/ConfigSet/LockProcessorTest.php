@@ -7,20 +7,23 @@ namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
 use Magento\Config\Console\Command\ConfigSet\LockProcessor;
 use Magento\Config\Console\Command\ConfigSetCommand;
-use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ConfigPathResolver;
+use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Stdlib\ArrayManager;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
+use Magento\Config\Model\Config\Structure;
+use Magento\Framework\App\Config\ValueFactory;
+use Magento\Config\Model\Config\Structure\Element\Field;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * Test for LockProcessor.
  *
- * @see \Magento\Config\Console\Command\ConfigSet\LockProcessor
+ * @see LockProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LockProcessorTest extends \PHPUnit_Framework_TestCase
@@ -41,11 +44,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
     private $arrayManagerMock;
 
     /**
-     * @var MetadataProcessor|Mock
-     */
-    private $metadataProcessorMock;
-
-    /**
      * @var InputInterface|Mock
      */
     private $inputMock;
@@ -53,7 +51,27 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ConfigPathResolver|Mock
      */
-    private $scopePathResolverMock;
+    private $configPathResolver;
+
+    /**
+     * @var Structure|Mock
+     */
+    private $structureMock;
+
+    /**
+     * @var Value|Mock
+     */
+    private $valueMock;
+
+    /**
+     * @var ValueFactory|Mock
+     */
+    private $valueFactoryMock;
+
+    /**
+     * @var Field|Mock
+     */
+    private $fieldMock;
 
     /**
      * @inheritdoc
@@ -66,20 +84,34 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataProcessorMock = $this->getMockBuilder(MetadataProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
-        $this->scopePathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
+        $this->configPathResolver = $this->getMockBuilder(ConfigPathResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->structureMock = $this->getMockBuilder(Structure::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->valueFactoryMock = $this->getMockBuilder(ValueFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->fieldMock = $this->getMockBuilder(Field::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->valueMock = $this->getMockBuilder(Value::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->structureMock->expects($this->any())
+            ->method('getElement')
+            ->willReturn($this->fieldMock);
 
         $this->model = new LockProcessor(
             $this->deploymentConfigWriterMock,
             $this->arrayManagerMock,
-            $this->metadataProcessorMock,
-            $this->scopePathResolverMock
+            $this->configPathResolver,
+            $this->structureMock,
+            $this->valueFactoryMock
         );
     }
 
@@ -100,11 +132,13 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
                 [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT],
                 [ConfigSetCommand::OPTION_SCOPE_CODE, 'test_scope_code']
             ]);
-        $this->metadataProcessorMock->expects($this->once())
-            ->method('prepareValue')
-            ->with($value, $path)
-            ->willReturn($value);
-        $this->scopePathResolverMock->expects($this->once())
+        $this->fieldMock->expects($this->once())
+            ->method('hasBackendModel')
+            ->willReturn(true);
+        $this->fieldMock->expects($this->once())
+            ->method('getBackendModel')
+            ->willReturn($this->valueMock);
+        $this->configPathResolver->expects($this->once())
             ->method('resolve')
             ->willReturn('system/default/test/test/test');
         $this->arrayManagerMock->expects($this->once())
@@ -164,11 +198,13 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
                 [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT],
                 [ConfigSetCommand::OPTION_SCOPE_CODE, 'test_scope_code'],
             ]);
-        $this->metadataProcessorMock->expects($this->once())
-            ->method('prepareValue')
-            ->with($value, $path)
-            ->willReturn($value);
-        $this->scopePathResolverMock->expects($this->once())
+        $this->fieldMock->expects($this->once())
+            ->method('hasBackendModel')
+            ->willReturn(true);
+        $this->fieldMock->expects($this->once())
+            ->method('getBackendModel')
+            ->willReturn($this->valueMock);
+        $this->configPathResolver->expects($this->once())
             ->method('resolve')
             ->willReturn('system/default/test/test/test');
         $this->arrayManagerMock->expects($this->once())

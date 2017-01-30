@@ -38,7 +38,6 @@ class DefaultProcessor implements ConfigSetProcessorInterface
      */
     private $configPathResolver;
 
-
     /**
      * @param ConfigFactory $configFactory
      * @param DeploymentConfig $deploymentConfig
