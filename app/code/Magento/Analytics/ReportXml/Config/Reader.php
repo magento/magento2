@@ -10,7 +10,10 @@ use Magento\Framework\Config\ReaderInterface;
 /**
  * Class Reader
  *
- * * Composite reader for config
+ * Composite reader for config
+ * Aggregates declared config readers, merges their results
+ * Additional readers can be declared through di.xml of corresponding module
+ *
  */
 class Reader implements ReaderInterface
 {

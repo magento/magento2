@@ -11,7 +11,8 @@ use Magento\Framework\Config\ConverterInterface;
 /**
  * Class Xml
  *
- * Reader for config stored in xml
+ * Reader for configuration stored in xml
+ * Reads xml source, transforms it to PHP array
  */
 class Xml implements ConverterInterface
 {
