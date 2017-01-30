@@ -54,8 +54,8 @@ class AnchorRenderer
             $output = '<a href="' . $menuItem->getUrl() . '" ' . $target . ' ' . $this->_renderItemAnchorTitle(
                 $menuItem
             ) . $this->_renderItemOnclickFunction(
-                    $menuItem
-                ) . ' class="' . ($this->menuItemChecker->isItemActive($activeItem, $menuItem, $level) ? '_active' : '')
+                $menuItem
+            ) . ' class="' . ($this->menuItemChecker->isItemActive($activeItem, $menuItem, $level) ? '_active' : '')
                 . '">' . '<span>' . $this->escaper->escapeHtml(__($menuItem->getTitle()))
                 . '</span>' . '</a>';
         }
@@ -80,7 +80,7 @@ class AnchorRenderer
      * @param Item $menuItem
      * @return string
      */
-    private  function _renderItemOnclickFunction($menuItem)
+    private function _renderItemOnclickFunction($menuItem)
     {
         return $menuItem->hasClickCallback() ? ' onclick="' . $menuItem->getClickCallback() . '"' : '';
     }
