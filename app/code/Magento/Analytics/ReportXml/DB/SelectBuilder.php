@@ -217,7 +217,7 @@ class SelectBuilder
         if (!empty($this->getGroup())) {
             $select->group(implode(', ', $this->getGroup()));
         }
-        return $select->limit(1000);
+        return $select;
     }
 
     /**
