@@ -38,12 +38,12 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     /**
      * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $urlMock;
+    private $urlMock;
 
     /**
      * @var IteratorFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $iteratorFactoryMock;
+    private $iteratorFactoryMock;
 
     /**
      * @var Session|\PHPUnit_Framework_MockObject_MockObject
@@ -71,7 +71,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     private $menuItemCheckerMock;
 
     /**
-     * @var AnchorRendererMock|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnchorRenderer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $anchorRendererMock;
 

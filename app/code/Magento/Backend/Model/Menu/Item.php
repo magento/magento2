@@ -152,7 +152,7 @@ class Item
      *
      * @var string|null
      */
-    protected $target;
+    private $target;
 
     /**
      * @param Item\Validator $validator
@@ -211,7 +211,7 @@ class Item
     /**
      * Retrieve item target
      *
-     * @return string
+     * @return string|null
      */
     public function getTarget()
     {

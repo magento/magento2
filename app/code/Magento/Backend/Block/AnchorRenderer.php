@@ -37,6 +37,7 @@ class AnchorRenderer
 
     /**
      * Render menu item anchor
+     *
      * @param Item $activeItem
      * @param Item $menuItem
      * @param int $level
