@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -103,7 +103,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         if (is_array($rules)) {
             return $rules;
         } elseif (!empty($rules)) {
-            return unserialize($rules);
+            return $this->getSerializer()->unserialize($rules);
         }
         return [];
     }
@@ -119,7 +119,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         if (empty($rules)) {
             $rules = null;
         } elseif (is_array($rules)) {
-            $rules = serialize($rules);
+            $rules = $this->getSerializer()->serialize($rules);
         }
         $this->setData('validate_rules', $rules);
 

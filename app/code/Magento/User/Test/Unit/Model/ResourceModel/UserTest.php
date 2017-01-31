@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,6 +42,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject */
     protected $roleMock;
+
+    /**
+     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $aclDataCacheMock;
 
     protected function setUp()
     {
@@ -85,6 +90,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
+        $this->aclDataCacheMock = $this->getMockBuilder(\Magento\Framework\Acl\Data\CacheInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $helper->getObject(
             \Magento\User\Model\ResourceModel\User::class,
@@ -92,7 +102,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
                 'resource' => $this->resourceMock,
                 'aclCache' => $this->aclCacheMock,
                 'roleFactory' => $this->roleFactoryMock,
-                'dateTime' => $this->dateTimeMock
+                'dateTime' => $this->dateTimeMock,
+                'aclDataCache' => $this->aclDataCacheMock,
             ]
         );
     }
@@ -412,7 +423,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->roleMock->expects($this->once())->method('load')->willReturn($this->roleMock);
         $this->roleMock->expects($this->atLeastOnce())->method('getId')->willReturn($roleId);
         $this->dbAdapterMock->expects($this->once())->method('describeTable')->willReturn([1, 2, 3]);
-
+        $this->aclDataCacheMock->expects($this->once())->method('clean');
         $this->assertInstanceOf(
             \Magento\User\Model\ResourceModel\User::class,
             $this->invokeMethod($this->model, '_afterSave', [$methodUserMock])

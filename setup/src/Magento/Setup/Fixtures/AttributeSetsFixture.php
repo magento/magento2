@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,11 +17,26 @@ class AttributeSetsFixture extends Fixture
     protected $priority = 25;
 
     /**
+     * Cache for attribute IDs.
+     *
+     * @var array
+     */
+    private $attributeIdsCache = [];
+
+    /**
+     * Quantity of unique attributes to generate. Zero means infinity.
+     *
+     * @var int
+     */
+    protected $uniqueAttributesQuantity = 0;
+
+    /**
      * {@inheritdoc}
      */
     public function execute()
     {
-        $attributeSets = $this->fixtureModel->getValue('attribute_sets', null);
+        $this->populateUniqueAttributesQuantity();
+        $attributeSets = $this->getAttributeSetsFixtureValue();
         if ($attributeSets === null) {
             return;
         }
@@ -71,35 +86,79 @@ class AttributeSetsFixture extends Fixture
             $attributesData = array_key_exists(0, $attributeSetData['attributes']['attribute'])
                 ? $attributeSetData['attributes']['attribute'] : [$attributeSetData['attributes']['attribute']];
             foreach ($attributesData as $attributeData) {
-                //Create Attribute
-                /** @var  \Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory $attributeFactory */
-                $attributeFactory = $this->fixtureModel->getObjectManager()->create(
-                    \Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory::class
-                );
-
-                $optionsData = array_key_exists(0, $attributeData['options']['option'])
-                    ? $attributeData['options']['option'] : [$attributeData['options']['option']];
-                $options = [];
-                foreach ($optionsData as $optionData) {
-                    /** @var \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionFactory */
-                    $optionFactory = $this->fixtureModel->getObjectManager()->create(
-                        \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class
+                if ($this->uniqueAttributesQuantity === 0
+                    || (count($this->attributeIdsCache) < $this->uniqueAttributesQuantity)) {
+                    //Create Attribute
+                    /** @var  \Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory $attributeFactory */
+                    $attributeFactory = $this->fixtureModel->getObjectManager()->create(
+                        \Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory::class
                     );
-                    $option = $optionFactory->create(['data' => $optionData]);
-                    $options[] = $option;
+
+                    $optionsData = array_key_exists(0, $attributeData['options']['option'])
+                        ? $attributeData['options']['option'] : [$attributeData['options']['option']];
+                    $options = [];
+                    foreach ($optionsData as $optionData) {
+                        /** @var \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionFactory */
+                        $optionFactory = $this->fixtureModel->getObjectManager()->create(
+                            \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class
+                        );
+                        $option = $optionFactory->create(['data' => $optionData]);
+                        $options[] = $option;
+                    }
+
+                    $attribute = $attributeFactory->create(['data' => $attributeData]);
+                    $attribute->setOptions($options);
+
+                    $result = $attributeRepository->save($attribute);
+                    $attributeId = $result->getAttributeId();
+                    $this->fillAttributeIdsCache($attributeId);
+                } else {
+                    $attributeId = $this->getAttributeIdFromCache();
                 }
-
-                $attribute = $attributeFactory->create(['data' => $attributeData]);
-                $attribute->setOptions($options);
-
-                $result = $attributeRepository->save($attribute);
-                $attributeId = $result->getAttributeId();
-
                 //Associate Attribute to Attribute Set
                 $sortOrder = 3;
+
                 $attributeManagement->assign($attributeSetId, $attributeGroupId, $attributeId, $sortOrder);
             }
         }
+    }
+
+    /**
+     * Get attribute ID from cache.
+     *
+     * @return int
+     */
+    private function getAttributeIdFromCache()
+    {
+        $attributeId = next($this->attributeIdsCache);
+        if ($attributeId === false) {
+            $attributeId = reset($this->attributeIdsCache);
+        }
+
+        return $attributeId;
+    }
+
+    /**
+     * Fill attribute IDs cache.
+     *
+     * @param int $attributeId
+     * @return void
+     */
+    private function fillAttributeIdsCache($attributeId)
+    {
+        if ($this->uniqueAttributesQuantity !== 0) {
+            $this->attributeIdsCache[] = $attributeId;
+        }
+    }
+
+    /**
+     * Populate quantity of unique attributes to generate.
+     *
+     * @return void
+     */
+    protected function populateUniqueAttributesQuantity()
+    {
+        $this->uniqueAttributesQuantity = $this->fixtureModel->getValue('unique_attributes_quantity', 0);
     }
 
     /**
@@ -118,5 +177,15 @@ class AttributeSetsFixture extends Fixture
         return [
             'attribute_sets' => 'Attribute Sets'
         ];
+    }
+
+    /**
+     * Get attribute sets fixture value.
+     *
+     * @return array|null
+     */
+    protected function getAttributeSetsFixtureValue()
+    {
+        return $this->fixtureModel->getValue('attribute_sets', null);
     }
 }

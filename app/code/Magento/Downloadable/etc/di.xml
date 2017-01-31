@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -120,6 +120,34 @@
                     <item name="entityTableName" xsi:type="string">downloadable_sample</item>
                     <item name="identifierField" xsi:type="string">sample_id</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Price\CostStorage">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="2" xsi:type="string">downloadable</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="3" xsi:type="string">downloadable</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Price\BasePriceStorage">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="3" xsi:type="string">downloadable</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Price\SpecialPriceStorage">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="3" xsi:type="string">downloadable</item>
             </argument>
         </arguments>
     </type>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -149,7 +149,9 @@ class Reader
             foreach ($initialFilePools as $initialFiles) {
                 if (isset($initialFiles[$fileKey]) && $fileDriver->isExists($path . '/' . $initialFiles[$fileKey])) {
                     $fileBuffer = include $path . '/' . $initialFiles[$fileKey];
-                    $result = array_replace_recursive($result, $fileBuffer);
+                    if (is_array($fileBuffer)) {
+                        $result = array_replace_recursive($result, $fileBuffer);
+                    }
                 }
             }
         }
@@ -157,6 +159,13 @@ class Reader
         if ($fileDriver->isExists($path . '/' . $pathConfig)) {
             $fileBuffer = include $path . '/' . $pathConfig;
             $result = array_replace_recursive($result, $fileBuffer);
+        }
+
+        if ($fileDriver->isExists($path . '/' . $pathConfig)) {
+            $configResult = include $path . '/' . $pathConfig;
+            if (is_array($configResult)) {
+                $result = array_replace_recursive($result, $configResult);
+            }
         }
 
         return $result;

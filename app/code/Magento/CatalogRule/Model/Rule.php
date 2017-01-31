@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model;
@@ -567,14 +567,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         $result = [];
         foreach ($array1 as $key => $value) {
             if (array_key_exists($key, $array2)) {
-                if (is_array($value)) {
-                    if ($value != $array2[$key]) {
-                        $result[$key] = true;
-                    }
-                } else {
-                    if ($value != $array2[$key]) {
-                        $result[$key] = true;
-                    }
+                if ($value != $array2[$key]) {
+                    $result[$key] = true;
                 }
             } else {
                 $result[$key] = true;

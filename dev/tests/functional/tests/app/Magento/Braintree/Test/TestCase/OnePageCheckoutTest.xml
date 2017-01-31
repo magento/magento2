@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -21,7 +21,6 @@
                 <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
-            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree_3dsecure</data>
             <data name="isVaultPresent" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">braintree, braintree_3d_secure_not_triggered_due_threshold</data>
@@ -45,7 +44,6 @@
                 <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
-            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree_3dsecure</data>
             <data name="isVaultPresent" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">braintree, braintree_3d_secure_uk</data>
@@ -69,8 +67,8 @@
                 <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
-            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
-            <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="isVaultPresent" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Processing</data>
@@ -97,8 +95,8 @@
                 <item name="0" xsi:type="string">145.98</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
-            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
-            <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="isVaultPresent" xsi:type="boolean">false</data>
             <data name="configData" xsi:type="string">braintree, braintree_sale</data>
             <data name="status" xsi:type="string">Processing</data>
@@ -107,6 +105,21 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory" />
+        </variation>
+        <variation name="OnePageCheckoutBraintreeTestVariation5" summary="Registered Checkout with Braintree Credit Card from Storefront with Advanced Fraud Protection" ticketId="MAGETWO-38721">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
+            <data name="configData" xsi:type="string">braintree_fraud_tool_enabled_account, braintree_fraudprotection</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Braintree\Test\Constraint\AssertDeviceDataIsPresentInBraintreeRequest" />
         </variation>
     </testCase>
 </config>
