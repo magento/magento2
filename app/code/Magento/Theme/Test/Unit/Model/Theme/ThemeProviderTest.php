@@ -7,12 +7,10 @@ namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Theme\Model\Theme\ThemeProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Class ThemeProviderTest
- * @covers \Magento\Theme\Model\Theme\ThemeProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ThemeProviderTest extends \PHPUnit_Framework_TestCase
 {
