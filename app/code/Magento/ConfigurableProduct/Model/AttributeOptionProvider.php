@@ -115,9 +115,11 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
         foreach ($collection->getItems() as $inStockOption) {
             $inStockSku[] = $inStockOption->getData('sku');
         }
-        foreach ($options as $key => $option) {
-            if (!in_array($options[$key]['sku'], $inStockSku)) {
-                unset($options[$key]);
+        if (!empty($inStockSku)) {
+            foreach ($options as $key => $option) {
+                if (!in_array($options[$key]['sku'], $inStockSku)) {
+                    unset($options[$key]);
+                }
             }
         }
         $options = array_values($options);
