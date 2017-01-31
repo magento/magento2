@@ -68,7 +68,6 @@ class Viewed extends \Magento\Backend\Block\Dashboard\Grid
         );
 
         $this->setCollection($collection);
-
         parent::_prepareCollection();
 
         /** @var Product $product */
