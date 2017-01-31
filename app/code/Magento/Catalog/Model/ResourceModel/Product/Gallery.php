@@ -449,4 +449,21 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $this->getConnection()->fetchAll($select);
     }
+
+    /**
+     * Counts uses of this image.
+     *
+     * @param string $image
+     * @return int
+     */
+    public function countImageUses($image)
+    {
+        $select = $this->getConnection()->select()
+            ->from([$this->getMainTableAlias() => $this->getMainTable()])
+            ->where(
+                'value = ?',
+                $image
+            );
+        return count($this->getConnection()->fetchAll($select));
+    }
 }
