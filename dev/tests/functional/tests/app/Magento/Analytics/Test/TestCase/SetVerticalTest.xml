@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Analytics\Test\TestCase\SetVerticalTest" summary="Navigate to Analytics admin menu and save Vertical" ticketId="MAGETWO-63898">
+        <variation name="SetVertical">
+            <constraint name="Magento\Analytics\Test\Constraint\AssertVerticalIsSet" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsVerticalScope" />
+        </variation>
+    </testCase>
+</config>

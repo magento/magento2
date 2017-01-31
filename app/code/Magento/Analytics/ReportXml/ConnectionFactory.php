@@ -22,6 +22,7 @@ class ConnectionFactory
      * @var ResourceConnection
      */
     private $resourceConnection;
+
     /**
      * @var ObjectManagerInterface
      */
