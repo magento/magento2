@@ -27,12 +27,18 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Checkout\Model\Session | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $checkoutSession;
+    
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeManagerMock;
 
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->orderConfig = $this->getMock(\Magento\Sales\Model\Order\Config::class, [], [], '', false);
+        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
 
         $this->checkoutSession = $this->getMockBuilder(
             \Magento\Checkout\Model\Session::class
@@ -109,5 +115,14 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
             [[Order::STATE_PENDING_PAYMENT, 'status2'],  false],
             [['status1', 'status2'], true]
         ];
+    }
+    
+    public function testGetContinueUrl()
+    {
+        $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
+        $storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue('Expected Result'));
+
+        $this->assertEquals('Expected Result', $this->block->getContinueUrl());
     }
 }
