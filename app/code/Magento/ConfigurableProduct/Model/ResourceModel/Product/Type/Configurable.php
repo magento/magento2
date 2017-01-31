@@ -13,7 +13,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
 use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
 use Magento\Catalog\Model\Product as ProductModel;
-use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
+use Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ObjectManager;
@@ -28,7 +28,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $catalogProductRelation;
 
     /**
-     * @var AttributeOptionProvider
+     * @var AttributeOptionProviderInterface
      */
     private $attributeOptionProvider;
 
@@ -47,7 +47,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param ProductRelation $catalogProductRelation
      * @param string $connectionName
      * @param ScopeResolverInterface $scopeResolver
-     * @param AttributeOptionProvider $attributeOptionProvider
+     * @param AttributeOptionProviderInterface $attributeOptionProvider
      * @param OptionProvider $optionProvider
      */
     public function __construct(
@@ -55,13 +55,13 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         ProductRelation $catalogProductRelation,
         $connectionName = null,
         ScopeResolverInterface $scopeResolver = null,
-        AttributeOptionProvider $attributeOptionProvider = null,
+        AttributeOptionProviderInterface $attributeOptionProvider = null,
         OptionProvider $optionProvider = null
     ) {
         $this->catalogProductRelation = $catalogProductRelation;
         $this->scopeResolver = $scopeResolver;
         $this->attributeOptionProvider = $attributeOptionProvider
-            ?: ObjectManager::getInstance()->get(AttributeOptionProvider::class);
+            ?: ObjectManager::getInstance()->get(AttributeOptionProviderInterface::class);
         $this->optionProvider = $optionProvider ?: ObjectManager::getInstance()->get(OptionProvider::class);
         parent::__construct($context, $connectionName);
     }
