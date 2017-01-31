@@ -70,7 +70,11 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $scopeConfig->expects($this->any())
             ->method('getValue')
-            ->with($this->stringContains('advanced/modules_disable_output/'), \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with(
+                $this->stringContains(
+                    'advanced/modules_disable_output/'), 
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
             ->will($this->returnValue(false));
 
         $context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
@@ -157,7 +161,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
 
     public function testGetContinueUrl()
     {
-        $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
         $storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue('Expected Result'));
 
