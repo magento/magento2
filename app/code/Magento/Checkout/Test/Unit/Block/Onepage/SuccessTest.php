@@ -10,6 +10,7 @@ use Magento\Sales\Model\Order;
 /**
  * Class SuccessTest
  * @package Magento\Checkout\Block\Onepage
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SuccessTest extends \PHPUnit_Framework_TestCase
 {
