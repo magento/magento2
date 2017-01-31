@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Test\Unit\Model;
+namespace Magento\Analytics\Test\Unit\ReportXml;
 
 use Magento\Analytics\ReportXml\Config;
 use Magento\Analytics\ReportXml\Config\Data;
