@@ -30,6 +30,8 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         } else {
             try {
                 $data = $this->getRequest()->getParams();
+                $data = array_merge($data, $rule->getData(), ['usage_per_customer' => $rule->getUsesPerCustomer()]);
+                
                 if (!empty($data['to_date'])) {
                     $inputFilter = new \Zend_Filter_Input(['to_date' => $this->_dateFilter], [], $data);
                     $data = $inputFilter->getUnescaped();
