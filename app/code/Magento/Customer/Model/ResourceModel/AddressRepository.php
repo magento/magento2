@@ -139,7 +139,17 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $this->addressRegistry->push($addressModel);
         $this->updateAddressCollection($customerModel, $addressModel);
 
-        return $addressModel->getDataModel();
+        $defaultBillingAddressId = null;
+        if (!is_null($customerModel->getDefaultBillingAddress())) {
+            $defaultBillingAddressId = $customerModel->getDefaultBillingAddress()->getId();
+        }
+
+        $defaultShippingAddressId = null;
+        if (!is_null($customerModel->getDefaultShippingAddress())) {
+            $defaultShippingAddressId = $customerModel->getDefaultShippingAddress()->getId();
+        }
+
+        return $addressModel->getDataModel($defaultBillingAddressId, $defaultShippingAddressId);
     }
 
     /**
