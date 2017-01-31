@@ -18,12 +18,21 @@ class Index extends \Magento\Framework\App\Action\Action
     protected $captchaHelper;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    protected $serializer;
+
+    /**
      * @param Context $context
      * @param \Magento\Captcha\Helper\Data $captchaHelper
      */
-    public function __construct(Context $context, \Magento\Captcha\Helper\Data $captchaHelper)
-    {
+    public function __construct(
+        Context $context,
+        \Magento\Captcha\Helper\Data $captchaHelper,
+        \Magento\Framework\Serialize\SerializerInterface $serializer
+    ) {
         $this->captchaHelper = $captchaHelper;
+        $this->serializer = $serializer;
         parent::__construct($context);
     }
 
@@ -34,16 +43,12 @@ class Index extends \Magento\Framework\App\Action\Action
     {
         $formId = $this->_request->getPost('formId');
         if (null === $formId) {
-            try {
-                $params = [];
-                $content = $this->_request->getContent();
-                if ($content) {
-                    $params = \Zend_Json::decode($content);
-                }
-                $formId = isset($params['formId']) ? $params['formId'] : null;
-            } catch (\Zend_Json_Exception $exception) {
-                $formId = null;
+            $params = [];
+            $content = $this->_request->getContent();
+            if ($content) {
+                $params = $this->serializer->unserialize($content);
             }
+            $formId = isset($params['formId']) ? $params['formId'] : null;
         }
         $captchaModel = $this->captchaHelper->getCaptcha($formId);
         $captchaModel->generate();

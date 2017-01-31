@@ -27,6 +27,11 @@ class AjaxLogin
     protected $resultJsonFactory;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    protected $serializer;
+
+    /**
      * @var array
      */
     protected $formIds;
@@ -41,11 +46,13 @@ class AjaxLogin
         CaptchaHelper $helper,
         SessionManagerInterface $sessionManager,
         JsonFactory $resultJsonFactory,
+        \Magento\Framework\Serialize\SerializerInterface $serializer,
         array $formIds
     ) {
         $this->helper = $helper;
         $this->sessionManager = $sessionManager;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->serializer = $serializer;
         $this->formIds = $formIds;
     }
 
@@ -53,7 +60,6 @@ class AjaxLogin
      * @param \Magento\Customer\Controller\Ajax\Login $subject
      * @param \Closure $proceed
      * @return $this
-     * @throws \Zend_Json_Exception
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -70,7 +76,7 @@ class AjaxLogin
         $loginParams = [];
         $content = $request->getContent();
         if ($content) {
-            $loginParams = \Zend_Json::decode($content);
+            $loginParams = $this->serializer->unserialize($content);
         }
         $username = isset($loginParams['username']) ? $loginParams['username'] : null;
         $captchaString = isset($loginParams[$captchaInputName]) ? $loginParams[$captchaInputName] : null;
