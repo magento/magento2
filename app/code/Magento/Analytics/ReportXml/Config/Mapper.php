@@ -10,6 +10,8 @@ namespace Magento\Analytics\ReportXml\Config;
  * Class Mapper
  *
  * Transforms configuration data for report builder
+ * Just for better config usability, affects data from all sources (DB, xml, etc)
+ * @see usage examples \Magento\Analytics\ReportXml\Config\Reader
  */
 class Mapper
 {
