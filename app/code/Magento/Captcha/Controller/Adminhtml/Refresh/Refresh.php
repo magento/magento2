@@ -23,6 +23,7 @@ class Refresh extends \Magento\Backend\App\Action
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Captcha\Helper\Data $captchaHelper
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
