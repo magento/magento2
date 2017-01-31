@@ -19,11 +19,11 @@ use Magento\Framework\App\Area;
 class ValueProcessor
 {
     /**
-     * System configuration structure.
+     * System configuration structure factory.
      *
-     * @var Structure
+     * @var StructureFactory
      */
-    private $configStructure;
+    private $configStructureFactory;
 
     /**
      * Factory of object that implement \Magento\Framework\App\Config\ValueInterface.
@@ -31,6 +31,11 @@ class ValueProcessor
      * @var ValueFactory
      */
     private $configValueFactory;
+
+    /**
+     * @var ScopeInterface
+     */
+    private $scope;
 
     /**
      * @param ScopeInterface $scope
@@ -42,8 +47,8 @@ class ValueProcessor
         StructureFactory $structureFactory,
         ValueFactory $valueFactory
     ) {
-        $scope->setCurrentScope(Area::AREA_ADMINHTML);
-        $this->configStructure = $structureFactory->create();
+        $this->scope = $scope;
+        $this->configStructureFactory = $structureFactory;
         $this->configValueFactory = $valueFactory;
     }
 
@@ -58,10 +63,17 @@ class ValueProcessor
      */
     public function process($scope, $scopeCode, $value, $path)
     {
+        $areaScope = $this->scope->getCurrentScope();
+        $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
+        /** @var Structure $configStructure */
+        $configStructure = $this->configStructureFactory->create();
+        $this->scope->setCurrentScope($areaScope);
+
         /** @var Field $field */
-        $field = $this->configStructure->getElement($path);
+        $field = $configStructure->getElement($path);
+
         /** @var Value $backendModel */
-        $backendModel = $field->hasBackendModel()
+        $backendModel = $field && $field->hasBackendModel()
             ? $field->getBackendModel()
             : $this->configValueFactory->create();
         $backendModel->setPath($path);

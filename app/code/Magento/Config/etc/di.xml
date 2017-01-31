@@ -201,6 +201,10 @@
                     <item name="source" xsi:type="object">systemConfigInitialDataProvider</item>
                     <item name="sortOrder" xsi:type="string">1000</item>
                 </item>
+                <item name="env" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</item>
+                    <item name="sortOrder" xsi:type="string">2000</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
