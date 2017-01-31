@@ -55,7 +55,7 @@ class Index extends \Magento\Framework\App\Action\Action
 
         $block = $this->_view->getLayout()->createBlock($captchaModel->getBlockName());
         $block->setFormId($formId)->setIsAjax(true)->toHtml();
-        $this->_response->representJson(json_encode(['imgSrc' => $captchaModel->getImgSrc()]));
+        $this->_response->representJson($this->serializer->serialize(['imgSrc' => $captchaModel->getImgSrc()]));
         $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
     }
 }
