@@ -112,10 +112,16 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             ]);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
-        // Assertion for first time load
-        $this->assertSame($this->theme, $this->themeProvider->getThemeByFullPath(self::THEME_PATH));
-        // Assertion for loading from local cache
-        $this->assertSame($this->theme, $this->themeProvider->getThemeByFullPath(self::THEME_PATH));
+        $this->assertSame(
+            $this->theme,
+            $this->themeProvider->getThemeByFullPath(self::THEME_PATH),
+            'Unable to load Theme'
+        );
+        $this->assertSame(
+            $this->theme,
+            $this->themeProvider->getThemeByFullPath(self::THEME_PATH),
+            'Unable to load Theme from object cache'
+        );
     }
 
     public function testGetByFullPathWithCache()
@@ -155,10 +161,16 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             ->with('theme' . self::THEME_PATH)
             ->willReturn($serializedTheme);
 
-        // Assertion for load from cache
-        $this->assertSame($this->theme, $this->themeProvider->getThemeByFullPath(self::THEME_PATH));
-        // Assertion for load from object cache
-        $this->assertSame($this->theme, $this->themeProvider->getThemeByFullPath(self::THEME_PATH));
+        $this->assertSame(
+            $this->theme,
+            $this->themeProvider->getThemeByFullPath(self::THEME_PATH),
+            'Unable to load Theme from application cache'
+        );
+        $this->assertSame(
+            $this->theme,
+            $this->themeProvider->getThemeByFullPath(self::THEME_PATH),
+            'Unable to load Theme from object cache'
+        );
     }
 
     public function testGetById()
@@ -185,10 +197,16 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             ->with($themeArray)
             ->willReturn('{"theme_data":"theme_data"}');
 
-        // Assertion for initial load
-        $this->assertSame($this->theme, $this->themeProvider->getThemeById(self::THEME_ID));
-        // Assertion for load from object cache
-        $this->assertSame($this->theme, $this->themeProvider->getThemeById(self::THEME_ID));
+        $this->assertSame(
+            $this->theme,
+            $this->themeProvider->getThemeById(self::THEME_ID),
+            'Unable to load Theme'
+        );
+        $this->assertSame(
+            $this->theme,
+            $this->themeProvider->getThemeById(self::THEME_ID),
+            'Unable to load Theme from object cache'
+        );
     }
 
     public function testGetByIdWithCache()
@@ -211,10 +229,16 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->theme);
 
-        // Assertion for initial load from cache
-        $this->assertSame($this->theme, $this->themeProvider->getThemeById(self::THEME_ID));
-        // Assertion for load from object cache
-        $this->assertSame($this->theme, $this->themeProvider->getThemeById(self::THEME_ID));
+        $this->assertSame(
+            $this->theme,
+            $this->themeProvider->getThemeById(self::THEME_ID),
+            'Unable to load Theme from application cache'
+        );
+        $this->assertSame(
+            $this->theme,
+            $this->themeProvider->getThemeById(self::THEME_ID),
+            'Unable to load Theme from object cache'
+        );
     }
 
     public function testGetThemeCustomizations()
