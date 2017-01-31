@@ -60,17 +60,17 @@ class ReportWriter implements ReportWriterInterface
     public function write(WriteInterface $directory, $path)
     {
         $directory->create($path);
-        $errorsStack = new \SplStack();
+        $errorsList = [];
         foreach($this->config->get() as $file) {
             foreach ($file['providers'] as $provider) {
-                $errors = $this->reportValidator->getErrors($provider[0]['name']);
-                if ($errors) {
-                    $errorsStack->push($errors);
+                $error = $this->reportValidator->getError($provider[0]['name']);
+                if ($error) {
+                    $errorsList[] = $error;
                     continue;
                 }
 
                 $providerObject = $this->providerFactory->create($provider[0]['class']);
-                $fileFullPath = $path . $provider[0]['name'] . md5(microtime()) . '.csv';
+                $fileFullPath = $path . $provider[0]['name'] . '.csv';
                 $fileData = $providerObject->getReport($provider[0]['name']);
 
                 $directory->create($path);
@@ -83,11 +83,11 @@ class ReportWriter implements ReportWriterInterface
                 $stream->close();
             }
         }
-        if ($errorsStack->count() > 0) {
+        if ($errorsList) {
             $errorStream = $directory->openFile($path . $this->errorsFileName, 'w+');
-            foreach ($errorsStack as $errors) {
+            foreach ($errorsList as $error) {
                 $errorStream->lock();
-                $errorStream->writeCsv($errors);
+                $errorStream->writeCsv([$error]);
                 $errorStream->unlock();
             }
             $errorStream->close();

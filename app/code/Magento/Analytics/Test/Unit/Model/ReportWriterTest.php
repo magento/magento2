@@ -113,7 +113,7 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
         $errorStreamMock->expects($this->once())->method('writeCsv')->with($fileData[0]);
         $errorStreamMock->expects($this->once())->method('unlock');
         $errorStreamMock->expects($this->once())->method('close');
-        $this->reportValidatorMock->expects($this->once())->method('getErrors')->willReturn($errors);
+        $this->reportValidatorMock->expects($this->once())->method('getError')->willReturn($errors);
         $this->directoryMock->expects($this->once())->method('openFile')->with(
             $this->stringContains('/var/tmp' . $reportName),
             'w+'
@@ -148,7 +148,7 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
         $errorStreamMock->expects($this->once())->method('writeCsv')->with($errors);
         $errorStreamMock->expects($this->once())->method('unlock');
         $errorStreamMock->expects($this->once())->method('close');
-        $this->reportValidatorMock->expects($this->once())->method('getErrors')->willReturn($errors);
+        $this->reportValidatorMock->expects($this->once())->method('getError')->willReturn($errors);
         $this->directoryMock->expects($this->once())->method('openFile')->with('/var/tmp' . 'errors.csv', 'w+')
             ->willReturn($errorStreamMock);
         $this->reportWriter->write($this->directoryMock, '/var/tmp');
@@ -160,7 +160,7 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
     public function testWriteEmptyReports()
     {
         $this->configInterfaceMock->expects($this->once())->method('get')->willReturn([]);
-        $this->reportValidatorMock->expects($this->never())->method('getErrors');
+        $this->reportValidatorMock->expects($this->never())->method('getError');
         $this->directoryMock->expects($this->never())->method('openFile');
         $this->reportWriter->write($this->directoryMock, '/var/tmp');
     }
