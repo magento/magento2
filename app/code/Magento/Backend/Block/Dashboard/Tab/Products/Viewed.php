@@ -6,6 +6,7 @@
 namespace Magento\Backend\Block\Dashboard\Tab\Products;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 
 /**
  * Adminhtml dashboard most viewed products grid
@@ -72,7 +73,7 @@ class Viewed extends \Magento\Backend\Block\Dashboard\Grid
 
         /** @var Product $product */
         foreach ($collection as $product) {
-            $product->setPrice($product->getFinalPrice());
+            $product->setPrice($product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue());
         }
 
         return $this;
