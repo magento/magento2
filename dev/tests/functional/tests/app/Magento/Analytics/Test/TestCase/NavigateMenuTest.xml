@@ -9,7 +9,7 @@
     <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
         <variation name="NavigateMenuTestBasicTier" summary="Navigate through Basic Tier admin menu to Sign Up page" ticketId="MAGETWO-63700">
             <data name="menuItem" xsi:type="string">Reports > Basic Tier</data>
-            <data name="waitElementNotVisible" xsi:type="boolean">false</data>
+            <data name="waitMenuItemNotVisible" xsi:type="boolean">false</data>
             <constraint name="Magento\Analytics\Test\Constraint\AssertBasicTierLink" />
         </variation>
     </testCase>
