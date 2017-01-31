@@ -69,11 +69,31 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @return array|null
+     * @return \Magento\Sales\Model\Order|null
      */
     public function getOrder()
     {
         return $this->_coreRegistry->registry('current_order');
+    }
+
+    /**
+     * Disable pager for printing page
+     *
+     * @return bool
+     */
+    public function isPagerDisplayed()
+    {
+        return false;
+    }
+
+    /**
+     * Get order items
+     *
+     * @return \Magento\Framework\DataObject[]
+     */
+    public function getItems()
+    {
+        return $this->getOrder()->getItemsCollection()->getItems();
     }
 
     /**

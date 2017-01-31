@@ -30,6 +30,7 @@
         <?php $items = $block->getItems(); ?>
         <?php $giftMessage = ''?>
         <?php foreach ($items as $item): ?>
+            <?php if ($item->getParentItem()) continue; ?>
             <tbody>
                 <?php echo $block->getItemHtml($item) ?>
                 <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order_item', $item) && $item->getGiftMessageId()): ?>

@@ -188,4 +188,43 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($html);
         $this->assertEquals($html, $this->block->getPagerHtml());
     }
+
+    public function testLayoutWithoutPager()
+    {
+        $itemsPerPage = 42;
+        $this->collectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->itemCollectionMock);
+
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with('sales/orders/items_per_page')
+            ->willReturn($itemsPerPage);
+
+        $this->layoutMock->expects($this->atLeastOnce())
+            ->method('getChildName')
+            ->with(null, 'sales_order_item_pager')
+            ->willReturn(false);
+        $pagerBlockMock = $this->getMockBuilder(\Magento\Theme\Block\Html\Pager::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setShowAmounts', 'setLimit', 'setCollection', 'setAvailableLimit', 'toHtml'])
+            ->getMock();
+        $pagerBlockMock->expects($this->never())
+            ->method('setLimit');
+        $pagerBlockMock->expects($this->never())
+            ->method('setCollection');
+        $pagerBlockMock->expects($this->never())
+            ->method('setAvailableLimit');
+
+        //isPagerDisplayed() call
+        $this->itemCollectionMock->expects($this->never())
+            ->method('getSize');
+
+        $pagerBlockMock->expects($this->never())
+            ->method('setShowAmounts');
+
+        $this->block->setLayout($this->layoutMock);
+        $this->assertFalse($this->block->isPagerDisplayed());
+        $this->assertEmpty($this->block->getPagerHtml());
+    }
 }
