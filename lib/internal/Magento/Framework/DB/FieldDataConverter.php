@@ -50,6 +50,8 @@ class FieldDataConverter
      * @param QueryModifierInterface|null $queryModifier
      *
      * @return Select
+     *
+     * @deprecated The method will be removed in MAGETWO-63944.
      */
     public function getSelect(
         AdapterInterface $connection,
