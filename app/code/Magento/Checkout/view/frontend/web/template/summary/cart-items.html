@@ -27,7 +27,7 @@
             </ol>
         </div>
     </div>
-    <div class="actions-toolbar" if="maxCartItemsToDisplay < getItemsQty()">
+    <div class="actions-toolbar" if="maxCartItemsToDisplay < getCartLineItemsCount()">
         <div class="secondary">
             <a class="action viewcart" data-bind="attr: {href: cartUrl}">
                 <span data-bind="i18n: 'View and Edit Cart'"></span>
