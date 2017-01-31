@@ -8,12 +8,18 @@ namespace Magento\Analytics\Model\Config\Source;
 /**
  * A source model for verticals configuration.
  *
- * Prepares and provides options for a selector of verticals.
+ * Prepares and provides options for a selector of verticals which is located
+ * in the corresponding configuration menu of the Admin area.
  */
-class Verticals implements \Magento\Framework\Option\ArrayInterface
+class Vertical implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * An array of possible verticals.
+     * The list of possible verticals.
+     *
+     * This list is configured via di.xml and may be extended or changed
+     * in any module if it is needed.
+     *
+     * It is supposed that the list may be changed in each Magento release.
      *
      * @var array
      */

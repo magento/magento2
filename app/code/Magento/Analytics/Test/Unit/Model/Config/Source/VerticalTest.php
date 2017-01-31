@@ -8,10 +8,10 @@ namespace Magento\Analytics\Test\Unit\Model\Config\Source;
 /**
  * A unit test for testing of the source model for verticals configuration.
  */
-class VerticalsTest extends \PHPUnit_Framework_TestCase
+class VerticalTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Analytics\Model\Config\Source\Verticals
+     * @var \Magento\Analytics\Model\Config\Source\Vertical
      */
     private $subject;
 
@@ -29,7 +29,7 @@ class VerticalsTest extends \PHPUnit_Framework_TestCase
             new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->subject = $this->objectManagerHelper->getObject(
-            \Magento\Analytics\Model\Config\Source\Verticals::class,
+            \Magento\Analytics\Model\Config\Source\Vertical::class,
             [
                 'verticals' => [
                     'Apps and Games',

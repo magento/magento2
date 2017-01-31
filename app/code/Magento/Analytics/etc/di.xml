@@ -74,7 +74,7 @@
             <argument name="reader" xsi:type="object">Magento\Analytics\Model\Config\Reader</argument>
         </arguments>
     </type>
-    <type name="Magento\Analytics\Model\Config\Source\Verticals">
+    <type name="Magento\Analytics\Model\Config\Source\Vertical">
         <arguments>
             <argument name="verticals" xsi:type="array">
                 <item name="0" xsi:type="string">Apps and Games</item>
