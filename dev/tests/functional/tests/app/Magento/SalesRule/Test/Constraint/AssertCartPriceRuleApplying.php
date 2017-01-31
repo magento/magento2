@@ -183,7 +183,7 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
 
         if ($salesRule->getCouponCode()) {
             $couponCode = $salesRule->getCouponCode();
-        } elseif($salesRuleOrigin->getCouponCode()) {
+        } elseif ($salesRuleOrigin->getCouponCode()) {
             $couponCode = $salesRuleOrigin->getCouponCode();
         }
 
