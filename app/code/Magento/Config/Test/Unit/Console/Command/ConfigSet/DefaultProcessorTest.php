@@ -5,15 +5,15 @@
  */
 namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Magento\Config\Console\Command\ConfigSet\DefaultProcessor;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Model\Config;
 use Magento\Config\Model\ConfigFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ConfigPathResolver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
+use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Test for DefaultProcessor.
@@ -121,7 +121,7 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Magento is not installed yet and this value can be only saved with --lock option.
+     * @expectedExceptionMessage We can't save this option because Magento is not installed.
      */
     public function testProcessNotInstalled()
     {
@@ -149,7 +149,7 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Effective value already locked.
+     * @expectedExceptionMessage The value you set has already been locked. To change the value, use the --lock option.
      */
     public function testProcessLockedValue()
     {

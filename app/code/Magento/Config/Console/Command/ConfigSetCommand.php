@@ -6,7 +6,10 @@
 namespace Magento\Config\Console\Command;
 
 use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorFactory;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Scope\ValidatorInterface;
+use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
@@ -14,7 +17,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\Scope\ValidatorInterface;
 
 /**
  * Command provides possibility to change system configuration.
@@ -42,15 +44,23 @@ class ConfigSetCommand extends Command
     private $validator;
 
     /**
+     * @var ScopeInterface
+     */
+    private $scope;
+
+    /**
      * @param ConfigSetProcessorFactory $configSetProcessorFactory
      * @param ValidatorInterface $validator
+     * @param ScopeInterface $scope
      */
     public function __construct(
         ConfigSetProcessorFactory $configSetProcessorFactory,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        ScopeInterface $scope
     ) {
         $this->configSetProcessorFactory = $configSetProcessorFactory;
         $this->validator = $validator;
+        $this->scope = $scope;
 
         parent::__construct();
     }
@@ -68,25 +78,25 @@ class ConfigSetCommand extends Command
                     InputArgument::REQUIRED,
                     'Configuration path in format group/section/field_name'
                 ),
-                new InputArgument(static::ARG_VALUE, InputArgument::REQUIRED, 'Value of configuration'),
+                new InputArgument(static::ARG_VALUE, InputArgument::REQUIRED, 'Configuration value'),
                 new InputOption(
                     static::OPTION_SCOPE,
                     null,
                     InputArgument::OPTIONAL,
-                    'Scope of configuration (default, website, store)',
+                    'Configuration scope (default, website, or store)',
                     ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 ),
                 new InputOption(
                     static::OPTION_SCOPE_CODE,
                     null,
                     InputArgument::OPTIONAL,
-                    'Scope code of configuration (website code or store view code)'
+                    'Scope code'
                 ),
                 new InputOption(
                     static::OPTION_LOCK,
                     'l',
                     InputOption::VALUE_NONE,
-                    'Lock value to prevent it modification via admin configuration'
+                    'Lock value which prevents modification in the Admin'
                 ),
             ]);
 
@@ -106,6 +116,9 @@ class ConfigSetCommand extends Command
                 $input->getOption(static::OPTION_SCOPE_CODE)
             );
 
+            // Emulating adminhtml scope to be able to read configs.
+            $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
+
             $processor = $input->getOption(static::OPTION_LOCK)
                 ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
                 : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT);
@@ -113,7 +126,7 @@ class ConfigSetCommand extends Command
                 ? 'Value was locked.'
                 : 'Value was saved.';
 
-            // The processing flow depends in --lock option.
+            // The processing flow depends on --lock option.
             $processor->process($input);
 
             $output->writeln('<info>' . $message . '</info>');

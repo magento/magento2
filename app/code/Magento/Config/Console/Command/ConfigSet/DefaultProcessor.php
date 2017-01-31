@@ -5,15 +5,15 @@
  */
 namespace Magento\Config\Console\Command\ConfigSet;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\StateException;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\Config\ConfigPathResolver;
+use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Model\ConfigFactory;
-use Magento\Config\App\Config\Type\System;
+use Magento\Framework\App\Config\ConfigPathResolver;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\StateException;
 use Magento\Store\Model\ScopeInterface;
+use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Processes default flow of config:set command.
@@ -70,7 +70,8 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         if (!$this->deploymentConfig->isAvailable()) {
             throw new StateException(
                 __(
-                    'Magento is not installed yet and this value can be only saved with --%1 option.',
+                    'We can\'t save this option because Magento is not installed. '
+                    . 'To lock this value, enter the command again using the --%1 option.',
                     ConfigSetCommand::OPTION_LOCK
                 )
             );
@@ -79,7 +80,7 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         if ($this->isLocked($path, $scope, $scopeCode)) {
             throw new CouldNotSaveException(
                 __(
-                    'Effective value already locked. It can be changed with --%1 option',
+                    'The value you set has already been locked. To change the value, use the --%1 option.',
                     ConfigSetCommand::OPTION_LOCK
                 )
             );

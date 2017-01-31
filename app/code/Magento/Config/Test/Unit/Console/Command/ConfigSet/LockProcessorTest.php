@@ -7,18 +7,18 @@ namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
 use Magento\Config\Console\Command\ConfigSet\LockProcessor;
 use Magento\Config\Console\Command\ConfigSetCommand;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Config\Model\Config\Structure;
+use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\App\Config\ConfigPathResolver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Stdlib\ArrayManager;
-use Symfony\Component\Console\Input\InputInterface;
-use Magento\Config\Model\Config\Structure;
-use Magento\Framework\App\Config\ValueFactory;
-use Magento\Config\Model\Config\Structure\Element\Field;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
+use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Test for LockProcessor.
@@ -99,6 +99,7 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->valueMock = $this->getMockBuilder(Value::class)
+            ->setMethods(['validateBeforeSave', 'beforeSave', 'setValue', 'getValue', 'afterSave'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -155,6 +156,9 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ]);
+        $this->valueMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn($value);
         $this->deploymentConfigWriterMock->expects($this->once())
             ->method('saveConfig')
             ->with(
@@ -171,7 +175,7 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ],
-                true
+                false
             );
 
         $this->model->process($this->inputMock);
@@ -204,6 +208,9 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $this->fieldMock->expects($this->once())
             ->method('getBackendModel')
             ->willReturn($this->valueMock);
+        $this->valueMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn($value);
         $this->configPathResolver->expects($this->once())
             ->method('resolve')
             ->willReturn('system/default/test/test/test');

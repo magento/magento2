@@ -9,6 +9,7 @@ use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorFactory;
 use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorInterface;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Framework\App\Scope\ValidatorInterface;
+use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  * Test for ConfigSetCommand.
  *
  * @see ConfigSetCommand
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,6 +44,11 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $processorMock;
 
     /**
+     * @var ScopeInterface|Mock
+     */
+    private $scopeMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -54,10 +61,13 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->processorMock = $this->getMockBuilder(ConfigSetProcessorInterface::class)
             ->getMockForAbstractClass();
+        $this->scopeMock = $this->getMockBuilder(ScopeInterface::class)
+            ->getMockForAbstractClass();
 
         $this->command = new ConfigSetCommand(
             $this->configSetProcessorFactoryMock,
-            $this->validatorMock
+            $this->validatorMock,
+            $this->scopeMock
         );
     }
 
