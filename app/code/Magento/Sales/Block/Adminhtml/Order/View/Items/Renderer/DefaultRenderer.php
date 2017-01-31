@@ -287,7 +287,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
             case 'tax-percent':
                 $html = $this->displayTaxPercent($item);
                 break;
-            case 'discont':
+            case 'discount':
                 $html = $this->displayPriceAttribute('discount_amount');
                 break;
             default:

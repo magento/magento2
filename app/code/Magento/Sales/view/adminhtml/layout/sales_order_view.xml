@@ -35,7 +35,7 @@
                                 <item name="subtotal" xsi:type="string" translate="true">Subtotal</item>
                                 <item name="tax-amount" xsi:type="string" translate="true">Tax Amount</item>
                                 <item name="tax-percent" xsi:type="string" translate="true">Tax Percent</item>
-                                <item name="discont" xsi:type="string" translate="true">Discount Amount</item>
+                                <item name="discount" xsi:type="string" translate="true">Discount Amount</item>
                                 <item name="total" xsi:type="string" translate="true">Row Total</item>
                             </argument>
                         </arguments>
@@ -50,7 +50,7 @@
                                 <item name="subtotal" xsi:type="string" translate="false">col-subtotal</item>
                                 <item name="tax-amount" xsi:type="string" translate="false">col-tax-amount</item>
                                 <item name="tax-percent" xsi:type="string" translate="false">col-tax-percent</item>
-                                <item name="discont" xsi:type="string" translate="false">col-discont</item>
+                                <item name="discount" xsi:type="string" translate="false">col-discount</item>
                                 <item name="total" xsi:type="string" translate="false">col-total</item>
                             </argument>
                         </arguments>
