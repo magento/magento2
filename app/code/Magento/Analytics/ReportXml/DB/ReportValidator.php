@@ -52,9 +52,6 @@ class ReportValidator
         $query = $this->queryFactory->create($name);
         $connection = $this->connectionFactory->getConnection($query->getConnectionName());
         $query->getSelect()->limit(0);
-        if ($name == 'orders') {
-            $query->getSelect()->where('sdd');
-        }
         try {
             $connection->query($query->getSelect());
         } catch (\Exception $e) {
