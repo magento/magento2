@@ -37,7 +37,7 @@ class Conditions
      */
     public function encode(array $value)
     {
-        $value = str_replace(['{', '}', '"', '\\'], ['[', ']', '`', '|'], $this->serializer->serialize($value));
+        $value = str_replace(['{', '}', '"', '\\\\'], ['[', ']', '`', '|'], $this->serializer->serialize($value));
         return $value;
     }
 
@@ -49,7 +49,7 @@ class Conditions
      */
     public function decode($value)
     {
-        $value = str_replace(['[', ']', '`', '|'], ['{', '}', '"', '\\'], $value);
+        $value = str_replace(['[', ']', '`', '|'], ['{', '}', '"', '\\\\'], $value);
         $value = $this->serializer->unserialize($value);
         return $value;
     }
