@@ -40,17 +40,26 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit_Framework_MockObject_MockObject */
     private $themeProvider;
 
+    /** @var \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
+    private $theme;
+
     protected function setUp()
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->collectionFactory = $this->getMock(
             \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory::class,
-            [],
+            ['create'],
             [],
             '',
             false
         );
-        $this->themeFactory = $this->getMock(\Magento\Theme\Model\ThemeFactory::class, [], [], '', false);
+        $this->themeFactory = $this->getMock(
+            \Magento\Theme\Model\ThemeFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->cache = $this->getMockBuilder(\Magento\Framework\App\CacheInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -64,16 +73,16 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
                 'serializer' => $this->serializer
             ]
         );
+        $this->theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
     }
 
     public function testGetByFullPath()
     {
         $themeArray = ['theme_data' => 'theme_data'];
-        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
-        $theme->expects($this->exactly(2))
+        $this->theme->expects($this->exactly(2))
             ->method('getId')
             ->willReturn(self::THEME_ID);
-        $theme->expects($this->exactly(2))
+        $this->theme->expects($this->exactly(2))
             ->method('toArray')
             ->willReturn($themeArray);
 
@@ -81,7 +90,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
         $collectionMock->expects($this->once())
             ->method('getThemeByFullPath')
             ->with(self::THEME_PATH)
-            ->willReturn($theme);
+            ->willReturn($this->theme);
         $this->collectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($collectionMock);
@@ -106,9 +115,9 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
         // Assertion for first time load
-        $this->assertSame($theme, $this->themeProvider->getThemeByFullPath(self::THEME_PATH));
+        $this->assertSame($this->theme, $this->themeProvider->getThemeByFullPath(self::THEME_PATH));
         // Assertion for loading from local cache
-        $this->assertSame($theme, $this->themeProvider->getThemeByFullPath(self::THEME_PATH));
+        $this->assertSame($this->theme, $this->themeProvider->getThemeByFullPath(self::THEME_PATH));
     }
 
     public function testGetByFullPathWithCache()
@@ -129,18 +138,19 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
         $serializedTheme = '{"theme_data":"theme_data"}';
-        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
-        $theme->expects($this->once())
+        $themeArray = ['theme_data' => 'theme_data'];
+        $this->theme->expects($this->once())
             ->method('populateFromArray')
+            ->with($themeArray)
             ->willReturnSelf();
         $this->themeFactory->expects($this->once())
             ->method('create')
-            ->willReturn($theme);
+            ->willReturn($this->theme);
 
         $this->serializer->expects($this->once())
             ->method('unserialize')
             ->with($serializedTheme)
-            ->willReturn(['theme_data' => 'theme_data']);
+            ->willReturn($themeArray);
 
         $this->cache->expects($this->once())
             ->method('load')
@@ -148,22 +158,26 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($serializedTheme);
 
         // Assertion for load from cache
-        $this->assertSame($theme, $this->themeProvider->getThemeByFullPath(self::THEME_PATH));
+        $this->assertSame($this->theme, $this->themeProvider->getThemeByFullPath(self::THEME_PATH));
         // Assertion for load from object cache
-        $this->assertSame($theme, $this->themeProvider->getThemeByFullPath(self::THEME_PATH));
+        $this->assertSame($this->theme, $this->themeProvider->getThemeByFullPath(self::THEME_PATH));
     }
 
     public function testGetById()
     {
         $themeArray = ['theme_data' => 'theme_data'];
-        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
-        $theme->expects($this->once())->method('load')->with(self::THEME_ID)->will($this->returnSelf());
-        $theme->expects($this->once())->method('getId')->will($this->returnValue(self::THEME_ID));
-        $theme->expects($this->once())
+        $this->theme->expects($this->once())
+            ->method('load')
+            ->with(self::THEME_ID)
+            ->willReturnSelf();
+        $this->theme->expects($this->once())
+            ->method('getId')
+            ->willReturn(self::THEME_ID);
+        $this->theme->expects($this->once())
             ->method('toArray')
             ->willReturn($themeArray);
 
-        $this->themeFactory->expects($this->once())->method('create')->will($this->returnValue($theme));
+        $this->themeFactory->expects($this->once())->method('create')->will($this->returnValue($this->theme));
         $this->cache->expects($this->once())
             ->method('load')
             ->with('theme-by-id-' . self::THEME_ID)
@@ -174,18 +188,18 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn('{"theme_data":"theme_data"}');
 
         // Assertion for initial load
-        $this->assertSame($theme, $this->themeProvider->getThemeById(self::THEME_ID));
+        $this->assertSame($this->theme, $this->themeProvider->getThemeById(self::THEME_ID));
         // Assertion for load from object cache
-        $this->assertSame($theme, $this->themeProvider->getThemeById(self::THEME_ID));
+        $this->assertSame($this->theme, $this->themeProvider->getThemeById(self::THEME_ID));
     }
 
     public function testGetByIdWithCache()
     {
         $serializedTheme = '{"theme_data":"theme_data"}';
-        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
-        $theme->expects($this->once())
+        $themeArray = ['theme_data' => 'theme_data'];
+        $this->theme->expects($this->once())
             ->method('populateFromArray')
-            ->with(['theme_data' => 'theme_data'])
+            ->with($themeArray)
             ->willReturnSelf();
         $this->cache->expects($this->once())
             ->method('load')
@@ -194,15 +208,15 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
         $this->serializer->expects($this->once())
             ->method('unserialize')
             ->with($serializedTheme)
-            ->willReturn(['theme_data' => 'theme_data']);
+            ->willReturn($themeArray);
         $this->themeFactory->expects($this->once())
             ->method('create')
-            ->willReturn($theme);
+            ->willReturn($this->theme);
 
         // Assertion for initial load from cache
-        $this->assertSame($theme, $this->themeProvider->getThemeById(self::THEME_ID));
+        $this->assertSame($this->theme, $this->themeProvider->getThemeById(self::THEME_ID));
         // Assertion for load from object cache
-        $this->assertSame($theme, $this->themeProvider->getThemeById(self::THEME_ID));
+        $this->assertSame($this->theme, $this->themeProvider->getThemeById(self::THEME_ID));
     }
 
     public function testGetThemeCustomizations()

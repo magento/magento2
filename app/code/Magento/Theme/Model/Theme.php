@@ -413,12 +413,13 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     {
         $this->_data = $data;
         if (isset($data['parent_theme'])) {
-            $this->_data['parent_theme'] = $this->getThemeInstance()->populateFromArray($data['parent_theme']);
+            $this->_data['parent_theme'] = $this->createThemeInstance()->populateFromArray($data['parent_theme']);
         }
 
         if (isset($data['inherited_themes'])) {
             foreach ($data['inherited_themes'] as $key => $inheritedTheme) {
-                $this->_data['inherited_themes'][$key] = $this->getThemeInstance()->populateFromArray($inheritedTheme);
+                $themeInstance = $this->createThemeInstance()->populateFromArray($inheritedTheme);
+                $this->_data['inherited_themes'][$key] = $themeInstance;
             }
         }
 
@@ -426,11 +427,11 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * Create a new Theme model from factory
+     * Create Theme instance
      *
      * @return \Magento\Theme\Model\Theme
      */
-    private function getThemeInstance()
+    private function createThemeInstance()
     {
         return $this->themeModelFactory->create();
     }
