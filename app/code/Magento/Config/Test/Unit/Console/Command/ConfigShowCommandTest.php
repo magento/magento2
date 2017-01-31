@@ -12,8 +12,8 @@ use Magento\Framework\Exception\LocalizedException;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\ConfigPathResolver;
+use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
 
 class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,9 +28,9 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
     private $configSourceMock;
 
     /**
-     * @var MetadataProcessor|MockObject
+     * @var ValueProcessor|MockObject
      */
-    private $metadataProcessorMock;
+    private $valueProcessorMock;
 
     /**
      * @var ConfigPathResolver|MockObject
@@ -44,7 +44,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataProcessorMock = $this->getMockBuilder(MetadataProcessor::class)
+        $this->valueProcessorMock = $this->getMockBuilder(ValueProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->pathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
@@ -59,7 +59,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
             $this->scopeValidatorMock,
             $this->configSourceMock,
             $this->pathResolverMock,
-            $this->metadataProcessorMock
+            $this->valueProcessorMock
         );
     }
 
@@ -82,9 +82,9 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with($resolvedConfigPath)
             ->willReturn('someValue');
-        $this->metadataProcessorMock->expects($this->once())
-            ->method('processValue')
-            ->with('someValue')
+        $this->valueProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($scope, $scopeCode, 'someValue', $configPath)
             ->willReturn('someProcessedValue');
 
         $tester = $this->getConfigShowCommandTester($configPath, $scope, $scopeCode);

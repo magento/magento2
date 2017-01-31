@@ -88,49 +88,4 @@ class MetadataProcessor
         }
         return $data;
     }
-
-    /**
-     * Processes value into correct form.
-     * Example: decrypt a value.
-     *
-     * @param string|int $value The value to process
-     * @param string $path The path of the value
-     * @return string The processed value
-     */
-    public function processValue($value, $path)
-    {
-        if (isset($this->_metadata[$path])) {
-            /** @var \Magento\Framework\App\Config\Data\ProcessorInterface $processor */
-            $processor = $this->_processorFactory->get($this->_metadata[$path]['backendModel']);
-
-            return $processor->processValue($value);
-        }
-
-        return $value;
-    }
-
-    /**
-     * Prepares value for saving.
-     * Example: encrypt a value.
-     *
-     * @param string|int $value The value to prepare
-     * @param string $path The path of the value
-     * @return string The prepared value
-     */
-    public function prepareValue($value, $path)
-    {
-        if (isset($this->_metadata[$path])) {
-            /** @var \Magento\Framework\App\Config\Data\ProcessorInterface $processor */
-            $processor = $this->_processorFactory->get($this->_metadata[$path]['backendModel']);
-
-            if ($processor instanceof \Magento\Framework\App\Config\Value) {
-                $processor->setValue($value);
-                $processor->beforeSave();
-
-                return $processor->getValue();
-            }
-        }
-
-        return $value;
-    }
 }
