@@ -30,12 +30,21 @@ define(
             getItems: totals.getItems(),
 
             /**
-             * Returns cart items count
+             * Returns cart items qty
              *
              * @returns {Number}
              */
             getItemsQty: function () {
                 return parseFloat(this.totals['items_qty']);
+            },
+
+            /**
+             * Returns count of cart line items
+             *
+             * @returns {Number}
+             */
+            getCartLineItemsCount: function () {
+                return parseInt(totals.getItems()().length, 10);
             },
 
             /**

@@ -27,11 +27,11 @@
 
     <if args="getCartParam('summary_count')">
         <div class="items-total">
-            <span class="count" if="maxItemsToDisplay < getCartParam('summary_count')" text="maxItemsToDisplay"/>
-            <translate args="'of'" if="maxItemsToDisplay < getCartParam('summary_count')"/>
-            <span class="count" text="getCartParam('summary_count')"/>
-            <translate args="'Item in Cart'" if="getCartParam('summary_count') == 1"/>
-            <translate args="'Items in Cart'" if="getCartParam('summary_count') > 1"/>
+            <span class="count" if="maxItemsToDisplay < getCartLineItemsCount()" text="maxItemsToDisplay"/>
+            <translate args="'of'" if="maxItemsToDisplay < getCartLineItemsCount()"/>
+            <span class="count" text="getCartLineItemsCount()"/>
+            <translate args="'Item in Cart'" if="getCartLineItemsCount() == 1"/>
+            <translate args="'Items in Cart'" if="getCartLineItemsCount() > 1"/>
         </div>
 
         <each args="getRegion('subtotalContainer')" render=""/>

@@ -177,6 +177,16 @@ define([
             items = items.slice(parseInt(-this.maxItemsToDisplay, 10));
 
             return items;
+        },
+
+        /**
+         * Returns count of cart line items
+         * @returns {Number}
+         */
+        getCartLineItemsCount: function () {
+            var items = this.getCartParam('items') || [];
+
+            return parseInt(items.length, 10);
         }
     });
 });
