@@ -12,6 +12,10 @@
         <strategy>css selector</strategy>
         <wrapper>general</wrapper>
         <fields>
+            <use_default_name>
+                <selector>#group_4name_default</selector>
+                <input>checkbox</input>
+            </use_default_name>
             <is_active>
                 <input>select</input>
             </is_active>
