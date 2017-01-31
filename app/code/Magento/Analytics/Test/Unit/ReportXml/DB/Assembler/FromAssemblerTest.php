@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Tests\Unit\ReportXml\DB\Assembler;
+namespace Magento\Analytics\Test\Unit\ReportXml\DB\Assembler;
 
 /**
  * A unit test for testing of the 'from' assembler.
