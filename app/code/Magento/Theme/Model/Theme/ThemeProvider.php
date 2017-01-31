@@ -83,7 +83,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
             return $this->getThemeList()->getThemeByFullPath($fullPath);
         }
 
-        $theme = $this->loadThemeFromCache('theme'. $fullPath);
+        $theme = $this->loadThemeFromCache('theme' . $fullPath);
         if ($theme) {
             $this->themes[$fullPath] = $theme;
             return $theme;
@@ -113,6 +113,10 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     }
 
     /**
+     * Get theme by id
+     *
+     * Checks local object cache first, application cache second, and will fall back on creating and loading
+     * a new Theme object. Loaded Theme is only cached by ID, as virtual themes may have matching base paths.
      * {@inheritdoc}
      */
     public function getThemeById($themeId)
