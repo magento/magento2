@@ -19,6 +19,11 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     protected $block;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layout;
+
+    /**
      * @var \Magento\Sales\Model\Order\Config | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderConfig;
@@ -27,7 +32,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Checkout\Model\Session | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $checkoutSession;
-    
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -38,17 +43,50 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->orderConfig = $this->getMock(\Magento\Sales\Model\Order\Config::class, [], [], '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
 
-        $this->checkoutSession = $this->getMockBuilder(
-            \Magento\Checkout\Model\Session::class
-        )
+        $this->layout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $this->checkoutSession = $this->getMockBuilder(\Magento\Checkout\Model\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $eventManager = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->with($this->stringContains('advanced/modules_disable_output/'), \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->will($this->returnValue(false));
+
+        $context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getLayout', 'getEventManager', 'getUrlBuilder', 'getScopeConfig', 'getStoreManager'])
+            ->getMock();
+        $context->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
+        $context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
+        $context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
+        $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
+        $context->expects($this->any())->method('getStoreManager')->will($this->returnValue($this->storeManagerMock));
 
         $this->block = $objectManager->getObject(
             \Magento\Checkout\Block\Onepage\Success::class,
             [
+                'context' => $context,
                 'orderConfig' => $this->orderConfig,
                 'checkoutSession' => $this->checkoutSession
             ]
@@ -116,7 +154,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
             [['status1', 'status2'], true]
         ];
     }
-    
+
     public function testGetContinueUrl()
     {
         $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
