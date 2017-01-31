@@ -11,12 +11,36 @@ namespace Magento\Captcha\Controller\Adminhtml\Refresh;
 class Refresh extends \Magento\Backend\App\Action
 {
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $serializer;
+
+    /**
+     * @var \Magento\Captcha\Helper\Data
+     */
+    protected $captchaHelper;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Serialize\SerializerInterface $serializer,
+        \Magento\Captcha\Helper\Data $captchaHelper
+    ) {
+        parent::__construct($context);
+        $this->serializer = $serializer;
+        $this->captchaHelper = $captchaHelper;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function execute()
     {
         $formId = $this->getRequest()->getPost('formId');
-        $captchaModel = $this->_objectManager->get(\Magento\Captcha\Helper\Data::class)->getCaptcha($formId);
+        $captchaModel = $this->captchaHelper->getCaptcha($formId);
         $this->_view->getLayout()->createBlock(
             $captchaModel->getBlockName()
         )->setFormId(
@@ -24,7 +48,7 @@ class Refresh extends \Magento\Backend\App\Action
         )->setIsAjax(
             true
         )->toHtml();
-        $this->getResponse()->representJson(json_encode(['imgSrc' => $captchaModel->getImgSrc()]));
+        $this->getResponse()->representJson($this->serializer->serialize(['imgSrc' => $captchaModel->getImgSrc()]));
         $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
     }
 
