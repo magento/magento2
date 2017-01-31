@@ -72,8 +72,9 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 $this->stringContains(
-                    'advanced/modules_disable_output/'), 
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    'advanced/modules_disable_output/'
+                ),
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
             ->will($this->returnValue(false));
 
