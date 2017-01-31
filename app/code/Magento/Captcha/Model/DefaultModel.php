@@ -41,7 +41,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     /**
      * Override default value to prevent a captcha cut off
      * @var int
-     * @see \Zend\Captcha\Image::$_fsize
+     * @see \Zend\Captcha\Image::$fsize
      */
     protected $fsize = 22;
 
