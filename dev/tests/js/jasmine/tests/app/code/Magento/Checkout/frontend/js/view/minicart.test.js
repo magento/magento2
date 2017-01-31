@@ -55,6 +55,12 @@ define(['squire'], function (Squire) {
             });
         });
 
+        describe('"getCartLineItemsCount" method', function () {
+            it('Check for return value.', function () {
+                expect(obj.getCartLineItemsCount()).toBe(2);
+            });
+        });
+
         describe('"getItemRenderer" method', function () {
             describe('Returns different renderers by product type', function () {
                 it('Check for default renderer.', function () {

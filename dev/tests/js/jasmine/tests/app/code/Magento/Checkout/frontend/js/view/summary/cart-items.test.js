@@ -17,7 +17,13 @@ define(['squire'], function (Squire) {
                     };
                 },
                 getItems: function () {
-                    var observable = function () {};
+                    var observable = function () {
+                        return [{
+                            itemId: 1
+                        }, {
+                            itemId: 2
+                        }];
+                    };
 
                     observable.subscribe = function () {};
 
@@ -72,6 +78,12 @@ define(['squire'], function (Squire) {
         describe('"isItemsBlockExpanded" method', function () {
             it('Check for return value.', function () {
                 expect(obj.isItemsBlockExpanded()).toBeTruthy();
+            });
+        });
+
+        describe('"getCartLineItemsCount" method', function () {
+            it('Check for return value.', function () {
+                expect(obj.getCartLineItemsCount()).toBe(2);
             });
         });
 
