@@ -35,22 +35,22 @@ class ReportWriter implements ReportWriterInterface
     /**
      * @var ReportValidator
      */
-    private $queryValidator;
+    private $reportValidator;
 
     /**
      * ReportWriter constructor.
      *
-     * @param Config $config
-     * @param ReportValidator $queryValidator
+     * @param ConfigInterface $config
+     * @param ReportValidator $reportValidator
      * @param ProviderFactory $providerFactory
      */
     public function __construct(
-        Config $config,
-        ReportValidator $queryValidator,
+        ConfigInterface $config,
+        ReportValidator $reportValidator,
         ProviderFactory $providerFactory
     ) {
         $this->config = $config;
-        $this->queryValidator = $queryValidator;
+        $this->reportValidator = $reportValidator;
         $this->providerFactory = $providerFactory;
     }
 
@@ -63,7 +63,7 @@ class ReportWriter implements ReportWriterInterface
         $errorsStack = new \SplStack();
         foreach($this->config->get() as $file) {
             foreach ($file['providers'] as $provider) {
-                $errors = $this->queryValidator->getErrors($provider[0]['name']);
+                $errors = $this->reportValidator->getErrors($provider[0]['name']);
                 if ($errors) {
                     $errorsStack->push($errors);
                     continue;
