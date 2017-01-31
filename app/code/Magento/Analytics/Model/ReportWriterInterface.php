@@ -13,7 +13,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
  * Writes report files
  * Executes export of collected data
  * Iterates registered providers @see etc/analytics.xml
- * Collects data (to TMP folder) and
+ * Collects data (to TMP folder)
  */
 interface ReportWriterInterface
 {
