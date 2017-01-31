@@ -47,7 +47,7 @@ class ReportValidator
      * @param SearchCriteriaInterface $criteria
      * @return array
      */
-    public function getErrors($name, SearchCriteriaInterface $criteria = null)
+    public function getError($name, SearchCriteriaInterface $criteria = null)
     {
         $query = $this->queryFactory->create($name);
         $connection = $this->connectionFactory->getConnection($query->getConnectionName());

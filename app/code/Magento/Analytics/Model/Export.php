@@ -72,10 +72,14 @@ class Export
     public function getArchiveContent()
     {
         $directory = $this->filesystem->getDirectoryWrite(DirectoryList::TMP);
-        $this->reportWriter->write($directory, $this->path);
-        $archiveFile = $directory->getAbsolutePath(). $this->archiveName;
-        $this->archive->pack($directory->getAbsolutePath($this->path), $archiveFile, true);
         $directory->delete($this->path);
+        try {
+            $this->reportWriter->write($directory, $this->path);
+            $archiveFile = $directory->getAbsolutePath(). $this->archiveName;
+            $this->archive->pack($directory->getAbsolutePath($this->path), $archiveFile, true);
+        } finally {
+            $directory->delete($this->path);
+        }
         return $directory->readFile($this->archiveName);
     }
 }
