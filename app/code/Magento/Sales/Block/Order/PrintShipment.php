@@ -93,6 +93,9 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getItems()
     {
+        if (!$this->getOrder()) {
+            return [];
+        }
         return $this->getOrder()->getItemsCollection()->getItems();
     }
 
