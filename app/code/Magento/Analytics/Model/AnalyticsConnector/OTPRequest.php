@@ -105,7 +105,7 @@ class OTPRequest
         return json_encode(
             [
                 "token" => $this->analyticsToken->getToken(),
-                "url" => $this->config->getValue(Store::XML_PATH_UNSECURE_BASE_URL),
+                "url" => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
             ]
         );
     }

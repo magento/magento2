@@ -61,7 +61,7 @@ class Show extends Action
         } catch (\Exception $e) {
             $this->getMessageManager()->addExceptionMessage(
                 $e,
-                __('Sorry, there was an error processing your request. '
+                __('Sorry, there has been an error processing your request. '
                 . 'Please try again later.')
             );
             $resultRedirect->setPath('adminhtml');
