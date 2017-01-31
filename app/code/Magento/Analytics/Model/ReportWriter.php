@@ -63,7 +63,7 @@ class ReportWriter implements ReportWriterInterface
         $errorsList = [];
         foreach($this->config->get() as $file) {
             foreach ($file['providers'] as $provider) {
-                $error = $this->reportValidator->getError($provider[0]['name']);
+                $error = $this->reportValidator->validate($provider[0]['name']);
                 if ($error) {
                     $errorsList[] = $error;
                     continue;
@@ -87,7 +87,7 @@ class ReportWriter implements ReportWriterInterface
             $errorStream = $directory->openFile($path . $this->errorsFileName, 'w+');
             foreach ($errorsList as $error) {
                 $errorStream->lock();
-                $errorStream->writeCsv([$error]);
+                $errorStream->writeCsv($error);
                 $errorStream->unlock();
             }
             $errorStream->close();
