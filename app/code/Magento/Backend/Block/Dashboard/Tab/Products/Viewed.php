@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Block\Dashboard\Tab\Products;
 
+use Magento\Catalog\Model\Product;
+
 /**
  * Adminhtml dashboard most viewed products grid
  *
@@ -67,7 +69,14 @@ class Viewed extends \Magento\Backend\Block\Dashboard\Grid
 
         $this->setCollection($collection);
 
-        return parent::_prepareCollection();
+        parent::_prepareCollection();
+
+        /** @var Product $product */
+        foreach ($collection as $product) {
+            $product->setPrice($product->getFinalPrice());
+        }
+
+        return $this;
     }
 
     /**
