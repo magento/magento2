@@ -25,6 +25,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @param Context $context
      * @param \Magento\Captcha\Helper\Data $captchaHelper
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      */
     public function __construct(
         Context $context,

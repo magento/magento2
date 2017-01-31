@@ -164,8 +164,10 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
      */
     public function testAroundExecuteCaptchaIsNotRequired($username, $requestContent)
     {
-        $this->requestMock->expects($this->once())->method('getContent')->will($this->returnValue(json_encode($requestContent)));
-        $this->serializerMock->expects(($this->once()))->method('unserialize')->will($this->returnValue($requestContent));
+        $this->requestMock->expects($this->once())->method('getContent')
+            ->will($this->returnValue(json_encode($requestContent)));
+        $this->serializerMock->expects(($this->once()))->method('unserialize')
+            ->will($this->returnValue($requestContent));
 
         $this->captchaMock->expects($this->once())->method('isRequired')->with($username)
             ->will($this->returnValue(false));

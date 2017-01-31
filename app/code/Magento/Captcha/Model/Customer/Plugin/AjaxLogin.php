@@ -40,6 +40,7 @@ class AjaxLogin
      * @param CaptchaHelper $helper
      * @param SessionManagerInterface $sessionManager
      * @param JsonFactory $resultJsonFactory
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param array $formIds
      */
     public function __construct(
