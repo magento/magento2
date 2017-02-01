@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Authorizenet\Test\TestCase\AuthorizenetFraudCheckoutTest" summary=".">
-        <variation name="AuthorizenetFraudCheckoutAccept" summary="jkhjkhkjhkhjkh" ticketId="MAGETWO-48162">
+    <testCase name="Magento\Authorizenet\Test\TestCase\AuthorizenetFraudCheckoutTest" summary="Accept transaction for order placed via Authorize.Net.">
+        <variation name="AuthorizenetFraudCheckoutAccept" summary="Accept transaction with 'Authorize and hold for review' fraud action for order placed with 'Authorize and Capture' payment action" ticketId="MAGETWO-38379">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>

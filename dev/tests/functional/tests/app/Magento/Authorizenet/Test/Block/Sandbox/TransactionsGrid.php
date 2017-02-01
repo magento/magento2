@@ -38,7 +38,7 @@ class TransactionsGrid extends Block
     /**
      * Find transaction in grid and open it.
      *
-     * @param $transactionId
+     * @param string $transactionId
      * @return void
      */
     public function openTransaction($transactionId)

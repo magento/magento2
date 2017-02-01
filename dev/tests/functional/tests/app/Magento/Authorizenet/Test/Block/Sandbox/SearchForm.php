@@ -10,7 +10,7 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Menu block on Cybersource sandbox.
+ * Menu block on Authorize.Net sandbox.
  */
 class SearchForm extends Block
 {
