@@ -28,9 +28,10 @@ class AssertOrderBillingAndShippingAddressesAreDifferent extends AbstractConstra
         $orderBillingAddress = $salesOrderView->getAddressesBlock()->getCustomerBillingAddress();
         $orderShippingAddress = $salesOrderView->getAddressesBlock()->getCustomerShippingAddress();
 
-        \PHPUnit_Framework_Assert::assertFalse(
-            $orderBillingAddress == $orderShippingAddress,
-            'Billing and shipping addresses on order page are the same.'
+        \PHPUnit_Framework_Assert::assertNotEquals(
+            $orderBillingAddress,
+            $orderShippingAddress,
+            "Billing and shipping addresses on order page are the same but shouldn't."
         );
     }
 
