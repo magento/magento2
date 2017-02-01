@@ -45,7 +45,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     private $indexController;
 
-
     public function setUp()
     {
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)

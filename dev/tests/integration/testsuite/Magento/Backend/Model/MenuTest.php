@@ -120,7 +120,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
             . '"sub_menu":[{"parent_id":null,"module_name":"Magento_Backend","sort_index":null,'
             . '"depends_on_config":null,"id":"Magento_Backend::system3_acl","resource":"Magento_Backend::system3_acl",'
             . '"path":"","action":"admin\/backend\/acl\/index","depends_on_module":null,"tooltip":"","title":"Acl",'
-            . '"sub_menu":null}]}]';
+            . '"target":null,"sub_menu":null}]}]';
         $this->assertEquals($expected, $serializedString);
     }
 
@@ -135,7 +135,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
             . '"sub_menu":[{"parent_id":null,"module_name":"Magento_Backend","sort_index":null,'
             . '"depends_on_config":null,"id":"Magento_Backend::system3_acl","resource":"Magento_Backend::system3_acl",'
             . '"path":"","action":"admin\/backend\/acl\/index","depends_on_module":null,"tooltip":"","title":"Acl",'
-            . '"sub_menu":null}]}]';
+            . '"target":null,"sub_menu":null}]}]';
         /** @var Menu $menu */
         $menu = $this->objectManager->get(\Magento\Backend\Model\MenuFactory::class)->create();
         $menu->unserialize($serializedMenu);
