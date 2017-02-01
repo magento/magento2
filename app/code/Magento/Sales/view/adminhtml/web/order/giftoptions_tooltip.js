@@ -93,7 +93,7 @@ define([
         /**
          *  Register event listeners
          *
-         *  @param {Object} element
+         *  @param {HTMLElement} element
          */
         _registerEvents: function (element) {
             Event.observe(element, 'mouseover', this._eventMouseOver);
@@ -103,7 +103,7 @@ define([
         /**
          * Move tooltip to mouse position
          *
-         * @param {Object} event
+         * @param {Prototype.Event} event
          */
         _moveTooltip: function (event) {
             var mouseX, mouseY;

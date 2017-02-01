@@ -86,7 +86,7 @@ define([
         },
 
         /**
-         * @param {*}amount
+         * @param {*} amount
          * @return {*|String}
          */
         formatPrice: function (amount) {

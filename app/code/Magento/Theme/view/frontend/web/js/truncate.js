@@ -18,6 +18,7 @@ define([
 
         /**
          * Establish the event handler for mouse events on the appropriate elements.
+         *
          * @private
          */
         _create: function () {
@@ -27,8 +28,9 @@ define([
 
         /**
          * Toggle the "show" class on the associated element.
+         *
          * @private
-         * @param {Object} event - Mouse over/out event.
+         * @param {jQuery.Event} event - Mouse over/out event.
          */
         _toggleShow: function (event) {
             $(event.currentTarget).find(this.options.truncatedFullValue).toggleClass('show');

@@ -24,7 +24,7 @@ define([
         /**
          * Show either the search by zip code option or the search by email address option.
          * @private
-         * @param {Objetc} e - Change event. Event target value is either 'zip' or 'email'.
+         * @param {jQuery.Event} e - Change event. Event target value is either 'zip' or 'email'.
          */
         _showIdentifyBlock: function (e) {
             var value = $(e.target).val();
