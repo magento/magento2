@@ -73,7 +73,7 @@ class ConfigSetProcessorFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage stdClass does not implement
+     * @expectedExceptionMessage stdClass should implement
      */
     public function testCreateWrongImplementation()
     {

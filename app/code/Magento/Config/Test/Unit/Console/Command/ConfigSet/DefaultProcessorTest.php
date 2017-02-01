@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
+use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\DefaultProcessor;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Model\Config;
@@ -12,6 +13,7 @@ use Magento\Config\Model\ConfigFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Store\Model\ScopeInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -85,11 +87,17 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testProcess()
+    /**
+     * Tests process of default flow.
+     *
+     * @param string $path
+     * @param string $value
+     * @param string $scope
+     * @param string|null $scopeCode
+     * @dataProvider processDataProvider
+     */
+    public function testProcess($path, $value, $scope, $scopeCode)
     {
-        $path = 'test/test/test';
-        $value = 'value';
-
         $this->inputMock->expects($this->any())
             ->method('getArgument')
             ->willReturnMap([
@@ -99,11 +107,12 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         $this->inputMock->expects($this->any())
             ->method('getOption')
             ->willReturnMap([
-                [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT],
-                [ConfigSetCommand::OPTION_SCOPE_CODE, null],
+                [ConfigSetCommand::OPTION_SCOPE, $scope],
+                [ConfigSetCommand::OPTION_SCOPE_CODE, $scopeCode],
             ]);
         $this->configPathResolverMock->expects($this->once())
             ->method('resolve')
+            ->with($path, $scope, $scopeCode, System::CONFIG_TYPE)
             ->willReturn('system/default/test/test/test');
         $this->deploymentConfigMock->expects($this->once())
             ->method('get')
@@ -117,6 +126,18 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('save');
 
         $this->model->process($this->inputMock);
+    }
+
+    /**
+     * @return array
+     */
+    public function processDataProvider()
+    {
+        return [
+            ['test/test/test', 'value', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],
+            ['test/test/test', 'value', ScopeInterface::SCOPE_WEBSITE, 'base'],
+            ['test/test/test', 'value', ScopeInterface::SCOPE_STORE, 'test'],
+        ];
     }
 
     /**
@@ -143,6 +164,8 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('isAvailable')
             ->willReturn(false);
+        $this->configMock->expects($this->never())
+            ->method('save');
 
         $this->model->process($this->inputMock);
     }

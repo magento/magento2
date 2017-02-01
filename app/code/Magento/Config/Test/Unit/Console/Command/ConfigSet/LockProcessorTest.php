@@ -17,6 +17,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Store\Model\ScopeInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -32,6 +33,11 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
      * @var LockProcessor
      */
     private $model;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfigMock;
 
     /**
      * @var DeploymentConfig\Writer|Mock
@@ -78,6 +84,9 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->deploymentConfigWriterMock = $this->getMockBuilder(DeploymentConfig\Writer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -106,8 +115,15 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $this->structureMock->expects($this->any())
             ->method('getElement')
             ->willReturn($this->fieldMock);
+        $this->deploymentConfigMock->expects($this->any())
+            ->method('isAvailable')
+            ->willReturn(true);
+        $this->valueFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->valueMock);
 
         $this->model = new LockProcessor(
+            $this->deploymentConfigMock,
             $this->deploymentConfigWriterMock,
             $this->arrayManagerMock,
             $this->configPathResolver,
@@ -116,7 +132,96 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testProcess()
+    /**
+     * Tests process of lock flow.
+     *
+     * @param string $path
+     * @param string $value
+     * @param string $scope
+     * @param string|null $scopeCode
+     * @dataProvider processDataProvider
+     */
+    public function testProcess($path, $value, $scope, $scopeCode)
+    {
+        $this->inputMock->expects($this->any())
+            ->method('getArgument')
+            ->willReturnMap([
+                [ConfigSetCommand::ARG_PATH, $path],
+                [ConfigSetCommand::ARG_VALUE, $value],
+            ]);
+        $this->inputMock->expects($this->any())
+            ->method('getOption')
+            ->willReturnMap([
+                [ConfigSetCommand::OPTION_SCOPE, $scope],
+                [ConfigSetCommand::OPTION_SCOPE_CODE, $scopeCode]
+            ]);
+        $this->fieldMock->expects($this->once())
+            ->method('hasBackendModel')
+            ->willReturn(true);
+        $this->fieldMock->expects($this->once())
+            ->method('getBackendModel')
+            ->willReturn($this->valueMock);
+        $this->configPathResolver->expects($this->once())
+            ->method('resolve')
+            ->willReturn('system/default/test/test/test');
+        $this->arrayManagerMock->expects($this->once())
+            ->method('set')
+            ->with('system/default/test/test/test', [], $value)
+            ->willReturn([
+                'system' => [
+                    'default' => [
+                        'test' => [
+                            'test' => [
+                                'test' => $value
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+        $this->valueMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn($value);
+        $this->deploymentConfigWriterMock->expects($this->once())
+            ->method('saveConfig')
+            ->with(
+                [
+                    ConfigFilePool::APP_CONFIG => [
+                        'system' => [
+                            'default' => [
+                                'test' => [
+                                    'test' => [
+                                        'test' => $value
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                false
+            );
+        $this->valueMock->expects($this->once())
+            ->method('validateBeforeSave');
+        $this->valueMock->expects($this->once())
+            ->method('beforeSave');
+        $this->valueMock->expects($this->once())
+            ->method('afterSave');
+
+        $this->model->process($this->inputMock);
+    }
+
+    /**
+     * @return array
+     */
+    public function processDataProvider()
+    {
+        return [
+            ['test/test/test', 'value', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],
+            ['test/test/test', 'value', ScopeInterface::SCOPE_WEBSITE, 'base'],
+            ['test/test/test', 'value', ScopeInterface::SCOPE_STORE, 'test'],
+        ];
+    }
+
+    public function testProcessBackendModelNotExists()
     {
         $path = 'test/test/test';
         $value = 'value';
@@ -135,10 +240,9 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ]);
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
-            ->willReturn(true);
-        $this->fieldMock->expects($this->once())
-            ->method('getBackendModel')
-            ->willReturn($this->valueMock);
+            ->willReturn(false);
+        $this->fieldMock->expects($this->never())
+            ->method('getBackendModel');
         $this->configPathResolver->expects($this->once())
             ->method('resolve')
             ->willReturn('system/default/test/test/test');
@@ -221,6 +325,49 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigWriterMock->expects($this->once())
             ->method('saveConfig')
             ->willThrowException(new FileSystemException(__('Filesystem is not writable.')));
+
+        $this->model->process($this->inputMock);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Invalid values
+     */
+    public function testCustomException()
+    {
+        $path = 'test/test/test';
+        $value = 'value';
+
+        $this->inputMock->expects($this->any())
+            ->method('getArgument')
+            ->willReturnMap([
+                [ConfigSetCommand::ARG_PATH, $path],
+                [ConfigSetCommand::ARG_VALUE, $value],
+            ]);
+        $this->inputMock->expects($this->any())
+            ->method('getOption')
+            ->willReturnMap([
+                [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT],
+                [ConfigSetCommand::OPTION_SCOPE_CODE, 'test_scope_code']
+            ]);
+        $this->fieldMock->expects($this->once())
+            ->method('hasBackendModel')
+            ->willReturn(true);
+        $this->fieldMock->expects($this->once())
+            ->method('getBackendModel')
+            ->willReturn($this->valueMock);
+        $this->configPathResolver->expects($this->once())
+            ->method('resolve')
+            ->willReturn('system/default/test/test/test');
+        $this->arrayManagerMock->expects($this->never())
+            ->method('set');
+        $this->valueMock->expects($this->never())
+            ->method('getValue');
+        $this->valueMock->expects($this->once())
+            ->method('validateBeforeSave')
+            ->willThrowException(new \Exception('Invalid values'));
+        $this->deploymentConfigWriterMock->expects($this->never())
+            ->method('saveConfig');
 
         $this->model->process($this->inputMock);
     }

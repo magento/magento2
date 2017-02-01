@@ -90,7 +90,7 @@ class ConfigSetCommand extends Command
                     static::OPTION_SCOPE_CODE,
                     null,
                     InputArgument::OPTIONAL,
-                    'Scope code'
+                    'Scope code (required only if scope code is not \'default\')'
                 ),
                 new InputOption(
                     static::OPTION_LOCK,

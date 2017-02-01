@@ -15,7 +15,6 @@ use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Stdlib\ArrayManager;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -28,42 +27,55 @@ use Symfony\Component\Console\Input\InputInterface;
 class LockProcessor implements ConfigSetProcessorInterface
 {
     /**
+     * The deployment configuration reader.
+     *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
+     * The deployment configuration writer.
+     *
      * @var DeploymentConfig\Writer
      */
     private $deploymentConfigWriter;
 
     /**
+     * An array manager for different manipulations with arrays.
+     *
      * @var ArrayManager
      */
     private $arrayManager;
 
     /**
+     * The resolver for configuration paths according to source type.
+     *
      * @var ConfigPathResolver
      */
     private $configPathResolver;
 
     /**
+     * The manager for system configuration structure.
+     *
      * @var Structure
      */
     private $configStructure;
 
     /**
+     * The factory for configuration value objects.
+     *
+     * @see Value
      * @var ValueFactory
      */
     private $configValueFactory;
 
     /**
-     * @param DeploymentConfig $deploymentConfig
-     * @param DeploymentConfig\Writer $writer
-     * @param ArrayManager $arrayManager
-     * @param ConfigPathResolver $configPathResolver
-     * @param Structure $configStructure
-     * @param ValueFactory $configValueFactory
+     * @param DeploymentConfig $deploymentConfig The deployment configuration reader
+     * @param DeploymentConfig\Writer $writer The deployment configuration writer
+     * @param ArrayManager $arrayManager An array manager for different manipulations with arrays
+     * @param ConfigPathResolver $configPathResolver The resolver for configuration paths according to source type
+     * @param Structure $configStructure The manager for system configuration structure
+     * @param ValueFactory $configValueFactory The factory for configuration value objects
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -89,27 +101,27 @@ class LockProcessor implements ConfigSetProcessorInterface
      */
     public function process(InputInterface $input)
     {
-        $path = $input->getArgument(ConfigSetCommand::ARG_PATH);
-        $value = $input->getArgument(ConfigSetCommand::ARG_VALUE);
-        $scope = $input->getOption(ConfigSetCommand::OPTION_SCOPE);
-        $scopeCode = $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE);
-        $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode, System::CONFIG_TYPE);
-
-        /** @var Field $field */
-        $field = $this->deploymentConfig->isAvailable()
-            ? $this->configStructure->getElement($path)
-            : null;
-        /** @var Value $backendModel */
-        $backendModel = $field && $field->hasBackendModel()
-            ? $field->getBackendModel()
-            : $this->configValueFactory->create();
-
-        $backendModel->setPath($path);
-        $backendModel->setScope($scope);
-        $backendModel->setScopeId($scopeCode);
-        $backendModel->setValue($value);
-
         try {
+            $path = $input->getArgument(ConfigSetCommand::ARG_PATH);
+            $value = $input->getArgument(ConfigSetCommand::ARG_VALUE);
+            $scope = $input->getOption(ConfigSetCommand::OPTION_SCOPE);
+            $scopeCode = $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE);
+
+            $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode, System::CONFIG_TYPE);
+            /** @var Field $field */
+            $field = $this->deploymentConfig->isAvailable()
+                ? $this->configStructure->getElement($path)
+                : null;
+            /** @var Value $backendModel */
+            $backendModel = $field && $field->hasBackendModel()
+                ? $field->getBackendModel()
+                : $this->configValueFactory->create();
+
+            $backendModel->setPath($path);
+            $backendModel->setScope($scope);
+            $backendModel->setScopeId($scopeCode);
+            $backendModel->setValue($value);
+
             /**
              * Temporary solution until Magento introduce unified interface
              * for storing system configuration into database and configuration files.
@@ -123,7 +135,7 @@ class LockProcessor implements ConfigSetProcessorInterface
             );
 
             $backendModel->afterSave();
-        } catch (FileSystemException $exception) {
+        } catch (\Exception $exception) {
             throw new CouldNotSaveException(__('%1', $exception->getMessage()), $exception);
         }
     }

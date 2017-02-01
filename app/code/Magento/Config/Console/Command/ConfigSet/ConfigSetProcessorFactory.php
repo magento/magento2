@@ -55,21 +55,22 @@ class ConfigSetProcessorFactory
     /**
      * Creates an instance of specified processor.
      *
-     * @param string $processor The name of processor
+     * @param string $processorName The name of processor
      * @return ConfigSetProcessorInterface New processor instance
      * @throws ConfigurationMismatchException If processor type is not exists in processors array
+     * or declared class has wrong implementation
      */
-    public function create($processor)
+    public function create($processorName)
     {
-        if (!isset($this->processors[$processor])) {
-            throw new ConfigurationMismatchException(__('Class for type "%1" was not declared', $processor));
+        if (!isset($this->processors[$processorName])) {
+            throw new ConfigurationMismatchException(__('Class for type "%1" was not declared', $processorName));
         }
 
-        $object = $this->objectManager->create($this->processors[$processor]);
+        $object = $this->objectManager->create($this->processors[$processorName]);
 
         if (!$object instanceof ConfigSetProcessorInterface) {
             throw new ConfigurationMismatchException(
-                __('%1 does not implement %2', get_class($object), ConfigSetProcessorInterface::class)
+                __('%1 should implement %2', get_class($object), ConfigSetProcessorInterface::class)
             );
         }
 
