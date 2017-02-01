@@ -29,10 +29,7 @@ class UpgradeData implements UpgradeDataInterface
     public function __construct(
         FieldDataConverterFactory $fieldDataConverterFactory
     ) {
-
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory ?: ObjectManager::getInstance()->get(
-            FieldDataConverterFactory::class
-        );
+        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
     }
 
     /**
