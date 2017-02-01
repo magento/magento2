@@ -13,6 +13,9 @@ use Magento\Framework\TranslateInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Deploy class for js dictionary
+ */
 class JsDictionaryDeploy implements DeployInterface
 {
     /**
