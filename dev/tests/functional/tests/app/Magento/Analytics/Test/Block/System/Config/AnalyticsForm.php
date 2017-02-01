@@ -72,12 +72,13 @@ class AnalyticsForm extends Form
     }
 
     /**
+     * @param string $vertical
      * @return array|string
      */
-    public function setAnalyticsVertical()
+    public function setAnalyticsVertical($vertical)
     {
         return $this->_rootElement->find($this->analyticsVertical, Locator::SELECTOR_CSS, 'select')
-            ->setValue('Apps and Games');
+            ->setValue($vertical);
     }
 
     /**

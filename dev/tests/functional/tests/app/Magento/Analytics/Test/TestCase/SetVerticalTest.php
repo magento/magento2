@@ -13,8 +13,8 @@ use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
  * Steps:
  * 1. Log in to backend.
  * 2. Navigate to analytics menu in system config
- * 3. Select one of the verticals and save config.
- * 4. Assert setting is saved
+ * 3. Select one of the verticals and save config
+ * 4. Perform assertions
  *
  * @ZephyrId MAGETWO-63898
  */
@@ -28,12 +28,13 @@ class SetVerticalTest extends Injectable
      * Set analytics vertical test.
      *
      * @param ConfigAnalytics $configAnalytics
+     * @param string $vertical
      * @return void
      */
-    public function test(ConfigAnalytics $configAnalytics)
+    public function test(ConfigAnalytics $configAnalytics, $vertical)
     {
         $configAnalytics->open();
-        $configAnalytics->getAnalyticsForm()->setAnalyticsVertical();
+        $configAnalytics->getAnalyticsForm()->setAnalyticsVertical($vertical);
         $configAnalytics->getAnalyticsForm()->saveConfig();
     }
 }

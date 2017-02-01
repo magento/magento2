@@ -9,22 +9,23 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
 
 /**
- * Assert Analytics Vertical ise set in Stores > Configuration > General > Analytics > General menu.
+ * Assert Analytics Vertical is set in Stores > Configuration > General > Analytics > General menu.
  */
 class AssertVerticalIsSet extends AbstractConstraint
 {
     /**
-     * Assert Analytics Vertical ise set in Stores > Configuration > General > Analytics > General menu.
+     * Assert Analytics Vertical is set in Stores > Configuration > General > Analytics > General menu.
      *
      * @param ConfigAnalytics $configAnalytics
+     * @param string $vertical
      * @return void
      */
-    public function processAssert(ConfigAnalytics $configAnalytics)
+    public function processAssert(ConfigAnalytics $configAnalytics, $vertical)
     {
         \PHPUnit_Framework_Assert::assertEquals(
-            'Apps and Games',
+            $vertical,
             $configAnalytics->getAnalyticsForm()->getAnalyticsVertical(),
-            'Apps and Games vertical is not selected'
+            $vertical . 'vertical is not selected'
         );
     }
 
@@ -36,6 +37,6 @@ class AssertVerticalIsSet extends AbstractConstraint
     public function toString()
     {
         return
-            'Magento Analytics vertical Apps and Games is selected';
+            'Proper Magento Analytics vertical is selected';
     }
 }
