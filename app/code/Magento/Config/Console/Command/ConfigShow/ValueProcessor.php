@@ -33,6 +33,8 @@ class ValueProcessor
     private $configValueFactory;
 
     /**
+     * Object for managing configuration scope.
+     *
      * @var ScopeInterface
      */
     private $scope;
@@ -55,10 +57,10 @@ class ValueProcessor
     /**
      * Processes value using backend model.
      *
-     * @param string $scope
-     * @param string $scopeCode
-     * @param string $value
-     * @param string $path
+     * @param string $scope The scope of configuration
+     * @param string $scopeCode The scope code of configuration
+     * @param string $value The value to process
+     * @param string $path The configuration path for getting backend model
      * @return string
      */
     public function process($scope, $scopeCode, $value, $path)

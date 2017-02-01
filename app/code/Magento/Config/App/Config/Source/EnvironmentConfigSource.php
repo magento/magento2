@@ -17,15 +17,23 @@ use Magento\Framework\Stdlib\ArrayManager;
 class EnvironmentConfigSource implements ConfigSourceInterface
 {
     /**
+     * Library for working with arrays.
+     *
      * @var ArrayManager
      */
     private $arrayManager;
 
     /**
+     * Object for working with placeholders for environment variables.
+     *
      * @var PlaceholderInterface
      */
     private $placeholder;
 
+    /**
+     * @param ArrayManager $arrayManager
+     * @param PlaceholderFactory $placeholderFactory
+     */
     public function __construct(
         ArrayManager $arrayManager,
         PlaceholderFactory $placeholderFactory

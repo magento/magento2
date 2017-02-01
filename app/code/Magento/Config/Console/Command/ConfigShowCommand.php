@@ -32,36 +32,50 @@ class ConfigShowCommand extends Command
     /**#@-*/
 
     /**
+     * Scope validator.
+     *
      * @var ValidatorInterface
      */
     private $scopeValidator;
 
     /**
+     * Source of configurations.
+     *
      * @var ConfigSourceInterface
      */
     private $configSource;
 
     /**
+     * Config path resolver.
+     *
      * @var ConfigPathResolver
      */
     private $pathResolver;
 
     /**
+     * Class for processing value using backend model.
+     *
      * @var ValueProcessor
      */
     private $valueProcessor;
 
     /**
+     * The scope of configuration.
+     *
      * @var string
      */
     private $scope;
 
     /**
+     * The scope code of configuration.
+     *
      * @var string
      */
     private $scopeCode;
 
     /**
+     * The path of configuration.
+     *
      * @var string
      */
     private $inputPath;
