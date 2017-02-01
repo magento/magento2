@@ -15,6 +15,9 @@ class Vertical extends \Magento\Framework\App\Config\Value
     /**
      * Handles the value of the selected vertical before saving.
      *
+     * Note that the selected vertical should not be empty since
+     * it will cause distortion of the analytics reports.
+     *
      * @return $this
      * @throws LocalizedException if the value of the selected vertical is empty.
      */

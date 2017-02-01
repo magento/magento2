@@ -82,7 +82,7 @@ class ReportValidatorTest extends \PHPUnit_Framework_TestCase
      * @param array $result
      * @param \PHPUnit_Framework_MockObject_Stub $queryReturnStub
      */
-    public function testGetError($reportName, $result, \PHPUnit_Framework_MockObject_Stub $queryReturnStub)
+    public function testValidate($reportName, $result, \PHPUnit_Framework_MockObject_Stub $queryReturnStub)
     {
         $connectionName = 'testConnection';
         $this->queryFactoryMock->expects($this->once())
@@ -95,7 +95,7 @@ class ReportValidatorTest extends \PHPUnit_Framework_TestCase
         $this->queryMock->expects($this->atLeastOnce())->method('getSelect')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('limit')->with(0);
         $this->connectionMock->expects($this->once())->method('query')->with($this->selectMock)->will($queryReturnStub);
-        $this->assertEquals($result, $this->reportValidator->getError($reportName));
+        $this->assertEquals($result, $this->reportValidator->validate($reportName));
     }
 
     /**
@@ -116,7 +116,7 @@ class ReportValidatorTest extends \PHPUnit_Framework_TestCase
             [
                 $reportName,
                 'expectedResult' => [$reportName, $errorMessage],
-                'queryReturnStub' => $this->throwException(new \Exception($errorMessage))
+                'queryReturnStub' => $this->throwException(new \Zend_Db_Statement_Exception($errorMessage))
             ]
         ];
     }

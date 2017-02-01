@@ -146,11 +146,11 @@ class ConditionResolver
             }
             if (isset($filter['filter'])) {
                 $parts[] = '(' . $this->getFilter(
-                        $selectBuilder,
-                        $filter['filter'],
-                        $aliasName,
-                        $referencedAlias
-                    ) . ')';
+                    $selectBuilder,
+                    $filter['filter'],
+                    $aliasName,
+                    $referencedAlias
+                ) . ')';
             }
             $filtersParts[] = '(' . implode(' ' . strtoupper($glue) . ' ', $parts) . ')';
         }

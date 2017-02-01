@@ -24,7 +24,7 @@
                 </field>
                 <field id="vertical" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Vertical</label>
-                    <source_model>Magento\Analytics\Model\Config\Source\Verticals</source_model>
+                    <source_model>Magento\Analytics\Model\Config\Source\Vertical</source_model>
                     <backend_model>Magento\Analytics\Model\Config\Backend\Vertical</backend_model>
                 </field>
             </group>
