@@ -338,17 +338,18 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param string $method
      * @param string $uri
      * @param array $params
+     * @param bool $json
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function makeRequest($method, $uri, $params = [])
+    protected function makeRequest($method, $uri, $params = [], $json = false)
     {
         $this->_ch = curl_init();
         $this->curlOption(CURLOPT_URL, $uri);
         if ($method == 'POST') {
             $this->curlOption(CURLOPT_POST, 1);
-            $this->curlOption(CURLOPT_POSTFIELDS, http_build_query($params));
+            $this->curlOption(CURLOPT_POSTFIELDS, $json ? json_encode($params) : http_build_query($params));
         } elseif ($method == "GET") {
             $this->curlOption(CURLOPT_HTTPGET, 1);
         } else {
