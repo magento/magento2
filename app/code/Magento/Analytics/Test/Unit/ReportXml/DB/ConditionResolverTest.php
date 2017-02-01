@@ -57,7 +57,6 @@ class ConditionResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFilter()
     {
-        //public function getFilter(SelectBuilder $selectBuilder, $filterConfig, $aliasName, $referencedAlias = null)
         $condition = ["type" => "variable", "_value" => "1", "attribute" => "id", "operator" => "neq"];
         $valueCondition = ["type" => "value", "_value" => "2", "attribute" => "first_name", "operator" => "eq"];
         $identifierCondition = [

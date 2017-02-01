@@ -194,7 +194,7 @@ class SelectBuilder
                 $select->joinRight($joinConfig['table'], $joinConfig['condition'], []);
                 break;
         }
-       return $select;
+        return $select;
     }
 
     /**
@@ -221,7 +221,7 @@ class SelectBuilder
     }
 
     /**
-     * Returns group 
+     * Returns group
      *
      * @return array
      */
