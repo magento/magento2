@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 ?>
-<a href="<?php /* @escapeNotVerified */ echo $block->getUrl('analytics/reports/show'); ?>"
+<a href="<?php echo $block->escapeUrl($block->getUrl('analytics/reports/show')); ?>"
    target="_blank"
    class="action action-secondary"
-   title="<?php /* @escapeNotVerified */ echo __('Free Tier') ?>">
-    <span><?php /* @escapeNotVerified */ echo __('Free Tier') ?></span>
+   title="<?php echo $block->escapeHtml(__('Free Tier')) ?>">
+    <span><?php echo $block->escapeHtml(__('Free Tier')) ?></span>
 </a>
