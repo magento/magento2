@@ -25,10 +25,22 @@ class Mapper
 
         $files = [];
         foreach ($configData['config'][0]['file'] as $fileData) {
-            $providers = [];
-            if (isset($fileData['providers'][0])) {
-                $providers = $fileData['providers'][0];
-                unset($fileData['providers'][0]);
+            /** just one set of providers is allowed by xsd */
+            $providers = isset($fileData['providers']) ? reset($fileData['providers']) : [];
+            foreach ($providers as $providerType => $providerDataSet) {
+                /** just one set of provider data is allowed by xsd */
+                $providerData = reset($providerDataSet);
+                /** just one set of parameters is allowed by xsd */
+                $providerData['parameters'] = isset($providerData['parameters'])
+                    ? reset($providerData['parameters'])
+                    : [];
+                array_walk(
+                    $providerData['parameters'],
+                    function (&$item) {
+                        $item = reset($item);
+                    }
+                );
+                $providers[$providerType] = $providerData;
             }
             $files[$fileData['name']] = $fileData;
             $files[$fileData['name']]['providers'] = $providers;

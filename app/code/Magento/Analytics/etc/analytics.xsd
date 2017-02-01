@@ -25,18 +25,27 @@
         <xs:attribute name="prefix" type="xs:string" />
     </xs:complexType>
     <xs:complexType name="providers">
-        <xs:sequence>
-            <xs:element name="reportProvider" type="reportProvider" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="customProvider" type="customProvider" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
+        <xs:all minOccurs="0">
+            <xs:element name="reportProvider" type="reportProvider" minOccurs="0" />
+            <xs:element name="customProvider" type="customProvider" minOccurs="0" />
+        </xs:all>
     </xs:complexType>
     <xs:complexType name="provider" abstract="true">
+        <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="class" type="xs:string" use="required"/>
     </xs:complexType>
     <xs:complexType name="reportProvider">
         <xs:complexContent>
             <xs:extension base="provider">
-                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:all>
+                    <xs:element name="parameters">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="name" type="notEmptyString" maxOccurs="1" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:all>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -51,9 +60,18 @@
                 File name attribute can has only [a-zA-Z0-9/_].
             </xs:documentation>
         </xs:annotation>
-
         <xs:restriction base="xs:string">
             <xs:pattern value="[a-zA-Z0-9/_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="notEmptyString">
+        <xs:annotation>
+            <xs:documentation>
+                Value is required.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

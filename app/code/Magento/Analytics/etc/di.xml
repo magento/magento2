@@ -35,13 +35,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Analytics\ReportXml\Config\Converter">
-        <arguments>
-            <argument name="converters" xsi:type="array">
-                <item name="xml" xsi:type="object">Magento\Analytics\ReportXml\Config\Converter\Xml</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Analytics\ReportXml\QueryFactory">
         <arguments>
             <argument name="assemblers" xsi:type="array">

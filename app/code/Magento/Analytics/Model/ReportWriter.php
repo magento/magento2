@@ -61,18 +61,20 @@ class ReportWriter implements ReportWriterInterface
     {
         $directory->create($path);
         $errorsList = [];
-        foreach($this->config->get() as $file) {
+        foreach ($this->config->get() as $file) {
             foreach ($file['providers'] as $provider) {
-                $error = $this->reportValidator->validate($provider[0]['name']);
-                if ($error) {
-                    $errorsList[] = $error;
-                    continue;
+                if (isset($provider['parameters']['name'])) {
+                    $error = $this->reportValidator->validate($provider['parameters']['name']);
+                    if ($error) {
+                        $errorsList[] = $error;
+                        continue;
+                    }
                 }
-
-                $providerObject = $this->providerFactory->create($provider[0]['class']);
-                $fileFullPath = $path . $provider[0]['name'] . '.csv';
-                $fileData = $providerObject->getReport($provider[0]['name']);
-
+                /** @var  $providerObject */
+                $providerObject = $this->providerFactory->create($provider['class']);
+                $fileName = $provider['parameters'] ? $provider['parameters']['name'] : $provider['name'];
+                $fileFullPath = $path . $fileName . '.csv';
+                $fileData = $providerObject->getReport(...array_values($provider['parameters']));
                 $directory->create($path);
                 $stream = $directory->openFile($fileFullPath, 'w+');
                 $stream->lock();

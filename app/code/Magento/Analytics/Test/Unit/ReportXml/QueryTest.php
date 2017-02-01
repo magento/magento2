@@ -10,7 +10,6 @@ use Magento\Analytics\ReportXml\SelectHydrator as selectHydrator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-
 /**
  * Class QueryTest
  */
