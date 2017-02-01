@@ -15,16 +15,14 @@ class MenuItemChecker
     /**
      * Check whether given item is currently selected
      *
-     * @param Item|null $activeItem,
+     * @param Item|false $activeItem Can be false if menu item is inaccessible
+     * but was triggered directly using controller. It is a legacy code behaviour.
      * @param Item $item
      * @param int $level
      * @return bool
      */
-    public function isItemActive(
-        $activeItem,
-        Item $item,
-        $level
-    ) {
+    public function isItemActive($activeItem, Item $item, $level)
+    {
         $output = false;
 
         if ($level == 0

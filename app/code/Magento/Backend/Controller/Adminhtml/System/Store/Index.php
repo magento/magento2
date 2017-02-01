@@ -6,6 +6,8 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class Index extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
@@ -13,9 +15,12 @@ class Index extends \Magento\Backend\Controller\Adminhtml\System\Store
      */
     public function execute()
     {
-        $resultPage = $this->resultPageFactory->create();
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_Backend::system_store');
+        $resultPage->addBreadcrumb(__('Stores'), __('Stores'));
+        $resultPage->addBreadcrumb(__('All Stores'), __('All Stores'));
         $resultPage->getConfig()->getTitle()->prepend(__('Stores'));
-
         return $resultPage;
     }
 }

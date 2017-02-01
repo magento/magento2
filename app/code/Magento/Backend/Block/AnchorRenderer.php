@@ -36,9 +36,10 @@ class AnchorRenderer
     }
 
     /**
-     * Render menu item anchor
+     * Render menu item anchor.
      *
-     * @param Item|null $activeItem
+     * @param Item|false $activeItem Can be false if menu item is inaccessible
+     * but was triggered directly using controller. It is a legacy code behaviour.
      * @param Item $menuItem
      * @param int $level
      * @return string

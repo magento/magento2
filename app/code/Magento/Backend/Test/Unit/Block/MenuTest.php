@@ -79,7 +79,6 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->activeItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->urlMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,6 +141,6 @@ class MenuTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn(null);
 
-        $this->assertNull($this->menu->getActiveItemModel());
+        $this->assertFalse($this->menu->getActiveItemModel());
     }
 }

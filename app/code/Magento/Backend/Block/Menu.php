@@ -38,7 +38,7 @@ class Menu extends \Magento\Backend\Block\Template
     /**
      * Current selected item
      *
-     * @var \Magento\Backend\Model\Menu\Item|null
+     * @var \Magento\Backend\Model\Menu\Item|false|null
      */
     protected $_activeItemModel = null;
 
@@ -405,14 +405,14 @@ class Menu extends \Magento\Backend\Block\Template
     /**
      * Get current selected menu item
      *
-     * @return \Magento\Backend\Model\Menu\Item|null
+     * @return \Magento\Backend\Model\Menu\Item|false
      */
     public function getActiveItemModel()
     {
         if (is_null($this->_activeItemModel)) {
             $this->_activeItemModel = $this->getMenuModel()->get($this->getActive());
             if (false == $this->_activeItemModel instanceof \Magento\Backend\Model\Menu\Item) {
-                $this->_activeItemModel = null;
+                $this->_activeItemModel = false;
             }
         }
         return $this->_activeItemModel;
