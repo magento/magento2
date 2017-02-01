@@ -14,7 +14,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Class ReportWriterTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReportWriterTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,6 +54,21 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
     private $reportWriter;
 
     /**
+     * @var string
+     */
+    private $reportName = 'testReport';
+
+    /**
+     * @var string
+     */
+    private $providerName = 'testProvider';
+
+    /**
+     * @var string
+     */
+    private $providerClass = 'Magento\Analytics\Provider';
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -79,32 +94,33 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $configData
      * @return void
+     *
+     * @dataProvider configDataProvider
      */
-    public function testWrite()
+    public function testWrite($configData)
     {
-        $reportName = 'testProvider';
-        $providerClass = 'Magento\Analytics\Provider';
         $errors = [];
         $fileData = [
             [1, 'Shoes Usual']
         ];
-        $this->configInterfaceMock->expects($this->once())->method('get')->willReturn([
-            [
-                'providers' => [
-                    [
-                        [
-                            'name' => $reportName,
-                            'class' => $providerClass
-                        ]
-                    ]
-                ]
-            ]
-        ]);
-        $this->providerFactoryMock->expects($this->once())->method('create')
+        $this->configInterfaceMock
+            ->expects($this->once())
+            ->method('get')
+            ->with()
+            ->willReturn([$configData]);
+        $this->providerFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->providerClass)
             ->willReturn($this->reportProviderMock);
-        $this->reportProviderMock->expects($this->once())->method('getReport')
-            ->with($reportName)
+        $parameterName = isset(reset($configData)[0]['parameters']['name'])
+            ? reset($configData)[0]['parameters']['name']
+            : '';
+        $this->reportProviderMock->expects($this->once())
+            ->method('getReport')
+            ->with($parameterName ?: null)
             ->willReturn($fileData);
         $errorStreamMock = $this->getMockBuilder(
             \Magento\Framework\Filesystem\File\WriteInterface::class
@@ -113,34 +129,33 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
         $errorStreamMock->expects($this->once())->method('writeCsv')->with($fileData[0]);
         $errorStreamMock->expects($this->once())->method('unlock');
         $errorStreamMock->expects($this->once())->method('close');
-        $this->reportValidatorMock->expects($this->once())->method('validate')->willReturn($errors);
-        $this->directoryMock->expects($this->once())->method('openFile')->with(
-            $this->stringContains('/var/tmp' . $reportName),
-            'w+'
-        )->willReturn($errorStreamMock);
+        if ($parameterName) {
+            $this->reportValidatorMock
+                ->expects($this->once())
+                ->method('validate')
+                ->with($parameterName)
+                ->willReturn($errors);
+        }
+        $this->directoryMock
+            ->expects($this->once())
+            ->method('openFile')
+            ->with(
+                $this->stringContains('/var/tmp' . $parameterName ?: $this->reportName),
+                'w+'
+            )->willReturn($errorStreamMock);
         $this->reportWriter->write($this->directoryMock, '/var/tmp');
     }
 
     /**
+     * @param array $configData
      * @return void
+     *
+     * @dataProvider configDataProvider
      */
-    public function testWriteErrorFile()
+    public function testWriteErrorFile($configData)
     {
-        $reportName = 'testProvider';
-        $providerClass = 'Magento\Analytics\Provider';
         $errors = ['orders', 'SQL Error: test'];
-        $this->configInterfaceMock->expects($this->once())->method('get')->willReturn([
-            [
-                'providers' => [
-                    [
-                        [
-                            'name' => $reportName,
-                            'class' => $providerClass
-                        ]
-                    ]
-                ]
-            ]
-        ]);
+        $this->configInterfaceMock->expects($this->once())->method('get')->willReturn([$configData]);
         $errorStreamMock = $this->getMockBuilder(
             \Magento\Framework\Filesystem\File\WriteInterface::class
         )->getMockForAbstractClass();
@@ -163,5 +178,25 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
         $this->reportValidatorMock->expects($this->never())->method('validate');
         $this->directoryMock->expects($this->never())->method('openFile');
         $this->reportWriter->write($this->directoryMock, '/var/tmp');
+    }
+
+    /**
+     * @return array
+     */
+    public function configDataProvider()
+    {
+        return [
+            ['reportProvider' => [
+                'providers' => [
+                    [
+                        'name' => $this->providerName,
+                        'class' => $this->providerClass,
+                        'parameters' => [
+                            'name' => $this->reportName
+                        ],
+                    ]
+                ]
+            ]],
+        ];
     }
 }
