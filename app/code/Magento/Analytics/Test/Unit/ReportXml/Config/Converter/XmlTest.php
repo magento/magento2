@@ -13,7 +13,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Analytics\ReportXml\Config\Converter\Xml
      */
-    protected $subject;
+    private $subject;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
