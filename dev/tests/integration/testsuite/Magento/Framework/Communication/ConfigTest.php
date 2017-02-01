@@ -24,6 +24,40 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Get topic configuration by its name
+     *
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Service method specified in the definition of topic "customerDeletedNumbers" is not available. Given "V55\Customer\Api\CustomerRepositoryInterface::delete99"
+     */
+    public function testGetTopicsNumeric()
+    {
+        $this->getConfigInstance(__DIR__ . '/_files/valid_communication_numeric.xml')->getTopics();
+    }
+
+    /**
+     * Get topic configuration by its name
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Invalid XML in file 0:
+    Element 'topic', attribute 'schema': [facet 'pattern'] The value '55\Customer\Api\CustomerRepositoryInterface::delete' is not accepted by the pattern '[a-zA-Z]+[a-zA-Z0-9\\]+::[a-zA-Z0-9]+'.
+    Line: 9
+
+    Element 'topic', attribute 'schema': '55\Customer\Api\CustomerRepositoryInterface::delete' is not a valid value of the atomic type 'schemaType'.
+    Line: 9
+
+    Element 'handler', attribute 'type': [facet 'pattern'] The value '55\Customer\Api\CustomerRepositoryInterface' is not accepted by the pattern '[a-zA-Z]+[a-zA-Z0-9\\]+'.
+    Line: 10
+
+    Element 'handler', attribute 'type': '55\Customer\Api\CustomerRepositoryInterface' is not a valid value of the atomic type 'serviceTypeType'.
+    Line: 10
+     *
+     */
+    public function testGetTopicsNumericInvalid()
+    {
+        $this->getConfigInstance(__DIR__ . '/_files/invalid_communication_numeric.xml')->getTopics();
+    }
+
+    /**
+     * Get topic configuration by its name
      */
     public function testGetTopic()
     {
