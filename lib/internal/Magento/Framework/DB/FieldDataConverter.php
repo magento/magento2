@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\DB;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
@@ -27,47 +28,25 @@ class FieldDataConverter
     private $dataConverter;
 
     /**
+     * @var SelectFactory
+     */
+    private $selectFactory;
+
+    /**
      * Constructor
      *
      * @param Generator $queryGenerator
      * @param DataConverterInterface $dataConverter
+     * @param SelectFactory $selectFactory
      */
     public function __construct(
         Generator $queryGenerator,
-        DataConverterInterface $dataConverter
+        DataConverterInterface $dataConverter,
+        SelectFactory $selectFactory = null
     ) {
         $this->queryGenerator = $queryGenerator;
         $this->dataConverter = $dataConverter;
-    }
-
-    /**
-     * Get converter select
-     *
-     * @param AdapterInterface $connection
-     * @param string $table
-     * @param string $identifier
-     * @param string $field
-     * @param QueryModifierInterface|null $queryModifier
-     *
-     * @return Select
-     *
-     * @deprecated The method will be removed in MAGETWO-63944.
-     */
-    public function getSelect(
-        AdapterInterface $connection,
-        $table,
-        $identifier,
-        $field,
-        QueryModifierInterface $queryModifier = null
-    ) {
-        $select = $connection->select()
-            ->from($table, [$identifier, $field])
-            ->where($field . ' IS NOT NULL');
-        if ($queryModifier) {
-            $queryModifier->modify($select);
-        }
-
-        return $select;
+        $this->selectFactory = $selectFactory ?: ObjectManager::getInstance()->get(SelectFactory::class);
     }
 
     /**
@@ -87,7 +66,12 @@ class FieldDataConverter
         $field,
         QueryModifierInterface $queryModifier = null
     ) {
-        $select = $this->getSelect($connection, $table, $identifier, $field, $queryModifier);
+        $select = $this->selectFactory->create($connection)
+            ->from($table, [$identifier, $field])
+            ->where($field . ' IS NOT NULL');
+        if ($queryModifier) {
+            $queryModifier->modify($select);
+        }
         $iterator = $this->queryGenerator->generate($identifier, $select);
         foreach ($iterator as $selectByRange) {
             $rows = $connection->fetchAll($selectByRange);
