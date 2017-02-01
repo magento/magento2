@@ -1,0 +1,18 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Analytics:etc/reports.xsd">
+    <report name="test_report_1" connection="sales">
+        <source name="sales_order" alias="orders">
+            <attribute name="entity_id" alias="identifier" />
+            <filter glue="and">
+                <condition attribute="entity_id" operator="gt">10</condition>
+            </filter>
+        </source>
+    </report>
+    <report name="test_report_2" connection="default">
+        <source name="customer_entity" alias="customers">
+            <attribute name="email" />
+            <filter glue="and">
+                <condition attribute="dob" operator="null" />
+            </filter>
+        </source>
+    </report>
+</config>
