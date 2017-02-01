@@ -34,6 +34,7 @@ class Config implements ConfigInterface
     /**
      * Returns config value by name
      *
+     * @param string $queryName
      * @return array
      */
     public function get($queryName)

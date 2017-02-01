@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Test\Unit\Model;
+namespace Magento\Analytics\Test\Unit\ReportXml;
 
 use Magento\Analytics\ReportXml\ConnectionFactory;
 use Magento\Framework\App\ResourceConnection;
@@ -13,7 +13,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Class AnalyticsTokenTest
+ * Class ConnectionFactoryTest
  */
 class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,9 +79,6 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testGetConnection()
     {
         $connectionName = 'read';

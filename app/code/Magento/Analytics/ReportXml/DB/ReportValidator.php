@@ -47,14 +47,14 @@ class ReportValidator
      * @param SearchCriteriaInterface $criteria
      * @return array
      */
-    public function getErrors($name, SearchCriteriaInterface $criteria = null)
+    public function validate($name, SearchCriteriaInterface $criteria = null)
     {
         $query = $this->queryFactory->create($name);
         $connection = $this->connectionFactory->getConnection($query->getConnectionName());
         $query->getSelect()->limit(0);
         try {
             $connection->query($query->getSelect());
-        } catch (\Exception $e) {
+        } catch (\Zend_Db_Statement_Exception $e) {
             return [$name, $e->getMessage()];
         }
 

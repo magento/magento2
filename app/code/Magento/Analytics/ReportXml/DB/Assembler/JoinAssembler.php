@@ -63,17 +63,22 @@ class JoinAssembler implements AssemblerInterface
         }
         $joins = [];
         $filters = $selectBuilder->getFilters();
+
+        $sourceAlias = $this->nameResolver->getAlias($queryConfig['source']);
+
         foreach ($queryConfig['source']['link-source'] as $join) {
-            $joins[$this->nameResolver->getAlias($join)]  = [
+            $joinAlias = $this->nameResolver->getAlias($join);
+
+            $joins[$joinAlias]  = [
                 'link-type' => isset($join['link-type']) ? $join['link-type'] : 'left',
                 'table' => [
-                    $this->nameResolver->getAlias($join) => $this->nameResolver->getName($join)
+                    $joinAlias => $this->nameResolver->getName($join)
                 ],
                 'condition' => $this->conditionResolver->getFilter(
                     $selectBuilder,
                     $join['using'],
-                    $this->nameResolver->getAlias($join),
-                    $this->nameResolver->getAlias($queryConfig['source'])
+                    $joinAlias,
+                    $sourceAlias
                 )
             ];
             if (isset($join['filter'])) {
@@ -83,8 +88,8 @@ class JoinAssembler implements AssemblerInterface
                         $this->conditionResolver->getFilter(
                             $selectBuilder,
                             $join['filter'],
-                            $this->nameResolver->getAlias($join),
-                            $this->nameResolver->getAlias($queryConfig['source'])
+                            $joinAlias,
+                            $sourceAlias
                         )
                     ]
                 );
