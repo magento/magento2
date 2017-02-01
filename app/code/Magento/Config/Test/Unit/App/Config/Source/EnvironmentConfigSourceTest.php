@@ -29,6 +29,8 @@ class EnvironmentConfigSourceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $_ENV['CONFIG__UNIT__TEST__VALUE'] = 'test_value';
+
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -53,7 +55,6 @@ class EnvironmentConfigSourceTest extends \PHPUnit_Framework_TestCase
         $value = 'test_value';
         $path = 'unit/test/value';
         $expectedArray = ['unit' => ['test' => ['value' => $value]]];
-        $_ENV[$placeholder] = $value;
 
         $this->placeholderMock->expects($this->any())
             ->method('isApplicable')
@@ -70,5 +71,10 @@ class EnvironmentConfigSourceTest extends \PHPUnit_Framework_TestCase
             ->willReturn($expectedArray);
 
         $this->assertSame($expectedArray, $this->source->get());
+    }
+
+    public function tearDown()
+    {
+        unset($_ENV['CONFIG__UNIT__TEST__VALUE']);
     }
 }
