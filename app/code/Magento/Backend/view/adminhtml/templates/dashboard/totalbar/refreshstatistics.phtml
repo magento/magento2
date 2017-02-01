@@ -15,11 +15,11 @@
                 <input
                     name="form_key"
                     type="hidden"
-                    value="<?php echo $block->escapeHtml($block->getFormKey()); ?>"/>
+                    value="<?php echo $block->escapeHtmlAttr($block->getFormKey()); ?>"/>
                 <button
                     class="action-primary"
                     type="submit"
-                    title="<?php echo $block->escapeHtml(__('Reload Data')) ?>">
+                    title="<?php echo $block->escapeHtmlAttr(__('Reload Data')) ?>">
                     <?php echo $block->escapeHtml(__('Reload Data')) ?>
                 </button>
             </form>
