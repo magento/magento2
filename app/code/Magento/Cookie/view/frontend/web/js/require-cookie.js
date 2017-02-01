@@ -5,7 +5,7 @@
 
 define([
     'jquery',
-    'query/ui'
+    'jquery/ui'
 ], function ($) {
     'use strict';
 
