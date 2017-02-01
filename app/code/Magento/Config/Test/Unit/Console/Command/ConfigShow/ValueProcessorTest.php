@@ -45,6 +45,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->structureFactoryMock = $this->getMockBuilder(StructureFactory::class)
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->valueProcessor = new ValueProcessor(
