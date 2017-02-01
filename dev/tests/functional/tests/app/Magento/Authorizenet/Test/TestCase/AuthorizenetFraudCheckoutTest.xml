@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Authorizenet\Test\TestCase\AuthorizenetFraudCheckoutTest" summary=".">
+        <variation name="AuthorizenetFraudCheckoutAccept" summary="jkhjkhkjhkhjkh" ticketId="MAGETWO-48162">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">15.00</item>
+            </data>
+            <data name="orderBeforeAccept" xsi:type="array">
+                <item name="invoiceStatus" xsi:type="string">Pending</item>
+                <item name="orderStatus" xsi:type="string">Suspected Fraud</item>
+                <item name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Get Payment Update</item>
+            </data>
+            <data name="payment/method" xsi:type="string">authorizenet_directpost</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="sandboxCustomer/dataset" xsi:type="string">sandbox_fraud_hold_review</data>
+            <data name="configData" xsi:type="string">authorizenet_fraud_review</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="invoiceStatus" xsi:type="string">Paid</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertInvoiceStatusInOrdersGrid" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
+        </variation>
+    </testCase>
+</config>

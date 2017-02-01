@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Authorizenet\Test\Repository\SandboxCustomer">
+        <dataset name="sandbox_fraud_hold_review">
+            <field name="login_id" xsi:type="string">AUTHORIZENET_SANDBOX_LOGIN_ID</field>
+            <field name="password" xsi:type="string">AUTHORIZENET_SANDBOX_PASSWORD</field>
+        </dataset>
+    </repository>
+</config>
