@@ -12,11 +12,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
-use Magento\Translation\Model\Js\Config as TranslationJsConfig;
-use Magento\Framework\TranslateInterface;
-use Magento\Framework\View\Asset\Repository;
-use Magento\Framework\View\Asset\LocalInterface as Asset;
-use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\Translate\Js\Config as TranslationJsConfig;
+use Magento\Deploy\Model\Deploy\JsDictionaryDeploy;
+use Magento\Deploy\Model\DeployStrategyFactory;
 
 class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,24 +34,14 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
     private $translationJsConfig;
 
     /**
-     * @var TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var JsDictionaryDeploy|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $translator;
+    private $jsDictionaryDeploy;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeployStrategyFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $assetRepo;
-
-    /**
-     * @var Asset|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $asset;
-
-    /**
-     * @var Publisher|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $assetPublisher;
+    private $deployStrategyFactory;
 
     protected function setUp()
     {
@@ -66,10 +54,10 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->translationJsConfig = $this->getMock(TranslationJsConfig::class, [], [], '', false);
-        $this->translator = $this->getMockForAbstractClass(TranslateInterface::class, [], '', false, false, true);
-        $this->assetRepo = $this->getMock(Repository::class, [], [], '', false);
-        $this->asset = $this->getMockForAbstractClass(Asset::class, [], '', false, false, true);;
-        $this->assetPublisher = $this->getMock(Publisher::class, [], [], '', false);
+
+        $this->deployStrategyFactory = $this->getMock(DeployStrategyFactory::class, [], [], '', false);
+
+        $this->jsDictionaryDeploy = $this->getMock(JsDictionaryDeploy::class, [], [], '', false);
     }
 
     /**
@@ -114,9 +102,8 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
         $baseFile1 = $baseLocale . $file1;
         $baseFile2 = $baseLocale . $file2;
 
-        $dictionary = TranslationJsConfig::DICTIONARY_FILE_NAME;
+        $dictionary = 'js-translation.json';
         $baseDictionary = $baseLocale . $dictionary;
-
 
         $this->staticDirectoryMock->expects(self::never())->method('createSymlink');
         $this->staticDirectoryMock->expects(self::exactly(2))->method('readRecursively')->willReturnMap(
@@ -136,22 +123,19 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
             [$baseFile2, $locale . $file2, null]
         );
 
-        $this->translationJsConfig->expects(self::exactly(4))->method('getDictionaryFileName')
+        $this->translationJsConfig->expects(self::exactly(3))->method('getDictionaryFileName')
             ->willReturn($dictionary);
 
         $this->translationJsConfig->expects($this->once())->method('dictionaryEnabled')->willReturn(true);
 
-        $this->translator->expects($this->once())->method('setLocale')->with($locale);
-        $this->translator->expects($this->once())->method('loadData')->with($area, true);
-
-        $this->assetRepo->expects($this->once())->method('createAsset')
+        $this->deployStrategyFactory->expects($this->once())->method('create')
             ->with(
-                $dictionary,
-                ['area' => $area, 'theme' => $themePath, 'locale' => $locale]
+                DeployStrategyFactory::DEPLOY_STRATEGY_JS_DICTIONARY,
+                ['output' => $this->outputMock, 'translationJsConfig' => $this->translationJsConfig]
             )
-            ->willReturn($this->asset);
+            ->willReturn($this->jsDictionaryDeploy);
 
-        $this->assetPublisher->expects($this->once())->method('publish');
+        $this->jsDictionaryDeploy->expects($this->once())->method('deploy')->with($area, $themePath, $locale);
 
         $model = $this->getModel([
             DeployInterface::DEPLOY_BASE_LOCALE => $baseLocale,
@@ -173,9 +157,7 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
                 'staticDirectory' => $this->staticDirectoryMock,
                 'options' => $options,
                 'translationJsConfig' => $this->translationJsConfig,
-                'translator' => $this->translator,
-                'assetRepo' => $this->assetRepo,
-                'assetPublisher' => $this->assetPublisher
+                'deployStrategyFactory' => $this->deployStrategyFactory
             ]
         );
     }

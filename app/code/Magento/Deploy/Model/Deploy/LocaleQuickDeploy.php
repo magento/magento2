@@ -13,11 +13,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
-use Magento\Framework\App\View\Asset\Publisher;
-use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\Translate\Js\Config as TranslationJsConfig;
 use Magento\Framework\App\ObjectManager;
-use Magento\Translation\Model\Js\Config as TranslationJsConfig;
-use Magento\Framework\TranslateInterface;
+use Magento\Deploy\Model\DeployStrategyFactory;
 
 class LocaleQuickDeploy implements DeployInterface
 {
@@ -42,51 +40,41 @@ class LocaleQuickDeploy implements DeployInterface
     private $options = [];
 
     /**
-     * @var Repository
-     */
-    private $assetRepo;
-
-    /**
-     * @var Publisher
-     */
-    private $assetPublisher;
-
-    /**
      * @var TranslationJsConfig
      */
     private $translationJsConfig;
 
     /**
-     * @var TranslateInterface
+     * @var DeployStrategyFactory
      */
-    private $translator;
+    private $deployStrategyFactory;
+
+    /**
+     * @var DeployInterface[]
+     */
+    private $deploys;
 
     /**
      * @param Filesystem $filesystem
      * @param OutputInterface $output
      * @param array $options
-     * @param Repository $assetRepo
-     * @param Publisher $assetPublisher
      * @param TranslationJsConfig $translationJsConfig
-     * @param TranslateInterface $translator
+     * @param DeployStrategyFactory $deployStrategyFactory
      */
     public function __construct(
         Filesystem $filesystem,
         OutputInterface $output,
         $options = [],
-        Repository $assetRepo = null,
-        Publisher $assetPublisher = null,
         TranslationJsConfig $translationJsConfig = null,
-        TranslateInterface $translator = null
+        DeployStrategyFactory $deployStrategyFactory = null
     ) {
         $this->filesystem = $filesystem;
         $this->output = $output;
         $this->options = $options;
-        $this->assetRepo = $assetRepo ?: ObjectManager::getInstance()->get(Repository::class);
-        $this->assetPublisher = $assetPublisher ?: ObjectManager::getInstance()->get(Publisher::class);
         $this->translationJsConfig = $translationJsConfig
             ?: ObjectManager::getInstance()->get(TranslationJsConfig::class);
-        $this->translator = $translator ?: ObjectManager::getInstance()->get(TranslateInterface::class);
+        $this->deployStrategyFactory = $deployStrategyFactory
+            ?: ObjectManager::getInstance()->get(DeployStrategyFactory::class);
     }
 
     /**
@@ -140,16 +128,23 @@ class LocaleQuickDeploy implements DeployInterface
             $jsDictionaryEnabled = $this->translationJsConfig->dictionaryEnabled();
             foreach ($localeFiles as $path) {
                 if ($this->getStaticDirectory()->isFile($path)) {
-                    $destination = $this->replaceLocaleInPath($path, $baseLocale, $locale);
                     if (!$jsDictionaryEnabled || !$this->isJsDictionary($path)) {
+                        $destination = $this->replaceLocaleInPath($path, $baseLocale, $locale);
                         $this->getStaticDirectory()->copyFile($path, $destination);
+                        $processedFiles++;
                     }
-                    $processedFiles++;
                 }
             }
 
             if ($jsDictionaryEnabled) {
-                $this->deployJsDictionary($area, $themePath, $locale);
+                $this->getDeploy(
+                        DeployStrategyFactory::DEPLOY_STRATEGY_JS_DICTIONARY,
+                        [
+                            'output' => $this->output,
+                            'translationJsConfig' => $this->translationJsConfig
+                        ]
+                    )
+                    ->deploy($area, $themePath, $locale);
                 $processedFiles++;
             }
 
@@ -157,6 +152,21 @@ class LocaleQuickDeploy implements DeployInterface
         }
 
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Get deploy strategy according to required strategy
+     *
+     * @param string $strategy
+     * @param array $params
+     * @return DeployInterface
+     */
+    private function getDeploy($strategy, $params)
+    {
+        if (empty($this->deploys[$strategy])) {
+            $this->deploys[$strategy] = $this->deployStrategyFactory->create($strategy, $params);
+        }
+        return $this->deploys[$strategy];
     }
 
     /**
@@ -168,32 +178,6 @@ class LocaleQuickDeploy implements DeployInterface
     private function isJsDictionary($path)
     {
         return strpos($path, $this->translationJsConfig->getDictionaryFileName()) !== false;
-    }
-
-    /**
-     * Deploy js-dictionary for specific locale, theme and area
-     *
-     * @param string $area
-     * @param string $themePath
-     * @param string $locale
-     * @return void
-     */
-    private function deployJsDictionary($area, $themePath, $locale)
-    {
-        $this->translator->setLocale($locale);
-        $this->translator->loadData($area, true);
-
-        $asset = $this->assetRepo->createAsset(
-            $this->translationJsConfig->getDictionaryFileName(),
-            ['area' => $area, 'theme' => $themePath, 'locale' => $locale]
-        );
-        if ($this->output->isVeryVerbose()) {
-            $this->output->writeln("\tDeploying the file to '{$asset->getPath()}'");
-        } else {
-            $this->output->write('.');
-        }
-
-        $this->assetPublisher->publish($asset);
     }
 
     /**
