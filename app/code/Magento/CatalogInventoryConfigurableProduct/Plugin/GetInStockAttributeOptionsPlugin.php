@@ -32,6 +32,7 @@ class GetInStockAttributeOptionsPlugin
         $this->stockStatusCriteriaFactory = $stockStatusCriteriaFactory;
         $this->stockStatusRepository = $stockStatusRepository;
     }
+
     /**
      * Retrieve in stock options for attribute
      *
