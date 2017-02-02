@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Config;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Resolves config path by input parameters.
+ * Configures full path for configurations, including scope data and configuration type.
  */
 class ConfigPathResolver
 {
@@ -31,8 +31,14 @@ class ConfigPathResolver
      *
      * @param string $path The path of configuration
      * @param string $scope The scope of configuration
-     * @param string|int|null $scopeCode The scope code or identifier of configuration
-     * @param string|null $type The type of configuration
+     * @param string|int|null $scopeCode The scope code or its identifier of configuration. The values for this
+     * field are taken from 'store' or 'store_website' tables, depends on $scope value
+     * @param string|null $type The type of configuration.
+     * The available types are declared in implementations of Magento\Framework\App\Config\ConfigTypeInterface
+     * E.g.
+     * ```php
+     * const CONFIG_TYPE = 'system';
+     * ```
      * @return string Resolved configuration path
      */
     public function resolve($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null, $type = null)
@@ -40,10 +46,7 @@ class ConfigPathResolver
         $path = trim($path, '/');
         $scope = rtrim($scope, 's');
 
-        /**
-         * Scope name is currently stored in plural form.
-         * Desired behavior will be changed in mayor release.
-         */
+        /** Scope name is currently stored in plural form. */
         if (in_array($scope, [ScopeInterface::SCOPE_STORE, ScopeInterface::SCOPE_WEBSITE])) {
             $scope .= 's';
         }
@@ -58,6 +61,6 @@ class ConfigPathResolver
             $scopePath .= '/' . $scopeCode;
         }
 
-        return trim($scopePath . '/' . $path, '/');
+        return $scopePath . ($path ? '/' . $path : '');
     }
 }

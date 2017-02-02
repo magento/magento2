@@ -14,9 +14,7 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\App\Area;
 
 /**
- * Class processes values using backend model.
- *
- * Backend model is gotten from field via its path (e.g. scope_id/group_id/field_id).
+ * Class processes values using backend model which declared in system.xml.
  */
 class ValueProcessor
 {
