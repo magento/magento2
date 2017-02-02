@@ -138,13 +138,13 @@ class LocaleQuickDeploy implements DeployInterface
 
             if ($jsDictionaryEnabled) {
                 $this->getDeploy(
-                        DeployStrategyFactory::DEPLOY_STRATEGY_JS_DICTIONARY,
-                        [
-                            'output' => $this->output,
-                            'translationJsConfig' => $this->translationJsConfig
-                        ]
-                    )
-                    ->deploy($area, $themePath, $locale);
+                    DeployStrategyFactory::DEPLOY_STRATEGY_JS_DICTIONARY,
+                    [
+                        'output' => $this->output,
+                        'translationJsConfig' => $this->translationJsConfig
+                    ]
+                )
+                ->deploy($area, $themePath, $locale);
                 $processedFiles++;
             }
 

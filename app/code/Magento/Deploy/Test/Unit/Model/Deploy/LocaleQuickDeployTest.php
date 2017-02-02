@@ -48,15 +48,11 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
         $this->outputMock = $this->getMockBuilder(OutputInterface::class)
             ->setMethods(['writeln', 'isVeryVerbose'])
             ->getMockForAbstractClass();
-
         $this->staticDirectoryMock = $this->getMockBuilder(WriteInterface::class)
             ->setMethods(['createSymlink', 'getAbsolutePath', 'getRelativePath', 'copyFile', 'readRecursively'])
             ->getMockForAbstractClass();
-
         $this->translationJsConfig = $this->getMock(TranslationJsConfig::class, [], [], '', false);
-
         $this->deployStrategyFactory = $this->getMock(DeployStrategyFactory::class, [], [], '', false);
-
         $this->jsDictionaryDeploy = $this->getMock(JsDictionaryDeploy::class, [], [], '', false);
     }
 
