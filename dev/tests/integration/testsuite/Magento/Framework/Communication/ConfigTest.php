@@ -33,6 +33,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->getConfigInstance(__DIR__ . '/_files/valid_communication_numeric.xml')->getTopics();
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * Get topic configuration by its name
      *
@@ -51,6 +52,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     Line: 10
      *
      */
+    // @codingStandardsIgnoreEnd
     public function testGetTopicsNumericInvalid()
     {
         $this->getConfigInstance(__DIR__ . '/_files/invalid_communication_numeric.xml')->getTopics();
