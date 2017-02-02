@@ -16,6 +16,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Execute data collection to $path
  * Packs collected data in $path and pack them into archive
  * Returns archive content
+ * Deletes data which was created during run
  */
 class Export
 {
