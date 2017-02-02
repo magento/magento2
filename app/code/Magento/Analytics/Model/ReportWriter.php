@@ -79,7 +79,13 @@ class ReportWriter implements ReportWriterInterface
                 $directory->create($path);
                 $stream = $directory->openFile($fileFullPath, 'w+');
                 $stream->lock();
+                $headers = [];
                 foreach ($fileData as $row) {
+                    if (!$headers) {
+                        $headers = array_keys($row);
+                        $stream->writeCsv($headers);
+
+                    }
                     $stream->writeCsv($row);
                 }
                 $stream->unlock();
