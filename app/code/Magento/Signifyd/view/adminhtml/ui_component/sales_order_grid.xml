@@ -9,6 +9,7 @@
     <columns name="sales_order_columns">
         <column name="signifyd_guarantee_status">
             <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Signifyd\Ui\Component\Listing\Column\Guarantee\Options</item>
                 <item name="config" xsi:type="array">
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="filter" xsi:type="string">select</item>
