@@ -83,7 +83,7 @@ class JsDictionaryDeployTest extends \PHPUnit_Framework_TestCase
 
         $dictionary = 'js-translation.json';
 
-        $this->translationJsConfig->expects(self::exactly(1))->method('getDictionaryFileName')
+        $this->translationJsConfig->expects(self::once())->method('getDictionaryFileName')
             ->willReturn($dictionary);
 
         $this->translator->expects($this->once())->method('setLocale')->with($locale);
