@@ -6,9 +6,7 @@
 
 namespace Magento\Sales\Test\TestStep;
 
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
@@ -55,7 +53,7 @@ class GetPaymentUpdateStep implements TestStepInterface
     }
 
     /**
-     * On hold order on backend.
+     * Get payment update for order.
      *
      * @return void
      */

@@ -39,30 +39,33 @@ class TransactionsGrid extends Block
      * Find transaction in grid and open it.
      *
      * @param string $transactionId
-     * @return void
+     * @return $this
      */
     public function openTransaction($transactionId)
     {
         $this->_rootElement->find(sprintf($this->transaction, $transactionId), Locator::SELECTOR_XPATH)->click();
+        return $this;
     }
 
     /**
      * Approve selected transaction.
      *
-     * @return void
+     * @return $this
      */
     public function approveTransaction()
     {
         $this->_rootElement->find($this->transactionApprove, Locator::SELECTOR_XPATH)->click();
+        return $this->confirmTransactionApproval();
     }
 
     /**
      * Confirm approval of selected transaction.
      *
-     * @return void
+     * @return $this
      */
-    public function confirmTransactionApproval()
+    private function confirmTransactionApproval()
     {
         $this->browser->find($this->transactionApprovalConfirm)->click();
+        return $this;
     }
 }

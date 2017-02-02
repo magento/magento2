@@ -32,7 +32,7 @@ class Menu extends Block
     /**
      * Accept notification if it appears after login.
      *
-     * @return void
+     * @return $this
      */
     public function acceptNotification()
     {
@@ -40,15 +40,17 @@ class Menu extends Block
         if ($element->isVisible()) {
             $element->click();
         }
+        return $this;
     }
 
     /**
      * Open 'Search' menu item.
      *
-     * @return void
+     * @return $this
      */
     public function openSearchMenu()
     {
         $this->_rootElement->find($this->searchMenuButton, Locator::SELECTOR_XPATH)->click();
+        return $this;
     }
 }

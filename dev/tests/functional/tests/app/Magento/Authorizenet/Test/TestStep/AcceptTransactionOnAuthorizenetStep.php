@@ -7,7 +7,9 @@
 namespace Magento\Authorizenet\Test\TestStep;
 
 use Magento\Authorizenet\Test\Fixture\SandboxCustomer;
+use Magento\Authorizenet\Test\Fixture\TransactionSearch;
 use Magento\Authorizenet\Test\Page\Sandbox\Main;
+use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Constraint\AssertInvoiceStatusInOrdersGrid;
 use Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable;
@@ -76,31 +78,58 @@ class AcceptTransactionOnAuthorizenetStep implements TestStepInterface
     private $assertOrderButtonsAvailable;
 
     /**
+     * Client Browser instance.
+     *
+     * @var BrowserInterface
+     */
+    private $browser;
+
+    /**
+     * Form frame selector.
+     *
+     * @var string
+     */
+    private $frame = 'frameset > frame';
+
+    /**
+     * Transaction search fixture.
+     *
+     * @var TransactionSearch
+     */
+    private $transactionSearch;
+
+    /**
      * @param SandboxCustomer $sandboxCustomer
+     * @param TransactionSearch $transactionSearch
      * @param Main $main
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
      * @param AssertInvoiceStatusInOrdersGrid $assertInvoiceStatusInOrdersGrid
      * @param AssertOrderButtonsAvailable $assertOrderButtonsAvailable
+     * @param BrowserInterface $browser
      * @param array $orderBeforeAccept
      * @param string $orderId
      */
     public function __construct(
         SandboxCustomer $sandboxCustomer,
+        TransactionSearch $transactionSearch,
         Main $main,
         SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
         AssertInvoiceStatusInOrdersGrid $assertInvoiceStatusInOrdersGrid,
         AssertOrderButtonsAvailable $assertOrderButtonsAvailable,
+        BrowserInterface $browser,
         array $orderBeforeAccept,
         $orderId
     ) {
         $this->sandboxCustomer = $sandboxCustomer;
+        $this->transactionSearch = $transactionSearch;
         $this->main = $main;
         $this->salesOrderView = $salesOrderView;
         $this->salesOrder = $salesOrder;
         $this->assertInvoiceStatusInOrdersGrid = $assertInvoiceStatusInOrdersGrid;
         $this->assertOrderButtonsAvailable = $assertOrderButtonsAvailable;
+        $this->browser = $browser;
         $this->orderBeforeAccept = $orderBeforeAccept;
         $this->orderId = $orderId;
     }
@@ -127,16 +156,15 @@ class AcceptTransactionOnAuthorizenetStep implements TestStepInterface
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
         $infoTab = $this->salesOrderView->getOrderForm()->openTab('info')->getTab('info');
         $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
-        preg_match('/"(\d+)"/', $latestComment['comment'], $matches);
+        if (!preg_match('/"(\d+)"/', $latestComment['comment'], $matches)) {
+            throw new \Exception('Comment with transaction id cannot be found.');
+        }
         $transactionId = $matches[1];
         $this->main->open();
-        $this->main->getLoginBlock()->fill($this->sandboxCustomer);
-        $this->main->getLoginBlock()->sandboxLogin();
-        $this->main->getMenuBlock()->acceptNotification();
-        $this->main->getMenuBlock()->openSearchMenu();
-        $this->main->getSearchFormBlock()->search();
-        $this->main->getTransactionsGridBlock()->openTransaction($transactionId);
-        $this->main->getTransactionsGridBlock()->approveTransaction();
-        $this->main->getTransactionsGridBlock()->confirmTransactionApproval();
+        $this->browser->switchToFrame($this->browser->find($this->frame)->getLocator());
+        $this->main->getLoginBlock()->fill($this->sandboxCustomer)->login();
+        $this->main->getMenuBlock()->acceptNotification()->openSearchMenu();
+        $this->main->getSearchFormBlock()->fill($this->transactionSearch)->search();
+        $this->main->getTransactionsGridBlock()->openTransaction($transactionId)->approveTransaction();
     }
 }

@@ -25,6 +25,7 @@
             <data name="payment/method" xsi:type="string">authorizenet_directpost</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="sandboxCustomer/dataset" xsi:type="string">sandbox_fraud_hold_review</data>
+            <data name="transactionSearch/dataset" xsi:type="string">unsettled</data>
             <data name="configData" xsi:type="string">authorizenet_fraud_review</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="invoiceStatus" xsi:type="string">Paid</data>
