@@ -7,9 +7,11 @@
 <div class="page-actions">
     <div class="page-actions-inner">
         <div class="page-actions-buttons">
-            <form
-                action="<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/refreshStatistics'); ?>"
-                method="post">
+            <?php echo $block->getChildHtml(); ?>
+
+            <form class="action-element"
+                  action="<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/refreshStatistics'); ?>"
+                  method="post">
                 <input
                     name="form_key"
                     type="hidden"
@@ -17,7 +19,7 @@
                 <button
                     class="action-primary"
                     type="submit"
-                    title="Refresh Data">
+                    title="<?php /* @escapeNotVerified */ echo __('Reload Data') ?>">
                     <?php /* @escapeNotVerified */ echo __('Reload Data') ?>
                 </button>
             </form>
