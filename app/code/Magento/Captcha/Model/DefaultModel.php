@@ -523,6 +523,9 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      *
      * Now deleting old captcha images make crontab script
      * @see \Magento\Captcha\Cron\DeleteExpiredImages::execute
+     *
+     * Added SuppressWarnings since this method is declared in parent class and we can not use other method name.
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     protected function gc()
     {
