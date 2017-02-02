@@ -123,7 +123,7 @@ class ConfigSetCommand extends Command
                 ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
                 : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT);
             $message = $input->getOption(static::OPTION_LOCK)
-                ? 'Value was locked.'
+                ? 'Value was saved and locked.'
                 : 'Value was saved.';
 
             // The processing flow depends on --lock option.

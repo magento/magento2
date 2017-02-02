@@ -207,8 +207,8 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->outputMock->expects($this->exactly(2))
             ->method('writeln')
             ->withConsecutive(
-                ['<info>Value was locked.</info>'],
-                ['<info>Value was locked.</info>']
+                ['<info>Value was saved and locked.</info>'],
+                ['<info>Value was saved and locked.</info>']
             );
 
         /** @var ConfigSetCommand $command */
@@ -276,8 +276,8 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertSame(null, $this->arrayManager->get($configPath, $this->loadConfig()));
 
-        $this->runCommand($arguments, $optionsLock, '<info>Value was locked.</info>');
-        $this->runCommand($arguments, $optionsLock, '<info>Value was locked.</info>');
+        $this->runCommand($arguments, $optionsLock, '<info>Value was saved and locked.</info>');
+        $this->runCommand($arguments, $optionsLock, '<info>Value was saved and locked.</info>');
 
         $this->assertSame($value, $this->arrayManager->get($configPath, $this->loadConfig()));
     }
