@@ -170,7 +170,7 @@ class ConfigShowCommand extends Command
      * Outputs single configuration value or list of values if array given.
      *
      * @param OutputInterface $output an OutputInterface instance
-     * @param mixed $configValue can be string when $configPath is a path for concreate field.
+     * @param string|array $configValue can be string when $configPath is a path for concreate field.
      * In other cases $configValue should be an array
      * ```php
      * [

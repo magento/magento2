@@ -31,7 +31,7 @@ class ConfigPathResolver
      *
      * @param string $path The path of configuration
      * @param string $scope The scope of configuration
-     * @param string|int|null $scopeCode The scope code or its identifier of configuration. The values for this
+     * @param string|int|null $scopeCode The scope code or its identifier. The values for this
      * field are taken from 'store' or 'store_website' tables, depends on $scope value
      * @param string|null $type The type of configuration.
      * The available types are declared in implementations of Magento\Framework\App\Config\ConfigTypeInterface
