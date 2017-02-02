@@ -8,9 +8,14 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class Index returns Stores page
+ */
 class Index extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
+     * Returns Stores page
+     *
      * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
