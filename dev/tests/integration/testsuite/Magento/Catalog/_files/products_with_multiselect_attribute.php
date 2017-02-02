@@ -39,6 +39,8 @@ $product->setTypeId(
     'simple_ms_1'
 )->setPrice(
     10
+)->setDescription(
+    'Hello " &amp;" Bring the water bottle when you can!'
 )->setVisibility(
     \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
 )->setMultiselectAttribute(
