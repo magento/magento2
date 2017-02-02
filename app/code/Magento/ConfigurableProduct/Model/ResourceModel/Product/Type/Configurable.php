@@ -227,16 +227,4 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         return $this->attributeOptionProvider->getAttributeOptions($superAttribute, $productId);
     }
-
-    /**
-     * Load in stock options for attribute
-     *
-     * @param AbstractAttribute $superAttribute
-     * @param int $productId
-     * @return array
-     */
-    public function getInStockAttributeOptions(AbstractAttribute $superAttribute, $productId)
-    {
-        return $this->attributeOptionProvider->getInStockAttributeOptions($superAttribute, $productId);
-    }
 }

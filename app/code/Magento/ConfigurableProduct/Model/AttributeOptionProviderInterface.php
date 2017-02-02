@@ -6,8 +6,7 @@
 namespace Magento\ConfigurableProduct\Model;
 
 /**
- * Interface to retrieve options for attribute was introduced to move methods
- * to get attribute's options from Configurable collection
+ * Interface to retrieve options for attribute
  */
 interface AttributeOptionProviderInterface
 {
@@ -19,16 +18,4 @@ interface AttributeOptionProviderInterface
      * @return array
      */
     public function getAttributeOptions(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute, $productId);
-
-    /**
-     * Retrieve in stock options for attribute
-     *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @param int $productId
-     * @return array
-     */
-    public function getInStockAttributeOptions(
-        \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute,
-        $productId
-    );
 }

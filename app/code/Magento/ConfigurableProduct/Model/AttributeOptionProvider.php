@@ -11,9 +11,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
-use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 
 class AttributeOptionProvider implements AttributeOptionProviderInterface
@@ -29,57 +26,27 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
     private $attributeResource;
 
     /**
-     * Product metadata pool
-     *
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
-    /**
-     * @var StockStatusRepositoryInterface
-     */
-    private $stockStatusRepository;
-
-    /**
-     * @var StockStatusCriteriaInterfaceFactory
-     */
-    private $stockStatusCriteriaFactory;
-
-    /**
      * @var OptionProvider
      */
     private $attributeOptionProvider;
 
     /**
      * @param Attribute $attributeResource
-     * @param StockStatusRepositoryInterface $stockStatusRepository
-     * @param StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory
      * @param OptionProvider $attributeOptionProvider,
      * @param ScopeResolverInterface $scopeResolver
-     * @param MetadataPool $metadataPool
      */
     public function __construct(
         Attribute $attributeResource,
-        StockStatusRepositoryInterface $stockStatusRepository,
-        StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory,
         OptionProvider $attributeOptionProvider,
-        ScopeResolverInterface $scopeResolver = null,
-        MetadataPool $metadataPool = null
+        ScopeResolverInterface $scopeResolver = null
     ) {
         $this->attributeResource = $attributeResource;
-        $this->stockStatusRepository = $stockStatusRepository;
-        $this->stockStatusCriteriaFactory = $stockStatusCriteriaFactory;
         $this->attributeOptionProvider = $attributeOptionProvider;
         $this->scopeResolver = $scopeResolver ?: ObjectManager::getInstance()->get(ScopeResolverInterface::class);
-        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
-     * Retrieve options for attribute
-     *
-     * @param AbstractAttribute $superAttribute
-     * @param int $productId
-     * @return array
+     * {@inheritdoc}
      */
     public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {
@@ -87,44 +54,6 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
         $select = $this->getAttributeOptionsSelect($superAttribute, $productId, $scope);
 
         return $this->attributeResource->getConnection()->fetchAll($select);
-    }
-
-    /**
-     * Retrieve in stock options for attribute
-     *
-     * @param AbstractAttribute $superAttribute
-     * @param int $productId
-     * @return array
-     */
-    public function getInStockAttributeOptions(AbstractAttribute $superAttribute, $productId)
-    {
-        $scope  = $this->scopeResolver->getScope();
-        $select = $this->getAttributeOptionsSelect($superAttribute, $productId, $scope);
-        $options = $this->attributeResource->getConnection()->fetchAll($select);
-
-        $sku = [];
-        foreach ($options as $option) {
-            $sku[] = $option['sku'];
-        }
-        $criteria = $this->stockStatusCriteriaFactory->create();
-        $criteria->addFilter('stock_status', 'stock_status', '1');
-        $criteria->addFilter('sku', 'sku', ['in' => $sku], 'public');
-        $collection = $this->stockStatusRepository->getList($criteria);
-
-        $inStockSku = [];
-        foreach ($collection->getItems() as $inStockOption) {
-            $inStockSku[] = $inStockOption->getData('sku');
-        }
-        if (!empty($inStockSku)) {
-            foreach ($options as $key => $option) {
-                if (!in_array($options[$key]['sku'], $inStockSku)) {
-                    unset($options[$key]);
-                }
-            }
-        }
-        $options = array_values($options);
-
-        return $options;
     }
 
     /**

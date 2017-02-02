@@ -263,7 +263,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $productAttribute = $item->getProductAttribute();
 
             $itemId = $item->getId();
-            $options = $configurableResource->getInStockAttributeOptions(
+            $options = $configurableResource->getAttributeOptions(
                 $productAttribute,
                 $this->getProduct()->getData(
                     $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
