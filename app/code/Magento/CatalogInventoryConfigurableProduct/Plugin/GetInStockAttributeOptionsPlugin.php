@@ -5,24 +5,12 @@
  */
 namespace Magento\CatalogInventoryConfigurableProduct\Plugin;
 
-use Magento\Framework\App\ScopeResolverInterface;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface;
 
 class GetInStockAttributeOptionsPlugin
 {
-    /**
-     * @var ScopeResolverInterface
-     */
-    private $scopeResolver;
-
-    /**
-     * @var Attribute
-     */
-    private $attributeResource;
-
     /**
      * @var StockStatusCriteriaInterfaceFactory
      */
@@ -34,19 +22,13 @@ class GetInStockAttributeOptionsPlugin
     private $stockStatusRepository;
 
     /**
-     * @param ScopeResolverInterface $scopeResolver
-     * @param Attribute $attributeResource
      * @param StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory
      * @param StockStatusRepositoryInterface $stockStatusRepository
      */
     public function __construct(
-        ScopeResolverInterface $scopeResolver,
-        Attribute $attributeResource,
         StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory,
         StockStatusRepositoryInterface $stockStatusRepository
     ) {
-        $this->scopeResolver = $scopeResolver;
-        $this->attributeResource = $attributeResource;
         $this->stockStatusCriteriaFactory = $stockStatusCriteriaFactory;
         $this->stockStatusRepository = $stockStatusRepository;
     }
