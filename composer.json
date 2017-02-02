@@ -31,7 +31,6 @@
         "zendframework/zend-serializer": "~2.4.6",
         "zendframework/zend-log": "~2.4.6",
         "zendframework/zend-http": "~2.4.6",
-        "zendframework/zend-db": "~2.4.6",
         "magento/zendframework1": "~1.12.16",
         "colinmollenhour/credis": "1.6",
         "colinmollenhour/php-redis-session-abstract": "1.2",
