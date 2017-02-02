@@ -26,7 +26,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * Get topic configuration by its name
      *
      * @expectedException \LogicException
-     * @expectedExceptionMessage Service method specified in the definition of topic "customerDeletedNumbers" is not available. Given "V55\Customer\Api\CustomerRepositoryInterface::delete99"
+     * @expectedExceptionMessage Service method specified in the definition of topic "customerDeletedNumbers" is not av
      */
     public function testGetTopicsNumeric()
     {
