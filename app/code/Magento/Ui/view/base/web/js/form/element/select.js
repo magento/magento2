@@ -44,9 +44,9 @@ define([
                 if (_.isUndefined(caption)) {
                     caption = node.label;
                 }
+            } else {
+                return node;
             }
-
-            return node;
         });
 
         return {
