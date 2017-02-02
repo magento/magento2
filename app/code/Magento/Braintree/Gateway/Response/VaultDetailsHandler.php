@@ -42,23 +42,31 @@ class VaultDetailsHandler implements HandlerInterface
     protected $config;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Constructor
      *
      * @param PaymentTokenInterfaceFactory $paymentTokenFactory
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param Config $config
      * @param SubjectReader $subjectReader
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      */
     public function __construct(
         PaymentTokenInterfaceFactory $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         Config $config,
-        SubjectReader $subjectReader
+        SubjectReader $subjectReader,
+        \Magento\Framework\Serialize\SerializerInterface $serializer
     ) {
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
         $this->config = $config;
         $this->subjectReader = $subjectReader;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -133,7 +141,7 @@ class VaultDetailsHandler implements HandlerInterface
      */
     private function convertDetailsToJSON($details)
     {
-        $json = \Zend_Json::encode($details);
+        $json = $this->serializer->serialize($details);
         return $json ? $json : '{}';
     }
 
