@@ -11,7 +11,7 @@ namespace Magento\Captcha\Controller\Adminhtml\Refresh;
 class Refresh extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
     protected $serializer;
 
