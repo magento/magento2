@@ -24,7 +24,7 @@ class Reader implements ReaderInterface
 
     /**
      * @param Mapper $mapper
-     * @param array $readers
+     * @param ReaderInterface[] $readers
      */
     public function __construct(
         Mapper $mapper,

@@ -186,17 +186,19 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
     public function configDataProvider()
     {
         return [
-            ['reportProvider' => [
-                'providers' => [
-                    [
-                        'name' => $this->providerName,
-                        'class' => $this->providerClass,
-                        'parameters' => [
-                            'name' => $this->reportName
-                        ],
+            'reportProvider' => [
+                [
+                    'providers' => [
+                        [
+                            'name' => $this->providerName,
+                            'class' => $this->providerClass,
+                            'parameters' => [
+                                'name' => $this->reportName
+                            ],
+                        ]
                     ]
                 ]
-            ]],
+            ],
         ];
     }
 }
