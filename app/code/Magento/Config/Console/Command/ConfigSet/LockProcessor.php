@@ -6,9 +6,7 @@
 namespace Magento\Config\Console\Command\ConfigSet;
 
 use Magento\Config\App\Config\Type\System;
-use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Model\Config\Structure;
-use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
@@ -16,7 +14,6 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Stdlib\ArrayManager;
-use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Processes file lock flow of config:set command.
@@ -99,16 +96,11 @@ class LockProcessor implements ConfigSetProcessorInterface
      *
      * {@inheritdoc}
      */
-    public function process(InputInterface $input)
+    public function process($path, $value, $scope, $scopeCode)
     {
         try {
-            $path = $input->getArgument(ConfigSetCommand::ARG_PATH);
-            $value = $input->getArgument(ConfigSetCommand::ARG_VALUE);
-            $scope = $input->getOption(ConfigSetCommand::OPTION_SCOPE);
-            $scopeCode = $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE);
-
             $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode, System::CONFIG_TYPE);
-            /** @var Field $field */
+            /** @var Structure\Element\Field $field */
             $field = $this->deploymentConfig->isAvailable()
                 ? $this->configStructure->getElement($path)
                 : null;

@@ -13,7 +13,6 @@ use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Store\Model\ScopeInterface;
-use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Processes default flow of config:set command.
@@ -66,17 +65,8 @@ class DefaultProcessor implements ConfigSetProcessorInterface
      *
      * {@inheritdoc}
      */
-    public function process(InputInterface $input)
+    public function process($path, $value, $scope, $scopeCode)
     {
-        try {
-            $path = $input->getArgument(ConfigSetCommand::ARG_PATH);
-            $value = $input->getArgument(ConfigSetCommand::ARG_VALUE);
-            $scope = $input->getOption(ConfigSetCommand::OPTION_SCOPE);
-            $scopeCode = $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE);
-        } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__('%1', $exception->getMessage()), $exception);
-        }
-
         if (!$this->deploymentConfig->isAvailable()) {
             throw new CouldNotSaveException(
                 __(

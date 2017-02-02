@@ -90,7 +90,7 @@ class ConfigSetCommand extends Command
                     static::OPTION_SCOPE_CODE,
                     null,
                     InputArgument::OPTIONAL,
-                    'Scope code (required only if scope code is not \'default\')'
+                    'Scope code (required only if scope is not \'default\')'
                 ),
                 new InputOption(
                     static::OPTION_LOCK,
@@ -127,7 +127,12 @@ class ConfigSetCommand extends Command
                 : 'Value was saved.';
 
             // The processing flow depends on --lock option.
-            $processor->process($input);
+            $processor->process(
+                $input->getArgument(ConfigSetCommand::ARG_PATH),
+                $input->getArgument(ConfigSetCommand::ARG_VALUE),
+                $input->getOption(ConfigSetCommand::OPTION_SCOPE),
+                $input->getOption(ConfigSetCommand::OPTION_SCOPE_CODE)
+            );
 
             $output->writeln('<info>' . $message . '</info>');
 

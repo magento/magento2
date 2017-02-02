@@ -6,7 +6,6 @@
 namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
 use Magento\Config\Console\Command\ConfigSet\LockProcessor;
-use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\App\Config\ConfigPathResolver;
@@ -19,7 +18,6 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
-use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Test for LockProcessor.
@@ -48,11 +46,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
      * @var ArrayManager|Mock
      */
     private $arrayManagerMock;
-
-    /**
-     * @var InputInterface|Mock
-     */
-    private $inputMock;
 
     /**
      * @var ConfigPathResolver|Mock
@@ -93,8 +86,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
         $this->configPathResolver = $this->getMockBuilder(ConfigPathResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -143,18 +134,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess($path, $value, $scope, $scopeCode)
     {
-        $this->inputMock->expects($this->any())
-            ->method('getArgument')
-            ->willReturnMap([
-                [ConfigSetCommand::ARG_PATH, $path],
-                [ConfigSetCommand::ARG_VALUE, $value],
-            ]);
-        $this->inputMock->expects($this->any())
-            ->method('getOption')
-            ->willReturnMap([
-                [ConfigSetCommand::OPTION_SCOPE, $scope],
-                [ConfigSetCommand::OPTION_SCOPE_CODE, $scopeCode]
-            ]);
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
             ->willReturn(true);
@@ -206,7 +185,7 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $this->valueMock->expects($this->once())
             ->method('afterSave');
 
-        $this->model->process($this->inputMock);
+        $this->model->process($path, $value, $scope, $scopeCode);
     }
 
     /**
@@ -226,18 +205,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $path = 'test/test/test';
         $value = 'value';
 
-        $this->inputMock->expects($this->any())
-            ->method('getArgument')
-            ->willReturnMap([
-                [ConfigSetCommand::ARG_PATH, $path],
-                [ConfigSetCommand::ARG_VALUE, $value],
-            ]);
-        $this->inputMock->expects($this->any())
-            ->method('getOption')
-            ->willReturnMap([
-                [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT],
-                [ConfigSetCommand::OPTION_SCOPE_CODE, 'test_scope_code']
-            ]);
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
             ->willReturn(false);
@@ -282,7 +249,7 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
                 false
             );
 
-        $this->model->process($this->inputMock);
+        $this->model->process($path, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
     }
 
     /**
@@ -294,18 +261,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $path = 'test/test/test';
         $value = 'value';
 
-        $this->inputMock->expects($this->any())
-            ->method('getArgument')
-            ->willReturnMap([
-                [ConfigSetCommand::ARG_PATH, $path],
-                [ConfigSetCommand::ARG_VALUE, $value],
-            ]);
-        $this->inputMock->expects($this->any())
-            ->method('getOption')
-            ->willReturnMap([
-                [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT],
-                [ConfigSetCommand::OPTION_SCOPE_CODE, 'test_scope_code'],
-            ]);
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
             ->willReturn(true);
@@ -326,7 +281,7 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('saveConfig')
             ->willThrowException(new FileSystemException(__('Filesystem is not writable.')));
 
-        $this->model->process($this->inputMock);
+        $this->model->process($path, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
     }
 
     /**
@@ -338,18 +293,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $path = 'test/test/test';
         $value = 'value';
 
-        $this->inputMock->expects($this->any())
-            ->method('getArgument')
-            ->willReturnMap([
-                [ConfigSetCommand::ARG_PATH, $path],
-                [ConfigSetCommand::ARG_VALUE, $value],
-            ]);
-        $this->inputMock->expects($this->any())
-            ->method('getOption')
-            ->willReturnMap([
-                [ConfigSetCommand::OPTION_SCOPE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT],
-                [ConfigSetCommand::OPTION_SCOPE_CODE, 'test_scope_code']
-            ]);
         $this->fieldMock->expects($this->once())
             ->method('hasBackendModel')
             ->willReturn(true);
@@ -369,6 +312,6 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigWriterMock->expects($this->never())
             ->method('saveConfig');
 
-        $this->model->process($this->inputMock);
+        $this->model->process($path, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
     }
 }
