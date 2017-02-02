@@ -66,6 +66,11 @@ class MessagePlugin
     }
 
     /**
+     * Set 'mage-messages' cookie
+     *
+     * Checks the result that controller actions must return. If result is not JSON type, then
+     * sets 'mage-messages' cookie.
+     *
      * @param ResultInterface $subject
      * @param ResultInterface $result
      * @return ResultInterface
@@ -75,18 +80,48 @@ class MessagePlugin
         ResultInterface $result
     ) {
         if (!($subject instanceof Json)) {
+            $this->setCookie($this->getMessages());
+        }
+        return $result;
+    }
+
+    /**
+     * Set 'mage-messages' cookie with 'messages' array
+     *
+     * Checks the $messages argument. If $messages is not an empty array, then
+     * sets 'mage-messages' public cookie:
+     *
+     *   Cookie Name: 'mage-messages';
+     *   Cookie Duration: 1 year;
+     *   Cookie Path: /;
+     *   Cookie HTTP Only flag: FALSE. Cookie can be accessed by client-side APIs.
+     *
+     * The 'messages' list has format:
+     * [
+     *   [
+     *     'type' => 'type_value',
+     *     'text' => 'cookie_value',
+     *   ],
+     * ]
+     *
+     *
+     * @param array $messages List of Magento messages that must be set as 'mage-messages' cookie.
+     * @return void
+     */
+    private function setCookie(array $messages)
+    {
+        if (!empty($messages)) {
             $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
             $publicCookieMetadata->setDurationOneYear();
             $publicCookieMetadata->setPath('/');
             $publicCookieMetadata->setHttpOnly(false);
+
             $this->cookieManager->setPublicCookie(
                 self::MESSAGES_COOKIES_NAME,
-                $this->jsonHelper->jsonEncode($this->getMessages()),
+                $this->jsonHelper->jsonEncode($messages),
                 $publicCookieMetadata
             );
         }
-
-        return $result;
     }
 
     /**
