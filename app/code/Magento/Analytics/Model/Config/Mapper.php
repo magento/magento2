@@ -15,7 +15,25 @@ class Mapper
      * Transforms Analytics configuration data.
      *
      * @param array $configData
-     * @return array
+     * @return array $files
+     * $files = [
+     *    'file_name' => [
+     *        'name' => 'file_name',
+     *        'providers' => [
+     *            'reportProvider' => [
+     *                'name' => 'report_provider_name',
+     *                'class' => 'Magento\Analytics\ReportXml\ReportProvider',
+     *                'parameters' =>[
+     *                    'name' => 'report_name',
+     *                ],
+     *            ],
+     *            'customProvider' => [
+     *                'name' => 'custom_provider_name',
+     *                'class' => 'Magento\Analytics\Model\CustomProvider',
+     *            ],
+     *        ],
+     *    ]
+     * ];
      */
     public function execute($configData)
     {
