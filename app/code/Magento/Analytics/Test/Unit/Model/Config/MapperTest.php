@@ -51,44 +51,96 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     public function executingDataProvider()
     {
         return [
-            'wrongConfig' => [['config' => ['files']], []],
-            'validConfig' => [['config' => [0 => ['file' => []]]], []],
-            'validConfigWithFileNodes' => [
-                ['config' =>
-                    [0 => ['file' =>
-                        [0 => ['name' => 'fileName']]
-                    ]]
+            'wrongConfig' => [
+                ['config' => ['files']],
+                []
+            ],
+            'validConfig' => [
+                [
+                    'config' => [
+                        0 => ['file' => []]
+                    ]
                 ],
-                ['fileName' => ['name' => 'fileName', 'providers' => []]],
+                []
+            ],
+            'validConfigWithFileNodes' => [
+                [
+                    'config' => [
+                        0 => [
+                            'file' => [
+                                0 => ['name' => 'fileName']
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'fileName' => [
+                        'name' => 'fileName',
+                        'providers' => []
+                    ]
+                ],
             ],
             'validConfigWithProvidersNode' => [
-                ['config' =>
-                    [0 => ['file' =>
-                        [0 => ['name' => 'fileName', 'providers' => [
-                            0 => ['reportProvider' => [
-                                0 => []
-                            ]]
-                        ]]]
-                    ]]
+                [
+                    'config' => [
+                        0 => [
+                            'file' => [
+                                0 => [
+                                    'name' => 'fileName',
+                                    'providers' => [
+                                        0 => [
+                                            'reportProvider' => [0 => []]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
                 ],
-                ['fileName' => ['name' => 'fileName', 'providers' => ['reportProvider' => ['parameters' => []]]]],
+                [
+                    'fileName' => [
+                        'name' => 'fileName',
+                        'providers' => [
+                            'reportProvider' => ['parameters' => []]
+                        ]
+                    ]
+                ],
             ],
             'validConfigWithParametersNode' => [
-                ['config' =>
-                    [0 => ['file' =>
-                        [0 => ['name' => 'fileName', 'providers' => [
-                            0 => ['reportProvider' => [
-                                0 => ['parameters' => [
-                                    0 => ['name' => ['reportName']]
-                                ]]
-                            ]]
-                        ]]]
-                    ]]
+                [
+                    'config' => [
+                        0 => [
+                            'file' => [
+                                0 => [
+                                    'name' => 'fileName',
+                                    'providers' => [
+                                        0 => [
+                                            'reportProvider' => [
+                                                0 => [
+                                                    'parameters' => [
+                                                        0 => ['name' => ['reportName']]
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
                 ],
-                ['fileName' => [
-                    'name' => 'fileName',
-                    'providers' => ['reportProvider' => ['parameters' => ['name' => 'reportName']]]
-                ]],
+                [
+                    'fileName' => [
+                        'name' => 'fileName',
+                        'providers' => [
+                            'reportProvider' => [
+                                'parameters' => [
+                                    'name' => 'reportName'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
             ],
         ];
     }

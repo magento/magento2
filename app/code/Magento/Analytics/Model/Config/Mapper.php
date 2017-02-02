@@ -34,11 +34,9 @@ class Mapper
                 $providerData['parameters'] = !empty($providerData['parameters'])
                     ? reset($providerData['parameters'])
                     : [];
-                array_walk(
-                    $providerData['parameters'],
-                    function (&$item) {
-                        $item = reset($item);
-                    }
+                $providerData['parameters'] = array_map(
+                    'reset',
+                    $providerData['parameters']
                 );
                 $providers[$providerType] = $providerData;
             }
