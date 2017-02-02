@@ -179,14 +179,4 @@
             <argument name="scopeOverriddenValue" xsi:type="object">Magento\Catalog\Model\Attribute\ScopeOverriddenValue</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Indexer\Product\Flat\State">
-        <arguments>
-            <argument name="isAvailable" xsi:type="boolean">false</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Model\Indexer\Category\Flat\State">
-        <arguments>
-            <argument name="isAvailable" xsi:type="boolean">false</argument>
-        </arguments>
-    </type>
 </config>

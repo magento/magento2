@@ -15,4 +15,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\AbstractFlatState">
+        <arguments>
+            <argument name="isAvailable" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Flat\State">
+        <arguments>
+            <argument name="isAvailable" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
 </config>
