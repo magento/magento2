@@ -221,6 +221,39 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->save();
     }
 
+    /**
+     * Check that it's possible to find previously created rule by attribute.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/SalesRule/_files/rule_custom_product_attribute.php
+     */
+    public function testAddAttributeInConditionFilterPositive()
+    {
+        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
+        );
+        $collection->addAttributeInConditionFilter('attribute_for_sales_rule_1');
+        $item = $collection->getFirstItem();
+        $this->assertEquals('50% Off on some attribute', $item->getName());
+    }
+
+    /**
+     * Check that it's not possible to find previously created rule by wrong attribute.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/SalesRule/_files/rule_custom_product_attribute.php
+     */
+    public function testAddAttributeInConditionFilterNegative()
+    {
+        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
+        );
+        $collection->addAttributeInConditionFilter('attribute_for_sales_rule_2');
+        $this->assertEquals(0, $collection->count());
+    }
+
     public function tearDown()
     {
         // restore default timezone

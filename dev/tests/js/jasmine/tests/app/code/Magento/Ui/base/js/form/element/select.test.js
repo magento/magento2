@@ -188,6 +188,39 @@ define([
                 expect(model.setVisible).toHaveBeenCalled();
                 expect(model.toggleInput).toHaveBeenCalled();
             });
+            it('Check call "parseOptions" method without predefined "captionValue" property', function () {
+                var data = [{
+                        value: null,
+                        label: 'label'
+                    }, {
+                        value: 'value'
+                    }];
+
+                model.options = jasmine.createSpy();
+                model.caption = jasmine.createSpy().and.returnValue(false);
+
+                model.setOptions(data);
+                expect(model.options).toHaveBeenCalledWith([{
+                    value: 'value'
+                }]);
+                expect(model.caption.calls.allArgs()).toEqual([[], ['label']]);
+
+            });
+            it('Check call "parseOptions" method with predefined "captionValue" property', function () {
+                var data = [{
+                        value: 'value',
+                        label: 'label'
+                    }];
+
+                model.options = jasmine.createSpy();
+                model.caption = jasmine.createSpy().and.returnValue(false);
+                model.captionValue = 'value';
+
+                model.setOptions(data);
+                expect(model.options).toHaveBeenCalledWith([]);
+                expect(model.caption.calls.allArgs()).toEqual([[], ['label']]);
+
+            });
         });
         describe('getPreview method', function () {
             it('check for default preview', function () {
