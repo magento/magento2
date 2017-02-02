@@ -69,7 +69,7 @@ class SignUpRequest
         return json_encode(
             [
                 "token" => $integrationToken,
-                "url" => $this->config->getConfigDataValue(Store::XML_PATH_UNSECURE_BASE_URL)
+                "url" => $this->config->getConfigDataValue(Store::XML_PATH_SECURE_BASE_URL)
             ]
         );
     }
