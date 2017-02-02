@@ -39,9 +39,10 @@ class ConfigSourceAggregated implements ConfigSourceInterface
             $source = $sourceConfig['source'];
             $configData = $source->get($path);
             if (!is_array($configData)) {
-                return $configData;
+                $data = $configData;
+            } elseif(!empty($configData)) {
+                $data = array_replace_recursive(is_array($data) ? $data : [], $configData);
             }
-            $data = array_replace_recursive($data, $configData);
         }
         return $data;
     }

@@ -19,7 +19,7 @@ use Magento\Framework\Console\Cli;
 use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
 
 /**
- * Command provides possibility to show system configuration.
+ * Command provides possibility to show saved system configuration.
  */
 class ConfigShowCommand extends Command
 {
@@ -74,7 +74,7 @@ class ConfigShowCommand extends Command
     private $scopeCode;
 
     /**
-     * The path of configuration.
+     * The configuration path.
      *
      * @var string
      */
@@ -108,67 +108,86 @@ class ConfigShowCommand extends Command
         $this->addArgument(
             self::INPUT_ARGUMENT_PATH,
             InputArgument::OPTIONAL,
-            'Configuration path for example group/section/field_name'
+            'Configuration path, for example section_id/group_id/field_id'
         );
         $this->addOption(
             self::INPUT_OPTION_SCOPE,
             null,
             InputOption::VALUE_OPTIONAL,
-            'Scope for configuration, if not set use \'default\'',
+            'Scope for configuration, if not specified, then \'default\' scope will be used',
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
         $this->addOption(
             self::INPUT_OPTION_SCOPE_CODE,
             null,
             InputOption::VALUE_OPTIONAL,
-            'Scope code for configuration, empty string by default',
+            'Scope code (required only if scope is not `default`)',
             ''
         );
         $this->setName('config:show')
-            ->setDescription('Shows configuration value for given path');
+            ->setDescription(
+                'Shows configuration value for given path. If path is not specified, all saved values will be shown'
+            );
         parent::configure();
     }
 
     /**
      * Displays configuration value for given configuration path.
      *
-     * Shows error message if configuration for given path doesn't exists
+     * Shows error message if configuration for given path doesn't exist
      * or scope/scope-code doesn't pass validation.
      *
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->scope = $input->getOption(self::INPUT_OPTION_SCOPE);
-        $this->scopeCode = $input->getOption(self::INPUT_OPTION_SCOPE_CODE);
-        $this->inputPath = $input->getArgument(self::INPUT_ARGUMENT_PATH);
-
         try {
+            $this->scope = $input->getOption(self::INPUT_OPTION_SCOPE);
+            $this->scopeCode = $input->getOption(self::INPUT_OPTION_SCOPE_CODE);
+            $this->inputPath = $input->getArgument(self::INPUT_ARGUMENT_PATH);
+
             $this->scopeValidator->isValid($this->scope, $this->scopeCode);
             $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, $this->scopeCode);
             $configValue = $this->configSource->get($configPath);
-        } catch (LocalizedException $e) {
+
+            if (empty($configValue)) {
+                $output->writeln(sprintf(
+                    '<error>%s</error>',
+                    __('Configuration for path: "%1" doesn\'t exist', $this->inputPath)->render()
+                ));
+                return Cli::RETURN_FAILURE;
+            }
+
+            $this->outputResult($output, $configValue, $this->inputPath);
+            return Cli::RETURN_SUCCESS;
+        } catch (\Exception $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return Cli::RETURN_FAILURE;
         }
-
-        if (empty($configValue)) {
-            $output->writeln(sprintf(
-                '<error>%s</error>',
-                __('Configuration for path: "%1" doesn\'t exist', $this->inputPath)->render()
-            ));
-            return Cli::RETURN_FAILURE;
-        }
-
-        $this->outputResult($output, $configValue, $this->inputPath);
-        return Cli::RETURN_SUCCESS;
     }
 
     /**
      * Outputs single configuration value or list of values if array given.
      *
      * @param OutputInterface $output an OutputInterface instance
-     * @param mixed $configValue single value or array of values
+     * @param mixed $configValue can be string when $configPath is a path for concreate field.
+     * In other cases $configValue should be an array
+     * ```php
+     * [
+     *      'section' =>
+     *      [
+     *          'group1' =>
+     *          [
+     *              'field1' => 'value1',
+     *              'field2' => 'value2'
+     *          ],
+     *          'group2' =>
+     *          [
+     *              'field1' => 'value3'
+     *          ]
+     *      ]
+     * ]
+     * ```
      * @param string $configPath base configuration path
      * @return void
      */

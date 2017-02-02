@@ -14,7 +14,9 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\App\Area;
 
 /**
- * Class processes value using backend model.
+ * Class processes values using backend model.
+ *
+ * Backend model is gotten from field via its path (e.g. scope_id/group_id/field_id).
  */
 class ValueProcessor
 {
@@ -57,11 +59,11 @@ class ValueProcessor
     /**
      * Processes value using backend model.
      *
-     * @param string $scope The scope of configuration
+     * @param string $scope The scope of configuration. E.g. 'default', 'website' or 'store'
      * @param string $scopeCode The scope code of configuration
      * @param string $value The value to process
-     * @param string $path The configuration path for getting backend model
-     * @return string
+     * @param string $path The configuration path for getting backend model. E.g. scope_id/group_id/field_id
+     * @return string processed value result
      */
     public function process($scope, $scopeCode, $value, $path)
     {

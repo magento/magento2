@@ -29,8 +29,6 @@ class EnvironmentConfigSourceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $_ENV['CONFIG__UNIT__TEST__VALUE'] = 'test_value';
-
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -49,12 +47,18 @@ class EnvironmentConfigSourceTest extends \PHPUnit_Framework_TestCase
         $this->source = new EnvironmentConfigSource($this->arrayManagerMock, $placeholderFactoryMock);
     }
 
-    public function testGet()
+    /**
+     * @param string $path
+     * @param array|string $expectedResult
+     * @dataProvider getDataProvider
+     */
+    public function testGet($path, $expectedResult)
     {
         $placeholder = 'CONFIG__UNIT__TEST__VALUE';
-        $value = 'test_value';
-        $path = 'unit/test/value';
-        $expectedArray = ['unit' => ['test' => ['value' => $value]]];
+        $configValue = 'test_value';
+        $configPath = 'unit/test/value';
+        $expectedArray = ['unit' => ['test' => ['value' => $configValue]]];
+        $_ENV[$placeholder] = $configValue;
 
         $this->placeholderMock->expects($this->any())
             ->method('isApplicable')
@@ -64,11 +68,40 @@ class EnvironmentConfigSourceTest extends \PHPUnit_Framework_TestCase
         $this->placeholderMock->expects($this->once())
             ->method('restore')
             ->with($placeholder)
-            ->willReturn($path);
+            ->willReturn($configPath);
         $this->arrayManagerMock->expects($this->once())
             ->method('set')
-            ->with($path, [], $value)
+            ->with($configPath, [], $configValue)
             ->willReturn($expectedArray);
+
+        $this->assertEquals($expectedResult, $this->source->get($path));
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataProvider()
+    {
+        return [
+            ['', ['unit' => ['test' => ['value' => 'test_value']]]],
+            ['unit', ['test' => ['value' => 'test_value']]],
+            ['unit/test', ['value' => 'test_value']],
+            ['unit/test/value', 'test_value'],
+            ['wrong/path', []],
+        ];
+    }
+
+    public function testGetWithoutEnvCongigurationVariables()
+    {
+        $expectedArray = [];
+
+        $this->placeholderMock->expects($this->any())
+            ->method('isApplicable')
+            ->willReturn(false);
+        $this->placeholderMock->expects($this->never())
+            ->method('restore');
+        $this->arrayManagerMock->expects($this->never())
+            ->method('set');
 
         $this->assertSame($expectedArray, $this->source->get());
     }

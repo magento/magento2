@@ -12,7 +12,7 @@ use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
- * Class for retrieving configuration from environment variables.
+ * Class for retrieving configurations from environment variables.
  */
 class EnvironmentConfigSource implements ConfigSourceInterface
 {

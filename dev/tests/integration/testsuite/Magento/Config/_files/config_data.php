@@ -12,18 +12,28 @@ use Magento\TestFramework\Helper\Bootstrap;
 $configData = [
     ScopeConfigInterface::SCOPE_TYPE_DEFAULT => [
         '' => [
-            'web/test/test_value_1' => 'http://default.test/',
-            'web/test/test_value_2' => 'someValue',
-            'web/test/test_value_3' => 100,
+            'web/test/test_value_1' => 'value1.db.default.test',
+            'web/test/test_value_2' => 'value2.db.default.test',
+            'web/test2/test_value_3' => 'value3.db.default.test',
+            'web/test2/test_value_4' => 'value4.db.default.test',
         ]
     ],
     ScopeInterface::SCOPE_WEBSITES => [
         'base' => [
-            'web/test/test_value_1' => 'http://website.test/',
-            'web/test/test_value_2' => 'someWebsiteValue',
-            'web/test/test_value_3' => 101,
+            'web/test/test_value_1' => 'value1.db.website_base.test',
+            'web/test/test_value_2' => 'value2.db.website_base.test',
+            'web/test2/test_value_3' => 'value3.db.website_base.test',
+            'web/test2/test_value_4' => 'value4.db.website_base.test',
         ]
-    ]
+    ],
+    ScopeInterface::SCOPE_STORES => [
+        'default' => [
+            'web/test/test_value_1' => 'value1.db.store_default.test',
+            'web/test/test_value_2' => 'value2.db.store_default.test',
+            'web/test2/test_value_3' => 'value3.db.store_default.test',
+            'web/test2/test_value_4' => 'value4.db.store_default.test',
+        ]
+    ],
 ];
 
 $objectManager = Bootstrap::getObjectManager();
@@ -38,6 +48,10 @@ foreach ($configData as $scope => $data) {
 
             if ($scope == ScopeInterface::SCOPE_WEBSITES) {
                 $config->setWebsite($scopeCode);
+            }
+
+            if ($scope == ScopeInterface::SCOPE_STORES) {
+                $config->setStore($scopeCode);
             }
 
             $config->setDataByPath($path, $value);
