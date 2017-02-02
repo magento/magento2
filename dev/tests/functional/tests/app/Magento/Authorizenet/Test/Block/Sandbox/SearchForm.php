@@ -3,13 +3,12 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Authorizenet\Test\Block\Sandbox;
 
 use Magento\Mtf\Block\Form;
 
 /**
- * Menu block on Authorize.Net sandbox.
+ * Transactions search form.
  */
 class SearchForm extends Form
 {

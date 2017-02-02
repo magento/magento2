@@ -148,11 +148,11 @@ class Actions extends Block
     }
 
     /**
-     * Get payment update.
+     * Click 'Get Payment Update' button to fetch updates from 3rd party payment solution.
      *
      * @return void
      */
-    public function getPaymentUpdate()
+    public function paymentUpdate()
     {
         $this->_rootElement->find($this->getPaymentUpdate)->click();
     }

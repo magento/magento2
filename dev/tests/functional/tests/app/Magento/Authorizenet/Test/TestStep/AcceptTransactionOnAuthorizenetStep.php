@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Authorizenet\Test\TestStep;
 
 use Magento\Authorizenet\Test\Fixture\SandboxCustomer;
@@ -138,6 +137,7 @@ class AcceptTransactionOnAuthorizenetStep implements TestStepInterface
      * Accept transaction on sandbox.authorize.net account.
      *
      * @return void
+     * @throws \Exception
      */
     public function run()
     {
@@ -162,9 +162,10 @@ class AcceptTransactionOnAuthorizenetStep implements TestStepInterface
         $transactionId = $matches[1];
         $this->main->open();
         $this->browser->switchToFrame($this->browser->find($this->frame)->getLocator());
-        $this->main->getLoginBlock()->fill($this->sandboxCustomer)->login();
-        $this->main->getMenuBlock()->acceptNotification()->openSearchMenu();
-        $this->main->getSearchFormBlock()->fill($this->transactionSearch)->search();
+        $this->main->getLoginForm()->fill($this->sandboxCustomer)->login();
+        $this->main->getModalBlock()->acceptNotification();
+        $this->main->getMenuBlock()->openSearchMenu();
+        $this->main->getSearchForm()->fill($this->transactionSearch)->search();
         $this->main->getTransactionsGridBlock()->openTransaction($transactionId)->approveTransaction();
     }
 }

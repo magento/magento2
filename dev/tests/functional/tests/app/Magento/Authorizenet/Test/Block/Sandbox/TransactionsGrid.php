@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Authorizenet\Test\Block\Sandbox;
 
 use Magento\Mtf\Block\Block;
@@ -55,17 +54,17 @@ class TransactionsGrid extends Block
     public function approveTransaction()
     {
         $this->_rootElement->find($this->transactionApprove, Locator::SELECTOR_XPATH)->click();
-        return $this->confirmTransactionApproval();
+        $this->confirmTransactionApproval();
+        return $this;
     }
 
     /**
      * Confirm approval of selected transaction.
      *
-     * @return $this
+     * @return void
      */
     private function confirmTransactionApproval()
     {
         $this->browser->find($this->transactionApprovalConfirm)->click();
-        return $this;
     }
 }

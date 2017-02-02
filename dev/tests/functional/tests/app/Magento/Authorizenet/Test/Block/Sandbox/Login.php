@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Authorizenet\Test\Block\Sandbox;
 
 use Magento\Mtf\Block\Form;
@@ -11,7 +10,7 @@ use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Login block.
+ * Login form.
  */
 class Login extends Form
 {
