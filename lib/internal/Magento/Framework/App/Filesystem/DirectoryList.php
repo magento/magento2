@@ -85,16 +85,17 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     /**
      * Dependency injection related file directory
      *
-     * @deprecated this constant become unused after folder for generated DI configuration files
-     * was moved to generated/metadata, please use constant GENERATED_METADATA instead
+     * @deprecated this constant become unused after moving folder for generated DI configuration files
+     * to generated/metadata
+     * @see self::GENERATED_METADATA
      */
     const DI = 'di';
 
     /**
      * Relative directory key for generated code
      *
-     * @deprecated this constant become unused after folder for generated files was moved to generated/code
-     * please use constant GENERATED_CODE instead
+     * @deprecated this constant become unused after moving folder for generated files to generated/code
+     * @see self::GENERATED_CODE
      */
     const GENERATION = 'generation';
 
@@ -123,12 +124,12 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     /**
      * Relative directory key for generated code
      */
-    const GENERATED_CODE = 'generated_code';
+    const GENERATED_CODE = 'code';
 
     /**
      * Relative directory key for generated metadata
      */
-    const GENERATED_METADATA = 'generated_metadata';
+    const GENERATED_METADATA = 'metadata';
 
     /**
      * {@inheritdoc}
