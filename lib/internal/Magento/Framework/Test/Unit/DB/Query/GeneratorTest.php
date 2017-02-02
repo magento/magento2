@@ -168,4 +168,38 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         )->willReturn($this->iteratorMock);
         $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
     }
+
+    /**
+     * Test success generate with non-unique strategy.
+     * @return void
+     */
+    public function testGenerateWithNonUniqueStrategy()
+    {
+        $map = [
+            [
+                Select::FROM,
+                [
+                    'cp' => ['joinType' => Select::FROM]
+                ]
+            ],
+            [
+                Select::COLUMNS,
+                [
+                    ['cp', 'entity_id', 'product_id']
+                ]
+            ]
+        ];
+        $this->selectMock->expects($this->exactly(2))->method('getPart')->willReturnMap($map);
+        $this->factoryMock->expects($this->once())->method('create')->with(
+            [
+                'select' => $this->selectMock,
+                'batchSize' => 100,
+                'correlationName' => 'cp',
+                'rangeField' => 'entity_id',
+                'rangeFieldAlias' => 'product_id',
+                'batchStrategy' => 'non_unique'
+            ]
+        )->willReturn($this->iteratorMock);
+        $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100, 'non_unique'));
+    }
 }

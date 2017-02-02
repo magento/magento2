@@ -6,7 +6,7 @@
 namespace Magento\Framework\DB\Query;
 
 /**
- * Factory class for \Magento\Framework\DB\Query\BatchIterator, \Magento\Framework\DB\Query\BatchRangeIterator
+ * Factory class for \Magento\Framework\DB\Query\BatchIterator | \Magento\Framework\DB\Query\BatchRangeIterator
  *
  * @see \Magento\Framework\DB\Query\BatchIterator
  * @see \Magento\Framework\DB\Query\BatchRangeIterator

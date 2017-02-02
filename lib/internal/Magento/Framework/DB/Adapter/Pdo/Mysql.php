@@ -3374,28 +3374,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
-     * Get an array of select for insert by range with step parameter
-     *
-     * @see selectsByRangeStrategy()
-     * @param string $rangeField
-     * @param \Magento\Framework\DB\Select $select
-     * @param int $stepCount
-     * @param string $batchStrategy
-     * @return \Magento\Framework\DB\Select[]
-     * @throws LocalizedException
-     * @deprecated
-     */
-    public function selectsByRange(
-        $rangeField,
-        \Magento\Framework\DB\Select $select,
-        $stepCount = 100,
-        $batchStrategy = \Magento\Framework\DB\Query\BatchIteratorFactory::UNIQUE_FIELD_ITERATOR
-    )
-    {
-        return $this->selectsByRangeStrategy($rangeField, $select, $stepCount, $batchStrategy);
-    }
-
-    /**
      * Get an array of select queries using the batching strategy
      *
      * Depending on the $batchStrategy parameter chooses a strategy. This strategy will be used to create
@@ -3415,11 +3393,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $batchStrategy - It determines which strategy is chosen
      * @return \Magento\Framework\DB\Select[]
      * @throws LocalizedException Throws if incorrect "FROM" part in \Select exists
-     * @deprecated This is a temporary solution which is made due to the fact that we
-     *             can't change method selectsByRange() in version 2.1 due to a backwards incompatibility.
-     *             In 2.2 version need to use original method selectsByRange() with additional parameter.
      */
-    public function selectsByRangeStrategy(
+    public function selectsByRange(
         $rangeField,
         \Magento\Framework\DB\Select $select,
         $batchSize = 100,

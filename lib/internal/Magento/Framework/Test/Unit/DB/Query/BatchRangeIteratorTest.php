@@ -94,10 +94,8 @@ class BatchRangeIteratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testCurrent()
     {
-        $filed = $this->correlationName . '.' . $this->rangeField;
-
         $this->selectMock->expects($this->once())->method('limit')->with($this->currentBatch, $this->batchSize);
-        $this->selectMock->expects($this->once())->method('order')->with($filed . ' ASC');
+        $this->selectMock->expects($this->once())->method('order')->with('correlationName.rangeField' . ' ASC');
         $this->assertEquals($this->selectMock, $this->model->current());
         $this->assertEquals(0, $this->model->key());
     }
@@ -107,16 +105,17 @@ class BatchRangeIteratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIterations()
     {
+        $iterations = 0;
+
         $this->connectionMock->expects($this->once())
             ->method('fetchRow')
             ->willReturn(['cnt' => 105]);
 
-        $this->model->rewind();
+        foreach ($this->model as $key) {
+            $this->assertEquals($this->selectMock, $key);
+            $iterations++;
+        };
 
-        $this->assertEquals($this->selectMock, $this->model->current());
-        $this->assertEquals(0, $this->model->key());
-        $this->assertEquals($this->selectMock, $this->model->next());
-        $this->assertTrue($this->model->valid());
-        $this->assertEquals(1, $this->model->key());
+        $this->assertEquals(10, $iterations);
     }
 }

@@ -126,7 +126,7 @@ class BatchRangeIterator implements \Iterator
     }
 
     /**
-     * Move forward to next element
+     * Move forward to next sub-select
      *
      * Retrieve the next sub-select and move cursor to the next element.
      * Checks that the count of elements more than the sum of limit and offset.
@@ -153,7 +153,6 @@ class BatchRangeIterator implements \Iterator
      * Rewind the BatchRangeIterator to the first element.
      *
      * Allows to start iteration from the beginning.
-     * Move cursor to the start.
      *
      * @return void
      */
