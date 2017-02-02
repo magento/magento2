@@ -1260,7 +1260,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function isCaptureFinal($amountToCapture)
     {
-        $total = $this->getOrder()->getTotalDue();
+        $total = $this->getOrder()->getBaseTotalDue();
         return $this->formatAmount($total, true) == $this->formatAmount($amountToCapture, true);
     }
 

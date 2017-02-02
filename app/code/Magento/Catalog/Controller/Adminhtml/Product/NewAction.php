@@ -9,6 +9,9 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Class that handle new product creation
+ */
 class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**

@@ -22,7 +22,7 @@
     <preference for="Magento\Quote\Api\CouponManagementInterface" type="Magento\Quote\Model\CouponManagement" />
     <preference for="Magento\Quote\Api\CartManagementInterface" type="Magento\Quote\Model\QuoteManagement" />
     <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
-    <preference for="Magento\Quote\Api\CartTotalRepositoryInterface" type="\Magento\Quote\Model\Cart\CartTotalRepository" />
+    <preference for="Magento\Quote\Api\CartTotalRepositoryInterface" type="Magento\Quote\Model\Cart\CartTotalRepository" />
     <preference for="Magento\Quote\Api\CartTotalManagementInterface" type="\Magento\Quote\Model\Cart\CartTotalManagement" />
     <preference for="Magento\Quote\Api\Data\TotalsInterface" type="\Magento\Quote\Model\Cart\Totals" />
     <preference for="Magento\Quote\Api\Data\TotalSegmentInterface" type="\Magento\Quote\Model\Cart\TotalSegment" />

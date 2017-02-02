@@ -41,6 +41,9 @@ class StoreId extends DataSource
             }
             $this->store = $store;
             $this->data = $store->getGroupId() . '/' . $store->getName();
+        } else if (isset($data['source']) && $data['source'] instanceof Store) {
+            $this->store = $data['source'];
+            $this->data = $this->store->getGroupId() . '/' . $this->store->getName();
         } else {
             $this->data = $data;
         }
