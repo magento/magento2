@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 /**
  * Class ReportWriter
  *
+ * Writes reports in files in csv format
  * @inheritdoc
  */
 class ReportWriter implements ReportWriterInterface
