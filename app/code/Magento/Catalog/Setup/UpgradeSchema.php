@@ -33,11 +33,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->addUniqueKeyToCategoryProductTable($setup);
         }
 
-        if (version_compare($context->getVersion(), '2.1.0', '<')) {
+        if (version_compare($context->getVersion(), '2.1.4', '<')) {
             $this->addPercentageValueColumn($setup);
-        }
-
-        if (version_compare($context->getVersion(), '2.1.1', '<')) {
             $tables = [
                 'catalog_product_index_price_cfg_opt_agr_idx',
                 'catalog_product_index_price_cfg_opt_agr_tmp',
@@ -59,13 +56,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ['type' => 'integer', 'nullable' => false]
                 );
             }
-        }
-
-        if (version_compare($context->getVersion(), '2.1.2', '<')) {
             $this->addSourceEntityIdToProductEavIndex($setup);
-        }
-
-        if (version_compare($context->getVersion(), '2.1.4', '<')) {
             $this->recreateCatalogCategoryProductIndexTmpTable($setup);
         }
 
