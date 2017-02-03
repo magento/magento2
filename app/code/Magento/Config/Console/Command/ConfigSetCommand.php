@@ -11,7 +11,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Console\Cli;
-use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -137,7 +136,7 @@ class ConfigSetCommand extends Command
             $output->writeln('<info>' . $message . '</info>');
 
             return Cli::RETURN_SUCCESS;
-        } catch (LocalizedException $exception) {
+        } catch (\Exception $exception) {
             $output->writeln('<error>' . $exception->getMessage() . '</error>');
 
             return Cli::RETURN_FAILURE;
