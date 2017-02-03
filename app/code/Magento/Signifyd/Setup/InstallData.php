@@ -33,7 +33,8 @@ class InstallData implements InstallDataInterface
     /**
      * Installs data for sales module
      *
-     * Update of sales_order_grid* tables is provided here to be sure that these tables are already created. {@inheritdoc}
+     * Update of sales_order_grid* tables is provided here to be sure that these tables are already created.
+     * {@inheritdoc}
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
