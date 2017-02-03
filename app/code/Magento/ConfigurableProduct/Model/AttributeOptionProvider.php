@@ -7,7 +7,6 @@ namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\DB\Select;
@@ -38,11 +37,11 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
     public function __construct(
         Attribute $attributeResource,
         OptionProvider $attributeOptionProvider,
-        ScopeResolverInterface $scopeResolver = null
+        ScopeResolverInterface $scopeResolver
     ) {
         $this->attributeResource = $attributeResource;
         $this->attributeOptionProvider = $attributeOptionProvider;
-        $this->scopeResolver = $scopeResolver ?: ObjectManager::getInstance()->get(ScopeResolverInterface::class);
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
