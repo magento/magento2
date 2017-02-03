@@ -13,6 +13,7 @@ define([
             this._super();
 
             this.customer = customerData.get('customer');
+            customerData.reload(['customer']);
         }
     });
 });
