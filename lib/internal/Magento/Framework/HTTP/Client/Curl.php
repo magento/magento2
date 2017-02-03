@@ -232,13 +232,14 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param string $uri
      * @param array $params
+     * @param bool $json
      * @return void
      *
      * @see \Magento\Framework\HTTP\Client#post($uri, $params)
      */
-    public function post($uri, $params)
+    public function post($uri, $params, $json = false)
     {
-        $this->makeRequest("POST", $uri, $params);
+        $this->makeRequest("POST", $uri, $params, $json = false);
     }
 
     /**
