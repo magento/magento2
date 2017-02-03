@@ -55,20 +55,15 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 ['config' => ['files']],
                 []
             ],
-            'validConfig' => [
-                [
-                    'config' => [
-                        0 => ['file' => []]
-                    ]
-                ],
-                []
-            ],
             'validConfigWithFileNodes' => [
                 [
                     'config' => [
                         0 => [
                             'file' => [
-                                0 => ['name' => 'fileName']
+                                0 => [
+                                    'name' => 'fileName',
+                                    'providers' => [[]]
+                                ]
                             ]
                         ]
                     ]

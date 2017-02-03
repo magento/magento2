@@ -19,16 +19,19 @@
     </xs:element>
     <xs:complexType name="fileDeclaration">
         <xs:sequence>
-            <xs:element name="providers" type="providers" minOccurs="0" />
+            <xs:element name="providers" type="providers" minOccurs="1" />
         </xs:sequence>
-        <xs:attribute name="name" type="fileName" use="required"/>
+        <xs:attribute name="name" type="fileName" use="required" />
         <xs:attribute name="prefix" type="xs:string" />
     </xs:complexType>
     <xs:complexType name="providers">
-        <xs:all minOccurs="0">
-            <xs:element name="reportProvider" type="reportProvider" minOccurs="0" />
-            <xs:element name="customProvider" type="customProvider" minOccurs="0" />
-        </xs:all>
+        <xs:choice>
+            <xs:sequence>
+                <xs:element name="reportProvider" type="reportProvider" />
+                <xs:element name="customProvider" type="customProvider" minOccurs="0" />
+            </xs:sequence>
+            <xs:element name="customProvider" type="customProvider" />
+        </xs:choice>
     </xs:complexType>
     <xs:complexType name="provider" abstract="true">
         <xs:attribute name="name" type="xs:string" use="required"/>
