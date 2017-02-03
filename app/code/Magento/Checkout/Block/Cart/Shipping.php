@@ -21,13 +21,19 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $layoutProcessors;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      * @param array $data
-     * @codeCoverageIgnore
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -35,12 +41,15 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
         array $data = []
     ) {
         $this->configProvider = $configProvider;
         $this->layoutProcessors = $layoutProcessors;
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**
@@ -64,7 +73,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         foreach ($this->layoutProcessors as $processor) {
             $this->jsLayout = $processor->process($this->jsLayout);
         }
-        return \Zend_Json::encode($this->jsLayout);
+        return $this->serializer->serialize($this->jsLayout);
     }
 
     /**

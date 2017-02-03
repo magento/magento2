@@ -47,6 +47,11 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
      */
     protected $layout;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
@@ -69,6 +74,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
         $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->context->expects($this->once())->method('getStoreManager')->willReturn($this->storeManager);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class,[],[],'',false);
 
         $this->model = new \Magento\Checkout\Block\Cart\Shipping(
             $this->context,
@@ -76,6 +82,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             $this->checkoutSession,
             $this->configProvider,
             [$this->layoutProcessor],
+            $this->serializer,
             ['jsLayout' => $this->layout]
         );
     }
@@ -91,13 +98,18 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     {
         $layoutProcessed = $this->layout;
         $layoutProcessed['components']['thirdComponent'] = ['param' => 'value'];
+        $jsonLayoutProcessed = json_encode($layoutProcessed);
 
         $this->layoutProcessor->expects($this->once())
             ->method('process')
             ->with($this->layout)
             ->willReturn($layoutProcessed);
+
+        $this->serializer->expects($this->once())->method('serialize')->will(
+            $this->returnValue($jsonLayoutProcessed)
+        );
         $this->assertEquals(
-            \Zend_Json::encode($layoutProcessed),
+            $jsonLayoutProcessed,
             $this->model->getJsLayout()
         );
     }
