@@ -86,4 +86,12 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     {
         return $this->_storeManager->getStore()->getBaseUrl();
     }
+
+    /**
+     * @return bool|string
+     */
+    public function getSerializedCheckoutConfig()
+    {
+        return $this->serializer->serialize($this->getCheckoutConfig());
+    }
 }

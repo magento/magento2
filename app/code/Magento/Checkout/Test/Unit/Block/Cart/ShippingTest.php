@@ -122,4 +122,15 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $this->assertEquals($baseUrl, $this->model->getBaseUrl());
     }
+
+    public function testGetSerializedCheckoutConfig()
+    {
+        $checkoutConfig = ['checkout', 'config'];
+        $this->configProvider->expects($this->once())->method('getConfig')->willReturn($checkoutConfig);
+        $this->serializer->expects($this->once())->method('serialize')->will(
+            $this->returnValue(json_encode($checkoutConfig))
+        );
+
+        $this->assertEquals(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
+    }
 }
