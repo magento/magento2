@@ -96,8 +96,8 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
             $this->captchaHelperMock,
             $this->sessionManagerMock,
             $this->jsonFactoryMock,
-            $this->serializerMock,
-            $this->formIds
+            $this->formIds,
+            $this->serializerMock
         );
     }
 

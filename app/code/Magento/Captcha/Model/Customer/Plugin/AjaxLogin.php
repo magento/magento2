@@ -48,8 +48,8 @@ class AjaxLogin
         CaptchaHelper $helper,
         SessionManagerInterface $sessionManager,
         JsonFactory $resultJsonFactory,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
-        array $formIds
+        array $formIds,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->helper = $helper;
         $this->sessionManager = $sessionManager;
