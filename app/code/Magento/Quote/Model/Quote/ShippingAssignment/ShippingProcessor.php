@@ -10,6 +10,9 @@ use Magento\Quote\Api\Data\ShippingInterface;
 use Magento\Quote\Model\ShippingFactory;
 use Magento\Quote\Model\ShippingAddressManagement;
 use Magento\Quote\Model\ShippingMethodManagement;
+use Magento\Framework\App\ObjectManager;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class ShippingProcessor
 {
@@ -27,6 +30,11 @@ class ShippingProcessor
      * @var ShippingMethodManagement
      */
     private $shippingMethodManagement;
+
+    /**
+     * @var AddressRepositoryInterface
+     */
+    private $addressRepository;
 
     /**
      * @param ShippingFactory $shippingFactory
@@ -63,7 +71,22 @@ class ShippingProcessor
      */
     public function save(ShippingInterface $shipping, CartInterface $quote)
     {
-        $this->shippingAddressManagement->assign($quote->getId(), $shipping->getAddress());
+        $assignAddress = true;
+        $shippingAddress = $shipping->getAddress();
+
+        if ($shippingAddress->getCustomerAddressId()) {
+            try {
+                $this->getAddressRepository()->getById($shippingAddress->getCustomerAddressId());
+            } catch (NoSuchEntityException $e) {
+                //do not re-assign address if the original customer address does not exist
+                $assignAddress = false;
+            }
+        }
+
+        if ($assignAddress) {
+            $this->shippingAddressManagement->assign($quote->getId(), $shippingAddress);
+        }
+
         if (!empty($shipping->getMethod()) && $quote->getItemsCount() > 0) {
             $nameComponents = explode('_', $shipping->getMethod());
             $carrierCode = array_shift($nameComponents);
@@ -71,5 +94,20 @@ class ShippingProcessor
             $methodCode = implode('_', $nameComponents);
             $this->shippingMethodManagement->apply($quote->getId(), $carrierCode, $methodCode);
         }
+    }
+
+    /**
+     * Get Magento\Customer\Api\AddressRepositoryInterface instance
+     *
+     * @return AddressRepositoryInterface
+     * @deprecated
+     */
+    private function getAddressRepository()
+    {
+        if ($this->addressRepository === null) {
+            $this->addressRepository = ObjectManager::getInstance()->get(AddressRepositoryInterface::class);
+        }
+
+        return $this->addressRepository;
     }
 }

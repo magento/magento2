@@ -73,7 +73,8 @@ class SaveHandler
 
         // Billing Address processing
         $billingAddress = $quote->getBillingAddress();
-        if ($billingAddress) {
+
+        if ($billingAddress && (!$billingAddress->getCustomerAddressId() || $billingAddress->getCustomerAddress())) {
             $this->billingAddressPersister->save($quote, $billingAddress);
         }
 
