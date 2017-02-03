@@ -21,9 +21,6 @@ class Manager
      * The checker of output modules.
      *
      * @var Output\ConfigInterface the config checker of output modules.
-     * @deprecated Added to not break backward compatibility of the constructor signature
-     *             by injecting the new dependency directly.
-     *             The method can be removed in a future major release, when constructor signature can be changed
      */
     private $outputConfig;
 
@@ -38,9 +35,6 @@ class Manager
      * The list of config paths to ignore.
      *
      * @var array the list of config paths to ignore.
-     * @deprecated Added to not break backward compatibility of the constructor signature
-     *             by injecting the new dependency directly.
-     *             The method can be removed in a future major release, when constructor signature can be changed
      */
     private $outputConfigPaths;
 
@@ -79,8 +73,7 @@ class Manager
      * @param string $moduleName the fully-qualified module name.
      *
      * @return boolean
-     * @deprecated because new api was introduced
-     * @see \Magento\Framework\Module\Manager::isEnabled()
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version
      */
     public function isOutputEnabled($moduleName)
     {
@@ -93,7 +86,8 @@ class Manager
      * @param string $moduleName Fully-qualified module name
      *
      * @return boolean
-     * @deprecated is not supported anymore
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version.
+     * The method can be removed in a future major release
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _isCustomOutputConfigEnabled($moduleName)

@@ -32,7 +32,7 @@ class CollectorFactory
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param array $types array for example
+     * @param array $types array of collector types that are available for creation, for example
      * ```php
      * array ('type' => 'collector class name ')
      * ```

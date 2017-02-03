@@ -949,7 +949,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $data
      * @return string
-     * @deprecated because \Magento\Framework\Escaper::escapeXssInUrl() is deprecated
+     * @deprecated
      */
     public function escapeXssInUrl($data)
     {
@@ -964,7 +964,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param  string $data
      * @param  bool $addSlashes
      * @return string
-     * @deprecated because \Magento\Framework\Escaper::escapeQuote() is deprecated
+     * @deprecated
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -977,7 +977,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|array $data
      * @param string $quote
      * @return string|array
-     * @deprecated because \Magento\Framework\Escaper::escapeJsQuote() is deprecated
+     * @deprecated
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
