@@ -69,7 +69,6 @@ class ConditionResolverTest extends \PHPUnit_Framework_TestCase
             ["glue" => "OR", "condition" => [$condition], 'filter' => $filter],
             ["glue" => "OR", "condition" => [$identifierCondition]],
         ];
-        $filtersParts = [];
         $aliasName = 'n';
         $this->selectBuilderMock->expects($this->any())
             ->method('setParams')

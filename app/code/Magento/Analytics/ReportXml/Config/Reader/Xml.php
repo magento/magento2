@@ -23,9 +23,9 @@ class Xml extends Filesystem implements ReaderInterface
      */
     protected $_idAttributes = [
         '/config/report' => 'name',
-//        '/config/query/entity' => 'name',
-//        '/config/query/entity/link-entity' => 'name',
-//        '/config/query/entity/link-entity' => 'name',
+        // '/config/query/entity' => 'name',
+        // '/config/query/entity/link-entity' => 'name',
+        // '/config/query/entity/link-entity' => 'name',
 
     ];
 

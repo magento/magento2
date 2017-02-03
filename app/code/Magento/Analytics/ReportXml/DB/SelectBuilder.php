@@ -87,6 +87,7 @@ class SelectBuilder
      * Set joins conditions
      *
      * @param array $joins
+     * @return void
      */
     public function setJoins($joins)
     {
@@ -107,6 +108,7 @@ class SelectBuilder
      * Set connection name
      *
      * @param string $connectionName
+     * @return void
      */
     public function setConnectionName($connectionName)
     {
@@ -127,6 +129,7 @@ class SelectBuilder
      * Set columns
      *
      * @param array $columns
+     * @return void
      */
     public function setColumns($columns)
     {
@@ -147,6 +150,7 @@ class SelectBuilder
      * Set filters
      *
      * @param array $filters
+     * @return void
      */
     public function setFilters($filters)
     {
@@ -167,6 +171,7 @@ class SelectBuilder
      * Set from condition
      *
      * @param array $from
+     * @return void
      */
     public function setFrom($from)
     {
@@ -233,6 +238,7 @@ class SelectBuilder
      * Set group
      *
      * @param array $group
+     * @return void
      */
     public function setGroup($group)
     {
@@ -253,6 +259,7 @@ class SelectBuilder
      * Set parameters
      *
      * @param array $params
+     * @return void
      */
     public function setParams($params)
     {
@@ -273,6 +280,7 @@ class SelectBuilder
      * Set having condition
      *
      * @param array $having
+     * @return void
      */
     public function setHaving($having)
     {
