@@ -279,4 +279,12 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     {
         return $this->_columns;
     }
+
+    /**
+     * @return string
+     */
+    public function getAddButtonLabel()
+    {
+        return $this->_addButtonLabel;
+    }
 }
