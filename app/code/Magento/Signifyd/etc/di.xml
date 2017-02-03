@@ -14,4 +14,34 @@
     <preference for="Magento\Signifyd\Api\GuaranteeCreationServiceInterface" type="Magento\Signifyd\Model\Guarantee\CreationService" />
     <preference for="Magento\Signifyd\Api\GuaranteeCancelingServiceInterface" type="Magento\Signifyd\Model\Guarantee\CancelingService" />
     <preference for="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface" type="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder" />
+
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="joins" xsi:type="array">
+                <item name="signifyd_case" xsi:type="array">
+                    <item name="table" xsi:type="string">signifyd_case</item>
+                    <item name="origin_column" xsi:type="string">entity_id</item>
+                    <item name="target_column" xsi:type="string">order_id</item>
+                </item>
+            </argument>
+            <argument name="columns" xsi:type="array">
+                <item name="signifyd_guarantee_status" xsi:type="string">signifyd_case.guarantee_disposition</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Magento\SalesArchive\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="joins" xsi:type="array">
+                <item name="signifyd_case" xsi:type="array">
+                    <item name="table" xsi:type="string">signifyd_case</item>
+                    <item name="origin_column" xsi:type="string">entity_id</item>
+                    <item name="target_column" xsi:type="string">order_id</item>
+                </item>
+            </argument>
+            <argument name="columns" xsi:type="array">
+                <item name="signifyd_guarantee_status" xsi:type="string">signifyd_case.guarantee_disposition</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
