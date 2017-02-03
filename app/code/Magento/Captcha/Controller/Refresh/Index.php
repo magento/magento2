@@ -25,15 +25,17 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @param Context $context
      * @param \Magento\Captcha\Helper\Data $captchaHelper
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         Context $context,
         \Magento\Captcha\Helper\Data $captchaHelper,
-        \Magento\Framework\Serialize\SerializerInterface $serializer
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null
     ) {
         $this->captchaHelper = $captchaHelper;
-        $this->serializer = $serializer;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         parent::__construct($context);
     }
 

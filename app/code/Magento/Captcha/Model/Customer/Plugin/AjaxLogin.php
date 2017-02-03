@@ -40,20 +40,22 @@ class AjaxLogin
      * @param CaptchaHelper $helper
      * @param SessionManagerInterface $sessionManager
      * @param JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      * @param array $formIds
+     * @throws \RuntimeException
      */
     public function __construct(
         CaptchaHelper $helper,
         SessionManagerInterface $sessionManager,
         JsonFactory $resultJsonFactory,
-        \Magento\Framework\Serialize\SerializerInterface $serializer,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
         array $formIds
     ) {
         $this->helper = $helper;
         $this->sessionManager = $sessionManager;
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->serializer = $serializer;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->formIds = $formIds;
     }
 

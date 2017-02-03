@@ -22,16 +22,18 @@ class Refresh extends \Magento\Backend\App\Action
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      * @param \Magento\Captcha\Helper\Data $captchaHelper
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Serialize\SerializerInterface $serializer,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
         \Magento\Captcha\Helper\Data $captchaHelper
     ) {
         parent::__construct($context);
-        $this->serializer = $serializer;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->captchaHelper = $captchaHelper;
     }
 
