@@ -32,6 +32,11 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
      */
     protected $layoutProcessorMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $contextMock = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
@@ -54,11 +59,15 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->serializer = new \Magento\Framework\Serialize\Serializer\Json();
+
         $this->model = new \Magento\Checkout\Block\Onepage(
             $contextMock,
             $this->formKeyMock,
             $this->configProviderMock,
-            [$this->layoutProcessorMock]
+            [$this->layoutProcessorMock],
+            [],
+            $this->serializer
         );
     }
 
