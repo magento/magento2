@@ -54,7 +54,7 @@ class AdminUsersFixture extends Fixture
                 ->setUserType($defaultAdminRole->getUserType())
                 ->setTreeLevel($defaultAdminRole->getTreeLevel())
                 ->setSortOrder($defaultAdminRole->getSortOrder())
-                ->setParentId($defaultAdminRole->getParentId());
+                ->setParentId(1);
             $role->save();
         }
 
