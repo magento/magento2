@@ -53,11 +53,24 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         $configLoader = $this->getMockForAbstractClass(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
         $eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+
+        $areaMock = $this->getMock(\Magento\Framework\App\Area::class, [], [], '', false);
+        $areaMock->expects($this->once())
+            ->method('load')
+            ->with(Area::PART_TRANSLATE);
+
+        $areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $areaListMock->expects($this->any())
+            ->method('getArea')
+            ->with(Area::AREA_CRONTAB)
+            ->willReturn($areaMock);
+
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
                 [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
                 [\Magento\Framework\Event\ManagerInterface::class, $eventManagerMock],
+                [\Magento\Framework\App\AreaList::class, $areaListMock]
             ]));
         $crontabConfig = ['config'];
         $configLoader->expects($this->once())
