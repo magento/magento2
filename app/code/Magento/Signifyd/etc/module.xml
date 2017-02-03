@@ -9,6 +9,7 @@
     <module name="Magento_Signifyd" setup_version="2.2.0">
         <sequence>
             <module name="Magento_Sales" />
+            <module name="Magento_SalesArchive" />
             <module name="Magento_Store" />
             <module name="Magento_Customer" />
             <module name="Magento_Directory" />
