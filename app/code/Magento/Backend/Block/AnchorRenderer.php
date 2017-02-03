@@ -38,6 +38,8 @@ class AnchorRenderer
     /**
      * Render menu item anchor.
      *
+     *  It is used in backend menu to render anchor menu.
+     *
      * @param Item|false $activeItem Can be false if menu item is inaccessible
      * but was triggered directly using controller. It is a legacy code behaviour.
      * @param Item $menuItem

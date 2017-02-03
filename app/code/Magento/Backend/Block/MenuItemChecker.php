@@ -13,7 +13,9 @@ use Magento\Backend\Model\Menu\Item;
 class MenuItemChecker
 {
     /**
-     * Check whether given item is currently selected
+     * Check whether given menu item is currently selected.
+     *
+     * It is used in backend menu to highlight active menu item.
      *
      * @param Item|false $activeItem Can be false if menu item is inaccessible
      * but was triggered directly using controller. It is a legacy code behaviour.
