@@ -28,6 +28,11 @@ class Sidebar extends AbstractCart
     protected $imageHelper;
 
     /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -42,6 +47,7 @@ class Sidebar extends AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
         array $data = []
     ) {
         if (isset($data['jsLayout'])) {
@@ -53,6 +59,8 @@ class Sidebar extends AbstractCart
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = false;
         $this->imageHelper = $imageHelper;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**
@@ -72,6 +80,14 @@ class Sidebar extends AbstractCart
             'minicartMaxItemsVisible' => $this->getMiniCartMaxItemsCount(),
             'websiteId' => $this->_storeManager->getStore()->getWebsiteId()
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getSerializedConfig()
+    {
+        return $this->serializer->serialize($this->getConfig());
     }
 
     /**
