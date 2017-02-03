@@ -12,9 +12,12 @@ case $TEST_SUITE in
         cd dev/tests/integration
 
         test_set_list=$(find testsuite/* -maxdepth 1 -mindepth 1 -type d | sort)
-        test_set_size=$(($(printf "$test_set_list" | wc -l)/INTEGRATION_SETS))
+        test_set_count=$(printf "$test_set_list" | wc -l)
+        test_set_size[1]=$(printf "%.0f" $(echo "$test_set_count*0.15" | bc))
+        test_set_size[2]=$(printf "%.0f" $(echo "$test_set_count*0.3" | bc))
+        test_set_size[3]=$(printf "%.0f" $(echo "$test_set_count*0.55" | bc))
 
-        echo "==> preparing integration testsuite on index $INTEGRATION_INDEX with set size of $test_set_size"
+        echo "==> preparing integration testsuite on index $INTEGRATION_INDEX with set size of ${test_set_size[$INTEGRATION_INDEX]}"
         cp phpunit.xml.dist phpunit.xml
 
         # remove memory usage tests if from any set other than the first
@@ -35,7 +38,7 @@ case $TEST_SUITE in
             fi
 
             i=$((i+1))
-            if [ $i -eq $test_set_size ] && [ $j -lt $INTEGRATION_SETS ]; then
+            if [ $i -eq ${test_set_size[$j]} ] && [ $j -lt $INTEGRATION_SETS ]; then
                 j=$((j+1))
                 i=0
             fi
