@@ -2,7 +2,7 @@
 /**
  * simple product assignet two websites fixture
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 require __DIR__ . '/../../../Magento/Store/_files/second_website_store.php';
