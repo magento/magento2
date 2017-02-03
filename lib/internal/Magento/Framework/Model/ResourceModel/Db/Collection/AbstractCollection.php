@@ -521,33 +521,6 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     }
 
     /**
-     * Join table to collection select
-     *
-     * @param string $table
-     * @param string $cond
-     * @param string $cols
-     * @return $this
-     */
-    public function joinLeft($table, $cond, $cols = '*')
-    {
-        if (is_array($table)) {
-            foreach ($table as $k => $v) {
-                $alias = $k;
-                $table = $v;
-                break;
-            }
-        } else {
-            $alias = $table;
-        }
-
-        if (!isset($this->_joinedTables[$alias])) {
-            $this->getSelect()->joinLeft([$alias => $this->getTable($table)], $cond, $cols);
-            $this->_joinedTables[$alias] = true;
-        }
-        return $this;
-    }
-
-    /**
      * Redeclare before load method for adding event
      *
      * @return $this
