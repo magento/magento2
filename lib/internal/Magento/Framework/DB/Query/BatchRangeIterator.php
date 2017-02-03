@@ -106,7 +106,7 @@ class BatchRangeIterator implements \Iterator
      */
     public function current()
     {
-        if (null == $this->currentSelect) {
+        if (null === $this->currentSelect) {
             $this->isValid = ($this->currentBatch + $this->batchSize) < $this->totalItemCount;
             $this->currentSelect = $this->initSelectObject();
         }
@@ -135,7 +135,7 @@ class BatchRangeIterator implements \Iterator
      */
     public function next()
     {
-        if (null == $this->currentSelect) {
+        if (null === $this->currentSelect) {
             $this->current();
         }
         $this->isValid = ($this->batchSize + $this->currentBatch) < $this->totalItemCount;
