@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\ReportXml;
 
 use Magento\Analytics\ReportXml\DB\SelectBuilderFactory;
@@ -22,6 +21,7 @@ class QueryFactory
      * @var Config
      */
     private $config;
+
     /**
      * @var SelectBuilderFactory
      */
@@ -55,7 +55,7 @@ class QueryFactory
      * @param ObjectManagerInterface $objectManager
      * @param SelectBuilderFactory $selectBuilderFactory
      * @param Config $config
-     * @param $assemblers
+     * @param array $assemblers
      */
     public function __construct(
         CacheInterface $queryCache,
@@ -63,7 +63,7 @@ class QueryFactory
         ObjectManagerInterface $objectManager,
         SelectBuilderFactory $selectBuilderFactory,
         Config $config,
-        $assemblers
+        array $assemblers
     ) {
         $this->config = $config;
         $this->selectBuilderFactory = $selectBuilderFactory;
@@ -91,7 +91,7 @@ class QueryFactory
     /**
      * Create query according to configuration settings
      *
-     * @param $queryName
+     * @param string $queryName
      * @return Query
      */
     private function constructQuery($queryName)

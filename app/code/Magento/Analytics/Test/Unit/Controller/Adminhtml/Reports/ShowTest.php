@@ -127,8 +127,7 @@ class ShowTest extends \PHPUnit_Framework_TestCase
         if ($exception instanceof LocalizedException) {
             $message = $exception->getMessage();
         } else {
-            $message = __('Sorry, there has been an error processing your request. '
-                . 'Please try again later.');
+            $message = __('Sorry, there has been an error processing your request. Please try again later.');
         }
         $this->messageManagerMock
             ->expects($this->once())

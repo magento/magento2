@@ -27,6 +27,7 @@ class JoinAssembler implements AssemblerInterface
      * @var NameResolver
      */
     private $nameResolver;
+
     /**
      * @var ColumnsResolver
      */

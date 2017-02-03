@@ -155,7 +155,6 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
                     'selectHydrator' => $this->selectHydratorMock,
                     'connectionName' => 'sales'
                 ]
-
             )
             ->willReturn($this->queryMock);
 

@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Test\Unit\Controller\Adminhtml\External;
+namespace Magento\Analytics\Test\Unit\Controller\BasicTier;
 
 use Magento\Analytics\Controller\Adminhtml\BasicTier\SignUp;
 use Magento\Config\Model\Config;

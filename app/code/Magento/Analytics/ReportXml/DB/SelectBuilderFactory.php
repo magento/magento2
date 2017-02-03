@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\ReportXml\DB;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -37,7 +36,7 @@ class SelectBuilderFactory
      * @param array $data
      * @return SelectBuilder
      */
-    public function create(array $data = array())
+    public function create(array $data = [])
     {
         return $this->objectManager->create(SelectBuilder::class, $data);
     }

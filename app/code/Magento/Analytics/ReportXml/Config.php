@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\ReportXml;
 
 use Magento\Analytics\ReportXml\Config\Data;
@@ -27,7 +26,7 @@ class Config implements ConfigInterface
      */
     public function __construct(
         Data $data
-    ){
+    ) {
         $this->data = $data;
     }
 

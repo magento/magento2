@@ -9,7 +9,6 @@ use Magento\Analytics\ReportXml\Config\SchemaLocator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Config\Dom\UrnResolver;
 
-
 /**
  * Class SchemaLocatorTest
  */

@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\ReportXml;
 
 use Magento\Framework\DB\Select;
@@ -34,7 +33,8 @@ class Query implements \JsonSerializable
      * Query constructor.
      *
      * @param Select $select
-     * @param $connectionName
+     * @param SelectHydrator $selectHydrator
+     * @param string $connectionName
      */
     public function __construct(
         Select $select,

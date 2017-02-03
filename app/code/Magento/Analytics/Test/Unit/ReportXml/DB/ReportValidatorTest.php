@@ -22,10 +22,12 @@ class ReportValidatorTest extends \PHPUnit_Framework_TestCase
      * @var ConnectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $connectionFactoryMock;
+
     /**
      * @var QueryFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $queryFactoryMock;
+
     /**
      * @var Query|\PHPUnit_Framework_MockObject_MockObject
      */
