@@ -19,7 +19,7 @@ class InstallData implements InstallDataInterface
     /**
      * @var Resource
      */
-    protected $resource;
+    private $resource;
 
     /**
      * @param ResourceConnection $resource
@@ -42,7 +42,7 @@ class InstallData implements InstallDataInterface
             'signifyd_guarantee_status',
             [
                 'type' => Table::TYPE_TEXT,
-                'length' => '50',
+                'length' => 32,
                 'comment' => 'Signifyd Guarantee Disposition Status'
             ]
         );
@@ -52,7 +52,7 @@ class InstallData implements InstallDataInterface
             'signifyd_guarantee_status',
             [
                 'type' => Table::TYPE_TEXT,
-                'length' => '50',
+                'length' => 32,
                 'comment' => 'Signifyd Guarantee Disposition Status'
             ]
         );
