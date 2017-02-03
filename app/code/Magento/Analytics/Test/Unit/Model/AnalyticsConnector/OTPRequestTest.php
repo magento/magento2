@@ -78,6 +78,7 @@ class OTPRequestTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->httpClientFactoryMock = $this->getMockBuilder(ZendClientFactory::class)
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
