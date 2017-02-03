@@ -111,4 +111,12 @@ class Onepage extends \Magento\Framework\View\Element\Template
     {
         return $this->_storeManager->getStore()->getBaseUrl();
     }
+
+    /**
+     * @return bool|string
+     */
+    public function getSerializedCheckoutConfig()
+    {
+        return $this->serializer->serialize($this->getCheckoutConfig());
+    }
 }

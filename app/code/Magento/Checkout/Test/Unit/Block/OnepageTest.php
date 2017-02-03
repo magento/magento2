@@ -109,4 +109,15 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($jsonLayout, $this->model->getJsLayout());
     }
+
+    public function testGetSerializedCheckoutConfig()
+    {
+        $checkoutConfig = ['checkout', 'config'];
+        $this->configProviderMock->expects($this->once())->method('getConfig')->willReturn($checkoutConfig);
+        $this->serializer->expects($this->once())->method('serialize')->will(
+            $this->returnValue(json_encode($checkoutConfig))
+        );
+
+        $this->assertEquals(json_encode($checkoutConfig), $this->model->getSerializedCheckoutConfig());
+    }
 }
