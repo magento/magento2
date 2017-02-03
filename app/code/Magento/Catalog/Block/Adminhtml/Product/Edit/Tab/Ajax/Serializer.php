@@ -5,8 +5,30 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax;
 
+use Magento\Framework\View\Element\Template;
+
 class Serializer extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @param Template\Context $context
+     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
+     * @param array $data
+     */
+    public function __construct(
+        Template\Context $context,
+        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
+        array $data = []
+    ) {
+        parent::__construct($context, $data);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+    }
+
     /**
      * @return $this
      */
@@ -19,6 +41,7 @@ class Serializer extends \Magento\Framework\View\Element\Template
 
     /**
      * @return string
+     * @deprecated
      */
     public function getProductsJSON()
     {
@@ -30,6 +53,6 @@ class Serializer extends \Magento\Framework\View\Element\Template
                 $result[$id] = $product->toArray(['qty', 'position']);
             }
         }
-        return $result ? \Zend_Json::encode($result) : '{}';
+        return $result ? $this->serializer->serialize($result) : '{}';
     }
 }
