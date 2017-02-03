@@ -9,7 +9,6 @@ use Magento\Analytics\ReportXml\Config;
 use Magento\Analytics\ReportXml\Config\Data;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-
 /**
  * Class ConfigTest
  */

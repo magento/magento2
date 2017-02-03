@@ -18,6 +18,10 @@ class ColumnsResolver
      */
     private $nameResolver;
 
+    /**
+     * ColumnsResolver constructor.
+     * @param NameResolver $nameResolver
+     */
     public function __construct(
         NameResolver $nameResolver
     ) {

@@ -15,7 +15,6 @@ use Magento\Framework\DB\Select;
  */
 class SelectBuilderTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var SelectBuilder
      */

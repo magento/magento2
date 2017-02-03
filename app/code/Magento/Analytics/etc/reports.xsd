@@ -15,7 +15,7 @@
     </xs:element>
     <xs:complexType name="reportDeclaration">
         <xs:sequence>
-            <xs:element name="source" type="sourceDeclaration" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="source" type="sourceDeclaration" minOccurs="1" maxOccurs="1" />
             <xs:any minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>

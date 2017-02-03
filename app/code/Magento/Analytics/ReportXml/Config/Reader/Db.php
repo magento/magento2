@@ -15,7 +15,6 @@ use Magento\Framework\Config\ReaderInterface;
  */
 class Db implements ReaderInterface
 {
-
     /**
      * Load configuration scope
      *

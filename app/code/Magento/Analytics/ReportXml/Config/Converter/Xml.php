@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\ReportXml\Config\Converter;
 
 use Magento\Framework\Config\ConverterInterface;
@@ -16,7 +15,6 @@ use Magento\Framework\Config\ConverterInterface;
  */
 class Xml implements ConverterInterface
 {
-
     /**
      * Converts xml node to array
      *

@@ -173,7 +173,6 @@ class SelectBuilder
         $this->from = $from;
     }
 
-
     /**
      * Process JOIN conditions
      *

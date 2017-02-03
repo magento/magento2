@@ -44,6 +44,10 @@ class ConditionResolver
      */
     private $resourceConnection;
 
+    /**
+     * ConditionResolver constructor.
+     * @param ResourceConnection $resourceConnection
+     */
     public function __construct(
         ResourceConnection $resourceConnection
     ) {

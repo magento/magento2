@@ -17,7 +17,6 @@ use Magento\Analytics\ReportXml\DB\NameResolver;
  */
 class FromAssembler implements AssemblerInterface
 {
-
     /**
      * @var NameResolver
      */

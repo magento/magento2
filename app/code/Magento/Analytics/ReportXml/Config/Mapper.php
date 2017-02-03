@@ -29,8 +29,7 @@ class Mapper
 
         $queries = [];
         foreach ($configData['config'][0]['report'] as $queryData) {
-            $entityData = $queryData['source'][0];
-            unset($queryData['source'][0]);
+            $entityData = array_shift($queryData['source']);
             $queries[$queryData['name']] = $queryData;
             $queries[$queryData['name']]['source'] = $entityData;
 

@@ -25,6 +25,11 @@ class ReportProvider
      */
     private $connectionFactory;
 
+    /**
+     * ReportProvider constructor.
+     * @param QueryFactory $queryFactory
+     * @param ConnectionFactory $connectionFactory
+     */
     public function __construct(
         QueryFactory $queryFactory,
         ConnectionFactory $connectionFactory
