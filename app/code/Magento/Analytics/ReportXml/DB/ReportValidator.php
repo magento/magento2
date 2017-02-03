@@ -46,6 +46,7 @@ class ReportValidator
      * @param string $name
      * @param SearchCriteriaInterface $criteria
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validate($name, SearchCriteriaInterface $criteria = null)
     {

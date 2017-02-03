@@ -44,6 +44,7 @@ class ReportProvider
      * @param string $name
      * @param SearchCriteria|null $criteria
      * @return \IteratorIterator
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getReport($name, SearchCriteria $criteria = null)
     {

@@ -43,6 +43,7 @@ class Export
      * @var Archive
      */
     private $archive;
+
     /**
      * @var \Magento\Analytics\Model\ReportWriterInterface
      */
