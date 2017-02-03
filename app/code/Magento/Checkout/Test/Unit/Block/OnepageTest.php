@@ -59,7 +59,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->serializer = new \Magento\Framework\Serialize\Serializer\Json();
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class,[],[],'',false);
 
         $this->model = new \Magento\Checkout\Block\Onepage(
             $contextMock,
@@ -103,6 +103,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $processedLayout = ['layout' => ['processed' => true]];
         $jsonLayout = '{"layout":{"processed":true}}';
         $this->layoutProcessorMock->expects($this->once())->method('process')->with([])->willReturn($processedLayout);
+        $this->serializer->expects($this->once())->method('serialize')->will(
+            $this->returnValue(json_encode($processedLayout))
+        );
 
         $this->assertEquals($jsonLayout, $this->model->getJsLayout());
     }
