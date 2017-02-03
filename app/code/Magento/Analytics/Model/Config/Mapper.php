@@ -44,7 +44,7 @@ class Mapper
         $files = [];
         foreach ($configData['config'][0]['file'] as $fileData) {
             /** just one set of providers is allowed by xsd */
-            $providers = !empty($fileData['providers']) ? reset($fileData['providers']) : [];
+            $providers = reset($fileData['providers']);
             foreach ($providers as $providerType => $providerDataSet) {
                 /** just one set of provider data is allowed by xsd */
                 $providerData = reset($providerDataSet);
