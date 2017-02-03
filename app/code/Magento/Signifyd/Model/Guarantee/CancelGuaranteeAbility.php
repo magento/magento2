@@ -9,7 +9,6 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order;
 use Magento\Signifyd\Model\CaseManagement;
 
 /**
@@ -62,11 +61,6 @@ class CancelGuaranteeAbility
 
         $order = $this->getOrder($orderId);
         if (null === $order) {
-            return false;
-        }
-
-        // Magento does not provide an ability to cancel Guarantees for canceled orders.
-        if (in_array($order->getState(), [Order::STATE_CANCELED])) {
             return false;
         }
 

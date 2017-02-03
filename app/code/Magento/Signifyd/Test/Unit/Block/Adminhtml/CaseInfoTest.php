@@ -5,15 +5,14 @@
  */
 namespace Magento\Signifyd\Test\Unit\Block\Adminhtml;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\Signifyd\Model\Config;
-use Magento\Signifyd\Model\CaseManagement;
-use Magento\Signifyd\Model\Guarantee\CreateGuaranteeAbility;
 use Magento\Signifyd\Block\Adminhtml\CaseInfo;
+use Magento\Signifyd\Model\CaseManagement;
+use Magento\Signifyd\Model\Config;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Tests for Signifyd block information.
@@ -33,27 +32,22 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     private $caseInfo;
 
     /**
-     * @var Context
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var Config
+     * @var Config|MockObject
      */
     private $config;
 
     /**
-     * @var CaseManagement
+     * @var CaseManagement|MockObject
      */
     private $caseManagement;
 
     /**
-     * @var CreateGuaranteeAbility
-     */
-    private $createGuaranteeAbility;
-
-    /**
-     * @var RequestInterface
+     * @var RequestInterface|MockObject
      */
     private $request;
 
@@ -83,10 +77,6 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->createGuaranteeAbility = $this->getMockBuilder(CreateGuaranteeAbility::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getScore'])
@@ -95,8 +85,7 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
         $this->caseInfo = $objectManager->getObject(CaseInfo::class, [
             'context' => $this->context,
             'config' => $this->config,
-            'caseManagement' => $this->caseManagement,
-            'createGuaranteeAbility' => $this->createGuaranteeAbility
+            'caseManagement' => $this->caseManagement
         ]);
     }
 

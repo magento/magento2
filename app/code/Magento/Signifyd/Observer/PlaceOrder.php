@@ -5,15 +5,14 @@
  */
 namespace Magento\Signifyd\Observer;
 
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Event;
-use Magento\Sales\Api\Data\OrderInterface;
-
-use Magento\Signifyd\Model\Config;
-use Magento\Signifyd\Api\CaseCreationServiceInterface;
-use Psr\Log\LoggerInterface;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Signifyd\Api\CaseCreationServiceInterface;
+use Magento\Signifyd\Model\Config;
+use Psr\Log\LoggerInterface;
 
 /**
  * Place Order observer.

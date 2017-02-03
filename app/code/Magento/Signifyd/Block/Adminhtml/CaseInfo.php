@@ -7,11 +7,9 @@ namespace Magento\Signifyd\Block\Adminhtml;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Signifyd\Model\Config;
-use Magento\Signifyd\Model\CaseManagement;
 use Magento\Signifyd\Api\Data\CaseInterface;
-use Magento\Signifyd\Model\Guarantee\CreateGuaranteeAbility;
-use Magento\Signifyd\Model\Guarantee\CancelGuaranteeAbility;
+use Magento\Signifyd\Model\CaseManagement;
+use Magento\Signifyd\Model\Config;
 
 /**
  * Get Signifyd Case Info
@@ -34,16 +32,6 @@ class CaseInfo extends Template
     private $caseManagement;
 
     /**
-     * @var CreateGuaranteeAbility
-     */
-    private $createGuaranteeAbility;
-
-    /**
-     * @var CancelGuaranteeAbility
-     */
-    private $cancelGuaranteeAbility;
-
-    /**
      * @var int
      */
     private static $scoreAccept = 500;
@@ -59,22 +47,16 @@ class CaseInfo extends Template
      * @param Context $context
      * @param Config $config
      * @param CaseManagement $caseManagement
-     * @param CreateGuaranteeAbility $createGuaranteeAbility
-     * @param CancelGuaranteeAbility $cancelGuaranteeAbility
      * @param array $data
      */
     public function __construct(
         Context $context,
         Config $config,
         CaseManagement $caseManagement,
-        CreateGuaranteeAbility $createGuaranteeAbility,
-        CancelGuaranteeAbility $cancelGuaranteeAbility,
         array $data = []
     ) {
         $this->config = $config;
         $this->caseManagement = $caseManagement;
-        $this->createGuaranteeAbility = $createGuaranteeAbility;
-        $this->cancelGuaranteeAbility = $cancelGuaranteeAbility;
 
         parent::__construct($context, $data);
     }
@@ -256,56 +238,6 @@ class CaseInfo extends Template
 
             return $result;
         });
-    }
-
-    /**
-     * Gets configuration of allowed buttons.
-     *
-     * @return array
-     */
-    public function getButtons()
-    {
-        $buttons = [];
-
-        if ($this->createGuaranteeAbility->isAvailable($this->getOrderId())) {
-            $buttons[] = $this->getSubmitButton();
-        }
-
-        if ($this->cancelGuaranteeAbility->isAvailable($this->getOrderId())) {
-            $buttons[] = $this->getCancelButton();
-        }
-
-        return $buttons;
-    }
-
-    /**
-     * Returns configuration for submit Guarantee request button.
-     *
-     * @return array
-     */
-    private function getSubmitButton()
-    {
-        return [
-            'title' => __('Submit Guarantee Request'),
-            'url' => $this->getUrl('signifyd/guarantee/create'),
-            'componentName' => 'submit_guarantee_request',
-            'orderId' => $this->getOrderId()
-        ];
-    }
-
-    /**
-     * Returns configuration for cancel Guarantee request button.
-     *
-     * @return array
-     */
-    private function getCancelButton()
-    {
-        return [
-            'title' => __('Cancel Guarantee Request'),
-            'url' => $this->getUrl('signifyd/guarantee/cancel'),
-            'componentName' => 'cancel_guarantee_request',
-            'orderId' => $this->getOrderId()
-        ];
     }
 
     /**
