@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel;
@@ -644,5 +644,18 @@ class Product extends AbstractResource
                 ->get(\Magento\Catalog\Model\ResourceModel\Product\CategoryLink::class);
         }
         return $this->productCategoryLink;
+    }
+
+    /**
+     * Extends parent method to be appropriate for product.
+     * Store id is required to correctly identify attribute value we are working with.
+     *
+     * {@inheritdoc}
+     */
+    protected function getAttributeRow($entity, $object, $attribute)
+    {
+        $data = parent::getAttributeRow($entity, $object, $attribute);
+        $data['store_id'] = $object->getStoreId();
+        return $data;
     }
 }

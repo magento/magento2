@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -50,6 +50,14 @@
             <data name="category/data/name" xsi:type="string">Category %isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryWithCustomStoreOnFrontend" />
+        </variation>
+        <variation name="UpdateCategoryEntityTestVariation5_ChangeCategoryUrlOnStoreView" summary="Update URL Key with custom Store View." ticketId="MAGETWO-16471">
+            <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
+            <data name="category/data/store_id/dataset" xsi:type="string">custom</data>
+            <data name="category/data/use_default_url_key" xsi:type="string">No</data>
+            <data name="category/data/url_key" xsi:type="string">UrlKey%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryOnCustomStore" />
         </variation>
     </testCase>
 </config>

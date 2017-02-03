@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Quote\Item;
 
 use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 class CartItemProcessor implements CartItemProcessorInterface
 {
@@ -31,21 +33,29 @@ class CartItemProcessor implements CartItemProcessorInterface
     protected $itemOptionValueFactory;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\DataObject\Factory $objectFactory
      * @param \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory
      * @param \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory
      * @param \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Framework\DataObject\Factory $objectFactory,
         \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory,
         \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory,
-        \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory
+        \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory,
+        Json $serializer = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->productOptionFactory = $productOptionFactory;
         $this->extensionFactory = $extensionFactory;
         $this->itemOptionValueFactory = $itemOptionValueFactory;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -73,7 +83,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     public function processOptions(CartItemInterface $cartItem)
     {
         $attributesOption = $cartItem->getProduct()->getCustomOption('attributes');
-        $selectedConfigurableOptions = unserialize($attributesOption->getValue());
+        $selectedConfigurableOptions = $this->serializer->unserialize($attributesOption->getValue());
 
         if (is_array($selectedConfigurableOptions)) {
             $configurableOptions = [];

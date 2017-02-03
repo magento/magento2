@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,8 +15,20 @@ define([
             var format, momentFormat;
 
             format = 'M/d/yy';
-            momentFormat = 'MM/DD/YYYY';
+            momentFormat = 'M/DD/YYYY';
             expect(utils.convertToMomentFormat(format)).toBe(momentFormat);
+        });
+
+        it('Check "filterFormData" method', function () {
+            var suffix = 'prepared-for-send',
+                separator = '-',
+                data = {
+                    key: 'value-prepared-before-save'
+                };
+            expect(utils.filterFormData(data, suffix, separator)).toEqual(data);
+            expect(utils.filterFormData(data, suffix)).toEqual(data);
+            expect(utils.filterFormData(data)).toEqual(data);
+            expect(utils.filterFormData()).toEqual({});
         });
 
         it('Check convertToMomentFormat function for all Magento supported locales', function () {

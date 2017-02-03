@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -25,9 +25,17 @@
         </dataset>
 
         <dataset name="default_subcategory">
-            <field name="id" xsi:type="string">%id%</field>
             <field name="name" xsi:type="string">DefaultSubcategory%isolation%</field>
             <field name="url_key" xsi:type="string">default-subcategory-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_category</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+
+        <dataset name="default_subcategory_without_url_key">
+            <field name="name" xsi:type="string">DefaultSubcategory%isolation%</field>
             <field name="parent_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_category</item>
             </field>

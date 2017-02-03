@@ -1,37 +1,42 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Test\Unit;
 
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class DesignExceptionsTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\View\DesignExceptions */
-    protected $designExceptions;
+    private $designExceptions;
 
     /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $scopeConfigMock;
+    private $scopeConfigMock;
 
     /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
-    protected $requestMock;
+    private $requestMock;
 
     /** @var string */
-    protected $exceptionConfigPath = 'exception_path';
+    private $exceptionConfigPath = 'exception_path';
 
     /** @var string */
-    protected $scopeType = 'scope_type';
+    private $scopeType = 'scope_type';
+
+    /** @var Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serializerMock;
 
     protected function setUp()
     {
         $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->serializerMock = $this->getMock(Json::class, [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->designExceptions = $this->objectManagerHelper->getObject(
@@ -39,31 +44,38 @@ class DesignExceptionsTest extends \PHPUnit_Framework_TestCase
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'exceptionConfigPath' => $this->exceptionConfigPath,
-                'scopeType' => $this->scopeType
+                'scopeType' => $this->scopeType,
+                'serializer' => $this->serializerMock,
             ]
         );
     }
 
     /**
      * @param string $userAgent
-     * @param bool $useConfig
+     * @param bool $configValue
+     * @param int $callNum
      * @param bool|string $result
      * @param array $expressions
      * @dataProvider getThemeByRequestDataProvider
      */
-    public function testGetThemeByRequest($userAgent, $useConfig, $result, $expressions = [])
+    public function testGetThemeByRequest($userAgent, $configValue, $callNum, $result, $expressions = [])
     {
         $this->requestMock->expects($this->once())
             ->method('getServer')
             ->with($this->equalTo('HTTP_USER_AGENT'))
             ->will($this->returnValue($userAgent));
 
-        if ($useConfig) {
+        if ($userAgent) {
             $this->scopeConfigMock->expects($this->once())
                 ->method('getValue')
                 ->with($this->equalTo($this->exceptionConfigPath), $this->equalTo($this->scopeType))
-                ->will($this->returnValue(serialize($expressions)));
+                ->will($this->returnValue($configValue));
         }
+
+        $this->serializerMock->expects($this->exactly($callNum))
+            ->method('unserialize')
+            ->with($configValue)
+            ->willReturn($expressions);
 
         $this->assertSame($result, $this->designExceptions->getThemeByRequest($this->requestMock));
     }
@@ -74,11 +86,11 @@ class DesignExceptionsTest extends \PHPUnit_Framework_TestCase
     public function getThemeByRequestDataProvider()
     {
         return [
-            [false, false, false],
-            ['iphone', false, false],
-            ['iphone', true, false],
-            ['iphone', true, 'matched', [['regexp' => '/iphone/', 'value' => 'matched']]],
-            ['explorer', true, false, [['regexp' => '/iphone/', 'value' => 'matched']]],
+            [false, null, 0, false],
+            ['iphone', null, 0, false],
+            ['iphone', 'serializedExpressions1', 1, false],
+            ['iphone', 'serializedExpressions2', 1, 'matched', [['regexp' => '/iphone/', 'value' => 'matched']]],
+            ['explorer', 'serializedExpressions3', 1, false, [['regexp' => '/iphone/', 'value' => 'matched']]],
         ];
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -22,8 +22,7 @@ define([
     function beforeSave(data, url, selectorPrefix, messagesClass) {
         var save = $.Deferred();
 
-        data = utils.serialize(data);
-
+        data = utils.serialize(utils.filterFormData(data));
         data['form_key'] = window.FORM_KEY;
 
         if (!url || url === 'undefined') {

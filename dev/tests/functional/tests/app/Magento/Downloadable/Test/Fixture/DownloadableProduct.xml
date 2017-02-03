@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -49,6 +49,7 @@
         <field name="msrp" is_required="0" />
         <field name="msrp_display_actual_price_type" is_required="0" />
         <field name="name" is_required="1" group="product-details" />
+        <field name="use_default_name" group="product-details" />
         <field name="news_from_date" is_required="0" />
         <field name="news_to_date" is_required="0" />
         <field name="old_id" is_required="0" />
@@ -80,6 +81,7 @@
         <field name="upsell_tgtr_position_behavior" is_required="0" />
         <field name="upsell_tgtr_position_limit" is_required="0" />
         <field name="url_key" is_required="0" group="search-engine-optimization" />
+        <field name="use_default_url_key" group="search-engine-optimization" />
         <field name="url_path" is_required="0" />
         <field name="visibility" is_required="0" group="product-details" />
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />

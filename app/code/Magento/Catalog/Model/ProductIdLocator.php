@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -95,6 +95,10 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
             }
         }
 
-        return array_intersect_key($this->idsBySku, array_flip($skus));
+        return array_intersect_ukey(
+            $this->idsBySku,
+            array_flip($skus),
+            'strcasecmp'
+        );
     }
 }

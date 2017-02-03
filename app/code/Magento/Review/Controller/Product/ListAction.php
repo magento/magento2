@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Product;
@@ -26,9 +26,8 @@ class ListAction extends ProductController
             $resultPage->getConfig()->setPageLayout($product->getPageLayout());
         }
         $urlSafeSku = rawurlencode($product->getSku());
-        $resultPage->addPageLayoutHandles(
-            ['id' => $product->getId(), 'sku' => $urlSafeSku, 'type' => $product->getTypeId()]
-        );
+        $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
+        $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
         $resultPage->addUpdate($product->getCustomLayoutUpdate());
         return $resultPage;
     }
