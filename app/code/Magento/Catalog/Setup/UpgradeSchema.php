@@ -84,25 +84,27 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $connection = $setup->getConnection();
         foreach ($tables as $tableName) {
             $tableName = $setup->getTable($tableName);
-            $connection->addColumn(
-                $tableName,
-                'source_id',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                    'unsigned' => true,
-                    'nullable' => false,
-                    'default' => 0,
-                    'comment' => 'Original entity Id for attribute value',
-                ]
-            );
-            $connection->dropIndex($tableName, $connection->getPrimaryKeyName($tableName));
-            $primaryKeyFields = ['entity_id', 'attribute_id', 'store_id', 'value', 'source_id'];
-            $setup->getConnection()->addIndex(
-                $tableName,
-                $connection->getIndexName($tableName, $primaryKeyFields),
-                $primaryKeyFields,
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY
-            );
+            if (!$connection->tableColumnExists($tableName, 'source_id')) {
+                $connection->addColumn(
+                    $tableName,
+                    'source_id',
+                    [
+                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                        'unsigned' => true,
+                        'nullable' => false,
+                        'default' => 0,
+                        'comment' => 'Original entity Id for attribute value',
+                    ]
+                );
+                $connection->dropIndex($tableName, $connection->getPrimaryKeyName($tableName));
+                $primaryKeyFields = ['entity_id', 'attribute_id', 'store_id', 'value', 'source_id'];
+                $setup->getConnection()->addIndex(
+                    $tableName,
+                    $connection->getIndexName($tableName, $primaryKeyFields),
+                    $primaryKeyFields,
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY
+                );
+            }
         }
     }
 
@@ -358,17 +360,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
     private function addPercentageValueColumn(SchemaSetupInterface $setup)
     {
         $connection = $setup->getConnection();
-        $connection->addColumn(
-            $setup->getTable('catalog_product_entity_tier_price'),
-            'percentage_value',
-            [
-                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                'nullable' => true,
-                'length' => '5,2',
-                'comment' => 'Percentage value',
-                'after' => 'value'
-            ]
-        );
+        $tableName = $setup->getTable('catalog_product_entity_tier_price');
+
+        if (!$connection->tableColumnExists($tableName, 'percentage_value')) {
+            $connection->addColumn(
+                $tableName,
+                'percentage_value',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                    'nullable' => true,
+                    'length' => '5,2',
+                    'comment' => 'Percentage value',
+                    'after' => 'value'
+                ]
+            );
+        }
     }
 
     /**
