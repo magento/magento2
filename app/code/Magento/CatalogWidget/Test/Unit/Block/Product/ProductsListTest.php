@@ -78,6 +78,11 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
      */
     private $priceCurrency;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->collectionFactory =
@@ -91,7 +96,12 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->httpContext = $this->getMock(\Magento\Framework\App\Http\Context::class);
         $this->builder = $this->getMock(\Magento\Rule\Model\Condition\Sql\Builder::class, [], [], '', false);
         $this->rule = $this->getMock(\Magento\CatalogWidget\Model\Rule::class, [], [], '', false);
-        $this->widgetConditionsHelper = $this->getMock(\Magento\Widget\Helper\Conditions::class);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
+        $this->widgetConditionsHelper = $this->getMock(
+            \Magento\Widget\Helper\Conditions::class,
+            [],
+            ['serializer' => $this->serializer]
+        );
         $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->design = $this->getMock(\Magento\Framework\View\DesignInterface::class);
 

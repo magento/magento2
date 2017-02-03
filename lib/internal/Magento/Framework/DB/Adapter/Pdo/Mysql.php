@@ -1391,7 +1391,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function select()
     {
-//        return new Select($this);
         return $this->selectFactory->create($this);
     }
 

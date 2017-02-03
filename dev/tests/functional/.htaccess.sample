@@ -1,6 +1,6 @@
 ##############################################
-## Allow access to command.php and website.php
-    <FilesMatch "command.php|website.php|export.php|pathChecker.php|deleteMagentoGeneratedCode.php">
+## Allow access to command.php, website.php, export.php, pathChecker.php, deleteMagentoGeneratedCode.php and log.php
+    <FilesMatch "command.php|website.php|export.php|pathChecker.php|deleteMagentoGeneratedCode.php|log.php">
          order allow,deny
          allow from all
     </FilesMatch>
