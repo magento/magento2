@@ -149,11 +149,6 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
         </arguments>
     </type>
-    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable">
-        <arguments>
-            <argument name="attributeOptionProvider" xsi:type="object">Magento\ConfigurableProduct\Model\AttributeOptionProvider\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes">
         <arguments>
             <argument name="supportedTypes" xsi:type="array">
