@@ -28,6 +28,10 @@ Options -MultiViews
 AddType application/javascript js jsonp
 AddType application/json json
 
+# HTML
+
+AddType text/html html
+
 # CSS
 AddType text/css css
 
