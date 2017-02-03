@@ -52,7 +52,16 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         );
         $this->category = $this->getMock(
             \Magento\Catalog\Model\Category::class,
-            ['setUrlKey', 'setUrlPath', 'dataHasChangedFor', 'isObjectNew', 'getResource', 'getUrlKey', 'getStoreId'],
+            [
+                'setUrlKey',
+                'setUrlPath',
+                'dataHasChangedFor',
+                'isObjectNew',
+                'getResource',
+                'getUrlKey',
+                'getStoreId',
+                'getData'
+            ],
             [],
             '',
             false
@@ -106,6 +115,26 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->once())->method('getUrlKey')->willReturn(false);
         $this->category->expects($this->never())->method('setUrlKey');
         $this->category->expects($this->never())->method('setUrlPath');
+        $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Invalid URL key
+     */
+    public function testExecuteWithException()
+    {
+        $categoryName = 'test';
+        $categoryData = ['url_key' => 0];
+        $this->category->expects($this->once())->method('getUrlKey')->willReturn($categoryName);
+        $this->category->expects($this->once())
+            ->method('getData')
+            ->with('use_default')
+            ->willReturn($categoryData);
+        $this->categoryUrlPathGenerator->expects($this->once())
+            ->method('getUrlKey')
+            ->with($this->category)
+            ->willReturn(null);
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
     }
 
