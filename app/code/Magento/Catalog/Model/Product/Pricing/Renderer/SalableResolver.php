@@ -19,6 +19,6 @@ class SalableResolver implements SalableResolverInterface
      */
     public function isSalable(\Magento\Framework\Pricing\SaleableInterface $salableItem)
     {
-        return $salableItem->getCanShowPrice() !== false && $salableItem->isSalable();
+        return $salableItem->getCanShowPrice() !== false;
     }
 }

@@ -48,7 +48,7 @@ class Payment extends Block
      * @var string
      */
     protected $placeOrder = '.payment-method._active .action.primary.checkout';
-    
+
     /**
      * Wait element.
      *
@@ -117,6 +117,19 @@ class Payment extends Block
             );
             $formBlock->fill($creditCard);
         }
+    }
+
+    /**
+     * Check visibility of payment method block by payment method type.
+     *
+     * @param array $payment
+     * @return bool
+     */
+    public function isVisiblePaymentMethod(array $payment)
+    {
+        $paymentSelector = sprintf($this->paymentMethodInput, $payment['method']);
+
+        return $this->_rootElement->find($paymentSelector)->isVisible();
     }
 
     /**

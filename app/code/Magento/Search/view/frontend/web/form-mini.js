@@ -86,6 +86,8 @@ define([
                 setTimeout($.proxy(function () {
                     if (this.autoComplete.is(':hidden')) {
                         this.setActiveState(false);
+                    } else {
+                        this.element.trigger('focus');
                     }
                     this.autoComplete.hide();
                     this._updateAriaHasPopup(false);
