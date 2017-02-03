@@ -117,54 +117,13 @@ class JoinAssemblerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $queryConfigMock
+     *
+     * @dataProvider assembleNotEmptyDataProvider
      * @return void
      */
-    public function testAssembleNotEmpty()
+    public function testAssembleNotEmpty($queryConfigMock)
     {
-        $queryConfigMock = [
-            'source' => [
-                'name' => 'sales_order',
-                'alias' => 'sales',
-                'link-source' => [
-                    [
-                        'name' => 'sales_order_address',
-                        'alias' => 'billing',
-                        'link-type' => 'left',
-                        'attribute' => [
-                            [
-                                'alias' => 'billing_address_id',
-                                'name' => 'entity_id'
-                            ]
-                        ],
-                        'using' => [
-                            [
-                                'glue' => 'and',
-                                'condition' => [
-                                    [
-                                        'attribute' => 'parent_id',
-                                        'operator' => 'eq',
-                                        'type' => 'identifier',
-                                        '_value' => 'entity_id'
-                                    ]
-                                ]
-                            ]
-                        ],
-                        'filter' => [
-                            [
-                                'glue' => 'and',
-                                'condition' => [
-                                    [
-                                        'attribute' => 'entity_id',
-                                        'operator' => 'null'
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
-
         $filtersMock = [];
 
         $joinsMock = [
@@ -244,5 +203,57 @@ class JoinAssemblerTest extends \PHPUnit_Framework_TestCase
             $this->selectBuilderMock,
             $this->subject->assemble($this->selectBuilderMock, $queryConfigMock)
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function assembleNotEmptyDataProvider()
+    {
+        return [[
+            [
+                'source' => [
+                    'name' => 'sales_order',
+                    'alias' => 'sales',
+                    'link-source' => [
+                        [
+                            'name' => 'sales_order_address',
+                            'alias' => 'billing',
+                            'link-type' => 'left',
+                            'attribute' => [
+                                [
+                                    'alias' => 'billing_address_id',
+                                    'name' => 'entity_id'
+                                ]
+                            ],
+                            'using' => [
+                                [
+                                    'glue' => 'and',
+                                    'condition' => [
+                                        [
+                                            'attribute' => 'parent_id',
+                                            'operator' => 'eq',
+                                            'type' => 'identifier',
+                                            '_value' => 'entity_id'
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            'filter' => [
+                                [
+                                    'glue' => 'and',
+                                    'condition' => [
+                                        [
+                                            'attribute' => 'entity_id',
+                                            'operator' => 'null'
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]];
     }
 }
