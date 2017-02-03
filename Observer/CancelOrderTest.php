@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class CancelOrderTest extends PHPUnit_Framework_TestCase
+class CancelOrderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var int
