@@ -7,6 +7,11 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax;
 
 use Magento\Framework\View\Element\Template;
 
+/**
+ * Class Serializer
+ * @package Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax
+ * @deprecated
+ */
 class Serializer extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -18,6 +23,7 @@ class Serializer extends \Magento\Framework\View\Element\Template
      * @param Template\Context $context
      * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      * @param array $data
+     * @throws \RuntimeException
      */
     public function __construct(
         Template\Context $context,
