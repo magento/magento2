@@ -32,6 +32,9 @@ class AdminUsersFixture extends Fixture
         /** @var \Magento\Authorization\Model\RoleFactory $roleFactory */
         $roleFactory = $this->fixtureModel->getObjectManager()->create(\Magento\Authorization\Model\RoleFactory::class);
 
+        $defaultAdminUser = $adminUserFactory->create()->loadByUsername('admin');
+        $defaultAdminRole = $roleFactory->create()->load($defaultAdminUser->getAclRole());
+
         for ($i = 1; $i <= $adminUsersNumber; $i++) {
             $adminUser = $adminUserFactory->create();
             $adminUser
@@ -47,11 +50,11 @@ class AdminUsersFixture extends Fixture
             $role
                 ->setUserId($adminUser->getId())
                 ->setRoleName('admin')
-                ->setRoleType('U')
-                ->setUserType(2)
-                ->setTreeLevel(2)
-                ->setSortOrder(0)
-                ->setParentId(1);
+                ->setRoleType($defaultAdminRole->getRoleType())
+                ->setUserType($defaultAdminRole->getUserType())
+                ->setTreeLevel($defaultAdminRole->getTreeLevel())
+                ->setSortOrder($defaultAdminRole->getSortOrder())
+                ->setParentId($defaultAdminRole->getParentId());
             $role->save();
         }
 
