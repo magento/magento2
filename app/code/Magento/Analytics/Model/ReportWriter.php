@@ -63,34 +63,33 @@ class ReportWriter implements ReportWriterInterface
         $directory->create($path);
         $errorsList = [];
         foreach ($this->config->get() as $file) {
-            foreach ($file['providers'] as $provider) {
-                if (isset($provider['parameters']['name'])) {
-                    $error = $this->reportValidator->validate($provider['parameters']['name']);
-                    if ($error) {
-                        $errorsList[] = $error;
-                        continue;
-                    }
+            $provider = reset($file['providers']);
+            if (isset($provider['parameters']['name'])) {
+                $error = $this->reportValidator->validate($provider['parameters']['name']);
+                if ($error) {
+                    $errorsList[] = $error;
+                    continue;
                 }
-                /** @var  $providerObject */
-                $providerObject = $this->providerFactory->create($provider['class']);
-                $fileName = $provider['parameters'] ? $provider['parameters']['name'] : $provider['name'];
-                $fileFullPath = $path . $fileName . '.csv';
-                $fileData = $providerObject->getReport(...array_values($provider['parameters']));
-                $directory->create($path);
-                $stream = $directory->openFile($fileFullPath, 'w+');
-                $stream->lock();
-                $headers = [];
-                foreach ($fileData as $row) {
-                    if (!$headers) {
-                        $headers = array_keys($row);
-                        $stream->writeCsv($headers);
-
-                    }
-                    $stream->writeCsv($row);
-                }
-                $stream->unlock();
-                $stream->close();
             }
+            /** @var  $providerObject */
+            $providerObject = $this->providerFactory->create($provider['class']);
+            $fileName = $provider['parameters'] ? $provider['parameters']['name'] : $provider['name'];
+            $fileFullPath = $path . $fileName . '.csv';
+            $fileData = $providerObject->getReport(...array_values($provider['parameters']));
+            $directory->create($path);
+            $stream = $directory->openFile($fileFullPath, 'w+');
+            $stream->lock();
+            $headers = [];
+            foreach ($fileData as $row) {
+                if (!$headers) {
+                    $headers = array_keys($row);
+                    $stream->writeCsv($headers);
+
+                }
+                $stream->writeCsv($row);
+            }
+            $stream->unlock();
+            $stream->close();
         }
         if ($errorsList) {
             $errorStream = $directory->openFile($path . $this->errorsFileName, 'w+');
