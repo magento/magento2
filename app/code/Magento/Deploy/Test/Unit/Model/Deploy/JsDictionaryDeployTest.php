@@ -100,5 +100,4 @@ class JsDictionaryDeployTest extends \PHPUnit_Framework_TestCase
 
         $this->model->deploy($area, $themePath, $locale);
     }
-
 }
