@@ -128,9 +128,9 @@ class CreateInvoiceStep implements TestStepInterface
             $this->orderInvoiceNew->getFormBlock()->updateQty();
             $this->orderInvoiceNew->getFormBlock()->fillFormData($invoiceData);
             $this->orderInvoiceNew->getFormBlock()->submit();
+            $shipmentIds = $this->getShipmentIds();
         }
         $invoiceIds = $this->getInvoiceIds();
-        $shipmentIds = $this->getShipmentIds();
 
         return [
             'ids' => [
