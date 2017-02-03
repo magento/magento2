@@ -99,11 +99,11 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider configDataProvider
      */
-    public function testWrite($configData)
+    public function testWrite(array $configData)
     {
         $errors = [];
         $fileData = [
-            [1, 'Shoes Usual']
+            ['number' => 1, 'type' => 'Shoes Usual']
         ];
         $this->configInterfaceMock
             ->expects($this->once())
@@ -125,8 +125,17 @@ class ReportWriterTest extends \PHPUnit_Framework_TestCase
         $errorStreamMock = $this->getMockBuilder(
             \Magento\Framework\Filesystem\File\WriteInterface::class
         )->getMockForAbstractClass();
-        $errorStreamMock->expects($this->once())->method('lock');
-        $errorStreamMock->expects($this->once())->method('writeCsv')->with($fileData[0]);
+        $errorStreamMock
+            ->expects($this->once())
+            ->method('lock')
+            ->with();
+        $errorStreamMock
+            ->expects($this->exactly(2))
+            ->method('writeCsv')
+            ->withConsecutive(
+                [array_keys($fileData[0])],
+                [$fileData[0]]
+            );
         $errorStreamMock->expects($this->once())->method('unlock');
         $errorStreamMock->expects($this->once())->method('close');
         if ($parameterName) {
