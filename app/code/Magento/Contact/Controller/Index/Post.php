@@ -43,7 +43,7 @@ class Post extends \Magento\Contact\Controller\Index
             if (trim($post['comment']) === '') {
                 $error = true;
             }
-            if (!\Zend_Validate::is(trim($post['email']), 'EmailAddress')) {
+            if (false === \strpos($post['email'], '@')) {
                 $error = true;
             }
             if (trim($post['hideit']) !== '') {
