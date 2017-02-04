@@ -10,12 +10,17 @@ addons:
 language: php
 php:
   - 5.6
+  - 7.0
 env:
   global:
     - COMPOSER_BIN_DIR=~/bin
     - INTEGRATION_SETS=3
   matrix:
+    - TEST_SUITE=unit
+    - TEST_SUITE=integration INTEGRATION_INDEX=1
+    - TEST_SUITE=integration INTEGRATION_INDEX=2
     - TEST_SUITE=integration INTEGRATION_INDEX=3
+    - TEST_SUITE=static
 cache:
   apt: true
   directories: $HOME/.composer/cache
