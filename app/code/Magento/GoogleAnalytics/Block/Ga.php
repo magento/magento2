@@ -80,14 +80,13 @@ class Ga extends \Magento\Framework\View\Element\Template
             $optPageURL = ", '" . $this->escapeHtmlAttr($pageName, false) . "'";
         }
 
-        $anonymizeIp = "false";
+        $anonymizeIp = "";
         if ($this->_googleAnalyticsData->isAnonymizedIpActive()) {
-          $anonymizeIp = "true";
+          $anonymizeIp = ", {'anonymizeIp': true}";
         }
 
-        return "\nga('create', '{$this->escapeJsQuote(
-            $accountId
-        )}', 'auto');\nga('send', 'pageview'{$optPageURL}, {'anonymizeIp' : {$anonymizeIp}});\n";
+        return "\nga('create', '" . $this->escapeHtmlAttr($accountId, false)
+           . ", 'auto');\nga('send', 'pageview'{$optPageURL}{$anonymizeIp});\n";
     }
 
     /**
@@ -111,6 +110,12 @@ class Ga extends \Magento\Framework\View\Element\Template
         $result = [];
 
         $result[] = "ga('require', 'ec', 'ec.js');";
+
+        $anonymizeIp = "";
+        if ($this->_googleAnalyticsData->isAnonymizedIpActive()) {
+          $anonymizeIp = ", {'anonymizeIp': true}";
+        }
+
         foreach ($collection as $order) {
             if ($order->getIsVirtual()) {
                 $address = $order->getBillingAddress();
@@ -148,7 +153,7 @@ class Ga extends \Magento\Framework\View\Element\Template
                 $order->getBaseShippingAmount()
             );
 
-            $result[] = "ga('send', 'pageview');";
+            $result[] = "ga('send', 'pageview'{$anonymizeIp});";
         }
         return implode("\n", $result);
     }
