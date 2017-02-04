@@ -5,6 +5,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Contact\Test\Unit\Controller\Index;
+
 use Magento\Framework\Controller\Result\Redirect;
 
 /**
@@ -85,8 +86,13 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->urlMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
         $this->messageManagerMock =
             $this->getMock(\Magento\Framework\Message\ManagerInterface::class, [], [], '', false);
-        $this->requestStub =
-            $this->getMock(\Magento\Framework\App\Request\Http::class, ['getPostValue', 'getParams', 'getParam'], [], '', false);
+        $this->requestStub = $this->getMock(
+            \Magento\Framework\App\Request\Http::class,
+            ['getPostValue', 'getParams', 'getParam'],
+            [],
+            '',
+            false
+        );
         $this->redirectResultMock = $this->getMock(
             \Magento\Framework\Controller\Result\Redirect::class,
             [],
@@ -95,7 +101,13 @@ class PostTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->redirectResultMock->method('setPath')->willReturnSelf();
-        $this->redirectResultFactoryMock = $this->getMock(\Magento\Framework\Controller\Result\RedirectFactory::class, ['create'], [], '', false);
+        $this->redirectResultFactoryMock = $this->getMock(
+            \Magento\Framework\Controller\Result\RedirectFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->redirectResultFactoryMock
             ->method('create')
             ->willReturn($this->redirectResultMock);
@@ -157,7 +169,6 @@ class PostTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteEmptyPost()
     {
-//        $this->requestMock->expects($this->once())->method('getPostValue')->willReturn([]);
         $this->stubRequestPostData([]);
         $this->assertSame($this->redirectResultMock, $this->controller->execute());
     }
@@ -264,6 +275,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->requestStub->method('getParam')->willReturnCallback(
             function ($key) use ($post) {
                 return $post[$key];
-            });
+            }
+        );
     }
 }
