@@ -8,6 +8,7 @@ namespace Magento\Contact\Controller\Index;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 
@@ -21,6 +22,7 @@ class Post extends \Magento\Contact\Controller\Index
     /**
      * Post user question
      *
+     * @return Redirect
      */
     public function execute()
     {
@@ -66,6 +68,7 @@ class Post extends \Magento\Contact\Controller\Index
 
     /**
      * @param array $post Post data from contact form
+     * @return void
      */
     protected function sendEmail($post)
     {
@@ -87,6 +90,9 @@ class Post extends \Magento\Contact\Controller\Index
         $transport->sendMessage();
     }
 
+    /**
+     * @return bool
+     */
     private function isPostRequest()
     {
         /** @var Request $request */
