@@ -21,6 +21,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setPostValue($params);
 
         $this->dispatch('contact/index/post');
+        $this->assertRedirect($this->stringContains('contact/index'));
         $this->assertSessionMessages(
             $this->contains(
                 "Thanks for contacting us with your comments and questions. We'll respond to you very soon."

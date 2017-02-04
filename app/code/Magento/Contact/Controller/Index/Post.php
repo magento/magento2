@@ -8,6 +8,7 @@ namespace Magento\Contact\Controller\Index;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
 
 class Post extends \Magento\Contact\Controller\Index
 {
@@ -19,54 +20,29 @@ class Post extends \Magento\Contact\Controller\Index
     /**
      * Post user question
      *
-     * @return void
-     * @throws \Exception
      */
     public function execute()
     {
-        $post = $this->getRequest()->getPostValue();
-        if (!$post) {
-            $this->_redirect('*/*/');
-            return;
+        if (! $this->isPostRequest()) {
+            return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
 
         $this->inlineTranslation->suspend();
         try {
-            $error = false;
-
-            if (trim($post['name']) === '') {
-                $error = true;
-            }
-            if (trim($post['comment']) === '') {
-                $error = true;
-            }
-            if (false === \strpos($post['email'], '@')) {
-                $error = true;
-            }
-            if (trim($post['hideit']) !== '') {
-                $error = true;
-            }
-            if ($error) {
-                throw new \Exception();
-            }
-
-            $this->sendEmail($post);
+            $this->sendEmail($this->validatedParams());
             $this->inlineTranslation->resume();
             $this->messageManager->addSuccess(
                 __('Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.')
             );
             $this->getDataPersistor()->clear('contact_us');
-            $this->_redirect('contact/index');
-            return;
         } catch (\Exception $e) {
             $this->inlineTranslation->resume();
             $this->messageManager->addError(
                 __('We can\'t process your request right now. Sorry, that\'s all we know.')
             );
-            $this->getDataPersistor()->set('contact_us', $post);
-            $this->_redirect('contact/index');
-            return;
+            $this->getDataPersistor()->set('contact_us', $this->getRequest()->getParams());
         }
+        return $this->resultRedirectFactory->create()->setPath('contact/index');
     }
 
     /**
@@ -105,5 +81,35 @@ class Post extends \Magento\Contact\Controller\Index
             ->getTransport();
 
         $transport->sendMessage();
+    }
+
+    private function isPostRequest()
+    {
+        /** @var Request $request */
+        $request = $this->getRequest();
+        return !empty($request->getPostValue());
+    }
+
+    private function validatedParams()
+    {
+        $request = $this->getRequest();
+        $error = false;
+        if (trim($request->getParam('name')) === '') {
+            $error = true;
+        }
+        if (trim($request->getParam('comment')) === '') {
+            $error = true;
+        }
+        if (false === \strpos($request->getParam('email'), '@')) {
+            $error = true;
+        }
+        if (trim($request->getParam('hideit')) !== '') {
+            $error = true;
+        }
+        if ($error) {
+            throw new \Exception();
+        }
+
+        return $request->getParams();
     }
 }
