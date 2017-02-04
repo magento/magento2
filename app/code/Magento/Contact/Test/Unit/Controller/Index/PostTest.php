@@ -5,6 +5,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Contact\Test\Unit\Controller\Index;
+use Magento\Framework\Controller\Result\Redirect;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -22,9 +23,14 @@ class PostTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewMock;
+    protected $redirectResultFactoryMock;
+
+    /**
+     * @var Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $redirectResultMock;
 
     /**
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -32,14 +38,9 @@ class PostTest extends \PHPUnit_Framework_TestCase
     protected $urlMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\HttpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestMock;
-
-    /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $redirectMock;
+    protected $requestStub;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -76,7 +77,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         );
         $context = $this->getMock(
             \Magento\Framework\App\Action\Context::class,
-            ['getRequest', 'getResponse', 'getView', 'getUrl', 'getRedirect', 'getMessageManager'],
+            ['getRequest', 'getResponse', 'getResultRedirectFactory', 'getUrl', 'getRedirect', 'getMessageManager'],
             [],
             '',
             false
@@ -84,11 +85,20 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->urlMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
         $this->messageManagerMock =
             $this->getMock(\Magento\Framework\Message\ManagerInterface::class, [], [], '', false);
-        $this->requestMock =
-            $this->getMock(\Magento\Framework\App\Request\Http::class, ['getPostValue'], [], '', false);
-        $this->redirectMock =
-            $this->getMock(\Magento\Framework\App\Response\RedirectInterface::class, [], [], '', false);
-        $this->viewMock = $this->getMock(\Magento\Framework\App\ViewInterface::class, [], [], '', false);
+        $this->requestStub =
+            $this->getMock(\Magento\Framework\App\Request\Http::class, ['getPostValue', 'getParams', 'getParam'], [], '', false);
+        $this->redirectResultMock = $this->getMock(
+            \Magento\Framework\Controller\Result\Redirect::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->redirectResultMock->method('setPath')->willReturnSelf();
+        $this->redirectResultFactoryMock = $this->getMock(\Magento\Framework\Controller\Result\RedirectFactory::class, ['create'], [], '', false);
+        $this->redirectResultFactoryMock
+            ->method('create')
+            ->willReturn($this->redirectResultMock);
         $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
         $this->transportBuilderMock = $this->getMock(
             \Magento\Framework\Mail\Template\TransportBuilder::class,
@@ -108,7 +118,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $context->expects($this->any())
             ->method('getRequest')
-            ->willReturn($this->requestMock);
+            ->willReturn($this->requestStub);
 
         $context->expects($this->any())
             ->method('getResponse')
@@ -122,13 +132,9 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->willReturn($this->urlMock);
 
-        $context->expects($this->any())
-            ->method('getRedirect')
-            ->willReturn($this->redirectMock);
-
         $context->expects($this->once())
-            ->method('getView')
-            ->willReturn($this->viewMock);
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->redirectResultFactoryMock);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -151,9 +157,9 @@ class PostTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteEmptyPost()
     {
-        $this->requestMock->expects($this->once())->method('getPostValue')->willReturn([]);
-        $this->redirectMock->expects($this->once())->method('redirect');
-        $this->controller->execute();
+//        $this->requestMock->expects($this->once())->method('getPostValue')->willReturn([]);
+        $this->stubRequestPostData([]);
+        $this->assertSame($this->redirectResultMock, $this->controller->execute());
     }
 
     /**
@@ -161,13 +167,11 @@ class PostTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecutePostValidation($postData, $exceptionExpected)
     {
-        $this->requestMock->expects($this->any())
-            ->method('getPostValue')
-            ->willReturn($postData);
+        $this->stubRequestPostData($postData);
 
         if ($exceptionExpected) {
             $this->messageManagerMock->expects($this->once())
-                ->method('addError');
+                ->method('addErrorMessage');
             $this->dataPersistorMock->expects($this->once())
                 ->method('set')
                 ->with('contact_us', $postData);
@@ -201,9 +205,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->method('clear')
             ->with('contact_us');
 
-        $this->requestMock->expects($this->any())
-            ->method('getPostValue')
-            ->willReturn($post);
+        $this->stubRequestPostData($post);
 
         $transport = $this->getMock(\Magento\Framework\Mail\TransportInterface::class, [], [], '', false);
 
@@ -250,5 +252,18 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->method('suspend');
 
         $this->controller->execute();
+    }
+
+    /**
+     * @param array $post
+     */
+    private function stubRequestPostData($post)
+    {
+        $this->requestStub->method('getPostValue')->willReturn($post);
+        $this->requestStub->method('getParams')->willReturn($post);
+        $this->requestStub->method('getParam')->willReturnCallback(
+            function ($key) use ($post) {
+                return $post[$key];
+            });
     }
 }
