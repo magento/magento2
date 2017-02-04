@@ -8,6 +8,7 @@ namespace Magento\Contact\Controller\Index;
 
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 
 class Post extends \Magento\Contact\Controller\Index
@@ -30,17 +31,20 @@ class Post extends \Magento\Contact\Controller\Index
         $this->inlineTranslation->suspend();
         try {
             $this->sendEmail($this->validatedParams());
-            $this->inlineTranslation->resume();
             $this->messageManager->addSuccess(
                 __('Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.')
             );
             $this->getDataPersistor()->clear('contact_us');
+        } catch (LocalizedException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->getDataPersistor()->set('contact_us', $this->getRequest()->getParams());
         } catch (\Exception $e) {
-            $this->inlineTranslation->resume();
-            $this->messageManager->addError(
+            $this->messageManager->addErrorMessage(
                 __('We can\'t process your request right now. Sorry, that\'s all we know.')
             );
             $this->getDataPersistor()->set('contact_us', $this->getRequest()->getParams());
+        } finally {
+            $this->inlineTranslation->resume();
         }
         return $this->resultRedirectFactory->create()->setPath('contact/index');
     }
@@ -90,23 +94,23 @@ class Post extends \Magento\Contact\Controller\Index
         return !empty($request->getPostValue());
     }
 
+    /**
+     * @return array
+     * @throws \Exception
+     */
     private function validatedParams()
     {
         $request = $this->getRequest();
-        $error = false;
         if (trim($request->getParam('name')) === '') {
-            $error = true;
+            throw new LocalizedException(__('Name is missing'));
         }
         if (trim($request->getParam('comment')) === '') {
-            $error = true;
+            throw new LocalizedException(__('Comment is missing'));
         }
         if (false === \strpos($request->getParam('email'), '@')) {
-            $error = true;
+            throw new LocalizedException(__('Invalid email address'));
         }
         if (trim($request->getParam('hideit')) !== '') {
-            $error = true;
-        }
-        if ($error) {
             throw new \Exception();
         }
 
