@@ -85,40 +85,6 @@ class Collection extends BlockCollection implements SearchResultInterface
     }
 
     /**
-     * Retrieve all ids for collection
-     * Backward compatibility with EAV collection
-     *
-     * @param int $limit
-     * @param int $offset
-     * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function getAllIds($limit = null, $offset = null)
-    {
-        return $this->getConnection()->fetchCol($this->_getAllIdsSelect($limit, $offset), $this->_bindParams);
-    }
-
-    /**
-     * Create all ids retrieving select with limitation
-     *
-     * @param int $limit
-     * @param int $offset
-     * @return \Magento\Framework\DB\Select
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function _getAllIdsSelect($limit = null, $offset = null)
-    {
-        $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
-        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
-        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
-        $idsSelect->columns($this->getResource()->getIdFieldName(), 'main_table');
-        $idsSelect->limit($limit, $offset);
-        return $idsSelect;
-    }
-
-    /**
      * Get search criteria.
      *
      * @return \Magento\Framework\Api\SearchCriteriaInterface|null
