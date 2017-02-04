@@ -34,4 +34,4 @@ before_script: ./dev/travis/before_script.sh
 script: 
   - cd dev/tests/$TEST_SUITE
   - test $TEST_SUITE = "static" && TEST_FILTER='--filter "Magento\\Test\\Php\\LiveCodeTest"' || true
-  - phpunit $TEST_FILTER
+  - phpunit --verbose --debug $TEST_FILTER
