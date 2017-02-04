@@ -14,8 +14,8 @@ case $TEST_SUITE in
         test_set_list=$(find testsuite/* -maxdepth 1 -mindepth 1 -type d | sort)
         test_set_count=$(printf "$test_set_list" | wc -l)
         test_set_size[1]=$(printf "%.0f" $(echo "$test_set_count*0.12" | bc))  #12%
-        test_set_size[2]=$(printf "%.0f" $(echo "$test_set_count*0.30" | bc))  #30%
-        test_set_size[3]=$((test_set_count-test_set_size[1]-test_set_size[2])) #58%
+        test_set_size[2]=$(printf "%.0f" $(echo "$test_set_count*0.32" | bc))  #32%
+        test_set_size[3]=$((test_set_count-test_set_size[1]-test_set_size[2])) #56%
         echo "Total = ${test_set_count}; Batch #1 = ${test_set_size[1]}; Batch #2 = ${test_set_size[2]}; Batch #3 = ${test_set_size[3]};";
 
         echo "==> preparing integration testsuite on index $INTEGRATION_INDEX with set size of ${test_set_size[$INTEGRATION_INDEX]}"
