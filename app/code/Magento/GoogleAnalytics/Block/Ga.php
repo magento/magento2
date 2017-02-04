@@ -80,8 +80,14 @@ class Ga extends \Magento\Framework\View\Element\Template
             $optPageURL = ", '" . $this->escapeHtmlAttr($pageName, false) . "'";
         }
 
-        return "\nga('create', '" . $this->escapeHtmlAttr($accountId, false)
-            . ", 'auto');\nga('send', 'pageview'{$optPageURL});\n";
+        $anonymizeIp = "false";
+        if ($this->_googleAnalyticsData->isAnonymizedIpActive()) {
+          $anonymizeIp = "true";
+        }
+
+        return "\nga('create', '{$this->escapeJsQuote(
+            $accountId
+        )}', 'auto');\nga('send', 'pageview'{$optPageURL}, {'anonymizeIp' : {$anonymizeIp}});\n";
     }
 
     /**
