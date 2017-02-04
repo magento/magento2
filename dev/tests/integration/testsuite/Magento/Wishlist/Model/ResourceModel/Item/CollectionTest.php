@@ -1,8 +1,10 @@
 <?php
-
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Wishlist\Model\ResourceModel\Item;
-
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ObjectManager;
@@ -15,14 +17,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * @var ObjectManager
      */
     private $objectManager;
+
     /**
      * @var Collection
      */
     private $itemCollection;
+
     /**
      * @var Wishlist
      */
     private $wishlist;
+
     /**
      * @var Config\Data
      */
@@ -35,7 +40,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->itemCollection = $this->objectManager->get(Collection::class);
         $this->attributeConfig = $this->objectManager->get(Config\Data::class);
     }
+
     /**
+     * Verify that Wishlist Item Collection uses Catalog Attributes defined in the configuration.
+     *
      * @magentoDataFixture Magento/Wishlist/_files/wishlist_shared.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
@@ -55,7 +63,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $attributes
+     * @param array $attributes
      */
     private function addAttributesToWishlistConfig($attributes)
     {
