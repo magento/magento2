@@ -37,16 +37,16 @@ class Post extends \Magento\Contact\Controller\Index
 
             $error = false;
 
-            if (!\Zend_Validate::is(trim($post['name']), 'NotEmpty')) {
+            if (trim($post['name']) === '') {
                 $error = true;
             }
-            if (!\Zend_Validate::is(trim($post['comment']), 'NotEmpty')) {
+            if (trim($post['comment']) === '') {
                 $error = true;
             }
             if (!\Zend_Validate::is(trim($post['email']), 'EmailAddress')) {
                 $error = true;
             }
-            if (\Zend_Validate::is(trim($post['hideit']), 'NotEmpty')) {
+            if (trim($post['hideit']) !== '') {
                 $error = true;
             }
             if ($error) {
