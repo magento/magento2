@@ -10,9 +10,7 @@ namespace Magento\Framework\Module;
  *
  * Usage:
  * ```php
- *  //...
  *  $manager->isEnabled('Vendor_Module');
- *  //...
  * ```
  */
 class Manager
@@ -21,6 +19,8 @@ class Manager
      * The checker of output modules.
      *
      * @var Output\ConfigInterface the config checker of output modules.
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version.
+     * The property can be removed in a future major release
      */
     private $outputConfig;
 
@@ -35,6 +35,8 @@ class Manager
      * The list of config paths to ignore.
      *
      * @var array the list of config paths to ignore.
+     * @deprecated Magento does not support custom disabling/enabling module output since 2.2.0 version.
+     * The property can be removed in a future major release
      */
     private $outputConfigPaths;
 
