@@ -11,7 +11,7 @@ case $TEST_SUITE in
     integration)
         cd dev/tests/integration
 
-        test_set_list=$(find testsuite/* -maxdepth 1 -mindepth 1 -type d -not -name Setup| sort)
+        test_set_list=$(find testsuite/* -maxdepth 1 -mindepth 1 -type d | sort)
         test_set_count=$(printf "$test_set_list" | wc -l)
         test_set_size[1]=$(printf "%.0f" $(echo "$test_set_count*0.12" | bc))  #12%
         test_set_size[2]=$(printf "%.0f" $(echo "$test_set_count*0.32" | bc))  #32%

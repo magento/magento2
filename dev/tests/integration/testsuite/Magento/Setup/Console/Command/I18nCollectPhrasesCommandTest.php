@@ -35,6 +35,7 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteConsoleOutput()
     {
+        $this->markTestSkipped('MAGETWO-63512. Unexpected test exit.');
         $this->tester->execute(
             [
                 'directory' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/',
