@@ -5,26 +5,19 @@
  */
 namespace Magento\Payment\Model;
 
-use Magento\Payment\Api\CodeVerificationInterface;
+use Magento\Payment\Api\PaymentVerificationInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
- * Default implementation of code verification interface.
+ * Default implementation of codes verification interfaces.
  * Provides AVS, CVV codes matching for payment methods which are not support AVS, CVV verification.
  */
-class NullCodeVerification implements CodeVerificationInterface
+class NullPaymentVerification implements PaymentVerificationInterface
 {
     /**
      * @inheritdoc
      */
-    public function getAvsCode()
-    {
-        return null;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCvvCode()
+    public function getCode(OrderPaymentInterface $orderPayment)
     {
         return null;
     }
