@@ -6,6 +6,7 @@
 namespace Magento\Signifyd\Model\CaseServices;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
@@ -78,6 +79,8 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
 
         $caseEntity = $caseRepository->getByCaseId($caseId);
         $orderEntityId = $caseEntity->getOrderId();
+        $gridGuarantyStatus = $this->getOrderGridGuarantyStatus($orderEntityId);
+
         static::assertNotEmpty($caseEntity);
         static::assertEquals('2017-01-05 22:23:26', $caseEntity->getCreatedAt());
         static::assertEquals(CaseInterface::GUARANTEE_APPROVED, $caseEntity->getGuaranteeDisposition());
@@ -85,6 +88,11 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
         static::assertEquals(true, $caseEntity->isGuaranteeEligible());
         static::assertEquals(CaseInterface::STATUS_PROCESSING, $caseEntity->getStatus());
         static::assertEquals($orderEntityId, $caseEntity->getOrderId());
+        static::assertEquals(
+            $gridGuarantyStatus,
+            $caseEntity->getGuaranteeDisposition(),
+            'Signifyd guaranty status in sales_order_grid table does not match case entity guaranty status'
+        );
 
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
@@ -96,5 +104,25 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $caseCreationComment = array_pop($histories);
         static::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
         static::assertEquals("Signifyd Case $caseId has been created for order.", $caseCreationComment->getComment());
+    }
+
+    /**
+     * Returns value of signifyd_guarantee_status column from sales order grid
+     *
+     * @param int $orderEntityId
+     * @return string|null
+     */
+    private function getOrderGridGuarantyStatus($orderEntityId)
+    {
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Grid\Collection $orderGridCollection */
+        $orderGridCollection = $this->objectManager->get(
+            \Magento\Sales\Model\ResourceModel\Order\Grid\Collection::class
+        );
+
+        $items = $orderGridCollection->addFilter($orderGridCollection->getIdFieldName(), $orderEntityId)
+            ->getItems();
+        $result = array_pop($items);
+
+        return isset($result['signifyd_guarantee_status']) ? $result['signifyd_guarantee_status'] : null;
     }
 }
