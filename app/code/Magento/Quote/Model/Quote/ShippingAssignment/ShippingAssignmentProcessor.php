@@ -5,6 +5,7 @@
  */
 namespace Magento\Quote\Model\Quote\ShippingAssignment;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Framework\Exception\InputException;
@@ -66,14 +67,6 @@ class ShippingAssignmentProcessor
         /** @var \Magento\Quote\Model\Quote $quote */
         $shippingAddress = $quote->getShippingAddress();
 
-        if ($shippingAddress->getCustomerAddressId()) {
-            try {
-                $this->addressRepository->getById($shippingAddress->getCustomerAddressId());
-            } catch (NoSuchEntityException $e) {
-                $shippingAddress->setCustomerAddressId(null);
-            }
-        }
-
         /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
         $shippingAssignment = $this->shippingAssignmentFactory->create();
         $shippingAssignment->setItems($quote->getItems());
@@ -83,10 +76,12 @@ class ShippingAssignmentProcessor
     }
 
     /**
+     * Save shipping assignment
+     *
      * @param ShippingAssignmentInterface $shippingAssignment
      * @param CartInterface $quote
      * @return void
-     * @throws InputException
+     * @throws InputException|LocalizedException
      */
     public function save(CartInterface $quote, ShippingAssignmentInterface $shippingAssignment)
     {
@@ -97,6 +92,17 @@ class ShippingAssignmentProcessor
                 $this->cartItemPersister->save($quote, $item);
             }
         }
+
+        $shippingAddress = $quote->getShippingAddress();
+
+        if ($shippingAddress->getCustomerAddressId()) {
+            try {
+                $this->addressRepository->getById($shippingAddress->getCustomerAddressId());
+            } catch (NoSuchEntityException $e) {
+                $shippingAddress->setCustomerAddressId(null);
+            }
+        }
+
         $this->shippingProcessor->save($shippingAssignment->getShipping(), $quote);
     }
 }
