@@ -8,6 +8,7 @@ namespace Magento\CatalogUrlRewrite\Observer;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
+use Magento\Framework\Event\Observer;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\Store;
@@ -47,7 +48,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     {
         /** @var Category $category */
         $category = $observer->getEvent()->getCategory();
-        if ($category->getUrlKey() !== false && !$category->getData('use_default')['url_key']) {
+        if ($category->getUrlKey() !== false) {
             $resultUrlKey = $this->categoryUrlPathGenerator->getUrlKey($category);
             if (empty($resultUrlKey)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid URL key'));
