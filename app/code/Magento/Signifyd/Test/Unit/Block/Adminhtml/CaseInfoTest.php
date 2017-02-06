@@ -90,50 +90,125 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Checks css class according to case entity score value.
+     * Checks label according to Signifyd status.
      *
-     * @param integer $score
-     * @param string $expectedClassName
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getScoreClass
-     * @dataProvider getScoreClassDataProvider
+     * @param string $status
+     * @param string $expectedLabel
+     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getCaseStatus()
+     * @dataProvider getStatusLabelDataProvider
      */
-    public function testGetScoreClass($score, $expectedClassName)
+    public function testGetCaseStatus($status, $expectedLabel)
     {
-        $this->caseEntity->expects($this->once())
-            ->method('getScore')
-            ->willReturn($score);
-
         $this->caseManagement->expects(self::once())
             ->method('getByOrderId')
             ->willReturn($this->caseEntity);
 
+        $this->caseEntity->expects(self::atLeastOnce())
+            ->method('getStatus')
+            ->willReturn($status);
+
         self::assertEquals(
-            $expectedClassName,
-            $this->caseInfo->getScoreClass()
+            $expectedLabel,
+            $this->caseInfo->getCaseStatus()
         );
     }
 
     /**
-     * Checks case property getter with real case.
+     * Case status and corresponding label data provider.
      *
-     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getCaseProperty
+     * @return array
      */
-    public function testCasePropertyWithCaseExists()
+    public function getStatusLabelDataProvider()
     {
-        $score = 575;
+        return [
+            [CaseInterface::STATUS_OPEN, __('Open')],
+            [CaseInterface::STATUS_PENDING, __('Pending')],
+            [CaseInterface::STATUS_PROCESSING, __('Processing')],
+            [CaseInterface::STATUS_FLAGGED, __('Flagged')],
+            [CaseInterface::STATUS_DISMISSED, __('Dismissed')],
+            ['Unregistered', '']
+        ];
+    }
 
-        $this->caseEntity->expects($this->once())
-            ->method('getScore')
-            ->willReturn($score);
-
+    /**
+     * Checks label according to Signifyd Guarantee Disposition.
+     *
+     * @param string $guaranteeDisposition
+     * @param string $expectedLabel
+     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getCaseGuaranteeDisposition()
+     * @dataProvider getGuaranteeLabelDataProvider
+     */
+    public function testGetGuaranteeDisposition($guaranteeDisposition, $expectedLabel)
+    {
         $this->caseManagement->expects(self::once())
             ->method('getByOrderId')
             ->willReturn($this->caseEntity);
 
+        $this->caseEntity->expects(self::atLeastOnce())
+            ->method('getGuaranteeDisposition')
+            ->willReturn($guaranteeDisposition);
+
         self::assertEquals(
-            $score,
-            $this->caseInfo->getCaseScore()
+            $expectedLabel,
+            $this->caseInfo->getCaseGuaranteeDisposition()
         );
+    }
+
+    /**
+     * Case Guarantee Disposition and corresponding label data provider.
+     *
+     * @return array
+     */
+    public function getGuaranteeLabelDataProvider()
+    {
+        return [
+            [CaseInterface::GUARANTEE_APPROVED, __('Approved')],
+            [CaseInterface::GUARANTEE_DECLINED, __('Declined')],
+            [CaseInterface::GUARANTEE_PENDING, __('Pending')],
+            [CaseInterface::GUARANTEE_CANCELED, __('Canceled')],
+            [CaseInterface::GUARANTEE_IN_REVIEW, __('In Review')],
+            [CaseInterface::GUARANTEE_UNREQUESTED, __('Unrequested')],
+            ['Unregistered', '']
+        ];
+    }
+
+    /**
+     * Checks label according to Signifyd Review Disposition.
+     *
+     * @param string $reviewDisposition
+     * @param string $expectedLabel
+     * @covers \Magento\Signifyd\Block\Adminhtml\CaseInfo::getCaseReviewDisposition()
+     * @dataProvider getReviewLabelDataProvider
+     */
+    public function testGetReviewDisposition($reviewDisposition, $expectedLabel)
+    {
+        $this->caseManagement->expects(self::once())
+            ->method('getByOrderId')
+            ->willReturn($this->caseEntity);
+
+        $this->caseEntity->expects(self::atLeastOnce())
+            ->method('getReviewDisposition')
+            ->willReturn($reviewDisposition);
+
+        self::assertEquals(
+            $expectedLabel,
+            $this->caseInfo->getCaseReviewDisposition()
+        );
+    }
+
+    /**
+     * Case Review Disposition and corresponding label data provider.
+     *
+     * @return array
+     */
+    public function getReviewLabelDataProvider()
+    {
+        return [
+            [CaseInterface::DISPOSITION_GOOD, __('Good')],
+            [CaseInterface::DISPOSITION_FRAUDULENT, __('Fraudulent')],
+            [CaseInterface::DISPOSITION_UNSET, __('Unset')],
+            ['Unregistered', '']
+        ];
     }
 
     /**
@@ -148,22 +223,8 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
 
         self::assertEquals(
-            0,
-            $this->caseInfo->getCaseScore()
+            '',
+            $this->caseInfo->getCaseGuaranteeDisposition()
         );
-    }
-
-    /**
-     * Case scores and corresponding class name data provider
-     *
-     * @return array
-     */
-    public function getScoreClassDataProvider()
-    {
-        return [
-            [300, 'red'],
-            [400, 'yellow'],
-            [500, 'green'],
-        ];
     }
 }

@@ -17,32 +17,26 @@
     <div class="admin__page-section-title">
         <span class="title"><?php echo $block->escapeHtml(__('Fraud Protection Information')); ?></span>
     </div>
-    <div class="admin__table-wrapper">
-        <table class="data-table admin__table-primary order-case-table">
-            <thead>
-            <tr class="headings">
-                <th class="col-case-status"><?php echo $block->escapeHtml(__('Case Status')); ?></th>
-                <th class="col-case-score"><?php echo $block->escapeHtml(__('Case Score')); ?></th>
-                <th class="col-guarantee-eligible"><?php echo $block->escapeHtml(__('Guarantee Eligible')); ?></th>
-                <th class="col-guarantee-disposition"><?php echo $block->escapeHtml(__('Guarantee Disposition')); ?></th>
-                <th class="col-case-team"><?php echo $block->escapeHtml(__('Associated Team')); ?></th>
-                <th class="col-case-review"><?php echo $block->escapeHtml(__('Review Disposition')); ?></th>
-                <th class="col-case-created"><?php echo $block->escapeHtml(__('Case Created')); ?></th>
-                <th class="col-case-updated"><?php echo $block->escapeHtml(__('Case Updated')); ?></th>
-            </tr>
-            </thead>
-            <tbody class="even">
-            <tr>
-                <td class="col-case-status"><?php echo $block->escapeHtml($block->getCaseStatus()); ?></td>
-                <td class="col-case-score-<?php echo $block->escapeHtml($block->getScoreClass()); ?>"><?php echo $block->escapeHtml($block->getCaseScore()); ?></td>
-                <td class="col-guarantee-eligible"><?php echo $block->escapeHtml($block->getCaseGuaranteeEligible()); ?></td>
-                <td class="col-guarantee-disposition"><?php echo $block->escapeHtml($block->getCaseGuaranteeDisposition()); ?></td>
-                <td class="col-case-team"><?php echo $block->escapeHtml($block->getCaseAssociatedTeam()); ?></td>
-                <td class="col-case-review"><?php echo $block->escapeHtml($block->getCaseReviewDisposition()); ?></td>
-                <td class="col-case-created"><?php echo $block->escapeHtml($block->getCaseCreatedAt()); ?></td>
-                <td class="col-case-updated"><?php echo $block->escapeHtml($block->getCaseUpdatedAt()); ?></td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item case-information">
+            <div class="admin__table-wrapper">
+                <table class="admin__table-secondary order-case-table">
+                    <tbody>
+                    <tr>
+                        <th class="col-case-status"><?php echo $block->escapeHtml(__('Case Status')); ?></th>
+                        <td class="col-case-status"><?php echo $block->escapeHtml($block->getCaseStatus()); ?></td>
+                    </tr>
+                    <tr>
+                        <th class="col-guarantee-disposition"><?php echo $block->escapeHtml(__('Guarantee Disposition')); ?></th>
+                        <td class="col-guarantee-disposition"><?php echo $block->escapeHtml($block->getCaseGuaranteeDisposition()); ?></td>
+                    </tr>
+                    <tr>
+                        <th class="col-case-review"><?php echo $block->escapeHtml(__('Review Disposition')); ?></th>
+                        <td class="col-case-review"><?php echo $block->escapeHtml($block->getCaseReviewDisposition()); ?></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </section>
