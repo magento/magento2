@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 
 /**
  * System config form block
@@ -112,6 +113,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @var DeploymentConfig
      */
     private $appConfig;
+
+    /**
+     * @var ElementVisibilityInterface
+     */
+    private $elementVisibility;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -355,7 +361,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
 
-        $isReadOnly = $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
+        $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath());
+        $isReadOnly = $isReadOnly
+            ?: $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
         $formField = $fieldset->addField(
             $elementId,
             $field->getType(),
@@ -804,5 +812,22 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $data = new DataObject(isset($appConfig[$scope][$scopeCode]) ? $appConfig[$scope][$scopeCode] : []);
         }
         return $data->getData($path);
+    }
+
+    /**
+     * Gets instance of ElementVisibilityInterface.
+     *
+     * @return ElementVisibilityInterface
+     * @deprecated Added to not break backward compatibility of the constructor signature
+     *             by injecting the new dependency directly.
+     *             The method can be removed in a future major release, when constructor signature can be changed.
+     */
+    public function getElementVisibility()
+    {
+        if (null === $this->elementVisibility) {
+            $this->elementVisibility = ObjectManager::getInstance()->get(ElementVisibilityInterface::class);
+        }
+
+        return $this->elementVisibility;
     }
 }
