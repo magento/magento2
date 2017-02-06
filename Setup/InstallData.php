@@ -38,7 +38,7 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $this->resource->getConnection('sales_order')->addColumn(
+        $this->resource->getConnection('sales')->addColumn(
             $setup->getTable('sales_order_grid'),
             'signifyd_guarantee_status',
             [
@@ -48,7 +48,7 @@ class InstallData implements InstallDataInterface
             ]
         );
 
-        $this->resource->getConnection('sales_order')->addColumn(
+        $this->resource->getConnection('sales')->addColumn(
             $setup->getTable('magento_sales_order_grid_archive'),
             'signifyd_guarantee_status',
             [
