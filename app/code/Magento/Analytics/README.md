@@ -1,7 +1,7 @@
 ## Overview
 
 The Magento Analytics module provides integration with 
-Magento Business Intelligence (https://magento.com/products/business-intelligence). Admin user can subscribe to
+[Magento Business Intelligence](https://magento.com/products/business-intelligence). Admin user can subscribe to
 Advanced Analytics, navigate to Advanced Analytics reports and Magento Business Intelligence subscription page
 
 The Magento_Analytics module adds:
