@@ -8,16 +8,17 @@ namespace Magento\Analytics\ReportXml\Config;
 use Magento\Framework\Config\ReaderInterface;
 
 /**
- * Class Reader
+ * A composite reader of reports configuration.
  *
- * Composite reader for config
- * Aggregates declared config readers, merges their results
- * Additional readers can be declared through di.xml of corresponding module
- *
+ * Reads configuration data using declared readers.
  */
 class Reader implements ReaderInterface
 {
     /**
+     * A list of declared readers.
+     *
+     * The list may be configured in each module via '/etc/di.xml'.
+     *
      * @var ReaderInterface[]
      */
     private $readers;
@@ -28,8 +29,6 @@ class Reader implements ReaderInterface
     private $mapper;
 
     /**
-     * Reader constructor.
-     *
      * @param Mapper $mapper
      * @param array $readers
      */
@@ -42,7 +41,7 @@ class Reader implements ReaderInterface
     }
 
     /**
-     * Read configuration scope
+     * Reads configuration according to the given scope.
      *
      * @param string|null $scope
      * @return array

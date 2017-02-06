@@ -3,21 +3,18 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\ReportXml\Config;
 
 use Magento\Framework\Config\CacheInterface;
 
 /**
- * Class Data
+ * A reports configuration object.
  *
- * Config data
+ * Represents loaded and cached configuration data.
  */
 class Data extends \Magento\Framework\Config\Data
 {
     /**
-     * Data constructor.
-     *
      * @param Reader $reader
      * @param CacheInterface $cache
      * @param string $cacheId

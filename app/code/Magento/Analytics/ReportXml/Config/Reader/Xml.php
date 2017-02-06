@@ -3,23 +3,20 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\ReportXml\Config\Reader;
 
 use Magento\Framework\Config\Reader\Filesystem;
 use Magento\Framework\Config\ReaderInterface;
 
 /**
- * Class Xml
+ * A reader of reports configuration.
  *
- * Reader for config stored in xml
+ * Reads configuration data stored in XML format.
  */
 class Xml extends Filesystem implements ReaderInterface
 {
     /**
-     * Mapping xml name nodes
-     *
-     * @var array
+     * {@inheritdoc}
      */
     protected $_idAttributes = [
         '/config/report' => 'name',
@@ -30,8 +27,6 @@ class Xml extends Filesystem implements ReaderInterface
     ];
 
     /**
-     * Xml constructor.
-     *
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
      * @param \Magento\Analytics\ReportXml\Config\Converter\Xml $converter
      * @param \Magento\Analytics\ReportXml\Config\SchemaLocator $schemaLocator

@@ -5,13 +5,12 @@
  */
 namespace Magento\Analytics\ReportXml\Config;
 
-use Magento\Framework\Module\Dir;
 use Magento\Framework\Config\SchemaLocatorInterface;
 
 /**
- * Class SchemaLocator
+ * A reports configuration schema locator.
  *
- * Specifies schema for xml validation
+ * Specifies the XSD schema for validation of reports configuration stored in XML format.
  */
 class SchemaLocator implements SchemaLocatorInterface
 {
@@ -26,8 +25,6 @@ class SchemaLocator implements SchemaLocatorInterface
     private $urnResolver;
 
     /**
-     * SchemaLocator constructor.
-     *
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      */
     public function __construct(
@@ -37,9 +34,7 @@ class SchemaLocator implements SchemaLocatorInterface
     }
 
     /**
-     * Get path to merged config schema
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getSchema()
     {
@@ -47,9 +42,7 @@ class SchemaLocator implements SchemaLocatorInterface
     }
 
     /**
-     * Get path to pre file validation schema
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getPerFileSchema()
     {

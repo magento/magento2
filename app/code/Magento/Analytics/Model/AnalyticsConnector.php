@@ -9,13 +9,19 @@ use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class AnalyticsConnector
+ * A connector to external services.
  *
- * Connector to MA services, aggregates calls to external services.
+ * Aggregates and executes commands which perform requests to external services.
  */
 class AnalyticsConnector
 {
     /**
+     * A list of possible commands.
+     *
+     * An associative array in format: 'command_name' => 'command_class_name'.
+     *
+     * The list may be configured in each module via '/etc/di.xml'.
+     *
      * @var string[]
      */
     private $commands;
@@ -26,7 +32,6 @@ class AnalyticsConnector
     private $objectManager;
 
     /**
-     * AnalyticsConnector constructor.
      * @param array $commands
      * @param ObjectManagerInterface $objectManager
      */
@@ -39,18 +44,21 @@ class AnalyticsConnector
     }
 
     /**
-     * Create the instance of the command and execute it.
+     * Executes a command in accordance with the given name.
      *
      * @param string $commandName
      * @return bool
-     * @throws NotFoundException
+     * @throws NotFoundException if the command is not found.
      */
     public function execute($commandName)
     {
         if (!array_key_exists($commandName, $this->commands)) {
             throw new NotFoundException(__('Command was not found.'));
         }
+
+        /** @var \Magento\Analytics\Model\AnalyticsConnector\AnalyticsCommandInterface $command */
         $command = $this->objectManager->create($this->commands[$commandName]);
+
         return $command->execute();
     }
 }

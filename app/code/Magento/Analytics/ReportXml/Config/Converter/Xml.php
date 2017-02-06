@@ -8,15 +8,14 @@ namespace Magento\Analytics\ReportXml\Config\Converter;
 use Magento\Framework\Config\ConverterInterface;
 
 /**
- * Class Xml
+ * A converter of reports configuration.
  *
- * Reader for configuration stored in xml
- * Reads xml source, transforms it to PHP array
+ * Converts configuration data stored in XML format into corresponding PHP array.
  */
 class Xml implements ConverterInterface
 {
     /**
-     * Converts xml node to array
+     * Converts XML node into corresponding array.
      *
      * @param \DOMNode $source
      * @return array|string
@@ -50,11 +49,10 @@ class Xml implements ConverterInterface
     }
 
     /**
-     * Converts source to array
+     * Converts XML document into corresponding array.
      *
      * @param \DOMDocument $source
      * @return array
-     * @throws \InvalidArgumentException
      */
     public function convert($source)
     {

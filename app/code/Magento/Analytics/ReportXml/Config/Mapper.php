@@ -3,20 +3,19 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\ReportXml\Config;
 
 /**
- * Class Mapper
+ * A reports configuration mapper.
  *
- * Transforms configuration data for report builder
- * Just for better config usability, affects data from all sources (DB, xml, etc)
- * @see usage examples \Magento\Analytics\ReportXml\Config\Reader
+ * Transforms configuration data to improve its usability.
+ *
+ * @see usage examples in \Magento\Analytics\ReportXml\Config\Reader
  */
 class Mapper
 {
     /**
-     * Transforms configuration data for report builder
+     * Transforms configuration data.
      *
      * @param array $configData
      * @return array
