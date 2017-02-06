@@ -889,7 +889,7 @@ class File extends AbstractIo
     {
         return pathinfo($path);
     }
-    
+
     /**
      * Open file in stream mode
      * For set folder for file use open method
