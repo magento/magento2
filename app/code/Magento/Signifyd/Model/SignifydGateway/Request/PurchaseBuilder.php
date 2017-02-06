@@ -6,8 +6,9 @@
 namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
 use Magento\Framework\App\Area;
-use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Payment\Api\Data\CodeVerificationInterfaceFactory;
 use Magento\Sales\Model\Order;
 use Magento\Signifyd\Model\SignifydOrderSessionId;
 
@@ -32,18 +33,26 @@ class PurchaseBuilder
     private $signifydOrderSessionId;
 
     /**
+     * @var CodeVerificationInterfaceFactory
+     */
+    private $codeVerificationFactory;
+
+    /**
      * @param DateTimeFactory $dateTimeFactory
      * @param ScopeInterface $scope
      * @param SignifydOrderSessionId $signifydOrderSessionId
+     * @param CodeVerificationInterfaceFactory $codeVerificationFactory
      */
     public function __construct(
         DateTimeFactory $dateTimeFactory,
         ScopeInterface $scope,
-        SignifydOrderSessionId $signifydOrderSessionId
+        SignifydOrderSessionId $signifydOrderSessionId,
+        CodeVerificationInterfaceFactory $codeVerificationFactory
     ) {
         $this->dateTimeFactory = $dateTimeFactory;
         $this->scope = $scope;
         $this->signifydOrderSessionId = $signifydOrderSessionId;
+        $this->codeVerificationFactory = $codeVerificationFactory;
     }
 
     /**
@@ -60,6 +69,8 @@ class PurchaseBuilder
             new \DateTimeZone('UTC')
         );
 
+        $verificationService = $this->codeVerificationFactory->create($orderPayment);
+
         $result = [
             'purchase' => [
                 'orderSessionId' => $this->signifydOrderSessionId->get($order->getQuoteId()),
@@ -69,6 +80,8 @@ class PurchaseBuilder
                 'paymentGateway' => $this->getPaymentGateway($orderPayment->getMethod()),
                 'transactionId' => $orderPayment->getLastTransId(),
                 'currency' => $order->getOrderCurrencyCode(),
+                'avsResponseCode' => $verificationService->getAvsCode(),
+                'cvvResponseCode' => $verificationService->getCvvCode(),
                 'orderChannel' => $this->getOrderChannel(),
                 'totalPrice' => $order->getGrandTotal(),
             ],
