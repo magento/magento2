@@ -14,8 +14,21 @@
     <preference for="Magento\Signifyd\Api\GuaranteeCreationServiceInterface" type="Magento\Signifyd\Model\Guarantee\CreationService" />
     <preference for="Magento\Signifyd\Api\GuaranteeCancelingServiceInterface" type="Magento\Signifyd\Model\Guarantee\CancelingService" />
     <preference for="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface" type="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder" />
+    <type name="Magento\Signifyd\Model\OrderGridUpdater">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
+        </arguments>
+    </type>
+    <virtualType name="SignifydIdListProvider" type="Magento\Sales\Model\ResourceModel\Provider\IdListProviderComposite">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="signifyd" xsi:type="string">Magento\Signifyd\Model\OrderIdListProvider</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid">
         <arguments>
+            <argument name="idListProvider" xsi:type="object">SignifydIdListProvider</argument>
             <argument name="joins" xsi:type="array">
                 <item name="signifyd_case" xsi:type="array">
                     <item name="table" xsi:type="string">signifyd_case</item>
