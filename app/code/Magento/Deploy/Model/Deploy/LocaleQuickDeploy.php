@@ -17,6 +17,10 @@ use Magento\Framework\Translate\Js\Config as TranslationJsConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Deploy\Model\DeployStrategyFactory;
 
+/**
+ * To avoid duplication of deploying of all static content per each theme/local, this class uses copying/symlinking
+ * of default static files to other locales, separately calls deploy for js dictionary per each locale
+ */
 class LocaleQuickDeploy implements DeployInterface
 {
     /**
