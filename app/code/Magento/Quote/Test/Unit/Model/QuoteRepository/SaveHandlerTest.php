@@ -205,15 +205,4 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         return $quoteItemMock;
     }
-
-    /**
-     * Create shipping assignment mock
-     *
-     * @return ShippingAssignmentInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createShippingAssignmentMock()
-    {
-        return $this->getMockBuilder(ShippingAssignmentInterface::class)
-            ->getMockForAbstractClass();
-    }
 }
