@@ -11,6 +11,7 @@ use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorInterface;
+use Magento\Signifyd\Model\OrderGridUpdater;
 
 /**
  * Performs Signifyd case entity updating operations.
@@ -33,20 +34,29 @@ class UpdatingService implements UpdatingServiceInterface
     private $commentsHistoryUpdater;
 
     /**
+     * @var OrderGridUpdater
+     */
+    private $orderGridUpdater;
+
+    /**
      * UpdatingService constructor.
      *
      * @param GeneratorInterface $messageGenerator
      * @param CaseRepositoryInterface $caseRepository
      * @param CommentsHistoryUpdater $commentsHistoryUpdater
+     * @param OrderGridUpdater $orderGridUpdater
      */
     public function __construct(
         GeneratorInterface $messageGenerator,
         CaseRepositoryInterface $caseRepository,
-        CommentsHistoryUpdater $commentsHistoryUpdater
+        CommentsHistoryUpdater $commentsHistoryUpdater,
+        OrderGridUpdater $orderGridUpdater
+
     ) {
         $this->messageGenerator = $messageGenerator;
         $this->caseRepository = $caseRepository;
         $this->commentsHistoryUpdater = $commentsHistoryUpdater;
+        $this->orderGridUpdater = $orderGridUpdater;
     }
 
     /**
@@ -68,6 +78,7 @@ class UpdatingService implements UpdatingServiceInterface
             $this->setCaseData($case, $data);
             $orderHistoryComment = $this->messageGenerator->generate($data);
             $this->caseRepository->save($case);
+            $this->orderGridUpdater->update($case->getOrderId());
             $this->commentsHistoryUpdater->addComment($case, $orderHistoryComment);
         } catch (\Exception $e) {
             throw new LocalizedException(__('Cannot update Case entity.'), $e);

@@ -64,9 +64,11 @@ class CaseManagement implements CaseManagementInterface
      */
     public function create($orderId)
     {
+        /** @var \Magento\Signifyd\Api\Data\CaseInterface $case */
         $case = $this->caseFactory->create();
         $case->setOrderId($orderId)
-            ->setStatus(CaseInterface::STATUS_PENDING);
+            ->setStatus(CaseInterface::STATUS_PENDING)
+            ->setGuaranteeDisposition(CaseInterface::GUARANTEE_PENDING);
         try {
             return $this->caseRepository->save($case);
         } catch (DuplicateException $e) {
