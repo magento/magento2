@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -84,6 +84,11 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
         $productIds = $collection->getAllIds();
         $storeId = (int) $this->getRequest()->getParam('store', 0);
         $status = (int) $this->getRequest()->getParam('status');
+        $filters = (array)$this->getRequest()->getParam('filters', []);
+
+        if (isset($filters['store_id'])) {
+            $storeId = (int)$filters['store_id'];
+        }
 
         try {
             $this->_validateMassStatus($productIds, $status);

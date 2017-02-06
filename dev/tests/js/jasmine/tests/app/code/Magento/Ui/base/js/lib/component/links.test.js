@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -18,9 +18,6 @@ define([
                 imports: {}
             };
 
-        });
-        it('has defaults', function () {
-            expect(typeof linksObj.defaults).toEqual('object');
         });
         it('has setLinks method', function () {
             returnedValue = linksObj.setLinks(undefined, 'imports');

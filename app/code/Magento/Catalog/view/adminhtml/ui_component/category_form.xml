@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -375,19 +375,6 @@
                         <item name="source" xsi:type="string">category</item>
                         <item name="label" xsi:type="string" translate="true">URL Key</item>
                         <item name="sortOrder" xsi:type="number">10</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="disabled" xsi:type="string">${ $.provider }:data.use_default.url_key</item>
-                        </item>
-                    </item>
-                </argument>
-            </field>
-            <field name="use_default.url_key">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="description" xsi:type="string" translate="true">Use Default</item>
-                        <item name="dataType" xsi:type="string">boolean</item>
-                        <item name="formElement" xsi:type="string">checkbox</item>
-                        <item name="sortOrder" xsi:type="number">20</item>
                     </item>
                 </argument>
             </field>
@@ -453,10 +440,9 @@
         <field name="custom_use_parent_settings">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="additionalClasses" xsi:type="string">admin__field-no-label</item>
+                    <item name="additionalClasses" xsi:type="string">admin__field-x-small</item>
                     <item name="sortOrder" xsi:type="number">170</item>
-                    <item name="label" xsi:type="string"/>
-                    <item name="description" xsi:type="string" translate="true">Use Parent Category Settings</item>
+                    <item name="label" xsi:type="string">Use Parent Category Settings</item>
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="valueMap" xsi:type="array">
@@ -464,6 +450,8 @@
                         <item name="false" xsi:type="string">0</item>
                     </item>
                     <item name="default" xsi:type="string">0</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/single-checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
                 </item>
             </argument>
         </field>
@@ -509,20 +497,21 @@
         <field name="custom_apply_to_products">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="additionalClasses" xsi:type="string">admin__field-no-label</item>
+                    <item name="additionalClasses" xsi:type="string">admin__field-x-small</item>
                     <item name="sortOrder" xsi:type="number">210</item>
-                    <item name="label" xsi:type="string"/>
-                    <item name="description" xsi:type="string" translate="true">Apply Design to Products</item>
+                    <item name="label" xsi:type="string" translate="true">Apply Design to Products</item>
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
-                    <item name="imports" xsi:type="array">
-                        <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
-                    </item>
                     <item name="valueMap" xsi:type="array">
                         <item name="true" xsi:type="string">1</item>
                         <item name="false" xsi:type="string">0</item>
                     </item>
                     <item name="default" xsi:type="string">0</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/single-checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="imports" xsi:type="array">
+                        <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings:checked</item>
+                    </item>
                 </item>
             </argument>
         </field>

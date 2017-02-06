@@ -1,59 +1,127 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Checks\CanUseForCountry;
 
+use Magento\Directory\Helper\Data;
+use Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+
+/**
+ * CountryProviderTest contains tests for CountryProvider class
+ */
 class CountryProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider
+     * @var CountryProvider
      */
-    protected $model;
+    private $countryProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
-    protected $directoryMock;
+    private $directory;
+
+    /**
+     * @var Quote|MockObject
+     */
+    private $quote;
 
     protected function setUp()
     {
-        $this->directoryMock = $this->getMock(\Magento\Directory\Helper\Data::class, [], [], '', false, false);
-        $this->model = new \Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider($this->directoryMock);
+        $this->directory = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDefaultCountry'])
+            ->getMock();
+
+        $this->quote = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getBillingAddress', 'getShippingAddress'])
+            ->getMock();
+
+        $this->countryProvider = new CountryProvider($this->directory);
     }
 
-    public function testGetCountryForNonVirtualQuote()
+    /**
+     * @covers \Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider::getCountry
+     */
+    public function testGetCountry()
     {
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false, false);
-        $quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
-        $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false, false);
-        $addressMock->expects($this->once())->method('getCountry')->will($this->returnValue(1));
-        $quoteMock->expects($this->once())->method('getShippingAddress')->will($this->returnValue($addressMock));
-        $this->assertEquals(1, $this->model->getCountry($quoteMock));
+        $address = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCountry'])
+            ->getMock();
+
+        $this->quote->expects(static::once())
+            ->method('getBillingAddress')
+            ->willReturn($address);
+
+        $this->quote->expects(static::never())
+            ->method('getShippingAddress');
+
+        $address->expects(static::exactly(2))
+            ->method('getCountry')
+            ->willReturn('UK');
+        $this->directory->expects(static::never())
+            ->method('getDefaultCountry');
+
+        static::assertEquals('UK', $this->countryProvider->getCountry($this->quote));
     }
 
-    public function testGetCountryForVirtualQuoteWhenBillingAddressNotExist()
+    /**
+     * @covers \Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider::getCountry
+     */
+    public function testGetCountryForBillingAddressWithoutCountry()
     {
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false, false);
-        $quoteMock->expects($this->once())->method('isVirtual')->willReturn(true);
-        $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false, false);
-        $addressMock->expects($this->never())->method('getCountry');
-        $quoteMock->expects($this->never())->method('getShippingAddress');
-        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
-        $this->directoryMock->expects($this->once())->method('getDefaultCountry')->willReturn(10);
-        $this->assertEquals(10, $this->model->getCountry($quoteMock));
+        $address = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCountry'])
+            ->getMock();
+
+        $this->quote->expects(static::never())
+            ->method('getShippingAddress');
+        $this->quote->expects(static::once())
+            ->method('getBillingAddress')
+            ->willReturn($address);
+
+        $address->expects(static::once())
+            ->method('getCountry')
+            ->willReturn(null);
+        $this->directory->expects(static::once())
+            ->method('getDefaultCountry')
+            ->willReturn('US');
+        static::assertEquals('US', $this->countryProvider->getCountry($this->quote));
     }
 
-    public function testGetCountryForVirtualQuoteWhenBillingAddressExist()
+    /**
+     * @covers \Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider::getCountry
+     */
+    public function testGetCountryShippingAddress()
     {
-        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false, false);
-        $quoteMock->expects($this->once())->method('isVirtual')->willReturn(true);
-        $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false, false);
-        $addressMock->expects($this->once())->method('getCountry')->willReturn(10);
-        $quoteMock->expects($this->never())->method('getShippingAddress');
-        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($addressMock);
-        $this->directoryMock->expects($this->never())->method('getDefaultCountry');
-        $this->assertEquals(10, $this->model->getCountry($quoteMock));
+        $address = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCountry'])
+            ->getMock();
+
+        $this->quote->expects(static::once())
+            ->method('getBillingAddress')
+            ->willReturn(null);
+
+        $this->quote->expects(static::once())
+            ->method('getShippingAddress')
+            ->willReturn($address);
+
+        $address->expects(static::exactly(2))
+            ->method('getCountry')
+            ->willReturn('CA');
+
+        $this->directory->expects(static::never())
+            ->method('getDefaultCountry');
+
+        static::assertEquals('CA', $this->countryProvider->getCountry($this->quote));
     }
 }

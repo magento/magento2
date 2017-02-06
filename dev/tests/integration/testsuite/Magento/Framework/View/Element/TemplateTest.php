@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
+
+use \Magento\Framework\App\Area;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,16 +54,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('frontend', $this->_block->getArea());
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\App\State::class
-        )->setAreaCode(
-            'some_area'
-        );
-        $this->assertEquals('some_area', $this->_block->getArea());
+        )->setAreaCode(Area::AREA_ADMINHTML);
+        $this->assertEquals(Area::AREA_ADMINHTML, $this->_block->getArea());
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\App\State::class
-        )->setAreaCode(
-            'another_area'
-        );
-        $this->assertEquals('another_area', $this->_block->getArea());
+        )->setAreaCode(Area::AREA_GLOBAL);
+        $this->assertEquals(Area::AREA_GLOBAL, $this->_block->getArea());
     }
 
     /**
@@ -71,7 +69,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testToHtml()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
-            ->setAreaCode('any area');
+            ->setAreaCode(Area::AREA_GLOBAL);
         $this->assertEmpty($this->_block->toHtml());
         $this->_block->setTemplate(uniqid('invalid_filename.phtml'));
         $this->assertEmpty($this->_block->toHtml());

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\TestStep;
@@ -17,20 +17,20 @@ class UseVaultPaymentTokenStep implements TestStepInterface
      * @var OrderCreateIndex
      */
     private $orderCreatePage;
-    
+
     /**
      * @var array
      */
-    private $payment;
+    private $vault;
 
     /**
      * @param OrderCreateIndex $orderCreateIndex
-     * @param array $payment
+     * @param array $vault
      */
-    public function __construct(OrderCreateIndex $orderCreateIndex, array $payment)
+    public function __construct(OrderCreateIndex $orderCreateIndex, array $vault)
     {
         $this->orderCreatePage = $orderCreateIndex;
-        $this->payment = $payment;
+        $this->vault = $vault;
     }
 
     /**
@@ -39,8 +39,7 @@ class UseVaultPaymentTokenStep implements TestStepInterface
     public function run()
     {
         $block = $this->orderCreatePage->getCreateBlock();
-        $this->payment['method'] .= '_cc_vault';
-        $block->selectPaymentMethod($this->payment);
-        $block->selectVaultToken('token_switcher_' . $this->payment['method']);
+        $block->selectPaymentMethod($this->vault);
+        $block->selectVaultToken('token_switcher_' . $this->vault['method']);
     }
 }

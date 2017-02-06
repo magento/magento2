@@ -1,159 +1,63 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\View\Element\Template;
+
 // @codingStandardsIgnoreFile
 
+/** @var $block \Magento\Shipping\Block\Tracking\Popup */
+
+$results = $block->getTrackingInfo();
 ?>
-<?php /** @var $block \Magento\Shipping\Block\Tracking\Popup */ ?>
-<?php $_results = $block->getTrackingInfo(); ?>
 <div class="page tracking">
-    <?php if (sizeof($_results)>0): ?>
-    <?php foreach ($_results as $shipid => $_result): ?>
-        <?php if ($shipid): ?>
-        <div class="order subtitle caption"><?php /* @escapeNotVerified */ echo __('Shipment #') . $shipid; ?></div>
-        <?php endif; ?>
-        <?php if (sizeof($_result)>0): ?>
-            <?php $rowCount = sizeof($_result); $counter = 1; ?>
-            <?php $_id = 0; foreach ($_result as $track): ?>
-                <div class="table-wrapper">
-                    <table class="data table order tracking" id="tracking-table-popup-<?php /* @escapeNotVerified */ echo $_id ?>">
-                        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Order tracking'); ?></caption>
-                        <tbody>
-                        <?php if (is_object($track)): ?>
-                            <tr>
-                                <th class="col label" scope="row"><?php /* @escapeNotVerified */ echo __('Tracking Number:'); ?></th>
-                                <td class="col value"><?php echo $block->escapeHtml($track->getTracking()); ?></td>
-                            </tr>
-                            <?php if ($track->getCarrierTitle()): ?>
-                                <tr>
-                                    <th class="col label" scope="row"><?php /* @escapeNotVerified */ echo __('Carrier:'); ?></th>
-                                    <td class="col value"><?php echo $block->escapeHtml($track->getCarrierTitle()); ?></td>
-                                </tr>
-                            <?php endif; ?>
-                            <?php if ($track->getErrorMessage()): ?>
-                                <tr>
-                                    <th class="col label" scope="row"><?php /* @escapeNotVerified */ echo __('Error:'); ?></th>
-                                    <td class="col error"><?php /* @escapeNotVerified */ echo __('Tracking information is currently not available. Please '); if ($block->getContactUsEnabled()) : ?><a href="<?php /* @escapeNotVerified */ echo $block->getContactUs() ?>" title="<?php /* @escapeNotVerified */ echo __('contact us') ?>" onclick="this.target='_blank'"><?php /* @escapeNotVerified */ echo __('contact us') ?></a><?php /* @escapeNotVerified */ echo __(' for more information or '); endif; /* @escapeNotVerified */ echo __('email us at '); ?><a href="mailto:<?php /* @escapeNotVerified */ echo $block->getStoreSupportEmail() ?>"><?php /* @escapeNotVerified */ echo $block->getStoreSupportEmail() ?></a></td>
-                                </tr>
-                            <?php elseif ($track->getTrackSummary()): ?>
-                                <tr>
-                                    <th class="col label" scope="row"><?php /* @escapeNotVerified */ echo __('Info:'); ?></th>
-                                    <td class="col value"><?php /* @escapeNotVerified */ echo $track->getTrackSummary(); ?></td>
-                                </tr>
-                            <?php elseif ($track->getUrl()): ?>
-                                <tr>
-                                    <th class="col label" scope="row"><?php /* @escapeNotVerified */ echo __('Track:'); ?></th>
-                                    <td class="col value"><a href="<?php echo $block->escapeHtml($track->getUrl()); ?>" onclick="this.target='_blank'"><?php echo $block->escapeHtml($track->getUrl()); ?></a></td>
-                                </tr>
-                            <?php else: ?>
-                                <?php if ($track->getStatus()): ?>
-                                    <tr>
-                                        <th class="col label" scope="row"><?php /* @escapeNotVerified */ echo __('Status:'); ?></th>
-                                        <td class="col value"><?php /* @escapeNotVerified */ echo $track->getStatus(); ?></td>
-                                    </tr>
-                                <?php endif; ?>
-
-                                <?php if ($track->getDeliverydate()): ?>
-                                    <tr>
-                                        <th class="col label" scope="row"><?php /* @escapeNotVerified */ echo __('Delivered on:'); ?></th>
-                                        <td class="col value"><?php /* @escapeNotVerified */ echo $block->formatDeliveryDateTime($track->getDeliverydate(), $track->getDeliverytime()); ?></td>
-                                    </tr>
-                                <?php endif; ?>
-
-                                <?php if ($track->getSignedby()): ?>
-                                    <tr>
-                                        <th class="col label" scope="row"><?php /* @escapeNotVerified */ echo __('Signed by:'); ?></th>
-                                        <td class="col value"><?php /* @escapeNotVerified */ echo $track->getSignedby(); ?></td>
-                                    </tr>
-                                <?php endif; ?>
-
-                                <?php if ($track->getDeliveryLocation()): ?>
-                                    <tr>
-                                        <th class="col label" scope="row"><?php /* @escapeNotVerified */ echo __('Delivered to:'); ?></th>
-                                        <td class="col value"><?php /* @escapeNotVerified */ echo $track->getDeliveryLocation(); ?></td>
-                                    </tr>
-                                <?php endif; ?>
-
-                                <?php if ($track->getShippedDate()): ?>
-                                    <tr>
-                                        <th class="col label" scope="row"><?php /* @escapeNotVerified */ echo __('Shipped or billed on:'); ?></th>
-                                        <td class="col value"><?php /* @escapeNotVerified */ echo $track->getShippedDate(); ?></td>
-                                    </tr>
-                                <?php endif; ?>
-
-                                <?php if ($track->getService()): ?>
-                                    <tr>
-                                        <th class="col label" scope="row"><?php /* @escapeNotVerified */ echo __('Service Type:'); ?></th>
-                                        <td class="col value"><?php /* @escapeNotVerified */ echo $track->getService(); ?></td>
-                                    </tr>
-                                <?php endif; ?>
-
-                                <?php if ($track->getWeight()): ?>
-                                    <tr>
-                                        <th class="col label" scope="row"><?php /* @escapeNotVerified */ echo __('Weight:'); ?></th>
-                                        <td class="col value"><?php /* @escapeNotVerified */ echo $track->getWeight(); ?></td>
-                                    </tr>
-                                <?php endif; ?>
-                            <?php endif; ?>
-                        <?php elseif (isset($track['title']) && isset($track['number']) && $track['number']): ?>
-                            <?php /* if the tracking is custom value */ ?>
-                            <tr>
-                                <th class="col label" scope="row"><?php echo($track['title'] ? $block->escapeHtml($track['title']) : __('N/A')); ?>:</th>
-                                <td class="col value"><?php echo(isset($track['number']) ? $block->escapeHtml($track['number']) : ''); ?></td>
-                            </tr>
-                        <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-                <?php if (is_object($track) && sizeof($track->getProgressdetail())>0): ?>
+    <?php if (!empty($results)): ?>
+        <?php foreach ($results as $shipId => $result): ?>
+            <?php if ($shipId): ?>
+                <div class="order subtitle caption"><?php /* @noEscape */ echo $block->escapeHtml(__('Shipment #')) . $shipId; ?></div>
+            <?php endif; ?>
+            <?php if (!empty($result)): ?>
+                <?php foreach ($result as $counter => $track): ?>
                     <div class="table-wrapper">
-                        <table class="data table order tracking" id="track-history-table-<?php /* @escapeNotVerified */ echo $track->getTracking(); ?>">
-                            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Track history'); ?></caption>
-                            <thead>
-                            <tr>
-                                <th class="col location" scope="col"><?php /* @escapeNotVerified */ echo __('Location') ?></th>
-                                <th class="col date" scope="col"><?php /* @escapeNotVerified */ echo __('Date') ?></th>
-                                <th class="col time" scope="col"><?php /* @escapeNotVerified */ echo __('Local Time') ?></th>
-                                <th class="col description" scope="col"><?php /* @escapeNotVerified */ echo __('Description') ?></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php foreach ($track->getProgressdetail() as $_detail): ?>
-                                <?php $_detailDate = (isset($_detail['deliverydate']) ? $block->formatDeliveryDate($_detail['deliverydate']) : '') ?>
-                                <?php $_detailTime = (isset($_detail['deliverytime']) ? $block->formatDeliveryTime($_detail['deliverytime'], $_detail['deliverydate']) : '') ?>
-                                <tr>
-                                    <td data-th="<?php echo $block->escapeHtml(__('Location')) ?>" class="col location"><?php echo(isset($_detail['deliverylocation']) ? $_detail['deliverylocation'] : ''); ?></td>
-                                    <td data-th="<?php echo $block->escapeHtml(__('Date')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $_detailDate ?></td>
-                                    <td data-th="<?php echo $block->escapeHtml(__('Local Time')) ?>" class="col time"><?php /* @escapeNotVerified */ echo $_detailTime ?></td>
-                                    <td data-th="<?php echo $block->escapeHtml(__('Description')) ?>" class="col description"><?php echo(isset($_detail['activity']) ? $_detail['activity'] : '') ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                        <?php
+                            $block->addChild('shipping.tracking.details.' . $counter, Template::class, [
+                                'track' => $track,
+                                'template' => 'Magento_Shipping::tracking/details.phtml',
+                                'storeSupportEmail' => $block->getStoreSupportEmail()
+                            ]
+                        );
+                        ?>
+                        <?php /* @noEscape */ echo $block->getChildHtml('shipping.tracking.details.' . $counter); ?>
                     </div>
-                <?php endif; ?>
-                <?php if ($counter != $rowCount): ?>
-                <?php endif; ?>
-                <?php $counter++; ?>
-            <?php /* end for each tracking information */ ?>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <div class="message info empty"><div><?php /* @escapeNotVerified */ echo __('There is no tracking available for this shipment.'); ?></div></div>
-        <?php endif; ?>
-
-    <?php endforeach; ?>
+                    <?php if (!empty($track->getProgressdetail())): ?>
+                        <?php
+                            $block->addChild('shipping.tracking.progress.'. $counter, Template::class, [
+                                'track' => $track,
+                                'template' => 'Magento_Shipping::tracking/progress.phtml'
+                            ]);
+                        ?>
+                        <?php /* @noEscape  */echo $block->getChildHtml('shipping.tracking.progress.' . $counter); ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="message info empty">
+                    <div><?php echo $block->escapeHtml(__('There is no tracking available for this shipment.')); ?></div>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
     <?php else: ?>
-        <div class="message info empty"><div><?php /* @escapeNotVerified */ echo __('There is no tracking available.'); ?></div></div>
+        <div class="message info empty">
+            <div><?php echo $block->escapeHtml(__('There is no tracking available.')); ?></div>
+        </div>
     <?php endif; ?>
     <div class="actions">
         <button type="button"
-                title="<?php /* @escapeNotVerified */ echo __('Close Window') ?>"
+                title="<?php echo $block->escapeHtml(__('Close Window')); ?>"
                 class="action close"
                 onclick="window.close(); window.opener.focus();">
-            <span><?php /* @escapeNotVerified */ echo __('Close Window') ?></span>
+            <span><?php echo $block->escapeHtml(__('Close Window')); ?></span>
         </button>
     </div>
 </div>

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml;
+
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -26,16 +28,32 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectManagerMock;
+
+    /**
      * Init context object
      *
      * @param array $additionalParams
+     * @param array $objectManagerMap Object Manager mappings
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function initContext(array $additionalParams = [])
+    protected function initContext(array $additionalParams = [], array $objectManagerMap = [])
     {
         $productActionMock = $this->getMock(\Magento\Catalog\Model\Product\Action::class, [], [], '', false);
-        $objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValue($productActionMock));
+
+        $this->objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
+
+        if ($objectManagerMap) {
+            $this->objectManagerMock->expects($this->any())
+                ->method('get')
+                ->willReturnMap($objectManagerMap);
+        }
+
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->willReturn($productActionMock);
 
         $block = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
             ->disableOriginalConstructor()->getMockForAbstractClass();
@@ -93,7 +111,7 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
         $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($requestInterfaceMock));
         $this->context->expects($this->any())->method('getResponse')->will($this->returnValue($responseInterfaceMock));
-        $this->context->expects($this->any())->method('getObjectManager')->will($this->returnValue($objectManagerMock));
+        $this->context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
 
         $this->context->expects($this->any())->method('getMessageManager')
             ->will($this->returnValue($managerInterfaceMock));

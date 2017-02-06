@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,8 @@
      attr="'data-level': $data.level, 'data-index': index"
      data-bind="visible: $data.visible === undefined ? true: $data.visible">
     <div class="fieldset-wrapper-title"
-         attr="tabindex: !collapsible ? -1 : 0"
+         attr="tabindex: !collapsible ? -1 : 0,
+               'data-state-collapsible': collapsible ? opened() ? 'open' : 'closed' : null"
          click="toggleOpened"
          keyboard="13: toggleOpened"
          if="label">
@@ -19,7 +20,7 @@
                       '_changed': changed,
                       '_loading': loading,
                       '_error': error">
-            <span text="label"/>
+            <span translate="label"/>
             <span class="admin__page-nav-item-messages" if="collapsible">
                 <span class="admin__page-nav-item-message _changed">
                     <span class="admin__page-nav-item-message-icon"></span>
@@ -30,7 +31,7 @@
                 <span class="admin__page-nav-item-message _error">
                     <span class="admin__page-nav-item-message-icon"></span>
                     <span class="admin__page-nav-item-message-tooltip"
-                            data-bind="i18n: 'This tab contains invalid data. Please resolve this before saving.'">
+                          data-bind="i18n: 'This tab contains invalid data. Please resolve this before saving.'">
                     </span>
                 </span>
                 <span class="admin__page-nav-item-message-loader">
@@ -43,7 +44,10 @@
     </div>
 
     <div class="admin__fieldset-wrapper-content"
-         css="'admin__collapsible-content': collapsible, '_show': opened, '_hide': !opened">
-        <fieldset class="admin__fieldset" each="data: elems, as: 'element'" render=""/>
+         css="'admin__collapsible-content': collapsible, '_show': opened, '_hide': !opened()">
+        <fieldset
+                if="opened() || _wasOpened"
+                class="admin__fieldset"
+                each="data: elems, as: 'element'" render=""/>
     </div>
 </div>

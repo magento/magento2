@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Model;
+
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
 /**
  * Class InvoiceRepositoryTest
@@ -26,6 +28,11 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $searchResultFactory;
 
+    /**
+     * @var CollectionProcessorInterface |\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessorMock;
+    
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -36,11 +43,14 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->getMock();
         $this->invoice = $objectManager->getObject(
             \Magento\Sales\Model\Order\InvoiceRepository::class,
             [
                 'invoiceMetadata' => $this->invoiceMetadata,
-                'searchResultFactory' => $this->searchResultFactory
+                'searchResultFactory' => $this->searchResultFactory,
+                'collectionProcessor' => $this->collectionProcessorMock,
             ]
         );
         $this->type = $this->getMock(\Magento\Eav\Model\Entity\Type::class, ['fetchNewIncrementId'], [], '', false);
@@ -116,44 +126,15 @@ class InvoiceRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $filterGroup = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroups = [$filterGroup];
-        $field = 'test_field';
-        $fieldValue = 'test_value';
-
-        $filter = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filter->expects($this->any())
-            ->method('getConditionType')
-            ->willReturn(false);
-        $filter->expects($this->any())
-            ->method('getField')
-            ->willReturn($field);
-        $filter->expects($this->any())
-            ->method('getValue')
-            ->willReturn($fieldValue);
-
-        $filterGroup->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$filter]);
-
         $searchCriteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteria::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $searchCriteria->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn($filterGroups);
-
         $collection = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Invoice\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $collection->expects($this->once())
-            ->method('addFieldToFilter')
-            ->withAnyParameters();
-
+        $this->collectionProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($searchCriteria, $collection);
         $this->searchResultFactory->expects($this->once())
             ->method('create')
             ->willReturn($collection);

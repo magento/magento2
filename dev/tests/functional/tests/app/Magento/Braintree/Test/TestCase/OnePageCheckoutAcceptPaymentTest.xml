@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -17,11 +17,11 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree</data>
-            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
-            <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="configData" xsi:type="string">braintree,braintree_fraudprotection</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S2</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertAcceptPaymentSuccessMessagePresent" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertAcceptPaymentMessageInCommentsHistory" />

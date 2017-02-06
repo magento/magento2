@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit;
@@ -23,7 +23,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     protected $priceLayout;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Price\PriceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $price;
 
@@ -33,7 +33,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
     protected $amount;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $saleableItem;
 
@@ -48,17 +48,17 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->price = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\BasePrice::class)
+        $this->price = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->amount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->saleableItem = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $this->saleableItem = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->renderPool = $this->getMockBuilder(\Magento\Framework\Pricing\Render\RendererPool::class)
             ->disableOriginalConstructor()

@@ -1,6 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Create fixture store
+ *
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,9 +28,9 @@ if (!$store->load('fixture_second_store', 'code')->getId()) {
         1
     );
     $store->save();
-
-    /* Refresh stores memory cache */
-    \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        \Magento\Store\Model\StoreManagerInterface::class
-    )->reinitStores();
 }
+
+/* Refresh stores memory cache */
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    \Magento\Store\Model\StoreManagerInterface::class
+)->reinitStores();

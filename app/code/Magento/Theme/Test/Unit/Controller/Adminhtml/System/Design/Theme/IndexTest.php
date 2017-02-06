@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
@@ -18,7 +18,9 @@ class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Des
         $menuModel = $this->getMock(
             \Magento\Backend\Model\Menu::class,
             [],
-            [$this->getMock(\Psr\Log\LoggerInterface::class)]
+            [$this->getMock(\Psr\Log\LoggerInterface::class)],
+            '',
+            false
         );
         $menuModel->expects($this->once())
             ->method('getParentItems')

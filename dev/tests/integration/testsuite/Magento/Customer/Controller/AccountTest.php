@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -459,7 +459,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
         $this->assertContains('<input type="checkbox" name="change_password" id="change-password" '
-            .'data-role="change-password" value="1" title="Change Password" class="checkbox" />', $body);
+            .'data-role="change-password" value="1" title="Change&#x20;Password" class="checkbox" />', $body);
     }
 
     /**
@@ -477,7 +477,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         // Verify the password check box is checked
         $this->assertContains(
             '<input type="checkbox" name="change_password" id="change-password" '
-            .'data-role="change-password" value="1" title="Change Password" checked="checked" class="checkbox" />',
+            . 'data-role="change-password" value="1" title="Change&#x20;Password" checked="checked" '
+            . 'class="checkbox" />',
             $body
         );
     }

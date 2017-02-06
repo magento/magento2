@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,11 +9,11 @@
 /** @var \Magento\Customer\Block\Account\Dashboard\Info $block */
 ?>
 <div class="block block-dashboard-info">
-    <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('Account Information') ?></strong></div>
+    <div class="block-title"><strong><?php echo $block->escapeHtml(__('Account Information')) ?></strong></div>
     <div class="block-content">
         <div class="box box-information">
             <strong class="box-title">
-                <span><?php /* @escapeNotVerified */ echo __('Contact Information') ?></span>
+                <span><?php echo $block->escapeHtml(__('Contact Information')) ?></span>
             </strong>
             <div class="box-content">
                 <p>
@@ -22,32 +22,32 @@
                 </p>
             </div>
             <div class="box-actions">
-                <a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getUrl('customer/account/edit') ?>">
-                    <span><?php /* @escapeNotVerified */ echo __('Edit') ?></span>
+                <a class="action edit" href="<?php echo $block->escapeUrl($block->getUrl('customer/account/edit')) ?>">
+                    <span><?php echo $block->escapeHtml(__('Edit')) ?></span>
                 </a>
-                <a href="<?php /* @escapeNotVerified */ echo $block->getChangePasswordUrl() ?>" class="action change-password">
-                    <?php /* @escapeNotVerified */ echo __('Change Password') ?>
+                <a href="<?php echo $block->escapeUrl($block->getChangePasswordUrl()) ?>" class="action change-password">
+                    <?php echo $block->escapeHtml(__('Change Password')) ?>
                 </a>
             </div>
         </div>
         <?php if ($block->isNewsletterEnabled()): ?>
             <div class="box box-newsletter">
                 <strong class="box-title">
-                    <span><?php /* @escapeNotVerified */ echo __('Newsletters') ?></span>
+                    <span><?php echo $block->escapeHtml(__('Newsletters')) ?></span>
                 </strong>
                 <div class="box-content">
                     <p>
                         <?php if ($block->getIsSubscribed()): ?>
-                            <?php /* @escapeNotVerified */ echo __('You subscribe to "General Subscription".') ?>
+                            <?php echo $block->escapeHtml(__('You subscribe to "General Subscription".')) ?>
                         <?php else: ?>
-                            <?php /* @escapeNotVerified */ echo __('You don\'t subscribe to our newsletter.') ?>
+                            <?php echo $block->escapeHtml(__('You don\'t subscribe to our newsletter.')) ?>
                         <?php endif; ?>
                     </p>
                     <?php /* Extensions placeholder */ ?>
                     <?php echo $block->getChildHtml('customer.account.dashboard.info.extra')?>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?php /* @escapeNotVerified */ echo $block->getUrl('newsletter/manage') ?>"><span><?php /* @escapeNotVerified */ echo __('Edit') ?></span></a>
+                    <a class="action edit" href="<?php echo $block->escapeUrl($block->getUrl('newsletter/manage')) ?>"><span><?php echo $block->escapeHtml(__('Edit')) ?></span></a>
                 </div>
             </div>
         <?php endif; ?>

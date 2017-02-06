@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity;
@@ -464,7 +464,8 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
         $table = $this->getTable('eav_attribute_option');
-        $intOptionId = (int)$optionId;
+        // ignore strings that start with a number
+        $intOptionId = is_numeric($optionId) ? (int)$optionId : 0;
 
         if (!empty($option['delete'][$optionId])) {
             if ($intOptionId) {

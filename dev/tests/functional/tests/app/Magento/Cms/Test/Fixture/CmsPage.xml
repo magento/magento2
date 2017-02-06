@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -34,6 +34,6 @@
         <field name="custom_theme_from" source="Magento\Backend\Test\Fixture\Source\Date" />
         <field name="custom_theme_to" source="Magento\Backend\Test\Fixture\Source\Date" />
         <field name="website_root" is_required="" />
-        <field name="store_id" is_required="1" group="page_in_websites" />
+        <field name="store_id" is_required="1" group="page_in_websites" source="Magento\Cms\Test\Fixture\CmsPage\StoreId" />
     </fixture>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Update Changes'.
  * 6. Perform all assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-28109
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -40,7 +40,6 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -143,9 +142,10 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
      *
      * @param Customer $customer
      * @param string $products
+     * @param bool $productsIsConfigured
      * @return array
      */
-    public function test(Customer $customer, $products)
+    public function test(Customer $customer, $products, $productsIsConfigured = false)
     {
         // Preconditions
         // Create product
@@ -169,6 +169,6 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
         $activitiesBlock->getRecentlyComparedProductsBlock()->addProductsToOrder($products);
         $activitiesBlock->updateChanges();
 
-        return ['products' => $products, 'productsIsConfigured' => false];
+        return ['products' => $products, 'productsIsConfigured' => $productsIsConfigured];
     }
 }

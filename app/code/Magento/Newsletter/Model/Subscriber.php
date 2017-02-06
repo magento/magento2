@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
@@ -442,6 +442,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->setStatusChanged(true);
 
         try {
+            /* Save model before sending out email */
             $this->save();
             if ($isConfirmNeed === true
                 && $isOwnSubscribes === false
@@ -541,11 +542,17 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $sendInformationEmail = false;
         $status = self::STATUS_SUBSCRIBED;
+        $isConfirmNeed = $this->_scopeConfig->getValue(
+            self::XML_PATH_CONFIRMATION_FLAG,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) == 1 ? true : false;
         if ($subscribe) {
             if (AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
                 == $this->customerAccountManagement->getConfirmationStatus($customerId)
             ) {
                 $status = self::STATUS_UNCONFIRMED;
+            } else if ($isConfirmNeed) {
+                $status = self::STATUS_NOT_ACTIVE;
             }
         } else {
             $status = self::STATUS_UNSUBSCRIBED;
@@ -580,7 +587,9 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $sendSubscription = $sendInformationEmail;
         if ($sendSubscription === null xor $sendSubscription) {
             try {
-                if ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
+                if ($isConfirmNeed) {
+                    $this->sendConfirmationRequestEmail();
+                } else if ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
                     $this->sendUnsubscriptionEmail();
                 } elseif ($this->isStatusChanged() && $status == self::STATUS_SUBSCRIBED) {
                     $this->sendConfirmationSuccessEmail();

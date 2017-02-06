@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,14 +27,13 @@ use Magento\Mtf\Fixture\FixtureFactory;
  * 5. Save
  * 6. Perform asserts
  *
- * @group Category_Management_(MX)
+ * @group Category_Management
  * @ZephyrId MAGETWO-23290
  */
 class UpdateCategoryEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -93,7 +92,6 @@ class UpdateCategoryEntityTest extends Injectable
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);
         $this->catalogCategoryEdit->getEditForm()->fill($category);
         $this->catalogCategoryEdit->getFormPageActions()->save();
-
         return ['category' => $this->prepareCategory($category, $initialCategory)];
     }
 
@@ -110,11 +108,16 @@ class UpdateCategoryEntityTest extends Injectable
             ? $category->getDataFieldConfig('parent_id')['source']->getParentCategory()
             : $initialCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
 
+        $rewriteData = ['parent_id' => ['source' => $parentCategory]];
+        if ($category->hasData('store_id')) {
+            $rewriteData['store_id'] = ['source' => $category->getDataFieldConfig('store_id')['source']->getStore()];
+        }
+
         $data = [
             'data' => array_merge(
                 $initialCategory->getData(),
                 $category->getData(),
-                ['parent_id' => ['source' => $parentCategory]]
+                $rewriteData
             )
         ];
 

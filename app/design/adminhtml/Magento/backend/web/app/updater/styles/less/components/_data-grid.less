@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -107,6 +107,26 @@
             &:before {
                 color: @color-info;
                 content: @icon-alert-round__content;
+                font-family: @icons__font-family;
+                font-size: @component-indicator__size;
+            }
+        }
+    }
+
+    &._tooltip {
+        background: transparent;
+        margin: 0px 0px 8px 5px;
+
+        a {
+            width: 21px;
+
+            &:hover {
+                text-decoration: none;
+            }
+
+            &:before {
+                color: @color-tertiary;
+                content: @icon-help__content;
                 font-family: @icons__font-family;
                 font-size: @component-indicator__size;
             }

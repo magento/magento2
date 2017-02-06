@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -29,6 +29,6 @@
         <add id="Magento_Reports::report_customers_orders" title="Order Count" translate="title" module="Magento_Reports" sortOrder="20" parent="Magento_Reports::report_customers" action="reports/report_customer/orders" resource="Magento_Reports::customers_orders"/>
         <add id="Magento_Reports::report_statistics" title="Statistics" translate="title" module="Magento_Reports" sortOrder="80" parent="Magento_Reports::report" resource="Magento_Reports::statistics"/>
         <add id="Magento_Reports::report_statistics_refresh" title="Refresh Statistics" translate="title" module="Magento_Reports" sortOrder="10" parent="Magento_Reports::report_statistics" action="reports/report_statistics" resource="Magento_Reports::statistics_refresh"/>
-        <add id="Magento_Search::report_search_term" title="Search Terms" translate="title" module="Magento_Search" sortOrder="10" parent="Magento_Reports::report_marketing" action="search/term/report" resource="Magento_Search::search" />
+        <add id="Magento_Search::report_search_term" title="Search Terms" translate="title" module="Magento_Search" sortOrder="10" parent="Magento_Reports::report_marketing" action="search/term/report" resource="Magento_Reports::report_search" />
     </menu>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,6 +21,7 @@ return [
             \Magento\Setup\Controller\Environment::class,
             \Magento\Setup\Controller\DependencyCheck::class,
             \Magento\Setup\Controller\DatabaseCheck::class,
+            \Magento\Setup\Controller\UrlCheck::class,
             \Magento\Setup\Controller\ValidateAdminCredentials::class,
             \Magento\Setup\Controller\AddDatabase::class,
             \Magento\Setup\Controller\WebConfiguration::class,

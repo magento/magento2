@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,7 +42,10 @@
                                 <span><?php /* @escapeNotVerified */ echo __('View Order') ?></span>
                             </a>
                             <?php if ($this->helper('Magento\Sales\Helper\Reorder')->canReorder($_order->getEntityId())) : ?>
-                                <a href="<?php /* @escapeNotVerified */ echo $block->getReorderUrl($_order) ?>" class="action order">
+                                <a href="#" data-post='<?php /* @escapeNotVerified */ echo
+                                $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+                                    ->getPostData($block->getReorderUrl($_order))
+                                ?>' class="action order">
                                     <span><?php /* @escapeNotVerified */ echo __('Reorder') ?></span>
                                 </a>
                             <?php endif ?>

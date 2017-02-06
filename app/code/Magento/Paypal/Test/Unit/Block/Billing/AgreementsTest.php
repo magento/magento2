@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Billing;
@@ -235,13 +235,14 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
     public function testToHtml()
     {
         $this->eventManager
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('dispatch')
             ->with('view_block_abstract_to_html_before', ['block' => $this->block]);
-        $this->scopeConfig
-            ->expects($this->once())
-            ->method('getValue')
-            ->willReturn(false);
+        $transport = new \Magento\Framework\DataObject(['html' => '']);
+        $this->eventManager
+            ->expects($this->at(1))
+            ->method('dispatch')
+            ->with('view_block_abstract_to_html_after', ['block' => $this->block, 'transport' => $transport]);
         $this->urlBuilder->expects($this->once())->method('getUrl')->with('paypal/billing_agreement/startWizard', []);
         $this->block->toHtml();
     }

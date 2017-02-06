@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Helper;
@@ -124,6 +124,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->setMethods([
                 'getProduct',
                 'getWishlistItemId',
+                'getQty',
             ])
             ->getMock();
 
@@ -217,6 +218,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $url = 'result url';
         $storeId = 1;
         $wishlistItemId = 1;
+        $wishlistItemQty = 1;
 
         $this->wishlistItem->expects($this->once())
             ->method('getProduct')
@@ -224,6 +226,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->wishlistItem->expects($this->once())
             ->method('getWishlistItemId')
             ->willReturn($wishlistItemId);
+        $this->wishlistItem->expects($this->once())
+            ->method('getQty')
+            ->willReturn($wishlistItemQty);
 
         $this->product->expects($this->once())
             ->method('isVisibleInSiteVisibility')
@@ -243,9 +248,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with('wishlist/index/cart')
             ->willReturn($url);
 
+        $expected = [
+            'item' => $wishlistItemId,
+            'qty' => $wishlistItemQty,
+        ];
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
-            ->with($url, ['item' => $wishlistItemId])
+            ->with($url, $expected)
             ->willReturn($url);
 
         $this->assertEquals($url, $this->model->getAddToCartParams($this->wishlistItem));
@@ -256,6 +265,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $url = 'result url';
         $storeId = 1;
         $wishlistItemId = 1;
+        $wishlistItemQty = 1;
         $referer = 'referer';
         $refererEncoded = 'referer_encoded';
 
@@ -265,6 +275,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->wishlistItem->expects($this->once())
             ->method('getWishlistItemId')
             ->willReturn($wishlistItemId);
+        $this->wishlistItem->expects($this->once())
+            ->method('getQty')
+            ->willReturn($wishlistItemQty);
 
         $this->product->expects($this->once())
             ->method('isVisibleInSiteVisibility')
@@ -288,9 +301,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with('wishlist/index/cart')
             ->willReturn($url);
 
+        $expected = [
+            'item' => $wishlistItemId,
+            ActionInterface::PARAM_NAME_URL_ENCODED => $refererEncoded,
+            'qty' => $wishlistItemQty,
+        ];
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
-            ->with($url, ['item' => $wishlistItemId, ActionInterface::PARAM_NAME_URL_ENCODED => $refererEncoded])
+            ->with($url, $expected)
             ->willReturn($url);
 
         $this->assertEquals($url, $this->model->getAddToCartParams($this->wishlistItem, true));
@@ -363,6 +381,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $url = 'result url';
         $storeId = 1;
         $wishlistItemId = 1;
+        $wishlistItemQty = 1;
 
         $this->wishlistItem->expects($this->once())
             ->method('getProduct')
@@ -370,6 +389,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->wishlistItem->expects($this->once())
             ->method('getWishlistItemId')
             ->willReturn($wishlistItemId);
+        $this->wishlistItem->expects($this->once())
+            ->method('getQty')
+            ->willReturn($wishlistItemQty);
 
         $this->product->expects($this->once())
             ->method('isVisibleInSiteVisibility')
@@ -383,9 +405,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with('wishlist/shared/cart')
             ->willReturn($url);
 
+        $exptected = [
+            'item' => $wishlistItemId,
+            'qty' => $wishlistItemQty,
+        ];
         $this->postDataHelper->expects($this->once())
             ->method('getPostData')
-            ->with($url, ['item' => $wishlistItemId])
+            ->with($url, $exptected)
             ->willReturn($url);
 
         $this->assertEquals($url, $this->model->getSharedAddToCartUrl($this->wishlistItem));

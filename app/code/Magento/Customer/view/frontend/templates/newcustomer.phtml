@@ -1,29 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php
-/**
- * New Customer block template
- *
- * @var $block \Magento\Customer\Block\Form\Login\Info
- */
+/** @var \Magento\Customer\Block\Form\Login\Info $block */
 ?>
 <?php if ($block->getRegistration()->isAllowed()): ?>
 <div class="block block-new-customer">
     <div class="block-title">
-        <strong id="block-new-customer-heading" role="heading" aria-level="2"><?php /* @escapeNotVerified */ echo __('New Customers') ?></strong>
+        <strong id="block-new-customer-heading" role="heading" aria-level="2"><?php echo $block->escapeHtml(__('New Customers')) ?></strong>
     </div>
     <div class="block-content" aria-labelledby="block-new-customer-heading">
-        <p><?php /* @escapeNotVerified */ echo __('Creating an account has many benefits: check out faster, keep more than one address, track orders and more.') ?></p>
+        <p><?php echo $block->escapeHtml(__('Creating an account has many benefits: check out faster, keep more than one address, track orders and more.')) ?></p>
         <div class="actions-toolbar">
             <div class="primary">
-                <a href="<?php /* @escapeNotVerified */ echo $block->getCreateAccountUrl() ?>" class="action create primary"><span><?php /* @escapeNotVerified */ echo __('Create an Account') ?></span></a>
+                <a href="<?php echo $block->escapeUrl($block->getCreateAccountUrl()) ?>" class="action create primary"><span><?php echo $block->escapeHtml(__('Create an Account')) ?></span></a>
             </div>
         </div>
     </div>

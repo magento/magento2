@@ -6,8 +6,8 @@
 "Caching Application","Caching Application"
 "Varnish Configuration","Varnish Configuration"
 "Access list","Access list"
-"IPs access list separated with \',\' that can purge Varnish configuration for config file generation.
-                            If field is empty default value localhost will be saved.","IPs access list separated with \',\' that can purge Varnish configuration for config file generation.
+"IPs access list separated with ',' that can purge Varnish configuration for config file generation.
+                            If field is empty default value localhost will be saved.","IPs access list separated with ',' that can purge Varnish configuration for config file generation.
                             If field is empty default value localhost will be saved."
 "Backend host","Backend host"
 "Specify backend host for config file generation. If field is empty default value localhost will be saved.","Specify backend host for config file generation. If field is empty default value localhost will be saved."

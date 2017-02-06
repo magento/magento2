@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Model\PackagesData;
-use \Magento\Setup\Model\Grid\TypeMapper;
 
 /**
  * Controller for extensions grid tasks
@@ -23,20 +22,12 @@ class InstallExtensionGrid extends AbstractActionController
     private $packagesData;
 
     /**
-     * @var TypeMapper
-     */
-    private $typeMapper;
-
-    /**
      * @param PackagesData $packagesData
-     * @param TypeMapper $typeMapper
      */
     public function __construct(
-        PackagesData $packagesData,
-        TypeMapper $typeMapper
+        PackagesData $packagesData
     ) {
         $this->packagesData = $packagesData;
-        $this->typeMapper = $typeMapper;
     }
 
     /**
@@ -60,10 +51,7 @@ class InstallExtensionGrid extends AbstractActionController
     {
         $extensions = $this->packagesData->getPackagesForInstall();
         $packages = isset($extensions['packages']) ? $extensions['packages'] : [];
-        array_walk($packages, function (&$package) {
-            $package['vendor'] = ucfirst($package['vendor']);
-            $package['type'] =  $this->typeMapper->map($package['name'], $package['type']);
-        });
+        $packages = $this->formatPackageList($packages);
 
         return new JsonModel(
             [
@@ -72,5 +60,20 @@ class InstallExtensionGrid extends AbstractActionController
                 'total' => count($packages)
             ]
         );
+    }
+
+    /**
+     * Format package list
+     *
+     * @param array $packages
+     * @return array
+     */
+    private function formatPackageList(array $packages)
+    {
+        array_walk($packages, function (&$package) {
+            $package['vendor'] = ucfirst($package['vendor']);
+        });
+
+        return $packages;
     }
 }

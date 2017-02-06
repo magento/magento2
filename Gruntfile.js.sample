@@ -1,18 +1,23 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // For performance use one level down: 'name/{,*/}*.js'
 // If you want to recursively match all subfolders, use: 'name/**/*.js'
+
 module.exports = function (grunt) {
     'use strict';
 
     var _ = require('underscore'),
         path = require('path'),
-        themes = require('./dev/tools/grunt/configs/themes'),
+        filesRouter = require('./dev/tools/grunt/tools/files-router'),
         configDir = './dev/tools/grunt/configs',
-        tasks = grunt.file.expand('./dev/tools/grunt/tasks/*');
+        tasks = grunt.file.expand('./dev/tools/grunt/tasks/*'),
+        themes;
+
+        filesRouter.set('themes', 'dev/tools/grunt/configs/themes');
+        themes = filesRouter.get('themes');
 
     tasks = _.map(tasks, function(task){ return task.replace('.js', '') });
     tasks.push('time-grunt');

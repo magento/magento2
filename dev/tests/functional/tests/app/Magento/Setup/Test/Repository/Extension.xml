@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -19,6 +19,18 @@
 
         <dataset name="secondExtension">
             <field name="extensionName" xsi:type="string">magento/module-theme-sample-data</field>
+        </dataset>
+
+        <dataset name="thirdExtension">
+            <field name="extensionName" xsi:type="string">magento/module-customer-sample-data</field>
+            <field name="version" xsi:type="string">100.1.0-rc3</field>
+            <field name="versionToUpdate" xsi:type="string">100.1.0</field>
+        </dataset>
+
+        <dataset name="fourthExtension">
+            <field name="extensionName" xsi:type="string">magento/module-theme-sample-data</field>
+            <field name="version" xsi:type="string">100.1.0-rc3</field>
+            <field name="versionToUpdate" xsi:type="string">100.1.0</field>
         </dataset>
     </repository>
 </config>

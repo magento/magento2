@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,6 +9,12 @@
     <fields>
         <firstname />
         <lastname />
+        <change_email>
+            <input>checkbox</input>
+        </change_email>
+        <change_password>
+            <input>checkbox</input>
+        </change_password>
         <email />
         <current_password />
         <password />

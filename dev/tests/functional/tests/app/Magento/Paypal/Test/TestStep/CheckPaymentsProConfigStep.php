@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -130,7 +130,7 @@ class CheckPaymentsProConfigStep implements TestStepInterface
         $this->paymentsProConfigBlock->enablePaymentsPro();
         $this->assertFieldsAreActive->processAssert(
             $this->systemConfigEditSectionPayment,
-            [$enablers['Enable this Solution'], $enablers['Enable PayPal Credit'], $enablers['Vault enabled']]
+            [$enablers['Enable this Solution'], $enablers['Enable PayPal Credit'], $enablers['Vault Enabled']]
         );
         $this->assertFieldsAreEnabled->processAssert(
             $this->systemConfigEditSectionPayment,

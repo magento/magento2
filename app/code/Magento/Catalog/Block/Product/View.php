@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\Product;
 
 /**
  * Product View block
@@ -29,6 +28,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     * @deprecated
      */
     protected $priceCurrency;
 
@@ -225,40 +225,34 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
             $config = [
                 'productId' => $product->getId(),
                 'priceFormat' => $this->_localeFormat->getPriceFormat()
-                ];
+            ];
             return $this->_jsonEncoder->encode($config);
         }
 
         $tierPrices = [];
         $tierPricesList = $product->getPriceInfo()->getPrice('tier_price')->getTierPriceList();
         foreach ($tierPricesList as $tierPrice) {
-            $tierPrices[] = $this->priceCurrency->convert($tierPrice['price']->getValue());
+            $tierPrices[] = $tierPrice['price']->getValue();
         }
         $config = [
-            'productId' => $product->getId(),
+            'productId'   => $product->getId(),
             'priceFormat' => $this->_localeFormat->getPriceFormat(),
-            'prices' => [
-                'oldPrice' => [
-                    'amount' => $this->priceCurrency->convert(
-                        $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue()
-                    ),
+            'prices'      => [
+                'oldPrice'   => [
+                    'amount'      => $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue(),
                     'adjustments' => []
                 ],
-                'basePrice' => [
-                    'amount' => $this->priceCurrency->convert(
-                        $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount()
-                    ),
+                'basePrice'  => [
+                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount(),
                     'adjustments' => []
                 ],
                 'finalPrice' => [
-                    'amount' => $this->priceCurrency->convert(
-                        $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue()
-                    ),
+                    'amount'      => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(),
                     'adjustments' => []
                 ]
             ],
-            'idSuffix' => '_clone',
-            'tierPrices' => $tierPrices
+            'idSuffix'    => '_clone',
+            'tierPrices'  => $tierPrices
         ];
 
         $responseObject = new \Magento\Framework\DataObject();
