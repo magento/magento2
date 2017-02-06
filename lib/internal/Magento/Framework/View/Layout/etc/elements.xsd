@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -140,7 +140,7 @@
 
     <xs:simpleType name="elementNameType">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_\.]*"/>
+            <xs:pattern value="[a-zA-Z0-9][a-zA-Z\d\-_\.]*"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -248,6 +248,7 @@
         <xs:attribute type="elementPositionType" name="after" use="optional"/>
         <xs:attribute type="elementOutputType" name="output" use="optional"/>
         <xs:attribute type="xs:string" name="acl" use="optional"/>
+        <xs:attribute type="xs:string" name="condition" use="optional"/>
         <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
         <xs:attribute type="xs:string" name="group" use="optional" />
         <xs:attribute type="xs:boolean" name="cacheable" default="true" use="optional"/>

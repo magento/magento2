@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Constraint;
@@ -11,7 +11,7 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
- * Class AssertTransactionIsPresentInSettlementReport
+ * Assert that comment with transaction id exists in Comments History section on order page in Admin.
  */
 class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
 {
@@ -26,6 +26,8 @@ class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
     private $settlementReportIndex;
 
     /**
+     * Assert that comment with transaction id exists in Comments History section on order page in Admin.
+     *
      * @param $orderId
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
@@ -58,7 +60,9 @@ class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
     }
 
     /**
-     * @inheritdoc
+     * Returns a string representation of the object.
+     *
+     * @return string
      */
     public function toString()
     {
@@ -66,15 +70,18 @@ class AssertTransactionIsPresentInSettlementReport extends AbstractConstraint
     }
 
     /**
-     * Get transaction id from order comments
-     * @return mixed
+     * Get transaction id from order comments.
+     *
+     * @return null|string
      */
     private function getTransactionId()
     {
-        $comments = $this->salesOrderView->getOrderHistoryBlock()->getCommentsHistory();
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $this->salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
         $transactionId = null;
 
-        preg_match('/(\w+-*\w+)"/', $comments, $matches);
+        preg_match('/(\w+-*\w+)"/', $latestComment['comment'], $matches);
         if (!empty($matches[1])) {
             $transactionId = $matches[1];
         }

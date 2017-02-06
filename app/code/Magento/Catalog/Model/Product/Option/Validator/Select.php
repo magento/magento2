@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,6 +51,9 @@ class Select extends DefaultValidator
             $storeId = $option->getProduct()->getStoreId();
         }
         foreach ($values as $value) {
+            if (isset($value['is_delete']) && (bool)$value['is_delete']) {
+                continue;
+            }
             $type = isset($value['price_type']) ? $value['price_type'] : null;
             $price = isset($value['price']) ? $value['price'] : null;
             $title = isset($value['title']) ? $value['title'] : null;

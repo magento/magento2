@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model;
@@ -122,7 +122,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->getArea(Area::AREA_FRONTEND)
             ->load();
 
-        $expectedViewUrl = 'static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
+        $expectedViewUrl = '/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
         $this->model->setDesignConfig([
             'area' => 'frontend',
             'store' => $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
@@ -578,7 +578,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->getArea(Area::AREA_FRONTEND)
             ->load();
 
-        $expectedViewUrl = 'static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
         $this->model->setTemplateSubject('{{view url="Magento_Theme::favicon.ico"}}');
         $this->model->setDesignConfig([
             'area' => 'frontend',
@@ -588,10 +587,16 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->setNotDefaultThemeForFixtureStore();
-        $this->assertStringEndsNotWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
+        $this->assertStringMatchesFormat(
+            '%s/frontend/Magento/luma/en_US/Magento_Theme/favicon.ico',
+            $this->model->getProcessedTemplateSubject([])
+        );
 
         $this->setDefaultThemeForFixtureStore();
-        $this->assertStringEndsWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
+        $this->assertStringMatchesFormat(
+            '%s/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico',
+            $this->model->getProcessedTemplateSubject([])
+        );
     }
 
     /**
@@ -605,7 +610,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->load();
 
         $this->assertStringEndsWith(
-            'static/frontend/Magento/luma/en_US/Magento_Email/logo_email.png',
+            '/frontend/Magento/luma/en_US/Magento_Email/logo_email.png',
             $this->model->getDefaultEmailLogo()
         );
     }

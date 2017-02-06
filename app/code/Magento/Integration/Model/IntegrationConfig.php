@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Integration\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Integration\Model\Cache\TypeIntegration;
 use Magento\Integration\Model\Config\Integration\Reader;
 
@@ -37,13 +39,23 @@ class IntegrationConfig
     protected $_integrations;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param TypeIntegration $configCacheType
      * @param Reader $configReader
+     * @param SerializerInterface $serializer
      */
-    public function __construct(TypeIntegration $configCacheType, Reader $configReader)
-    {
+    public function __construct(
+        TypeIntegration $configCacheType,
+        Reader $configReader,
+        SerializerInterface $serializer = null
+    ) {
         $this->_configCacheType = $configCacheType;
         $this->_configReader = $configReader;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -57,11 +69,11 @@ class IntegrationConfig
         if (null === $this->_integrations) {
             $integrations = $this->_configCacheType->load(self::CACHE_ID);
             if ($integrations && is_string($integrations)) {
-                $this->_integrations = unserialize($integrations);
+                $this->_integrations = $this->serializer->unserialize($integrations);
             } else {
                 $this->_integrations = $this->_configReader->read();
                 $this->_configCacheType->save(
-                    serialize($this->_integrations),
+                    $this->serializer->serialize($this->_integrations),
                     self::CACHE_ID,
                     [TypeIntegration::CACHE_TAG]
                 );

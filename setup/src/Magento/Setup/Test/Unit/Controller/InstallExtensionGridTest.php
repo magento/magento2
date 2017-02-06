@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Test\Unit\Controller;
 
 use Magento\Setup\Controller\InstallExtensionGrid;
-use Magento\Setup\Model\Grid\TypeMapper;
 use Magento\Setup\Model\PackagesData;
+use Magento\Framework\Composer\ComposerInformation;
 
 class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,23 +24,14 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
      */
     private $packagesData;
 
-    /**
-     * @var TypeMapper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $typeMapperMock;
-
     public function setUp()
     {
         $this->packagesData = $this->getMockBuilder(PackagesData::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->typeMapperMock = $this->getMockBuilder(TypeMapper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->controller = new InstallExtensionGrid(
-            $this->packagesData,
-            $this->typeMapperMock
+            $this->packagesData
         );
     }
 
@@ -63,9 +54,6 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
         $this->packagesData->expects(static::once())
             ->method('getPackagesForInstall')
             ->willReturn($extensions);
-        $this->typeMapperMock->expects(static::exactly(4))
-            ->method('map')
-            ->willReturn($extensions);
 
         $jsonModel = $this->controller->extensionsAction();
         static::assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
@@ -84,25 +72,25 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
         $extensions['packages'] = [
             'magento/testing-extension' => [
                 'name' => 'magento/testing-extension',
-                'type' => 'module',
+                'type' => ComposerInformation::MODULE_PACKAGE_TYPE,
                 'vendor' => 'magento',
                 'version' => '2.2.2',
                 'author' => 'magento'],
             'magento/my-first-module' => [
                 'name' => 'magento/my-first-module',
-                'type' => 'module',
+                'type' => ComposerInformation::MODULE_PACKAGE_TYPE,
                 'vendor' => 'magento',
                 'version' => '2.0.0',
                 'author' => 'magento'],
             'magento/last-extension' => [
-                'name' => 'magento/last-extension',
-                'type' => 'module',
+                'name' => 'magento/theme',
+                'type' => ComposerInformation::THEME_PACKAGE_TYPE,
                 'vendor' => 'magento',
                 'version' => '2.1.1',
                 'author' => 'magento'],
             'magento/magento-second-module' => [
                 'name' => 'magento/magento-second-module',
-                'type' => 'module',
+                'type' => ComposerInformation::COMPONENT_PACKAGE_TYPE,
                 'vendor' => 'magento',
                 'version' => '2.0.0',
                 'author' => 'magento']

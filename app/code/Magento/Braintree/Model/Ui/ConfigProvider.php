@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Ui;
 
+use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
@@ -86,7 +87,14 @@ final class ConfigProvider implements ConfigProviderInterface
     public function getClientToken()
     {
         if (empty($this->clientToken)) {
-            $this->clientToken = $this->adapter->generate();
+            $params = [];
+
+            $merchantAccountId = $this->config->getMerchantAccountId();
+            if (!empty($merchantAccountId)) {
+                $params[PaymentDataBuilder::MERCHANT_ACCOUNT_ID] = $merchantAccountId;
+            }
+
+            $this->clientToken = $this->adapter->generate($params);
         }
 
         return $this->clientToken;

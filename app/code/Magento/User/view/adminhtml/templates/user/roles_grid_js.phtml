@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -71,3 +71,18 @@ require([
 
 });
 </script>
+
+<?php $editBlock = $block->getLayout()->getBlock('adminhtml.user.edit'); ?>
+<?php if (is_object($editBlock)): ?>
+    <script type="text/x-magento-init">
+        {
+            "[data-role=delete-user]" : {
+                "deleteUserAccount" : {
+                    "message": "<?php echo $editBlock->escapeHtml($editBlock->getDeleteMessage()) ?>",
+                    "url": "<?php /* @noEscape */ echo $editBlock->getDeleteUrl(); ?>",
+                    "objId": "<?php echo $editBlock->escapeHtml($editBlock->getObjectId()) ?>"
+                }
+            }
+        }
+    </script>
+<?php endif; ?>

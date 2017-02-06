@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,10 +8,16 @@ namespace Magento\Tax\Api;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Webapi\Model\Rest\Config as HttpConstants;
 
+/**
+ * Class TaxRuleRepositoryInterfaceTest
+ * @package Magento\Tax\Api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
 {
     const SERVICE_NAME = "taxTaxRuleRepositoryV1";
@@ -33,6 +39,15 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
     /** @var SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
 
+    /** @var  \Magento\Tax\Api\Data\TaxClassInterface | \Magento\Tax\Model\ClassModel */
+    private $taxClass;
+
+    /** @var  \Magento\Tax\Api\Data\TaxRateInterface | \Magento\Tax\Model\Calculation\Rate */
+    private $taxRate;
+
+    /** @var  SortOrderBuilder */
+    private $sortOrderBuilder;
+
     /**
      * Execute per test initialization.
      */
@@ -51,6 +66,16 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         );
         $this->filterBuilder = $objectManager->create(
             \Magento\Framework\Api\FilterBuilder::class
+        );
+        $this->sortOrderBuilder = $objectManager->create(
+            SortOrderBuilder::class
+        );
+        $this->taxClass = $objectManager->create(
+            \Magento\Tax\Api\Data\TaxClassInterface::class
+        );
+
+        $this->taxRate = $objectManager->create(
+            \Magento\Tax\Api\Data\TaxRateInterface::class
         );
 
         /** Initialize tax classes, tax rates and tax rules defined in fixture Magento/Tax/_files/tax_classes.php */
@@ -311,21 +336,32 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Tax/_files/tax_classes.php
      */
-    public function testSearchTaxRulesCodeLike()
+    public function testSearchTaxRulesCodeWithJoins()
     {
-        // Find rules whose code starts with 'Test Rule'
-        $filter = $this->filterBuilder
+        $customerTaxClass =  clone $this->taxClass->load('CustomerTaxClass2', 'class_name');
+        $productTaxClass = clone $this->taxClass->load('Taxable Goods', 'class_name');
+        $taxRate = $this->taxRate->load('*', 'code');
+
+        $filter2 = $this->filterBuilder
+            ->setField('customer_tax_class_ids')
+            ->setValue($customerTaxClass->getClassId())
+            ->create();
+        $filter3 = $this->filterBuilder
+            ->setField('product_tax_class_ids')
+            ->setValue($productTaxClass->getClassId())
+            ->create();
+        $filter4 = $this->filterBuilder
+            ->setField('tax_calculation_rate_id')
+            ->setValue($taxRate->getId())
+            ->create();
+        $sortOrder = $this->sortOrderBuilder
             ->setField('code')
-            ->setValue('Test Rule%')
-            ->setConditionType('like')
+            ->setDirection('DESC')
             ->create();
 
-        $sortFilter = $this->filterBuilder
-            ->setField('position')
-            ->setValue(0)
-            ->create();
-
-        $this->searchCriteriaBuilder->addFilters([$filter, $sortFilter]);
+        $this->searchCriteriaBuilder->addFilters([$filter2, $filter3]);
+        $this->searchCriteriaBuilder->addFilters([$filter4]);
+        $this->searchCriteriaBuilder->addSortOrder($sortOrder);
 
         $fixtureRule = $this->getFixtureTaxRules()[1];
 
@@ -350,16 +386,6 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
 
         $expectedRuleData = [
             [
-                'id' => $fixtureRule->getId(),
-                'code' => 'Test Rule',
-                'priority' => 0,
-                'position' => 0,
-                'calculate_subtotal' => 0,
-                'customer_tax_class_ids' => array_values(array_unique($fixtureRule->getCustomerTaxClasses())),
-                'product_tax_class_ids' => array_values(array_unique($fixtureRule->getProductTaxClasses())),
-                'tax_rate_ids' => array_values(array_unique($fixtureRule->getRates())),
-            ],
-            [
                 'id' => $this->getFixtureTaxRules()[0]->getId(),
                 'code' => 'Test Rule Duplicate',
                 'priority' => 0,
@@ -368,6 +394,16 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
                 'customer_tax_class_ids' => array_values(array_unique($fixtureRule->getCustomerTaxClasses())),
                 'product_tax_class_ids' => array_values(array_unique($fixtureRule->getProductTaxClasses())),
                 'tax_rate_ids' => array_values(array_unique($fixtureRule->getRates()))
+            ],
+            [
+                'id' => $fixtureRule->getId(),
+                'code' => 'Test Rule',
+                'priority' => 0,
+                'position' => 0,
+                'calculate_subtotal' => 0,
+                'customer_tax_class_ids' => array_values(array_unique($fixtureRule->getCustomerTaxClasses())),
+                'product_tax_class_ids' => array_values(array_unique($fixtureRule->getProductTaxClasses())),
+                'tax_rate_ids' => array_values(array_unique($fixtureRule->getRates())),
             ],
         ];
         $this->assertEquals($expectedRuleData, $searchResults['items']);

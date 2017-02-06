@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CheckoutAgreements\Test\TestCase\DeleteTermEntityTest" summary="Delete Terms And Conditions" ticketId="MAGETWO-29687">
         <variation name="DeleteTermEntityTestVariation1">
+            <data name="tag" xsi:type="string">severity:S3</data>
             <data name="configData" xsi:type="string">checkout_term_condition</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="agreement/dataset" xsi:type="string">term_enabled_text</data>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -245,15 +245,14 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetDataWithMultidimensionalArray()
     {
-        $this->markTestSkipped('Need to revert changes from  MAGETWO-39106 and then modify this test.');
         $expected = [
             'key' => 'value',
-            'array' => 'value1',
+            'street' => 'value1',
         ];
 
         $key = [
             'key' => 'value',
-            'array' => [
+            'street' => [
                 'key1' => 'value1',
             ]
         ];
@@ -337,31 +336,31 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
         return [
             'firstname' => [
                 array_merge(array_diff_key($data, ['firstname' => '']), ['country_id' => $countryId++]),
-                ['Please enter the first name.'],
+                ['firstname is a required field.'],
             ],
             'lastname' => [
                 array_merge(array_diff_key($data, ['lastname' => '']), ['country_id' => $countryId++]),
-                ['Please enter the last name.'],
+                ['lastname is a required field.'],
             ],
             'street' => [
                 array_merge(array_diff_key($data, ['street' => '']), ['country_id' => $countryId++]),
-                ['Please enter the street.'],
+                ['street is a required field.'],
             ],
             'city' => [
                 array_merge(array_diff_key($data, ['city' => '']), ['country_id' => $countryId++]),
-                ['Please enter the city.'],
+                ['city is a required field.'],
             ],
             'telephone' => [
                 array_merge(array_diff_key($data, ['telephone' => '']), ['country_id' => $countryId++]),
-                ['Please enter the phone number.'],
+                ['telephone is a required field.'],
             ],
             'postcode' => [
                 array_merge(array_diff_key($data, ['postcode' => '']), ['country_id' => $countryId++]),
-                ['Please enter the zip/postal code.'],
+                ['postcode is a required field.'],
             ],
             'country_id' => [
                 array_diff_key($data, ['country_id' => '']),
-                ['Please enter the country.'],
+                ['countryId is a required field.'],
             ],
             'validated' => [array_merge($data, ['country_id' => $countryId++]), true],
         ];

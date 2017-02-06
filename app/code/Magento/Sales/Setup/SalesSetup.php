@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Setup;
@@ -11,12 +11,15 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Eav\Setup\EavSetup;
 
 /**
- * Setup Model of Sales Module
+ * Sales module setup class
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codeCoverageIgnore
  */
-class SalesSetup extends \Magento\Eav\Setup\EavSetup
+class SalesSetup extends EavSetup
 {
     /**
      * This should be set explicitly
@@ -49,6 +52,13 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     protected $encryptor;
 
     /**
+     * @var string
+     */
+    private static $connectionName = 'sales';
+
+    /**
+     * Constructor
+     * 
      * @param ModuleDataSetupInterface $setup
      * @param Context $context
      * @param CacheInterface $cache
@@ -105,8 +115,12 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
      */
     protected function _flatTableExist($table)
     {
-        $tablesList = $this->getSetup()->getConnection()->listTables();
-        return in_array(strtoupper($this->getSetup()->getTable($table)), array_map('strtoupper', $tablesList));
+        $tablesList = $this->getConnection()
+            ->listTables();
+        return in_array(
+            strtoupper($this->getTable($table)),
+            array_map('strtoupper', $tablesList)
+        );
     }
 
     /**
@@ -143,13 +157,14 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
      */
     protected function _addFlatAttribute($table, $attribute, $attr)
     {
-        $tableInfo = $this->getSetup()->getConnection()->describeTable($this->getSetup()->getTable($table));
+        $tableInfo = $this->getConnection()
+            ->describeTable($this->getTable($table));
         if (isset($tableInfo[$attribute])) {
             return $this;
         }
         $columnDefinition = $this->_getAttributeColumnDefinition($attribute, $attr);
-        $this->getSetup()->getConnection()->addColumn(
-            $this->getSetup()->getTable($table),
+        $this->getConnection()->addColumn(
+            $this->getTable($table),
             $attribute,
             $columnDefinition
         );
@@ -169,8 +184,8 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     {
         if (in_array($entityTypeId, $this->_flatEntitiesGrid) && !empty($attr['grid'])) {
             $columnDefinition = $this->_getAttributeColumnDefinition($attribute, $attr);
-            $this->getSetup()->getConnection()->addColumn(
-                $this->getSetup()->getTable($table . '_grid'),
+            $this->getConnection()->addColumn(
+                $this->getTable($table . '_grid'),
                 $attribute,
                 $columnDefinition
             );
@@ -285,5 +300,26 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     public function getEncryptor()
     {
         return $this->encryptor;
+    }
+
+    /**
+     * Get sales connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function getConnection()
+    {
+        return $this->getSetup()->getConnection(self::$connectionName);
+    }
+
+    /**
+     * Get table name
+     *
+     * @param string $table
+     * @return string
+     */
+    public function getTable($table)
+    {
+        return $this->getSetup()->getTable($table, self::$connectionName);
     }
 }

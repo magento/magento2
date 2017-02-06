@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
 
 use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Catalog\Model\ProductOptionProcessorInterface;
 use Magento\Framework\Api\SearchCriteria;
@@ -60,13 +61,18 @@ class ItemRepository implements OrderItemRepositoryInterface
      */
     protected $registry = [];
 
+    /** @var  CollectionProcessorInterface */
+    private $collectionProcessor;
+
     /**
+     * ItemRepository constructor.
      * @param DataObjectFactory $objectFactory
      * @param Metadata $metadata
      * @param OrderItemSearchResultInterfaceFactory $searchResultFactory
      * @param ProductOptionFactory $productOptionFactory
      * @param ProductOptionExtensionFactory $extensionFactory
      * @param array $processorPool
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         DataObjectFactory $objectFactory,
@@ -74,7 +80,8 @@ class ItemRepository implements OrderItemRepositoryInterface
         OrderItemSearchResultInterfaceFactory $searchResultFactory,
         ProductOptionFactory $productOptionFactory,
         ProductOptionExtensionFactory $extensionFactory,
-        array $processorPool = []
+        array $processorPool = [],
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->metadata = $metadata;
@@ -82,6 +89,7 @@ class ItemRepository implements OrderItemRepositoryInterface
         $this->productOptionFactory = $productOptionFactory;
         $this->extensionFactory = $extensionFactory;
         $this->processorPool = $processorPool;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -118,17 +126,10 @@ class ItemRepository implements OrderItemRepositoryInterface
      */
     public function getList(SearchCriteria $searchCriteria)
     {
-        /** @var OrderItemSearchResultInterface $searchResult */
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Item\Collection $searchResult */
         $searchResult = $this->searchResultFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
-
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
-        }
-
+        $this->collectionProcessor->process($searchCriteria, $searchResult);
         /** @var OrderItemInterface $orderItem */
         foreach ($searchResult->getItems() as $orderItem) {
             $this->addProductOption($orderItem);
@@ -267,5 +268,21 @@ class ItemRepository implements OrderItemRepositoryInterface
         }
 
         return $request;
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Config;
@@ -72,10 +72,10 @@ class Converter implements ConverterInterface
         $data['fieldsets'] = isset($data['fieldsets']) ? $data['fieldsets'] : [];
         switch ($childNode->nodeName) {
             case 'title':
-                $data['title'] = $this->getTranslatedNodeValue($childNode);
+                $data['title'] = $childNode->nodeValue;
                 break;
             case 'description':
-                $data['description'] = $this->getTranslatedNodeValue($childNode);
+                $data['description'] = $childNode->nodeValue;
                 break;
             case 'saveHandler':
                 $data['saveHandler'] = $this->getAttributeValue($childNode, 'class');
@@ -207,6 +207,7 @@ class Converter implements ConverterInterface
      *
      * @param \DOMNode $node
      * @return string
+     * @deprecated
      */
     protected function getTranslatedNodeValue(\DOMNode $node)
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model;
@@ -9,6 +9,8 @@ use Magento\Framework\Api\SortOrder;
 use \Magento\Tax\Model\TaxRuleRepository;
 
 /**
+ * Class TaxRuleRepositoryTest
+ * @package Magento\Tax\Test\Unit\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -58,9 +60,17 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface |
+     * \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->taxRuleRegistry =
+            $this->getMock(\Magento\Tax\Model\Calculation\TaxRuleRegistry::class, [], [], '', false);
         $this->taxRuleRegistry = $this->getMock(
             \Magento\Tax\Model\Calculation\TaxRuleRegistry::class,
             [],
@@ -98,14 +108,21 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        $this->collectionProcessor = $this->getMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new TaxRuleRepository(
             $this->taxRuleRegistry,
             $this->searchResultFactory,
             $this->ruleFactory,
             $this->collectionFactory,
             $this->resource,
-            $this->extensionAttributesJoinProcessorMock
+            $this->extensionAttributesJoinProcessorMock,
+            $this->collectionProcessor
         );
     }
 
@@ -189,44 +206,19 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $collectionSize = 1;
-        $currentPage = 42;
-        $pageSize = 4;
-
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
         $collectionMock =
             $this->getMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class, [], [], '', false);
-        $filterGroupMock = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
-        $filterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
-        $sortOrderMock = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
+            $this->getMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class, [], [], '', false);
 
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
             ->with($collectionMock);
-
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteriaMock, $collectionMock);
         $this->searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
-        $filterGroupMock->expects($this->exactly(2))->method('getFilters')->willReturn([$filterMock]);
-        $filterMock->expects($this->exactly(2))->method('getConditionType')->willReturn('eq');
-        $filterMock->expects($this->exactly(2))->method('getField')->willReturnOnConsecutiveCalls(
-            'rate.tax_calculation_rate_id',
-            'cd.customer_tax_class_id'
-        );
-        $filterMock->expects($this->once())->method('getValue')->willReturn('value');
-        $collectionMock->expects($this->exactly(2))->method('joinCalculationData')->withConsecutive(['rate'], ['cd']);
-        $collectionMock->expects($this->once())->method('addFieldToFilter')
-            ->with([0 => 'rate.tax_calculation_rate_id'], [0 => ['eq' => 'value']]);
-        $collectionMock->expects($this->once())->method('getSize')->willReturn($collectionSize);
-        $this->searchResultsMock->expects($this->once())->method('setTotalCount')->with($collectionSize);
-        $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
-        $sortOrderMock->expects($this->once())->method('getField')->willReturn('sort_order');
-        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
-        $collectionMock->expects($this->once())->method('addOrder')->with('position', 'ASC');
-        $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
-        $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
-        $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn($pageSize);
-        $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([]);
         $this->searchResultsMock->expects($this->once())->method('setItems')->with([]);
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultsMock);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -93,5 +93,20 @@ class View extends ParentView
     public function fillOptions(FixtureInterface $product)
     {
         $this->getGroupedProductBlock()->fill($product);
+    }
+
+    /**
+     * Set quantity and click add to cart.
+     * @param FixtureInterface $product
+     * @param string|int $qty
+     */
+    public function setQtyAndClickAddToCartGrouped(FixtureInterface $product, $qty)
+    {
+        $associatedProducts = $product->getAssociated()['products'];
+        $groupedProductBlock = $this->getGroupedProductBlock();
+        foreach ($associatedProducts as $product) {
+            $groupedProductBlock->setQty($product->getId(), $qty);
+        }
+        $this->clickAddToCart();
     }
 }

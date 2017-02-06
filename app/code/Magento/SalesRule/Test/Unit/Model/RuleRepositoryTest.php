@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model;
@@ -54,6 +54,11 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $toModelConverter;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
     protected function setUp()
     {
         $this->ruleFactory = $this->getMock(\Magento\SalesRule\Model\RuleFactory::class, ['create'], [], '', false);
@@ -77,6 +82,13 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->extensionAttributesJoinProcessorMock = $this->getMock($className, ['process'], [], '', false);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->collectionProcessor = $this->getMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->ruleRepository = $objectManager->getObject(
             \Magento\SalesRule\Model\RuleRepository::class,
             [
@@ -85,7 +97,8 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
                 'toModelConverter' =>  $this->toModelConverter,
                 'searchResultFactory' => $this->searchResultFactory,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
-                'ruleCollectionFactory' => $this->collectionFactory
+                'ruleCollectionFactory' => $this->collectionFactory,
+                'collectionProcessor' => $this->collectionProcessor
             ]
         );
     }
@@ -134,9 +147,6 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $collectionSize = 1;
-        $currentPage = 42;
-        $pageSize = 4;
-
         /**
          * @var \Magento\Framework\Api\SearchCriteriaInterface $searchCriteriaMock
          */
@@ -148,9 +158,6 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $filterGroupMock = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
-        $filterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
-        $sortOrderMock = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
 
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
@@ -158,25 +165,11 @@ class RuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
-        $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterMock]);
-        $filterMock->expects($this->exactly(2))->method('getConditionType')->willReturn('eq');
-        $filterMock->expects($this->once())->method('getField')->willReturn(
-            'rule_id'
-        );
-        $filterMock->expects($this->once())->method('getValue')->willReturn('value');
-        $collectionMock->expects($this->once())->method('addFieldToFilter')
-            ->with([0 => 'rule_id'], [0 => ['eq' => 'value']]);
         $collectionMock->expects($this->once())->method('getSize')->willReturn($collectionSize);
         $this->searchResultsMock->expects($this->once())->method('setTotalCount')->with($collectionSize);
-        $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
-        $sortOrderMock->expects($this->once())->method('getField')->willReturn('sort_order');
-        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
-        $collectionMock->expects($this->once())->method('addOrder')->with('sort_order', 'ASC');
-        $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
-        $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
-        $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn($pageSize);
-        $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
+        $this->collectionProcessor->expects($this->once())
+            ->method('process')
+            ->with($searchCriteriaMock, $collectionMock);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([]);
         $this->searchResultsMock->expects($this->once())->method('setItems')->with([]);
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultsMock);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Block\Cart;
@@ -35,6 +35,13 @@ class Sidebar extends Block
      * @var string
      */
     protected $braintreePaypalCheckoutButton = './/button[contains(@id, "braintree-paypal-mini-cart")]';
+
+    /**
+     * Locator value for "Proceed to Checkout" button.
+     *
+     * @var string
+     */
+    private $proceedToCheckoutButton = '#top-cart-btn-checkout';
 
     /**
      * Minicart items quantity
@@ -117,6 +124,16 @@ class Sidebar extends Block
     }
 
     /**
+     * Click "Proceed to Checkout" button.
+     *
+     * @return void
+     */
+    public function clickProceedToCheckoutButton()
+    {
+        $this->_rootElement->find($this->proceedToCheckoutButton)->click();
+    }
+
+    /**
      * Wait counter qty visibility.
      *
      * @return void
@@ -134,7 +151,7 @@ class Sidebar extends Block
     }
 
     /**
-     * Get empty minicart message
+     * Get empty minicart message.
      *
      * @return string
      */
@@ -145,13 +162,23 @@ class Sidebar extends Block
     }
 
     /**
-     * Is minicart items quantity block visible
+     * Is minicart items quantity block visible.
      *
      * @return bool
      */
     public function isItemsQtyVisible()
     {
         return $this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Get qty of items in minicart.
+     *
+     * @return int
+     */
+    public function getItemsQty()
+    {
+        return (int)$this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->getText();
     }
 
     /**

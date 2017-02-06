@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@
 ?>
 <?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?>
     {{pdf_row_separator}}
-<?php if ($block->getInfo()->getAdditionalData()): ?>
+<?php if ($block->getInfo()->getAdditionalInformation()): ?>
     {{pdf_row_separator}}
     <?php if ($block->getPayableTo()): ?>
         <?php echo $block->escapeHtml(__('Make Check payable to: %1', $block->getPayableTo())) ?>

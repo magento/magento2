@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Test\Unit\Model\Session;
@@ -12,6 +12,11 @@ namespace Magento\Backend\Test\Unit\Model\Session;
  */
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -93,11 +98,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $quoteFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $cartManagementMock;
-
-    /**
      * Set up
      *
      * @return void
@@ -105,6 +105,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
             \Magento\Customer\Api\CustomerRepositoryInterface::class,
             [],
@@ -197,13 +198,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->quoteFactoryMock = $this->getMock(\Magento\Quote\Model\QuoteFactory::class, ['create'], [], '', false);
-        $this->cartManagementMock = $this->getMock(
-            \Magento\Quote\Api\CartManagementInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
 
         $this->quote = $this->getMock(
             \Magento\Backend\Model\Session\Quote::class,
@@ -226,10 +220,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 'quoteFactory' => $this->quoteFactoryMock
             ]
         );
-
-        $this->prepareObjectManager([
-            [\Magento\Quote\Api\CartManagementInterface::class, $this->cartManagementMock]
-        ]);
     }
 
     /**
@@ -415,20 +405,5 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             'customer ids different' => [66, null, 'once'],
             'customer ids same' => [66, 66, 'never'],
         ];
-    }
-
-    /**
-     * @param array $map
-     * @deprecated
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

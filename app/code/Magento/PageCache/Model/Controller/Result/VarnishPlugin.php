@@ -1,11 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model\Controller\Result;
 
+use Magento\PageCache\Model\Config;
+use Magento\Framework\App\PageCache\Version;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Registry;
 use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Plugin for processing varnish cache
@@ -13,74 +18,61 @@ use Magento\Framework\App\Response\Http as ResponseHttp;
 class VarnishPlugin
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var Config
      */
-    protected $config;
+    private $config;
 
     /**
-     * @var \Magento\Framework\App\PageCache\Version
+     * @var Version
      */
-    protected $version;
+    private $version;
 
     /**
-     * @var \Magento\Framework\App\PageCache\Kernel
+     * @var AppState
      */
-    protected $kernel;
+    private $state;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var Registry
      */
-    protected $state;
+    private $registry;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @param Config $config
+     * @param Version $version
+     * @param AppState $state
+     * @param Registry $registry
      */
-    protected $registry;
-
-    /**
-     * Constructor
-     *
-     * @param \Magento\PageCache\Model\Config $config
-     * @param \Magento\Framework\App\PageCache\Version $version
-     * @param \Magento\Framework\App\PageCache\Kernel $kernel
-     * @param \Magento\Framework\App\State $state
-     * @param \Magento\Framework\Registry $registry
-     */
-    public function __construct(
-        \Magento\PageCache\Model\Config $config,
-        \Magento\Framework\App\PageCache\Version $version,
-        \Magento\Framework\App\PageCache\Kernel $kernel,
-        \Magento\Framework\App\State $state,
-        \Magento\Framework\Registry $registry
-    ) {
+    public function __construct(Config $config, Version $version, AppState $state, Registry $registry)
+    {
         $this->config = $config;
         $this->version = $version;
-        $this->kernel = $kernel;
         $this->state = $state;
         $this->registry = $registry;
     }
 
     /**
-     * @param \Magento\Framework\Controller\ResultInterface $subject
-     * @param callable $proceed
+     * Perform result postprocessing
+     *
+     * @param ResultInterface $subject
+     * @param ResultInterface $result
      * @param ResponseHttp $response
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundRenderResult(
-        \Magento\Framework\Controller\ResultInterface $subject,
-        \Closure $proceed,
-        ResponseHttp $response
-    ) {
-        $proceed($response);
+    public function afterRenderResult(ResultInterface $subject, ResultInterface $result, ResponseHttp $response)
+    {
         $usePlugin = $this->registry->registry('use_page_cache_plugin');
-        if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()
-            && $usePlugin) {
+
+        if ($this->config->getType() == Config::VARNISH && $this->config->isEnabled() && $usePlugin) {
             $this->version->process();
-            if ($this->state->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+
+            if ($this->state->getMode() == AppState::MODE_DEVELOPER) {
                 $response->setHeader('X-Magento-Debug', 1);
             }
         }
 
-        return $subject;
+        return $result;
     }
 }

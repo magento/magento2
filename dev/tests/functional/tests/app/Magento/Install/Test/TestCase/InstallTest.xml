@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Install\Test\TestCase\InstallTest" summary="[Web Setup][Auto] Install CE Magento via Web Interface" ticketId="MAGETWO-31431">
-        <variation name="InstallTestVariation1">
-            <data name="description" xsi:type="string">Install with custom admin path.</data>
+        <variation name="InstallTestVariation1" summary="Install with custom admin path">
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/admin" xsi:type="string">custom</data>
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
         </variation>
-        <variation name="InstallTestVariation2">
-            <data name="description" xsi:type="string">Install with custom encryption key and changed currency and locale.</data>
+        <variation name="InstallTestVariation2" summary="Install with custom encryption key and changed currency and locale">
             <data name="user/dataset" xsi:type="string">default</data>
-            <data name="install/keyOwn" xsi:type="string">Yes</data>
+            <data name="install/keyOwn" xsi:type="string">I want to use my own encryption key</data>
             <data name="install/keyValue" xsi:type="string">123123qa</data>
             <data name="install/storeLanguage" xsi:type="string">German (Germany)</data>
             <data name="install/storeCurrency" xsi:type="string">Euro (EUR)</data>
@@ -28,36 +26,34 @@
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\Install\Test\Constraint\AssertCurrencySelected" />
         </variation>
-        <variation name="InstallTestVariation3">
-            <data name="description" xsi:type="string">Install with table prefix.</data>
+        <variation name="InstallTestVariation3" summary="Install with table prefix">
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/dbTablePrefix" xsi:type="string">pref_</data>
             <data name="install/storeLanguage" xsi:type="string">Chinese (China)</data>
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
         </variation>
-        <variation name="InstallTestVariation4">
-            <data name="description" xsi:type="string">Install with enabled url rewrites.</data>
+        <variation name="InstallTestVariation4" summary="Install with enabled url rewrites">
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/apacheRewrites" xsi:type="string">Yes</data>
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\Install\Test\Constraint\AssertRewritesEnabled" />
         </variation>
-        <variation name="InstallTestVariation5">
-            <data name="description" xsi:type="string">Install with enabled secure urls.</data>
+        <variation name="InstallTestVariation5" summary="Install with enabled secure urls">
             <data name="user/dataset" xsi:type="string">default</data>
-            <data name="install/httpsFront" xsi:type="string">Yes</data>
-            <data name="install/httpsAdmin" xsi:type="string">Yes</data>
+            <data name="install/httpsFront" xsi:type="string">Use HTTPS for Magento Storefront</data>
+            <data name="install/httpsAdmin" xsi:type="string">Use HTTPS for Magento Admin</data>
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\Install\Test\Constraint\AssertSecureUrlEnabled" />
         </variation>
-        <variation name="InstallTestVariation6">
-            <data name="description" xsi:type="string">Install with default values.</data>
+        <variation name="InstallTestVariation6" summary="Install with default values and check DI compile" ticketId="MAGETWO-62817">
             <data name="user/dataset" xsi:type="string">default</data>
+            <data name="diCompile" xsi:type="boolean">true</data>
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
+            <constraint name="Magento\Install\Test\Constraint\AssertGenerationFilePathCheck" />
         </variation>
     </testCase>
 </config>

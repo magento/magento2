@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
-  <page name="OrderCreateIndex" area="Adminhtml" mca="sales/order_create/index">
-    <block name="configureProductBlock">
-      <render name="configurable" class="Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Composite\Configure"/>
-    </block>
-  </page>
+    <page name="OrderCreateIndex" area="Adminhtml" mca="sales/order_create/index">
+        <block name="configureProductBlock">
+            <render name="configurable" class="Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Composite\Configure" />
+        </block>
+    </page>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -403,5 +403,24 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Model\Data\Customer::TAXVAT => 1,
             \Magento\Customer\Model\Data\Customer::WEBSITE_ID => 1
         ];
+    }
+
+    /**
+     * Test to verify that reserved_order_id will be changed if it already in used
+     *
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     * @magentoDataFixture Magento/Quote/_files/empty_quote.php
+     */
+    public function testReserveOrderId()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
+        $quote->load('reserved_order_id', 'reserved_order_id');
+        $quote->reserveOrderId();
+        $this->assertEquals('reserved_order_id', $quote->getReservedOrderId());
+        $quote->setReservedOrderId('100000001');
+        $quote->reserveOrderId();
+        $this->assertNotEquals('100000001', $quote->getReservedOrderId());
     }
 }

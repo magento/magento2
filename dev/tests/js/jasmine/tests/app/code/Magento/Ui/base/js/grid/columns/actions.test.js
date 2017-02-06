@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -81,20 +81,6 @@ define([
             expect(model.isActionVisible(action)).toBeFalsy();
             action.hidden = false;
             expect(model.isActionVisible(action)).toBeTruthy();
-        });
-
-        it('Check toggleList function', function () {
-            model.toggleList(0);
-            expect(model.opened()).toEqual(0);
-            model.toggleList(0);
-            expect(model.opened()).toBeFalsy();
-        });
-
-        it('Check closeList function', function () {
-            model.toggleList(0);
-            expect(model.opened()).toEqual(0);
-            model.closeList(0);
-            expect(model.opened()).toBeFalsy();
         });
     });
 });

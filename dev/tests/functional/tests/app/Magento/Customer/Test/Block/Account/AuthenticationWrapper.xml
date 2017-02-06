@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="1">
+    <fields>
+        <email>
+            <selector>[id='login-email']</selector>
+        </email>
+        <password>
+            <selector>[id='login-password']</selector>
+        </password>
+    </fields>
+</mapping>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -243,9 +243,11 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         );
         $customerGroupMock->expects($this->once())->method('getTaxClassId')->will($this->returnValue($taxClassId));
         $customerFormMock = $this->getMock(\Magento\Customer\Model\Metadata\Form::class, [], [], '', false);
-        $customerFormMock->expects($this->any())->method('getAttributes')->will($this->returnValue($attributeMocks));
+        $customerFormMock->expects($this->any())
+            ->method('getAttributes')
+            ->will($this->returnValue([$attributeMocks[1]]));
         $customerFormMock->expects($this->any())->method('extractData')->will($this->returnValue([]));
-        $customerFormMock->expects($this->any())->method('restoreData')->will($this->returnValue([]));
+        $customerFormMock->expects($this->any())->method('restoreData')->will($this->returnValue(['group_id' => 1]));
 
         $customerFormMock->expects($this->any())
             ->method('prepareRequest')
@@ -254,7 +256,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $customerMock = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class, [], [], '', false);
         $this->customerMapper->expects($this->atLeastOnce())
             ->method('toFlatArray')
-            ->willReturn(['email' => 'user@example.com', 'group_id' => 1, 'gender' => 1]);
+            ->willReturn(['group_id' => 1]);
 
 
         $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
@@ -263,7 +265,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('addData')
             ->with(
             [
-                'customer_email' => $attributes[0][1],
                 'customer_group_id' => $attributes[1][1],
                 'customer_tax_class_id' => $taxClassId
             ]
@@ -272,7 +273,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('populateWithArray')
             ->with(
                 $customerMock,
-                ['email' => 'user@example.com', 'group_id' => 1, 'gender' => 1], \Magento\Customer\Api\Data\CustomerInterface::class
+                ['group_id' => 1], \Magento\Customer\Api\Data\CustomerInterface::class
             );
 
         $this->formFactoryMock->expects($this->any())->method('create')->will($this->returnValue($customerFormMock));
@@ -283,7 +284,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('getById')
             ->will($this->returnValue($customerGroupMock));
 
-        $this->adminOrderCreate->setAccountData([]);
+        $this->adminOrderCreate->setAccountData(['group_id' => 1]);
     }
 
     public function testUpdateQuoteItemsNotArray()
@@ -349,5 +350,33 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
         $this->adminOrderCreate->setRecollect(false);
         $this->adminOrderCreate->updateQuoteItems($items);
+    }
+
+    public function testApplyCoupon()
+    {
+        $couponCode = '';
+        $quoteMock = $this->getMock(
+            \Magento\Quote\Model\Quote::class,
+            ['getShippingAddress', 'setCouponCode'],
+            [],
+            '',
+            false
+        );
+        $this->sessionQuoteMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+
+        $addressMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['setCollectShippingRates', 'setFreeShipping'],
+            [],
+            '',
+            false
+        );
+        $quoteMock->expects($this->exactly(2))->method('getShippingAddress')->willReturn($addressMock);
+        $quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode)->willReturnSelf();
+
+        $addressMock->expects($this->once())->method('setCollectShippingRates')->with(true)->willReturnSelf();
+        $addressMock->expects($this->once())->method('setFreeShipping')->with(null)->willReturnSelf();
+
+        $this->adminOrderCreate->applyCoupon($couponCode);
     }
 }

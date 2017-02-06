@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
+
+/** @var \Magento\Newsletter\Block\Adminhtml\Subscriber $block */
 
 ?>
 <?php echo $block->getChildHtml('grid') ?>
@@ -12,10 +14,10 @@
 <div class="form-buttons">
     <select id="queueList" name="queue">
     <?php foreach ($block->getQueueAsOptions() as $_queue): ?>
-        <option value="<?php /* @escapeNotVerified */ echo $_queue['value'] ?>"><?php /* @escapeNotVerified */ echo $_queue['label'] ?> #<?php /* @escapeNotVerified */ echo $_queue['value'] ?></option>
+        <option value="<?php echo $block->escapeHtmlAttr($_queue['value']) ?>"><?php echo $block->escapeHtml($_queue['label']) ?> #<?php echo $block->escapeHtml($_queue['value']) ?></option>
     <?php endforeach; ?>
     </select>
-    <button type="button" class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?php /* @escapeNotVerified */ echo __('Add to Queue'); ?></span></span></span></button>
+    <button type="button" class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?php echo $block->escapeHtml(__('Add to Queue')); ?></span></span></span></button>
 </div>
 <?php endif ?>
 <script>

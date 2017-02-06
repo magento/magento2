@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 13. Log in using new admin user (before the bug was fixed, it was impossible to log in from the first attempt)
  * 14. Perform assertions
  *
- * @group ACL_(PS)
+ * @group ACL
  * @ZephyrId MAGETWO-28828
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -43,7 +43,6 @@ class UserLoginAfterChangingPermissionsTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**

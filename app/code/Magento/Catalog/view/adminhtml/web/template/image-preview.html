@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -31,5 +31,6 @@
     <div class="file-uploader-filename" text="$file.name"/>
     <div class="file-uploader-meta">
         <text args="$file.previewWidth"/>x<text args="$file.previewHeight"/>
+        <text args="$parent.formatSize($file.size)"/>
     </div>
 </div>

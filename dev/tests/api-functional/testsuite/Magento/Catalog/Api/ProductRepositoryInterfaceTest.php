@@ -1,20 +1,25 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Helper\Product;
 use Magento\Store\Model\Store;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Store\Model\Website;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductRepositoryInterfaceTest extends WebapiAbstract
 {
@@ -129,15 +134,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
     }
 
-    private function markAreaAsSecure()
-    {
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get(\Magento\Framework\Registry::class);
-        $registry->unregister("isSecureArea");
-        $registry->register("isSecureArea", true);
-    }
-
     /**
      * Test removing association between product and website 1
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_two_websites.php
@@ -164,9 +160,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
             $websitesData["website_ids"]
         );
-        $this->deleteProduct($productBuilder[ProductInterface::SKU]);
-        $this->markAreaAsSecure();
-        $website->delete();
     }
 
     /**
@@ -193,9 +186,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
             $websitesData["website_ids"]
         );
-        $this->deleteProduct($productBuilder[ProductInterface::SKU]);
-        $this->markAreaAsSecure();
-        $website->delete();
     }
 
     /**
@@ -217,7 +207,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $websitesData = [
             'website_ids' => [
                 1,
-                $website->getId(),
+                (int) $website->getId(),
             ]
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
@@ -226,9 +216,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
             $websitesData["website_ids"]
         );
-        $this->deleteProduct($productBuilder[ProductInterface::SKU]);
-        $this->markAreaAsSecure();
-        $website->delete();
     }
 
     /**
@@ -248,6 +235,35 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Store/_files/fixture_store_with_catalogsearch_index.php
      */
     public function testCreateAllStoreCode($fixtureProduct)
+    {
+        $response = $this->saveProduct($fixtureProduct, 'all');
+        $this->assertArrayHasKey(ProductInterface::SKU, $response);
+
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $storeManager = \Magento\TestFramework\ObjectManager::getInstance()->get(
+            \Magento\Store\Model\StoreManagerInterface::class
+        );
+
+        foreach ($storeManager->getStores(true) as $store) {
+            $code = $store->getCode();
+            if ($code === Store::ADMIN_CODE) {
+                continue;
+            }
+            $this->assertArrayHasKey(
+                ProductInterface::SKU,
+                $this->getProduct($fixtureProduct[ProductInterface::SKU], $code)
+            );
+        }
+        $this->deleteProduct($fixtureProduct[ProductInterface::SKU]);
+    }
+
+    /**
+     * Test creating product with all store code on single store
+     *
+     * @param array $fixtureProduct
+     * @dataProvider productCreationProvider
+     */
+    public function testCreateAllStoreCodeForSingleWebsite($fixtureProduct)
     {
         $response = $this->saveProduct($fixtureProduct, 'all');
         $this->assertArrayHasKey(ProductInterface::SKU, $response);
@@ -299,7 +315,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->setExpectedException('Exception', 'Requested product doesn\'t exist');
 
         // Delete all with 'all' store code
-        $this->deleteProduct($sku, 'all');
+        $this->deleteProduct($sku);
         $this->getProduct($sku);
     }
 
@@ -679,6 +695,84 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertNotNull($response['items'][0]['sku']);
         $this->assertEquals('simple', $response['items'][0]['sku']);
+
+        $index = null;
+        foreach ($response['items'][0]['custom_attributes'] as $key => $customAttribute) {
+            if ($customAttribute['attribute_code'] == 'category_ids') {
+                $index = $key;
+                break;
+            }
+        }
+        $this->assertNotNull($index, 'Category information wasn\'t set');
+
+        $expectedResult = (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ? ['string' => '2'] : ['2'];
+        $this->assertEquals($expectedResult, $response['items'][0]['custom_attributes'][$index]['value']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     */
+    public function testGetListWithMultipleFilterGroupsAndSortingAndPagination()
+    {
+        /** @var FilterBuilder $filterBuilder */
+        $filterBuilder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
+
+        $filter1 = $filterBuilder->setField(ProductInterface::NAME)
+            ->setValue('search product 2')
+            ->create();
+        $filter2 = $filterBuilder->setField(ProductInterface::NAME)
+            ->setValue('search product 3')
+            ->create();
+        $filter3 = $filterBuilder->setField(ProductInterface::NAME)
+            ->setValue('search product 4')
+            ->create();
+        $filter4 = $filterBuilder->setField(ProductInterface::NAME)
+            ->setValue('search product 5')
+            ->create();
+        $filter5 = $filterBuilder->setField(ProductInterface::PRICE)
+            ->setValue(35)
+            ->setConditionType('lt')
+            ->create();
+        $filter6 = $filterBuilder->setField('category_id')
+            ->setValue(333)
+            ->create();
+
+        /**@var SortOrderBuilder $sortOrderBuilder */
+        $sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);
+
+        /** @var SortOrder $sortOrder */
+        $sortOrder = $sortOrderBuilder->setField('meta_title')->setDirection(SortOrder::SORT_DESC)->create();
+
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder =  Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+
+        $searchCriteriaBuilder->addFilters([$filter1, $filter2, $filter3, $filter4]);
+        $searchCriteriaBuilder->addFilters([$filter5]);
+        $searchCriteriaBuilder->addFilters([$filter6]);
+        $searchCriteriaBuilder->setSortOrders([$sortOrder]);
+
+        $searchCriteriaBuilder->setPageSize(2);
+        $searchCriteriaBuilder->setCurrentPage(2);
+
+        $searchData = $searchCriteriaBuilder->create()->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+
+        $searchResult = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertEquals(3, $searchResult['total_count']);
+        $this->assertEquals(1, count($searchResult['items']));
+        $this->assertEquals('search_product_4', $searchResult['items'][0][ProductInterface::SKU]);
     }
 
     /**

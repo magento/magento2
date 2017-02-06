@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model;
+
+use Magento\Backend\Block\Widget\Grid\Serializer;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class DesignTest extends \PHPUnit_Framework_TestCase
 {
@@ -121,7 +124,8 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         )->load(
             $cacheId
         );
-        $cachedDesign = unserialize($cachedDesign);
+        $serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(SerializerInterface::class);
+        $cachedDesign = $serializer->unserialize($cachedDesign);
 
         $this->assertInternalType('array', $cachedDesign);
         $this->assertArrayHasKey('design', $cachedDesign);
@@ -139,7 +143,8 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         )->load(
             $cacheId
         );
-        $cachedDesign = unserialize($cachedDesign);
+
+        $cachedDesign = $serializer->unserialize($cachedDesign);
 
         $this->assertTrue(is_array($cachedDesign));
         $this->assertEquals($cachedDesign['design'], $design->getDesign());

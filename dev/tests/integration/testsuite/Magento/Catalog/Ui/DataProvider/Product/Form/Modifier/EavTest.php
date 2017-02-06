@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -66,6 +66,19 @@ class EavTest extends \PHPUnit_Framework_TestCase
         $product->load(1);
         $this->locatorMock->expects($this->any())->method('getProduct')->willReturn($product);
         $expectedMeta = include __DIR__ . '/_files/eav_expected_meta_output.php';
+        $actualMeta = $this->eavModifier->modifyMeta([]);
+        $this->prepareDataForComparison($actualMeta, $expectedMeta);
+        $this->assertEquals($expectedMeta, $actualMeta);
+    }
+    
+    public function testModifyMetaNewProduct()
+    {
+        $this->objectManager->get(\Magento\Eav\Model\Entity\AttributeCache::class)->clear();
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
+        $product->setAttributeSetId(4);
+        $this->locatorMock->expects($this->any())->method('getProduct')->willReturn($product);
+        $expectedMeta = include __DIR__ . '/_files/eav_expected_meta_output_w_default.php';
         $actualMeta = $this->eavModifier->modifyMeta([]);
         $this->prepareDataForComparison($actualMeta, $expectedMeta);
         $this->assertEquals($expectedMeta, $actualMeta);

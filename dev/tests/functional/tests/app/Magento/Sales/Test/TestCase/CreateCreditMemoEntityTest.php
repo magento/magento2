@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,11 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Preconditions:
- * 1. Enable payment method "Check/Money Order".
+ * 1. Enable payment method one of "Check/Money Order/Bank Transfer/Cash on Delivery/Purchase Order".
  * 2. Enable shipping method one of "Flat Rate/Free Shipping".
  * 3. Create order.
  * 4. Create Invoice.
@@ -25,14 +26,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. On order's page click 'Refund offline' button.
  * 5. Perform all assertions.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-29116
  */
 class CreateCreditMemoEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**
@@ -56,37 +56,33 @@ class CreateCreditMemoEntityTest extends Injectable
     ];
 
     /**
-     * Set up configuration.
-     *
-     * @param FixtureFactory $fixtureFactory
-     * @return void
-     */
-    public function __prepare(FixtureFactory $fixtureFactory)
-    {
-        $this->fixtureFactory = $fixtureFactory;
-
-        $setupConfigurationStep = $this->objectManager->create(
-            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => 'checkmo, flatrate']
-        );
-        $setupConfigurationStep->run();
-    }
-
-    /**
      * Create credit memo.
      *
+     * @param TestStepFactory $stepFactory
+     * @param FixtureFactory $fixtureFactory
      * @param OrderInjectable $order
      * @param array $data
+     * @param string|null $configData [optional]
      * @return array
      */
-    public function test(OrderInjectable $order, array $data)
-    {
+    public function test(
+        TestStepFactory $stepFactory,
+        FixtureFactory $fixtureFactory,
+        OrderInjectable $order,
+        array $data,
+        $configData = null
+    ) {
         // Preconditions
+        $this->fixtureFactory = $fixtureFactory;
+        $stepFactory->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $configData]
+        )->run();
         $order->persist();
-        $this->objectManager->create(\Magento\Sales\Test\TestStep\CreateInvoiceStep::class, ['order' => $order])->run();
+        $stepFactory->create(\Magento\Sales\Test\TestStep\CreateInvoiceStep::class, ['order' => $order])->run();
 
         // Steps
-        $createCreditMemoStep = $this->objectManager->create(
+        $createCreditMemoStep = $stepFactory->create(
             \Magento\Sales\Test\TestStep\CreateCreditMemoStep::class,
             ['order' => $order, 'data' => $data]
         );
@@ -94,32 +90,7 @@ class CreateCreditMemoEntityTest extends Injectable
 
         return [
             'ids' => ['creditMemoIds' => $result['creditMemoIds']],
-            'product' => $this->getProduct($order, $data),
             'customer' => $order->getDataFieldConfig('customer_id')['source']->getCustomer()
         ];
-    }
-
-    /**
-     * Get product's fixture.
-     *
-     * @param OrderInjectable $order
-     * @param array $data
-     * @param int $index [optional]
-     * @return FixtureInterface
-     */
-    protected function getProduct(OrderInjectable $order, array $data, $index = 0)
-    {
-        if (!isset($data['items_data'][$index]['back_to_stock'])
-            || $data['items_data'][$index]['back_to_stock'] != 'Yes'
-        ) {
-            return $order->getEntityId()['products'][$index];
-        }
-        $product = $order->getEntityId()['products'][$index];
-        $productData = $product->getData();
-        $checkoutDataQty = $productData['checkout_data']['qty'];
-        $productData['quantity_and_stock_status']['qty'] -= ($checkoutDataQty - $data['items_data'][$index]['qty']);
-        $productData = array_diff_key($productData, array_flip($this->skipFields));
-
-        return $this->fixtureFactory->create(get_class($product), ['data' => $productData]);
     }
 }

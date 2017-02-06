@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Reader;
@@ -207,13 +207,15 @@ class Block implements Layout\ReaderInterface
         $elementRemove = filter_var($currentElement->getAttribute('remove'), FILTER_VALIDATE_BOOLEAN);
         if ($elementRemove) {
             $scheduledStructure->setElementToRemoveList($elementName);
-        } else {
-            $data = $scheduledStructure->getStructureElementData($elementName, []);
-            $data['attributes'] = $this->mergeBlockAttributes($data, $currentElement);
-            $this->updateScheduledData($currentElement, $data);
-            $this->evaluateArguments($currentElement, $data);
-            $scheduledStructure->setStructureElementData($elementName, $data);
+            return;
+        } elseif ($currentElement->getAttribute('remove')) {
+            $scheduledStructure->unsetElementFromListToRemove($elementName);
         }
+        $data = $scheduledStructure->getStructureElementData($elementName, []);
+        $data['attributes'] = $this->mergeBlockAttributes($data, $currentElement);
+        $this->updateScheduledData($currentElement, $data);
+        $this->evaluateArguments($currentElement, $data);
+        $scheduledStructure->setStructureElementData($elementName, $data);
     }
 
     /**

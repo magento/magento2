@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,8 +20,6 @@ class PayflowPro extends Block
      * @var array
      */
     private $fields = [
-        'Email Associated with PayPal Merchant Account' => '#payment_us_paypal_payment_gateways_paypal_payflowpro_' .
-            'with_express_checkout_paypal_payflow_required_paypal_payflow_api_settings_business_account',
         'Partner' => '#payment_us_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_' .
             'required_paypal_payflow_api_settings_partner',
         'Vendor' => '#payment_us_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_' .
@@ -42,7 +40,7 @@ class PayflowPro extends Block
             '_payflow_required_enable_paypal_payflow',
         'Enable PayPal Credit' => '#payment_us_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal' .
             '_payflow_required_enable_express_checkout_bml_payflow',
-        'Vault enabled' => '#payment_us_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_' .
+        'Vault Enabled' => '#payment_us_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_' .
             'payflow_required_payflowpro_cc_vault_active'
     ];
 
@@ -60,8 +58,6 @@ class PayflowPro extends Block
      */
     public function specifyCredentials()
     {
-        $this->_rootElement->find($this->fields['Email Associated with PayPal Merchant Account'])
-            ->setValue('test@test.com');
         $this->_rootElement->find($this->fields['Partner'])->setValue('1');
         $this->_rootElement->find($this->fields['Vendor'])->setValue('1');
         $this->_rootElement->find($this->fields['User'])->setValue('1');
@@ -75,7 +71,6 @@ class PayflowPro extends Block
      */
     public function clearCredentials()
     {
-        $this->_rootElement->find($this->fields['Email Associated with PayPal Merchant Account'])->setValue('');
         $this->_rootElement->find($this->fields['Partner'])->setValue('');
         $this->_rootElement->find($this->fields['Vendor'])->setValue('');
         $this->_rootElement->find($this->fields['User'])->setValue('');

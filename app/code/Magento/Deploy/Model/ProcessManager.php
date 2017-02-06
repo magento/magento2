@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,20 @@ class ProcessManager
 {
     /** @var Process[] */
     private $processes = [];
+
+    /**
+     * @var ProcessFactory
+     */
+    private $processFactory;
+
+    /**
+     * ProcessManager constructor.
+     * @param ProcessFactory $processFactory
+     */
+    public function __construct(ProcessFactory $processFactory)
+    {
+        $this->processFactory = $processFactory;
+    }
 
     /**
      * Forks the currently running process.
@@ -66,7 +80,7 @@ class ProcessManager
      */
     private function createProcess(callable $handler)
     {
-        return new Process($handler);
+        return $this->processFactory->create(['handler' => $handler]);
     }
 
     /**

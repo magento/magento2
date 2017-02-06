@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,12 +9,14 @@
  */
 namespace Magento\Wishlist\Block;
 
+use Magento\Customer\Block\Account\SortLinkInterface;
+
 /**
  * Class Link
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class Link extends \Magento\Framework\View\Element\Html\Link
+class Link extends \Magento\Framework\View\Element\Html\Link implements SortLinkInterface
 {
     /**
      * Template name
@@ -67,5 +69,13 @@ class Link extends \Magento\Framework\View\Element\Html\Link
     public function getLabel()
     {
         return __('My Wish List');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSortOrder()
+    {
+        return $this->getData(self::SORT_ORDER);
     }
 }

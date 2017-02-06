@@ -1,35 +1,37 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Review\Block\Product\ReviewRenderer $block */
+
+$url = $block->getReviewsUrl() . '#reviews';
+$urlForm = $block->getReviewsUrl() . '#review-form';
 ?>
-<?php $url = $block->getReviewsUrl() . '#reviews'; ?>
-<?php $urlForm = $block->getReviewsUrl() . '#review-form'; ?>
 <?php if ($block->getReviewsCount()): ?>
 <?php $rating = $block->getRatingSummary(); ?>
 <div class="product-reviews-summary<?php echo !$rating ? ' no-rating' : ''?>" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
     <?php if ($rating):?>
     <div class="rating-summary">
-         <span class="label"><span><?php /* @escapeNotVerified */ echo __('Rating') ?>:</span></span>
-         <div class="rating-result" title="<?php /* @escapeNotVerified */ echo $rating; ?>%">
-             <span style="width:<?php /* @escapeNotVerified */ echo $rating; ?>%"><span><span itemprop="ratingValue"><?php /* @escapeNotVerified */ echo $rating; ?></span>% of <span itemprop="bestRating">100</span></span></span>
+         <span class="label"><span><?php echo $block->escapeHtml(__('Rating')) ?>:</span></span>
+         <div class="rating-result" title="<?php echo $block->escapeHtmlAttr($rating); ?>%">
+             <span style="width:<?php echo $block->escapeHtmlAttr($rating); ?>%"><span><span itemprop="ratingValue"><?php echo $block->escapeHtml($rating); ?></span>% of <span itemprop="bestRating">100</span></span></span>
          </div>
      </div>
     <?php endif;?>
     <div class="reviews-actions">
-        <a class="action view" href="<?php /* @escapeNotVerified */ echo $url ?>"><span itemprop="reviewCount"><?php /* @escapeNotVerified */ echo $block->getReviewsCount() ?></span>&nbsp;<span><?php /* @escapeNotVerified */ echo($block->getReviewsCount() == 1) ? __('Review') : __('Reviews') ?></span></a>
-        <a class="action add" href="<?php /* @escapeNotVerified */ echo $urlForm ?>"><?php /* @escapeNotVerified */ echo __('Add Your Review') ?></a>
+        <a class="action view" href="<?php echo $block->escapeUrl($url) ?>"><span itemprop="reviewCount"><?php echo $block->escapeHtml($block->getReviewsCount()) ?></span>&nbsp;<span><?php echo($block->getReviewsCount() == 1) ? $block->escapeHtml(__('Review')) : $block->escapeHtml(__('Reviews')) ?></span></a>
+        <a class="action add" href="<?php echo $block->escapeUrl($urlForm) ?>"><?php echo $block->escapeHtml(__('Add Your Review')) ?></a>
     </div>
 </div>
 <?php elseif ($block->getDisplayIfEmpty()): ?>
 <div class="product-reviews-summary empty">
     <div class="reviews-actions">
-        <a class="action add" href="<?php /* @escapeNotVerified */ echo $urlForm; ?>">
-            <?php /* @escapeNotVerified */ echo __('Be the first to review this product') ?>
+        <a class="action add" href="<?php echo $block->escapeUrl($urlForm); ?>">
+            <?php echo $block->escapeHtml(__('Be the first to review this product')) ?>
         </a>
     </div>
 </div>

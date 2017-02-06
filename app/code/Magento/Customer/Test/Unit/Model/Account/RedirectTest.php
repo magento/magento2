@@ -2,7 +2,7 @@
 /**
  * Unit test for Magento\Customer\Test\Unit\Model\Account\Redirect
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,7 @@ namespace Magento\Customer\Test\Unit\Model\Account;
 use Magento\Customer\Model\Account\Redirect;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Url\HostChecker;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -81,6 +82,11 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultFactory;
 
+    /**
+     * @var HostChecker | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $hostChecker;
+
     protected function setUp()
     {
         $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
@@ -134,6 +140,10 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->hostChecker = $this->getMockBuilder(HostChecker::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             \Magento\Customer\Model\Account\Redirect::class,
@@ -145,7 +155,8 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
                 'url'                   => $this->url,
                 'urlDecoder'            => $this->urlDecoder,
                 'customerUrl'           => $this->customerUrl,
-                'resultFactory'         => $this->resultFactory
+                'resultFactory'         => $this->resultFactory,
+                'hostChecker' => $this->hostChecker
             ]
         );
     }
@@ -254,6 +265,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRedirect->expects($this->once())
             ->method('setUrl')
+            ->with($beforeAuthUrl)
             ->willReturnSelf();
 
         $this->resultFactory->expects($this->once())
@@ -286,6 +298,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         return [
             // Loggend In, Redirect by Referer
             [1, 2, 'referer', 'base', '', '', 'account', '', '', '', true, false],
+            [1, 2, 'http://referer.com/', 'http://base.com/', '', '', 'account', '', '', 'dashboard', true, false],
             // Loggend In, Redirect by AfterAuthUrl
             [1, 2, 'referer', 'base', '', 'defined', 'account', '', '', '', true, true],
             // Not logged In, Redirect by LoginUrl

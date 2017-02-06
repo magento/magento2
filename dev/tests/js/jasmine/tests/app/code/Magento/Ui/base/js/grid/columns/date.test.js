@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*eslint max-nested-callbacks: 0*/
@@ -22,20 +22,13 @@ define([
                 });
         });
 
-        describe('initProperties method', function () {
+        describe('initConfig method', function () {
             it('check for chainable', function () {
-                expect(date.initProperties()).toEqual(date);
+                expect(date.initConfig()).toEqual(date);
             });
             it('check for extend', function () {
-                date.initProperties();
+                date.initConfig();
                 expect(date.dateFormat).toBeDefined();
-            });
-        });
-
-        describe('getLabel method', function () {
-            it('check format', function () {
-                date.dateFormat = dateFormat;
-                expect(date.getLabel(dateRaw)).toBe(dateFormatted);
             });
         });
     });

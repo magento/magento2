@@ -183,7 +183,7 @@ Categories,Categories
 "Category is not available for requested store.","Category is not available for requested store."
 "There was a category move error.","There was a category move error."
 "There was a category move error. %1","There was a category move error. %1"
-"You moved the category","You moved the category"
+"You moved the category.","You moved the category."
 "Attribute ""%1"" is required.","Attribute ""%1"" is required."
 "You saved the category.","You saved the category."
 "Something went wrong while saving the category.","Something went wrong while saving the category."
@@ -701,6 +701,7 @@ Image,Image
 "Allowed file types: jpeg, gif, png.","Allowed file types: jpeg, gif, png."
 "Image Opacity","Image Opacity"
 "Example format: 200x300.","Example format: 200x300."
+"This value does not follow the specified format (for example, 200X300).","This value does not follow the specified format (for example, 200X300)."
 "Image Position","Image Position"
 Small,Small
 "Attribute Label","Attribute Label"

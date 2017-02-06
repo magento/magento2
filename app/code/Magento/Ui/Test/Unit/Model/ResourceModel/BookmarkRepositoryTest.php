@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,6 +37,11 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $searchResultsMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
+    /**
      * Set up
      */
     protected function setUp()
@@ -64,11 +69,18 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory::class
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $searchResultsFactoryMock->expects($this->any())->method('create')->willReturn($this->searchResultsMock);
-
+        $this->collectionProcessor = $this->getMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->bookmarkRepository = new BookmarkRepository(
             $bookmarkFactoryMock,
             $this->bookmarkResourceMock,
-            $searchResultsFactoryMock
+            $searchResultsFactoryMock,
+            $this->collectionProcessor
         );
     }
 
@@ -143,10 +155,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $bookmarkId = 1;
-        $fieldNameAsc = 'first_field';
-        $fieldValueAsc = 'first_value';
-        $fieldNameDesc = 'second_field';
-        $fieldValueDesc = 'second_value';
+
         $this->bookmarkMock->expects($this->any())
             ->method('getId')
             ->willReturn($bookmarkId);
@@ -154,77 +163,17 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($this->bookmarkMock, $bookmarkId)
             ->willReturn($this->bookmarkMock);
-        $filterGroup = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sortOrderAsc = $this->getMockBuilder(\Magento\Framework\Api\SortOrder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sortOrderAsc->expects($this->once())
-            ->method('getField')
-            ->willReturn($fieldNameAsc);
-        $sortOrderAsc->expects($this->once())
-            ->method('getDirection')
-            ->willReturn(SortOrder::SORT_ASC);
-        $sortOrderDesc = $this->getMockBuilder(\Magento\Framework\Api\SortOrder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sortOrderDesc->expects($this->once())
-            ->method('getField')
-            ->willReturn($fieldNameDesc);
-        $sortOrderDesc->expects($this->once())
-            ->method('getDirection')
-            ->willReturn(SortOrder::SORT_DESC);
-        $fieldAsc = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $fieldAsc->expects($this->once())
-            ->method('getField')
-            ->willReturn($fieldNameAsc);
-        $fieldAsc->expects($this->once())
-            ->method('getValue')
-            ->willReturn($fieldValueAsc);
-        $fieldAsc->expects($this->any())
-            ->method('getConditionType')
-            ->willReturn(false);
-        $fieldDesc = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $fieldDesc->expects($this->once())
-            ->method('getField')
-            ->willReturn($fieldNameDesc);
-        $fieldDesc->expects($this->once())
-            ->method('getValue')
-            ->willReturn($fieldValueDesc);
-        $fieldDesc->expects($this->any())
-            ->method('getConditionType')
-            ->willReturn('eq');
-        $filterGroup->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$fieldAsc, $fieldDesc]);
         $collection = $this->getMockBuilder(\Magento\Ui\Model\ResourceModel\Bookmark\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->once())
             ->method('getItems')
             ->willReturn([$this->bookmarkMock]);
-        $collection->expects($this->any())
-            ->method('addOrder')
-            ->willReturnMap([[$fieldNameAsc, SortOrder::SORT_ASC], [$fieldNameDesc, SortOrder::SORT_DESC]]);
-        $collection->expects($this->any())
-            ->method('addFieldToFilter')
-            ->willReturnMap([[$fieldNameAsc, [$fieldValueAsc => 'eq']], [$fieldNameDesc, [$fieldValueDesc => 'eq']]]);
         $this->bookmarkMock->expects($this->once())
             ->method('getCollection')
             ->willReturn($collection);
         $searchCriteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)
             ->getMockForAbstractClass();
-        $searchCriteria->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn([$filterGroup]);
-        $searchCriteria->expects($this->once())
-            ->method('getSortOrders')
-            ->willReturn([$sortOrderAsc, $sortOrderDesc]);
         $this->assertEquals($this->searchResultsMock, $this->bookmarkRepository->getList($searchCriteria));
     }
 

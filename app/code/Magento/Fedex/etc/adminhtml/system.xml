@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -101,11 +101,11 @@
                     <source_model>Magento\Fedex\Model\Source\Freemethod</source_model>
                 </field>
                 <field id="free_shipping_enable" translate="label" type="select" sortOrder="220" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Free Shipping Amount Threshold</label>
+                    <label>Enable Free Shipping Threshold</label>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
                 <field id="free_shipping_subtotal" translate="label" type="text" sortOrder="230" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Enable Free Shipping Threshold</label>
+                    <label>Free Shipping Amount Threshold</label>
                     <validate>validate-number validate-zero-or-greater</validate>
                     <depends>
                         <field id="free_shipping_enable">1</field>

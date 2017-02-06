@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -52,6 +52,11 @@ define([
                     if (item.checked) {
                         result[item.name] = item.value;
                     }
+                    break;
+
+                case 'select-multiple':
+                    var name = item.name.substring(0,(item.name.length - 2)); //remove [] from the name ending
+                    result[name] = _.pluck(item.selectedOptions, 'value');
                     break;
 
                 default:
@@ -248,17 +253,29 @@ define([
          * @param {Object} data
          */
         save: function (redirect, data) {
-            var scrollTop;
-
             this.validate();
 
             if (!this.additionalInvalid && !this.source.get('params.invalid')) {
                 this.setAdditionalData(data)
                     .submit(redirect);
             } else {
-                scrollTop = $(this.errorClass).offset().top - window.innerHeight / 2;
-                window.scrollTo(0, scrollTop);
+                this.focusInvalid();
             }
+        },
+
+        /**
+         * Tries to set focus on first invalid form field.
+         *
+         * @returns {Object}
+         */
+        focusInvalid: function () {
+            var invalidField = _.find(this.delegate('checkInvalid'));
+
+            if (!_.isUndefined(invalidField) && _.isFunction(invalidField.focused)) {
+                invalidField.focused(true);
+            }
+
+            return this;
         },
 
         /**

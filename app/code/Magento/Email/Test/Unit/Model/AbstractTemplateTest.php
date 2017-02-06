@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -242,6 +242,67 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \LogicException
+     */
+    public function testGetProcessedTemplateException() {
+        $filterTemplate = $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
+            ->setMethods([
+                'setUseSessionInUrl',
+                'setPlainTemplateMode',
+                'setIsChildTemplate',
+                'setDesignParams',
+                'setVariables',
+                'setStoreId',
+                'filter',
+                'getStoreId',
+                'getInlineCssFiles',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filterTemplate->expects($this->once())
+            ->method('setUseSessionInUrl')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setPlainTemplateMode')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setIsChildTemplate')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setDesignParams')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->any())
+            ->method('setStoreId')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnValue(1));
+
+        $model = $this->getModelMock([
+            'getDesignParams',
+            'applyDesignConfig',
+            'getTemplateText',
+            'isPlain',
+        ]);
+
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
+        $model->expects($this->any())
+            ->method('getDesignParams')
+            ->will($this->returnValue($designParams));
+        $model->setTemplateFilter($filterTemplate);
+        $model->setTemplateType(\Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT);
+
+        $filterTemplate->expects($this->once())
+            ->method('filter')
+            ->will($this->throwException(new \Exception));
+        $model->getProcessedTemplate([]);
+    }
+
+    /**
      * @return array
      */
     public function getProcessedTemplateProvider()
@@ -331,16 +392,24 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     {
         $model = $this->getModelMock();
         $originalConfig = ['area' => 'some_area', 'store' => 1];
-        $expectedConfig = ['area' => 'frontend', 'store' => 2];
         $model->setDesignConfig($originalConfig);
 
-        $model->emulateDesign(2);
-        // assert config data has been emulated
-        $this->assertEquals($expectedConfig, $model->getDesignConfig()->getData());
+        $expectedConfigs = [
+            ['in' => ['area' => 'frontend', 'store' => null], 'out' => $originalConfig],
+            ['in' => ['area' => 'frontend', 'store' => false], 'out' => $originalConfig],
+            ['in' => ['area' => 'frontend', 'store' => 0], 'out' => ['area' => 'frontend', 'store' => 0]],
+            ['in' => ['area' => 'frontend', 'store' => 1], 'out' => ['area' => 'frontend', 'store' => 1]],
+            ['in' => ['area' => 'frontend', 'store' => 2], 'out' => ['area' => 'frontend', 'store' => 2]],
+        ];
+        foreach ($expectedConfigs as $set) {
+            $model->emulateDesign($set['in']['store'], $set['in']['area']);
+            // assert config data has been emulated
+            $this->assertEquals($set['out'], $model->getDesignConfig()->getData());
 
-        $model->revertDesign();
-        // assert config data has been reverted to the original state
-        $this->assertEquals($originalConfig, $model->getDesignConfig()->getData());
+            $model->revertDesign();
+            // assert config data has been reverted to the original state
+            $this->assertEquals($originalConfig, $model->getDesignConfig()->getData());
+        }
     }
 
     public function testGetDesignConfig()
