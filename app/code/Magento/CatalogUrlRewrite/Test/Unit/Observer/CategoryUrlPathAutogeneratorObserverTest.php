@@ -105,7 +105,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->once())->method('setUrlKey')->with('urk_key')->willReturnSelf();
         $this->categoryUrlPathGenerator->expects($this->once())->method('getUrlPath')->willReturn('url_path');
         $this->category->expects($this->once())->method('setUrlPath')->with('url_path')->willReturnSelf();
-        $this->category->expects($this->once())->method('isObjectNew')->willReturn(true);
+        $this->category->expects($this->atLeastOnce())->method('isObjectNew')->willReturn(true);
 
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
     }
@@ -149,7 +149,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->once())->method('setUrlKey')->with('url_key')->willReturnSelf();
         $this->category->expects($this->once())->method('setUrlPath')->with('url_path')->willReturnSelf();
         // break code execution
-        $this->category->expects($this->once())->method('isObjectNew')->willReturn(true);
+        $this->category->expects($this->atLeastOnce())->method('isObjectNew')->willReturn(true);
 
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
     }
@@ -163,7 +163,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->any())->method('setUrlKey')->willReturnSelf();
         $this->category->expects($this->any())->method('setUrlPath')->willReturnSelf();
 
-        $this->category->expects($this->once())->method('isObjectNew')->willReturn(true);
+        $this->category->expects($this->atLeastOnce())->method('isObjectNew')->willReturn(true);
         $this->categoryResource->expects($this->never())->method('saveAttribute');
 
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
@@ -177,7 +177,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->any())->method('getUrlKey')->willReturn('not_formatted_url_key');
         $this->category->expects($this->any())->method('setUrlKey')->willReturnSelf();
         $this->category->expects($this->any())->method('setUrlPath')->willReturnSelf();
-        $this->category->expects($this->once())->method('isObjectNew')->willReturn(false);
+        $this->category->expects($this->atLeastOnce())->method('isObjectNew')->willReturn(false);
 
         $this->categoryResource->expects($this->once())->method('saveAttribute')->with($this->category, 'url_path');
 
@@ -197,7 +197,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->any())->method('getUrlKey')->willReturn('not_formatted_url_key');
         $this->category->expects($this->any())->method('setUrlKey')->willReturnSelf();
         $this->category->expects($this->any())->method('setUrlPath')->willReturnSelf();
-        $this->category->expects($this->once())->method('isObjectNew')->willReturn(false);
+        $this->category->expects($this->atLeastOnce())->method('isObjectNew')->willReturn(false);
         // break code execution
         $this->category->expects($this->once())->method('dataHasChangedFor')->with('url_path')->willReturn(false);
 
@@ -212,7 +212,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends \PHPUnit_Framework_TestCa
         $this->category->expects($this->any())->method('getUrlKey')->willReturn('not_formatted_url_key');
         $this->category->expects($this->any())->method('setUrlKey')->willReturnSelf();
         $this->category->expects($this->any())->method('setUrlPath')->willReturnSelf();
-        $this->category->expects($this->any())->method('isObjectNew')->willReturn(false);
+        $this->category->expects($this->atLeastOnce())->method('isObjectNew')->willReturn(false);
         $this->category->expects($this->any())->method('dataHasChangedFor')->willReturn(true);
         // only for specific store
         $this->category->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
