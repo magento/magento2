@@ -8,8 +8,10 @@ namespace Magento\Signifyd\Model\SignifydGateway\Request;
 use Magento\Framework\App\Area;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Intl\DateTimeFactory;
-use Magento\Payment\Api\Data\CodeVerificationInterfaceFactory;
+use Magento\Payment\Api\PaymentVerificationInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
+use Magento\Signifyd\Model\PaymentVerificationFactory;
 use Magento\Signifyd\Model\SignifydOrderSessionId;
 
 /**
@@ -33,26 +35,26 @@ class PurchaseBuilder
     private $signifydOrderSessionId;
 
     /**
-     * @var CodeVerificationInterfaceFactory
+     * @var PaymentVerificationFactory
      */
-    private $codeVerificationFactory;
+    private $paymentVerificationFactory;
 
     /**
      * @param DateTimeFactory $dateTimeFactory
      * @param ScopeInterface $scope
      * @param SignifydOrderSessionId $signifydOrderSessionId
-     * @param CodeVerificationInterfaceFactory $codeVerificationFactory
+     * @param PaymentVerificationFactory $paymentVerificationFactory
      */
     public function __construct(
         DateTimeFactory $dateTimeFactory,
         ScopeInterface $scope,
         SignifydOrderSessionId $signifydOrderSessionId,
-        CodeVerificationInterfaceFactory $codeVerificationFactory
+        PaymentVerificationFactory $paymentVerificationFactory
     ) {
         $this->dateTimeFactory = $dateTimeFactory;
         $this->scope = $scope;
         $this->signifydOrderSessionId = $signifydOrderSessionId;
-        $this->codeVerificationFactory = $codeVerificationFactory;
+        $this->paymentVerificationFactory = $paymentVerificationFactory;
     }
 
     /**
@@ -69,8 +71,6 @@ class PurchaseBuilder
             new \DateTimeZone('UTC')
         );
 
-        $verificationService = $this->codeVerificationFactory->create($orderPayment);
-
         $result = [
             'purchase' => [
                 'orderSessionId' => $this->signifydOrderSessionId->get($order->getQuoteId()),
@@ -80,8 +80,8 @@ class PurchaseBuilder
                 'paymentGateway' => $this->getPaymentGateway($orderPayment->getMethod()),
                 'transactionId' => $orderPayment->getLastTransId(),
                 'currency' => $order->getOrderCurrencyCode(),
-                'avsResponseCode' => $verificationService->getAvsCode(),
-                'cvvResponseCode' => $verificationService->getCvvCode(),
+                'avsResponseCode' => $this->getAvsCode($orderPayment),
+                'cvvResponseCode' => $this->getCvvCode($orderPayment),
                 'orderChannel' => $this->getOrderChannel(),
                 'totalPrice' => $order->getGrandTotal(),
             ],
@@ -174,5 +174,35 @@ class PurchaseBuilder
     private function getOrderChannel()
     {
         return $this->scope->getCurrentScope() === Area::AREA_ADMINHTML ? 'PHONE' : 'WEB';
+    }
+
+    /**
+     * Gets AVS code for order payment method.
+     *
+     * @param OrderPaymentInterface $orderPayment
+     * @return string
+     */
+    private function getAvsCode(OrderPaymentInterface $orderPayment)
+    {
+        /** @var PaymentVerificationInterface $avsAdapter */
+        $avsAdapter = $this->paymentVerificationFactory->createPaymentAvs($orderPayment->getMethod());
+        $code = $avsAdapter->getCode($orderPayment);
+
+        return $code !== null ? $code : 'U';
+    }
+
+    /**
+     * Gets CVV code for order payment method.
+     *
+     * @param OrderPaymentInterface $orderPayment
+     * @return string
+     */
+    private function getCvvCode(OrderPaymentInterface $orderPayment)
+    {
+        /** @var PaymentVerificationInterface $cvvAdapter */
+        $cvvAdapter = $this->paymentVerificationFactory->createPaymentCvv($orderPayment->getMethod());
+        $code = $cvvAdapter->getCode($orderPayment);
+
+        return $code !== null ? $code : '';
     }
 }
