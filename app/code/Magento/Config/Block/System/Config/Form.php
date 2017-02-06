@@ -115,6 +115,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     private $appConfig;
 
     /**
+     * Checks visibility status of form elements on Stores > Settings > Configuration page in Admin Panel
+     * by their paths in the system.xml structure.
+     *
      * @var ElementVisibilityInterface
      */
     private $elementVisibility;
@@ -361,8 +364,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $sharedClass = $this->_getSharedCssClass($field);
         $requiresClass = $this->_getRequiresCssClass($field, $fieldPrefix);
 
-        $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath());
-        $isReadOnly = $isReadOnly
+        $isReadOnly = $this->getElementVisibility()->isDisabled($field->getPath())
             ?: $this->getSettingChecker()->isReadOnly($path, $this->getScope(), $this->getStringScopeCode());
         $formField = $fieldset->addField(
             $elementId,
