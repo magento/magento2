@@ -84,8 +84,8 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
 
         $html = $this->getBlockContents();
         static::assertNotEmpty($html);
-        static::assertContains('Some Team', $html);
-        static::assertContains('col-case-score-green', $html);
+        static::assertContains('Processing', $html);
+        static::assertContains('Good', $html);
     }
 
     /**
