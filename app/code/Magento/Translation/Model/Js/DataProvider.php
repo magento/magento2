@@ -109,6 +109,8 @@ class DataProvider implements DataProviderInterface
                         $dictionary[$phrase] = $translatedPhrase;
                     }
                 } catch (\Exception $e) {
+                    throw new \Exception(sprintf('Error while generating translating phrase "%s" in file %s.',
+                        $phrase, $filePath[0]));
                 }
             }
         }
