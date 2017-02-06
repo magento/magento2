@@ -56,7 +56,19 @@ class ConvertSerializedDataToJson
             'identifier' => 'transaction_id',
             'title' => 'additional_information',
             'data_converter' => SerializedToJson::class
-        ]
+        ],
+        [
+            'table' => 'sales_invoice_item',
+            'identifier' => 'entity_id',
+            'title' => 'tax_ratio',
+            'data_converter' => SerializedToJson::class
+        ],
+        [
+            'table' => 'sales_creditmemo_item',
+            'identifier' => 'entity_id',
+            'title' => 'tax_ratio',
+            'data_converter' => SerializedToJson::class
+        ],
     ];
 
     /**
