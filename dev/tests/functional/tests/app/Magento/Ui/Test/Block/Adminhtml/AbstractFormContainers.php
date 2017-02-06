@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -158,7 +158,7 @@ abstract class AbstractFormContainers extends Form
 
     /**
      * Fill specified form with containers data.
-     * 
+     *
      * Input data in format
      * [[container => [field => [attribute_name => attribute_value, ..], ..], ..]
      * where container name can be empty if a field is not assigned to any container.

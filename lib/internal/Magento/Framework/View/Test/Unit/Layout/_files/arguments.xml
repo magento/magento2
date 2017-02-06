@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -33,7 +33,7 @@
                     <item name="label" xsi:type="string">Excel XML</item>
                 </argument>
                 <argument name="testArrayWithUpdater" xsi:type="array">
-                    <updater>Magento\Sales\Model\Order\Grid\Massaction\ItemsUpdater</updater>
+                    <updater>Magento\Framework\View\Layout\Argument\UpdaterInterface</updater>
                     <item name="add" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Move to Archive</item>
                         <item name="url" xsi:type="string">*/sales_archive/massAdd</item>

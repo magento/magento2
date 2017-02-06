@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,14 +27,13 @@ use Magento\Customer\Test\Fixture\Customer;
  * 3. Create Cart Price rule according to dataset and click "Save" button.
  * 4. Perform asserts.
  *
- * @group Shopping_Cart_Price_Rules_(CS)
+ * @group Shopping_Cart_Price_Rules
  * @ZephyrId MAGETWO-24855
  */
 class CreateSalesRuleEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 

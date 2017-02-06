@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity;
@@ -498,6 +498,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function __sleep()
     {
+        $this->unsetData('attribute_set_info');
         return array_diff(
             parent::__sleep(),
             ['_localeDate', '_localeResolver', 'reservedAttributeList', 'dateTimeFormatter']

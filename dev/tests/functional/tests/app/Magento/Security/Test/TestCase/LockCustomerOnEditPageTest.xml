@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Security\Test\TestCase\LockCustomerOnEditPageTest" summary="Lock customer from edit page">
         <variation name="LockCustomerOnEditPageTest1">
+            <data name="tag" xsi:type="string">severity:S1, to_maintain:yes</data>
             <data name="configData" xsi:type="string">customer_max_login_failures_number</data>
             <data name="initialCustomer/dataset" xsi:type="string">default</data>
             <data name="customer/data/current_password" xsi:type="string">incorrect password</data>
             <data name="customer/data/password" xsi:type="string">123123^a</data>
             <data name="customer/data/password_confirmation" xsi:type="string">123123^a</data>
-            <data name="attempts" xsi:type="string">6</data>
+            <data name="attempts" xsi:type="string">7</data>
             <constraint name="Magento\Security\Test\Constraint\AssertCustomerIsLocked" />
         </variation>
     </testCase>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
@@ -331,6 +331,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoConfigFixture current_store catalog/search/engine mysql
      * @dataProvider advancedSearchDataProvider
+     * @param string $nameQuery
+     * @param string $descriptionQuery
+     * @param array $rangeFilter
+     * @param int $expectedRecordsCount
      */
     public function testSimpleAdvancedSearch(
         $nameQuery,
@@ -412,6 +416,68 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
         $queryResponse = $this->executeQuery();
         $this->assertEquals($expectedRecordsCount, $queryResponse->count());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Framework/Search/_files/product_configurable.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     */
+    public function testAdvancedSearchCompositeProductWithOutOfStockOption()
+    {
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'test_configurable');
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
+        $selectOptions = $this->objectManager
+            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
+            ->setAttributeFilter($attribute->getId());
+
+        $firstOption = $selectOptions->getFirstItem();
+        $firstOptionId = $firstOption->getId();
+        $this->requestBuilder->bind('test_configurable', $firstOptionId);
+        $this->requestBuilder->setRequestName('filter_out_of_stock_child');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(0, $queryResponse->count());
+
+        $secondOption = $selectOptions->getLastItem();
+        $secondOptionId = $secondOption->getId();
+        $this->requestBuilder->bind('test_configurable', $secondOptionId);
+        $this->requestBuilder->setRequestName('filter_out_of_stock_child');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(1, $queryResponse->count());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_disabled_child.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     */
+    public function testAdvancedSearchCompositeProductWithDisabledChild()
+    {
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'test_configurable');
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
+        $selectOptions = $this->objectManager
+            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
+            ->setAttributeFilter($attribute->getId());
+
+        $firstOption = $selectOptions->getFirstItem();
+        $firstOptionId = $firstOption->getId();
+        $this->requestBuilder->bind('test_configurable', $firstOptionId);
+        $this->requestBuilder->setRequestName('filter_out_of_stock_child');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(0, $queryResponse->count());
+
+        $secondOption = $selectOptions->getLastItem();
+        $secondOptionId = $secondOption->getId();
+        $this->requestBuilder->bind('test_configurable', $secondOptionId);
+        $this->requestBuilder->setRequestName('filter_out_of_stock_child');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(0, $queryResponse->count());
     }
 
     public function dateDataProvider()

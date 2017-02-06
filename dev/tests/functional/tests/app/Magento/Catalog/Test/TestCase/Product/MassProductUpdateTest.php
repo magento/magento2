@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductActionAttributeEdit;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Precondition:
@@ -28,14 +31,13 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductActionAttributeEdit;
  * 9. Click on the "Save" button.
  * 10. Perform asserts.
  *
- * @group Products_(MX)
+ * @group Products
  * @ZephyrId MAGETWO-21128
  */
 class MassProductUpdateTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -60,34 +62,57 @@ class MassProductUpdateTest extends Injectable
     protected $configData;
 
     /**
+     * Factory for Test Steps.
+     *
+     * @var TestStepFactory
+     */
+    private $testStepFactory;
+
+    /**
+     * Factory for Fixtures.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
      * Injection data.
      *
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductActionAttributeEdit $attributeMassActionPage
+     * @param TestStepFactory $testStepFactory
+     * @param FixtureFactory $fixtureFactory
      * @return void
      */
     public function __inject(
         CatalogProductIndex $productGrid,
-        CatalogProductActionAttributeEdit $attributeMassActionPage
+        CatalogProductActionAttributeEdit $attributeMassActionPage,
+        TestStepFactory $testStepFactory,
+        FixtureFactory $fixtureFactory
     ) {
         $this->productGrid = $productGrid;
         $this->attributeMassActionPage = $attributeMassActionPage;
+        $this->testStepFactory = $testStepFactory;
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
      * Run mass update product simple entity test.
      *
-     * @param CatalogProductSimple $initialProduct
      * @param CatalogProductSimple $product
      * @param string $configData
+     * @param array $initialProducts
      * @return array
      */
-    public function test(CatalogProductSimple $initialProduct, CatalogProductSimple $product, $configData)
+    public function test(CatalogProductSimple $product, $configData, array $initialProducts)
     {
         $this->configData = $configData;
 
         // Preconditions
-        $initialProduct->persist();
+        $products = $this->testStepFactory->create(
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
+            ['products' => $initialProducts]
+        )->run()['products'];
 
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
@@ -96,19 +121,33 @@ class MassProductUpdateTest extends Injectable
 
         // Steps
         $this->productGrid->open();
-        $this->productGrid->getProductGrid()->updateAttributes([['sku' => $initialProduct->getSku()]]);
+        $this->productGrid->getProductGrid()->updateAttributes($products);
         $this->attributeMassActionPage->getAttributesBlockForm()->fill($product);
         $this->attributeMassActionPage->getFormPageActions()->save();
-        $data = array_merge($initialProduct->getData(), $product->getData());
-        $product = $this->objectManager->create(
-            \Magento\Catalog\Test\Fixture\CatalogProductSimple::class,
-            ['data' => $data]
-        );
+        $updatedProducts = $this->prepareUpdatedProducts($products, $product);
+        
+        return ['products' => $updatedProducts];
+    }
 
-        return [
-            'category' => $initialProduct->getDataFieldConfig('category_ids')['source']->getCategories()[0],
-            'product' => $product,
-        ];
+    /**
+     * Prepare updated products.
+     *
+     * @param array $products
+     * @param CatalogProductSimple $product
+     * @return array
+     */
+    private function prepareUpdatedProducts(array $products, CatalogProductSimple $product)
+    {
+        $productsReturn = [];
+        /** @var FixtureInterface $item */
+        foreach ($products as $item) {
+            $productsReturn[] = $this->fixtureFactory->create(
+                get_class($item),
+                ['data' => array_merge($item->getData(), $product->getData())]
+            );
+        }
+
+        return $productsReturn;
     }
 
     /**

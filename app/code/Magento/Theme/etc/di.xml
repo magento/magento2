@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -139,6 +139,33 @@
     <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
         <arguments>
             <argument name="metadata" xsi:type="array">
+                <item name="theme_theme_id" xsi:type="array">
+                    <item name="path" xsi:type="string">design/theme/theme_id</item>
+                    <item name="fieldset" xsi:type="string">theme</item>
+                    <item name="backend_model" xsi:type="string">Magento\Theme\Model\Design\Backend\Theme</item>
+                    <item name="use_in_grid" xsi:type="boolean">true</item>
+                </item>
+                <item name="theme_ua_regexp" xsi:type="array">
+                    <item name="path" xsi:type="string">design/theme/ua_regexp</item>
+                    <item name="fieldset" xsi:type="string">desing_rule</item>
+                    <item name="backend_model" xsi:type="string">Magento\Theme\Model\Design\Backend\Exceptions</item>
+                </item>
+                <item name="pagination_pagination_frame" xsi:type="array">
+                    <item name="path" xsi:type="string">design/pagination/pagination_frame</item>
+                    <item name="fieldset" xsi:type="string">other_settings/pagination</item>
+                </item>
+                <item name="pagination_pagination_frame_skip" xsi:type="array">
+                    <item name="path" xsi:type="string">design/pagination/pagination_frame_skip</item>
+                    <item name="fieldset" xsi:type="string">other_settings/pagination</item>
+                </item>
+                <item name="pagination_anchor_text_for_previous" xsi:type="array">
+                    <item name="path" xsi:type="string">design/pagination/anchor_text_for_previous</item>
+                    <item name="fieldset" xsi:type="string">other_settings/pagination</item>
+                </item>
+                <item name="pagination_anchor_text_for_next" xsi:type="array">
+                    <item name="path" xsi:type="string">design/pagination/anchor_text_for_next</item>
+                    <item name="fieldset" xsi:type="string">other_settings/pagination</item>
+                </item>
                 <item name="head_shortcut_icon" xsi:type="array">
                     <item name="path" xsi:type="string">design/head/shortcut_icon</item>
                     <item name="fieldset" xsi:type="string">other_settings/head</item>

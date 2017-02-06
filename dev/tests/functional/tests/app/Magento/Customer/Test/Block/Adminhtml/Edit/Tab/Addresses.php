@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,6 +20,7 @@ use Magento\Customer\Test\Fixture\Address;
 
 /**
  * Customer addresses edit block.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Addresses extends Tab
 {
@@ -36,6 +37,8 @@ class Addresses extends Tab
      * @var string
      */
     protected $addressSelector = "//li[address[contains(.,'%s')]]";
+
+    protected $countriesSelector = "//*/select[@name='address[new_%d][country_id]']/option";
 
     /**
      * Delete Address button.
@@ -238,6 +241,34 @@ class Addresses extends Tab
         );
 
         return $addressTab->isVisible();
+    }
+
+    /**
+     * Retrieve list of all countries
+     * @param int $addressNumber
+     * @return array
+     */
+    public function getCountriesList($addressNumber)
+    {
+        $this->openCustomerAddress($addressNumber);
+        /** @var SimpleElement $element */
+        $options = $this->_rootElement->getElements(
+            sprintf($this->countriesSelector, $addressNumber - 1),
+            Locator::SELECTOR_XPATH
+        );
+        $data = [];
+        /** @var SimpleElement $option */
+        foreach ($options as $option) {
+            if ($option->isVisible()) {
+                $value = $option->getValue();
+
+                if ($value != "") {
+                    $data[] = $value;
+                }
+            }
+        }
+
+        return $data;
     }
 
     /**

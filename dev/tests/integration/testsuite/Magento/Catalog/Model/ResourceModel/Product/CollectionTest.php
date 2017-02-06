@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -18,6 +18,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $processor;
 
     /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
@@ -29,6 +34,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Indexer\Product\Price\Processor::class
+        );
+
+        $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
     }
 
@@ -99,5 +108,20 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $product = reset($items);
         $this->assertCount(2, $items);
         $this->assertEquals(15, $product->getPrice());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @magentoDbIsolation enabled
+     */
+    public function testGetProductsWithTierPrice()
+    {
+        $product = $this->productRepository->get('simple products');
+        $items = $this->collection->addIdFilter($product->getId())->addAttributeToSelect('price')
+            ->load()->addTierPriceData();
+        $tierPrices = $items->getFirstItem()->getTierPrices();
+        $this->assertCount(3, $tierPrices);
+        $this->assertEquals(50, $tierPrices[2]->getExtensionAttributes()->getPercentageValue());
+        $this->assertEquals(5, $tierPrices[2]->getValue());
     }
 }

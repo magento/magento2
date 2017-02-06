@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
@@ -178,6 +178,7 @@ class Source extends AbstractEav
                 'pid.attribute_id',
                 'pid.store_id',
                 'value' => $ifNullSql,
+                'pid.entity_id',
             ]
         )->where(
             'pid.attribute_id IN(?)',
@@ -200,7 +201,7 @@ class Source extends AbstractEav
                 'select' => $select,
                 'entity_field' => new \Zend_Db_Expr('pid.entity_id'),
                 'website_field' => new \Zend_Db_Expr('pid.website_id'),
-                'store_field' => new \Zend_Db_Expr('pid.store_id')
+                'store_field' => new \Zend_Db_Expr('pid.store_id'),
             ]
         );
         $query = $select->insertFromSelect($idxTable);
@@ -221,11 +222,7 @@ class Source extends AbstractEav
         $connection = $this->getConnection();
 
         // prepare multiselect attributes
-        if ($attributeId === null) {
-            $attrIds = $this->_getIndexableAttributes(true);
-        } else {
-            $attrIds = [$attributeId];
-        }
+        $attrIds = $attributeId === null ? $this->_getIndexableAttributes(true) : [$attributeId];
 
         if (!$attrIds) {
             return $this;
@@ -247,20 +244,20 @@ class Source extends AbstractEav
         $productValueExpression = $connection->getCheckSql('pvs.value_id > 0', 'pvs.value', 'pvd.value');
         $select = $connection->select()->from(
             ['pvd' => $this->getTable('catalog_product_entity_varchar')],
-            [$productIdField, 'attribute_id']
+            []
         )->join(
             ['cs' => $this->getTable('store')],
             '',
-            ['store_id']
+            []
         )->joinLeft(
             ['pvs' => $this->getTable('catalog_product_entity_varchar')],
             "pvs.{$productIdField} = pvd.{$productIdField} AND pvs.attribute_id = pvd.attribute_id"
             . ' AND pvs.store_id=cs.store_id',
-            ['value' => $productValueExpression]
+            []
         )->joinLeft(
             ['cpe' => $this->getTable('catalog_product_entity')],
             "cpe.{$productIdField} = pvd.{$productIdField}",
-            ['entity_id']
+            []
         )->where(
             'pvd.store_id=?',
             $connection->getIfNullSql('pvs.store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
@@ -272,6 +269,14 @@ class Source extends AbstractEav
             $attrIds
         )->where(
             'cpe.entity_id IS NOT NULL'
+        )->columns(
+            [
+                'entity_id' => 'cpe.entity_id',
+                'attribute_id' => 'attribute_id',
+                'store_id' => 'cs.store_id',
+                'value' => $productValueExpression,
+                'source_id' => 'cpe.entity_id',
+            ]
         );
 
         $statusCond = $connection->quoteInto('=?', ProductStatus::STATUS_ENABLED);
@@ -289,30 +294,11 @@ class Source extends AbstractEav
                 'select' => $select,
                 'entity_field' => new \Zend_Db_Expr('cpe.entity_id'),
                 'website_field' => new \Zend_Db_Expr('cs.website_id'),
-                'store_field' => new \Zend_Db_Expr('cs.store_id')
+                'store_field' => new \Zend_Db_Expr('cs.store_id'),
             ]
         );
 
-        $i = 0;
-        $data = [];
-        $query = $select->query();
-        while ($row = $query->fetch()) {
-            $values = explode(',', $row['value']);
-            foreach ($values as $valueId) {
-                if (isset($options[$row['attribute_id']][$valueId])) {
-                    $data[] = [$row['entity_id'], $row['attribute_id'], $row['store_id'], $valueId];
-                    $i++;
-                    if ($i % 10000 == 0) {
-                        $this->_saveIndexData($data);
-                        $data = [];
-                    }
-                }
-            }
-        }
-
-        $this->_saveIndexData($data);
-        unset($options);
-        unset($data);
+        $this->saveDataFromSelect($select, $options);
 
         return $this;
     }
@@ -331,7 +317,7 @@ class Source extends AbstractEav
         $connection = $this->getConnection();
         $connection->insertArray(
             $this->getIdxTable(),
-            ['entity_id', 'attribute_id', 'store_id', 'value'],
+            ['entity_id', 'attribute_id', 'store_id', 'value', 'source_id'],
             $data
         );
         return $this;
@@ -347,5 +333,32 @@ class Source extends AbstractEav
     public function getIdxTable($table = null)
     {
         return $this->tableStrategy->getTableName('catalog_product_index_eav');
+    }
+
+    /**
+     * @param \Magento\Framework\DB\Select $select
+     * @param array $options
+     * @return void
+     */
+    private function saveDataFromSelect(\Magento\Framework\DB\Select $select, array $options)
+    {
+        $i = 0;
+        $data = [];
+        $query = $select->query();
+        while ($row = $query->fetch()) {
+            $values = explode(',', $row['value']);
+            foreach ($values as $valueId) {
+                if (isset($options[$row['attribute_id']][$valueId])) {
+                    $data[] = [$row['entity_id'], $row['attribute_id'], $row['store_id'], $valueId, $row['source_id']];
+                    $i++;
+                    if ($i % 10000 == 0) {
+                        $this->_saveIndexData($data);
+                        $data = [];
+                    }
+                }
+            }
+        }
+
+        $this->_saveIndexData($data);
     }
 }

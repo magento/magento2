@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,6 +35,13 @@ abstract class AbstractGrid extends Block
      * @var string
      */
     protected $extensionName = "//*[contains(text(), '%s')]";
+
+    /**
+     * Checkbox for select extension.
+     *
+     * @var string
+     */
+    protected $extensionCheckbox = "//tr[td/*[contains(text(), '%s')]]//*[contains(@ng-checked, 'selectedExtension')]";
 
     /**
      * Find Extension on the grid by name.
@@ -84,5 +91,43 @@ abstract class AbstractGrid extends Block
         }
 
         return false;
+    }
+
+    /**
+     * Select several extensions to install on grid.
+     *
+     * @param Extension[] $extensions
+     * @return Extension[]
+     */
+    public function selectSeveralExtensions(array $extensions)
+    {
+        while (true) {
+            foreach ($extensions as $key => $extension) {
+                if ($this->isExtensionOnGrid($extension->getExtensionName())) {
+                    $this->selectExtension($extension->getExtensionName());
+                    unset($extensions[$key]);
+                }
+            }
+
+            if (empty($extensions) || !$this->clickNextPageButton()) {
+                break;
+            }
+        }
+
+        return $extensions;
+    }
+
+    /**
+     * Select extension on grid, check checkbox.
+     *
+     * @param string $extensionName
+     * @return void
+     */
+    protected function selectExtension($extensionName)
+    {
+        $this->_rootElement->find(
+            sprintf($this->extensionCheckbox, $extensionName),
+            Locator::SELECTOR_XPATH
+        )->click();
     }
 }

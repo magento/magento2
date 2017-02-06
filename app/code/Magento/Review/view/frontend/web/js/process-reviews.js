@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -11,7 +11,9 @@ define([
         $.ajax({
             url: url,
             cache: true,
-            dataType: 'html'
+            dataType: 'html',
+            showLoader: true,
+            loaderContext: $('.product.data.items')
         }).done(function (data) {
             $('#product-review-container').html(data);
             $('[data-role="product-review"] .pages a').each(function (index, element) {
@@ -30,7 +32,17 @@ define([
     }
 
     return function (config, element) {
-        processReviews(config.productReviewUrl);
+        var reviewTab = $(config.reviewsTabSelector);
+        var requiredReviewTabRole = 'tab';
+
+        if (reviewTab.attr('role') === requiredReviewTabRole && reviewTab.hasClass('active')) {
+            processReviews(config.productReviewUrl);
+        } else {
+            reviewTab.one('beforeOpen', function () {
+                processReviews(config.productReviewUrl);
+            });
+        }
+
         $(function () {
             $('.product-info-main .reviews-actions a').click(function (event) {
                 event.preventDefault();

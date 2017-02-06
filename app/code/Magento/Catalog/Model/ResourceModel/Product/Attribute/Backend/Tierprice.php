@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend;
@@ -34,6 +34,7 @@ class Tierprice extends AbstractGroupPrice
     {
         $columns = parent::_loadPriceDataColumns($columns);
         $columns['price_qty'] = 'qty';
+        $columns['percentage_value'] = 'percentage_value';
         return $columns;
     }
 

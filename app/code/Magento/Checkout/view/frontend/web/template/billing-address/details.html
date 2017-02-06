@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,6 +13,16 @@
     <!-- ko if: (currentBillingAddress().telephone) -->
     <a data-bind="text: currentBillingAddress().telephone, attr: {'href': 'tel:' + currentBillingAddress().telephone}"></a>
     <!-- /ko --><br/>
+    <!-- ko foreach: { data: currentBillingAddress().customAttributes, as: 'element' } -->
+        <!-- ko foreach: { data: Object.keys(element), as: 'attribute' } -->
+            <!-- ko if: (typeof element[attribute] === "object") -->
+                <!-- ko text: element[attribute].value --><!-- /ko -->
+            <!-- /ko -->
+            <!-- ko if: (typeof element[attribute] === "string") -->
+                <!-- ko text: element[attribute] --><!-- /ko -->
+            <!-- /ko --><br/>
+        <!-- /ko -->
+    <!-- /ko -->
     <button type="button"
             class="action action-edit-address"
             data-bind="visible: !isAddressSameAsShipping(), click: editAddress">

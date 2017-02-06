@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -24,6 +24,9 @@ define(
         customerData
     ) {
         'use strict';
+
+        // State of PayPal module initialization
+        var clientInit = false;
 
         return Component.extend({
 
@@ -93,15 +96,26 @@ define(
              * @returns {Object}
              */
             initClient: function () {
+                var selector = '#' + this.getButtonId();
+
                 _.each(this.clientConfig, function (fn, name) {
                     if (typeof fn === 'function') {
                         this.clientConfig[name] = fn.bind(this);
                     }
                 }, this);
 
-                domObserver.get('#' + this.getButtonId(), function () {
-                    paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
-                }.bind(this));
+                if (!clientInit) {
+                    domObserver.get(selector, function () {
+                        paypalExpressCheckout.checkout.setup(this.merchantId, this.clientConfig);
+                        clientInit = true;
+                        domObserver.off(selector);
+                    }.bind(this));
+                } else {
+                    domObserver.get(selector, function () {
+                        $(selector).on('click', this.clientConfig.click);
+                        domObserver.off(selector);
+                    }.bind(this));
+                }
 
                 return this;
             },

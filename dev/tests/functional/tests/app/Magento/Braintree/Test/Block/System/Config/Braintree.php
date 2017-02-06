@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class Braintree extends Block
     private $enablers = [
         'Enable this Solution' => "#payment_us_braintree_section_braintree_active",
         'Enable PayPal through Braintree' => '#payment_us_braintree_section_braintree_active_braintree_paypal',
-        'Vault enabled' => '#payment_us_braintree_section_braintree_braintree_cc_vault_active'
+        'Vault Enabled' => '#payment_us_braintree_section_braintree_braintree_cc_vault_active'
     ];
 
     /**

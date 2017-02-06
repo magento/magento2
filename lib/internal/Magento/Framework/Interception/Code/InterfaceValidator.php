@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception\Code;
@@ -111,13 +111,13 @@ class InterfaceValidator
                     );
                     break;
                 case self::METHOD_AFTER:
-                    // TODO: Remove this condition check in scope of MAGETWO-56123
                     if (count($pluginMethodParameters) > 1) {
                         // remove result
                         array_shift($pluginMethodParameters);
+                        $matchedParameters = array_intersect_key($originMethodParameters, $pluginMethodParameters);
                         $this->validateMethodsParameters(
                             $pluginMethodParameters,
-                            $originMethodParameters,
+                            $matchedParameters,
                             $pluginClass,
                             $pluginMethod->getName()
                         );

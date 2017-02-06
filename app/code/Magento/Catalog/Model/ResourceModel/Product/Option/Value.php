@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Option;
@@ -32,6 +32,11 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
+
+    /**
+     * @var \Magento\Framework\Locale\FormatInterface
+     */
+    private $localeFormat;
 
     /**
      * Class constructor
@@ -91,8 +96,9 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _saveValuePrices(\Magento\Framework\Model\AbstractModel $object)
     {
         $priceTable = $this->getTable('catalog_product_option_type_price');
+        $formattedPrice = $this->getLocaleFormatter()->getNumber($object->getPrice());
 
-        $price = (double)sprintf('%F', $object->getPrice());
+        $price = (double)sprintf('%F', $formattedPrice);
         $priceType = $object->getPriceType();
 
         if ($object->getPrice() && $priceType) {
@@ -231,6 +237,11 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             );
             $optionTypeId = $this->getConnection()->fetchOne($select);
             $existInCurrentStore = $this->getOptionIdFromOptionTable($titleTable, (int)$object->getId(), (int)$storeId);
+
+            if ($storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID && $object->getData('is_delete_store_title')) {
+                $object->unsetData('title');
+            }
+
             if ($object->getTitle()) {
                 if ($existInCurrentStore) {
                     if ($storeId == $object->getStoreId()) {
@@ -409,5 +420,20 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $object;
+    }
+
+    /**
+     * Get FormatInterface to convert price from string to number format
+     *
+     * @return \Magento\Framework\Locale\FormatInterface
+     * @deprecated
+     */
+    private function getLocaleFormatter()
+    {
+        if ($this->localeFormat === null) {
+            $this->localeFormat = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Locale\FormatInterface::class);
+        }
+        return $this->localeFormat;
     }
 }

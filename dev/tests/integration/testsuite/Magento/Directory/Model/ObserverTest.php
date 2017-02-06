@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -67,7 +67,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $url = str_replace('{{CURRENCY_TO}}', 'GBP', $url);
         try {
             file_get_contents($url);
-        } catch (\PHPUnit_Framework_Error_Warning $e) {
+        } catch (\PHPUnit_Framework_Exception $e) {
             $this->markTestSkipped('http://www.webservicex.net is unavailable ');
         }
 

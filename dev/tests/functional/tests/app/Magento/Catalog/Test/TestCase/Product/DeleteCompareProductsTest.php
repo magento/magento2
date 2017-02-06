@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,14 +21,14 @@ use Magento\Mtf\Fixture\FixtureFactory;
  * 3. Click (X) icon near the $product from dataset.
  * 4. Perform assertions.
  *
- * @group Compare_Products_(MX)
+ * @group Compare_Products
  * @ZephyrId MAGETWO-26161
  */
 class DeleteCompareProductsTest extends AbstractCompareProductsTest
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'MX';
+    const STABLE = 'no';
     /* end tags */
 
     /**

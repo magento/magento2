@@ -1,22 +1,32 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Data provider for categories field of product page
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Categories extends AbstractModifier
 {
+    /**#@+
+     * Category tree cache id
+     */
+    const CATEGORY_TREE_ID = 'CATALOG_PRODUCT_CATEGORY_TREE';
+    /**#@-*/
+
     /**
      * @var CategoryCollectionFactory
      */
@@ -29,6 +39,7 @@ class Categories extends AbstractModifier
 
     /**
      * @var array
+     * @deprecated
      */
     protected $categoriesTrees = [];
 
@@ -48,24 +59,52 @@ class Categories extends AbstractModifier
     protected $arrayManager;
 
     /**
+     * @var CacheInterface
+     */
+    private $cacheManager;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param LocatorInterface $locator
      * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param DbHelper $dbHelper
      * @param UrlInterface $urlBuilder
      * @param ArrayManager $arrayManager
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         LocatorInterface $locator,
         CategoryCollectionFactory $categoryCollectionFactory,
         DbHelper $dbHelper,
         UrlInterface $urlBuilder,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        SerializerInterface $serializer = null
     ) {
         $this->locator = $locator;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->dbHelper = $dbHelper;
         $this->urlBuilder = $urlBuilder;
         $this->arrayManager = $arrayManager;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+    }
+
+    /**
+     * Retrieve cache interface
+     *
+     * @return CacheInterface
+     * @deprecated
+     */
+    private function getCacheManager()
+    {
+        if (!$this->cacheManager) {
+            $this->cacheManager = ObjectManager::getInstance()
+                ->get(CacheInterface::class);
+        }
+        return $this->cacheManager;
     }
 
     /**
@@ -254,8 +293,9 @@ class Categories extends AbstractModifier
      */
     protected function getCategoriesTree($filter = null)
     {
-        if (isset($this->categoriesTrees[$filter])) {
-            return $this->categoriesTrees[$filter];
+        $categoryTree = $this->getCacheManager()->load(self::CATEGORY_TREE_ID . '_' . $filter);
+        if ($categoryTree) {
+            return $this->serializer->unserialize($categoryTree);
         }
 
         $storeId = $this->locator->getStore()->getId();
@@ -307,9 +347,16 @@ class Categories extends AbstractModifier
             $categoryById[$category->getId()]['label'] = $category->getName();
             $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
         }
+        
+        $this->getCacheManager()->save(
+            $this->serializer->serialize($categoryById[CategoryModel::TREE_ROOT_ID]['optgroup']),
+            self::CATEGORY_TREE_ID . '_' . $filter,
+            [
+                \Magento\Catalog\Model\Category::CACHE_TAG,
+                \Magento\Framework\App\Cache\Type\Block::CACHE_TAG
+            ]
+        );
 
-        $this->categoriesTrees[$filter] = $categoryById[CategoryModel::TREE_ROOT_ID]['optgroup'];
-
-        return $this->categoriesTrees[$filter];
+        return $categoryById[CategoryModel::TREE_ROOT_ID]['optgroup'];
     }
 }

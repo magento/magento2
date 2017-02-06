@@ -1,22 +1,24 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Option;
 
 use \Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
 use \Magento\Catalog\Model\ResourceModel\Product\Option\Value;
 
 /**
- * Class CollectionTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codingStandardsIgnoreFile
  */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
      */
@@ -79,6 +81,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->entityFactoryMock = $this->getMock(
             \Magento\Framework\Data\Collection\EntityFactory::class, ['create'], [], '', false
         );
@@ -147,11 +150,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
         $this->selectMock->expects($this->exactly(2))->method('join');
 
-        $this->prepareObjectManager([
-            [\Magento\Framework\EntityManager\MetadataPool::class, $this->metadataPoolMock],
-            [\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class, $this->joinProcessor]
-        ]);
-
         $this->collection = new Collection(
             $this->entityFactoryMock,
             $this->loggerMock,
@@ -160,28 +158,18 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $this->optionsFactoryMock,
             $this->storeManagerMock,
             null,
-            $this->resourceMock
+            $this->resourceMock,
+            $this->metadataPoolMock
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->collection,
+            'joinProcessor',
+            $this->joinProcessor
         );
     }
 
     public function testReset()
     {
         $this->collection->reset();
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

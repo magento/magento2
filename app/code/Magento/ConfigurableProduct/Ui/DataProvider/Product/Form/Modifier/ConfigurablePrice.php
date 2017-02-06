@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
@@ -61,10 +61,8 @@ class ConfigurablePrice extends AbstractModifier
                                 'arguments' => [
                                     'data' => [
                                         'config' => [
-                                            'imports' => [
-                                                'disabled' => '!ns = ${ $.ns }, index = '
-                                                    . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
-                                            ],
+                                            'component' => 'Magento_ConfigurableProduct/js/' .
+                                                'components/price-configurable'
                                         ],
                                     ],
                                 ],
@@ -79,8 +77,6 @@ class ConfigurablePrice extends AbstractModifier
                     ? ['visible' => 0, 'disabled' => 1]
                     : [
                         'imports' => [
-                            'disabled' => '!ns = ${ $.ns }, index = '
-                                . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
                             'visible' => 'ns = ${ $.ns }, index = '
                                 . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
                         ]

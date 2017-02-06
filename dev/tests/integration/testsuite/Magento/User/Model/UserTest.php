@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -125,7 +125,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $roles = $this->_model->getRoles();
         $this->assertEquals(1, count($roles));
-        $this->assertEquals(1, $roles[0]);
+        $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
         $this->_model->setRoleId(self::$_newRole->getId())->save();
         $roles = $this->_model->getRoles();
         $this->assertEquals(1, count($roles));
@@ -140,7 +140,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $role = $this->_model->getRole();
         $this->assertInstanceOf(\Magento\Authorization\Model\Role::class, $role);
-        $this->assertEquals(1, $role->getId());
+        $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
         $this->_model->setRoleId(self::$_newRole->getId())->save();
         $role = $this->_model->getRole();
         $this->assertEquals(self::$_newRole->getId(), $role->getId());
@@ -152,7 +152,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testDeleteFromRole()
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $this->_model->setRoleId(1)->deleteFromRole();
+        $roles = $this->_model->getRoles();
+        $this->_model->setRoleId(reset($roles))->deleteFromRole();
         $role = $this->_model->getRole();
         $this->assertNull($role->getId());
     }
@@ -160,9 +161,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testRoleUserExists()
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $this->_model->setRoleId(1);
+        $role = $this->_model->getRole();
+        $this->_model->setRoleId($role->getId());
         $this->assertTrue($this->_model->roleUserExists());
-        $this->_model->setRoleId(2);
+        $this->_model->setRoleId(100);
         $this->assertFalse($this->_model->roleUserExists());
     }
 
@@ -239,8 +241,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
      */
     public function testAuthenticateUserWithoutRole()
     {
-        $this->_model->load(1);
-        $this->_model->setRoleId(1)->deleteFromRole();
+        $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $roles = $this->_model->getRoles();
+        $this->_model->setRoleId(reset($roles))->deleteFromRole();
         $this->_model->authenticate(
             \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
@@ -293,7 +296,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $role = $this->_model->hasAssigned2Role($this->_model);
         $this->assertEquals(1, count($role));
         $this->assertArrayHasKey('role_id', $role[0]);
-        $this->_model->setRoleId(1)->deleteFromRole();
+        $roles = $this->_model->getRoles();
+        $this->_model->setRoleId(reset($roles))->deleteFromRole();
         $this->assertEmpty($this->_model->hasAssigned2Role($this->_model));
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -48,7 +48,7 @@ Disallow: /*SID=
                 <welcome>Default welcome msg!</welcome>
             </header>
             <footer translate="copyright">
-                <copyright>Copyright &#169; 2016 Magento. All rights reserved.</copyright>
+                <copyright>Copyright &#169; 2013-2017 Magento, Inc. All rights reserved.</copyright>
             </footer>
         </design>
         <theme>
@@ -64,5 +64,10 @@ Disallow: /*SID=
                 </allowed_resources>
             </media_storage_configuration>
         </system>
+        <dev>
+            <static>
+                <sign>1</sign>
+            </static>
+        </dev>
     </default>
 </config>

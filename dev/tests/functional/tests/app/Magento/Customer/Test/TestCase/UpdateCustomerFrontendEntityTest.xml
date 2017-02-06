@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Customer\Test\TestCase\UpdateCustomerFrontendEntityTest" summary="Update Customer on Frontend" ticketId="MAGETWO-25925">
-        <variation name="UpdateCustomerFrontendEntityTestVariation1" summary="Update customer information and add US address">
-            <data name="customer/data/firstname" xsi:type="string">Jany %isolation%</data>
-            <data name="customer/data/lastname" xsi:type="string">Doe %isolation%</data>
-            <data name="customer/data/email" xsi:type="string">janydoe%isolation%@example.com</data>
+        <variation name="UpdateCustomerFrontendEntityTestVariation1" summary="No XSS injection on update customer information add address" ticketId="MAGETWO-47189">
+            <data name="customer/data/firstname" xsi:type="string">Patrick&lt;/title&gt;&lt;/head&gt;&lt;svg/onload=alert(&#39;XSS&#39;)&gt;</data>
+            <data name="customer/data/lastname" xsi:type="string">&lt;script&gt;alert(&#39;Last name&#39;)&lt;/script&gt;</data>
             <data name="customer/data/current_password" xsi:type="string">123123^q</data>
             <data name="address/data/firstname" xsi:type="string">Jany %isolation%</data>
             <data name="address/data/lastname" xsi:type="string">Doe %isolation%</data>
@@ -23,6 +22,7 @@
             <data name="address/data/postcode" xsi:type="string">12345</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
         </variation>
         <variation name="UpdateCustomerFrontendEntityTestVariation2" summary="Update customer information and add UK address, assert customer name and address on address book tab">
             <data name="customer/data/firstname" xsi:type="string">Jonny %isolation%</data>

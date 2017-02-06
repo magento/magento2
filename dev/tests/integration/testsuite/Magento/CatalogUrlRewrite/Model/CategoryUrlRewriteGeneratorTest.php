@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,13 +23,6 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-    }
-
-    public function tearDown()
-    {
-        $category = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
-        $category->load(3);
-        $category->delete();
     }
 
     /**
@@ -94,6 +87,37 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertResults($categoryExpectedResult, $actualResults);
+    }
+
+    /**
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @param string $urlKey
+     * @dataProvider incorrectUrlRewritesDataProvider
+     */
+    public function testGenerateUrlRewritesWithIncorrectUrlKey($urlKey)
+    {
+        $this->setExpectedException(
+            \Magento\Framework\Exception\LocalizedException::class,
+            'Invalid URL key'
+        );
+        /** @var \Magento\Catalog\Api\CategoryRepositoryInterface $repository */
+        $repository = $this->objectManager->get(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+        $category = $repository->get(3);
+        $category->setUrlKey($urlKey);
+        $repository->save($category);
+    }
+
+    /**
+     * @return array
+     */
+    public function incorrectUrlRewritesDataProvider()
+    {
+        return [
+            ['#'],
+            ['//']
+        ];
     }
 
     /**

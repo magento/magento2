@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -22,7 +22,6 @@
                 <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
-            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree_3dsecure</data>
             <data name="paymentInformation" xsi:type="array">
                 <item name="Liability Shifted" xsi:type="string">1</item>
@@ -31,7 +30,7 @@
             <data name="secure3d/dataset" xsi:type="string">secure3d_braintree</data>
             <data name="configData" xsi:type="string">braintree, braintree_3d_secure</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit\Plugin;
@@ -20,11 +20,6 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_cacheMock;
-
-    /**
-     * @var \Closure
-     */
-    protected $closureMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -49,9 +44,6 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_cacheMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
-        $this->closureMock = function () {
-            return 'Expected';
-        };
         $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
         $this->subjectMock = $this->getMock(\Magento\Framework\App\FrontController::class, [], [], '', false);
         $moduleList = $this->getMockForAbstractClass(\Magento\Framework\Module\ModuleListInterface::class);
@@ -85,8 +77,8 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap($returnMap));
 
         $this->assertEquals(
-            'Expected',
-            $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+            null,
+            $this->_model->beforeDispatch($this->subjectMock, $this->requestMock)
         );
     }
 
@@ -101,8 +93,8 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
         $this->moduleManager->expects($this->never())
             ->method('isDbDataUpToDate');
         $this->assertEquals(
-            'Expected',
-            $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+            null,
+            $this->_model->beforeDispatch($this->subjectMock, $this->requestMock)
         );
     }
 
@@ -125,7 +117,7 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('getDbVersionErrors')
             ->will($this->returnValue($dbVersionErrors));
 
-        $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock);
+        $this->_model->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
     /**

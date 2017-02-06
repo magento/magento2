@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend;
@@ -124,5 +124,18 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
         $stockData = $object->getStockData();
         $this->assertEquals(0, $stockData['qty']);
+    }
+
+    public function testBeforeSaveNoStockData()
+    {
+        $object = new \Magento\Framework\DataObject(
+            [
+                self::ATTRIBUTE_NAME => ['is_in_stock' => 1, 'qty' => 0]
+            ]
+        );
+
+        $this->model->beforeSave($object);
+        $this->assertNull($object->getStockData());
+        $this->assertNull($object->getData(self::ATTRIBUTE_NAME));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -125,6 +125,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected['subtotal'], $total->getSubtotal());
         $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $total->getSubtotalInclTax());
+        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $address->getBaseSubtotalTotalInclTax());
         $this->assertEquals($expected['discount_amount'], $total->getDiscountAmount());
         $items = $address->getAllItems();
         /** @var \Magento\Quote\Model\Quote\Address\Item $item */

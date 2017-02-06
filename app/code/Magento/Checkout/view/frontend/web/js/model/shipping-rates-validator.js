@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*global define*/
@@ -12,7 +12,8 @@ define(
         '../action/select-shipping-address',
         './postcode-validator',
         'mage/translate',
-        'uiRegistry'
+        'uiRegistry',
+        'Magento_Checkout/js/model/quote'
     ],
     function (
         $,
@@ -22,7 +23,8 @@ define(
         selectShippingAddress,
         postcodeValidator,
         $t,
-        uiRegistry
+        uiRegistry,
+        quote
     ) {
         'use strict';
 
@@ -41,7 +43,7 @@ define(
              * @param {Object} validator
              */
             registerValidator: function (carrier, validator) {
-                if (checkoutConfig.activeCarriers.indexOf(carrier) != -1) {
+                if (checkoutConfig.activeCarriers.indexOf(carrier) !== -1) {
                     validators.push(validator);
                 }
             },
@@ -127,9 +129,8 @@ define(
                     element.on('value', function () {
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function () {
-                            if (self.postcodeValidation()) {
-                                self.validateFields();
-                            }
+                            self.postcodeValidation();
+                            self.validateFields();
                         }, delay);
                     });
                     observedElements.push(element);
@@ -175,6 +176,7 @@ define(
                     address;
 
                 if (this.validateAddressData(addressFlat)) {
+                    addressFlat = uiRegistry.get('checkoutProvider').shippingAddress;
                     address = addressConverter.formAddressDataToQuoteAddress(addressFlat);
                     selectShippingAddress(address);
                 }

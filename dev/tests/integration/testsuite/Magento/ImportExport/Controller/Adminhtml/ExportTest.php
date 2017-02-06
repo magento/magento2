@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
@@ -84,6 +84,6 @@ class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
 
         $body = $this->getResponse()->getBody();
         $this->assertSelectCount('fieldset#base_fieldset', 1, $body);
-        $this->assertSelectCount('fieldset#base_fieldset div.field', 2, $body);
+        $this->assertSelectCount('fieldset#base_fieldset div.field', 3, $body);
     }
 }

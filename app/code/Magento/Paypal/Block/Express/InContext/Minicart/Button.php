@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Block\Express\InContext\Minicart;
@@ -54,7 +54,6 @@ class Button extends Template implements ShortcutInterface
     private $session;
 
     /**
-     * Constructor
      * @param Context $context
      * @param ResolverInterface $localeResolver
      * @param ConfigFactory $configFactory
@@ -80,6 +79,8 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Check `in_context` config value
+     *
      * @return bool
      */
     private function isInContext()
@@ -88,13 +89,27 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Check `visible_on_cart` config value
+     *
+     * @return bool
+     */
+    private function isVisibleOnCart()
+    {
+        return (bool)(int) $this->config->getValue('visible_on_cart');
+    }
+
+    /**
+     * Check is Paypal In-Context Express Checkout button
+     * should render in cart/mini-cart
+     *
      * @return bool
      */
     protected function shouldRender()
     {
         return $this->payment->isAvailable($this->session->getQuote())
             && $this->isMiniCart
-            && $this->isInContext();
+            && $this->isInContext()
+            && $this->isVisibleOnCart();
     }
 
     /**

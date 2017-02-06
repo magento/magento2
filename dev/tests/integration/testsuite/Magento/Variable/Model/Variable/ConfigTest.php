@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,8 +28,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetWysiwygJsPluginSrc()
     {
         $src = $this->_model->getWysiwygJsPluginSrc();
-        $this->assertStringStartsWith('http://localhost/pub/static/adminhtml/Magento/backend/en_US/mage/adminhtml/',
-            $src);
-        $this->assertStringEndsWith('editor_plugin.js', $src);
+        $this->assertStringMatchesFormat(
+            'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/mage/adminhtml/%s/editor_plugin.js',
+            $src
+        );
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // jscs:disable jsDoc
@@ -51,9 +51,13 @@ define([
             this.setNotificationMessage();
         },
         setNotificationMessage: function () {
+            /*eslint-disable max-len*/
+            var msg = $.mage.__('When you remove or add an attribute, we automatically update all configurations and you will need to recreate current configurations manually.');
+
+            /*eslint-enable max-len*/
+
             if (this.mode === 'edit') {
-                this.wizard.setNotificationMessage($.mage.__('When you remove or add an attribute, we automatically ' +
-                'update all configurations and you will need to recreate current configurations manually.'));
+                this.wizard.setNotificationMessage(msg);
             }
         },
         doSelectSavedAttributes: function () {
