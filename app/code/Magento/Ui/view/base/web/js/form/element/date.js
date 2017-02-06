@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -53,13 +53,12 @@ define([
             pickerDefaultDateFormat: 'MM/dd/y', // ICU Date Format
             pickerDefaultTimeFormat: 'h:mm a', // ICU Time Format
 
-            /**
-             * Moment compatible format used for moment conversion
-             * of date from datePicker
-             */
-            momentFormat: 'MM/DD/YYYY',
-
             elementTmpl: 'ui/form/element/date',
+
+            /**
+             * Format needed by moment timezone for conversion
+             */
+            timezoneFormat: 'YYYY-MM-DD HH:mm',
 
             listens: {
                 'value': 'onValueChange',
@@ -141,15 +140,17 @@ define([
          */
         onShiftedValueChange: function (shiftedValue) {
             var value,
-                formattedValue;
+                formattedValue,
+                momentValue;
 
             if (shiftedValue) {
+                momentValue = moment(shiftedValue, this.pickerDateTimeFormat);
+
                 if (this.options.showsTime) {
-                    formattedValue = moment(shiftedValue).format('YYYY-MM-DD HH:mm');
+                    formattedValue = moment(momentValue).format(this.timezoneFormat);
                     value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
-                    value = moment(shiftedValue, this.momentFormat);
-                    value = value.format(this.outputDateFormat);
+                    value = momentValue.format(this.outputDateFormat);
                 }
             } else {
                 value = '';
@@ -166,39 +167,21 @@ define([
          */
         prepareDateTimeFormats: function () {
             this.pickerDateTimeFormat = this.options.dateFormat;
-            this.momentFormat = this.options.dateFormat ?
-                this.convertToMomentFormat(this.options.dateFormat) : this.momentFormat;
 
             if (this.options.showsTime) {
                 this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
             }
 
-            this.pickerDateTimeFormat = utils.normalizeDate(this.pickerDateTimeFormat);
+            this.pickerDateTimeFormat = utils.convertToMomentFormat(this.pickerDateTimeFormat);
 
             if (this.dateFormat) {
                 this.inputDateFormat = this.dateFormat;
             }
 
-            this.inputDateFormat = utils.normalizeDate(this.inputDateFormat);
-            this.outputDateFormat = utils.normalizeDate(this.outputDateFormat);
+            this.inputDateFormat = utils.convertToMomentFormat(this.inputDateFormat);
+            this.outputDateFormat = utils.convertToMomentFormat(this.outputDateFormat);
 
             this.validationParams.dateFormat = this.outputDateFormat;
-        },
-
-        /**
-         * Converts PHP IntlFormatter format to moment format.
-         *
-         * @param {String} format - PHP format
-         * @returns {String} - moment compatible formatting
-         */
-        convertToMomentFormat: function (format) {
-            var newFormat;
-
-            newFormat = format.replace(/yy|y/gi, 'YYYY'); // replace the year
-            newFormat = newFormat.replace(/dd|d/g, 'DD'); // replace the date
-            newFormat = newFormat.replace(/mm|m/gi, 'MM'); //replace the month
-
-            return newFormat;
         }
     });
 });

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Setup;
@@ -69,7 +69,7 @@ class UpgradeData implements UpgradeDataInterface
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
         $queryModifier = $this->queryModifierFactory->create(
-            InQueryModifier::class,
+            'in',
             [
                 'values' => [
                     'code' => [
@@ -107,7 +107,7 @@ class UpgradeData implements UpgradeDataInterface
                 $codes
             );
             $queryModifier = $this->queryModifierFactory->create(
-                InQueryModifier::class,
+                'in',
                 [
                     'values' => [
                         'code' => $codes

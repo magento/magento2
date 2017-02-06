@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
@@ -36,7 +36,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
         $serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\Serialize\SerializerInterface::class
+            \Magento\Framework\Serialize\Serializer\Json::class
         );
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Catalog\Model\Product\Type\AbstractType::class,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,6 +19,8 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Acl\CacheInterface
+     * @deprecated since 2.2 due to native serialization elimination.
+     * Use data cache \Magento\Framework\Acl\Data\CacheInterface instead.
      */
     protected $_aclCache;
 
@@ -35,6 +37,11 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $dateTime;
 
     /**
+     * @var \Magento\Framework\Acl\Data\CacheInterface
+     */
+    private $aclDataCache;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -42,18 +49,23 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
+     * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Acl\CacheInterface $aclCache,
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_aclCache = $aclCache;
         $this->_roleFactory = $roleFactory;
         $this->dateTime = $dateTime;
+        $this->aclDataCache = $aclDataCache ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Acl\Data\CacheInterface::class
+        );
     }
 
     /**
@@ -214,7 +226,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             $insertData = $this->_prepareDataForTable($data, $this->getTable('authorization_role'));
             $this->getConnection()->insert($this->getTable('authorization_role'), $insertData);
-            $this->_aclCache->clean();
+            $this->aclDataCache->clean();
         }
     }
 

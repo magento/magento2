@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
@@ -11,7 +11,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\Calculation;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -49,7 +49,7 @@ class Tax extends CommonTaxCollector
     protected $_discountTaxCompensationes = [];
 
     /**
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -64,7 +64,7 @@ class Tax extends CommonTaxCollector
      * @param CustomerAddressFactory $customerAddressFactory
      * @param CustomerAddressRegionFactory $customerAddressRegionFactory
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param SerializerInterface $serializer
+     * @param Json $serializer
      */
     public function __construct(
         \Magento\Tax\Model\Config $taxConfig,
@@ -75,11 +75,11 @@ class Tax extends CommonTaxCollector
         CustomerAddressFactory $customerAddressFactory,
         CustomerAddressRegionFactory $customerAddressRegionFactory,
         \Magento\Tax\Helper\Data $taxData,
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->setCode('tax');
         $this->_taxData = $taxData;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct(
             $taxConfig,
             $taxCalculationService,

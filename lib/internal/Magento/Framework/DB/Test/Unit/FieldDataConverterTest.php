@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit;
 
+use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -45,6 +46,11 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
      */
     private $fieldDataConverter;
 
+    /**
+     * @var \Magento\Framework\DB\SelectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $selectFactoryMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -53,11 +59,16 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
         $this->dataConverterMock = $this->getMock(DataConverterInterface::class);
         $this->selectMock = $this->getMock(Select::class, [], [], '', false);
         $this->queryModifierMock = $this->getMock(QueryModifierInterface::class);
+        $this->selectFactoryMock = $this->getMockBuilder(SelectFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $this->fieldDataConverter = $objectManager->getObject(
             FieldDataConverter::class,
             [
                 'queryGenerator' => $this->queryGeneratorMock,
-                'dataConverter' => $this->dataConverterMock
+                'dataConverter' => $this->dataConverterMock,
+                'selectFactory' => $this->selectFactoryMock
             ]
         );
     }
@@ -81,8 +92,9 @@ class FieldDataConverterTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $convertedValue = 'converted value';
-        $this->connectionMock->expects($this->once())
-            ->method('select')
+        $this->selectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->connectionMock)
             ->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())
             ->method('from')

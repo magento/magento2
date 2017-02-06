@@ -2,7 +2,7 @@
 /**
  * Grouped product type implementation
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
@@ -95,7 +95,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Msrp\Helper\Data $msrpData
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -113,7 +113,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Framework\App\State $appState,
         \Magento\Msrp\Helper\Data $msrpData,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->productLinks = $catalogProductLink;
         $this->_storeManager = $storeManager;

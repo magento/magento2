@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -98,7 +98,7 @@ class Item extends AbstractModel implements OrderItemInterface
     /**
      * Serializer interface instance.
      *
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -115,7 +115,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -129,7 +129,7 @@ class Item extends AbstractModel implements OrderItemInterface
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct(
             $context,
@@ -141,7 +141,7 @@ class Item extends AbstractModel implements OrderItemInterface
             $data
         );
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->_orderFactory = $orderFactory;
         $this->_storeManager = $storeManager;
         $this->productRepository = $productRepository;

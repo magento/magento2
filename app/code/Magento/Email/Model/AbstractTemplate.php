@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model;
@@ -352,7 +352,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $result = $processor->filter($this->getTemplateText());
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
-            throw new \LogicException(__($e->getMessage()), $e);
+            throw new \LogicException(__($e->getMessage()), $e->getCode(), $e);
         }
         if ($isDesignApplied) {
             $this->cancelDesignConfig();

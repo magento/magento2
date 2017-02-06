@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model\Sales\Order\Pdf\Items;
@@ -13,7 +13,7 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment $model */
     protected $model;
 
-    /** @var \Magento\Framework\Serialize\SerializerInterface $serializer */
+    /** @var \Magento\Framework\Serialize\Serializer\Json $serializer */
     protected $serializer;
 
     protected function setUp()
@@ -27,14 +27,13 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(\Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment::class);
-
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
-        $reflection = new \ReflectionClass(\Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems::class);
-        $reflectionProperty = $reflection->getProperty('serializer');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->model, $this->serializer);
-
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->model = $objectManager->getObject(
+            \Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment::class,
+            [
+                'serializer' => $this->serializer
+            ]
+        );
     }
 
     /**

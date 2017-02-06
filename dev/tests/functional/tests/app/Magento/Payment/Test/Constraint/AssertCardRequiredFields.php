@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Payment\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Payment\Test\Repository\CreditCardAdmin;
+use Magento\Payment\Test\Repository\CreditCard;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 
 /**
@@ -30,10 +30,10 @@ class AssertCardRequiredFields extends AbstractConstraint
     /**
      * Assert required fields on credit card payment method in backend.
      * @param OrderCreateIndex $orderCreateIndex
-     * @param CreditCardAdmin $creditCard
+     * @param CreditCard $creditCard
      * @return void
      */
-    public function processAssert(OrderCreateIndex $orderCreateIndex, CreditCardAdmin $creditCard)
+    public function processAssert(OrderCreateIndex $orderCreateIndex, CreditCard $creditCard)
     {
         $actualRequiredFields = $orderCreateIndex->getCreateBlock()->getBillingMethodBlock()
             ->getJsErrors();

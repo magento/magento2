@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Item;
@@ -35,7 +35,7 @@ class Updater
     /**
      * Serializer interface instance.
      *
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -43,19 +43,19 @@ class Updater
      * @param ProductFactory $productFactory
      * @param FormatInterface $localeFormat
      * @param ObjectFactory $objectFactory
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
         ProductFactory $productFactory,
         FormatInterface $localeFormat,
         ObjectFactory $objectFactory,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->productFactory = $productFactory;
         $this->localeFormat = $localeFormat;
         $this->objectFactory = $objectFactory;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**

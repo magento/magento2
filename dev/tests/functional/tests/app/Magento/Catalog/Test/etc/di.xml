@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -167,7 +167,7 @@
                     <item name="selector" xsi:type="string">[name="product[%code%]"]</item>
                     <item name="type" xsi:type="string">null</item>
                 </item>
-                <item name="hasDatepicker" xsi:type="array">
+                <item name="admin__control-text _has-datepicker" xsi:type="array">
                     <item name="selector" xsi:type="string">[name="product[%code%]"]</item>
                     <item name="type" xsi:type="string">datepicker</item>
                 </item>

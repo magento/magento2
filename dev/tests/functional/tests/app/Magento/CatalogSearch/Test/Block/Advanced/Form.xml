@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -25,5 +25,11 @@
         <price_to>
             <selector>#price_to</selector>
         </price_to>
+        <weight_from>
+            <selector>#weight</selector>
+        </weight_from>
+        <weight_to>
+            <selector>#weight_to</selector>
+        </weight_to>
     </fields>
 </mapping>

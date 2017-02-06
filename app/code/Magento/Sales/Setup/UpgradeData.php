@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Setup;
 
 /**
- * Class UpgradeData
- * @package Magento\Sales\Setup
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Data upgrade script
  */
 class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
 {
@@ -25,25 +23,25 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
     private $eavConfig;
 
     /**
-     * @var \Magento\Framework\DB\FieldDataConverterFactory
+     * @var \Magento\Sales\Setup\ConvertSerializedDataToJsonFactory
      */
-    private $fieldDataConverterFactory;
+    private $convertSerializedDataToJsonFactory;
 
     /**
      * Constructor
      *
      * @param \Magento\Sales\Setup\SalesSetupFactory $salesSetupFactory
+     * @param \Magento\Sales\Setup\ConvertSerializedDataToJsonFactory $convertSerializedDataToJsonFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
      */
     public function __construct(
         \Magento\Sales\Setup\SalesSetupFactory $salesSetupFactory,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
+        \Magento\Sales\Setup\ConvertSerializedDataToJsonFactory $convertSerializedDataToJsonFactory,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
+        $this->convertSerializedDataToJsonFactory = $convertSerializedDataToJsonFactory;
         $this->eavConfig = $eavConfig;
-        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
     }
 
     /**
@@ -58,7 +56,8 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
             $this->upgradeToTwoZeroOne($salesSetup);
         }
         if (version_compare($context->getVersion(), '2.0.5', '<')) {
-            $this->upgradeToVersionTwoZeroFive($setup);
+            $this->convertSerializedDataToJsonFactory->create(['salesSetup' => $salesSetup])
+                ->convert();
         }
         $this->eavConfig->clear();
     }
@@ -110,50 +109,6 @@ class UpgradeData implements \Magento\Framework\Setup\UpgradeDataInterface
             'shipment',
             'increment_model',
             \Magento\Eav\Model\Entity\Increment\NumericValue::class
-        );
-    }
-
-    /**
-     * Upgrade to version 2.0.5, convert data for the following fields from serialized to JSON format:
-     * sales_order_item.product_options
-     * sales_shipment.packages
-     * sales_order_payment.additional_information
-     * sales_payment_transaction.additional_information
-     *
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $setup
-     * @return void
-     */
-    private function upgradeToVersionTwoZeroFive(\Magento\Framework\Setup\ModuleDataSetupInterface $setup)
-    {
-        $productOptionsDataConverter = $this->fieldDataConverterFactory->create(
-            \Magento\Sales\Setup\SerializedDataConverter::class
-        );
-        $productOptionsDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('sales_order_item'),
-            'item_id',
-            'product_options'
-        );
-        $fieldDataConverter = $this->fieldDataConverterFactory->create(
-            \Magento\Framework\DB\DataConverter\SerializedToJson::class
-        );
-        $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('sales_shipment'),
-            'entity_id',
-            'packages'
-        );
-        $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('sales_order_payment'),
-            'entity_id',
-            'additional_information'
-        );
-        $fieldDataConverter->convert(
-            $setup->getConnection(),
-            $setup->getTable('sales_payment_transaction'),
-            'transaction_id',
-            'additional_information'
         );
     }
 }

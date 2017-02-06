@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Config\Test\Repository\ConfigData">
         <dataset name="store_information_US">
             <field name="general/store_information/name" xsi:type="array">
@@ -165,12 +166,14 @@
                 <item name="scope_id" xsi:type="number">0</item>
                 <item name="label" xsi:type="string">Yes</item>
                 <item name="value" xsi:type="number">1</item>
+                <item name="inherit" xsi:type="number">1</item>
             </field>
             <field name="web/secure/use_in_adminhtml" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
                 <item name="scope_id" xsi:type="number">0</item>
                 <item name="label" xsi:type="string">Yes</item>
                 <item name="value" xsi:type="number">1</item>
+                <item name="inherit" xsi:type="number">1</item>
             </field>
         </dataset>
 
@@ -186,6 +189,56 @@
                 <item name="scope_id" xsi:type="number">0</item>
                 <item name="label" xsi:type="string">No</item>
                 <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="enable_https_frontend_admin_with_url">
+            <field name="web/secure/use_in_frontend" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="web/secure/use_in_adminhtml" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="web/secure/base_url" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="string">{{basic_url_to_secure}}</item>
+            </field>
+            <field name="web/secure/base_link_url" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="string">{{basic_url_to_secure}}</item>
+            </field>
+        </dataset>
+
+        <dataset name="enable_https_frontend_admin_with_url_rollback">
+            <field name="web/secure/use_in_frontend" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="web/secure/use_in_adminhtml" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="web/secure/base_url" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="string">{{basic_url_to_unsecure}}</item>
+            </field>
+            <field name="web/secure/base_link_url" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="string">{{basic_url_to_unsecure}}</item>
             </field>
         </dataset>
 
@@ -220,6 +273,21 @@
             </field>
         </dataset>
 
+        <dataset name="disable_https_frontend_admin">
+            <field name="web/secure/use_in_frontend" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="web/secure/use_in_adminhtml" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
         <dataset name="custom_allowed_country">
             <field name="general/country/allow" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
@@ -230,6 +298,7 @@
                 </item>
             </field>
         </dataset>
+
         <dataset name="custom_allowed_country_rollback">
             <field name="general/country/allow" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
@@ -237,6 +306,7 @@
                 <item name="inherit" xsi:type="string">1</item>
             </field>
         </dataset>
+
         <dataset name="enable_single_store_mode">
             <field name="general/single_store_mode/enabled" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
@@ -245,12 +315,33 @@
                 <item name="value" xsi:type="number">1</item>
             </field>
         </dataset>
+
         <dataset name="enable_single_store_mode_rollback">
             <field name="general/single_store_mode/enabled" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
                 <item name="scope_id" xsi:type="number">0</item>
                 <item name="label" xsi:type="string">No</item>
                 <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="top_destinations_DE_ES_GB">
+            <field name="general/country/destinations" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="array">
+                    <item name="Germany" xsi:type="string">DE</item>
+                    <item name="Spain" xsi:type="string">ES</item>
+                    <item name="United Kingdom" xsi:type="string">GB</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="top_destinations_DE_ES_GB_rollback">
+            <field name="general/country/destinations" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="string"></item>
             </field>
         </dataset>
     </repository>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
@@ -164,7 +164,7 @@ abstract class AbstractType
     /**
      * Serializer interface instance.
      *
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     protected $serializer;
 
@@ -180,7 +180,7 @@ abstract class AbstractType
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -193,7 +193,7 @@ abstract class AbstractType
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_catalogProductOption = $catalogProductOption;
         $this->_eavConfig = $eavConfig;
@@ -205,7 +205,7 @@ abstract class AbstractType
         $this->_logger = $logger;
         $this->productRepository = $productRepository;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**

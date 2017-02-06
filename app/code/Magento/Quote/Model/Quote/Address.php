@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
@@ -8,7 +8,7 @@ namespace Magento\Quote\Model\Quote;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -235,7 +235,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected $totalsReader;
 
     /**
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -272,7 +272,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @param SerializerInterface $serializer
+     * @param Json $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -309,7 +309,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_addressItemFactory = $addressItemFactory;
@@ -328,7 +328,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $this->attributeList = $attributeList;
         $this->totalsCollector = $totalsCollector;
         $this->totalsReader = $totalsReader;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct(
             $context,
             $registry,

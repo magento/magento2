@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -293,8 +293,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSelectedAttributesInfo()
     {
-        /** @var $serializer \Magento\Framework\Serialize\SerializerInterface */
-        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\SerializerInterface::class);
+        /** @var $serializer \Magento\Framework\Serialize\Serializer\Json */
+        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $product = $this->productRepository->getById(1, true);
         $attributes = $this->model->getConfigurableAttributesAsArray($product);
@@ -317,8 +317,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSelectedAttributesInfoForStore()
     {
-        /** @var $serializer \Magento\Framework\Serialize\SerializerInterface */
-        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\SerializerInterface::class);
+        /** @var $serializer \Magento\Framework\Serialize\Serializer\Json */
+        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $attributes = $this->model->getConfigurableAttributesAsArray($this->product);
 

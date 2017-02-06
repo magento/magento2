@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ *
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,7 +35,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
     protected $unserialize;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -43,21 +44,21 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      * @param ForwardFactory $resultForwardFactory
      * @param \Magento\Sales\Model\Download $download
      * @param \Magento\Framework\Unserialize\Unserialize $unserialize
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         Context $context,
         ForwardFactory $resultForwardFactory,
         \Magento\Sales\Model\Download $download,
         \Magento\Framework\Unserialize\Unserialize $unserialize,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
         $this->download = $download;
         $this->unserialize = $unserialize;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Serialize\SerializerInterface::class
+            \Magento\Framework\Serialize\Serializer\Json::class
         );
     }
 

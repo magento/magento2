@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -169,7 +169,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
 

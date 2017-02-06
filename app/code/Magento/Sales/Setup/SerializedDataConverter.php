@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,10 +10,6 @@ use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
- * Class SerializedToJson.
- *
- * @package Magento\Sales\Model\Order\Item\Converter\ProductOptions
- *
  * Serializer used to update nested serialized data in product_options field.
  */
 class SerializedDataConverter implements \Magento\Framework\DB\DataConverter\DataConverterInterface

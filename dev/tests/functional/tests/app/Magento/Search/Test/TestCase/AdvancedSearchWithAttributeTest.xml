@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Search\Test\TestCase\AdvancedSearchWithAttributeTest" summary="Use Advanced Search by Decimal indexable attribute if Edit/Add Attribute" ticketId="MAGETWO-25931">
+        <variation name="AdvancedSearchWithWeightAttributeTestVariation1">
+            <data name="productDropDownList/0" xsi:type="string">configurable</data>
+            <data name="productDropDownList/1" xsi:type="string">simple</data>
+            <data name="productDropDownList/2" xsi:type="string">bundle</data>
+            <data name="productDropDownList/3" xsi:type="string">grouped</data>
+            <data name="isVisibleInAdvancedSearch/0" xsi:type="string">No</data>
+            <data name="isVisibleInAdvancedSearch/1" xsi:type="string">Yes</data>
+            <data name="isVisibleInAdvancedSearch/2" xsi:type="string">Yes</data>
+            <data name="isVisibleInAdvancedSearch/3" xsi:type="string">Yes</data>
+            <data name="attributeEnable/data/is_searchable" xsi:type="string">Yes</data>
+            <data name="attributeEnable/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
+            <data name="attributeDisable/data/is_global" xsi:type="string">Global</data>
+            <data name="attributeDisable/data/is_searchable" xsi:type="string">No</data>
+            <data name="attributeGlobalStatus/data/is_global" xsi:type="string">Website</data>
+            <data name="products/0" xsi:type="string">configurableProduct::one_simple_product</data>
+            <data name="products/1" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/2" xsi:type="string">bundleProduct::default_with_one_simple_product</data>
+            <data name="products/3" xsi:type="string">groupedProduct::withSimpleProduct_without_category</data>
+            <data name="productSearch/data/additional_attributes/weight_from" xsi:type="string">1</data>
+            <data name="productSearch/data/additional_attributes/weight_to" xsi:type="string">1</data>
+            <data name="indexers" xsi:type="string">Product EAV</data>
+            <data name="attributeForSearch" xsi:type="array">
+                <item name="name" xsi:type="string">Weight</item>
+                <item name="isVisible" xsi:type="boolean">true</item>
+            </data>
+            <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+        </variation>
+    </testCase>
+</config>

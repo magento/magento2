@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 require 'quote_with_address.php';
 
-/** @var \Magento\Framework\Serialize\SerializerInterface $serializer */
-$serializer = $objectManager->create(\Magento\Framework\Serialize\SerializerInterface::class);
+/** @var \Magento\Framework\Serialize\Serializer\Json $serializer */
+$serializer = $objectManager->create(\Magento\Framework\Serialize\Serializer\Json::class);
 
 $quote->setReservedOrderId(
     'test_order_1_with_payment'

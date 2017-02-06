@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Item;
@@ -15,17 +15,17 @@ class Compare
     /**
      * Serializer interface instance.
      *
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
     /**
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer [optional]
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
-    public function __construct(\Magento\Framework\Serialize\SerializerInterface $serializer = null)
+    public function __construct(\Magento\Framework\Serialize\Serializer\Json $serializer = null)
     {
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**

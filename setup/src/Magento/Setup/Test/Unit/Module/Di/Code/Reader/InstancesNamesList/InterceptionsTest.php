@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList;
@@ -97,7 +97,7 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetListNoValidation()
     {
-        $path = '/var/generation';
+        $path = '/generated/code';
 
         $classes = ['NameSpace1\ClassName1', 'NameSpace1\ClassName2'];
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Quote\Item;
@@ -88,7 +88,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->serializer = $this->getMock(
-            \Magento\Framework\Serialize\SerializerInterface::class,
+            \Magento\Framework\Serialize\Serializer\Json::class,
             [],
             [],
             '',

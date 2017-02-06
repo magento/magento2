@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Product;
 
 use Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class TypeTest
@@ -32,7 +32,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     private $product;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializerMock;
 
@@ -98,7 +98,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $resourceProductMock->expects($this->any())->method('getEntityType')->will($this->returnValue($entityTypeMock));
 
         $this->serializerMock = $this->getMock(
-            SerializerInterface::class,
+            Json::class,
             [],
             ['serialize', 'unserialize'],
             '',

@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
 use Magento\Catalog\Model\Product\Type\AbstractType;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
- * Sales Order Pdf Items renderer
+ * Order pdf items renderer
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
@@ -17,20 +19,22 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     /**
      * Serializer
      *
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Framework\Filesystem $filesystem ,
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -41,10 +45,9 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
-        $this->serializer = $serializer;
-
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct(
             $context,
             $registry,
@@ -202,7 +205,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
             $options = $item->getOrderItem()->getProductOptions();
         }
         if (isset($options['bundle_selection_attributes'])) {
-            return $this->getSerializer()->unserialize($options['bundle_selection_attributes']);
+            return $this->serializer->unserialize($options['bundle_selection_attributes']);
         }
         return null;
     }
@@ -286,20 +289,5 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
             return true;
         }
         return false;
-    }
-
-    /**
-     * The getter function to get serializer
-     *
-     * @return SerializerInterface
-     *
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(SerializerInterface::class);
-        }
-        return $this->serializer;
     }
 }

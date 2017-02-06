@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -227,7 +227,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     /**
      * Serializer interface instance.
      *
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -260,7 +260,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Sales\Api\OrderManagementInterface $orderManagement
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -292,7 +292,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Sales\Api\OrderManagementInterface $orderManagement,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         array $data = [],
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -322,7 +322,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->orderManagement = $orderManagement;
         $this->quoteFactory = $quoteFactory;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($data);
     }
 

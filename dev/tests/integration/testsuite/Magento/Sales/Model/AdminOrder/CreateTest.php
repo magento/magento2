@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\AdminOrder;
@@ -61,8 +61,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitFromOrderAndCreateOrderFromQuoteWithAdditionalOptions()
     {
-        /** @var $serializer \Magento\Framework\Serialize\SerializerInterface */
-        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\SerializerInterface::class);
+        /** @var $serializer \Magento\Framework\Serialize\Serializer\Json */
+        $serializer = Bootstrap::getObjectManager()->create(\Magento\Framework\Serialize\Serializer\Json::class);
 
         /** @var $order \Magento\Sales\Model\Order */
         $order = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
@@ -508,9 +508,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
      */
     public function testGetCustomerCartExistingCart()
     {
@@ -535,10 +535,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Sales\Model\AdminOrder\Create::moveQuoteItem()
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
      */
     public function testMoveQuoteItemToCart()
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
@@ -82,10 +82,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled
-     * @covers \Magento\GroupedProduct\Model\Product\Type\Grouped::_prepareProduct()
-     * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php
      */
     public function testPrepareProduct()
     {

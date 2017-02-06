@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Product;
@@ -85,7 +85,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
      * @param TypeHandler\TypeHandlerInterface $typeHandler
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer [optional]
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -106,7 +106,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Downloadable\Model\LinkFactory $linkFactory,
         \Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface $typeHandler,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_sampleResFactory = $sampleResFactory;
         $this->_linkResource = $linkResource;

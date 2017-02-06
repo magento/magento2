@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\Order;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Factory class for @see \Magento\Sales\Api\Data\ShipmentInterface
@@ -39,7 +39,7 @@ class ShipmentFactory
     /**
      * Serializer
      *
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -48,18 +48,18 @@ class ShipmentFactory
      *
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
      * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
         \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->converter = $convertOrderFactory->create();
         $this->trackFactory = $trackFactory;
         $this->instanceName = \Magento\Sales\Api\Data\ShipmentInterface::class;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(SerializerInterface::class);
+            ->get(Json::class);
     }
 
     /**

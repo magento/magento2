@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote;
@@ -41,7 +41,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()
             ->getMock();
         $this->eventManager = $this->getMock(ManagerInterface::class);
-        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $serializer->expects($this->any())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Option\Type;
@@ -39,7 +39,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     private $filesystemMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializer;
 
@@ -69,7 +69,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->with(DirectoryList::MEDIA, DriverPool::FILE)
             ->willReturn($this->rootDirectory);
 
-        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
 

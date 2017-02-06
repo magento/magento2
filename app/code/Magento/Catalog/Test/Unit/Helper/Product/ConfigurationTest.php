@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Helper\Product;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Helper\Product;
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $serializer;
 
@@ -23,7 +23,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $optionFactoryMock = $this->getMock(\Magento\Catalog\Model\Product\OptionFactory::class, [], [], '', false);
         $filterManagerMock = $this->getMock(\Magento\Framework\Filter\FilterManager::class, [], [], '', false);
         $stringUtilsMock = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class, [], [], '', false);
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class, [], [], '', false);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
 
         $this->helper = new \Magento\Catalog\Helper\Product\Configuration(
             $contextMock,

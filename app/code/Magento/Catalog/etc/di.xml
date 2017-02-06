@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -51,6 +51,17 @@
     <preference for="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface" type="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver"/>
     <preference for="Magento\Catalog\Model\Product\Media\ConfigInterface" type="Magento\Catalog\Model\Product\Media\Config"/>
     <preference for="Magento\Framework\View\Asset\ContextInterface" type="Magento\Catalog\Model\View\Asset\Image\Context"/>
+    <preference for="Magento\Catalog\Api\TierPriceStorageInterface" type="Magento\Catalog\Model\Product\Price\TierPriceStorage" />
+    <preference for="Magento\Catalog\Api\Data\TierPriceInterface" type="Magento\Catalog\Model\Product\Price\TierPrice" />
+    <preference for="Magento\Catalog\Api\BasePriceStorageInterface" type="Magento\Catalog\Model\Product\Price\BasePriceStorage" />
+    <preference for="Magento\Catalog\Api\Data\BasePriceInterface" type="Magento\Catalog\Model\Product\Price\BasePrice" />
+    <preference for="Magento\Catalog\Api\CostStorageInterface" type="Magento\Catalog\Model\Product\Price\CostStorage" />
+    <preference for="Magento\Catalog\Api\Data\CostInterface" type="Magento\Catalog\Model\Product\Price\Cost" />
+    <preference for="Magento\Catalog\Api\SpecialPriceStorageInterface" type="Magento\Catalog\Model\Product\Price\SpecialPriceStorage" />
+    <preference for="Magento\Catalog\Api\Data\SpecialPriceInterface" type="Magento\Catalog\Model\Product\Price\SpecialPrice" />
+    <preference for="Magento\Catalog\Api\Data\PriceUpdateResultInterface" type="Magento\Catalog\Model\Product\Price\PriceUpdateResult" />
+    <preference for="Magento\Catalog\Api\SpecialPriceInterface" type="Magento\Catalog\Model\ResourceModel\Product\Price\SpecialPrice" />
+    <preference for="Magento\Catalog\Model\ProductIdLocatorInterface" type="Magento\Catalog\Model\ProductIdLocator" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -848,4 +859,39 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Price\CostStorage">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="0" xsi:type="string">simple</item>
+                <item name="1" xsi:type="string">virtual</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Price\BasePriceStorage">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="0" xsi:type="string">simple</item>
+                <item name="1" xsi:type="string">virtual</item>
+                <item name="2" xsi:type="string">bundle</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="0" xsi:type="string">simple</item>
+                <item name="1" xsi:type="string">virtual</item>
+                <item name="2" xsi:type="string">bundle</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Price\SpecialPriceStorage">
+        <arguments>
+            <argument name="allowedProductTypes" xsi:type="array">
+                <item name="0" xsi:type="string">simple</item>
+                <item name="1" xsi:type="string">virtual</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface" type="Magento\Catalog\Pricing\Price\MinimalTierPriceCalculator" />
 </config>

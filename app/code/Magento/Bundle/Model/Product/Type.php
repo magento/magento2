@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ namespace Magento\Bundle\Model\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Bundle Type Model
@@ -168,7 +168,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
-     * @param \Magento\Framework\Serialize\SerializerInterface $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -194,7 +194,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         PriceCurrencyInterface $priceCurrency,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->_catalogProduct = $catalogProduct;
         $this->_catalogData = $catalogData;
@@ -550,6 +550,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $selectionsCollection = $this->_bundleCollection->create();
             $selectionsCollection->addAttributeToSelect('status');
             $selectionsCollection->addQuantityFilter();
+            $selectionsCollection->setFlag('product_children', true);
             $selectionsCollection->addFilterByRequiredOptions();
             $selectionsCollection->setOptionIdsFilter([$option->getId()]);
 
@@ -1029,8 +1030,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $selectionIds = $product->getCustomOption('bundle_selection_ids');
         $selectionIds = $this->serializer->unserialize($selectionIds->getValue());
         $buyRequest = $product->getCustomOption('info_buyRequest');
-        $buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest->getValue()));
-        $bundleOption = $buyRequest->getBundleOption();
+ 	 	$buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest->getValue()));
+ 	 	$bundleOption = $buyRequest->getBundleOption();
 
         if (empty($bundleOption)) {
             throw new \Magento\Framework\Exception\LocalizedException($this->getSpecifyOptionMessage());

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,23 +29,18 @@ define([
 
             it('normal + boundary values', function () {
                 expect(paging.normalize(1)).toBe(1);
-                expect(paging.normalize(2)).toBe(2);
-                expect(paging.normalize(4)).toBe(4);
             });
 
             it('out of boundary values', function () {
                 expect(paging.normalize(0)).toBe(1);
-                expect(paging.normalize(5)).toBe(4);
             });
         });
 
         describe('onPagesChange method', function () {
-            it('pages amount became less than current', function () {
-                paging.current = 4;
-                expect(paging.current).toBe(4);
-                paging.pageSize = 3;
+            it('Check call "onPagesChange" method', function () {
+                paging.updateCursor = jasmine.createSpy();
                 paging.onPagesChange();
-                expect(paging.current).toBe(3);
+                expect(paging.updateCursor).toHaveBeenCalled();
             });
         });
 
