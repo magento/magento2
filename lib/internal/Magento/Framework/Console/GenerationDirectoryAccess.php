@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Console;
@@ -14,7 +14,7 @@ use Zend\ServiceManager\ServiceManager;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 
 /**
- * Check var/generation read and write access
+ * Check generated/code read and write access
  */
 class GenerationDirectoryAccess
 {
@@ -33,7 +33,7 @@ class GenerationDirectoryAccess
     }
 
     /**
-     * Check var/generation read and write access
+     * Check generated/code read and write access
      *
      * @return bool
      */

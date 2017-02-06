@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,6 +63,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '2.1.2', '<')) {
             $this->addSourceEntityIdToProductEavIndex($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.1.4', '<')) {
+            $this->recreateCatalogCategoryProductIndexTmpTable($setup);
         }
 
         $setup->endSetup();
@@ -374,5 +378,75 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'after' => 'value'
             ]
         );
+    }
+
+    /**
+     * Drop and recreate catalog_category_product_index_tmp table
+     *
+     * Before this update the catalog_category_product_index_tmp table was created without usage of PK
+     * and with engine=MEMORY. Such structure of catalog_category_product_index_tmp table causes
+     * issues with MySQL DB replication.
+     *
+     * To avoid replication issues this method drops catalog_category_product_index_tmp table
+     * and creates new one with PK and engine=InnoDB
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function recreateCatalogCategoryProductIndexTmpTable(SchemaSetupInterface $setup)
+    {
+        $tableName = $setup->getTable('catalog_category_product_index_tmp');
+
+        // Drop catalog_category_product_index_tmp table
+        $setup->getConnection()->dropTable($tableName);
+
+        // Create catalog_category_product_index_tmp table with PK and engine=InnoDB
+        $table = $setup->getConnection()
+            ->newTable($tableName)
+            ->addColumn(
+                'category_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                'Category ID'
+            )
+            ->addColumn(
+                'product_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                'Product ID'
+            )
+            ->addColumn(
+                'position',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false, 'default' => '0'],
+                'Position'
+            )
+            ->addColumn(
+                'is_parent',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Is Parent'
+            )
+            ->addColumn(
+                'store_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                'Store ID'
+            )
+            ->addColumn(
+                'visibility',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Visibility'
+            )
+            ->setComment('Catalog Category Product Indexer temporary table');
+
+        $setup->getConnection()->createTable($table);
     }
 }

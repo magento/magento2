@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogInventory\Helper;
 
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\Store;
 
 /**
@@ -32,18 +34,26 @@ class Minsaleqty
     protected $groupManagement;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param GroupManagementInterface $groupManagement
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Math\Random $mathRandom,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        Json $serializer = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->mathRandom = $mathRandom;
         $this->groupManagement = $groupManagement;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -78,7 +88,7 @@ class Minsaleqty
             if (count($data) == 1 && array_key_exists($this->getAllCustomersGroupId(), $data)) {
                 return (string) $data[$this->getAllCustomersGroupId()];
             }
-            return serialize($data);
+            return $this->serializer->serialize($data);
         } else {
             return '';
         }
@@ -95,7 +105,7 @@ class Minsaleqty
         if (is_numeric($value)) {
             return [$this->getAllCustomersGroupId() => $this->fixQty($value)];
         } elseif (is_string($value) && !empty($value)) {
-            return unserialize($value);
+            return $this->serializer->unserialize($value);
         } else {
             return [];
         }

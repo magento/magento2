@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Analytics\Model\AnalyticsConnector">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="signUp" xsi:type="string">Magento\Analytics\Model\AnalyticsConnector\SignUpCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Model\View\Layout\ConditionPool">
+        <arguments>
+            <argument name="conditions" xsi:type="array">
+                <item name="analytics::can-view-notification" xsi:type="string">Magento\Analytics\Model\Condition\CanViewNotification</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Model\Subscription">
+        <arguments>
+            <argument name="configValueResource" xsi:type="object">Magento\Config\Model\ResourceModel\Config\Data</argument>
+        </arguments>
+    </type>
+</config>

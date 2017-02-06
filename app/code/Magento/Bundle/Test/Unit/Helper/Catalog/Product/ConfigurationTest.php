@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Helper\Catalog\Product;
@@ -27,6 +27,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $item;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->pricingHelper = $this->getMock(
@@ -48,6 +53,16 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class,
             ['getQty', 'getProduct', 'getOptionByCode', 'getFileDownloadParams']
         );
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->getMockForAbstractClass();
+
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
 
         $this->helper = (new ObjectManager($this))->getObject(
             \Magento\Bundle\Helper\Catalog\Product\Configuration::class,
@@ -55,6 +70,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
                 'pricingHelper' => $this->pricingHelper,
                 'productConfiguration' => $this->productConfiguration,
                 'escaper' => $this->escaper,
+                'serializer' => $this->serializer
             ]
         );
     }
@@ -127,8 +143,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBundleOptionsEmptyBundleSelectionIds()
     {
-        $optionIds = 'a:1:{i:0;i:1;}';
-
+        $optionIds = '{"0":"1"}';
         $collection = $this->getMock(\Magento\Bundle\Model\ResourceModel\Option\Collection::class, [], [], '', false);
         $product = $this->getMock(
             \Magento\Catalog\Model\Product::class,
@@ -152,7 +167,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $selectionOption->expects($this->once())->method('getValue')->will($this->returnValue(''));
         $itemOption->expects($this->once())->method('getValue')->will($this->returnValue($optionIds));
-        $typeInstance->expects($this->once())->method('getOptionsByIds')->with(unserialize($optionIds), $product)
+        $typeInstance->expects($this->once())->method('getOptionsByIds')->with(json_decode($optionIds, true), $product)
             ->will($this->returnValue($collection));
         $product->expects($this->once())->method('getTypeInstance')->will($this->returnValue($typeInstance));
         $this->item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
@@ -169,8 +184,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOptions()
     {
-        $optionIds = 'a:1:{i:0;i:1;}';
-        $selectionIds = 'a:1:{i:0;s:1:"2";}';
+        $optionIds = '{"0":"1"}';
+        $selectionIds =  '{"0":"2"}';
         $selectionId = '2';
         $product = $this->getMock(
             \Magento\Catalog\Model\Product::class,
@@ -237,9 +252,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())->method('appendSelections')->with($collection2, true)
             ->will($this->returnValue([$bundleOption]));
         $itemOption->expects($this->once())->method('getValue')->will($this->returnValue($optionIds));
-        $typeInstance->expects($this->once())->method('getOptionsByIds')->with(unserialize($optionIds), $product)
+        $typeInstance->expects($this->once())->method('getOptionsByIds')->with(json_decode($optionIds, true), $product)
             ->will($this->returnValue($collection));
-        $typeInstance->expects($this->once())->method('getSelectionsByIds')->with(unserialize($selectionIds), $product)
+        $typeInstance->expects($this->once())
+            ->method('getSelectionsByIds')
+            ->with(json_decode($selectionIds, true), $product)
             ->will($this->returnValue($collection2));
         $product->expects($this->once())->method('getTypeInstance')->will($this->returnValue($typeInstance));
         $product->expects($this->any())->method('getCustomOption')->with('selection_qty_' . $selectionId)
