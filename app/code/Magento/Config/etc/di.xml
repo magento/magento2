@@ -190,4 +190,19 @@
             <argument name="placeholder" xsi:type="object">Magento\Config\Model\Placeholder\Environment</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="configSetCommand" xsi:type="object">Magento\Config\Console\Command\ConfigSetCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorFactory">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Config\Console\Command\ConfigSet\DefaultProcessor</item>
+                <item name="lock" xsi:type="string">Magento\Config\Console\Command\ConfigSet\LockProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
