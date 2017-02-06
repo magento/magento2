@@ -14,8 +14,7 @@
     <preference for="Magento\Signifyd\Api\GuaranteeCreationServiceInterface" type="Magento\Signifyd\Model\Guarantee\CreationService" />
     <preference for="Magento\Signifyd\Api\GuaranteeCancelingServiceInterface" type="Magento\Signifyd\Model\Guarantee\CancelingService" />
     <preference for="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface" type="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder" />
-
-    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid">
         <arguments>
             <argument name="joins" xsi:type="array">
                 <item name="signifyd_case" xsi:type="array">
@@ -29,8 +28,7 @@
             </argument>
         </arguments>
     </virtualType>
-
-    <virtualType name="Magento\SalesArchive\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+    <virtualType name="Magento\SalesArchive\Model\ResourceModel\Order\Grid">
         <arguments>
             <argument name="joins" xsi:type="array">
                 <item name="signifyd_case" xsi:type="array">
