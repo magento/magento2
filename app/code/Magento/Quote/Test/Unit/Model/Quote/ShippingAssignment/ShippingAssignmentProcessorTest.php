@@ -115,22 +115,15 @@ class ShippingAssignmentProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveWithDeletedCartItems()
     {
-        $quoteId = 1;
-        $quoteItemMock = $this->createQuoteItemMock();
+        $quoteItemId = 1;
 
         $this->shippingAssignmentMock->expects(static::once())
             ->method('getItems')
-            ->willReturn([$quoteItemMock]);
+            ->willReturn([$this->createQuoteItemMock($quoteItemId, true)]);
         $this->quoteMock->expects(static::atLeastOnce())
             ->method('getItemById')
-            ->with($quoteId)
+            ->with($quoteItemId)
             ->willReturn(null);
-        $quoteItemMock->expects(static::atLeastOnce())
-            ->method('getItemId')
-            ->willReturn($quoteId);
-        $quoteItemMock->expects(static::atLeastOnce())
-            ->method('isDeleted')
-            ->willReturn(true);
         $this->cartItemPersisterMock->expects(static::never())
             ->method('save');
         $this->shippingAddressMock->expects(static::atLeastOnce())
@@ -171,12 +164,25 @@ class ShippingAssignmentProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Create quote item mock
+     *
+     * @param int|string $id
+     * @param bool $isDeleted
      * @return QuoteItem|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createQuoteItemMock()
+    private function createQuoteItemMock($id, $isDeleted)
     {
-        return $this->getMockBuilder(QuoteItem::class)
+        $quoteItemMock = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $quoteItemMock->expects(static::any())
+            ->method('getItemId')
+            ->willReturn($id);
+        $quoteItemMock->expects(static::any())
+            ->method('isDeleted')
+            ->willReturn($isDeleted);
+
+        return $quoteItemMock;
     }
 }
