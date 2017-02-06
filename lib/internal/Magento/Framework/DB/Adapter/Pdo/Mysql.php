@@ -2242,13 +2242,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if (!empty($relations)) {
             foreach ($relations as $fkData) {
                 $onDelete = $this->_getDdlAction($fkData['ON_DELETE']);
+                $onUpdate = $this->_getDdlAction($fkData['ON_UPDATE']);
                 $definition[] = sprintf(
-                    '  CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s) ON DELETE %s',
+                    '  CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s) ON DELETE %s ON UPDATE %s',
                     $this->quoteIdentifier($fkData['FK_NAME']),
                     $this->quoteIdentifier($fkData['COLUMN_NAME']),
                     $this->quoteIdentifier($fkData['REF_TABLE_NAME']),
                     $this->quoteIdentifier($fkData['REF_COLUMN_NAME']),
-                    $onDelete
+                    $onDelete,
+                    $onUpdate
                 );
             }
         }
