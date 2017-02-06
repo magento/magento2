@@ -113,6 +113,14 @@
     <preference for="Magento\Sales\Model\Order\Creditmemo\NotifierInterface" type="Magento\Sales\Model\Order\Creditmemo\Notifier"/>
     <preference for="Magento\Sales\Api\RefundOrderInterface" type="Magento\Sales\Model\RefundOrder"/>
     <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>
+    <preference for="Magento\Sales\Model\ResourceModel\Provider\IdListProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\IdListProviderComposite" />
+    <type name="Magento\Sales\Model\ResourceModel\Provider\IdListProviderComposite">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Sales\Model\ResourceModel\Report" shared="false"/>
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
         <arguments>

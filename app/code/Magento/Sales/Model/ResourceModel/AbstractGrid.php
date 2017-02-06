@@ -89,6 +89,8 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
      *
      * @param string $default
      * @return string
+     * @deprecated unused
+     * @see \Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider
      */
     protected function getLastUpdatedAtValue($default = '0000-00-00 00:00:00')
     {

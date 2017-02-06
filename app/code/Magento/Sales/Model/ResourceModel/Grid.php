@@ -5,9 +5,10 @@
  */
 namespace Magento\Sales\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Sales\Model\ResourceModel\AbstractGrid;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Sales\Model\ResourceModel\Provider\IdListProviderInterface;
 
 /**
  * Class Grid
@@ -40,6 +41,11 @@ class Grid extends AbstractGrid
     protected $columns;
 
     /**
+     * @var IdListProviderInterface
+     */
+    private $idListProvider;
+
+    /**
      * @param Context $context
      * @param string $mainTableName
      * @param string $gridTableName
@@ -47,6 +53,7 @@ class Grid extends AbstractGrid
      * @param array $joins
      * @param array $columns
      * @param string $connectionName
+     * @param IdListProviderInterface $idListProvider
      */
     public function __construct(
         Context $context,
@@ -55,13 +62,15 @@ class Grid extends AbstractGrid
         $orderIdField,
         array $joins = [],
         array $columns = [],
-        $connectionName = null
+        $connectionName = null,
+        IdListProviderInterface $idListProvider = null
     ) {
         $this->mainTableName = $mainTableName;
         $this->gridTableName = $gridTableName;
         $this->orderIdField = $orderIdField;
         $this->joins = $joins;
         $this->columns = $columns;
+        $this->idListProvider = $idListProvider ?: ObjectManager::getInstance()->get(IdListProviderInterface::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -99,7 +108,10 @@ class Grid extends AbstractGrid
     public function refreshBySchedule()
     {
         $select = $this->getGridOriginSelect()
-            ->where($this->mainTableName . '.updated_at >= ?', $this->getLastUpdatedAtValue());
+            ->where(
+                $this->mainTableName . '.entity_id IN (?)',
+                $this->idListProvider->get($this->mainTableName, $this->gridTableName)
+            );
 
         return $this->getConnection()->query(
             $this->getConnection()
