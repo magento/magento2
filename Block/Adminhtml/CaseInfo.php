@@ -32,16 +32,6 @@ class CaseInfo extends Template
     private $caseManagement;
 
     /**
-     * @var int
-     */
-    private static $scoreAccept = 500;
-
-    /**
-     * @var int
-     */
-    private static $scoreDecline = 300;
-
-    /**
      * Constructor
      *
      * @param Context $context
@@ -117,37 +107,19 @@ class CaseInfo extends Template
     public function getCaseStatus()
     {
         return $this->getCaseProperty('', function () {
-            return $this->getCaseEntity()->getStatus();
-        });
-    }
+            $caseStatusMap = [
+                CaseInterface::STATUS_OPEN => __('Open'),
+                CaseInterface::STATUS_PENDING => __('Pending'),
+                CaseInterface::STATUS_PROCESSING => __('Processing'),
+                CaseInterface::STATUS_FLAGGED => __('Flagged'),
+                CaseInterface::STATUS_DISMISSED => __('Dismissed')
+            ];
 
-    /**
-     * Gets case score value
-     *
-     * @return int
-     */
-    public function getCaseScore()
-    {
-        return $this->getCaseProperty(0, function () {
-            return $this->getCaseEntity()->getScore();
-        });
-    }
+            $status = isset($caseStatusMap[$this->getCaseEntity()->getStatus()]) ?
+                $caseStatusMap[$this->getCaseEntity()->getStatus()] :
+                '';
 
-    /**
-     * Gets state of case guarantee eligible.
-     *
-     * @return string|\Magento\Framework\Phrase
-     */
-    public function getCaseGuaranteeEligible()
-    {
-        return $this->getCaseProperty('', function () {
-            $value = $this->getCaseEntity()->isGuaranteeEligible();
-
-            if ($value === null) {
-                return '';
-            }
-
-            return $value ? __('Yes') : __('No');
+            return $status;
         });
     }
 
@@ -159,7 +131,20 @@ class CaseInfo extends Template
     public function getCaseGuaranteeDisposition()
     {
         return $this->getCaseProperty('', function () {
-            return $this->getCaseEntity()->getGuaranteeDisposition();
+            $guaranteeStatusMap = [
+                CaseInterface::GUARANTEE_APPROVED => __('Approved'),
+                CaseInterface::GUARANTEE_DECLINED => __('Declined'),
+                CaseInterface::GUARANTEE_PENDING => __('Pending'),
+                CaseInterface::GUARANTEE_CANCELED => __('Canceled'),
+                CaseInterface::GUARANTEE_IN_REVIEW => __('In Review'),
+                CaseInterface::GUARANTEE_UNREQUESTED => __('Unrequested')
+            ];
+
+            $status = isset($guaranteeStatusMap[$this->getCaseEntity()->getGuaranteeDisposition()]) ?
+                $guaranteeStatusMap[$this->getCaseEntity()->getGuaranteeDisposition()] :
+                '';
+
+            return $status;
         });
     }
 
@@ -171,72 +156,17 @@ class CaseInfo extends Template
     public function getCaseReviewDisposition()
     {
         return $this->getCaseProperty('', function () {
-            return $this->getCaseEntity()->getReviewDisposition();
-        });
-    }
+            $reviewStatusMap = [
+                CaseInterface::DISPOSITION_GOOD => __('Good'),
+                CaseInterface::DISPOSITION_FRAUDULENT => __('Fraudulent'),
+                CaseInterface::DISPOSITION_UNSET => __('Unset')
+            ];
 
-    /**
-     * Gets case create date.
-     *
-     * @return string
-     */
-    public function getCaseCreatedAt()
-    {
-        return $this->getCaseProperty('asd', function () {
-            return $this->getCaseEntity()->getCreatedAt();
-        });
-    }
+            $status = isset($reviewStatusMap[$this->getCaseEntity()->getReviewDisposition()]) ?
+                $reviewStatusMap[$this->getCaseEntity()->getReviewDisposition()] :
+                '';
 
-    /**
-     * Gets case update date.
-     *
-     * @return string
-     */
-    public function getCaseUpdatedAt()
-    {
-        return $this->getCaseProperty('', function () {
-            return $this->getCaseEntity()->getUpdatedAt();
-        });
-    }
-
-    /**
-     * Gets case associated team name.
-     *
-     * @return string
-     */
-    public function getCaseAssociatedTeam()
-    {
-        return $this->getCaseProperty('', function () {
-            $teamName = 'unknown';
-            $team = $this->getCaseEntity()->getAssociatedTeam();
-            if (isset($team['teamName'])) {
-                $teamName = $team['teamName'];
-            }
-
-            return $teamName;
-        });
-    }
-
-    /**
-     * Returns cell class name according to case score value.
-     * It could be used by merchant to customize order view template.
-     *
-     * @return string
-     */
-    public function getScoreClass()
-    {
-        return $this->getCaseProperty('', function () {
-            $score = $this->getCaseEntity()->getScore();
-
-            if (self::$scoreAccept <= $score) {
-                $result = 'green';
-            } elseif ($score <= self::$scoreDecline) {
-                $result = 'red';
-            } else {
-                $result = 'yellow';
-            }
-
-            return $result;
+            return $status;
         });
     }
 
