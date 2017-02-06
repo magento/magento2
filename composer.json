@@ -37,7 +37,7 @@
         "colinmollenhour/cache-backend-redis": "1.9",
         "colinmollenhour/cache-backend-file": "1.4",
         "composer/composer": "1.0.0-beta1",
-        "monolog/monolog": "1.16.0",
+        "monolog/monolog": "^1.17",
         "oyejorge/less.php": "~1.7.0",
         "pelago/emogrifier": "0.1.1",
         "tubalmartin/cssmin": "2.4.8-p4",
