@@ -90,7 +90,8 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
      *
      * @param string $default
      * @return string
-     * @deprecated unused
+     * @deprecated this method is not used in abstract model but only in single child so
+     * this deprecation is a part of cleaning abstract classes.
      * @see \Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider
      */
     protected function getLastUpdatedAtValue($default = '0000-00-00 00:00:00')

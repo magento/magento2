@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\ResourceModel;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Sales\Model\ResourceModel\Provider\IdListProviderInterface;
+use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
 
 /**
  * Class Grid
@@ -41,7 +41,7 @@ class Grid extends AbstractGrid
     protected $columns;
 
     /**
-     * @var IdListProviderInterface
+     * @var NotSyncedDataProviderInterface
      */
     private $idListProvider;
 
@@ -53,7 +53,7 @@ class Grid extends AbstractGrid
      * @param array $joins
      * @param array $columns
      * @param string $connectionName
-     * @param IdListProviderInterface $idListProvider
+     * @param NotSyncedDataProviderInterface $idListProvider
      */
     public function __construct(
         Context $context,
@@ -63,14 +63,14 @@ class Grid extends AbstractGrid
         array $joins = [],
         array $columns = [],
         $connectionName = null,
-        IdListProviderInterface $idListProvider = null
+        NotSyncedDataProviderInterface $idListProvider = null
     ) {
         $this->mainTableName = $mainTableName;
         $this->gridTableName = $gridTableName;
         $this->orderIdField = $orderIdField;
         $this->joins = $joins;
         $this->columns = $columns;
-        $this->idListProvider = $idListProvider ?: ObjectManager::getInstance()->get(IdListProviderInterface::class);
+        $this->idListProvider = $idListProvider ?: ObjectManager::getInstance()->get(NotSyncedDataProviderInterface::class);
         parent::__construct($context, $connectionName);
     }
 

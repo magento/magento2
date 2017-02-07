@@ -8,12 +8,12 @@ namespace Magento\Sales\Model\ResourceModel\Provider;
 use Magento\Framework\ObjectManager\TMapFactory;
 
 /**
- * Implements IdListProviderInterface as composite
+ * Implements NotSyncedDataProviderInterface as composite
  */
-class IdListProvider implements IdListProviderInterface
+class NotSyncedDataProvider implements NotSyncedDataProviderInterface
 {
     /**
-     * @var IdListProviderInterface[]
+     * @var NotSyncedDataProviderInterface[]
      */
     private $providers;
 
@@ -28,7 +28,7 @@ class IdListProvider implements IdListProviderInterface
         $this->providers = $tmapFactory->create(
             [
                 'array' => $providers,
-                'type' => IdListProviderInterface::class
+                'type' => NotSyncedDataProviderInterface::class
             ]
         );
     }
@@ -36,13 +36,13 @@ class IdListProvider implements IdListProviderInterface
     /**
      * @inheritDoc
      */
-    public function get($mainTableName, $gridTableName)
+    public function getIds($mainTableName, $gridTableName)
     {
         $result = [];
         foreach ($this->providers as $provider) {
             $result = array_merge($result, $provider->get($mainTableName, $gridTableName));
         }
 
-        return $result;
+        return array_unique($result);
     }
 }

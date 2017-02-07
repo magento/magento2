@@ -7,14 +7,14 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Provider;
 
 use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
-use Magento\Sales\Model\ResourceModel\Provider\IdListProvider;
-use Magento\Sales\Model\ResourceModel\Provider\IdListProviderInterface;
+use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider;
+use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class IdListProviderTest
+ * Class NotSyncedDataProviderTest
  */
-class IdListProviderTest extends \PHPUnit_Framework_TestCase
+class NotSyncedDataProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetEmpty()
     {
@@ -32,7 +32,7 @@ class IdListProviderTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'array' => [],
-                    'type' => IdListProviderInterface::class
+                    'type' => NotSyncedDataProviderInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -40,12 +40,12 @@ class IdListProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
 
-        $provider = new IdListProvider($tMapFactory, []);
-        static::assertEquals([], $provider->get('main_table', 'grid_table'));
+        $provider = new NotSyncedDataProvider($tMapFactory, []);
+        static::assertEquals([], $provider->getIds('main_table', 'grid_table'));
     }
 
     /**
-     * @covers \Magento\Sales\Model\ResourceModel\Provider\IdListProvider::get
+     * @covers \Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider::get
      */
     public function testGet()
     {
@@ -58,27 +58,27 @@ class IdListProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $provider1 = $this->getMockBuilder(IdListProviderInterface::class)
+        $provider1 = $this->getMockBuilder(NotSyncedDataProviderInterface::class)
             ->getMockForAbstractClass();
         $provider1->expects(static::once())
             ->method('get')
             ->willReturn([1, 2]);
 
-        $provider2 = $this->getMockBuilder(IdListProviderInterface::class)
+        $provider2 = $this->getMockBuilder(NotSyncedDataProviderInterface::class)
             ->getMockForAbstractClass();
         $provider2->expects(static::once())
             ->method('get')
-            ->willReturn([3, 4]);
+            ->willReturn([2, 3, 4]);
 
         $tMapFactory->expects(static::once())
             ->method('create')
             ->with(
                 [
                     'array' => [
-                        'provider1' => IdListProviderInterface::class,
-                        'provider2' => IdListProviderInterface::class
+                        'provider1' => NotSyncedDataProviderInterface::class,
+                        'provider2' => NotSyncedDataProviderInterface::class
                     ],
-                    'type' => IdListProviderInterface::class
+                    'type' => NotSyncedDataProviderInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -86,14 +86,14 @@ class IdListProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$provider1, $provider2]));
 
-        $provider = new IdListProvider(
+        $provider = new NotSyncedDataProvider(
             $tMapFactory,
             [
-                'provider1' => IdListProviderInterface::class,
-                'provider2' => IdListProviderInterface::class,
+                'provider1' => NotSyncedDataProviderInterface::class,
+                'provider2' => NotSyncedDataProviderInterface::class,
             ]
         );
 
-        static::assertEquals([1, 2, 3, 4], $provider->get('main_table', 'grid_table'));
+        static::assertEquals([1, 2, 3, 4], array_values($provider->getIds('main_table', 'grid_table')));
     }
 }

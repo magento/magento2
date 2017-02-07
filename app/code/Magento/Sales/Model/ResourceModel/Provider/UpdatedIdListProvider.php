@@ -11,7 +11,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 /**
  * Provides latest updated entities ids list
  */
-class UpdatedIdListProvider implements IdListProviderInterface
+class UpdatedIdListProvider implements NotSyncedDataProviderInterface
 {
     /**
      * @var ResourceConnection
@@ -24,7 +24,7 @@ class UpdatedIdListProvider implements IdListProviderInterface
     private $connection;
 
     /**
-     * IdListProvider constructor.
+     * NotSyncedDataProvider constructor.
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
@@ -36,7 +36,7 @@ class UpdatedIdListProvider implements IdListProviderInterface
     /**
      * @inheritdoc
      */
-    public function get($mainTableName, $gridTableName)
+    public function getIds($mainTableName, $gridTableName)
     {
         $lastUpdatedAt = $this->getLastUpdatedAtValue($gridTableName);
         $select = $this->getConnection()->select()
