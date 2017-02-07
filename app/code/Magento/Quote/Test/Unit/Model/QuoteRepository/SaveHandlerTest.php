@@ -11,10 +11,12 @@ use Magento\Quote\Model\ResourceModel\Quote as QuoteResourceModel;
 use Magento\Quote\Model\Quote\Item\CartItemPersister;
 use Magento\Quote\Model\Quote\Address\BillingAddressPersister;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister;
+use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,6 +51,11 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     private $shippingAssignmentPersisterMock;
 
     /**
+     * @var AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $addressRepositoryMock;
+
+    /**
      * @var Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     private $quoteMock;
@@ -77,6 +84,8 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->shippingAssignmentPersisterMock = $this->getMockBuilder(ShippingAssignmentPersister::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->addressRepositoryMock = $this->getMockBuilder(AddressRepositoryInterface::class)
+            ->getMockForAbstractClass();
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -88,7 +97,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->billingAddressMock = $this->getMockBuilder(QuoteAddress::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerAddressId', 'getCustomerAddress', 'setCustomerAddressId'])
             ->getMock();
         $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
             ->getMockForAbstractClass();
@@ -107,7 +115,8 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
                 'quoteResource' => $this->quoteResourceModelMock,
                 'cartItemPersister' => $this->cartItemPersisterMock,
                 'billingAddressPersister' => $this->billingAddressPersisterMock,
-                'ShippingAssignmentPersister' => $this->shippingAssignmentPersisterMock
+                'shippingAssignmentPersister' => $this->shippingAssignmentPersisterMock,
+                'addressRepository' => $this->addressRepositoryMock
             ]
         );
     }
@@ -153,6 +162,8 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveWithNotExistingCustomerAddress()
     {
+        $customerAddressId = 5;
+
         $this->quoteMock->expects(static::atLeastOnce())
             ->method('getItems')
             ->willReturn([]);
@@ -160,11 +171,12 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setLastAddedItem');
         $this->billingAddressMock->expects(static::atLeastOnce())
             ->method('getCustomerAddressId')
-            ->willReturn(5);
-        $this->billingAddressMock->expects(static::atLeastOnce())
-            ->method('getCustomerAddress')
-            ->willReturn(null);
-        $this->billingAddressMock->expects(static::atLeastOnce())
+            ->willReturn($customerAddressId);
+        $this->addressRepositoryMock->expects(static::once())
+            ->method('getById')
+            ->with($customerAddressId)
+            ->willThrowException(new NoSuchEntityException());
+        $this->billingAddressMock->expects(static::once())
             ->method('setCustomerAddressId')
             ->willReturn(null);
         $this->billingAddressPersisterMock->expects(static::once())

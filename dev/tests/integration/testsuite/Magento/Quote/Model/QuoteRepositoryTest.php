@@ -9,6 +9,7 @@ use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchResults;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\CartSearchResultsInterface;
@@ -70,6 +71,10 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($searchResult->getItems());
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
     public function testSaveWithNotExistingCustomerAddress()
     {
         $addressData = include __DIR__ . '/../../Sales/_files/address_data.php';
@@ -107,6 +112,16 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setExtensionAttributes($extensionAttributes)
             ->save();
         $this->quoteRepository->save($quote);
+
+        $this->assertNull($quote->getBillingAddress()->getCustomerAddressId());
+        $this->assertNull($quote->getShippingAddress()->getCustomerAddressId());
+        $this->assertNull(
+            $quote->getExtensionAttributes()
+                ->getShippingAssignments()[0]
+                ->getShipping()
+                ->getAddress()
+                ->getCustomerAddressId()
+        );
     }
 
     /**
@@ -130,9 +145,9 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Perform assertions
      *
-     * @param CartSearchResultsInterface $searchResult
+     * @param SearchResults|CartSearchResultsInterface $searchResult
      */
-    private function performAssertions(CartSearchResultsInterface $searchResult)
+    private function performAssertions($searchResult)
     {
         $expectedExtensionAttributes = [
             'firstname' => 'firstname',

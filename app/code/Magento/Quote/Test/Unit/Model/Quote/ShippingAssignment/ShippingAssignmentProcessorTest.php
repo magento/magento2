@@ -100,6 +100,9 @@ class ShippingAssignmentProcessorTest extends \PHPUnit_Framework_TestCase
         $this->shippingAssignmentMock->expects(static::any())
             ->method('getShipping')
             ->willReturn($this->shippingMock);
+        $this->shippingMock->expects(static::any())
+            ->method('getAddress')
+            ->willReturn($this->shippingAddressMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->shippingAssignmentProcessor = $this->objectManagerHelper->getObject(
@@ -152,7 +155,7 @@ class ShippingAssignmentProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getById')
             ->with($customerAddressId)
             ->willThrowException(new NoSuchEntityException());
-        $this->shippingAddressMock->expects(static::once())
+        $this->shippingAddressMock->expects(static::exactly(2))
             ->method('setCustomerAddressId')
             ->with(null)
             ->willReturn($this->shippingAddressMock);

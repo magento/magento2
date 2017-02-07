@@ -6,6 +6,9 @@
 namespace Magento\Quote\Model\QuoteRepository;
 
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
 
 class SaveHandler
@@ -31,21 +34,30 @@ class SaveHandler
     private $shippingAssignmentPersister;
 
     /**
+     * @var AddressRepositoryInterface
+     */
+    private $addressRepository;
+
+    /**
      * @param \Magento\Quote\Model\ResourceModel\Quote $quoteResource
      * @param \Magento\Quote\Model\Quote\Item\CartItemPersister $cartItemPersister
      * @param \Magento\Quote\Model\Quote\Address\BillingAddressPersister $billingAddressPersister
      * @param \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister $shippingAssignmentPersister
+     * @param AddressRepositoryInterface $addressRepository
      */
     public function __construct(
         \Magento\Quote\Model\ResourceModel\Quote $quoteResource,
         \Magento\Quote\Model\Quote\Item\CartItemPersister $cartItemPersister,
         \Magento\Quote\Model\Quote\Address\BillingAddressPersister $billingAddressPersister,
-        \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister $shippingAssignmentPersister
+        \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister $shippingAssignmentPersister,
+        AddressRepositoryInterface $addressRepository = null
     ) {
         $this->quoteResourceModel = $quoteResource;
         $this->cartItemPersister = $cartItemPersister;
         $this->billingAddressPersister = $billingAddressPersister;
         $this->shippingAssignmentPersister = $shippingAssignmentPersister;
+        $this->addressRepository = $addressRepository
+            ?: ObjectManager::getInstance()->get(AddressRepositoryInterface::class);
     }
 
     /**
@@ -76,8 +88,12 @@ class SaveHandler
         $billingAddress = $quote->getBillingAddress();
 
         if ($billingAddress) {
-            if ($billingAddress->getCustomerAddressId() && !$billingAddress->getCustomerAddress()) {
-                $billingAddress->setCustomerAddressId(null);
+            if ($billingAddress->getCustomerAddressId()) {
+                try {
+                    $this->addressRepository->getById($billingAddress->getCustomerAddressId());
+                } catch (NoSuchEntityException $e) {
+                    $billingAddress->setCustomerAddressId(null);
+                }
             }
 
             $this->billingAddressPersister->save($quote, $billingAddress);
