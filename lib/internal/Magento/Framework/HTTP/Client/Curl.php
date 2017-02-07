@@ -232,14 +232,13 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param string $uri
      * @param array $params
-     * @param bool $json
      * @return void
      *
      * @see \Magento\Framework\HTTP\Client#post($uri, $params)
      */
-    public function post($uri, $params, $json = false)
+    public function post($uri, $params)
     {
-        $this->makeRequest("POST", $uri, $params, $json = false);
+        $this->makeRequest("POST", $uri, $params);
     }
 
     /**
@@ -338,19 +337,18 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Make request
      * @param string $method
      * @param string $uri
-     * @param array $params
-     * @param bool $json
+     * @param array array|string $params
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function makeRequest($method, $uri, $params = [], $json = false)
+    protected function makeRequest($method, $uri, $params = [])
     {
         $this->_ch = curl_init();
         $this->curlOption(CURLOPT_URL, $uri);
         if ($method == 'POST') {
             $this->curlOption(CURLOPT_POST, 1);
-            $this->curlOption(CURLOPT_POSTFIELDS, $json ? json_encode($params) : http_build_query($params));
+            $this->curlOption(CURLOPT_POSTFIELDS, is_array($params) ? http_build_query($params) : $params);
         } elseif ($method == "GET") {
             $this->curlOption(CURLOPT_HTTPGET, 1);
         } else {
