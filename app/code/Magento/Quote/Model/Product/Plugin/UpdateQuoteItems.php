@@ -6,7 +6,7 @@
 namespace Magento\Quote\Model\Product\Plugin;
 
 /**
- * AroundSave plugin for product resource model to update quote items prices if product price is changed
+ * BeforeSave plugin for product resource model to update quote items prices if product price is changed
  */
 class UpdateQuoteItems
 {
@@ -26,21 +26,16 @@ class UpdateQuoteItems
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Product $subject
-     * @param \Closure $proceed
      * @param \Magento\Framework\Model\AbstractModel $product
-     * @return \Magento\Catalog\Model\ResourceModel\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
+    public function beforeSave(
         \Magento\Catalog\Model\ResourceModel\Product $subject,
-        \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $product
     ) {
-        $result = $proceed($product);
         $originalPrice = $product->getOrigData('price');
         if (!empty($originalPrice) && ($originalPrice != $product->getPrice())) {
             $this->resource->markQuotesRecollect($product->getId());
         }
-        return $result;
     }
 }
