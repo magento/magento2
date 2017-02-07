@@ -37,7 +37,7 @@ class OrderGridUpdaterTest extends \PHPUnit_Framework_TestCase
         $this->globalConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->model = new \Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater($this->orderGrid, $this->globalConfig);
+        $this->model = new OrderGridUpdater($this->orderGrid, $this->globalConfig);
     }
 
     public function testUpdateInSyncMode()
