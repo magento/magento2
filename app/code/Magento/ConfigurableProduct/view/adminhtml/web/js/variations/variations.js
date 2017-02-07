@@ -127,7 +127,7 @@ define([
 
         /**
          * @param {String} name
-         * @return {*|jQuery}
+         * @return {String|Number|Array}
          */
         getProductValue: function (name) {
             name = name.split('/').join('][');
@@ -147,7 +147,7 @@ define([
         },
 
         /**
-         * @param {Object}variation
+         * @param {Object} variation
          * @param {String} field
          * @return {String}
          */
@@ -274,8 +274,7 @@ define([
         /**
          * Get attributes options
          * @see use in matrix.phtml
-         * @function
-         * @event
+         *
          * @returns {Array}
          */
         getAttributesOptions: function () {
@@ -324,7 +323,7 @@ define([
         },
 
         /**
-         * @param {Object}options
+         * @param {Object} options
          * @return {String}
          */
         getVariationKey: function (options) {
@@ -374,7 +373,7 @@ define([
 
         /**
          * Get currency symbol
-         * @returns {*}
+         * @returns {String}
          */
         getCurrencySymbol: function () {
             return this.currencySymbol;
@@ -469,34 +468,30 @@ define([
                 dataType: 'json',
                 showLoader: true,
                 context: this
-            })
+            }).success(function (data) {
+                if (!data.error) {
+                    this.set(
+                        'skeletonAttributeSet',
+                        data.id
+                    );
+                    messageBoxElement.content(data.messages);
+                    messageBoxElement.visible(true);
+                    this.closeDialogAndProcessForm();
+                } else {
+                    messageBoxElement.content(data.messages);
+                    messageBoxElement.visible(true);
+                }
 
-                .success(function (data) {
-                    if (!data.error) {
-                        this.set(
-                            'skeletonAttributeSet',
-                            data.id
-                        );
-                        messageBoxElement.content(data.messages);
-                        messageBoxElement.visible(true);
-                        this.closeDialogAndProcessForm();
-                    } else {
-                        messageBoxElement.content(data.messages);
-                        messageBoxElement.visible(true);
-                    }
+                return false;
+            }).error(function (xhr) {
+                if (xhr.statusText === 'abort') {
+                    return;
+                }
 
-                    return false;
-                })
-
-                .error(function (xhr) {
-                    if (xhr.statusText === 'abort') {
-                        return;
-                    }
-
-                    alert({
-                        content: $t('Something went wrong.')
-                    });
+                alert({
+                    content: $t('Something went wrong.')
                 });
+            });
 
             return false;
         },

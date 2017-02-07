@@ -13,12 +13,20 @@ define([
             template: 'Magento_OfflinePayments/payment/checkmo'
         },
 
-        /** Returns send check to info */
+        /**
+         * Returns send check to info.
+         *
+         * @return {*}
+         */
         getMailingAddress: function () {
             return window.checkoutConfig.payment.checkmo.mailingAddress;
         },
 
-        /** Returns payable to info */
+        /**
+         * Returns payable to info.
+         *
+         * @return {*}
+         */
         getPayableTo: function () {
             return window.checkoutConfig.payment.checkmo.payableTo;
         }

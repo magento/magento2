@@ -117,7 +117,7 @@ define([
         /**
          * @param {Object} attribute
          * @param {*} index
-         * @return {*}
+         * @return {Object}
          */
         createAttribute: function (attribute, index) {
             attribute.chosenOptions = ko.observableArray([]);
@@ -133,7 +133,7 @@ define([
         },
 
         /**
-         * Dirst 3 attribute panels must be open.
+         * First 3 attribute panels must be open.
          *
          * @param {Number} index
          * @return {Boolean}

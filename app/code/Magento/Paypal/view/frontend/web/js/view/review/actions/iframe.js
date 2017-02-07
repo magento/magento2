@@ -46,7 +46,7 @@ define([
         },
 
         /**
-         * @param {Object}context
+         * @param {Object} context
          * @return {Function}
          */
         placeOrder: function (context) {

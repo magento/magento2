@@ -37,6 +37,7 @@ define([
 
         /**
          * Initialize
+         *
          * @param {Array} options
          */
         initialize: function (options) {
@@ -48,9 +49,7 @@ define([
                     {
                         text: $.mage.__('Cancel'),
 
-                        /**
-                         * Close modal
-                         */
+                        /** Close modal */
                         click: function () {
                             this.closeModal();
                         }

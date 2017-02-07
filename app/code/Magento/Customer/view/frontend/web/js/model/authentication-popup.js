@@ -12,7 +12,11 @@ define([
     return {
         modalWindow: null,
 
-        /** Create popUp window for provided element */
+        /**
+         * Create popUp window for provided element
+         *
+         * @param {HTMLElement} element
+         */
         createPopUp: function (element) {
             var options = {
                 'type': 'popup',

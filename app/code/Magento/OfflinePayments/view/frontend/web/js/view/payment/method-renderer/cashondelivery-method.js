@@ -13,7 +13,11 @@ define([
             template: 'Magento_OfflinePayments/payment/cashondelivery'
         },
 
-        /** Returns payment method instructions */
+        /**
+         * Returns payment method instructions.
+         *
+         * @return {*}
+         */
         getInstructions: function () {
             return window.checkoutConfig.payment.instructions[this.item.method];
         }

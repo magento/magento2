@@ -39,6 +39,7 @@ define([
 
         /**
          * This method set the url for the redirect.
+         * @param {jQuery.Event} event
          * @private
          */
         _checkCookie: function (event) {

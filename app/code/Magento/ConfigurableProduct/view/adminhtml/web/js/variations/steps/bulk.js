@@ -132,8 +132,7 @@ define([
 
             if (flag) {
                 this.wizard.setNotificationMessage(
-                    $.mage.__('Choose this option to delete and replace extension data ' +
-                    'for all past configurations.')
+                    $.mage.__('Choose this option to delete and replace extension data for all past configurations.')
                 );
             } else {
                 this.wizard.cleanNotificationMessage();
@@ -388,7 +387,7 @@ define([
                         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 
                         /**
-                         * @param {jQuery.Event}e
+                         * @param {jQuery.Event} e
                          * @param {Object} data
                          */
                         add: function (e, data) {
@@ -420,7 +419,7 @@ define([
                         },
 
                         /**
-                         * @param {jQuery.Event}e
+                         * @param {jQuery.Event} e
                          * @param {Object} data
                          */
                         done: function (e, data) {
@@ -438,7 +437,7 @@ define([
                         },
 
                         /**
-                         * @param {jQuery.Event}e
+                         * @param {jQuery.Event} e
                          * @param {Object} data
                          */
                         progress: function (e, data) {
@@ -449,7 +448,7 @@ define([
                         },
 
                         /**
-                         * @param {jQuery.Event}e
+                         * @param {jQuery.Event} e
                          * @param {Object} data
                          */
                         fail: function (e, data) {

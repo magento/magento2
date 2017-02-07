@@ -258,7 +258,8 @@ define([
 
         /**
          * @param {*} price
-         * @param {*} showSign
+         * @param {Boolean} showSign
+         * @return {String}
          */
         formatPrice: function (price, showSign) {
             var str = '',
@@ -303,6 +304,7 @@ define([
 
         /**
          * @param {*} attributeId
+         * @return {*|undefined}
          */
         getAttributeOptions: function (attributeId) {
             if (this.config.attributes[attributeId]) {
@@ -312,6 +314,7 @@ define([
 
         /**
          * Reload price.
+         * @return {undefined|Number}
          */
         reloadPrice: function () {
             var price = 0,
@@ -345,15 +348,7 @@ define([
             );
             optionsPrice.reload();
 
-            /* eslint-disable */
-
             return price;
-
-            if ($('product-price-' + this.config.productId)) {
-                $('product-price-' + this.config.productId).innerHTML = price;
-            }
-            this.reloadOldPrice();
-            /* eslint-enable */
         },
 
         /**

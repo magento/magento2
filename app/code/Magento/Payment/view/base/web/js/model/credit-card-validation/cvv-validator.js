@@ -19,8 +19,12 @@ define([], function () {
     }
 
     /**
-     * CVV number validation
-     * validate digit count fot CVV code
+     * CVV number validation.
+     * Validate digit count fot CVV code.
+     *
+     * @param {*} value
+     * @param {Number} maxLength
+     * @return {Object}
      */
     return function (value, maxLength) {
         var DEFAULT_LENGTH = 3;

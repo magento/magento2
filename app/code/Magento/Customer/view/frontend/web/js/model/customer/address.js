@@ -7,8 +7,10 @@ define([], function () {
     'use strict';
 
     /**
+     * Returns new address object.
+     *
      * @param {Object} addressData
-     * Returns new address object
+     * @return {Object}
      */
     return function (addressData) {
         var regionId;

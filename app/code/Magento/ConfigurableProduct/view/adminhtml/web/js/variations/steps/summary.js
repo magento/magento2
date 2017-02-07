@@ -215,7 +215,7 @@ define([
         },
 
         /**
-         * @param {*}attributes
+         * @param {*} attributes
          * @return {Array}
          */
         getColumnsName: function (attributes) {
