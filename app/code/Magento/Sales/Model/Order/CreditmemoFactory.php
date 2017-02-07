@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -24,21 +24,32 @@ class CreditmemoFactory
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
+     * @deprecated
      */
     protected $unserialize;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
 
     /**
      * Factory constructor
      *
      * @param \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
-        \Magento\Tax\Model\Config $taxConfig
+        \Magento\Tax\Model\Config $taxConfig,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->convertor = $convertOrderFactory->create();
         $this->taxConfig = $taxConfig;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Framework\Serialize\Serializer\Json::class
+        );
     }
 
     /**
@@ -262,7 +273,7 @@ class CreditmemoFactory
 
     /**
      * @param \Magento\Sales\Api\Data\OrderItemInterface $orderItem
-     * @param array $qtys
+     * @param int $parentQty
      * @return int
      */
     private function calculateProductOptions(\Magento\Sales\Api\Data\OrderItemInterface $orderItem, $parentQty)
@@ -270,27 +281,12 @@ class CreditmemoFactory
         $qty = $parentQty;
         $productOptions = $orderItem->getProductOptions();
         if (isset($productOptions['bundle_selection_attributes'])) {
-            $bundleSelectionAttributes = $this->getUnserialize()
+            $bundleSelectionAttributes = $this->serializer
                 ->unserialize($productOptions['bundle_selection_attributes']);
             if ($bundleSelectionAttributes) {
                 $qty = $bundleSelectionAttributes['qty'] * $parentQty;
             }
         }
         return $qty;
-    }
-
-    /**
-     * Get Unserialize
-     *
-     * @return \Magento\Framework\Unserialize\Unserialize
-     * @deprecated
-     */
-    private function getUnserialize()
-    {
-        if (!$this->unserialize) {
-            $this->unserialize = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Unserialize\Unserialize::class);
-        }
-        return $this->unserialize;
     }
 }

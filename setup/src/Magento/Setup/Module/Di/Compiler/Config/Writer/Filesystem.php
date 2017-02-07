@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,7 +46,7 @@ class Filesystem implements WriterInterface
         $this->initialize();
 
         file_put_contents(
-            $this->directoryList->getPath(DirectoryList::DI) . '/' . $key  . '.ser',
+            $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $key  . '.ser',
             $this->getSerializer()->serialize($config)
         );
     }
@@ -58,8 +58,8 @@ class Filesystem implements WriterInterface
      */
     private function initialize()
     {
-        if (!file_exists($this->directoryList->getPath(DirectoryList::DI))) {
-            mkdir($this->directoryList->getPath(DirectoryList::DI));
+        if (!file_exists($this->directoryList->getPath(DirectoryList::GENERATED_METADATA))) {
+            mkdir($this->directoryList->getPath(DirectoryList::GENERATED_METADATA));
         }
     }
 

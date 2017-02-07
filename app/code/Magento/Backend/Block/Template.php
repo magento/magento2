@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
@@ -70,17 +70,12 @@ class Template extends \Magento\Framework\View\Element\Template
      *
      * @param string $moduleName Full module name
      * @return boolean
+     * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isOutputEnabled($moduleName = null)
     {
-        if ($moduleName === null) {
-            $moduleName = $this->getModuleName();
-        }
-
-        return !$this->_scopeConfig->isSetFlag(
-            'advanced/modules_disable_output/' . $moduleName,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return true;
     }
 
     /**

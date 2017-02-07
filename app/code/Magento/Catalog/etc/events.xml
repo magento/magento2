@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -50,5 +50,8 @@
     </event>
     <event name="magento_catalog_api_data_categorytreeinterface_load_after">
         <observer name="legacy_categorytree_load_after" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
+    </event>
+    <event name="admin_system_config_changed_section_catalog">
+        <observer name="catalog_update_price_attribute" instance="Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange" />
     </event>
 </config>

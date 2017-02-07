@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class UpgradeCommand extends AbstractSetupCommand
 {
     /**
-     * Option to skip deletion of var/generation directory
+     * Option to skip deletion of generated/code directory
      */
     const INPUT_KEY_KEEP_GENERATED = 'keep-generated';
 

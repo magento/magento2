@@ -1,14 +1,113 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
-
+/**
+ * Class Save
+ *
+ * Save controller for system entities such as: Store, StoreGroup, Website
+ */
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
+    /**
+     * Process Website model save
+     *
+     * @param array $postData
+     * @return array
+     */
+    private function processWebsiteSave($postData)
+    {
+        $postData['website']['name'] = $this->filterManager->removeTags($postData['website']['name']);
+        $websiteModel = $this->_objectManager->create(\Magento\Store\Model\Website::class);
+        if ($postData['website']['website_id']) {
+            $websiteModel->load($postData['website']['website_id']);
+        }
+        $websiteModel->setData($postData['website']);
+        if ($postData['website']['website_id'] == '') {
+            $websiteModel->setId(null);
+        }
+
+        $websiteModel->save();
+        $this->messageManager->addSuccess(__('You saved the website.'));
+
+        return $postData;
+    }
+
+    /**
+     * Process Store model save
+     *
+     * @param array $postData
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return array
+     */
+    private function processStoreSave($postData)
+    {
+        $eventName = 'store_edit';
+        /** @var \Magento\Store\Model\Store $storeModel */
+        $storeModel = $this->_objectManager->create(\Magento\Store\Model\Store::class);
+        $postData['store']['name'] = $this->filterManager->removeTags($postData['store']['name']);
+        if ($postData['store']['store_id']) {
+            $storeModel->load($postData['store']['store_id']);
+        }
+        $storeModel->setData($postData['store']);
+        if ($postData['store']['store_id'] == '') {
+            $storeModel->setId(null);
+            $eventName = 'store_add';
+        }
+        $groupModel = $this->_objectManager->create(
+            \Magento\Store\Model\Group::class
+        )->load(
+            $storeModel->getGroupId()
+        );
+        $storeModel->setWebsiteId($groupModel->getWebsiteId());
+        if (!$storeModel->isActive() && $storeModel->isDefault()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The default store cannot be disabled')
+            );
+        }
+        $storeModel->save();
+        $this->_objectManager->get(\Magento\Store\Model\StoreManager::class)->reinitStores();
+        $this->_eventManager->dispatch($eventName, ['store' => $storeModel]);
+        $this->messageManager->addSuccess(__('You saved the store view.'));
+
+        return $postData;
+    }
+
+    /**
+     * Process StoreGroup model save
+     *
+     * @param array $postData
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return array
+     */
+    private function processGroupSave($postData)
+    {
+        $postData['group']['name'] = $this->filterManager->removeTags($postData['group']['name']);
+        /** @var \Magento\Store\Model\Group $groupModel */
+        $groupModel = $this->_objectManager->create(\Magento\Store\Model\Group::class);
+        if ($postData['group']['group_id']) {
+            $groupModel->load($postData['group']['group_id']);
+        }
+        $groupModel->setData($postData['group']);
+        if ($postData['group']['group_id'] == '') {
+            $groupModel->setId(null);
+        }
+        if (!$this->isSelectedDefaultStoreActive($postData, $groupModel)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('An inactive store view cannot be saved as default store view')
+            );
+        }
+        $groupModel->save();
+        $this->_eventManager->dispatch('store_group_save', ['group' => $groupModel]);
+        $this->messageManager->addSuccess(__('You saved the store.'));
+
+        return $postData;
+    }
+
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -22,73 +121,16 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                 $redirectResult->setPath('adminhtml/*/');
                 return $redirectResult;
             }
-
             try {
                 switch ($postData['store_type']) {
                     case 'website':
-                        $postData['website']['name'] = $this->filterManager->removeTags($postData['website']['name']);
-                        $websiteModel = $this->_objectManager->create(\Magento\Store\Model\Website::class);
-                        if ($postData['website']['website_id']) {
-                            $websiteModel->load($postData['website']['website_id']);
-                        }
-                        $websiteModel->setData($postData['website']);
-                        if ($postData['website']['website_id'] == '') {
-                            $websiteModel->setId(null);
-                        }
-
-                        $websiteModel->save();
-                        $this->messageManager->addSuccess(__('You saved the website.'));
+                        $postData = $this->processWebsiteSave($postData);
                         break;
-
                     case 'group':
-                        $postData['group']['name'] = $this->filterManager->removeTags($postData['group']['name']);
-                        /** @var \Magento\Store\Model\Group $groupModel */
-                        $groupModel = $this->_objectManager->create(\Magento\Store\Model\Group::class);
-                        if ($postData['group']['group_id']) {
-                            $groupModel->load($postData['group']['group_id']);
-                        }
-                        $groupModel->setData($postData['group']);
-                        if ($postData['group']['group_id'] == '') {
-                            $groupModel->setId(null);
-                        }
-                        if (!$this->isSelectedDefaultStoreActive($postData, $groupModel)) {
-                            throw new \Magento\Framework\Exception\LocalizedException(
-                                __('An inactive store view cannot be saved as default store view')
-                            );
-                        }
-                        $groupModel->save();
-                        $this->_eventManager->dispatch('store_group_save', ['group' => $groupModel]);
-                        $this->messageManager->addSuccess(__('You saved the store.'));
+                        $postData = $this->processGroupSave($postData);
                         break;
-
                     case 'store':
-                        $eventName = 'store_edit';
-                        /** @var \Magento\Store\Model\Store $storeModel */
-                        $storeModel = $this->_objectManager->create(\Magento\Store\Model\Store::class);
-                        $postData['store']['name'] = $this->filterManager->removeTags($postData['store']['name']);
-                        if ($postData['store']['store_id']) {
-                            $storeModel->load($postData['store']['store_id']);
-                        }
-                        $storeModel->setData($postData['store']);
-                        if ($postData['store']['store_id'] == '') {
-                            $storeModel->setId(null);
-                            $eventName = 'store_add';
-                        }
-                        $groupModel = $this->_objectManager->create(
-                            \Magento\Store\Model\Group::class
-                        )->load(
-                            $storeModel->getGroupId()
-                        );
-                        $storeModel->setWebsiteId($groupModel->getWebsiteId());
-                        if (!$storeModel->isActive() && $storeModel->isDefault()) {
-                            throw new \Magento\Framework\Exception\LocalizedException(
-                                __('The default store cannot be disabled')
-                            );
-                        }
-                        $storeModel->save();
-                        $this->_objectManager->get(\Magento\Store\Model\StoreManager::class)->reinitStores();
-                        $this->_eventManager->dispatch($eventName, ['store' => $storeModel]);
-                        $this->messageManager->addSuccess(__('You saved the store view.'));
+                        $postData = $this->processStoreSave($postData);
                         break;
                     default:
                         $redirectResult->setPath('adminhtml/*/');

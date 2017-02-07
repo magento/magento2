@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Helper;
@@ -113,6 +113,11 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultPageFactory;
 
+    /**
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $httpRequestMock;
+
     protected function setUp()
     {
         $this->actionMock = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
@@ -157,6 +162,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
+        $this->httpRequestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -184,7 +191,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Helper\Context::class,
             [
                 'eventManager' => $this->eventManagerMock,
-                'urlBuilder' => $this->urlBuilderMock
+                'urlBuilder' => $this->urlBuilderMock,
+                'httpRequest' => $this->httpRequestMock,
             ]
         );
 
@@ -318,7 +326,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 'cms_page_render',
                 [
                     'page' => $this->pageMock,
-                    'controller_action' => $this->actionMock
+                    'controller_action' => $this->actionMock,
+                    'request' => $this->httpRequestMock,
                 ]
             );
         $this->pageMock->expects($this->any())

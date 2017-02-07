@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -52,6 +52,11 @@ define([
                     if (item.checked) {
                         result[item.name] = item.value;
                     }
+                    break;
+
+                case 'select-multiple':
+                    var name = item.name.substring(0,(item.name.length - 2)); //remove [] from the name ending
+                    result[name] = _.pluck(item.selectedOptions, 'value');
                     break;
 
                 default:
