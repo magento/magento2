@@ -123,7 +123,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($mapperArray);
 
         $this->serializer = $this->getMock(
-            \Magento\Framework\Serialize\SerializerInterface::class,
+            \Magento\Framework\Serialize\Serializer\Json::class,
             [],
             [],
             '',
