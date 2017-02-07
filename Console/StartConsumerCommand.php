@@ -19,6 +19,7 @@ class StartConsumerCommand extends Command
 {
     const ARGUMENT_CONSUMER = 'consumer';
     const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
+    const OPTION_BATCH_SIZE = 'batch-size';
     const OPTION_AREACODE = 'area-code';
     const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
@@ -57,13 +58,14 @@ class StartConsumerCommand extends Command
     {
         $consumerName = $input->getArgument(self::ARGUMENT_CONSUMER);
         $numberOfMessages = $input->getOption(self::OPTION_NUMBER_OF_MESSAGES);
+        $batchSize = (int)$input->getOption(self::OPTION_BATCH_SIZE);
         $areaCode = $input->getOption(self::OPTION_AREACODE);
         if ($areaCode !== null) {
             $this->appState->setAreaCode($areaCode);
         } else {
             $this->appState->setAreaCode('global');
         }
-        $consumer = $this->consumerFactory->get($consumerName);
+        $consumer = $this->consumerFactory->get($consumerName, $batchSize);
         $consumer->process($numberOfMessages);
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
@@ -88,6 +90,12 @@ class StartConsumerCommand extends Command
             . 'If not specified - terminate after processing all queued messages.'
         );
         $this->addOption(
+            self::OPTION_BATCH_SIZE,
+            null,
+            InputOption::VALUE_REQUIRED,
+            'The number of messages per one batch. Applicable for the Batch Consumer only.'
+        );
+        $this->addOption(
             self::OPTION_AREACODE,
             null,
             InputOption::VALUE_REQUIRED,
@@ -100,11 +108,15 @@ This command starts MessageQueue consumer by its name.
 
 To start consumer which will process all queued messages and terminate execution:
 
-      <comment>%command.full_name% someConsumer</comment>
+    <comment>%command.full_name% someConsumer</comment>
 
 To specify the number of messages which should be processed by consumer before its termination:
 
     <comment>%command.full_name% someConsumer --max-messages=50</comment>
+
+To specify the number of messages per one batch for the Batch Consumer:
+
+    <comment>%command.full_name% someConsumer --batch-size=500</comment>
 
 To specify the preferred area:
 
