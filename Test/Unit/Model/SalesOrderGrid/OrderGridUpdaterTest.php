@@ -3,16 +3,13 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Test\Unit\Model;
+namespace Magento\Signifyd\Test\Unit\Model\SalesOrderGrid;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sales\Model\ResourceModel\GridInterface;
 use Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-/**
- * Class OrderGridUpdaterTest
- */
 class OrderGridUpdaterTest extends \PHPUnit_Framework_TestCase
 {
     /**
