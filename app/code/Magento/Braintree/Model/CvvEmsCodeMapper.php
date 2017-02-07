@@ -16,8 +16,15 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * @see https://developers.braintreepayments.com/reference/response/transaction
  * @see http://www.emsecommerce.net/avs_cvv2_response_codes.htm
  */
-class CvvEmsMapper implements PaymentVerificationInterface
+class CvvEmsCodeMapper implements PaymentVerificationInterface
 {
+    /**
+     * Default code for mismatch mapping
+     *
+     * @var string
+     */
+    private static $notProvidedCode = 'P';
+
     /**
      * List of mapping CVV codes
      *
@@ -36,16 +43,17 @@ class CvvEmsMapper implements PaymentVerificationInterface
      * Gets payment CVV verification code.
      * Returns null if payment does not contain any CVV details.
      *
-     * @return string|null
+     * @param OrderPaymentInterface $orderPayment
+     * @return string
      */
     public function getCode(OrderPaymentInterface $orderPayment)
     {
         $additionalInfo = $orderPayment->getAdditionalInformation();
         if (empty($additionalInfo[PaymentDetailsHandler::CVV_RESPONSE_CODE])) {
-            return null;
+            return self::$notProvidedCode;
         }
 
         $cvv = $additionalInfo[PaymentDetailsHandler::CVV_RESPONSE_CODE];
-        return isset(self::$cvvMap[$cvv]) ? self::$cvvMap[$cvv] : null;
+        return isset(self::$cvvMap[$cvv]) ? self::$cvvMap[$cvv] : self::$notProvidedCode;
     }
 }

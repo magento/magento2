@@ -15,13 +15,15 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * The payment methods can map payment method info from internal sources,
  * like additional information, to specific international codes.
  *
+ * There are no default implementation of this interface, because code verification
+ * depends on payment method integration specifics.
+ *
  * @api
  */
 interface PaymentVerificationInterface
 {
     /**
      * Gets payment provider verification code.
-     * Returns null if verification cannot be obtained by payment method.
      *
      * @param OrderPaymentInterface $orderPayment
      * @return string

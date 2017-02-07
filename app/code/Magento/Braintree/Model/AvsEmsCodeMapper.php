@@ -19,6 +19,13 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 class AvsEmsCodeMapper implements PaymentVerificationInterface
 {
     /**
+     * Default code for mismatching mapping.
+     *
+     * @var string
+     */
+    private static $unavailableCode = 'U';
+
+    /**
      * List of mapping AVS codes
      *
      * @var array
@@ -37,7 +44,8 @@ class AvsEmsCodeMapper implements PaymentVerificationInterface
      * Gets payment AVS verification code.
      * Returns null if payment does not contain any AVS details.
      *
-     * @return string|null
+     * @param OrderPaymentInterface $orderPayment
+     * @return string
      */
     public function getCode(OrderPaymentInterface $orderPayment)
     {
@@ -45,11 +53,11 @@ class AvsEmsCodeMapper implements PaymentVerificationInterface
         if (empty($additionalInfo[PaymentDetailsHandler::AVS_POSTAL_RESPONSE_CODE]) ||
             empty($additionalInfo[PaymentDetailsHandler::AVS_STREET_ADDRESS_RESPONSE_CODE])
         ) {
-            return null;
+            return self::$unavailableCode;
         }
         $streetCode = $additionalInfo[PaymentDetailsHandler::AVS_STREET_ADDRESS_RESPONSE_CODE];
         $zipCode = $additionalInfo[PaymentDetailsHandler::AVS_POSTAL_RESPONSE_CODE];
         $key = $zipCode . $streetCode;
-        return isset(self::$avsMap[$key]) ? self::$avsMap[$key] : null;
+        return isset(self::$avsMap[$key]) ? self::$avsMap[$key] : self::$unavailableCode;
     }
 }

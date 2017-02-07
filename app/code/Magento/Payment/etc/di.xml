@@ -12,7 +12,6 @@
     <preference for="Magento\Payment\Gateway\ConfigFactoryInterface" type="Magento\Payment\Gateway\Config\ConfigFactory" />
     <preference for="Magento\Payment\Gateway\Command\CommandManagerPoolInterface" type="Magento\Payment\Gateway\Command\CommandManagerPool" />
     <preference for="Magento\Payment\Gateway\Data\PaymentDataObjectFactoryInterface" type="Magento\Payment\Gateway\Data\PaymentDataObjectFactory" />
-    <preference for="Magento\Payment\Api\PaymentVerificationInterface" type="Magento\Payment\Model\NullPaymentVerification" />
 
     <type name="Magento\Payment\Model\Config\Reader">
         <arguments>
