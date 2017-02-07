@@ -284,20 +284,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $productCollection->setVisibility($this->_productVisibility->getVisibleInSiteIds());
         }
 
-        $attributesToSelect = [
-            'name',
-            'visibility',
-            'small_image',
-            'thumbnail',
-            'links_purchased_separately',
-            'links_title',
-            'price_type'
-        ];
-
         $productCollection->addPriceData()
             ->addTaxPercents()
             ->addIdFilter($this->_productIds)
-            ->addAttributeToSelect($attributesToSelect)
+            ->addAttributeToSelect($this->_wishlistConfig->getProductAttributes())
             ->addOptionsToResult()
             ->addUrlRewrite();
 
