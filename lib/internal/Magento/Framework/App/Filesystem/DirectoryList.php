@@ -84,11 +84,18 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
 
     /**
      * Dependency injection related file directory
+     *
+     * @deprecated this constant become unused after moving folder for generated DI configuration files
+     * to generated/metadata
+     * @see self::GENERATED_METADATA
      */
     const DI = 'di';
 
     /**
      * Relative directory key for generated code
+     *
+     * @deprecated this constant become unused after moving folder for generated files to generated/code
+     * @see self::GENERATED_CODE
      */
     const GENERATION = 'generation';
 
@@ -113,6 +120,16 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
      * Directory name for generated data.
      */
     const GENERATED = 'generated';
+
+    /**
+     * Relative directory key for generated code
+     */
+    const GENERATED_CODE = 'code';
+
+    /**
+     * Relative directory key for generated metadata
+     */
+    const GENERATED_METADATA = 'metadata';
 
     /**
      * {@inheritdoc}
@@ -141,6 +158,8 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::SETUP => [parent::PATH => 'setup/src'],
             self::COMPOSER_HOME => [parent::PATH => 'var/composer_home'],
             self::GENERATED => [parent::PATH => 'generated'],
+            self::GENERATED_CODE => [parent::PATH => Io::DEFAULT_DIRECTORY],
+            self::GENERATED_METADATA => [parent::PATH => 'generated/metadata'],
         ];
         return parent::getDefaultConfig() + $result;
     }
