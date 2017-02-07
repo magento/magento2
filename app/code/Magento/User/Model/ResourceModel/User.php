@@ -174,7 +174,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $user)
     {
-        $user->setExtra(unserialize($user->getExtra()));
+        $user->setExtra($this->getSerializer()->unserialize($user->getExtra()));
         if ($user->hasRoleId()) {
             $this->_clearUserRoles($user);
             $this->_createUserRole($user->getRoleId(), $user);
@@ -239,7 +239,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $user)
     {
         if (is_string($user->getExtra())) {
-            $user->setExtra(unserialize($user->getExtra()));
+            $user->setExtra($this->getSerializer()->unserialize($user->getExtra()));
         }
         return parent::_afterLoad($user);
     }
