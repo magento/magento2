@@ -36,7 +36,7 @@ class OrderGridUpdater
     }
 
     /**
-     * Handles synchronous updating order entity in grid after.
+     * Handles synchronous updating order entity in grid.
      *
      * Works only if asynchronous grid indexing is disabled
      * in global settings.

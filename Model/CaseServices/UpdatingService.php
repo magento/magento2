@@ -51,7 +51,6 @@ class UpdatingService implements UpdatingServiceInterface
         CaseRepositoryInterface $caseRepository,
         CommentsHistoryUpdater $commentsHistoryUpdater,
         OrderGridUpdater $orderGridUpdater
-
     ) {
         $this->messageGenerator = $messageGenerator;
         $this->caseRepository = $caseRepository;
