@@ -40,7 +40,7 @@ class NotSyncedDataProvider implements NotSyncedDataProviderInterface
     {
         $result = [];
         foreach ($this->providers as $provider) {
-            $result = array_merge($result, $provider->get($mainTableName, $gridTableName));
+            $result = array_merge($result, $provider->getIds($mainTableName, $gridTableName));
         }
 
         return array_unique($result);

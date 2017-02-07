@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class NotSyncedDataProviderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetEmpty()
+    public function testGetIdsEmpty()
     {
         /** @var TMapFactory|MockObject $tMapFactory */
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
@@ -47,7 +47,7 @@ class NotSyncedDataProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider::getIds
      */
-    public function testGet()
+    public function testGetIds()
     {
         /** @var TMapFactory|MockObject $tMapFactory */
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
@@ -61,13 +61,13 @@ class NotSyncedDataProviderTest extends \PHPUnit_Framework_TestCase
         $provider1 = $this->getMockBuilder(NotSyncedDataProviderInterface::class)
             ->getMockForAbstractClass();
         $provider1->expects(static::once())
-            ->method('get')
+            ->method('getIds')
             ->willReturn([1, 2]);
 
         $provider2 = $this->getMockBuilder(NotSyncedDataProviderInterface::class)
             ->getMockForAbstractClass();
         $provider2->expects(static::once())
-            ->method('get')
+            ->method('getIds')
             ->willReturn([2, 3, 4]);
 
         $tMapFactory->expects(static::once())
