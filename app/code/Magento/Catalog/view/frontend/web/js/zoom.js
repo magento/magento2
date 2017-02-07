@@ -93,8 +93,10 @@ define([
         },
 
         /**
-         * If image dimension is smaller than parent container, disable zoom
+         * If image dimension is smaller than parent container, disable zoom.
+         *
          * @private
+         * @return {Boolean}
          */
         _isZoomable: function () {
             if (this.imageWidth <= this.imageParentWidth && this.imageHeight <= this.imageParentHeight) {

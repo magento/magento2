@@ -45,7 +45,7 @@ define([
         },
 
         /**
-         * @return {*}
+         * @return {Boolean}
          */
         isLoaderEnabled: function () {
             return this.options.processStart && this.options.processStop;

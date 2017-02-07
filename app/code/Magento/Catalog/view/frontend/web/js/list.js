@@ -13,7 +13,6 @@ define([
 
         /** @inheritdoc */
         _create: function () {
-
             var elem = this.element,
                 products = $('thead td', elem),
                 headings;

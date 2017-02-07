@@ -42,6 +42,7 @@ define([
 
             /**
              * @param {Object} data
+             * @return {HTMLElement}
              */
             findElement = function (data) {
                 return $container.find('.image:not(.image-placeholder)').filter(function () {
@@ -53,7 +54,7 @@ define([
                 }).first();
             };
 
-            /** Update visibility. */
+            /** Update image visibility. */
             updateVisibility = function () {
                 var elementsList = $container.find('.image:not(.removed-item)');
 
@@ -161,6 +162,11 @@ define([
                         });
                     }
                 },
+
+                /**
+                 * @param {jQuery.Event} e
+                 * @param {Object} data
+                 */
                 change: function (e, data) {
                     if (data.files.length > this.options.maxImageUploadCount) {
                         $('body').notification('clear').notification('add', {

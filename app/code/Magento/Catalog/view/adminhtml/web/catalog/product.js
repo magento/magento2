@@ -19,18 +19,6 @@ require([
     }
 
     /**
-     * @param {String} toogleIdentifier
-     * @param {String} fieldId
-     */
-    function toogleFieldEditMode(toogleIdentifier, fieldId) {
-        if ($(toogleIdentifier).is(':checked')) {
-            enableFieldEditMode(fieldId);//eslint-disable-line no-use-before-define
-        } else {
-            disableFieldEditMode(fieldId);//eslint-disable-line no-use-before-define
-        }
-    }
-
-    /**
      * @param {String} fieldId
      */
     function disableFieldEditMode(fieldId) {
@@ -61,6 +49,18 @@ require([
 
         if (byId(fieldId + '_hidden').length) {
             byId(fieldId + '_hidden').prop('disabled', false);
+        }
+    }
+
+    /**
+     * @param {String} toogleIdentifier
+     * @param {String} fieldId
+     */
+    function toogleFieldEditMode(toogleIdentifier, fieldId) {
+        if ($(toogleIdentifier).is(':checked')) {
+            enableFieldEditMode(fieldId);
+        } else {
+            disableFieldEditMode(fieldId);
         }
     }
 
