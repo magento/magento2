@@ -6,6 +6,8 @@
 
 namespace Magento\Translation\Model\Js;
 
+use Magento\Framework\LocalizedException;
+
 /**
  * DataProvider for js translation
  */
@@ -109,7 +111,7 @@ class DataProvider implements DataProviderInterface
                         $dictionary[$phrase] = $translatedPhrase;
                     }
                 } catch (\Exception $e) {
-                    throw new \Exception(sprintf('Error while translating phrase "%s" in file %s.',
+                    throw new LocalizedException(sprintf(__('Error while translating phrase "%s" in file %s.'),
                         $phrase, $filePath[0]));
                 }
             }
