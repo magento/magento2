@@ -7,14 +7,14 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Provider;
 
 use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
-use Magento\Sales\Model\ResourceModel\Provider\IdListProviderComposite;
+use Magento\Sales\Model\ResourceModel\Provider\IdListProvider;
 use Magento\Sales\Model\ResourceModel\Provider\IdListProviderInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class IdListProviderCompositeTest
+ * Class IdListProviderTest
  */
-class IdListProviderCompositeTest extends \PHPUnit_Framework_TestCase
+class IdListProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetEmpty()
     {
@@ -40,12 +40,12 @@ class IdListProviderCompositeTest extends \PHPUnit_Framework_TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
 
-        $provider = new IdListProviderComposite($tMapFactory, []);
+        $provider = new IdListProvider($tMapFactory, []);
         static::assertEquals([], $provider->get('main_table', 'grid_table'));
     }
 
     /**
-     * @covers \Magento\Sales\Model\ResourceModel\Provider\IdListProviderComposite::get
+     * @covers \Magento\Sales\Model\ResourceModel\Provider\IdListProvider::get
      */
     public function testGet()
     {
@@ -86,7 +86,7 @@ class IdListProviderCompositeTest extends \PHPUnit_Framework_TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$provider1, $provider2]));
 
-        $provider = new IdListProviderComposite(
+        $provider = new IdListProvider(
             $tMapFactory,
             [
                 'provider1' => IdListProviderInterface::class,

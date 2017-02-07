@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Model\ResourceModel;
 
+use Magento\Sales\Model\ResourceModel\Order\Grid\Collection;
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * Class GridTest
  */
@@ -22,7 +25,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
         $this->resourceModel = $this->objectManager->create('Magento\Sales\Model\ResourceModel\Order\Grid');
     }
 
@@ -58,16 +61,14 @@ class GridTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns value of signifyd_guarantee_status column from sales order grid
+     * Returns sales order grid items
      *
-     * @return string|null
+     * @return \Magento\Framework\DataObject[]
      */
     private function getOrderGridItemList()
     {
-        /** @var \Magento\Sales\Model\ResourceModel\Order\Grid\Collection $orderGridCollection */
-        $orderGridCollection = $this->objectManager->get(
-            \Magento\Sales\Model\ResourceModel\Order\Grid\Collection::class
-        );
+        /** @var Collection $orderGridCollection */
+        $orderGridCollection = $this->objectManager->get(Collection::class);
 
         return $orderGridCollection->addFilter('increment_id', '100000001')->getItems();
     }

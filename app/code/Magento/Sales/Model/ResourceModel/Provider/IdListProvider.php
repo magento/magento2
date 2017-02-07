@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManager\TMapFactory;
 /**
  * Implements IdListProviderInterface as composite
  */
-class IdListProviderComposite implements IdListProviderInterface
+class IdListProvider implements IdListProviderInterface
 {
     /**
      * @var IdListProviderInterface[]

@@ -62,6 +62,6 @@ class UpdatedIdListProvider implements IdListProviderInterface
      */
     private function getConnection()
     {
-        return $this->resourceConnection->getConnection('sales');
+        return $this->resourceConnection->getConnection();
     }
 }

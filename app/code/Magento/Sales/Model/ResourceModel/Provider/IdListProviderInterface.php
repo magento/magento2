@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\ResourceModel\Provider;
 
 /**
- * Interface provides entities ids list that should be updated in grid
+ * Interface provides entities id list that should be updated in grid
  */
 interface IdListProviderInterface
 {
