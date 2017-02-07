@@ -45,7 +45,7 @@ class NotSyncedDataProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider::get
+     * @covers \Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider::getIds
      */
     public function testGet()
     {

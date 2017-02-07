@@ -70,7 +70,8 @@ class Grid extends AbstractGrid
         $this->orderIdField = $orderIdField;
         $this->joins = $joins;
         $this->columns = $columns;
-        $this->idListProvider = $idListProvider ?: ObjectManager::getInstance()->get(NotSyncedDataProviderInterface::class);
+        $this->idListProvider =
+            $idListProvider ?: ObjectManager::getInstance()->get(NotSyncedDataProviderInterface::class);
         parent::__construct($context, $connectionName);
     }
 
