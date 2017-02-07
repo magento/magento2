@@ -15,8 +15,6 @@ use Magento\Signifyd\Model\Config;
 use Psr\Log\LoggerInterface;
 
 /**
- * Place Order observer.
- *
  * Observer should be triggered when new order is created and placed.
  * If Signifyd integration enabled in configuration then new case will be created.
  */
@@ -38,8 +36,6 @@ class PlaceOrder implements ObserverInterface
     private $logger;
 
     /**
-     * PlaceOrder constructor.
-     *
      * @param Config $signifydIntegrationConfig
      * @param CaseCreationServiceInterface $caseCreationService
      * @param LoggerInterface $logger

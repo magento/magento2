@@ -32,8 +32,6 @@ class CaseInfo extends Template
     private $caseManagement;
 
     /**
-     * Constructor
-     *
      * @param Context $context
      * @param Config $config
      * @param CaseManagement $caseManagement
