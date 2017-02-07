@@ -14,15 +14,15 @@
     <preference for="Magento\Signifyd\Api\GuaranteeCreationServiceInterface" type="Magento\Signifyd\Model\Guarantee\CreationService" />
     <preference for="Magento\Signifyd\Api\GuaranteeCancelingServiceInterface" type="Magento\Signifyd\Model\Guarantee\CancelingService" />
     <preference for="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface" type="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder" />
-    <type name="Magento\Signifyd\Model\OrderGridUpdater">
+    <type name="Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater">
         <arguments>
             <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
         </arguments>
     </type>
-    <virtualType name="SignifydIdListProvider" type="Magento\Sales\Model\ResourceModel\Provider\IdListProvider">
+    <virtualType name="SignifydIdListProvider" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
-                <item name="signifyd" xsi:type="string">Magento\Signifyd\Model\OrderIdListProvider</item>
+                <item name="signifyd" xsi:type="string">Magento\Signifyd\Model\SalesOrderGrid\NotSyncedOrderIdListProvider</item>
             </argument>
         </arguments>
     </virtualType>

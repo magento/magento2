@@ -7,7 +7,7 @@ namespace Magento\Signifyd\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sales\Model\ResourceModel\GridInterface;
-use Magento\Signifyd\Model\OrderGridUpdater;
+use Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -40,7 +40,7 @@ class OrderGridUpdaterTest extends \PHPUnit_Framework_TestCase
         $this->globalConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->model = new OrderGridUpdater($this->orderGrid, $this->globalConfig);
+        $this->model = new \Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater($this->orderGrid, $this->globalConfig);
     }
 
     public function testUpdateInSyncMode()

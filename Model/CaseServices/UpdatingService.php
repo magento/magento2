@@ -11,7 +11,7 @@ use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorInterface;
-use Magento\Signifyd\Model\OrderGridUpdater;
+use Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater;
 
 /**
  * Performs Signifyd case entity updating operations.
@@ -34,7 +34,7 @@ class UpdatingService implements UpdatingServiceInterface
     private $commentsHistoryUpdater;
 
     /**
-     * @var OrderGridUpdater
+     * @var \Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater
      */
     private $orderGridUpdater;
 
@@ -44,7 +44,7 @@ class UpdatingService implements UpdatingServiceInterface
      * @param GeneratorInterface $messageGenerator
      * @param CaseRepositoryInterface $caseRepository
      * @param CommentsHistoryUpdater $commentsHistoryUpdater
-     * @param OrderGridUpdater $orderGridUpdater
+     * @param \Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater $orderGridUpdater
      */
     public function __construct(
         GeneratorInterface $messageGenerator,
