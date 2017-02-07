@@ -242,6 +242,67 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \LogicException
+     */
+    public function testGetProcessedTemplateException() {
+        $filterTemplate = $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
+            ->setMethods([
+                'setUseSessionInUrl',
+                'setPlainTemplateMode',
+                'setIsChildTemplate',
+                'setDesignParams',
+                'setVariables',
+                'setStoreId',
+                'filter',
+                'getStoreId',
+                'getInlineCssFiles',
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filterTemplate->expects($this->once())
+            ->method('setUseSessionInUrl')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setPlainTemplateMode')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setIsChildTemplate')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setDesignParams')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->any())
+            ->method('setStoreId')
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnValue(1));
+
+        $model = $this->getModelMock([
+            'getDesignParams',
+            'applyDesignConfig',
+            'getTemplateText',
+            'isPlain',
+        ]);
+
+        $designParams = [
+            'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+            'theme' => 'themeId',
+            'locale' => 'localeId',
+        ];
+        $model->expects($this->any())
+            ->method('getDesignParams')
+            ->will($this->returnValue($designParams));
+        $model->setTemplateFilter($filterTemplate);
+        $model->setTemplateType(\Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT);
+
+        $filterTemplate->expects($this->once())
+            ->method('filter')
+            ->will($this->throwException(new \Exception));
+        $model->getProcessedTemplate([]);
+    }
+
+    /**
      * @return array
      */
     public function getProcessedTemplateProvider()
