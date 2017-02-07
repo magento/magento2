@@ -15,24 +15,24 @@ use Magento\Framework\View\Element\Template;
 class Serializer extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
     /**
      * @param Template\Context $context
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param array $data
      * @throws \RuntimeException
      */
     public function __construct(
         Template\Context $context,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
