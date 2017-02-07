@@ -10,7 +10,7 @@ use Magento\Payment\Api\PaymentVerificationInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 
 /**
- * Creates verification service for provided payment method, or \Magento\Payment\Api\PaymentVerificationInterface::class
+ * Creates verification service for provided payment method, or PaymentVerificationInterface::class
  * if payment method does not support AVS, CVV verifications.
  */
 class PaymentVerificationFactory
@@ -36,7 +36,12 @@ class PaymentVerificationFactory
     }
 
     /**
-     * @inheritdoc
+     * Creates instance of CVV code verification.
+     * Exception will be thrown if CVV mapper does not implement PaymentVerificationInterface.
+     *
+     * @param string $paymentCode
+     * @return PaymentVerificationInterface
+     * @throws \Exception
      */
     public function createPaymentCvv($paymentCode)
     {
@@ -44,7 +49,12 @@ class PaymentVerificationFactory
     }
 
     /**
-     * @inheritdoc
+     * Creates instance of AVS code verification.
+     * Exception will be thrown if AVS mapper does not implement PaymentVerificationInterface.
+     *
+     * @param string $paymentCode
+     * @return PaymentVerificationInterface
+     * @throws \Exception
      */
     public function createPaymentAvs($paymentCode)
     {
@@ -52,7 +62,14 @@ class PaymentVerificationFactory
     }
 
     /**
-     * @inheritdoc
+     * Creates instance of PaymentVerificationInterface.
+     * Default implementation will be returned if payment method does not implement PaymentVerificationInterface.
+     * Exception will be thrown if payment verification instance does not implement PaymentVerificationInterface.
+     *
+     * @param string $paymentCode
+     * @param string $configKey
+     * @return PaymentVerificationInterface
+     * @throws \Exception
      */
     private function create($paymentCode, $configKey)
     {
@@ -61,6 +78,10 @@ class PaymentVerificationFactory
         if ($verificationClass === null) {
             return $this->objectManager->get(PaymentVerificationInterface::class);
         }
-        return $this->objectManager->create($verificationClass);
+        $mapper = $this->objectManager->create($verificationClass);
+        if (!$mapper instanceof PaymentVerificationInterface) {
+            throw new \Exception($verificationClass . ' must implement ' . PaymentVerificationInterface::class);
+        }
+        return $mapper;
     }
 }
