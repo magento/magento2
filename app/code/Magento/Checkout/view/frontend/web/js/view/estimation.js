@@ -16,7 +16,7 @@ define([
         isLoading: totals.isLoading,
 
         /**
-         * @return {*}
+         * @return {Number}
          */
         getQuantity: function () {
             if (totals.totals()) {
@@ -27,7 +27,7 @@ define([
         },
 
         /**
-         * @return {*}
+         * @return {Number}
          */
         getPureValue: function () {
             if (totals.totals()) {

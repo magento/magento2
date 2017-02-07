@@ -19,7 +19,7 @@ define([
         },
 
         /**
-         * Initialize observable properties
+         * @inheritdoc
          */
         initObservable: function () {
             this._super()

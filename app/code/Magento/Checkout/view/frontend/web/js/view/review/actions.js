@@ -27,6 +27,7 @@ define([
 
         /**
          * @param {*} code
+         * @return {Object}
          */
         getViewByCode: function (code) {
             return _.find(this.elems(), function (elem) {
@@ -36,6 +37,8 @@ define([
 
         /**
          * Get default view.
+         *
+         * @return {Object}
          */
         getDefaultView: function () {
             return _.find(this.elems(), function (elem) {

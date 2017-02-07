@@ -130,7 +130,13 @@ define([
                 return this.getUrl(urls, params);
             },
 
-            /** Get url for service */
+            /**
+             * Get url for service.
+             *
+             * @param {*} urls
+             * @param {*} urlParams
+             * @return {String|*}
+             */
             getUrl: function (urls, urlParams) {
                 var url;
 

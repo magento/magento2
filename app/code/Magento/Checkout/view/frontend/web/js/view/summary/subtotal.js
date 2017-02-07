@@ -16,6 +16,8 @@ define([
 
         /**
          * Get pure value.
+         *
+         * @return {*}
          */
         getPureValue: function () {
             var totals = quote.getTotals()();

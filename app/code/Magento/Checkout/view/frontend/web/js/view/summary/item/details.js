@@ -15,6 +15,7 @@ define([
 
         /**
          * @param {Object} quoteItem
+         * @return {String}
          */
         getValue: function (quoteItem) {
             return quoteItem.name;

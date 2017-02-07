@@ -26,12 +26,20 @@ define([
             template: 'Magento_Checkout/authentication'
         },
 
-        /** Is login form enabled for current customer */
+        /**
+         * Is login form enabled for current customer.
+         *
+         * @return {Boolean}
+         */
         isActive: function () {
             return !customer.isLoggedIn();
         },
 
-        /** Provide login action */
+        /**
+         * Provide login action.
+         *
+         * @param {HTMLElement} loginForm
+         */
         login: function (loginForm) {
             var loginData = {},
                 formDataArray = $(loginForm).serializeArray();

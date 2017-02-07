@@ -216,7 +216,7 @@ function (
         },
 
         /**
-         * @param {int} countryId
+         * @param {Number} countryId
          * @return {*}
          */
         getCountryName: function (countryId) {
