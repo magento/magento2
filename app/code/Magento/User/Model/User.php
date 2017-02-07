@@ -204,6 +204,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->serializer = $objectManager->get(Json::class);
         $this->_eventManager = $objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
         $this->_userData = $objectManager->get(\Magento\User\Helper\Data::class);
         $this->_config = $objectManager->get(\Magento\Backend\App\ConfigInterface::class);
