@@ -11,7 +11,7 @@ namespace Magento\Captcha\Controller\Adminhtml\Refresh;
 class Refresh extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     protected $serializer;
 
@@ -24,17 +24,15 @@ class Refresh extends \Magento\Backend\App\Action
      * Refresh constructor.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Captcha\Helper\Data $captchaHelper
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
-     * @throws \RuntimeException
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Captcha\Helper\Data $captchaHelper,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer
     ) {
         parent::__construct($context);
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializer = $serializer;
         $this->captchaHelper = $captchaHelper;
     }
 

@@ -68,7 +68,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
         $this->flagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
         $this->serializerMock = $this->getMock(
-            \Magento\Framework\Serialize\SerializerInterface::class,
+            \Magento\Framework\Serialize\Serializer\Json::class,
             [],
             [],
             '',

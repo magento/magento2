@@ -85,7 +85,7 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
             ->with('user_login')->will($this->returnValue($this->captchaMock));
         $this->formIds = ['user_login'];
         $this->serializerMock = $this->getMock(
-            \Magento\Framework\Serialize\SerializerInterface::class,
+            \Magento\Framework\Serialize\Serializer\Json::class,
             [],
             [],
             '',
