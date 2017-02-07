@@ -12,7 +12,7 @@ use Magento\Signifyd\Model\CaseServices\UpdatingService;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorException;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorInterface;
-use Magento\Signifyd\Model\OrderGridUpdater;
+use Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -46,7 +46,7 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
     private $commentsHistoryUpdater;
 
     /**
-     * @var OrderGridUpdater|MockObject
+     * @var \Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater|MockObject
      */
     private $orderGridUpdater;
 

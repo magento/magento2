@@ -3,15 +3,16 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Model;
+namespace Magento\Signifyd\Model\SalesOrderGrid;
 
-use Magento\Sales\Model\ResourceModel\Provider\IdListProviderInterface;
+use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
+use Magento\Signifyd\Model\ResourceModel;
 use Magento\Signifyd\Model\ResourceModel\CaseEntity;
 
 /**
  * Provides order ids list which Signifyd Case guaranty status were changed
  */
-class OrderIdListProvider implements IdListProviderInterface
+class NotSyncedOrderIdListProvider implements NotSyncedDataProviderInterface
 {
     /**
      * @var ResourceModel\CaseEntity
@@ -30,7 +31,7 @@ class OrderIdListProvider implements IdListProviderInterface
     /**
      * @inheritdoc
      */
-    public function get($mainTableName, $gridTableName)
+    public function getIds($mainTableName, $gridTableName)
     {
         $connection = $this->caseEntity->getConnection();
         $select = $connection->select()
