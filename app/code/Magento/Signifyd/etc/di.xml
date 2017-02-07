@@ -19,7 +19,7 @@
             <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
         </arguments>
     </type>
-    <virtualType name="SignifydIdListProvider" type="Magento\Sales\Model\ResourceModel\Provider\IdListProviderComposite">
+    <virtualType name="SignifydIdListProvider" type="Magento\Sales\Model\ResourceModel\Provider\IdListProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
                 <item name="signifyd" xsi:type="string">Magento\Signifyd\Model\OrderIdListProvider</item>
