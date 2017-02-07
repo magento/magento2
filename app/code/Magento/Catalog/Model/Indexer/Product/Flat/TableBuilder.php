@@ -295,18 +295,39 @@ class TableBuilder
                 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
                 foreach ($columnsList as $columnName => $attribute) {
                     $countTableName = 't' . $iterationNum++;
+                    $countTableNameWebsite = 't' . $iterationNum++;
+                    $joinConditionTemplate = "%s.entity_id=%s.entity_id" .
+                                             " AND %s.attribute_id = " .
+                                             $attribute->getId() .
+                                             " AND %s.store_id = %d";
                     $joinCondition = sprintf(
-                        'e.%3$s = %1$s.%3$s AND %1$s.attribute_id = %2$d AND %1$s.store_id = 0',
+                        $joinConditionTemplate,
+                        'e',
                         $countTableName,
-                        $attribute->getId(),
-                        $metadata->getLinkField()
+                        $countTableName,
+                        $countTableName,
+                        \Magento\Store\Model\Store::DEFAULT_STORE_ID
                     );
+                    if ($attribute->getFlatAddChildData()) {
+                        $joinCondition .= ' AND e.child_id = ' . $countTableName . '.entity_id';
+                    }
 
-                    $select->joinLeft(
-                        [$countTableName => $tableName],
+                    $valueExpr = $this->_connection->getCheckSql($countTableNameWebsite.'.value_id > 0', $countTableNameWebsite.'.value', $countTableName.'.value');
+
+                    $select
+                        ->joinLeft(
+                        [$countTableName => $attribute->getBackend()->getTable()],
                         $joinCondition,
-                        [$columnName => 'value']
+                        []
+                    )->joinLeft(
+                        [$countTableNameWebsite => $attribute->getBackend()->getTable()],
+                            sprintf($joinConditionTemplate, $countTableName, $countTableNameWebsite,
+                                $countTableNameWebsite, $countTableNameWebsite, $storeId),
+                            [$attribute->getAttributeCode() => $valueExpr]
                     );
+                    if ($attribute->getFlatAddChildData()) {
+                        $select->where("e.is_child = ?", 0);
+                    }
 
                     if ($attribute->getFlatUpdateSelect($storeId) instanceof \Magento\Framework\DB\Select) {
                         $attributeCode = $attribute->getAttributeCode();
