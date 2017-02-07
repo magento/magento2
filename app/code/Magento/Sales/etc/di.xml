@@ -811,42 +811,6 @@
             <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Invoice\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">sales_invoice_grid</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Invoice</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Shipment\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">sales_shipment_grid</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Shipment</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Creditmemo\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">sales_creditmemo_grid</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Creditmemo</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Invoice\Orders\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">sales_invoice_grid</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Invoice</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Shipment\Order\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">sales_shipment_grid</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Shipment</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Creditmemo\Order\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">sales_creditmemo_grid</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Creditmemo</argument>
-        </arguments>
-    </virtualType>
     <virtualType name="orderMetadata" type="Magento\Sales\Model\ResourceModel\Metadata">
         <arguments>
             <argument name="resourceClassName" xsi:type="string">Magento\Sales\Model\ResourceModel\Order</argument>
