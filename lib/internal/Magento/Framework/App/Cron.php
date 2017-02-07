@@ -56,13 +56,15 @@ class Cron implements \Magento\Framework\AppInterface
         Console\Request $request,
         Console\Response $response,
         ObjectManagerInterface $objectManager,
-        array $parameters = []
+        array $parameters = [],
+        \Magento\Framework\App\AreaList $arealist = null
     ) {
         $this->_state = $state;
         $this->_request = $request;
         $this->_request->setParams($parameters);
         $this->_response = $response;
         $this->objectManager = $objectManager;
+        $this->arealist = $arealist ?: $this->objectManager->get(\Magento\Framework\App\AreaList::class);
     }
 
     /**
@@ -76,27 +78,13 @@ class Cron implements \Magento\Framework\AppInterface
         $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
         $this->objectManager->configure($configLoader->load(Area::AREA_CRONTAB));
 
-        $areaList = $this->getAreaList();
-        $areaList->getArea(Area::AREA_CRONTAB)->load(Area::PART_TRANSLATE);
+        $this->areaList->getArea(Area::AREA_CRONTAB)->load(Area::PART_TRANSLATE);
 
         /** @var \Magento\Framework\Event\ManagerInterface $eventManager */
         $eventManager = $this->objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
         $eventManager->dispatch('default');
         $this->_response->setCode(0);
         return $this->_response;
-    }
-
-    /**
-     * @deprecated
-     *
-     * @return \Magento\Framework\App\AreaList
-     */
-    private function getAreaList()
-    {
-        if ($this->areaList === null) {
-            $this->areaList = $this->objectManager->get(\Magento\Framework\App\AreaList::class);
-        }
-        return $this->areaList;
     }
 
     /**
