@@ -67,6 +67,18 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 
         $config = $this->reader->loadConfigFile(ConfigFilePool::APP_CONFIG, $this->getFileName());
 
+        $this->validateSystemSection($config);
+        $this->validateThemesSection($config);
+    }
+
+    /**
+     * Validates 'system' section in configuration data.
+     *
+     * @param array $config The configuration array
+     * @return void
+     */
+    private function validateSystemSection(array $config)
+    {
         $this->assertArrayHasKey(
             'test_value_1',
             $config['system']['default']['web']['test']
@@ -78,6 +90,52 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey(
             'test_sensitive',
             $config['system']['default']['web']['test']
+        );
+    }
+
+    /**
+     * Validates 'themes' section in configuration data.
+     *
+     * @param array $config The configuration array
+     * @return void
+     */
+    private function validateThemesSection(array $config)
+    {
+        $this->assertEquals(
+            [
+                'parent_id' => null,
+                'theme_path' => 'Magento/backend',
+                'theme_title' => 'Magento 2 backend',
+                'is_featured' => '0',
+                'area' => 'adminhtml',
+                'type' => '0',
+                'code' => 'Magento/backend',
+            ],
+            $config['themes']['Magento/backend']
+        );
+        $this->assertEquals(
+            [
+                'parent_id' => null,
+                'theme_path' => 'Magento/blank',
+                'theme_title' => 'Magento Blank',
+                'is_featured' => '0',
+                'area' => 'frontend',
+                'type' => '0',
+                'code' => 'Magento/blank',
+            ],
+            $config['themes']['Magento/blank']
+        );
+        $this->assertEquals(
+            [
+                'parent_id' => 'Magento/blank',
+                'theme_path' => 'Magento/luma',
+                'theme_title' => 'Magento Luma',
+                'is_featured' => '0',
+                'area' => 'frontend',
+                'type' => '0',
+                'code' => 'Magento/luma',
+            ],
+            $config['themes']['Magento/luma']
         );
     }
 
