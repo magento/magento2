@@ -5,6 +5,7 @@
  */
 
 namespace Magento\User\Test\Unit\Model\ResourceModel;
+
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**

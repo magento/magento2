@@ -12,6 +12,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * Test class for \Magento\User\Model\User testing
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class UserTest extends \PHPUnit_Framework_TestCase
 {
@@ -64,6 +65,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @var Json|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializer;
+
     /**
      * Set required values
      * @return void
