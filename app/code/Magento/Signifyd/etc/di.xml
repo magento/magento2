@@ -61,4 +61,9 @@
             <argument name="config" xsi:type="object">Magento\Payment\Gateway\Config\Config</argument>
         </arguments>
     </type>
+    <type name="Magento\Signifyd\Model\ResourceModel\CaseEntity">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
 </config>
