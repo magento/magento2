@@ -45,7 +45,7 @@ class Compiled implements ConfigLoaderInterface
      */
     public static function getFilePath($area)
     {
-        $diPath = DirectoryList::getDefaultConfig()[DirectoryList::DI][DirectoryList::PATH];
+        $diPath = DirectoryList::getDefaultConfig()[DirectoryList::GENERATED_METADATA][DirectoryList::PATH];
         return BP . '/' . $diPath . '/' . $area . '.ser';
     }
 
