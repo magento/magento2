@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -22,8 +22,8 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
         </variation>
         <variation name="OnePageCheckoutUsingRegisterLink" summary="Customer is redirected to checkout on login if guest is disabled, flow with registration new Customer" ticketId="MAGETWO-49917">
-            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="issue" xsi:type="string">MAGETWO-59816: Redirect works improperly in a browser incognito mode</data>
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
             <data name="customer/dataset" xsi:type="string">register_customer</data>
             <data name="checkoutMethod" xsi:type="string">register_before_checkout</data>
@@ -79,23 +79,27 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
-        <variation name="OnePageCheckoutTestVariation3" summary="Checkout as UK guest with simple product" ticketId="MAGETWO-42603">
-            <data name="tag" xsi:type="string">stable:no, severity:S1</data>
-            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
+        <variation name="OnePageCheckoutTestVariation3" summary="Checkout as UK guest with simple product" ticketId="MAGETWO-42603, MAGETWO-43282, MAGETWO-43318">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_with_qty_25</data>
+            <data name="expectedQty/0" xsi:type="string">0</data>
+            <data name="expectedStockStatus/0" xsi:type="string">out of stock</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">565.00</item>
+                <item name="grandTotal" xsi:type="string">375.00</item>
             </data>
             <data name="payment/method" xsi:type="string">banktransfer</data>
             <data name="status" xsi:type="string">Pending</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Cancel, Hold, Ship, Invoice, Edit</data>
-            <data name="configData" xsi:type="string">banktransfer_specificcountry_gb</data>
+            <data name="configData" xsi:type="string">banktransfer_specificcountry_gb, can_subtract_and_can_back_in_stock</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsOutOfStock" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductsQtyAndStockStatusInAdminPanel" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsAvailable" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
@@ -151,7 +155,7 @@
             <data name="products/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_with_fixed_price_discount_coupon</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="billingAddress/dataset" xsi:type="string">UK_address</data>
+            <data name="billingAddress/dataset" xsi:type="string">UK_address_without_email</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">0.00</item>
@@ -170,7 +174,7 @@
             <data name="tag" xsi:type="string">severity:S1</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_with_qty_25</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
-            <data name="shippingAddress/dataset" xsi:type="string">UK_address</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
@@ -221,8 +225,8 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddressFrontendAddressBook" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
-        <variation name="OnePageCheckoutTestVariation10" summary="One Page Checkout with all product types">
-            <data name="tag" xsi:type="string">stable:no, severity:S0</data>
+        <variation name="OnePageCheckoutTestVariation10" summary="One Page Checkout with all product types" ticketId="MAGETWO-17475">
+            <data name="tag" xsi:type="string">severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductVirtual::default</data>
             <data name="products/1" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <data name="products/2" xsi:type="string">configurableProduct::with_one_option</data>
@@ -231,7 +235,7 @@
             <data name="products/5" xsi:type="string">groupedProduct::three_simple_products</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
-            <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email</data>
+            <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email_first_name_last_name</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">

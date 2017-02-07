@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model;
@@ -162,6 +162,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @param array $data
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param AttributeValueFactory|null $customAttributeFactory
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -186,7 +187,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         array $relatedCacheTypes = [],
         array $data = [],
         ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null
+        AttributeValueFactory $customAttributeFactory = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_storeManager = $storeManager;
@@ -210,7 +212,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
             $resourceCollection,
             $data,
             $extensionFactory,
-            $customAttributeFactory
+            $customAttributeFactory,
+            $serializer
         );
     }
 

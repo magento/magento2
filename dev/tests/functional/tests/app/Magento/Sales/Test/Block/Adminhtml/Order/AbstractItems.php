@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,63 +19,70 @@ class AbstractItems extends Block
      *
      * @var string
      */
-    private $rowItem = 'tbody';
+    protected $rowItem = 'tbody';
+
+    /**
+     * Locator for "Product" column.
+     *
+     * @var string
+     */
+    protected $product = '.col-product';
 
     /**
      * Locator for product sku column.
      *
      * @var string
      */
-    private $sku = '.col-product .product-sku-block';
+    protected $sku = '.col-product .product-sku-block';
 
     /**
      * Locator for product title column.
      *
      * @var string
      */
-    private $title = '.col-product .product-title';
+    protected $title = '.col-product .product-title';
 
     /**
      * Locator for "Price" column.
      *
      * @var string
      */
-    private $price = '.col-price .price';
+    protected $price = '.col-price .price';
 
     /**
      * Locator for "Qty" column.
      *
      * @var string
      */
-    private $qty = '.col-qty';
+    protected $qty = '.col-qty';
 
     /**
      * Locator for "Subtotal" column.
      *
      * @var string
      */
-    private $subtotal = '.col-subtotal .price';
+    protected $subtotal = '.col-subtotal .price';
 
     /**
      * Locator for "Tax Amount" column.
      *
      * @var string
      */
-    private $taxAmount = '.col-tax .price';
+    protected $taxAmount = '.col-tax .price';
 
     /**
      * Locator for "Discount Amount" column.
      *
      * @var string
      */
-    private $discountAmount = '.col-discount .price';
+    protected $discountAmount = '.col-discount .price';
 
     /**
      * Locator for "Row total" column.
      *
      * @var string
      */
-    private $rowTotal = '.col-total .price';
+    protected $rowTotal = '.col-total .price';
 
     /**
      * Get items data.
@@ -111,7 +118,7 @@ class AbstractItems extends Block
      * @param ElementInterface $item
      * @return null|int
      */
-    private function getQty(ElementInterface $item)
+    protected function getQty(ElementInterface $item)
     {
         $qty = null;
         $elements = $item->getElements($this->qty);
@@ -127,7 +134,7 @@ class AbstractItems extends Block
      * @param ElementInterface $item
      * @return string
      */
-    private function getSku(ElementInterface $item)
+    protected function getSku(ElementInterface $item)
     {
         $itemContent = $item->find($this->sku)->getText();
         $itemContent = preg_replace('/\n|\r/', '', $itemContent);
@@ -144,5 +151,20 @@ class AbstractItems extends Block
     private function escapePrice($price)
     {
         return preg_replace('[^0-9\.]', '', $price);
+    }
+
+    /**
+     * Parse product name to title and sku product.
+     *
+     * @param string $product
+     * @return array
+     */
+    protected function parseProductName($product)
+    {
+        $data = array_map('trim', explode('SKU:', str_replace("\n", '', $product)));
+        return [
+            'product' => $data[0],
+            'sku' => isset($data[1]) ? $data[1] : ''
+        ];
     }
 }

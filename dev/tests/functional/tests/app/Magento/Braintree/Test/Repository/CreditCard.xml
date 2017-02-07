@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -29,6 +29,13 @@
             <field name="cc_exp_month" xsi:type="string">01</field>
             <field name="cc_exp_year" xsi:type="string">2020</field>
             <field name="cc_cid" xsi:type="string">123</field>
+        </dataset>
+
+        <dataset name="visa_braintree_no_cvv">
+            <field name="payment_code" xsi:type="string">braintree</field>
+            <field name="cc_number" xsi:type="string">4111111111111111</field>
+            <field name="cc_exp_month" xsi:type="string">01 - January</field>
+            <field name="cc_exp_year" xsi:type="string">2020</field>
         </dataset>
     </repository>
 </config>

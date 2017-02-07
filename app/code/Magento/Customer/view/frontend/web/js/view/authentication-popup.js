@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -66,21 +66,30 @@ define([
             }
         },
 
-        /** Provide login action */
-        login: function (loginForm) {
-            var loginData = {},
-                formDataArray = $(loginForm).serializeArray();
+            /**
+             * Provide login action
+             *
+             * @return {Boolean}
+             */
+            login: function (formUiElement, event) {
+                var loginData = {},
+                    formElement = $(event.currentTarget),
+                    formDataArray = formElement.serializeArray();
 
-            formDataArray.forEach(function (entry) {
-                loginData[entry.name] = entry.value;
-            });
+                event.stopPropagation();
+                formDataArray.forEach(function (entry) {
+                    loginData[entry.name] = entry.value;
+                });
 
-            if ($(loginForm).validation() &&
-                $(loginForm).validation('isValid')
-            ) {
-                this.isLoading(true);
-                loginAction(loginData, null, false);
+                if (formElement.validation() &&
+                    formElement.validation('isValid')
+                ) {
+                    this.isLoading(true);
+                    loginAction(loginData);
+                }
+
+                return false;
             }
-        }
-    });
-});
+        });
+    }
+);

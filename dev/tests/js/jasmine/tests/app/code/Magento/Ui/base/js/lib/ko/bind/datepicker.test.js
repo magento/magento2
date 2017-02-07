@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,19 +13,21 @@ define([
     'use strict';
 
     describe('Datepicker binding', function () {
-        var element,
+        var observable,
+            element,
             config;
 
         beforeEach(function () {
-            element    = $('<input />');
+            element = $('<input />');
+            observable = ko.observable();
 
             config = {
                 options: {
                     dateFormat: 'M/d/yy',
-                    'storeLocale': 'en_US',
-                    'timeFormat': 'h:mm: a'
+                    storeLocale: 'en_US',
+                    timeFormat: 'h:mm: a'
                 },
-                storage: ko.observable(moment().format('MM/DD/YYYY'))
+                storage: observable
             };
 
             $(document.body).append(element);
@@ -40,18 +42,14 @@ define([
         });
 
         it('writes picked date\'s value to assigned observable', function () {
-            var todayDate,
-                momentFormat,
-                result,
-                inputFormat;
-
-            inputFormat = 'M/d/yy';
+            var todayDate, momentFormat, result,
+                inputFormat = 'M/d/yy';
 
             momentFormat = utils.convertToMomentFormat(inputFormat);
+            todayDate = moment().format(momentFormat);
 
-            todayDate   = moment().format(momentFormat);
-
-            result = $('input:last').val();
+            element.datepicker('setTimezoneDate').blur().trigger('change');
+            result = moment(observable()).format(momentFormat);
 
             expect(todayDate).toEqual(result);
         });

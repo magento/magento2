@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,6 +9,7 @@
     <preference for="Magento\Config\Model\Config\Structure\SearchInterface" type="Magento\Config\Model\Config\Structure" />
     <preference for="Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Config\Model\Config\Backend\File\RequestData" />
     <preference for="Magento\Framework\App\Config\ConfigResource\ConfigInterface" type="Magento\Config\Model\ResourceModel\Config" />
+    <preference for="Magento\Framework\App\Config\CommentParserInterface" type="Magento\Config\Model\Config\Parser\Comment" />
     <virtualType name="Magento\Framework\View\TemplateEngine\Xhtml\ConfigCompiler" type="Magento\Framework\View\TemplateEngine\Xhtml\Compiler" shared="false">
         <arguments>
             <argument name="compilerText" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Text</argument>
@@ -182,6 +183,11 @@
             <argument name="types" xsi:type="array">
                 <item name="environment" xsi:type="string">Magento\Config\Model\Placeholder\Environment</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Parser\Comment">
+        <arguments>
+            <argument name="placeholder" xsi:type="object">Magento\Config\Model\Placeholder\Environment</argument>
         </arguments>
     </type>
 </config>

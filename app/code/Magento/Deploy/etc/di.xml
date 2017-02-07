@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,12 +26,21 @@
                 <item name="setModeCommand" xsi:type="object">Magento\Deploy\Console\Command\SetModeCommand</item>
                 <item name="showModeCommand" xsi:type="object">Magento\Deploy\Console\Command\ShowModeCommand</item>
                 <item name="dumpApplicationCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\ApplicationDumpCommand</item>
+                <item name="sensitiveConfigSetCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\SensitiveConfigSetCommand</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Deploy\Model\Filesystem">
         <arguments>
             <argument name="shell" xsi:type="object">Magento\Framework\App\Shell</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Deploy\Console\Command\App\SensitiveConfigSet\CollectorFactory">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="interactive" xsi:type="string">Magento\Deploy\Console\Command\App\SensitiveConfigSet\InteractiveCollector</item>
+                <item name="simple" xsi:type="string">Magento\Deploy\Console\Command\App\SensitiveConfigSet\SimpleCollector</item>
+            </argument>
         </arguments>
     </type>
 </config>
