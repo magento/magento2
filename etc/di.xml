@@ -55,4 +55,9 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Signifyd\Model\ResourceModel\CaseEntity">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
 </config>
