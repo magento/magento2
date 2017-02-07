@@ -186,9 +186,7 @@ class PurchaseBuilder
     {
         /** @var PaymentVerificationInterface $avsAdapter */
         $avsAdapter = $this->paymentVerificationFactory->createPaymentAvs($orderPayment->getMethod());
-        $code = $avsAdapter->getCode($orderPayment);
-
-        return $code !== null ? $code : 'U';
+        return $avsAdapter->getCode($orderPayment);
     }
 
     /**
@@ -201,8 +199,6 @@ class PurchaseBuilder
     {
         /** @var PaymentVerificationInterface $cvvAdapter */
         $cvvAdapter = $this->paymentVerificationFactory->createPaymentCvv($orderPayment->getMethod());
-        $code = $cvvAdapter->getCode($orderPayment);
-
-        return $code !== null ? $code : '';
+        return $cvvAdapter->getCode($orderPayment);
     }
 }
