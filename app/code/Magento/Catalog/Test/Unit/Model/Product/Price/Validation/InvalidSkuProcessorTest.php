@@ -4,24 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Unit\Model\Product\Price;
-
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+namespace Magento\Catalog\Test\Unit\Model\Product\Price\Validation;
 
 /**
- * Test for model Product\Price\InvalidSkuChecker.
+ * Test for model Magento\Catalog\Product\Price\Validation\InvalidSkuProcessor.
  */
-class InvalidSkuCheckerTest extends \PHPUnit_Framework_TestCase
+class InvalidSkuProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ObjectManagerHelper
+     * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
      */
-    private $objectManagerHelper;
-
-    /**
-     * @var \Magento\Catalog\Model\Product\Price\InvalidSkuChecker
-     */
-    private $invalidSkuChecker;
+    private $invalidSkuProcessor;
 
     /**
      * @var \Magento\Catalog\Model\ProductIdLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -39,16 +32,13 @@ class InvalidSkuCheckerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productIdLocator = $this->getMockBuilder(\Magento\Catalog\Model\ProductIdLocatorInterface::class)
-            ->setMethods(['retrieveProductIdsBySkus'])
             ->disableOriginalConstructor()->getMockForAbstractClass();
-
         $this->productRepository = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
-            ->setMethods(['get'])
             ->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->invalidSkuChecker = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Product\Price\InvalidSkuChecker::class,
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->invalidSkuProcessor = $objectManager->getObject(
+            \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor::class,
             [
                 'productIdLocator' => $this->productIdLocator,
                 'productRepository' => $this->productRepository
@@ -68,13 +58,11 @@ class InvalidSkuCheckerTest extends \PHPUnit_Framework_TestCase
         $idsBySku = [$productSku => [235235235 => $productType]];
         $this->productIdLocator->expects($this->atLeastOnce())->method('retrieveProductIdsBySkus')
             ->willReturn($idsBySku);
-
         $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->setMethods(['getPriceType'])
             ->disableOriginalConstructor()->getMockForAbstractClass();
         $productPriceType = 0;
         $product->expects($this->atLeastOnce())->method('getPriceType')->willReturn($productPriceType);
-
         $this->productRepository->expects($this->atLeastOnce())->method('get')->willReturn($product);
     }
 
@@ -91,31 +79,11 @@ class InvalidSkuCheckerTest extends \PHPUnit_Framework_TestCase
         $skus = [$methodParamSku];
         $allowedProductTypes = [$productType];
         $allowedPriceTypeValue = true;
-
         $this->prepareRetrieveInvalidSkuListMethod($productType, $productSku);
 
-        $expects = [$methodParamSku, $productSku];
-        $result = $this->invalidSkuChecker->retrieveInvalidSkuList($skus, $allowedProductTypes, $allowedPriceTypeValue);
-        $this->assertEquals($expects, $result);
-    }
-
-    /**
-     * Test for isSkuListValid() with Exception.
-     *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @return void
-     */
-    public function testIsSkuListValidWithException()
-    {
-        $productSku = 'LKJKJ2233636';
-        $productType = \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE;
-        $methodParamSku = 'SDFSDF3242355';
-        $skus = [$methodParamSku];
-        $allowedProductTypes = [$productType];
-        $allowedPriceTypeValue = true;
-
-        $this->prepareRetrieveInvalidSkuListMethod($productType, $productSku);
-
-        $this->invalidSkuChecker->isSkuListValid($skus, $allowedProductTypes, $allowedPriceTypeValue);
+        $this->assertEquals(
+            [$methodParamSku, $productSku],
+            $this->invalidSkuProcessor->retrieveInvalidSkuList($skus, $allowedProductTypes, $allowedPriceTypeValue)
+        );
     }
 }
