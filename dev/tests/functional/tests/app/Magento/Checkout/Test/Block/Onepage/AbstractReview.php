@@ -31,7 +31,7 @@ abstract class AbstractReview extends Block
      *
      * @var string
      */
-    protected $grandTotal = '[class="grand totals"] td.amount strong';
+    protected $grandTotal = '[class="grand totals"] td>strong';
 
     /**
      * Grand total excluding tax search mask.
