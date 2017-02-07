@@ -56,10 +56,11 @@ class ConsumerFactory
      * Return the actual Consumer implementation for the given consumer name.
      *
      * @param string $consumerName
+     * @param int $batchSize [optional]
      * @return ConsumerInterface
      * @throws LocalizedException
      */
-    public function get($consumerName)
+    public function get($consumerName, $batchSize = 0)
     {
         $consumerConfig = $this->getConsumerConfig()->getConsumer($consumerName);
         if ($consumerConfig === null) {
@@ -70,7 +71,10 @@ class ConsumerFactory
 
         return $this->objectManager->create(
             $consumerConfig->getConsumerInstance(),
-            ['configuration' => $this->createConsumerConfiguration($consumerConfig)]
+            [
+                'configuration' => $this->createConsumerConfiguration($consumerConfig),
+                'batchSize' => $batchSize,
+            ]
         );
     }
 
@@ -103,7 +107,8 @@ class ConsumerFactory
         $configData = [
             ConsumerConfigurationInterface::CONSUMER_NAME => $consumerConfigItem->getName(),
             ConsumerConfigurationInterface::QUEUE_NAME => $consumerConfigItem->getQueue(),
-            ConsumerConfigurationInterface::TOPICS => $topics
+            ConsumerConfigurationInterface::TOPICS => $topics,
+            ConsumerConfigurationInterface::MAX_MESSAGES => $consumerConfigItem->getMaxMessages(),
         ];
 
         return $this->objectManager->create(

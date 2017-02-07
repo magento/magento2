@@ -43,6 +43,11 @@ class BatchConsumer implements ConsumerInterface
     private $interval;
 
     /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @var Resource
      */
     private $resource;
@@ -82,7 +87,8 @@ class BatchConsumer implements ConsumerInterface
      * @param MergerFactory $mergerFactory
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
-     * @param int $interval
+     * @param int $interval [optional]
+     * @param int $batchSize [optional]
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -93,12 +99,14 @@ class BatchConsumer implements ConsumerInterface
         MergerFactory $mergerFactory,
         ResourceConnection $resource,
         ConsumerConfigurationInterface $configuration,
-        $interval = 5
+        $interval = 5,
+        $batchSize = 0
     ) {
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;
         $this->mergerFactory = $mergerFactory;
         $this->interval = $interval;
+        $this->batchSize = $batchSize;
         $this->resource = $resource;
         $this->configuration = $configuration;
     }
@@ -151,8 +159,11 @@ class BatchConsumer implements ConsumerInterface
     private function runDaemonMode(QueueInterface $queue, MergerInterface $merger)
     {
         $transactionCallback = $this->getTransactionCallback($queue, $merger);
+
         while (true) {
-            $messages = $this->getAllMessages($queue);
+            $messages = $this->batchSize > 0
+                ? $this->getMessages($queue, $this->batchSize)
+                : $this->getAllMessages($queue);
             $transactionCallback($messages);
             sleep($this->interval);
         }
@@ -171,10 +182,18 @@ class BatchConsumer implements ConsumerInterface
         $count = $maxNumberOfMessages
             ? $maxNumberOfMessages
             : $this->configuration->getMaxMessages() ?: 1;
-
-        $messages = $this->getMessages($queue, $count);
         $transactionCallback = $this->getTransactionCallback($queue, $merger);
-        $transactionCallback($messages);
+
+        if ($this->batchSize) {
+            while ($count > 0) {
+                $messages = $this->getMessages($queue, $count > $this->batchSize ? $this->batchSize : $count);
+                $transactionCallback($messages);
+                $count -= $this->batchSize;
+            }
+        } else {
+            $messages = $this->getMessages($queue, $count);
+            $transactionCallback($messages);
+        }
     }
 
     /**
