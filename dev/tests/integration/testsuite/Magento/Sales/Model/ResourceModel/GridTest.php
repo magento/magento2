@@ -8,9 +8,6 @@ namespace Magento\Sales\Model\ResourceModel;
 use Magento\Sales\Model\ResourceModel\Order\Grid\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
-/**
- * Class GridTest
- */
 class GridTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -26,7 +23,17 @@ class GridTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->resourceModel = $this->objectManager->create('Magento\Sales\Model\ResourceModel\Order\Grid');
+        $this->resourceModel = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Grid');
+    }
+
+    /**
+     * Tests synchronous insertion of the new entity into order grid.
+     *
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     */
+    public function testRefreshByScheduleSyncModeSuccess()
+    {
+        $this->assertNotEmpty($this->getOrderGridItemList());
     }
 
     /**
@@ -53,17 +60,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests synchronous insertion of the new entity into order grid.
-     *
-     * @magentoDataFixture Magento/Sales/_files/order.php
-     */
-    public function testRefreshByScheduleSyncModeSuccess()
-    {
-        $this->assertNotEmpty($this->getOrderGridItemList());
-    }
-
-    /**
-     * Returns sales order grid items
+     * Returns sales order grid items.
      *
      * @return \Magento\Framework\DataObject[]
      */
