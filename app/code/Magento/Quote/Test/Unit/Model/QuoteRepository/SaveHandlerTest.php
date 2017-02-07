@@ -14,7 +14,6 @@ use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Api\Data\CartExtensionInterface;
-use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
