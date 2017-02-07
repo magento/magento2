@@ -6,6 +6,7 @@
 namespace Magento\Sales\Model\ResourceModel\Provider;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Provides latest updated entities ids list
@@ -16,6 +17,11 @@ class UpdatedIdListProvider implements IdListProviderInterface
      * @var ResourceConnection
      */
     private $resourceConnection;
+
+    /**
+     * @var AdapterInterface
+     */
+    private $connection;
 
     /**
      * IdListProvider constructor.
@@ -58,10 +64,16 @@ class UpdatedIdListProvider implements IdListProviderInterface
     }
 
     /**
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * Returns connection.
+     *
+     * @return AdapterInterface
      */
     private function getConnection()
     {
-        return $this->resourceConnection->getConnection();
+        if (!$this->connection) {
+            $this->connection = $this->resourceConnection->getConnection('sales');
+        }
+
+        return $this->connection;
     }
 }

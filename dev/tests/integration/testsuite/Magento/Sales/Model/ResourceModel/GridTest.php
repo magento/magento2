@@ -32,6 +32,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests asynchronous insertion of the new entity into order grid.
      *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/order_async.php
      */
     public function testRefreshByScheduleAsyncModeSuccess()
