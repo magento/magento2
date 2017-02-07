@@ -50,6 +50,7 @@ class Cron implements \Magento\Framework\AppInterface
      * @param Console\Response $response
      * @param ObjectManagerInterface $objectManager
      * @param array $parameters
+     * @param AreaList|null          $areaList
      */
     public function __construct(
         State $state,
@@ -57,14 +58,14 @@ class Cron implements \Magento\Framework\AppInterface
         Console\Response $response,
         ObjectManagerInterface $objectManager,
         array $parameters = [],
-        \Magento\Framework\App\AreaList $arealist = null
+        \Magento\Framework\App\AreaList $areaList = null
     ) {
         $this->_state = $state;
         $this->_request = $request;
         $this->_request->setParams($parameters);
         $this->_response = $response;
         $this->objectManager = $objectManager;
-        $this->arealist = $arealist ?: $this->objectManager->get(\Magento\Framework\App\AreaList::class);
+        $this->areaList = $areaList ? $areaList : $this->objectManager->get(\Magento\Framework\App\AreaList::class);
     }
 
     /**
