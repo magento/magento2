@@ -10,7 +10,7 @@
         <variation name="AddProductsToShoppingCartEntityTestVariation1" ticketId="MAGETWO-42677">
             <data name="tag" xsi:type="string">severity:S2</data>
             <data name="productsData/0" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
-            <data name="cart/data/grand_total" xsi:type="string">200</data>
+            <data name="cart/data/grand_total" xsi:type="string">210</data>
             <data name="cart/data/subtotal" xsi:type="string">200</data>
             <data name="expectedItemsQty" xsi:type="number">2</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
@@ -20,12 +20,11 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartItemsQty" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation2">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S2</data>
             <data name="productsData/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
-            <data name="cart/data/grand_total" xsi:type="string">756</data>
+            <data name="cart/data/grand_total" xsi:type="string">761</data>
             <data name="cart/data/subtotal" xsi:type="string">756</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
@@ -36,9 +35,9 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation3">
-            <data name="tag" xsi:type="string">severity:S0</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S0</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
-            <data name="cart/data/grand_total" xsi:type="string">340</data>
+            <data name="cart/data/grand_total" xsi:type="string">345</data>
             <data name="cart/data/subtotal" xsi:type="string">340</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
@@ -49,7 +48,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation4">
-            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S1</data>
             <data name="productsData/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="cart/data/grand_total" xsi:type="string">50</data>
             <data name="cart/data/subtotal" xsi:type="string">50</data>
@@ -62,9 +61,9 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation5">
-            <data name="tag" xsi:type="string">severity:S0</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S0</data>
             <data name="productsData/0" xsi:type="string">configurableProduct::default</data>
-            <data name="cart/data/grand_total" xsi:type="string">120</data>
+            <data name="cart/data/grand_total" xsi:type="string">135</data>
             <data name="cart/data/subtotal" xsi:type="string">120</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
@@ -88,9 +87,9 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation7">
-            <data name="tag" xsi:type="string">severity:S2</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S2</data>
             <data name="productsData/0" xsi:type="string">groupedProduct::three_simple_products</data>
-            <data name="cart/data/grand_total" xsi:type="string">1920</data>
+            <data name="cart/data/grand_total" xsi:type="string">1950</data>
             <data name="cart/data/subtotal" xsi:type="string">1920</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
@@ -101,7 +100,8 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation8" summary="Enable https in backend and add products of different types to cart" ticketId="MAGETWO-42677">
-            <data name="tag" xsi:type="string">severity:S0</data>
+            <data name="tag" xsi:type="string">to_maintain:yes, severity:S0</data>
+            <data name="issue" xsi:type="string">Errors on configuration step. Skipped.</data>
             <data name="productsData/0" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <data name="productsData/1" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="productsData/2" xsi:type="string">downloadableProduct::with_two_separately_links</data>
@@ -164,6 +164,7 @@
             <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">10</data>
             <data name="totalItemsCountInShoppingCart" xsi:type="number">11</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
+            <data name="flushCache" xsi:type="boolean">true</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInMiniShoppingCart" />
@@ -183,6 +184,7 @@
             <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">10</data>
             <data name="totalItemsCountInShoppingCart" xsi:type="number">10</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
+            <data name="flushCache" xsi:type="boolean">true</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInMiniShoppingCart" />
@@ -202,9 +204,10 @@
             <data name="checkoutSummaryMaxVisibleCartItemsCount" xsi:type="number">10</data>
             <data name="totalItemsCountInShoppingCart" xsi:type="number">10</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
+            <data name="flushCache" xsi:type="boolean">true</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageOnCheckoutSummaryBlock" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertLinkGoToCartNotPresentInSummaryBlock" />
         </variation>
         <variation name="VariationWithCartItemsDisplayDefaultLimitationOnCheckout" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-63448">
@@ -223,9 +226,10 @@
             <data name="checkoutSummaryMaxVisibleCartItemsCount" xsi:type="number">10</data>
             <data name="totalItemsCountInShoppingCart" xsi:type="number">11</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
+            <data name="flushCache" xsi:type="boolean">true</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageOnCheckoutSummaryBlock" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertLinkGoToCartPresentInSummaryBlock" />
         </variation>
         <variation name="VariationWithCartItemsDisplayCustomLimitations" summary="Verify visible items count in minicart and checkout summary block according to configuration" ticketId="MAGETWO-63445, MAGETWO-63449, MAGETWO-63452">
@@ -238,12 +242,13 @@
             <data name="minicartMaxVisibleCartItemsCount" xsi:type="number">3</data>
             <data name="totalItemsCountInShoppingCart" xsi:type="number">4</data>
             <data name="cart/data/subtotal" xsi:type="string">6160.00</data>
+            <data name="flushCache" xsi:type="boolean">true</data>
             <data name="configData" xsi:type="string">checkout_max_items_display_count_to_2, minicart_max_items_display_count_to_3</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertItemsCounterInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyMessageOnCheckoutSummaryBlock" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertVisibleItemsQtyInCheckoutSummaryBlock" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertLinkGoToCartPresentInSummaryBlock" />
         </variation>
     </testCase>

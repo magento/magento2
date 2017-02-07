@@ -51,6 +51,11 @@ class Sidebar extends Block
     protected $productCounter = './/*[@class="counter-number"]';
 
     /**
+     * @var string
+     */
+    protected $visibleProductCounter = './/*[@class="items-total"]';
+
+    /**
      * Empty minicart message
      *
      * @var string
@@ -98,13 +103,6 @@ class Sidebar extends Block
      * @var string
      */
     protected $loadingMask = '.loading-mask';
-
-    /**
-     * Locator for items counter message.
-     *
-     * @var string
-     */
-    protected $itemsCounterMessage = '.items-total';
 
     /**
      * Open mini cart.
@@ -195,7 +193,7 @@ class Sidebar extends Block
      */
     public function getVisibleItemsCounter()
     {
-        return $this->_rootElement->find($this->itemsCounterMessage, Locator::SELECTOR_CSS)->getText();
+        return $this->_rootElement->find($this->visibleProductCounter, Locator::SELECTOR_XPATH)->getText();
     }
 
     /**

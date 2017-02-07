@@ -138,7 +138,7 @@ abstract class AbstractReview extends Block
      *
      * @var string
      */
-    protected $itemsBlockSelector = '.items-in-cart';
+    protected $itemsBlock = '.block.items-in-cart  > .title';
 
     /**
      * Selector for items counter
@@ -146,6 +146,13 @@ abstract class AbstractReview extends Block
      * @var string
      */
     protected $itemsCounterSelector = '.items-in-cart .title';
+
+    /**
+     * Selector for list of cart items
+     *
+     * @var string
+     */
+    protected $cartItemsContentSelector = '.content.minicart-items';
 
     /**
      * @constructor
@@ -254,7 +261,9 @@ abstract class AbstractReview extends Block
      */
     public function expandItemsBlock()
     {
-        $this->_rootElement->find($this->itemsBlockSelector)->click();
+        if (!$this->_rootElement->find($this->cartItemsContentSelector)->isVisible()) {
+            $this->browser->find($this->itemsBlock)->click();
+        }
     }
 
     /**

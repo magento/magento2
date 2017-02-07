@@ -8,6 +8,7 @@ namespace Magento\Checkout\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
+use Magento\Cms\Test\Page\CmsIndex;
 
 class AssertVisibleItemsQtyMessageOnCheckoutSummaryBlock extends AbstractConstraint
 {
@@ -24,18 +25,23 @@ class AssertVisibleItemsQtyMessageOnCheckoutSummaryBlock extends AbstractConstra
     /**
      * Assert that quantity of visible Cart items are the same as minicart configuration value.
      *
+     * @param CmsIndex $cmsIndex
      * @param CheckoutOnepage $checkoutPage
      * @param int $checkoutSummaryMaxVisibleCartItemsCount
      * @param int $totalItemsCountInShoppingCart
      * @return void
      */
     public function processAssert(
+        CmsIndex $cmsIndex,
         CheckoutOnepage $checkoutPage,
         $checkoutSummaryMaxVisibleCartItemsCount,
         $totalItemsCountInShoppingCart
     ) {
+        $sidebar = $cmsIndex->getCartSidebarBlock();
+        $sidebar->openMiniCart();
+        $sidebar->clickProceedToCheckoutButton();
+
         $reviewBlock = $checkoutPage->getReviewBlock();
-        $reviewBlock->expandItemsBlock();
 
         if ($totalItemsCountInShoppingCart > $checkoutSummaryMaxVisibleCartItemsCount) {
             $counterMessage = sprintf(

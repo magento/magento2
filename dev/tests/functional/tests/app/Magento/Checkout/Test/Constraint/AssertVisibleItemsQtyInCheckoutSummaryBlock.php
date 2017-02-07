@@ -8,7 +8,6 @@ namespace Magento\Checkout\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Fixture\Cart;
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
@@ -17,21 +16,16 @@ class AssertVisibleItemsQtyInCheckoutSummaryBlock extends AbstractConstraint
     /**
      * Assert that visible cart items count are the same as configuration value
      *
-     * @param CmsIndex $cmsIndex
      * @param CheckoutOnepage $checkoutPage
      * @param Cart $cart
      * @param int $checkoutSummaryMaxVisibleCartItemsCount
      * @return void
      */
     public function processAssert(
-        CmsIndex $cmsIndex,
         CheckoutOnepage $checkoutPage,
         Cart $cart,
         $checkoutSummaryMaxVisibleCartItemsCount
     ) {
-        $sidebar = $cmsIndex->getCartSidebarBlock();
-        $sidebar->clickProceedToCheckoutButton();
-
         $reviewBlock = $checkoutPage->getReviewBlock();
         $reviewBlock->expandItemsBlock();
 
