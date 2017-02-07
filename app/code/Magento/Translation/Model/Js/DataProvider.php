@@ -141,8 +141,8 @@ class DataProvider implements DataProviderInterface
                 }
             }
             if (false === $result) {
-                throw new \Exception(
-                    sprintf('Error while generating js translation dictionary: "%s"', error_get_last())
+                throw new LocalizedException(
+                    sprintf(__('Error while generating js translation dictionary: "%s"'), error_get_last())
                 );
             }
         }
