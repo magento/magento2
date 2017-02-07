@@ -13,7 +13,7 @@
         "magento/module-backend": "100.2.*"
     },
     "suggest": {
-        "magento/module-scalable-oms": "100.2.*",
+        "magento/module-scalable-oms": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",
