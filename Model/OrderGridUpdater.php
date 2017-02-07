@@ -41,7 +41,7 @@ class OrderGridUpdater
      * Works only if asynchronous grid indexing is disabled
      * in global settings.
      *
-     * @param $orderId
+     * @param int $orderId
      * @return void
      */
     public function update($orderId)

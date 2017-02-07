@@ -10,5 +10,8 @@
         <constraint name="signifyd_case_to_sales_order_id" onDelete="SET NULL" referenceEntity="sales_order">
             <field name="order_id" reference="entity_id" />
         </constraint>
+        <constraint name="signifyd_case_to_sales_order_grid_id" onDelete="SET NULL" referenceEntity="sales_order_grid">
+            <field name="order_id" reference="entity_id" />
+        </constraint>
     </entity>
 </config>
