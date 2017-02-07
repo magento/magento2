@@ -6,8 +6,7 @@
 
 namespace Magento\User\Test\Unit\Model;
 
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\User\Model\UserValidationRules;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Test class for \Magento\User\Model\User testing
@@ -62,7 +61,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     protected $roleFactoryMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
      */
     private $serializer;
     /**
@@ -133,7 +132,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['validateHash'])
             ->getMockForAbstractClass();
 
-        $this->serializer = $this->getMock(SerializerInterface::class, ['serialize', 'unserialize'], [], '', false);
+        $this->serializer = $this->getMock(Json::class, ['serialize', 'unserialize'], [], '', false);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(

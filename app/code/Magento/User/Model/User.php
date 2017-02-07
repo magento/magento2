@@ -10,7 +10,7 @@ use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\Store;
 use Magento\User\Api\Data\UserInterface;
 
@@ -116,7 +116,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $validationRules;
 
     /**
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -134,7 +134,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param SerializerInterface $serializer
+     * @param Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -151,7 +151,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        SerializerInterface $serializer = null
+        Json $serializer = null
     ) {
         $this->_encryptor = $encryptor;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -162,7 +162,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->validationRules = $validationRules;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**

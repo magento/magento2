@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\User\Model;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * @magentoAppArea adminhtml
@@ -30,7 +30,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     protected static $_newRole;
 
     /**
-     * @var SerializerInterface
+     * @var Json
      */
     private $serializer;
 
@@ -43,7 +43,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Stdlib\DateTime::class
         );
         $this->serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            SerializerInterface::class
+            Json::class
         );
     }
 
