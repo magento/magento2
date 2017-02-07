@@ -23,12 +23,17 @@ class InstallSchema implements InstallSchemaInterface
     private static $table = 'signifyd_case';
 
     /**
+     * @var string
+     */
+    private static $connectionName = 'sales';
+
+    /**
      * @inheritdoc
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         /** @var AdapterInterface $connection */
-        $connection = $setup->startSetup()->getConnection();
+        $connection = $setup->startSetup()->getConnection(self::$connectionName);
 
         $table = $connection->newTable($setup->getTable(static::$table));
         $table->addColumn(

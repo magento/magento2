@@ -60,4 +60,11 @@
             <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
+    <type name="Magento\ScalableOms\Console\Command\SplitSales">
+        <arguments>
+            <argument name="tables" xsi:type="array">
+                <item name="signifyd_case" xsi:type="string">signifyd_case</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
