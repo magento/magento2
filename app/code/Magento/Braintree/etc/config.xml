@@ -40,8 +40,8 @@
                 <masked_fields>cvv,number</masked_fields>
                 <privateInfoKeys>avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</privateInfoKeys>
                 <paymentInfoKeys>cc_type,cc_number,avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</paymentInfoKeys>
-                <avs_ems_adapter>Magento\Braintree\Model\AvsPaymentVerification</avs_ems_adapter>
-                <cvv_ems_adapter>Magento\Braintree\Model\CvvPaymentVerification</cvv_ems_adapter>
+                <avs_ems_adapter>Magento\Braintree\Model\AvsEmsCodeMapper</avs_ems_adapter>
+                <cvv_ems_adapter>Magento\Braintree\Model\CvvEmsMapper</cvv_ems_adapter>
             </braintree>
             <braintree_paypal>
                 <model>BraintreePayPalFacade</model>

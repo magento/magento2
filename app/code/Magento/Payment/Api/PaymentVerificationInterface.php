@@ -10,15 +10,21 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 /**
  * Payment provider codes verification interface.
  *
+ * Custom payment methods might implement this interface to provide
+ * specific mapping for payment methods, like AVS or CVV verification.
+ * The payment methods can map payment method info from internal sources,
+ * like additional information, to specific international codes.
+ *
  * @api
  */
 interface PaymentVerificationInterface
 {
     /**
      * Gets payment provider verification code.
-     * Returns null if payment method does not support verification.
+     * Returns null if verification cannot be obtained by payment method.
      *
-     * @return string|null
+     * @param OrderPaymentInterface $orderPayment
+     * @return string
      */
     public function getCode(OrderPaymentInterface $orderPayment);
 }

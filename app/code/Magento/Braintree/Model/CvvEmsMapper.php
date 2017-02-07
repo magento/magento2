@@ -16,7 +16,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * @see https://developers.braintreepayments.com/reference/response/transaction
  * @see http://www.emsecommerce.net/avs_cvv2_response_codes.htm
  */
-class CvvPaymentVerification implements PaymentVerificationInterface
+class CvvEmsMapper implements PaymentVerificationInterface
 {
     /**
      * List of mapping CVV codes
