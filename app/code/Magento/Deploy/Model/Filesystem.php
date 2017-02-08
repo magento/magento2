@@ -143,8 +143,8 @@ class Filesystem
         $this->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
-                DirectoryList::GENERATION,
-                DirectoryList::DI,
+                DirectoryList::GENERATED_CODE,
+                DirectoryList::GENERATED_METADATA,
                 DirectoryList::TMP_MATERIALIZATION_DIR
             ]
         );
@@ -241,8 +241,8 @@ class Filesystem
         $this->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
-                DirectoryList::GENERATION,
-                DirectoryList::DI,
+                DirectoryList::GENERATED_CODE,
+                DirectoryList::GENERATED_METADATA,
             ]
         );
         $cmd = $this->functionCallPath . 'setup:di:compile';
@@ -340,8 +340,8 @@ class Filesystem
         // Lock /generated/code, /generated/metadata/ and /var/view_preprocessed directories
         $this->changePermissions(
             [
-                DirectoryList::GENERATION,
-                DirectoryList::DI,
+                DirectoryList::GENERATED_CODE,
+                DirectoryList::GENERATED_METADATA,
                 DirectoryList::TMP_MATERIALIZATION_DIR,
             ],
             self::PERMISSIONS_DIR,

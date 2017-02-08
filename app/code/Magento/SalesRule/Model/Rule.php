@@ -190,6 +190,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param array $data
      * @param ExtensionAttributesFactory|null $extensionFactory
      * @param AttributeValueFactory|null $customAttributeFactory
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -208,7 +209,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null
+        AttributeValueFactory $customAttributeFactory = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_couponFactory = $couponFactory;
         $this->_codegenFactory = $codegenFactory;
@@ -225,7 +227,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $resourceCollection,
             $data,
             $extensionFactory,
-            $customAttributeFactory
+            $customAttributeFactory,
+            $serializer
         );
     }
 
