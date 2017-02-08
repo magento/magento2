@@ -25,7 +25,7 @@ class ConfigParser
      */
     public function parseServiceMethod($serviceMethod)
     {
-        $pattern = '/^([a-zA-Z\\\\]+)::([a-zA-Z]+)$/';
+        $pattern = '/^([a-zA-Z]+[a-zA-Z0-9\\\\]+)::([a-zA-Z0-9]+)$/';
         preg_match($pattern, $serviceMethod, $matches);
         if (!isset($matches[1]) || !isset($matches[2])) {
             throw new LocalizedException(
