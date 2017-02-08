@@ -28,6 +28,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/products';
 
     const KEY_TIER_PRICES = 'tier_prices';
+    const KEY_SPECIAL_PRICE = 'special_price';
     const KEY_CATEGORY_LINKS = 'category_links';
 
     /**
@@ -1121,5 +1122,22 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 ]
             ],
         ];
+    }
+
+    public function testSpecialPrice()
+    {
+        $productData = $this->getSimpleProductData();
+        $productData['custom_attributes'] = [
+            ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => '1']
+        ];
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $customAttributes = $response['custom_attributes'];
+        $this->assertNotEmpty($customAttributes);
+        $missingAttributes = ['news_from_date', 'custom_design_from'];
+        $expectedAttribute = ['special_price', 'special_from_date'];
+        $attributeCodes = array_column($customAttributes, 'attribute_code');
+        $this->assertEquals(0, count(array_intersect($attributeCodes, $missingAttributes)));
+        $this->assertEquals(2, count(array_intersect($attributeCodes, $expectedAttribute)));
     }
 }
