@@ -59,4 +59,19 @@ class CategoryForm extends FormTabs
 
         return $this->fillTabs($tabs, $element);
     }
+
+    /**
+     * Return category Id.
+     *
+     * @return string
+     */
+    public function getCategoryId()
+    {
+        $categoryId = '';
+        if (preg_match('/\/id\/(?<id>\d+)(?:\/)?/', $this->browser->getUrl(), $matches)) {
+            $categoryId = $matches['id'];
+        }
+
+        return $categoryId;
+    }
 }

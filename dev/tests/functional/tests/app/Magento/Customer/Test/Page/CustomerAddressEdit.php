@@ -45,7 +45,7 @@ class CustomerAddressEdit extends Page
     public function getEditForm()
     {
         return Factory::getBlockFactory()->getMagentoCustomerAddressEdit(
-            $this->browser->find($this->editForm, Locator::SELECTOR_CSS)
+                $this->browser->find($this->editForm, Locator::SELECTOR_CSS)
         );
     }
 }
