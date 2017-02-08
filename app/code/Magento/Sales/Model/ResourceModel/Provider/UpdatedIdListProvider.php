@@ -38,29 +38,22 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
      */
     public function getIds($mainTableName, $gridTableName)
     {
-        $lastUpdatedAt = $this->getLastUpdatedAtValue($gridTableName);
         $select = $this->getConnection()->select()
-            ->from($this->getConnection()->getTableName($mainTableName), ['entity_id'])
-            ->where('updated_at >= ?', $lastUpdatedAt);
+            ->from($this->getConnection()->getTableName($mainTableName), [$mainTableName.'.entity_id'])
+            ->joinLeft(
+                [$gridTableName => $this->getConnection()->getTableName($gridTableName)],
+                sprintf(
+                    '%s.%s = %s.%s',
+                    $mainTableName,
+                    'entity_id',
+                    $gridTableName,
+                    'entity_id'
+                ),
+                []
+            )
+            ->where($gridTableName.'.entity_id IS NULL');
 
         return $this->getConnection()->fetchAll($select, [], \Zend_Db::FETCH_COLUMN);
-    }
-
-    /**
-     * Returns update time of the last row in the grid.
-     *
-     * @param string $gridTableName
-     * @return string
-     */
-    private function getLastUpdatedAtValue($gridTableName)
-    {
-        $select = $this->getConnection()->select()
-            ->from($this->getConnection()->getTableName($gridTableName), ['updated_at'])
-            ->order('updated_at DESC')
-            ->limit(1);
-        $row = $this->getConnection()->fetchRow($select);
-
-        return isset($row['updated_at']) ? $row['updated_at'] : '0000-00-00 00:00:00';
     }
 
     /**

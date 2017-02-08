@@ -43,7 +43,7 @@ class Grid extends AbstractGrid
     /**
      * @var NotSyncedDataProviderInterface
      */
-    private $idListProvider;
+    private $notSyncedDataProvider;
 
     /**
      * @param Context $context
@@ -53,7 +53,7 @@ class Grid extends AbstractGrid
      * @param array $joins
      * @param array $columns
      * @param string $connectionName
-     * @param NotSyncedDataProviderInterface $idListProvider
+     * @param NotSyncedDataProviderInterface $notSyncedDataProvider
      */
     public function __construct(
         Context $context,
@@ -63,15 +63,15 @@ class Grid extends AbstractGrid
         array $joins = [],
         array $columns = [],
         $connectionName = null,
-        NotSyncedDataProviderInterface $idListProvider = null
+        NotSyncedDataProviderInterface $notSyncedDataProvider = null
     ) {
         $this->mainTableName = $mainTableName;
         $this->gridTableName = $gridTableName;
         $this->orderIdField = $orderIdField;
         $this->joins = $joins;
         $this->columns = $columns;
-        $this->idListProvider =
-            $idListProvider ?: ObjectManager::getInstance()->get(NotSyncedDataProviderInterface::class);
+        $this->notSyncedDataProvider =
+            $notSyncedDataProvider ?: ObjectManager::getInstance()->get(NotSyncedDataProviderInterface::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -111,7 +111,7 @@ class Grid extends AbstractGrid
         $select = $this->getGridOriginSelect()
             ->where(
                 $this->mainTableName . '.entity_id IN (?)',
-                $this->idListProvider->get($this->mainTableName, $this->gridTableName)
+                $this->notSyncedDataProvider->getIds($this->mainTableName, $this->gridTableName)
             );
 
         return $this->getConnection()->query(
