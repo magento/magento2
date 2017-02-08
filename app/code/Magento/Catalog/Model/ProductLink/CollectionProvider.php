@@ -48,14 +48,14 @@ class CollectionProvider
         $products = $this->providers[$type]->getLinkedProducts($product);
         $converter = $this->converterPool->getConverter($type);
         $output = [];
-	$realoutput = [];
+        $realoutput = [];
         foreach ($products as $item) {
             $output[$item->getId()] = $converter->convert($item);
         }
-	foreach ($output as $item) {
-	    $realoutput[$item["position"]] = $item;
-	}
-	ksort($realoutput);
+        foreach ($output as $item) {
+            $realoutput[$item["position"]] = $item;
+        }
+        ksort($realoutput);
         return $realoutput;
     }
 }
