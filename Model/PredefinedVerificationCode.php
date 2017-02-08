@@ -12,7 +12,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * Default implementation of payment verification interface.
  * The default code value can be configured via DI.
  */
-class PredefinedVerificationCodeMapper implements PaymentVerificationInterface
+class PredefinedVerificationCode implements PaymentVerificationInterface
 {
     /**
      * @var string

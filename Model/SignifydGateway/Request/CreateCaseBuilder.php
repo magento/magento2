@@ -116,7 +116,7 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
     {
         foreach ($data as $key => $value) {
             // skip allowed empty values
-            if (in_array($key, self::$allowed, true)) {
+            if (in_array($key, self::$allowed, true) && $value === '') {
                 continue;
             }
 
