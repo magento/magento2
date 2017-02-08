@@ -7,6 +7,7 @@ namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 class AddressMetadataTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,8 +37,10 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $customAttributesMetadata = $this->service->getCustomAttributesMetadata();
         $this->assertCount(0, $customAttributesMetadata, "Invalid number of attributes returned.");
+
         $customAttributesMetadata2 = $this->service->getCustomAttributesMetadata();
         $this->assertCount(0, $customAttributesMetadata2, "Invalid number of attributes returned.");
+
         $customAttributesMetadata3 = $this->service2->getCustomAttributesMetadata();
         $this->assertCount(0, $customAttributesMetadata3, "Invalid number of attributes returned.");
     }
@@ -67,8 +70,10 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
             $this->fail("Custom attributes declared in the config not found.");
         }
         $this->assertCount(2, $customAttributesMetadata, "Invalid number of attributes returned.");
+
         $customAttributesMetadata2 = $this->service->getCustomAttributesMetadata();
         $this->assertEquals($customAttributesMetadata, $customAttributesMetadata2);
+
         $customAttributesMetadata3 = $this->service2->getCustomAttributesMetadata();
         $this->assertEquals($customAttributesMetadata, $customAttributesMetadata3);
     }
@@ -80,8 +85,10 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $allAttributesMetadata = $this->service->getAllAttributesMetadata();
         $this->assertCount(21, $allAttributesMetadata, "Invalid number of attributes returned.");
+
         $allAttributesMetadata2 = $this->service->getAllAttributesMetadata();
         $this->assertEquals($allAttributesMetadata, $allAttributesMetadata2);
+
         $allAttributesMetadata3 = $this->service2->getAllAttributesMetadata();
         $this->assertEquals($allAttributesMetadata, $allAttributesMetadata3);
     }
@@ -96,6 +103,7 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
 
         $vatValidMetadata2 = $this->service->getAttributeMetadata('vat_is_valid');
         $this->assertEquals($vatValidMetadata, $vatValidMetadata2);
+
         $vatValidMetadata3 = $this->service2->getAttributeMetadata('vat_is_valid');
         $this->assertEquals('vat_is_valid', $vatValidMetadata3->getAttributeCode());
         $this->assertEquals($vatValidMetadata, $vatValidMetadata3);
@@ -136,6 +144,15 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAttributes()
     {
+        /** @var \Magento\Customer\Api\Data\ValidationRuleInterfaceFactory $validationRulesFactory */
+        $validationRulesFactory = $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Api\Data\ValidationRuleInterfaceFactory::class
+        );
+        $expectedValidationRules = [
+            $validationRulesFactory->create(['data' => ['name' => 'max_text_length', 'value' => 255]]),
+            $validationRulesFactory->create(['data' => ['name' => 'min_text_length', 'value' => 1]]),
+        ];
+
         $formAttributesMetadata = $this->service->getAttributes('customer_address_edit');
         $this->assertCount(15, $formAttributesMetadata, "Invalid number of attributes for the specified form.");
 
@@ -143,16 +160,24 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
         $attributeMetadata = $formAttributesMetadata['company'];
         $this->assertInstanceOf(\Magento\Customer\Model\Data\AttributeMetadata::class, $attributeMetadata);
         $this->assertEquals('company', $attributeMetadata->getAttributeCode(), 'Attribute code is invalid');
-        $this->assertNotEmpty($attributeMetadata->getValidationRules(), 'Validation rules are not set');
+        $validationRules = $attributeMetadata->getValidationRules();
+        $this->assertEquals($expectedValidationRules, $validationRules);
         $this->assertEquals('static', $attributeMetadata->getBackendType(), 'Backend type is invalid');
         $this->assertEquals('Company', $attributeMetadata->getFrontendLabel(), 'Frontend label is invalid');
+        $vatIdAttributeMetadata = $formAttributesMetadata['vat_id'];
+        $this->assertEquals([], $vatIdAttributeMetadata->getOptions());
+        $this->assertEquals([], $vatIdAttributeMetadata->getValidationRules());
 
         $formAttributesMetadata2 = $this->service->getAttributes('customer_address_edit');
         $this->assertEquals($formAttributesMetadata, $formAttributesMetadata2);
+
         $formAttributesMetadata3 = $this->service2->getAttributes('customer_address_edit');
         $attributeMetadata1 = $formAttributesMetadata3['company'];
         $this->assertEquals('company', $attributeMetadata1->getAttributeCode(), 'Attribute code is invalid');
-        $this->assertNotEmpty($attributeMetadata1->getValidationRules(), 'Validation rules are not set');
+        $this->assertEquals($expectedValidationRules, $attributeMetadata1->getValidationRules());
+        $vatIdAttributeMetadata1 = $formAttributesMetadata3['vat_id'];
+        $this->assertEquals([], $vatIdAttributeMetadata1->getOptions());
+        $this->assertEquals([], $vatIdAttributeMetadata1->getValidationRules());
         $this->assertEquals($formAttributesMetadata, $formAttributesMetadata3);
     }
 
@@ -163,5 +188,6 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
         /* @var \Magento\Framework\Config\CacheInterface $cache */
         $cache = $objectManager->create(\Magento\Framework\Config\CacheInterface::class);
         $cache->remove('extension_attributes_config');
+        CacheCleaner::cleanAll();
     }
 }

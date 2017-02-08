@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Model;
 
+use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -51,8 +52,10 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $customAttributesMetadata = $this->service->getCustomAttributesMetadata();
         $this->assertCount(0, $customAttributesMetadata, "Invalid number of attributes returned.");
+
         $customAttributesMetadata1 = $this->service->getCustomAttributesMetadata();
         $this->assertCount(0, $customAttributesMetadata1, "Invalid number of attributes returned.");
+
         $customAttributesMetadata2 = $this->service2->getCustomAttributesMetadata();
         $this->assertCount(0, $customAttributesMetadata2, "Invalid number of attributes returned.");
     }
@@ -121,8 +124,10 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $allAttributesMetadata = $this->service->getAllAttributesMetadata();
         $this->assertCount(30, $allAttributesMetadata, "Invalid number of attributes returned.");
+
         $allAttributesMetadata2 = $this->service->getAllAttributesMetadata();
         $this->assertEquals($allAttributesMetadata, $allAttributesMetadata2);
+
         $allAttributesMetadata3 = $this->service2->getAllAttributesMetadata();
         $this->assertEquals($allAttributesMetadata, $allAttributesMetadata3);
     }
@@ -255,5 +260,6 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
         /* @var \Magento\Framework\Config\CacheInterface $cache */
         $cache = $objectManager->create(\Magento\Framework\Config\CacheInterface::class);
         $cache->remove('extension_attributes_config');
+        CacheCleaner::cleanAll();
     }
 }
