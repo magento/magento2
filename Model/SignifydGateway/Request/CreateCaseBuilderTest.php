@@ -127,7 +127,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                     'city' => $billingAddress->getCity(),
                     'provinceCode' => $billingAddress->getRegionCode(),
                     'postalCode' => $billingAddress->getPostcode(),
-                    'countryCode' => $billingAddress->getCountryId()
+                    'countryCode' => $billingAddress->getCountryId(),
+                    'unit' => ''
                 ]
             ],
             'recipient' => [
@@ -223,7 +224,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                     'city' => $billingAddress->getCity(),
                     'provinceCode' => $billingAddress->getRegionCode(),
                     'postalCode' => $billingAddress->getPostcode(),
-                    'countryCode' => $billingAddress->getCountryId()
+                    'countryCode' => $billingAddress->getCountryId(),
+                    'unit' => ''
                 ]
             ],
             'seller' => $this->getSellerData(),
