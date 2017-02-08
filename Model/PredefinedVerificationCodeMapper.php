@@ -12,19 +12,19 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * Default implementation of payment verification interface.
  * The default code value can be configured via DI.
  */
-class DefaultPaymentVerification implements PaymentVerificationInterface
+class PredefinedVerificationCodeMapper implements PaymentVerificationInterface
 {
     /**
      * @var string
      */
-    private $default;
+    private $code;
 
     /**
-     * @param string $default
+     * @param string $code
      */
-    public function __construct($default = '')
+    public function __construct($code = '')
     {
-        $this->default = $default;
+        $this->code = $code;
     }
 
     /**
@@ -32,6 +32,6 @@ class DefaultPaymentVerification implements PaymentVerificationInterface
      */
     public function getCode(OrderPaymentInterface $orderPayment)
     {
-        return $this->default;
+        return $this->code;
     }
 }

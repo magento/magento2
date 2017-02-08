@@ -26,31 +26,31 @@ class PaymentVerificationFactory
     private $objectManager;
 
     /**
-     * @var DefaultPaymentVerification
+     * @var PaymentVerificationInterface
      */
-    private $avsAdapter;
+    private $avsDefaultAdapter;
 
     /**
-     * @var DefaultPaymentVerification
+     * @var PaymentVerificationInterface
      */
-    private $cvvAdapter;
+    private $cvvDefaultAdapter;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param ConfigInterface|Config $config
-     * @param DefaultPaymentVerification $avsAdapter
-     * @param DefaultPaymentVerification $cvvAdapter
+     * @param PaymentVerificationInterface $avsDefaultAdapter
+     * @param PaymentVerificationInterface $cvvDefaultAdapter
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ConfigInterface $config,
-        DefaultPaymentVerification $avsAdapter,
-        DefaultPaymentVerification $cvvAdapter
+        PaymentVerificationInterface $avsDefaultAdapter,
+        PaymentVerificationInterface $cvvDefaultAdapter
     ) {
         $this->config = $config;
         $this->objectManager = $objectManager;
-        $this->avsAdapter = $avsAdapter;
-        $this->cvvAdapter = $cvvAdapter;
+        $this->avsDefaultAdapter = $avsDefaultAdapter;
+        $this->cvvDefaultAdapter = $cvvDefaultAdapter;
     }
 
     /**
@@ -63,7 +63,7 @@ class PaymentVerificationFactory
      */
     public function createPaymentCvv($paymentCode)
     {
-        return $this->create($this->cvvAdapter, $paymentCode, 'cvv_ems_adapter');
+        return $this->create($this->cvvDefaultAdapter, $paymentCode, 'cvv_ems_adapter');
     }
 
     /**
@@ -76,7 +76,7 @@ class PaymentVerificationFactory
      */
     public function createPaymentAvs($paymentCode)
     {
-        return $this->create($this->avsAdapter, $paymentCode, 'avs_ems_adapter');
+        return $this->create($this->avsDefaultAdapter, $paymentCode, 'avs_ems_adapter');
     }
 
     /**
@@ -84,13 +84,13 @@ class PaymentVerificationFactory
      * Default implementation will be returned if payment method does not implement PaymentVerificationInterface.
      * Exception will be thrown if payment verification instance does not implement PaymentVerificationInterface.
      *
-     * @param DefaultPaymentVerification $defaultAdapter
+     * @param PaymentVerificationInterface $defaultAdapter
      * @param string $paymentCode
      * @param string $configKey
      * @return PaymentVerificationInterface
      * @throws \Exception
      */
-    private function create(DefaultPaymentVerification $defaultAdapter, $paymentCode, $configKey)
+    private function create(PaymentVerificationInterface $defaultAdapter, $paymentCode, $configKey)
     {
         $this->config->setMethodCode($paymentCode);
         $verificationClass = $this->config->getValue($configKey);

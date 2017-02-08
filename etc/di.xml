@@ -15,15 +15,18 @@
     <preference for="Magento\Signifyd\Api\GuaranteeCancelingServiceInterface" type="Magento\Signifyd\Model\Guarantee\CancelingService" />
     <preference for="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface" type="Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilder" />
 
-    <virtualType name="SignifydAvsDefaultMapper" type="Magento\Signifyd\Model\DefaultPaymentVerification">
+    <virtualType name="SignifydAvsDefaultMapper" type="Magento\Signifyd\Model\PredefinedVerificationCodeMapper">
         <arguments>
-            <argument name="default" xsi:type="string">U</argument>
+            <argument name="code" xsi:type="string">U</argument>
         </arguments>
     </virtualType>
+    <virtualType name="SignifydCvvDefaultMapper" type="Magento\Signifyd\Model\PredefinedVerificationCodeMapper" />
+
     <type name="Magento\Signifyd\Model\PaymentVerificationFactory">
         <arguments>
             <argument name="config" xsi:type="object">Magento\Payment\Gateway\Config\Config</argument>
-            <argument name="avsAdapter" xsi:type="object">SignifydAvsDefaultMapper</argument>
+            <argument name="avsDefaultAdapter" xsi:type="object">SignifydAvsDefaultMapper</argument>
+            <argument name="cvvDefaultAdapter" xsi:type="object">SignifydCvvDefaultMapper</argument>
         </arguments>
     </type>
 </config>
