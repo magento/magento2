@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -111,8 +111,9 @@ class DataProvider implements DataProviderInterface
                         $dictionary[$phrase] = $translatedPhrase;
                     }
                 } catch (\Exception $e) {
-                    throw new LocalizedException(sprintf(__('Error while translating phrase "%s" in file %s.'),
-                        $phrase, $filePath[0]));
+                    throw new LocalizedException(
+                        sprintf(__('Error while translating phrase "%s" in file %s.'), $phrase, $filePath[0])
+                    );
                 }
             }
         }
