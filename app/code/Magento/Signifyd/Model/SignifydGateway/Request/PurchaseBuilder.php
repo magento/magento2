@@ -12,6 +12,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Signifyd\Model\PaymentVerificationFactory;
 use Magento\Signifyd\Model\SignifydOrderSessionId;
+use Magento\Signifyd\Model\PaymentMethodMapper\PaymentMethodMapper;
 
 /**
  * Prepare data related to purchase event represented in case creation request.
@@ -39,21 +40,31 @@ class PurchaseBuilder
     private $paymentVerificationFactory;
 
     /**
-     * @param DateTimeFactory $dateTimeFactory
-     * @param ScopeInterface $scope
-     * @param SignifydOrderSessionId $signifydOrderSessionId
+     * @var PaymentMethodMapper
+     */
+    private $paymentMethodMapper;
+
+    /**
+     * PurchaseBuilder constructor.
+     *
+     * @param DateTimeFactory            $dateTimeFactory
+     * @param ScopeInterface             $scope
+     * @param SignifydOrderSessionId     $signifydOrderSessionId
      * @param PaymentVerificationFactory $paymentVerificationFactory
+     * @param PaymentMethodMapper        $paymentMethodMapper
      */
     public function __construct(
         DateTimeFactory $dateTimeFactory,
         ScopeInterface $scope,
         SignifydOrderSessionId $signifydOrderSessionId,
-        PaymentVerificationFactory $paymentVerificationFactory
+        PaymentVerificationFactory $paymentVerificationFactory,
+        PaymentMethodMapper $paymentMethodMapper
     ) {
         $this->dateTimeFactory = $dateTimeFactory;
         $this->scope = $scope;
         $this->signifydOrderSessionId = $signifydOrderSessionId;
         $this->paymentVerificationFactory = $paymentVerificationFactory;
+        $this->paymentMethodMapper = $paymentMethodMapper;
     }
 
     /**
@@ -83,6 +94,8 @@ class PurchaseBuilder
                 'cvvResponseCode' => $this->getCvvCode($orderPayment),
                 'orderChannel' => $this->getOrderChannel(),
                 'totalPrice' => $order->getGrandTotal(),
+                'paymentMethod' => $this->paymentMethodMapper
+                    ->getSignifydPaymentMethodCode($orderPayment->getMethod())
             ],
         ];
 
