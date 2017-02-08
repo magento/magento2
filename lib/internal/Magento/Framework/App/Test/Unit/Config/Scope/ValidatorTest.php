@@ -3,14 +3,14 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Store\Test\Unit\Model\Scope;
+namespace Magento\Framework\App\Test\Unit\Config\Scope;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\Scope\Validator;
+use Magento\Framework\App\Scope\Validator;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase

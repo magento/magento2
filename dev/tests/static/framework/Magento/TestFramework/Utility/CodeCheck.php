@@ -22,7 +22,7 @@ class CodeCheck
     {
         /* avoid matching namespace instead of class */
         $content = preg_replace('/namespace[^;]+;/', '', $content);
-        return self::_isRegexpMatched('/[^a-z\d_]' . preg_quote($className, '/') . '[^a-z\d_\\\\]/iS', $content);
+        return self::_isRegexpMatched('/[^a-z\d_\$]' . preg_quote($className, '/') . '[^a-z\d_\\\\]/iS', $content);
     }
 
     /**
@@ -126,7 +126,7 @@ class CodeCheck
     {
         $name = preg_quote($name, '/');
         return self::_isRegexpMatched(
-            '/\s+extends\s+' . $name . '\b|\s+implements\s+[^{]*\b' . $name . '\b[^{^\\\\]*\{/iS',
+            '/\s+extends\s+\\\\?' . $name . '\b|\s+implements\s+[^{]*\b' . $name . '\b[^{^\\\\]*\{/iS',
             $content
         );
     }
