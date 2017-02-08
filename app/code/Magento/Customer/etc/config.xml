@@ -87,7 +87,7 @@ T: {{var telephone}}
 {{depend street3}}{{var street3}}|{{/depend}}
 {{depend street4}}{{var street4}}|{{/depend}}
 
-{{if city}}{{var city}},|{{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}|{{/if}}
+{{if city}}{{var city}},{{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}|{{/if}}
 {{var country}}|
 {{depend telephone}}T: {{var telephone}}|{{/depend}}
 {{depend fax}}F: {{var fax}}|{{/depend}}
