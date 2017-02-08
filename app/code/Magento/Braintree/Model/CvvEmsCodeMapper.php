@@ -6,6 +6,7 @@
 namespace Magento\Braintree\Model;
 
 use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
+use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Payment\Api\PaymentVerificationInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
@@ -42,12 +43,18 @@ class CvvEmsCodeMapper implements PaymentVerificationInterface
     /**
      * Gets payment CVV verification code.
      * Returns null if payment does not contain any CVV details.
+     * Throws an exception if specified order payment has different payment method code.
      *
      * @param OrderPaymentInterface $orderPayment
      * @return string
+     * @throws \Exception
      */
     public function getCode(OrderPaymentInterface $orderPayment)
     {
+        if ($orderPayment->getMethod() !== ConfigProvider::CODE) {
+            throw new \Exception('"' . $orderPayment->getMethod() . '" does not supported by Braintree CVV mapper.');
+        }
+
         $additionalInfo = $orderPayment->getAdditionalInformation();
         if (empty($additionalInfo[PaymentDetailsHandler::CVV_RESPONSE_CODE])) {
             return self::$notProvidedCode;

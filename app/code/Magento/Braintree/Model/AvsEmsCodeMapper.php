@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Model;
 
+use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
 use Magento\Payment\Api\PaymentVerificationInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
@@ -43,18 +44,25 @@ class AvsEmsCodeMapper implements PaymentVerificationInterface
     /**
      * Gets payment AVS verification code.
      * Returns null if payment does not contain any AVS details.
+     * Throws an exception if specified order payment has different payment method code.
      *
      * @param OrderPaymentInterface $orderPayment
      * @return string
+     * @throws \Exception
      */
     public function getCode(OrderPaymentInterface $orderPayment)
     {
+        if ($orderPayment->getMethod() !== ConfigProvider::CODE) {
+            throw new \Exception('"' . $orderPayment->getMethod() . '" does not supported by Braintree AVS mapper.');
+        }
+
         $additionalInfo = $orderPayment->getAdditionalInformation();
         if (empty($additionalInfo[PaymentDetailsHandler::AVS_POSTAL_RESPONSE_CODE]) ||
             empty($additionalInfo[PaymentDetailsHandler::AVS_STREET_ADDRESS_RESPONSE_CODE])
         ) {
             return self::$unavailableCode;
         }
+
         $streetCode = $additionalInfo[PaymentDetailsHandler::AVS_STREET_ADDRESS_RESPONSE_CODE];
         $zipCode = $additionalInfo[PaymentDetailsHandler::AVS_POSTAL_RESPONSE_CODE];
         $key = $zipCode . $streetCode;
