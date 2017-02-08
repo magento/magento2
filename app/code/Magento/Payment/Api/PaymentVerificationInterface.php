@@ -24,9 +24,11 @@ interface PaymentVerificationInterface
 {
     /**
      * Gets payment provider verification code.
+     * Throws an exception if provided payment method is different to verification implementation.
      *
      * @param OrderPaymentInterface $orderPayment
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function getCode(OrderPaymentInterface $orderPayment);
 }

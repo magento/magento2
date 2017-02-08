@@ -52,7 +52,9 @@ class CvvEmsCodeMapper implements PaymentVerificationInterface
     public function getCode(OrderPaymentInterface $orderPayment)
     {
         if ($orderPayment->getMethod() !== ConfigProvider::CODE) {
-            throw new \Exception('"' . $orderPayment->getMethod() . '" does not supported by Braintree CVV mapper.');
+            throw new \InvalidArgumentException(
+                'The "' . $orderPayment->getMethod() . '" does not supported by Braintree CVV mapper.'
+            );
         }
 
         $additionalInfo = $orderPayment->getAdditionalInformation();

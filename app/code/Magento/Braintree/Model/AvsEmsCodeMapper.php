@@ -48,12 +48,14 @@ class AvsEmsCodeMapper implements PaymentVerificationInterface
      *
      * @param OrderPaymentInterface $orderPayment
      * @return string
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function getCode(OrderPaymentInterface $orderPayment)
     {
         if ($orderPayment->getMethod() !== ConfigProvider::CODE) {
-            throw new \Exception('"' . $orderPayment->getMethod() . '" does not supported by Braintree AVS mapper.');
+            throw new \InvalidArgumentException(
+                'The "' . $orderPayment->getMethod() . '" does not supported by Braintree AVS mapper.'
+            );
         }
 
         $additionalInfo = $orderPayment->getAdditionalInformation();

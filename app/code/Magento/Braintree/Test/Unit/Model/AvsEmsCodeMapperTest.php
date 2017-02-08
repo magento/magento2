@@ -59,8 +59,8 @@ class AvsEmsCodeMapperTest extends \PHPUnit_Framework_TestCase
      * Checks a test case, when payment order is not Braintree payment method.
      *
      * @covers \Magento\Braintree\Model\AvsEmsCodeMapper::getCode
-     * @expectedException \Exception
-     * @expectedExceptionMessage "some_payment" does not supported by Braintree AVS mapper.
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The "some_payment" does not supported by Braintree AVS mapper.
      */
     public function testGetCodeWithException()
     {
