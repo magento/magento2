@@ -4,7 +4,7 @@
  *
  * Format: array(<constant_name>[, <class_scope> = ''[, <replacement>]])
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -562,10 +562,13 @@ return [
         '\Magento\Framework\App\Filesystem',
         '\Magento\Framework\App\Filesystem\DirectoryList::SESSION',
     ],
-    ['DI_DIR', '\Magento\Framework\App\Filesystem', '\Magento\Framework\App\Filesystem\DirectoryList::DI'],
+    ['DI_DIR',
+        '\Magento\Framework\App\Filesystem',
+        '\Magento\Framework\App\Filesystem\DirectoryList::GENERATED_METADATA'
+    ],
     ['GENERATION_DIR',
         '\Magento\Framework\App\Filesystem',
-        '\Magento\Framework\App\Filesystem\DirectoryList::GENERATION',
+        '\Magento\Framework\App\Filesystem\DirectoryList::GENERATED_CODE',
     ],
     ['UPLOAD_DIR',
         '\Magento\Framework\App\Filesystem',

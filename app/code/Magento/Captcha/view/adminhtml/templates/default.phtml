@@ -1,18 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Captcha\Block\Captcha\DefaultCaptcha $block */
+
+/** @var \Magento\Captcha\Model\DefaultModel $captcha */
+$captcha = $block->getCaptchaModel();
 ?>
-<?php /* @var $captcha \Magento\Captcha\Model\DefaultModel */ ?>
-<?php /* @var $block \Magento\Captcha\Block\Captcha\DefaultCaptcha */ ?>
-<?php $captcha = $block->getCaptchaModel() ?>
 <div class="admin__field _required">
     <label for="captcha" class="admin__field-label">
-        <span><?php /* @escapeNotVerified */ echo __('Please enter the letters from the image') ?></span>
+        <span><?php echo $block->escapeHtml(__('Please enter the letters from the image')) ?></span>
     </label>
     <div class="admin__field-control">
         <input
@@ -23,7 +24,7 @@
             data-validate="{required:true}"/>
         <?php if ($captcha->isCaseSensitive()) :?>
             <div class="admin__field-note">
-                <span><?php /* @escapeNotVerified */ echo __('<strong>Attention</strong>: Captcha is case sensitive.') ?></span>
+                <span><?php echo $block->escapeHtml(__('<strong>Attention</strong>: Captcha is case sensitive.'), ['strong']) ?></span>
             </div>
         <?php endif; ?>
     </div>
@@ -33,7 +34,7 @@
         id="captcha-reload"
         class="captcha-reload"
         src="<?php echo $block->escapeUrl($block->getViewFileUrl('Magento_Captcha::reload.png')) ?>"
-        alt="<?php /* @escapeNotVerified */ echo __('Reload captcha') ?>"/>
+        alt="<?php echo $block->escapeHtmlAttr(__('Reload captcha')) ?>"/>
     <img
         id="<?php echo $block->escapeHtmlAttr($block->getFormId()) ?>"
         width="<?php /* @noEscape */ echo (float) $block->getImgWidth() ?>"
@@ -44,7 +45,7 @@
     require(["prototype", "mage/captcha"], function(){
 
 //<![CDATA[
-        var captcha = new Captcha('<?php echo $block->escapeUrl($block->getRefreshUrl()) ?>', '<?php echo $block->escapeJs($block->getFormId()) ?>');
+        var captcha = new Captcha('<?php echo $block->escapeJs($block->escapeUrl($block->getRefreshUrl())) ?>', '<?php echo $block->escapeJs($block->escapeHtml($block->getFormId())) ?>');
 
         $('captcha-reload').observe('click', function () {
             captcha.refresh(this);

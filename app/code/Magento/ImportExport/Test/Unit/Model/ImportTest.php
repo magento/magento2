@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model;
+
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\ImportExport\Model\Import;
 
 /**
  * Class ImportTest
@@ -126,7 +129,7 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->getMock();
         $this->_importConfig = $this->getMockBuilder(\Magento\ImportExport\Model\Import\Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityTypeCode', 'getBehavior', 'getEntities'])
+            ->setMethods(['getEntityTypeCode', 'getBehavior', 'getEntities', 'getRelatedIndexers'])
             ->getMockForAbstractClass();
         $this->_entityFactory = $this->getMockBuilder(\Magento\ImportExport\Model\Import\Entity\Factory::class)
             ->disableOriginalConstructor()
@@ -419,12 +422,90 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
-    /**
-     * @todo to implement it.
-     */
     public function testInvalidateIndex()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $indexers = [
+            'indexer_1' => 'indexer_1',
+            'indexer_2' => 'indexer_2'
+        ];
+        $indexer1 = $this->getMockBuilder(IndexerInterface::class)
+            ->getMockForAbstractClass();
+        $indexer2 = clone $indexer1;
+        $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $indexer1->expects($this->once())
+            ->method('isScheduled')
+            ->willReturn(true);
+        $indexer1->expects($this->never())
+            ->method('invalidate');
+        $indexer2->expects($this->once())
+            ->method('isScheduled')
+            ->willReturn(false);
+        $indexer2->expects($this->once())
+            ->method('invalidate');
+
+        $this->_importConfig->expects($this->atLeastOnce())
+            ->method('getRelatedIndexers')
+            ->willReturn($indexers);
+        $this->indexerRegistry->expects($this->any())
+            ->method('get')
+            ->willReturnMap([
+                ['indexer_1', $indexer1],
+                ['indexer_2', $indexer2],
+            ]);
+
+        $import = new Import(
+            $logger,
+            $this->_filesystem,
+            $this->_importExportData,
+            $this->_coreConfig,
+            $this->_importConfig,
+            $this->_entityFactory,
+            $this->_importData,
+            $this->_csvFactory,
+            $this->_httpFactory,
+            $this->_uploaderFactory,
+            $this->_behaviorFactory,
+            $this->indexerRegistry,
+            $this->historyModel,
+            $this->dateTime
+        );
+
+        $import->setEntity('test');
+        $import->invalidateIndex();
+    }
+
+    public function testInvalidateIndexWithoutIndexers()
+    {
+        $this->_importConfig->expects($this->once())
+            ->method('getRelatedIndexers')
+            ->willReturn([]);
+
+        $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $import = new Import(
+            $logger,
+            $this->_filesystem,
+            $this->_importExportData,
+            $this->_coreConfig,
+            $this->_importConfig,
+            $this->_entityFactory,
+            $this->_importData,
+            $this->_csvFactory,
+            $this->_httpFactory,
+            $this->_uploaderFactory,
+            $this->_behaviorFactory,
+            $this->indexerRegistry,
+            $this->historyModel,
+            $this->dateTime
+        );
+
+        $import->setEntity('test');
+        $this->assertSame($import, $import->invalidateIndex());
     }
 
     /**

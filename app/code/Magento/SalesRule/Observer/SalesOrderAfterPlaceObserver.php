@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Observer;
@@ -57,7 +57,7 @@ class SalesOrderAfterPlaceObserver implements ObserverInterface
     {
         $order = $observer->getEvent()->getOrder();
 
-        if (!$order || $order->getDiscountAmount() == 0) {
+        if (!$order || !$order->getAppliedRuleIds()) {
             return $this;
         }
 

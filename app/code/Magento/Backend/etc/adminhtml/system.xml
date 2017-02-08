@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,7 +16,7 @@
         <tab id="advanced" translate="label" sortOrder="999999">
             <label>Advanced</label>
         </tab>
-        <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="0" showInWebsite="0" showInStore="0">
             <label>Advanced</label>
             <tab>advanced</tab>
             <resource>Magento_Backend::advanced</resource>
@@ -198,7 +198,7 @@
             <resource>Magento_Config::config_general</resource>
             <group id="country" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Country Options</label>
-                <field id="allow" translate="label" type="multiselect" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="allow" translate="label" type="multiselect" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Allow Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <can_be_empty>1</can_be_empty>

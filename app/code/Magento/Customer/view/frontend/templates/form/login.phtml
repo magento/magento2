@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@
 ?>
 <div class="block block-customer-login">
     <div class="block-title">
-        <strong id="block-customer-login-heading" role="heading" aria-level="2"><?php /* @escapeNotVerified */ echo __('Registered Customers') ?></strong>
+        <strong id="block-customer-login-heading" role="heading" aria-level="2"><?php echo $block->escapeHtml(__('Registered Customers')) ?></strong>
     </div>
     <div class="block-content" aria-labelledby="block-customer-login-heading">
         <form class="form form-login"
@@ -19,24 +19,24 @@
               id="login-form"
               data-mage-init='{"validation":{}}'>
             <?php echo $block->getBlockHtml('formkey'); ?>
-            <fieldset class="fieldset login" data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>">
-                <div class="field note"><?php /* @escapeNotVerified */ echo __('If you have an account, sign in with your email address.') ?></div>
+            <fieldset class="fieldset login" data-hasrequired="<?php echo $block->escapeHtmlAttr(__('* Required Fields')) ?>">
+                <div class="field note"><?php echo $block->escapeHtml(__('If you have an account, sign in with your email address.')) ?></div>
                 <div class="field email required">
-                    <label class="label" for="email"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
+                    <label class="label" for="email"><span><?php echo $block->escapeHtml(__('Email')) ?></span></label>
                     <div class="control">
-                        <input name="login[username]" value="<?php echo $block->escapeHtmlAttr($block->getUsername()) ?>" <?php if ($block->isAutocompleteDisabled()): ?> autocomplete="off"<?php endif; ?> id="email" type="email" class="input-text" title="<?php /* @escapeNotVerified */ echo __('Email') ?>" data-validate="{required:true, 'validate-email':true}">
+                        <input name="login[username]" value="<?php echo $block->escapeHtmlAttr($block->getUsername()) ?>" <?php if ($block->isAutocompleteDisabled()): ?> autocomplete="off"<?php endif; ?> id="email" type="email" class="input-text" title="<?php echo $block->escapeHtmlAttr(__('Email')) ?>" data-validate="{required:true, 'validate-email':true}">
                     </div>
                 </div>
                 <div class="field password required">
-                    <label for="pass" class="label"><span><?php /* @escapeNotVerified */ echo __('Password') ?></span></label>
+                    <label for="pass" class="label"><span><?php echo $block->escapeHtml(__('Password')) ?></span></label>
                     <div class="control">
-                        <input name="login[password]" type="password" <?php if ($block->isAutocompleteDisabled()): ?> autocomplete="off"<?php endif; ?> class="input-text" id="pass" title="<?php /* @escapeNotVerified */ echo __('Password') ?>" data-validate="{required:true}">
+                        <input name="login[password]" type="password" <?php if ($block->isAutocompleteDisabled()): ?> autocomplete="off"<?php endif; ?> class="input-text" id="pass" title="<?php echo $block->escapeHtmlAttr(__('Password')) ?>" data-validate="{required:true}">
                     </div>
                 </div>
                 <?php echo $block->getChildHtml('form_additional_info'); ?>
                 <div class="actions-toolbar">
-                    <div class="primary"><button type="submit" class="action login primary" name="send" id="send2"><span><?php /* @escapeNotVerified */ echo __('Sign In') ?></span></button></div>
-                    <div class="secondary"><a class="action remind" href="<?php echo $block->escapeUrl($block->getForgotPasswordUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('Forgot Your Password?') ?></span></a></div>
+                    <div class="primary"><button type="submit" class="action login primary" name="send" id="send2"><span><?php echo $block->escapeHtml(__('Sign In')) ?></span></button></div>
+                    <div class="secondary"><a class="action remind" href="<?php echo $block->escapeUrl($block->getForgotPasswordUrl()) ?>"><span><?php echo $block->escapeHtml(__('Forgot Your Password?')) ?></span></a></div>
                 </div>
             </fieldset>
         </form>

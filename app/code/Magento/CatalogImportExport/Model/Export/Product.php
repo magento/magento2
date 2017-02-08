@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export;
@@ -126,6 +126,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @var array
      */
     protected $_attributeTypes = [];
+
+    /**
+     * Attributes defined by user
+     *
+     * @var array
+     */
+    private $userDefinedAttributes = [];
 
     /**
      * Product collection
@@ -261,7 +268,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected $dateAttrCodes = [
         'special_from_date',
-        'special_to_date'
+        'special_to_date',
+        'news_from_date',
+        'news_to_date',
+        'custom_design_from',
+        'custom_design_to'
     ];
 
     /**
@@ -817,7 +828,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         while (true) {
             ++$page;
             $entityCollection = $this->_getEntityCollection(true);
-            $entityCollection->setOrder('has_options', 'asc');
+            $entityCollection->setOrder('entity_id', 'asc');
             $entityCollection->setStoreId(Store::DEFAULT_STORE_ID);
             $this->_prepareEntityCollection($entityCollection);
             $this->paginateCollection($page, $this->getItemsPerPage());
@@ -836,6 +847,24 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         }
         return $writer->getContents();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
+    {
+        $exportFilter = !empty($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP]) ?
+            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP] : [];
+
+        if (isset($exportFilter['category_ids'])
+            && trim($exportFilter['category_ids'])
+            && $collection instanceof \Magento\Catalog\Model\ResourceModel\Product\Collection
+        ) {
+            $collection->addCategoriesFilter(['in' => explode(',', $exportFilter['category_ids'])]);
+        }
+
+        return parent::_prepareEntityCollection($collection);
     }
 
     /**
@@ -910,25 +939,29 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     }
                     $fieldName = isset($this->_fieldsMap[$code]) ? $this->_fieldsMap[$code] : $code;
 
-                    if (in_array($code, $this->dateAttrCodes)) {
-                        $attrValue = $this->_localeDate->formatDateTime(
-                            new \DateTime($attrValue),
-                            \IntlDateFormatter::SHORT,
-                            \IntlDateFormatter::NONE,
-                            null,
-                            date_default_timezone_get()
-                        );
-                    } else if ($this->_attributeTypes[$code] === 'datetime') {
-                        $attrValue = $this->_localeDate->formatDateTime(
-                            new \DateTime($attrValue),
-                            \IntlDateFormatter::SHORT,
-                            \IntlDateFormatter::SHORT
-                        );
+                    if ($this->_attributeTypes[$code] == 'datetime') {
+                        if (in_array($code, $this->dateAttrCodes)
+                            || in_array($code, $this->userDefinedAttributes)
+                        ) {
+                            $attrValue = $this->_localeDate->formatDateTime(
+                                new \DateTime($attrValue),
+                                \IntlDateFormatter::SHORT,
+                                \IntlDateFormatter::NONE,
+                                null,
+                                date_default_timezone_get()
+                            );
+                        } else {
+                            $attrValue = $this->_localeDate->formatDateTime(
+                                new \DateTime($attrValue),
+                                \IntlDateFormatter::SHORT,
+                                \IntlDateFormatter::SHORT
+                            );
+                        }
                     }
 
                     if ($storeId != Store::DEFAULT_STORE_ID
                         && isset($data[$itemId][Store::DEFAULT_STORE_ID][$fieldName])
-                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == $attrValue
+                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == htmlspecialchars_decode($attrValue)
                     ) {
                         continue;
                     }
@@ -937,7 +970,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         if (is_scalar($attrValue)) {
                             if (!in_array($fieldName, $this->_getExportMainAttrCodes())) {
                                 $additionalAttributes[$fieldName] = $fieldName .
-                                    ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $attrValue;
+                                    ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $this->wrapValue($attrValue);
                             }
                             $data[$itemId][$storeId][$fieldName] = htmlspecialchars_decode($attrValue);
                         }
@@ -947,7 +980,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                             $additionalAttributes[$code] = $fieldName .
                                 ImportProduct::PAIR_NAME_VALUE_SEPARATOR . implode(
                                     ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
-                                    $this->collectedMultiselectsData[$storeId][$productLinkId][$code]
+                                    $this->wrapValue($this->collectedMultiselectsData[$storeId][$productLinkId][$code])
                                 );
                         }
                     }
@@ -967,7 +1000,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     $data[$itemId][$storeId][self::COL_ATTR_SET] = $this->_attrSetIdToName[$attrSetId];
                     $data[$itemId][$storeId][self::COL_TYPE] = $item->getTypeId();
                 }
-                $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
+                $data[$itemId][$storeId][self::COL_SKU] = htmlspecialchars_decode($item->getSku());
                 $data[$itemId][$storeId]['store_id'] = $storeId;
                 $data[$itemId][$storeId]['product_id'] = $itemId;
                 $data[$itemId][$storeId]['product_link_id'] = $productLinkId;
@@ -976,6 +1009,25 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         }
 
         return $data;
+    }
+
+    /**
+     * Wrap values with double quotes if "Fields Enclosure" option is enabled
+     *
+     * @param string|array $value
+     * @return string|array
+     */
+    private function wrapValue($value)
+    {
+        if (!empty($this->_parameters[\Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE])) {
+            $wrap = function ($value) {
+                return sprintf('"%s"', str_replace('"', '""', $value));
+            };
+
+            $value = is_array($value) ? array_map($wrap, $value) : $wrap($value);
+        }
+
+        return $value;
     }
 
     /**
@@ -1380,6 +1432,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->_attributeValues[$attribute->getAttributeCode()] = $this->getAttributeOptions($attribute);
             $this->_attributeTypes[$attribute->getAttributeCode()] =
                 \Magento\ImportExport\Model\Import::getAttributeType($attribute);
+            if ($attribute->getIsUserDefined()) {
+                $this->userDefinedAttributes[] = $attribute->getAttributeCode();
+            }
         }
         return $this;
     }

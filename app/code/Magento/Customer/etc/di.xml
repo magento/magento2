@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -51,6 +51,12 @@
                 type="Magento\Customer\Helper\View" />
     <preference for="Magento\Customer\Model\Address\CustomAttributeListInterface"
                 type="Magento\Customer\Model\Address\CustomAttributeList" />
+    <preference for="Magento\Customer\Model\Customer\Source\GroupSourceInterface"
+                type="Magento\Customer\Model\Customer\Source\Group" />
+    <preference for="Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface"
+                type="Magento\Customer\Model\Customer\Attribute\Source\Group"/>
+    <preference for="Magento\Customer\Block\Account\SortLinkInterface"
+                type="Magento\Customer\Block\Account\SortLink"/>
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
@@ -306,6 +312,9 @@
     </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
+    </type>
+    <type name="Magento\Directory\Model\AllowedCountries">
+        <plugin name="customerAllowedCountries" type="Magento\Customer\Model\Plugin\AllowedCountries"/>
     </type>
     <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>

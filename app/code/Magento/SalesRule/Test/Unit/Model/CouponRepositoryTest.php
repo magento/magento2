@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model;
@@ -233,6 +233,7 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $collectionSize = 1;
+        $couponMock = $this->getMock(\Magento\SalesRule\Api\Data\CouponInterface::class);
         /**
          * @var \Magento\Framework\Api\SearchCriteriaInterface $searchCriteriaMock
          */
@@ -254,8 +255,8 @@ class CouponRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
         $collectionMock->expects($this->once())->method('getSize')->willReturn($collectionSize);
         $this->searchResultsMock->expects($this->once())->method('setTotalCount')->with($collectionSize);
-        $collectionMock->expects($this->once())->method('getItems')->willReturn([]);
-        $this->searchResultsMock->expects($this->once())->method('setItems')->with([]);
+        $collectionMock->expects($this->once())->method('getItems')->willReturn([$couponMock]);
+        $this->searchResultsMock->expects($this->once())->method('setItems')->with([$couponMock]);
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultsMock);
 
         $this->assertEquals($this->searchResultsMock, $this->model->getList($searchCriteriaMock));

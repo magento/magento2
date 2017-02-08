@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module;
@@ -25,7 +25,7 @@ class Setup extends \Magento\Framework\Module\Setup implements SchemaSetupInterf
         $indexType = '',
         $connectionName = ResourceConnection::DEFAULT_CONNECTION
     ) {
-        return $this->getConnection($connectionName)->getIndexName($tableName, $fields, $indexType);
+        return $this->getConnection($connectionName)->getIndexName($this->getTable($tableName), $fields, $indexType);
     }
 
     /**
@@ -46,7 +46,7 @@ class Setup extends \Magento\Framework\Module\Setup implements SchemaSetupInterf
         $connectionName = ResourceConnection::DEFAULT_CONNECTION
     ) {
         return $this->getConnection($connectionName)->getForeignKeyName(
-            $priTableName,
+            $this->getTable($priTableName),
             $priColumnName,
             $refTableName,
             $refColumnName

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -101,11 +101,13 @@ class DeleteAdminUserEntityTest extends Injectable
      *
      * @param User $user
      * @param string $isDefaultUser
+     * @param User $systemAdmin
      * @return void
      */
     public function testDeleteAdminUserEntity(
         User $user,
-        $isDefaultUser
+        $isDefaultUser,
+        User $systemAdmin = null
     ) {
         $filter = [
             'username' => $user->getUsername(),
@@ -118,6 +120,7 @@ class DeleteAdminUserEntityTest extends Injectable
         }
         $this->userIndex->open();
         $this->userIndex->getUserGrid()->searchAndOpen($filter);
+        $this->userEdit->getUserForm()->fill($systemAdmin);
         $this->userEdit->getPageActions()->delete();
         $this->userEdit->getModalBlock()->acceptAlert();
     }

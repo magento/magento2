@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\Client;
@@ -9,6 +9,7 @@ namespace Magento\Framework\HTTP\Client;
  * Class to work with HTTP protocol using curl library
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Curl implements \Magento\Framework\HTTP\ClientInterface
 {
@@ -16,7 +17,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Max supported protocol by curl CURL_SSLVERSION_TLSv1_2
      * @var int
      */
-    private static $sslVersion = 6;
+    private $sslVersion;
 
     /**
      * Hostname
@@ -86,7 +87,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Curl
-     * @var object
+     * @var resource
      */
     protected $_ch;
 
@@ -117,10 +118,11 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     }
 
     /**
-     * Constructor
+     * @param int|null $sslVersion
      */
-    public function __construct()
+    public function __construct($sslVersion = null)
     {
+        $this->sslVersion = $sslVersion;
     }
 
     /**
@@ -228,8 +230,11 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     /**
      * Make POST request
      *
+     * String type was added to parameter $param in order to support sending JSON or XML requests.
+     * This feature was added base on Community Pull Request https://github.com/magento/magento2/pull/8373
+     *
      * @param string $uri
-     * @param array $params
+     * @param array|string $params
      * @return void
      *
      * @see \Magento\Framework\HTTP\Client#post($uri, $params)
@@ -333,9 +338,13 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
 
     /**
      * Make request
+     *
+     * String type was added to parameter $param in order to support sending JSON or XML requests.
+     * This feature was added base on Community Pull Request https://github.com/magento/magento2/pull/8373
+     *
      * @param string $method
      * @param string $uri
-     * @param array $params
+     * @param array|string $params - use $params as a string in case of JSON or XML POST request.
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -346,7 +355,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         $this->curlOption(CURLOPT_URL, $uri);
         if ($method == 'POST') {
             $this->curlOption(CURLOPT_POST, 1);
-            $this->curlOption(CURLOPT_POSTFIELDS, http_build_query($params));
+            $this->curlOption(CURLOPT_POSTFIELDS, is_array($params) ? http_build_query($params) : $params);
         } elseif ($method == "GET") {
             $this->curlOption(CURLOPT_HTTPGET, 1);
         } else {
@@ -377,10 +386,11 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
             $this->curlOption(CURLOPT_PORT, $this->_port);
         }
 
-        //$this->curlOption(CURLOPT_HEADER, 1);
         $this->curlOption(CURLOPT_RETURNTRANSFER, 1);
         $this->curlOption(CURLOPT_HEADERFUNCTION, [$this, 'parseHeaders']);
-        $this->curlOption(CURLOPT_SSLVERSION, self::$sslVersion);
+        if ($this->sslVersion !== null) {
+            $this->curlOption(CURLOPT_SSLVERSION, $this->sslVersion);
+        }
 
         if (count($this->_curlUserOptions)) {
             foreach ($this->_curlUserOptions as $k => $v) {
@@ -415,6 +425,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param resource $ch curl handle, not needed
      * @param string $data
      * @return int
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function parseHeaders($ch, $data)
@@ -422,11 +433,10 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         if ($this->_headerCount == 0) {
             $line = explode(" ", trim($data), 3);
             if (count($line) != 3) {
-                return $this->doError("Invalid response line returned from server: " . $data);
+                $this->doError("Invalid response line returned from server: " . $data);
             }
             $this->_responseStatus = intval($line[1]);
         } else {
-            //var_dump($data);
             $name = $value = '';
             $out = explode(": ", trim($data), 2);
             if (count($out) == 2) {

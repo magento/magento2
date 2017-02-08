@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -15,12 +15,24 @@ define([
             cookieMessages: [],
             messages: []
         },
+
+        /**
+         * Extends Component object by storage observable messages.
+         */
         initialize: function () {
             this._super();
 
             this.cookieMessages = $.cookieStorage.get('mage-messages');
-            this.messages = customerData.get('messages').extend({disposableCustomerData: 'messages'});
-            $.cookieStorage.setConf({path: '/', expires: -1}).set('mage-messages', null);
+            this.messages = customerData.get('messages').extend({
+                disposableCustomerData: 'messages'
+            });
+
+            // Force to clean obsolete messages
+            if (!_.isEmpty(this.messages().messages)) {
+                customerData.set('messages', {});
+            }
+
+            $.cookieStorage.set('mage-messages', '');
         }
     });
 });

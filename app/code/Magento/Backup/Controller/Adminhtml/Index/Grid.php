@@ -1,21 +1,22 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
+
+use Magento\Framework\Controller\ResultFactory;
 
 class Grid extends \Magento\Backup\Controller\Adminhtml\Index
 {
     /**
      * Backup list action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
+        return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }
 }

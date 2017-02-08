@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,7 +10,7 @@
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper">
-        <div class="admin__control-table-pagination" visible="!!$data.recordData().length">
+        <div class="admin__control-table-pagination" visible="!!element.getRecordCount()">
             <div class="admin__data-grid-pager">
                 <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
                 <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
@@ -43,10 +43,11 @@
                             </div>
 
                             <button class="action-delete"
+                                    data-index="delete_button"
                                     type="button"
                                     title="'Delete'"
                                     click="function(){
-                                            $parents[1].deleteRecord($parent.index, $parent.recordId)
+                                            $parents[1].deleteHandler($parent.index, $parent.recordId)
                                         }">
                                 <span translate="'Delete'"/>
                             </button>

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,6 +42,10 @@ define([
             this._super()
                 .initStorage()
                 .clearData();
+
+            // Load data when there will
+            // be no more pending assets.
+            resolver(this.reload, this);
 
             return this;
         },
@@ -122,9 +126,11 @@ define([
          * Handles changes of 'params' object.
          */
         onParamsChange: function () {
-            this.firstLoad ?
-                resolver(this.reload, this) :
+            // It's necessary to make a reload only
+            // after the initial loading has been made.
+            if (!this.firstLoad) {
                 this.reload();
+            }
         },
 
         /**

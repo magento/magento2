@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -120,7 +120,7 @@
                         <!-- ko if:  method.error_message -->
                         <tr class="row row-error">
                             <td class="col col-error" colspan="4">
-                                <div class="message error">
+                                <div role="alert" class="message error">
                                     <div data-bind="text: method.error_message"></div>
                                 </div>
                                 <span class="no-display">
@@ -141,7 +141,7 @@
                     <!-- /ko -->
                 </div>
                 <!-- ko if: errorValidationMessage().length > 0 -->
-                <div class="message notice">
+                <div role="alert" class="message notice">
                     <span><!-- ko text: errorValidationMessage()--><!-- /ko --></span>
                 </div>
                 <!-- /ko -->

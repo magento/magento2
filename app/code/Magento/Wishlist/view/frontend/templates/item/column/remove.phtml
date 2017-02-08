@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,6 @@
 /* @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Remove $block */
 ?>
 
-<a href="#" data-role="remove" data-post-remove='<?php /* @noEscape */ echo $block->getItemRemoveParams($block->getItem()); ?>' title="<?php /* @escapeNotVerified */ echo __('Remove Item') ?>" class="btn-remove action delete">
-    <span><?php /* @escapeNotVerified */ echo __('Remove item');?></span>
+<a href="#" data-role="remove" data-post-remove='<?php /* @noEscape */ echo $block->getItemRemoveParams($block->getItem()); ?>' title="<?php echo $block->escapeHtmlAttr(__('Remove Item')) ?>" class="btn-remove action delete">
+    <span><?php echo $block->escapeHtml(__('Remove item'));?></span>
 </a>

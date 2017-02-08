@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,11 @@
  */
 namespace Magento\Widget\Model\ResourceModel;
 
+/**
+ * Resource model for widget.
+ *
+ * @deprecated Data from this table was moved to xml(widget.xml).
+ */
 class Widget extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -41,7 +46,7 @@ class Widget extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $widget = $connection->fetchRow($select, $bind);
         if (is_array($widget)) {
             if ($widget['parameters']) {
-                $widget['parameters'] = unserialize($widget['parameters']);
+                $widget['parameters'] = $this->getSerializer()->unserialize($widget['parameters']);
             }
             return $widget;
         }

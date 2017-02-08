@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Category;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\UrlRewrite\Model\MergeDataProviderFactory;
+use Magento\Framework\App\ObjectManager;
 
 class ChildrenUrlRewriteGenerator
 {
@@ -16,16 +19,25 @@ class ChildrenUrlRewriteGenerator
     /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory */
     protected $categoryUrlRewriteGeneratorFactory;
 
+    /** @var \Magento\UrlRewrite\Model\MergeDataProvider */
+    private $mergeDataProviderPrototype;
+
     /**
      * @param \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGeneratorFactory $categoryUrlRewriteGeneratorFactory
+     * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
      */
     public function __construct(
         ChildrenCategoriesProvider $childrenCategoriesProvider,
-        CategoryUrlRewriteGeneratorFactory $categoryUrlRewriteGeneratorFactory
+        CategoryUrlRewriteGeneratorFactory $categoryUrlRewriteGeneratorFactory,
+        MergeDataProviderFactory $mergeDataProviderFactory = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGeneratorFactory = $categoryUrlRewriteGeneratorFactory;
+        if (!isset($mergeDataProviderFactory)) {
+            $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
+        }
+        $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
     }
 
     /**
@@ -33,19 +45,22 @@ class ChildrenUrlRewriteGenerator
      *
      * @param int $storeId
      * @param \Magento\Catalog\Model\Category $category
+     * @param int|null $rootCategoryId
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
      */
-    public function generate($storeId, Category $category)
+    public function generate($storeId, Category $category, $rootCategoryId = null)
     {
-        $urls = [];
-        foreach ($this->childrenCategoriesProvider->getChildren($category) as $childCategory) {
+        $mergeDataProvider = clone $this->mergeDataProviderPrototype;
+        foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
             $childCategory->setStoreId($storeId);
             $childCategory->setData('save_rewrites_history', $category->getData('save_rewrites_history'));
-            $urls = array_merge(
-                $urls,
-                $this->categoryUrlRewriteGeneratorFactory->create()->generate($childCategory)
+            /** @var CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator */
+            $categoryUrlRewriteGenerator = $this->categoryUrlRewriteGeneratorFactory->create();
+            $mergeDataProvider->merge(
+                $categoryUrlRewriteGenerator->generate($childCategory, false, $rootCategoryId)
             );
         }
-        return $urls;
+
+        return $mergeDataProvider->getData();
     }
 }

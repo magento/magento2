@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -11,10 +11,17 @@
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="products/1" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="refundedPrices" xsi:type="array">
-                <item name="0" xsi:type="string">139.9</item>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                </item>
+            </data>
+            <data name="order/data/price/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">139.90</item>
+                </item>
             </data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
@@ -22,9 +29,7 @@
             <data name="payment/method" xsi:type="string">braintree_paypal</data>
             <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_sale, braintree_paypal_skip_order_review</data>
             <data name="paymentAction" xsi:type="string">sale</data>
-            <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
-            <data name="data/items_data/0/qty" xsi:type="string">-</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
@@ -32,22 +37,36 @@
         <variation name="CreateOnlineCreditMemoBraintreePaypalTestVariation2" summary="Partial refund of order placed within Braintree PayPal" ticketId="MAGETWO-48698">
             <data name="products/0" xsi:type="string">catalogProductSimple::simple_for_sales</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="refundedPrices" xsi:type="array">
-                <item name="0" xsi:type="string">621.2</item>
+            <data name="order/data/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                    <item name="items_data" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="qty" xsi:type="string">1</item>
+                        </item>
+                    </item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="invoiceId" xsi:type="string">0</item>
+                </item>
+            </data>
+            <data name="order/data/price/refund" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">621.20</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="grand_creditmemo_total" xsi:type="string">606.20</item>
+                </item>
             </data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree_paypal</data>
             <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_skip_order_review</data>
-            <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
             <data name="data/items_data/0/qty" xsi:type="string">2</data>
-            <data name="refundData/items_data/0/qty" xsi:type="string">1</data>
-            <data name="order/dataset" xsi:type="string">default</data>
-            <data name="isCreditMemoPartial" xsi:type="string">Yes</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />

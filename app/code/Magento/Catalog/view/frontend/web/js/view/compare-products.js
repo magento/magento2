@@ -1,38 +1,33 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'uiComponent',
-    'Magento_Customer/js/customer-data'
-], function (Component, customerData) {
+    'Magento_Customer/js/customer-data',
+    'jquery',
+    'mage/mage',
+    'mage/decorate'
+], function (Component, customerData, $) {
     'use strict';
 
     var sidebarInitialized = false;
 
+    /**
+     * Initialize sidebar
+     */
     function initSidebar() {
         if (sidebarInitialized) {
-            return ;
+            return;
         }
+
         sidebarInitialized = true;
-        require([
-            'jquery',
-            'mage/mage'
-        ], function ($) {
-            $('[data-role=compare-products-sidebar]').mage('compareItems', {
-                "removeConfirmMessage": $.mage.__(
-                    "Are you sure you want to remove this item from your Compare Products list?"
-                ),
-                "removeSelector": "#compare-items a.action.delete",
-                "clearAllConfirmMessage": $.mage.__(
-                    "Are you sure you want to remove all items from your Compare Products list?"
-                ),
-                "clearAllSelector": "#compare-clear-all"
-            });
-        });
+        $('[data-role=compare-products-sidebar]').decorate('list', true);
     }
 
     return Component.extend({
+        /** @inheritdoc */
         initialize: function () {
             this._super();
             this.compareProducts = customerData.get('compare-products');

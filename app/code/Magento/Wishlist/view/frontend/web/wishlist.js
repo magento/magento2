@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true sub:true*/
@@ -47,6 +47,7 @@ define([
                         event.preventDefault();
                         $.mage.dataPost().postData($(event.currentTarget).data('post-remove'));
                     }, this))
+                    .on('click', this.options.addToCartSelector, $.proxy(this._beforeAddToCart, this))
                     .on('click', this.options.addAllToCartSelector, $.proxy(this._addAllWItemsToCart, this))
                     .on('focusin focusout', this.options.commentInputType, $.proxy(this._focusComment, this));
             }
@@ -57,6 +58,27 @@ define([
                     error.insertAfter(element.next());
                 }
             });
+        },
+
+        /**
+         * Process data before add to cart
+         *
+         * - update item's qty value.
+         *
+         * @param {Event} event
+         * @private
+         */
+        _beforeAddToCart: function(event) {
+            var elem = $(event.currentTarget),
+                itemId = elem.data(this.options.dataAttribute),
+                qtyName = $.validator.format(this.options.nameFormat, itemId),
+                qtyValue = elem.parents().find('[name="' + qtyName + '"]').val(),
+                params = elem.data('post');
+
+            if (params) {
+                params.data = $.extend({}, params.data, {'qty': qtyValue});
+                elem.data('post', params);
+            }
         },
 
         /**

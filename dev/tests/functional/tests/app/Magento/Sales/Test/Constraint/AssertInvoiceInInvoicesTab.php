@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,13 +36,13 @@ class AssertInvoiceInInvoicesTab extends AbstractConstraint
         $orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
         $salesOrderView->getOrderForm()->openTab('invoices');
         /** @var Grid $grid */
-        $grid = $salesOrderView->getOrderForm()->getTab('invoices')->getGridBlock();
+        $grid = $salesOrderView->getOrderInvoiceGrid();
         $amount = $order->getPrice();
         foreach ($ids['invoiceIds'] as $key => $invoiceId) {
             $filter = [
                 'id' => $invoiceId,
-                'amount_from' => $amount[$key]['grand_invoice_total'],
-                'amount_to' => $amount[$key]['grand_invoice_total'],
+                'grand_total_from' => $amount[$key]['grand_invoice_total'],
+                'grand_total_to' => $amount[$key]['grand_invoice_total'],
             ];
             $grid->search($filter);
             $filter['amount_from'] = number_format($amount[$key]['grand_invoice_total'], 2);

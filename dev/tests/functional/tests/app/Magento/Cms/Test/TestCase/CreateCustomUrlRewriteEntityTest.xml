@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\UrlRewrite\Test\TestCase\CreateCustomUrlRewriteEntityTest" summary="Create Custom URL Rewrites" ticketId="MAGETWO-25474">
         <variation name="CreateCustomUrlRewriteEntityTestVariation3">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="urlRewrite/data/entity_type" xsi:type="string">Custom</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="urlRewrite/data/target_path/entity" xsi:type="string">cms/page/view/page_id/%cmsPage::default%</data>
@@ -15,10 +16,10 @@
             <data name="urlRewrite/data/redirect_type" xsi:type="string">No</data>
             <data name="urlRewrite/data/description" xsi:type="string">test description_full path</data>
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid" />
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCustomRedirect" />
         </variation>
         <variation name="CreateCustomUrlRewriteEntityTestVariation4">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="urlRewrite/data/entity_type" xsi:type="string">Custom</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="urlRewrite/data/target_path/entity" xsi:type="string">cms/page/view/page_id/%cmsPage::default%</data>
@@ -26,7 +27,6 @@
             <data name="urlRewrite/data/redirect_type" xsi:type="string">Temporary (302)</data>
             <data name="urlRewrite/data/description" xsi:type="string">test description_full path</data>
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
-            <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteInGrid" />
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteCustomRedirect" />
         </variation>
     </testCase>

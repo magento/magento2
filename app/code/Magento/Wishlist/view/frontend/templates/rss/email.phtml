@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@
 ?>
 <?php if ($block->getLink()): ?>
 <p style="font-size:12px; line-height:16px; margin:0 0 16px;">
-    <?php echo __("RSS link to %1's wishlist", $block->escapeHtml($this->helper('Magento\Wishlist\Helper\Data')->getCustomerName())) ?>
+    <?php echo $block->escapeHtml(__("RSS link to %1's wishlist", $this->helper('Magento\Wishlist\Helper\Data')->getCustomerName())) ?>
     <br />
     <a href="<?php echo $block->escapeUrl($block->getLink()); ?>"><?php echo $block->escapeUrl($block->getLink()); ?></a>
 </p>

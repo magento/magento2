@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -21,6 +21,10 @@
         <selection_qty>
             <selector>[name$='[selection_qty]']</selector>
         </selection_qty>
+        <user_defined>
+            <selector>[name$='[selection_can_change_qty]']</selector>
+            <input>checkbox</input>
+        </user_defined>
         <getProductName>
             <selector>span[data-index="name"]</selector>
         </getProductName>

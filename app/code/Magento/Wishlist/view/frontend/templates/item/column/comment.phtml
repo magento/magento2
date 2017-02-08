@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,9 +14,9 @@ $item = $block->getItem();
 
 <div class="field comment-box">
     <label class="label" for="product-item-comment-<?php echo $block->escapeHtmlAttr($item->getWishlistItemId()) ?>">
-        <span><?php /* @escapeNotVerified */ echo __('Comment') ?></span>
+        <span><?php echo $block->escapeHtml(__('Comment')) ?></span>
     </label>
     <div class="control">
-        <textarea id="product-item-comment-<?php echo $block->escapeHtmlAttr($item->getWishlistItemId()) ?>" placeholder="<?php /* @noEscape */ echo $this->helper('Magento\Wishlist\Helper\Data')->defaultCommentString() ?>" name="description[<?php echo $block->escapeHtmlAttr($item->getWishlistItemId()) ?>]" title="<?php /* @escapeNotVerified */ echo __('Comment') ?>" class="product-item-comment"><?php echo($block->escapeHtml($item->getDescription())) ?></textarea>
+        <textarea id="product-item-comment-<?php echo $block->escapeHtmlAttr($item->getWishlistItemId()) ?>" placeholder="<?php /* @noEscape */ echo $this->helper('Magento\Wishlist\Helper\Data')->defaultCommentString() ?>" name="description[<?php echo $block->escapeHtmlAttr($item->getWishlistItemId()) ?>]" title="<?php echo $block->escapeHtmlAttr(__('Comment')) ?>" class="product-item-comment"><?php echo($block->escapeHtml($item->getDescription())) ?></textarea>
     </div>
 </div>

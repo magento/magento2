@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,25 +9,30 @@
 
 namespace Magento\PageCache\Test\Unit\Observer;
 
+use Magento\Framework\View\EntitySpecificHandlesList;
+
 class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\PageCache\Observer\ProcessLayoutRenderElement */
-    protected $_model;
+    private $_model;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|EntitySpecificHandlesList */
+    private $entitySpecificHandlesListMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Config */
-    protected $_configMock;
+    private $_configMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Element\AbstractBlock */
-    protected $_blockMock;
+    private $_blockMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout */
-    protected $_layoutMock;
+    private $_layoutMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer */
-    protected $_observerMock;
+    private $_observerMock;
 
     /** @var \Magento\Framework\DataObject */
-    protected $_transport;
+    private $_transport;
 
     /**
      * Set up all mocks and data for test
@@ -41,8 +46,11 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
-        $this->_model = new \Magento\PageCache\Observer\ProcessLayoutRenderElement($this->_configMock);
+        $this->entitySpecificHandlesListMock = $this->getMock(EntitySpecificHandlesList::class, [], [], '', false);
+        $this->_model = new \Magento\PageCache\Observer\ProcessLayoutRenderElement(
+            $this->_configMock,
+            $this->entitySpecificHandlesListMock
+        );
         $this->_observerMock = $this->getMock(
             \Magento\Framework\Event\Observer::class,
             ['getEvent'],
@@ -114,7 +122,11 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
 
             $this->_layoutMock->expects($this->any())
                 ->method('getHandles')
-                ->will($this->returnValue([]));
+                ->will($this->returnValue(['default', 'catalog_product_view', 'catalog_product_view_id_1']));
+
+            $this->entitySpecificHandlesListMock->expects($this->any())
+                ->method('getHandles')
+                ->will($this->returnValue(['catalog_product_view_id_1']));
 
             $this->_layoutMock->expects($this->once())
                 ->method('getBlock')
@@ -127,6 +139,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
                     ->will($this->returnValue($blockTtl));
                 $this->_blockMock->expects($this->any())
                     ->method('getUrl')
+                    ->with('page_cache/block/esi', ['blocks' => '[null]', 'handles' => '["default","catalog_product_view"]'])
                     ->will($this->returnValue('page_cache/block/wrapesi/with/handles/and/other/stuff'));
             }
             if ($scopeIsPrivate) {

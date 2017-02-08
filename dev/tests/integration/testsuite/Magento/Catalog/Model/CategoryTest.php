@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -273,6 +273,27 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $category = $this->_model->load('444');
         $this->assertEquals('5', $category->getPosition());
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     */
+    public function testSaveCategoryWithoutImage()
+    {
+        $model = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
+        $repository = $this->objectManager->get(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+
+        $model->setName('Test Category 100')
+            ->setParentId(2)
+            ->setLevel(2)
+            ->setAvailableSortBy(['position', 'name'])
+            ->setDefaultSortBy('name')
+            ->setIsActive(true)
+            ->setPosition(1)
+            ->isObjectNew(true);
+
+        $repository->save($model);
+        $this->assertEmpty($model->getImage());
     }
 
     /**

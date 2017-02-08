@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ $suffix = $block->showSuffix();
 <?php if (($prefix || $middle || $suffix) && !$block->getNoWrap()): ?>
 <div class="field required fullname <?php echo $block->escapeHtmlAttr($block->getContainerClassName()) ?>">
     <label for="<?php echo $block->escapeHtmlAttr($block->getFieldId('firstname')) ?>" class="label">
-        <span><?php /* @escapeNotVerified */ echo __('Name') ?></span>
+        <span><?php echo $block->escapeHtml(__('Name')) ?></span>
     </label>
     <div class="control">
         <fieldset class="fieldset fieldset-fullname">
@@ -56,7 +56,7 @@ $suffix = $block->showSuffix();
                             class="<?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('prefix')) ?>" <?php if ($block->isPrefixRequired()) echo ' data-validate="{required:true}"' ?> >
                         <?php foreach ($block->getPrefixOptions() as $_option): ?>
                             <option value="<?php echo $block->escapeHtmlAttr($_option) ?>"<?php if ($block->getObject()->getPrefix() == $_option): ?> selected="selected"<?php endif; ?>>
-                                <?php /* @escapeNotVerified */ echo __($_option) ?>
+                                <?php echo $block->escapeHtml(__($_option)) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -126,7 +126,7 @@ $suffix = $block->showSuffix();
                             class="<?php echo $block->escapeHtmlAttr($block->getAttributeValidationClass('suffix')) ?>" <?php if ($block->isSuffixRequired()) echo ' data-validate="{required:true}"' ?>>
                         <?php foreach ($block->getSuffixOptions() as $_option): ?>
                             <option value="<?php echo $block->escapeHtmlAttr($_option) ?>"<?php if ($block->getObject()->getSuffix() == $_option): ?> selected="selected"<?php endif; ?>>
-                                <?php /* @escapeNotVerified */ echo __($_option) ?>
+                                <?php echo $block->escapeHtml(__($_option)) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>

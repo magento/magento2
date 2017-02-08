@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\VerifyPaymentMethodOnCheckoutTest" summary="Verifies payment method availability on One Page Checkout">
+        <variation name="VerifyPaymentMethodOnCheckoutBraintreeTestVariation1" summary="Checkout with Braintree Credit Card with specific allowed countries" ticketId="MAGETWO-38437">
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="configData" xsi:type="string">braintree, braintree_specific_country_GB</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPaymentMethodIsAbsentOnPaymentPage" />
+        </variation>
+    </testCase>
+</config>

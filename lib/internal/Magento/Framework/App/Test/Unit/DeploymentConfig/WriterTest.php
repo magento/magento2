@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,6 +18,11 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Phrase;
 
+/**
+ * @covers \Magento\Framework\App\DeploymentConfig\Writer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @package Magento\Framework\App\Test\Unit\DeploymentConfig
+ */
 class WriterTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Writer */
@@ -76,8 +81,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     public function testSaveConfig()
     {
         $configFiles = [
-            ConfigFilePool::APP_CONFIG => 'test_conf.php',
-            'test_key' => 'test2_conf.php'
+            ConfigFilePool::APP_CONFIG => 'config.php'
         ];
 
         $testSetExisting = [
@@ -113,13 +117,14 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig->expects($this->once())->method('resetData');
         $this->configFilePool->expects($this->once())->method('getPaths')->willReturn($configFiles);
         $this->dirWrite->expects($this->any())->method('isExist')->willReturn(true);
-        $this->reader->expects($this->once())->method('load')->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
+        $this->reader->expects($this->once())->method('loadConfigFile')
+            ->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
         $this->formatter
             ->expects($this->once())
             ->method('format')
             ->with($testSetExpected[ConfigFilePool::APP_CONFIG])
             ->willReturn([]);
-        $this->dirWrite->expects($this->once())->method('writeFile')->with('test_conf.php', []);
+        $this->dirWrite->expects($this->once())->method('writeFile')->with('config.php', []);
 
         $this->object->saveConfig($testSetUpdate);
     }
@@ -127,19 +132,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     public function testSaveConfigOverride()
     {
         $configFiles = [
-            ConfigFilePool::APP_CONFIG => 'test_conf.php',
-            'test_key' => 'test2_conf.php'
-        ];
-
-        $testSetExisting = [
-            ConfigFilePool::APP_CONFIG => [
-                'foo' => 'bar',
-                'key' => 'value',
-                'baz' => [
-                    'test' => 'value',
-                    'test1' => 'value1'
-                ]
-            ],
+            ConfigFilePool::APP_CONFIG => 'config.php'
         ];
 
         $testSetUpdate = [
@@ -152,8 +145,6 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 
         $testSetExpected = [
             ConfigFilePool::APP_CONFIG => [
-                'foo' => 'bar',
-                'key' => 'value',
                 'baz' => [
                     'test' => 'value2',
                 ]
@@ -163,13 +154,12 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig->expects($this->once())->method('resetData');
         $this->configFilePool->expects($this->once())->method('getPaths')->willReturn($configFiles);
         $this->dirWrite->expects($this->any())->method('isExist')->willReturn(true);
-        $this->reader->expects($this->once())->method('load')->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
         $this->formatter
             ->expects($this->once())
             ->method('format')
             ->with($testSetExpected[ConfigFilePool::APP_CONFIG])
             ->willReturn([]);
-        $this->dirWrite->expects($this->once())->method('writeFile')->with('test_conf.php', []);
+        $this->dirWrite->expects($this->once())->method('writeFile')->with('config.php', []);
 
         $this->object->saveConfig($testSetUpdate, true);
     }

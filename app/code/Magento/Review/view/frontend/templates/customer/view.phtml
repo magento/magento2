@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ $product = $block->getProductData();
         <div class="product-info">
             <h2 class="product-name"><?php echo $block->escapeHtml($product->getName()) ?></h2>
             <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
-                <span class="rating-average-label"><?php /* @escapeNotVerified */ echo __('Average Customer Rating:') ?></span>
+                <span class="rating-average-label"><?php echo $block->escapeHtml(__('Average Customer Rating:')) ?></span>
                 <?php echo $block->getReviewsSummaryHtml($product) ?>
             <?php endif; ?>
         </div>
@@ -31,7 +31,7 @@ $product = $block->getProductData();
     <div class="review-details">
         <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
             <div class="title">
-                <strong><?php /* @escapeNotVerified */ echo __('Your Review'); ?></strong>
+                <strong><?php echo $block->escapeHtml(__('Your Review')); ?></strong>
             </div>
             <div class="customer-review-rating">
                 <?php foreach ($block->getRating() as $_rating): ?>
@@ -53,13 +53,13 @@ $product = $block->getProductData();
         <div class="review-title"><?php echo $block->escapeHtml($block->getReviewData()->getTitle()) ?></div>
         <div class="review-content"><?php echo nl2br($block->escapeHtml($block->getReviewData()->getDetail())) ?></div>
         <div class="review-date">
-            <?php /* @escapeNotVerified */ echo __('Submitted on %1', '<time class="date">' . $block->dateFormat($block->getReviewData()->getCreatedAt()) . '</time>') ?>
+            <?php echo $block->escapeHtml(__('Submitted on %1', '<time class="date">' . $block->dateFormat($block->getReviewData()->getCreatedAt()) . '</time>'), ['time']) ?>
         </div>
     </div>
 </div>
 <div class="actions-toolbar">
     <div class="secondary">
-        <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('Back to My Reviews') ?></span></a>
+        <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php echo $block->escapeHtml(__('Back to My Reviews')) ?></span></a>
     </div>
 </div>
 <?php endif; ?>

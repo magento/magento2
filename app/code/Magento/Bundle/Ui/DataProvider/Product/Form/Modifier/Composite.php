@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
@@ -120,7 +120,7 @@ class Composite extends AbstractModifier
                         'is_default' => ($productLink->getIsDefault()) ? '1' : '0',
                         'selection_price_value' => $productLink->getPrice(),
                         'selection_price_type' => $productLink->getPriceType(),
-                        'selection_qty' => (bool)$integerQty ? (int)$productLink->getQty() : $productLink->getQty(),
+                        'selection_qty' => $integerQty ? (int)$productLink->getQty() : $productLink->getQty(),
                         'selection_can_change_qty' => $productLink->getCanChangeQuantity(),
                         'selection_qty_is_integer' => (bool)$integerQty,
                         'position' => $productLink->getPosition(),

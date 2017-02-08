@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,6 +21,7 @@ class FlushStaticFilesCacheButtonVisibilityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
+    const SEVERITY = 'S2';
     /* end tags */
     
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
@@ -80,6 +80,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoConfigFixture current_store tax/display/type 1
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
@@ -90,8 +91,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $options = $this->prepareOptions(
             [
                 [
-                    'id' => 1,
-                    'option_id' => 0,
+                    'option_id' => null,
                     'previous_group' => 'text',
                     'title' => 'Test Field',
                     'type' => 'field',

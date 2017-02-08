@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Link\Product;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -17,8 +17,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection */
     protected $collection;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    private $objectManager;
 
     /** @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $entityFactoryMock;
@@ -76,6 +76,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->entityFactoryMock = $this->getMock(
             \Magento\Framework\Data\Collection\EntityFactory::class,
             [],
@@ -133,14 +134,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->timezoneInterfaceMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $this->sessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
         $this->dateTimeMock = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->prepareObjectManager([
-            [\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class,
-                $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class)
-            ]
-        ]);
+        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock->method('create')
+            ->willReturn($this->getMock(ProductLimitation::class));
 
-        $this->collection = $this->objectManagerHelper->getObject(
+        $this->collection = $this->objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,
             [
                 'entityFactory' => $this->entityFactoryMock,
@@ -160,7 +158,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'catalogUrl' => $this->urlMock,
                 'localeDate' => $this->timezoneInterfaceMock,
                 'customerSession' => $this->sessionMock,
-                'dateTime' => $this->dateTimeMock
+                'dateTime' => $this->dateTimeMock,
+                'productLimitationFactory' => $productLimitationFactoryMock,
             ]
         );
     }
@@ -174,21 +173,5 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())->method('getStore')->will($this->returnValue($productStore));
         $this->collection->setProduct($product);
         $this->assertEquals(33, $this->collection->getStoreId());
-    }
-
-    /**
-     * @param $map
-     */
-    public function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

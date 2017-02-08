@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -44,12 +44,40 @@
             <field name="code" xsi:type="string">de%isolation%</field>
             <field name="is_active" xsi:type="string">Enabled</field>
         </dataset>
+
         <dataset name="custom_store">
             <field name="group_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">custom_new_group</item>
             </field>
             <field name="name" xsi:type="string">Store_%isolation%</field>
             <field name="code" xsi:type="string">store_%isolation%</field>
+            <field name="is_active" xsi:type="string">Enabled</field>
+        </dataset>
+
+        <dataset name="custom_group_custom_store">
+            <field name="group_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">custom</item>
+            </field>
+            <field name="name" xsi:type="string">Custom_Store_%isolation%</field>
+            <field name="code" xsi:type="string">code_%isolation%</field>
+            <field name="is_active" xsi:type="string">Enabled</field>
+        </dataset>
+
+        <dataset name="store_new_1">
+            <field name="group_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">store_group_new_1</item>
+            </field>
+            <field name="name" xsi:type="string">New_Store_%isolation%</field>
+            <field name="code" xsi:type="string">store_group_new_1_%isolation%</field>
+            <field name="is_active" xsi:type="string">Enabled</field>
+        </dataset>
+
+        <dataset name="store_new_2">
+            <field name="group_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">store_group_new_2</item>
+            </field>
+            <field name="name" xsi:type="string">New_Store_2_%isolation%</field>
+            <field name="code" xsi:type="string">store_group_new_2_%isolation%</field>
             <field name="is_active" xsi:type="string">Enabled</field>
         </dataset>
     </repository>

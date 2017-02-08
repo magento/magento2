@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
 <div data-bind="scope: 'messages'">
-    <div data-bind="foreach: { data: cookieMessages, as: 'message' }" class="messages">
+    <!-- ko if: cookieMessages && cookieMessages.length > 0 -->
+    <div role="alert" data-bind="foreach: { data: cookieMessages, as: 'message' }" class="messages">
         <div data-bind="attr: {
             class: 'message-' + message.type + ' ' + message.type + ' message',
             'data-ui-id': 'message-' + message.type
@@ -13,7 +14,9 @@
             <div data-bind="html: message.text"></div>
         </div>
     </div>
-    <div data-bind="foreach: { data: messages().messages, as: 'message' }" class="messages">
+    <!-- /ko -->
+    <!-- ko if: messages().messages && messages().messages.length > 0 -->
+    <div role="alert" data-bind="foreach: { data: messages().messages, as: 'message' }" class="messages">
         <div data-bind="attr: {
             class: 'message-' + message.type + ' ' + message.type + ' message',
             'data-ui-id': 'message-' + message.type
@@ -21,6 +24,7 @@
             <div data-bind="html: message.text"></div>
         </div>
     </div>
+    <!-- /ko -->
 </div>
 <script type="text/x-magento-init">
     {

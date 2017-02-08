@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
@@ -23,14 +23,14 @@ interface CommentInterface
     const COMMENT = 'comment';
 
     /**
-     * Gets the comment for the invoice.
+     * Gets the comment text.
      *
      * @return string Comment.
      */
     public function getComment();
 
     /**
-     * Sets the comment for the invoice.
+     * Sets the comment text.
      *
      * @param string $comment
      * @return $this
@@ -38,14 +38,14 @@ interface CommentInterface
     public function setComment($comment);
 
     /**
-     * Gets the is-visible-on-storefront flag value for the invoice.
+     * Gets the is-visible-on-storefront flag value for the comment.
      *
      * @return int Is-visible-on-storefront flag value.
      */
     public function getIsVisibleOnFront();
 
     /**
-     * Sets the is-visible-on-storefront flag value for the invoice.
+     * Sets the is-visible-on-storefront flag value for the comment.
      *
      * @param int $isVisibleOnFront
      * @return $this

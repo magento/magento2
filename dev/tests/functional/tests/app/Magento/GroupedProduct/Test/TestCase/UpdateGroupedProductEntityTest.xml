@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\GroupedProduct\Test\TestCase\UpdateGroupedProductEntityTest" summary="Update Grouped Product" ticketId="MAGETWO-26462">
         <variation name="UpdateGroupedProductEntityTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="originalProduct/dataset" xsi:type="string">grouped_product_out_of_stock</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
@@ -21,6 +22,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="UpdateGroupedProductEntityTestVariation2">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="originalProduct/dataset" xsi:type="string">default</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
@@ -31,6 +33,7 @@
             <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductForm" />
         </variation>
         <variation name="UpdateGroupedProductEntityTestVariation3">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="originalProduct/dataset" xsi:type="string">default</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
@@ -42,6 +45,7 @@
             <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductForm" />
         </variation>
         <variation name="UpdateGroupedProductEntityTestVariation4">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="originalProduct/dataset" xsi:type="string">default</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>
@@ -52,6 +56,7 @@
             <constraint name="Magento\GroupedProduct\Test\Constraint\AssertSpecialPriceOnGroupedProductPage" />
         </variation>
         <variation name="UpdateGroupedProductEntityTestVariation5">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="originalProduct/dataset" xsi:type="string">default</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku_edited %isolation%</data>

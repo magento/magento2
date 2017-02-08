@@ -1,15 +1,16 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Module\Di\Compiler\Config\Writer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Setup\Module\Di\Compiler\Config\WriterInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 class Filesystem implements WriterInterface
 {
@@ -17,6 +18,11 @@ class Filesystem implements WriterInterface
      * @var DirectoryList
      */
     private $directoryList;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
     /**
      * Constructor
@@ -39,8 +45,10 @@ class Filesystem implements WriterInterface
     {
         $this->initialize();
 
-        $serialized = serialize($config);
-        file_put_contents($this->directoryList->getPath(DirectoryList::DI) . '/' . $key . '.ser', $serialized);
+        file_put_contents(
+            $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $key  . '.ser',
+            $this->getSerializer()->serialize($config)
+        );
     }
 
     /**
@@ -50,8 +58,23 @@ class Filesystem implements WriterInterface
      */
     private function initialize()
     {
-        if (!file_exists($this->directoryList->getPath(DirectoryList::DI))) {
-            mkdir($this->directoryList->getPath(DirectoryList::DI));
+        if (!file_exists($this->directoryList->getPath(DirectoryList::GENERATED_METADATA))) {
+            mkdir($this->directoryList->getPath(DirectoryList::GENERATED_METADATA));
         }
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(Serialize::class);
+        }
+        return $this->serializer;
     }
 }

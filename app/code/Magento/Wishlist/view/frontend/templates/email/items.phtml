@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,13 +31,13 @@
                 </p>
                 <?php if ($block->hasDescription($item)): ?>
                     <p>
-                        <strong><?= /* @escapeNotVerified */  __('Comment') ?>:</strong>
+                        <strong><?= $block->escapeHtml(__('Comment')) ?>:</strong>
                         <br/><?= /* @noEscape */  $block->getEscapedDescription($item) ?>
                     </p>
                 <?php endif; ?>
                 <p>
                     <a href="<?= $block->escapeUrl($block->getProductUrl($_product)) ?>">
-                        <?= /* @escapeNotVerified */  __('View Product') ?>
+                        <?= $block->escapeHtml(__('View Product')) ?>
                     </a>
                 </p>
             </td>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@
             <?php $block->getChildBlock('items')->setItems($block->getWishlistItems()); ?>
             <?php echo $block->getChildHtml('items');?>
         <?php else: ?>
-            <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have no items in your wish list.') ?></span></div>
+            <div class="message info empty"><span><?php echo $block->escapeHtml(__('You have no items in your wish list.')) ?></span></div>
         <?php endif ?>
         <?php echo $block->getChildHtml('bottom'); ?>
         <div class="actions-toolbar">
@@ -32,7 +32,7 @@
             </div>
             <div class="secondary">
                 <a href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
-                    <span><?php /* @escapeNotVerified */ echo __('Back') ?></span>
+                    <span><?php echo $block->escapeHtml(__('Back')) ?></span>
                 </a>
             </div>
         </div>

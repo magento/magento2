@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -754,7 +754,10 @@ class Eav extends AbstractModifier
         $meta['arguments']['data']['config']['wysiwyg'] = true;
         $meta['arguments']['data']['config']['wysiwygConfigData'] = [
             'add_variables' => false,
-            'add_widgets' => false
+            'add_widgets' => false,
+            'add_directives' => true,
+            'use_container' => true,
+            'container_class' => 'hor-scroll',
         ];
 
         return $meta;

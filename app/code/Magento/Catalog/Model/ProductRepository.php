@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -313,15 +313,22 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
-        if (!$this->storeManager->hasSingleStore()) {
-            if ($this->storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
-                $websiteIds = array_keys($this->storeManager->getWebsites());
-            } else {
-                $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
-            }
+        $websiteIds = $product->getWebsiteIds();
 
-            $product->setWebsiteIds(array_unique(array_merge($product->getWebsiteIds(), $websiteIds)));
+        if (!$this->storeManager->hasSingleStore()) {
+            $websiteIds = array_unique(
+                array_merge(
+                    $websiteIds,
+                    [$this->storeManager->getStore()->getWebsiteId()]
+                )
+            );
         }
+
+        if ($this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+            $websiteIds = array_keys($this->storeManager->getWebsites());
+        }
+
+        $product->setWebsiteIds($websiteIds);
     }
 
     /**
@@ -633,6 +640,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         $collection->load();
 
+        $collection->addCategoryIds();
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());

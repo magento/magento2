@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,14 +13,14 @@
 <?php echo $block->getChildHtml('customer.form.register.extra')?>
 <form class="form create account form-create-account" action="<?php echo $block->escapeUrl($block->getPostActionUrl()) ?>" method="post" id="form-validate" enctype="multipart/form-data" autocomplete="off">
     <fieldset class="fieldset create info">
-        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Personal Information') ?></span></legend><br>
+        <legend class="legend"><span><?php echo $block->escapeHtml(__('Personal Information')) ?></span></legend><br>
         <input type="hidden" name="success_url" value="<?php echo $block->escapeUrl($block->getSuccessUrl()) ?>">
         <input type="hidden" name="error_url" value="<?php echo $block->escapeUrl($block->getErrorUrl()) ?>">
         <?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Name')->setObject($block->getFormData())->setForceUseCustomerAttributes(true)->toHtml() ?>
         <?php if ($block->isNewsletterEnabled()): ?>
             <div class="field choice newsletter">
-                <input type="checkbox" name="is_subscribed" title="<?php /* @escapeNotVerified */ echo __('Sign Up for Newsletter') ?>" value="1" id="is_subscribed"<?php if ($block->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox">
-                <label for="is_subscribed" class="label"><span><?php /* @escapeNotVerified */ echo __('Sign Up for Newsletter') ?></span></label>
+                <input type="checkbox" name="is_subscribed" title="<?php echo $block->escapeHtmlAttr(__('Sign Up for Newsletter')) ?>" value="1" id="is_subscribed"<?php if ($block->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox">
+                <label for="is_subscribed" class="label"><span><?php echo $block->escapeHtml(__('Sign Up for Newsletter')) ?></span></label>
             </div>
             <?php /* Extensions placeholder */ ?>
             <?php echo $block->getChildHtml('customer.form.register.newsletter')?>
@@ -43,36 +43,36 @@
     </fieldset>
     <?php if ($block->getShowAddressFields()): ?>
         <fieldset class="fieldset address">
-            <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Address Information') ?></span></legend><br>
+            <legend class="legend"><span><?php echo $block->escapeHtml(__('Address Information')) ?></span></legend><br>
             <input type="hidden" name="create_address" value="1" />
             <div class="field company">
-                <label for="company" class="label"><span><?php /* @escapeNotVerified */ echo __('Company') ?></span></label>
+                <label for="company" class="label"><span><?php echo $block->escapeHtml(__('Company')) ?></span></label>
                 <div class="control">
-                    <input type="text" name="company" id="company" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getCompany()) ?>" title="<?php /* @escapeNotVerified */ echo __('Company') ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('company')) ?>">
+                    <input type="text" name="company" id="company" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getCompany()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Company')) ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('company')) ?>">
                 </div>
             </div>
             <div class="field telephone">
-                <label for="telephone" class="label"><span><?php /* @escapeNotVerified */ echo __('Phone Number') ?></span></label>
+                <label for="telephone" class="label"><span><?php echo $block->escapeHtml(__('Phone Number')) ?></span></label>
                 <div class="control">
-                    <input type="text" name="telephone" id="telephone" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getTelephone()) ?>" title="<?php /* @escapeNotVerified */ echo __('Phone Number') ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('telephone')) ?>">
+                    <input type="text" name="telephone" id="telephone" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getTelephone()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Phone Number')) ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('telephone')) ?>">
                 </div>
             </div>
 
             <?php $_streetValidationClass = $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('street'); ?>
 
             <div class="field street required">
-                <label for="street_1" class="label"><span><?php /* @escapeNotVerified */ echo __('Street Address') ?></span></label>
+                <label for="street_1" class="label"><span><?php echo $block->escapeHtml(__('Street Address')) ?></span></label>
                 <div class="control">
-                    <input type="text" name="street[]" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getStreet(0)) ?>" title="<?php /* @escapeNotVerified */ echo __('Street Address') ?>" id="street_1" class="input-text <?php echo $block->escapeHtmlAttr($_streetValidationClass) ?>">
+                    <input type="text" name="street[]" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getStreet(0)) ?>" title="<?php echo $block->escapeHtmlAttr(__('Street Address')) ?>" id="street_1" class="input-text <?php echo $block->escapeHtmlAttr($_streetValidationClass) ?>">
                     <div class="nested">
                         <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
                         <?php for ($_i = 2, $_n = $this->helper('Magento\Customer\Helper\Address')->getStreetLines(); $_i <= $_n; $_i++): ?>
                             <div class="field additional">
                                 <label class="label" for="street_<?php /* @noEscape */ echo $_i ?>">
-                                    <span><?php /* @escapeNotVerified */ echo __('Address') ?></span>
+                                    <span><?php echo $block->escapeHtml(__('Address')) ?></span>
                                 </label>
                                 <div class="control">
-                                    <input type="text" name="street[]" value="<?php echo $block->escapeHtml($block->getFormData()->getStreetLine($_i - 1)) ?>" title="<?php /* @escapeNotVerified */ echo __('Street Address %1', $_i) ?>" id="street_<?php /* @noEscape */ echo $_i ?>" class="input-text <?php echo $block->escapeHtmlAttr($_streetValidationClass) ?>">
+                                    <input type="text" name="street[]" value="<?php echo $block->escapeHtml($block->getFormData()->getStreetLine($_i - 1)) ?>" title="<?php echo $block->escapeHtmlAttr(__('Street Address %1', $_i)) ?>" id="street_<?php /* @noEscape */ echo $_i ?>" class="input-text <?php echo $block->escapeHtmlAttr($_streetValidationClass) ?>">
                                 </div>
                             </div>
                         <?php endfor; ?>
@@ -81,31 +81,31 @@
             </div>
 
             <div class="field required">
-                <label for="city" class="label"><span><?php /* @escapeNotVerified */ echo __('City') ?></span></label>
+                <label for="city" class="label"><span><?php echo $block->escapeHtml(__('City')) ?></span></label>
                 <div class="control">
-                    <input type="text" name="city" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getCity()) ?>" title="<?php /* @escapeNotVerified */ echo __('City') ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('city')) ?>" id="city">
+                    <input type="text" name="city" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getCity()) ?>" title="<?php echo $block->escapeHtmlAttr(__('City')) ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('city')) ?>" id="city">
                 </div>
             </div>
 
             <div class="field region required">
-                <label for="region_id" class="label"><span><?php /* @escapeNotVerified */ echo __('State/Province') ?></span></label>
+                <label for="region_id" class="label"><span><?php echo $block->escapeHtml(__('State/Province')) ?></span></label>
                 <div class="control">
-                    <select id="region_id" name="region_id" title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="validate-select" style="display:none;">
-                        <option value=""><?php /* @escapeNotVerified */ echo __('Please select a region, state or province.') ?></option>
+                    <select id="region_id" name="region_id" title="<?php echo $block->escapeHtmlAttr(__('State/Province')) ?>" class="validate-select" style="display:none;">
+                        <option value=""><?php echo $block->escapeHtml(__('Please select a region, state or province.')) ?></option>
                     </select>
-                    <input type="text" id="region" name="region" value="<?php echo $block->escapeHtml($block->getRegion()) ?>" title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region')) ?>" style="display:none;">
+                    <input type="text" id="region" name="region" value="<?php echo $block->escapeHtml($block->getRegion()) ?>" title="<?php echo $block->escapeHtmlAttr(__('State/Province')) ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region')) ?>" style="display:none;">
                 </div>
             </div>
 
             <div class="field zip required">
-                <label for="zip" class="label"><span><?php /* @escapeNotVerified */ echo __('Zip/Postal Code') ?></span></label>
+                <label for="zip" class="label"><span><?php echo $block->escapeHtml(__('Zip/Postal Code')) ?></span></label>
                 <div class="control">
-                    <input type="text" name="postcode" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getPostcode()) ?>" title="<?php /* @escapeNotVerified */ echo __('Zip/Postal Code') ?>" id="zip" class="input-text validate-zip-international <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('postcode')) ?>">
+                    <input type="text" name="postcode" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getPostcode()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Zip/Postal Code')) ?>" id="zip" class="input-text validate-zip-international <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('postcode')) ?>">
                 </div>
             </div>
 
             <div class="field country required">
-                <label for="country" class="label"><span><?php /* @escapeNotVerified */ echo __('Country') ?></span></label>
+                <label for="country" class="label"><span><?php echo $block->escapeHtml(__('Country')) ?></span></label>
                 <div class="control">
                     <?php echo $block->getCountryHtmlSelect() ?>
                 </div>
@@ -122,19 +122,19 @@
         </fieldset>
 
     <?php endif; ?>
-    <fieldset class="fieldset create account" data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>">
-        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Sign-in Information') ?></span></legend><br>
+    <fieldset class="fieldset create account" data-hasrequired="<?php echo $block->escapeHtmlAttr(__('* Required Fields')) ?>">
+        <legend class="legend"><span><?php echo $block->escapeHtml(__('Sign-in Information')) ?></span></legend><br>
         <div class="field required">
-            <label for="email_address" class="label"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
+            <label for="email_address" class="label"><span><?php echo $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
-                <input type="email" name="email" autocomplete="email" id="email_address" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getEmail()) ?>" title="<?php /* @escapeNotVerified */ echo __('Email') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}">
+                <input type="email" name="email" autocomplete="email" id="email_address" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getEmail()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Email')) ?>" class="input-text" data-validate="{required:true, 'validate-email':true}">
             </div>
         </div>
         <div class="field password required" data-mage-init='{"passwordStrengthIndicator": {}}'>
-            <label for="password" class="label"><span><?php /* @escapeNotVerified */ echo __('Password') ?></span></label>
+            <label for="password" class="label"><span><?php echo $block->escapeHtml(__('Password')) ?></span></label>
             <div class="control">
                 <input type="password" name="password" id="password"
-                       title="<?php /* @escapeNotVerified */ echo __('Password') ?>"
+                       title="<?php echo $block->escapeHtmlAttr(__('Password')) ?>"
                        class="input-text"
                        data-password-min-length="<?php echo $block->escapeHtmlAttr($block->getMinimumPasswordLength()) ?>"
                        data-password-min-character-sets="<?php echo $block->escapeHtmlAttr($block->getRequiredCharacterClassesNumber()) ?>"
@@ -142,9 +142,9 @@
                        autocomplete="off">
                 <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
                     <div id="password-strength-meter" class="password-strength-meter">
-                        <?php /* @escapeNotVerified */ echo __('Password Strength'); ?>:
+                        <?php echo $block->escapeHtml(__('Password Strength')); ?>:
                         <span id="password-strength-meter-label" data-role="password-strength-meter-label">
-                            <?php /* @escapeNotVerified */ echo __('No Password'); ?>
+                            <?php echo $block->escapeHtml(__('No Password')); ?>
                         </span>
                     </div>
                 </div>
@@ -152,19 +152,19 @@
 
         </div>
         <div class="field confirmation required">
-            <label for="password-confirmation" class="label"><span><?php /* @escapeNotVerified */ echo __('Confirm Password') ?></span></label>
+            <label for="password-confirmation" class="label"><span><?php echo $block->escapeHtml(__('Confirm Password')) ?></span></label>
             <div class="control">
-                <input type="password" name="password_confirmation" title="<?php /* @escapeNotVerified */ echo __('Confirm Password') ?>" id="password-confirmation" class="input-text" data-validate="{required:true, equalTo:'#password'}" autocomplete="off">
+                <input type="password" name="password_confirmation" title="<?php echo $block->escapeHtmlAttr(__('Confirm Password')) ?>" id="password-confirmation" class="input-text" data-validate="{required:true, equalTo:'#password'}" autocomplete="off">
             </div>
         </div>
         <?php echo $block->getChildHtml('form_additional_info'); ?>
     </fieldset>
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="submit" class="action submit primary" title="<?php /* @escapeNotVerified */ echo __('Create an Account') ?>"><span><?php /* @escapeNotVerified */ echo __('Create an Account') ?></span></button>
+            <button type="submit" class="action submit primary" title="<?php echo $block->escapeHtmlAttr(__('Create an Account')) ?>"><span><?php echo $block->escapeHtml(__('Create an Account')) ?></span></button>
         </div>
         <div class="secondary">
-            <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('Back') ?></span></a>
+            <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php echo $block->escapeHtml(__('Back')) ?></span></a>
         </div>
     </div>
 </form>
@@ -209,9 +209,9 @@ require([
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": <?php /* @noEscape */ echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
-                "defaultRegion": "<?php echo $block->escapeJs($block->getFormData()->getRegionId()) ?>",
-                "countriesWithOptionalZip": <?php /* @noEscape */ echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+                "regionJson": <?php /* @noEscape */ echo $this->helper(\Magento\Directory\Helper\Data::class)->getRegionJson() ?>,
+                "defaultRegion": "<?php echo (int) $block->getFormData()->getRegionId() ?>",
+                "countriesWithOptionalZip": <?php /* @noEscape */ echo $this->helper(\Magento\Directory\Helper\Data::class)->getCountriesWithOptionalZip(true) ?>
             }
         }
     }

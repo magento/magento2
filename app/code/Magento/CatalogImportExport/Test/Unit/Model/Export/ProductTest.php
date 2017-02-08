@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Export;
@@ -403,7 +403,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
         $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
         $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
+        $this->abstractCollection->expects($this->once())->method('setOrder')->with('entity_id', 'asc');
         $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
 
         $this->abstractCollection->expects($this->once())->method('count')->willReturn(0);
@@ -434,7 +434,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
         $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
         $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
+        $this->abstractCollection->expects($this->once())->method('setOrder')->with('entity_id', 'asc');
         $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
 
         $this->abstractCollection->expects($this->once())->method('count')->willReturn(1);

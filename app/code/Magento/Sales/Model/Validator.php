@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
@@ -21,26 +21,41 @@ class Validator
     private $objectManager;
 
     /**
+     * @var ValidatorResultInterfaceFactory
+     */
+    private $validatorResultFactory;
+
+    /**
      * Validator constructor.
      *
      * @param ObjectManagerInterface $objectManager
+     * @param ValidatorResultInterfaceFactory $validatorResult
      */
-    public function __construct(ObjectManagerInterface $objectManager)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        ValidatorResultInterfaceFactory $validatorResult
+    ) {
         $this->objectManager = $objectManager;
+        $this->validatorResultFactory = $validatorResult;
     }
 
     /**
      * @param object $entity
      * @param ValidatorInterface[] $validators
-     * @return string[]
+     * @param object|null $context
+     * @return ValidatorResultInterface
      * @throws ConfigurationMismatchException
      */
-    public function validate($entity, array $validators)
+    public function validate($entity, array $validators, $context = null)
     {
         $messages = [];
+        $validatorArguments = [];
+        if ($context !== null) {
+            $validatorArguments['context'] = $context;
+        }
+
         foreach ($validators as $validatorName) {
-            $validator = $this->objectManager->get($validatorName);
+            $validator = $this->objectManager->create($validatorName, $validatorArguments);
             if (!$validator instanceof ValidatorInterface) {
                 throw new ConfigurationMismatchException(
                     __(
@@ -50,7 +65,11 @@ class Validator
             }
             $messages = array_merge($messages, $validator->validate($entity));
         }
+        $validationResult = $this->validatorResultFactory->create();
+        foreach ($messages as $message) {
+            $validationResult->addMessage($message);
+        }
 
-        return $messages;
+        return $validationResult;
     }
 }

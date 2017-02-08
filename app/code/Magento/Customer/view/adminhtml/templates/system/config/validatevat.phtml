@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,10 +20,10 @@ require(['prototype'], function(){
             vat: $('<?php echo $block->escapeJs($block->getMerchantVatNumberField()); ?>').value
         };
 
-        new Ajax.Request('<?php echo $block->escapeUrl($block->getAjaxUrl()) ?>', {
+        new Ajax.Request('<?php echo $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>', {
             parameters: params,
             onSuccess: function(response) {
-                var result = '<?php /* @escapeNotVerified */ echo __('Error during VAT Number verification.') ?>';
+                var result = '<?php echo $block->escapeJs($block->escapeHtml(__('Error during VAT Number verification.'))) ?>';
                 try {
                     if (response.responseText.isJSON()) {
                         response = response.responseText.evalJSON();

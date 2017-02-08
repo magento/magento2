@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -118,8 +118,8 @@ abstract class AbstractAssertForm extends AbstractConstraint
 
     /**
      * Sort multidimensional array by paths.
-     * Pattern path: key/subKey::sorkKey.
-     * Exapmle:
+     * Pattern path: key/subKey::sortKey.
+     * Example:
      * $data = [
      *     'custom_options' => [
      *         'options' => [

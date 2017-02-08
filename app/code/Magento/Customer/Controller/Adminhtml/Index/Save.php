@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
@@ -72,6 +72,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     ) {
         $metadataForm = $this->getMetadataForm($entityType, $formCode, $scope);
         $formData = $metadataForm->extractData($this->getRequest(), $scope);
+        $formData = $metadataForm->compactData($formData);
 
         // Initialize additional attributes
         /** @var \Magento\Framework\DataObject $object */
@@ -80,11 +81,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         foreach ($additionalAttributes as $attributeCode) {
             $formData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
         }
-
-        $result = $metadataForm->compactData($formData);
-
-        // Re-initialize additional attributes
-        $formData = array_replace($formData, $result);
 
         // Unset unused attributes
         $formAttributes = $metadataForm->getAttributes();

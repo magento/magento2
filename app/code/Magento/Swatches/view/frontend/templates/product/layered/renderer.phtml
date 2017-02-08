@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,15 +10,19 @@
 ?>
 <?php $swatchData = $block->getSwatchData(); ?>
 <div class="swatch-attribute swatch-layered <?php /* @escapeNotVerified */ echo $swatchData['attribute_code'] ?>"
-     attribute-code="<?php /* @escapeNotVerified */ echo $swatchData['attribute_code'] ?>" attribute-id="<?php /* @escapeNotVerified */ echo $swatchData['attribute_id'] ?>">
+     attribute-code="<?php /* @escapeNotVerified */ echo $swatchData['attribute_code'] ?>"
+     attribute-id="<?php /* @escapeNotVerified */ echo $swatchData['attribute_id'] ?>">
     <div class="swatch-attribute-options clearfix">
         <?php foreach ($swatchData['options'] as $option => $label): ?>
-            <a href="<?php /* @escapeNotVerified */ echo $label['link'] ?>" class="swatch-option-link-layered">
+            <a href="<?php /* @escapeNotVerified */ echo $label['link'] ?>"
+               aria-label="<?php /* @escapeNotVerified */ echo $label['label'] ?>"
+               class="swatch-option-link-layered">
                 <?php if (isset($swatchData['swatches'][$option]['type'])) { ?>
                     <?php switch ($swatchData['swatches'][$option]['type']) {
                         case '3':
                             ?>
                             <div class="swatch-option <?php /* @escapeNotVerified */ echo $label['custom_style'] ?>"
+                                 tabindex="-1"
                                  option-type="3"
                                  option-id="<?php /* @escapeNotVerified */ echo $option ?>"
                                  option-label="<?php /* @escapeNotVerified */ echo $label['label'] ?>"
@@ -33,6 +37,7 @@
                             <?php $swatchImagePath = $block->getSwatchPath('swatch_image',
                             $swatchData['swatches'][$option]['value']); ?>
                             <div class="swatch-option image <?php /* @escapeNotVerified */ echo $label['custom_style'] ?>"
+                                 tabindex="-1"
                                  option-type="2"
                                  option-id="<?php /* @escapeNotVerified */ echo $option ?>"
                                  option-label="<?php /* @escapeNotVerified */ echo $label['label'] ?>"
@@ -43,6 +48,7 @@
                         case '1':
                             ?>
                             <div class="swatch-option color <?php /* @escapeNotVerified */ echo $label['custom_style'] ?>"
+                                 tabindex="-1"
                                  option-type="1"
                                  option-id="<?php /* @escapeNotVerified */ echo $option ?>"
                                  option-label="<?php /* @escapeNotVerified */ echo $label['label'] ?>"
@@ -54,6 +60,7 @@
                         default:
                             ?>
                                 <div class="swatch-option text <?php /* @escapeNotVerified */ echo $label['custom_style'] ?>"
+                                     tabindex="-1"
                                      option-type="0"
                                      option-id="<?php /* @escapeNotVerified */ echo $option ?>"
                                      option-label="<?php /* @escapeNotVerified */ echo $label['label'] ?>"

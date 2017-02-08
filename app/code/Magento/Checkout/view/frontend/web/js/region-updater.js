@@ -1,15 +1,16 @@
 /**
  * @category    frontend Checkout region-updater
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true expr:true*/
 define([
     'jquery',
     'mage/template',
+    'underscore',
     'jquery/ui',
     'mage/validation'
-], function ($, mageTemplate) {
+], function ($, mageTemplate, _) {
     'use strict';
 
     $.widget('mage.regionUpdater', {
@@ -124,6 +125,8 @@ define([
          * @private
          */
         _clearError: function () {
+            var args = ['clearError', this.options.regionListId, this.options.regionInputId, this.options.postcodeId];
+
             if (this.options.clearError && typeof this.options.clearError === 'function') {
                 this.options.clearError.call(this);
             } else {
@@ -133,8 +136,8 @@ define([
 
                 this.options.form = $(this.options.form);
 
-                this.options.form && this.options.form.data('validator') && this.options.form.validation('clearError',
-                    this.options.regionListId, this.options.regionInputId, this.options.postcodeId);
+                this.options.form && this.options.form.data('validator') &&
+                    this.options.form.validation.apply(this.options.form, _.compact(args));
 
                 // Clean up errors on region & zip fix
                 $(this.options.regionInputId).removeClass('mage-error').parent().find('[generated]').remove();

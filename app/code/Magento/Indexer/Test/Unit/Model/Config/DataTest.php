@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Model\Config;
@@ -37,6 +37,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $indexers = ['indexer1' => [], 'indexer3' => []];
 
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
         $this->reader = $this->getMock(\Magento\Framework\Indexer\Config\Reader::class, ['read'], [], '', false);
@@ -56,20 +61,22 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     public function testConstructorWithCache()
     {
+        $serializedData = 'serialized data';
         $this->cache->expects($this->once())->method('test')->with($this->cacheId)->will($this->returnValue(true));
-        $this->cache->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            $this->cacheId
-        )->will(
-            $this->returnValue(serialize($this->indexers))
-        );
+        $this->cache->expects($this->once())
+            ->method('load')
+            ->with($this->cacheId)
+            ->willReturn($serializedData);
+
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedData)
+            ->willReturn($this->indexers);
 
         $this->stateCollection->expects($this->never())->method('getItems');
 
@@ -77,7 +84,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $this->reader,
             $this->cache,
             $this->stateCollection,
-            $this->cacheId
+            $this->cacheId,
+            $this->serializerMock
         );
     }
 
@@ -116,7 +124,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $this->reader,
             $this->cache,
             $this->stateCollection,
-            $this->cacheId
+            $this->cacheId,
+            $this->serializerMock
         );
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -81,37 +81,6 @@ define([
                 .toEqual(dataTranslateAttr.replace(/\$/g, staticText).replace(/\&/g, staticText));
             expect(elWithVariable.attr(dataTranslateAttrName))
                 .toEqual(dataTranslateAttr.replace(/\$/g, variableText).replace(/\&/g, variableText));
-        });
-
-        it('if inline translation is on, ' +
-        'and there is translation for this text,' +
-        ' set translated text for element', function () {
-            turnOnInlineTranslation();
-            $.mage.translate.add(staticText, staticTextTranslatedRaw);
-            $.mage.translate.add(variableText, variableTranslatedRaw);
-            spyOn($.mage.translate, 'parsedTranslate').and.callThrough();
-
-            context.config.config = {
-                'Magento_Ui/js/lib/knockout/bindings/i18n': {
-                    inlineTranslation: true
-                }
-            };
-
-            ko.applyBindingsToNode(elWithStaticText[0], {
-                i18n: staticText
-            });
-            ko.applyBindingsToNode(elWithVariable[0], {
-                i18n: variable
-            });
-
-            expect($.mage.translate.parsedTranslate).toHaveBeenCalledWith(staticText);
-            expect($.mage.translate.parsedTranslate).toHaveBeenCalledWith(variableText);
-            expect(elWithStaticText.text()).toEqual(staticTextTranslated);
-            expect(elWithVariable.text()).toEqual(variableTranslated);
-            expect(elWithStaticText.attr(dataTranslateAttrName))
-                .toEqual(dataTranslateAttr.replace(/\$/g, staticText).replace(/\&/g, staticTextTranslated));
-            expect(elWithVariable.attr(dataTranslateAttrName))
-                .toEqual(dataTranslateAttr.replace(/\$/g, variableText).replace(/\&/g, variableTranslated));
         });
     });
 });

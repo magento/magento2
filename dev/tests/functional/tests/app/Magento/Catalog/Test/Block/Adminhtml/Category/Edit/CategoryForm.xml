@@ -1,14 +1,14 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <sections>
     <general_information>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>div[class=fieldset-wrapper]</selector>
+        <selector>[data-index="general"]</selector>
         <strategy>css selector</strategy>
         <fields>
             <is_active>
@@ -31,8 +31,8 @@
     </general_information>
     <content>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::select[@name='landing_page']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="content"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <description>
                 <input>textarea</input>
@@ -45,8 +45,8 @@
     </content>
     <display_setting>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::input[@name='is_anchor']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="display_settings"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <display_mode>
                 <input>select</input>
@@ -83,13 +83,17 @@
     </display_setting>
     <seo>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::input[@name='meta_title']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="search_engine_optimization"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <url_key>
                 <input>input</input>
                 <selector>input[name='url_key']</selector>
             </url_key>
+            <use_default_url_key>
+                <input>checkbox</input>
+                <selector>input[name='use_default[url_key]']</selector>
+            </use_default_url_key>
             <meta_title>
                 <input>input</input>
                 <selector>input[name='meta_title']</selector>
@@ -98,13 +102,13 @@
     </seo>
     <category_products>
         <class>\Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Section\Products</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::div[@id='catalog_category_products']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="assign_products"]</selector>
+        <strategy>css selector</strategy>
     </category_products>
     <design>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::select[@name='page_layout']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="design"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <use_parent_category_settings>
                 <input>checkbox</input>
@@ -130,15 +134,15 @@
     </design>
     <schedule_design_update>
         <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::input[@name='custom_design_to']]</selector>
-        <strategy>xpath</strategy>
+        <selector>[data-index="schedule_design_update"]</selector>
+        <strategy>css selector</strategy>
         <fields>
             <schedule_update_from>
-                <input>text</input>
+                <input>datepicker</input>
                 <selector>input[name='custom_design_from']</selector>
             </schedule_update_from>
             <schedule_update_to>
-                <input>text</input>
+                <input>datepicker</input>
                 <selector>input[name='custom_design_to']</selector>
             </schedule_update_to>
         </fields>

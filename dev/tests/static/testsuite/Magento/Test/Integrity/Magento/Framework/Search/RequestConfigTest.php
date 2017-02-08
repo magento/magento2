@@ -2,7 +2,7 @@
 /**
  * Test search_request.xsd and xml files.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Magento\Framework\Search;
@@ -100,7 +100,7 @@ Element 'filterReference': The attribute 'clause' is required but missing.
 Element 'filterReference': The attribute 'ref' is required but missing.
 Element 'filter': The attribute 'field' is required but missing.
 Element 'metric', attribute 'type': [facet 'enumeration'] " .
-                "The value 'sumasdasd' is not an element of the set {'sum', 'count', 'min', 'max'}.
+                "The value 'sumasdasd' is not an element of the set {'sum', 'count', 'min', 'max', 'avg'}.
 Element 'metric', attribute 'type': 'sumasdasd' is not a valid value of the local atomic type.
 Element 'bucket': Missing child element(s). Expected is one of ( metrics, ranges ).
 Element 'request': Missing child element(s). Expected is ( from )."

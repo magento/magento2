@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,6 @@
     <a href="#"
        data-post='<?php /* @noEscape */ echo $block->getMoveFromCartParams(); ?>'
        class="use-ajax action action-towishlist">
-        <span><?php /* @escapeNotVerified */ echo __('Move to Wishlist'); ?></span>
+        <span><?php echo $block->escapeHtml(__('Move to Wishlist')); ?></span>
     </a>
 <?php endif ?>

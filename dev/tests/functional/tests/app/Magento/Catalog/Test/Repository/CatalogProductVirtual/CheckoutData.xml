@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -34,6 +34,11 @@
 
         <dataset name="virtual_update_mini_shopping_cart">
             <field name="qty" xsi:type="string">2</field>
+            <field name="cartItem" xsi:type="array">
+                <item name="price" xsi:type="string">10</item>
+                <item name="qty" xsi:type="string">2</item>
+                <item name="subtotal" xsi:type="string">20</item>
+            </field>
         </dataset>
     </repository>
 </config>

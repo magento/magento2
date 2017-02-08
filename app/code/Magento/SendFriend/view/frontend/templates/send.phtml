@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,32 +8,32 @@
 
 /**
  * Send to friend form
- *
- * @var $block \Magento\SendFriend\Block\Send
  */
+/** @var \Magento\SendFriend\Block\Send $block */
+
 ?>
 <script id="add-recipient-tmpl" type="text/x-magento-template">
     <div class="actions-toolbar">
         <div class="secondary">
             <button type="button" id="btn-remove<%- data._index_ %>" class="action remove"
                title="<?php echo $block->escapeHtmlAttr(__('Remove Recipent')) ?>">
-               <span><?php echo $block->escapeHtml(__('Remove')) ?></span>
+               <span><?php echo $block->escapeJs($block->escapeHtml(__('Remove'))) ?></span>
             </button>
         </div>
     </div>
     <fieldset class="fieldset">
         <div class="field name required">
-            <label for="recipients-name<%- data._index_ %>" class="label"><span><?php /* @escapeNotVerified */ echo __('Name')?></span></label>
+            <label for="recipients-name<%- data._index_ %>" class="label"><span><?php echo $block->escapeJs($block->escapeHtml(__('Name'))) ?></span></label>
             <div class="control">
-                <input name="recipients[name][<%- data._index_ %>]" type="text" title="<?php /* @escapeNotVerified */ echo __('Name') ?>" class="input-text"
+                <input name="recipients[name][<%- data._index_ %>]" type="text" title="<?php echo $block->escapeHtmlAttr(__('Name')) ?>" class="input-text"
                        id="recipients-name<%- data._index_ %>" data-validate="{required:true}"/>
             </div>
         </div>
 
         <div class="field email required">
-            <label for="recipients-email<%- data._index_ %>" class="label"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
+            <label for="recipients-email<%- data._index_ %>" class="label"><span><?php echo $block->escapeJs($block->escapeHtml(__('Email'))) ?></span></label>
             <div class="control">
-                <input name="recipients[email][<%- data._index_ %>]" title="<?php /* @escapeNotVerified */ echo __('Email') ?>"
+                <input name="recipients[email][<%- data._index_ %>]" title="<?php echo $block->escapeHtmlAttr(__('Email')) ?>"
                        id="recipients-email<%- data._index_ %>" type="email" class="input-text"
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
@@ -54,31 +54,31 @@
             "addRowBtn":"#add-recipient-button",
             "additionalRowClass":"additional"},
         "validation":{}}'
-      class="form send friend" data-hasRequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>">
+      class="form send friend" data-hasRequired="<?php echo $block->escapeHtmlAttr(__('* Required Fields')) ?>">
     <fieldset class="fieldset sender" id="sender_options">
         <?php echo $block->getBlockHtml('formkey')?>
-        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Sender') ?></span></legend>
+        <legend class="legend"><span><?php echo $block->escapeHtml(__('Sender')) ?></span></legend>
         <br>
         <div class="field sender required">
-            <label for="sender-name" class="label"><span><?php /* @escapeNotVerified */ echo __('Name') ?></span></label>
+            <label for="sender-name" class="label"><span><?php echo $block->escapeHtml(__('Name')) ?></span></label>
             <div class="control">
                 <input name="sender[name]" value="<?php echo $block->escapeHtmlAttr($block->getUserName()) ?>"
-                       title="<?php /* @escapeNotVerified */ echo __('Name') ?>" id="sender-name" type="text" class="input-text"
+                       title="<?php echo $block->escapeHtmlAttr(__('Name')) ?>" id="sender-name" type="text" class="input-text"
                        data-validate="{required:true}"/>
             </div>
         </div>
 
         <div class="field email required">
-            <label for="sender-email" class="label"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
+            <label for="sender-email" class="label"><span><?php echo $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
                 <input name="sender[email]" value="<?php echo $block->escapeHtmlAttr($block->getEmail()) ?>"
-                       title="<?php /* @escapeNotVerified */ echo __('Email') ?>" id="sender-email" type="text" class="input-text"
+                       title="<?php echo $block->escapeHtmlAttr(__('Email')) ?>" id="sender-email" type="text" class="input-text"
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
         </div>
 
         <div class="field text required">
-            <label for="sender-message" class="label"><span><?php /* @escapeNotVerified */ echo __('Message') ?></span></label>
+            <label for="sender-message" class="label"><span><?php echo $block->escapeHtml(__('Message')) ?></span></label>
             <div class="control">
                 <textarea name="sender[message]" class="input-text" id="sender-message" cols="3" rows="3"
                           data-validate="{required:true}"><?php echo $block->escapeHtml($block->getMessage()) ?></textarea>
@@ -88,19 +88,19 @@
 
     <fieldset class="fieldset recipients">
         <?php echo $block->getBlockHtml('formkey')?>
-        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Invitee') ?></span></legend>
+        <legend class="legend"><span><?php echo $block->escapeHtml(__('Invitee')) ?></span></legend>
         <br />
         <div id="recipients-options"></div>
         <?php if ($block->getMaxRecipients()): ?>
             <div id="max-recipient-message" style="display: none;" class="message notice limit" role="alert">
-                <span><?php /* @escapeNotVerified */ echo __('Maximum %1 email addresses allowed.', $block->getMaxRecipients()) ?></span>
+                <span><?php echo $block->escapeHtml(__('Maximum %1 email addresses allowed.', $block->getMaxRecipients())) ?></span>
             </div>
         <?php endif; ?>
         <div class="actions-toolbar">
             <div class="secondary">
             <?php if (1 < $block->getMaxRecipients()): ?>
                 <button type="button" id="add-recipient-button" class="action add">
-                    <span><?php /* @escapeNotVerified */ echo __('Add Invitee') ?></span></button>
+                    <span><?php echo $block->escapeHtml(__('Add Invitee')) ?></span></button>
             <?php endif; ?>
             </div>
         </div>
@@ -109,10 +109,10 @@
         <div class="primary">
             <button type="submit"
                     class="action submit primary"<?php if (!$block->canSend()): ?> disabled="disabled"<?php endif ?>>
-                <span><?php /* @escapeNotVerified */ echo __('Send Email') ?></span></button>
+                <span><?php echo $block->escapeHtml(__('Send Email')) ?></span></button>
         </div>
         <div class="secondary">
-            <a class="action back" href="#" role="back"><span><?php /* @escapeNotVerified */ echo __('Back') ?></span></a>
+            <a class="action back" href="#" role="back"><span><?php echo $block->escapeHtml(__('Back')) ?></span></a>
         </div>
     </div>
 </form>

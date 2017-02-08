@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,8 +11,8 @@
 <?php if ($block->getReviews() && count($block->getReviews())): ?>
 <div class="block block-reviews-dashboard">
     <div class="block-title">
-        <strong><?php /* @escapeNotVerified */ echo __('My Recent Reviews') ?></strong>
-        <a class="action view" href="<?php echo $block->escapeUrl($block->getAllReviewsUrl()) ?>"><span><?php /* @escapeNotVerified */ echo __('View All') ?></span></a>
+        <strong><?php echo $block->escapeHtml(__('My Recent Reviews')) ?></strong>
+        <a class="action view" href="<?php echo $block->escapeUrl($block->getAllReviewsUrl()) ?>"><span><?php echo $block->escapeHtml(__('View All')) ?></span></a>
     </div>
     <div class="block-content">
         <ol class="items">
@@ -22,7 +22,7 @@
                 <?php if ($_review->getSum()): ?>
                 <?php $rating = $_review->getSum() / $_review->getCount() ?>
                     <div class="rating-summary">
-                         <span class="label"><span><?php /* @escapeNotVerified */ echo __('Rating') ?>:</span></span>
+                         <span class="label"><span><?php echo $block->escapeHtml(__('Rating')) ?>:</span></span>
                          <div class="rating-result" title="<?php echo $block->escapeHtmlAttr($rating); ?>%">
                              <span style="width:<?php echo $block->escapeHtmlAttr($rating); ?>%"><span><?php echo $block->escapeHtml($rating); ?>%</span></span>
                          </div>

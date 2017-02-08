@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -147,6 +147,14 @@ class SetupInfo
     {
         $setupDir = $this->getDir($this->projectRoot);
         $isSubDir = false !== strpos($setupDir . '/', $this->docRoot . '/');
+        // Setup is not accessible from pub folder
+        $setupDir = rtrim($setupDir, '/');
+        $lastOccurrence = strrpos($setupDir, '/pub/setup');
+
+        if (false !== $lastOccurrence) {
+            $setupDir = substr_replace($setupDir, '/setup', $lastOccurrence, strlen('/pub/setup'));
+        }
+
         return $isSubDir && realpath($setupDir);
     }
 
