@@ -92,7 +92,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      * @dataProvider executeDataProvider
      * @param int $formId
      * @param int $callsNumber
-     * @throws \PHPUnit_Framework_Exception
      */
     public function testExecute($formId, $callsNumber)
     {
