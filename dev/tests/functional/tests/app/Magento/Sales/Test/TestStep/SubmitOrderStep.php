@@ -107,7 +107,7 @@ class SubmitOrderStep implements TestStepInterface
         $orderId = trim($this->salesOrderView->getTitleBlock()->getTitle(), '#');
         $data = [
             'id' => $orderId,
-            'customer_id' => ['customer' => $this->customer],
+            'customer_id' => ['customer' => $this->customer->getData()],
             'entity_id' => ['products' => $this->products],
             'billing_address_id' => ['billingAddress' => $this->billingAddress],
         ];
