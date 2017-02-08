@@ -19,5 +19,5 @@ $autoloadWrapper->addPsr4(
     ]
 );
 
-$generatedCode = DirectoryList::getDefaultConfig()[DirectoryList::GENERATION][DirectoryList::PATH];
+$generatedCode = DirectoryList::getDefaultConfig()[DirectoryList::GENERATED_CODE][DirectoryList::PATH];
 $autoloadWrapper->addPsr4('Magento\\', $baseDir . '/' . $generatedCode . '/Magento/');
