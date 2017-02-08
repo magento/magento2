@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_Catalog" setup_version="2.1.2">
+    <module name="Magento_Catalog" setup_version="2.1.4">
         <sequence>
             <module name="Magento_Eav"/>
             <module name="Magento_Cms"/>

@@ -25,7 +25,6 @@
     <preference for="Magento\Framework\App\ScopeFallbackResolverInterface" type="Magento\Store\Model\ScopeFallbackResolver"/>
     <preference for="Magento\Framework\App\ScopeTreeProviderInterface" type="Magento\Store\Model\ScopeTreeProvider"/>
     <preference for="Magento\Framework\App\ScopeValidatorInterface" type="Magento\Store\Model\ScopeValidator"/>
-    <preference for="Magento\Framework\App\Scope\ValidatorInterface" type="Magento\Store\Model\Scope\Validator"/>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="genericHeaderPlugin" type="Magento\Framework\App\Response\HeaderManager"/>
     </type>
@@ -112,6 +111,7 @@
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
             <argument name="cacheTags" xsi:type="array">
                 <item name="storeTag" xsi:type="const">Magento\Store\Model\Store::CACHE_TAG</item>
+                <item name="configTag" xsi:type="const">Magento\Framework\App\Config::CACHE_TAG</item>
             </argument>
             <argument name="cacheLifetime" xsi:type="boolean">false</argument>
         </arguments>
@@ -122,6 +122,7 @@
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
             <argument name="cacheTags" xsi:type="array">
                 <item name="storeTag" xsi:type="const">Magento\Store\Model\Store::CACHE_TAG</item>
+                <item name="configTag" xsi:type="const">Magento\Framework\App\Config::CACHE_TAG</item>
             </argument>
             <argument name="cacheLifetime" xsi:type="boolean">false</argument>
         </arguments>
@@ -132,6 +133,7 @@
             <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
             <argument name="cacheTags" xsi:type="array">
                 <item name="storeTag" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</item>
+                <item name="configTag" xsi:type="const">Magento\Framework\App\Config::CACHE_TAG</item>
             </argument>
             <argument name="cacheLifetime" xsi:type="boolean">false</argument>
         </arguments>
