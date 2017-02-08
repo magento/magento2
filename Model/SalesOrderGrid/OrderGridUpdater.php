@@ -9,7 +9,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sales\Model\ResourceModel\GridInterface;
 
 /**
- * Perfoms sales order grid updating operations
+ * Perfoms sales order grid updating operations.
+ *
+ * Serves order grid updates in both synchronous and asynchronous modes.
  */
 class OrderGridUpdater
 {
