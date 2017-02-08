@@ -25,7 +25,6 @@
     <preference for="Magento\Framework\App\ScopeFallbackResolverInterface" type="Magento\Store\Model\ScopeFallbackResolver"/>
     <preference for="Magento\Framework\App\ScopeTreeProviderInterface" type="Magento\Store\Model\ScopeTreeProvider"/>
     <preference for="Magento\Framework\App\ScopeValidatorInterface" type="Magento\Store\Model\ScopeValidator"/>
-    <preference for="Magento\Framework\App\Scope\ValidatorInterface" type="Magento\Store\Model\Scope\Validator"/>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="genericHeaderPlugin" type="Magento\Framework\App\Response\HeaderManager"/>
     </type>
