@@ -6,14 +6,15 @@
  */
 namespace Magento\CatalogSearch\Controller\Advanced;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
+        return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }
 }
