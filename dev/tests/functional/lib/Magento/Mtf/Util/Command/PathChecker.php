@@ -6,6 +6,7 @@
 namespace Magento\Mtf\Util\Command;
 
 use Magento\Mtf\Util\Protocol\CurlInterface;
+use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
  * PathChecker checks that path to file or directory exists.
