@@ -72,6 +72,22 @@ class HandlerTest extends AbstractController
     }
 
     /**
+     * Tests handling webhook message of cases/test type.
+     * Controller should response with code 200.
+     *
+     * @covers \Magento\Signifyd\Controller\Webhooks\Handler::execute
+     * @magentoConfigFixture current_store fraud_protection/signifyd/active 1
+     */
+    public function testExecuteTestSuccess()
+    {
+        $webhookRequest = $this->getTestWebhookRequest();
+        $this->_objectManager->addSharedInstance($webhookRequest, WebhookRequest::class);
+        $this->dispatch(self::$entryPoint);
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->_objectManager->removeSharedInstance(WebhookRequest::class);
+    }
+
+    /**
      * Returns mocked WebhookRequest
      *
      * @return WebhookRequest|\PHPUnit_Framework_MockObject_MockObject
@@ -93,4 +109,29 @@ class HandlerTest extends AbstractController
 
         return $webhookRequest;
     }
+
+    /**
+     * Returns mocked test WebhookRequest
+     *
+     * @return WebhookRequest|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getTestWebhookRequest()
+    {
+        $webhookRequest = $this->getMockBuilder(WebhookRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $webhookRequest->expects($this->any())
+            ->method('getBody')
+            ->willReturn(file_get_contents(__DIR__ . '/../../_files/webhook_body.json'));
+        $webhookRequest->expects($this->any())
+            ->method('getEventTopic')
+            ->willReturn('cases/test');
+        $webhookRequest->expects($this->any())
+            ->method('getHash')
+            ->willReturn('wyG0r9mOmv1IqVlN6ZqJ5sgA635yKW6lbSsqlYF2b8U=');
+
+        return $webhookRequest;
+    }
+
+
 }
