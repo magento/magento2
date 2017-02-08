@@ -98,7 +98,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getQuery', 'getIndex', 'getSize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->request->expects($this->exactly(2))
+        $this->request->expects($this->any())
             ->method('getIndex')
             ->will($this->returnValue(self::INDEX_NAME));
 
@@ -536,5 +536,21 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         return $select;
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unsupported relevance calculation method used.
+     */
+    public function testUnsupportedRelevanceCalculationMethod()
+    {
+        $helper = new ObjectManager($this);
+        $helper->getObject(
+            \Magento\Framework\Search\Adapter\Mysql\Mapper::class,
+            [
+                'indexProviders' => [],
+                'relevanceCalculationMethod' => 'UNSUPPORTED'
+            ]
+        );
     }
 }

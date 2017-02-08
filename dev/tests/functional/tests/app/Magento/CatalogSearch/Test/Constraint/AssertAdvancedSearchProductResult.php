@@ -86,6 +86,7 @@ class AssertAdvancedSearchProductResult extends AbstractConstraint
                 unset($products[$key]);
             }
         } while ($resultPage->getBottomToolbar()->nextPage() && (count($products) > 0));
+
         sort($foundedProducts);
         return $foundedProducts;
     }
