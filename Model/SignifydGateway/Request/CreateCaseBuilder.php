@@ -16,15 +16,6 @@ use Magento\Sales\Model\OrderFactory;
 class CreateCaseBuilder implements CreateCaseBuilderInterface
 {
     /**
-     * List of params, which can be empty, but required by Signifyd API.
-     *
-     * @var array
-     */
-    private static $allowed = [
-        'cvvResponseCode'
-    ];
-
-    /**
      * @var OrderFactory
      */
     private $orderFactory;
@@ -115,11 +106,6 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
     private function removeEmptyValues($data)
     {
         foreach ($data as $key => $value) {
-            // skip allowed empty values
-            if (in_array($key, self::$allowed, true) && $value === '') {
-                continue;
-            }
-
             if (is_array($value)) {
                 $data[$key] = $this->removeEmptyValues($data[$key]);
             }
@@ -140,6 +126,6 @@ class CreateCaseBuilder implements CreateCaseBuilderInterface
      */
     private function isEmpty($value)
     {
-        return $value === null || $value === '' || (is_array($value) && empty($value));
+        return $value === null || (is_array($value) && empty($value));
     }
 }
