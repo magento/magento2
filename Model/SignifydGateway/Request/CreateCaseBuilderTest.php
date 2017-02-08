@@ -87,6 +87,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                 'paymentGateway' => 'paypal_account',
                 'transactionId' => $payment->getLastTransId(),
                 'currency' => $order->getOrderCurrencyCode(),
+                'avsResponseCode' => 'U',
+                'cvvResponseCode' => '',
                 'orderChannel' => 'WEB',
                 'totalPrice' => $order->getGrandTotal(),
                 'shipments' => [
@@ -160,7 +162,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        static::assertEquals(
+        self::assertEquals(
             $expected,
             $this->caseBuilder->build($order->getEntityId())
         );
@@ -200,6 +202,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                 'paymentGateway' => $payment->getMethod(),
                 'transactionId' => $payment->getLastTransId(),
                 'currency' => $order->getOrderCurrencyCode(),
+                'avsResponseCode' => 'Y',
+                'cvvResponseCode' => 'M',
                 'orderChannel' => 'PHONE',
                 'totalPrice' => $order->getGrandTotal(),
                 'products' => [
@@ -231,7 +235,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        static::assertEquals(
+        self::assertEquals(
             $expected,
             $this->caseBuilder->build($order->getEntityId())
         );
