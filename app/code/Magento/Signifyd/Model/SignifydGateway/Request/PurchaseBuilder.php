@@ -8,7 +8,6 @@ namespace Magento\Signifyd\Model\SignifydGateway\Request;
 use Magento\Framework\App\Area;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Intl\DateTimeFactory;
-use Magento\Payment\Api\PaymentVerificationInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Signifyd\Model\PaymentVerificationFactory;
@@ -184,7 +183,6 @@ class PurchaseBuilder
      */
     private function getAvsCode(OrderPaymentInterface $orderPayment)
     {
-        /** @var PaymentVerificationInterface $avsAdapter */
         $avsAdapter = $this->paymentVerificationFactory->createPaymentAvs($orderPayment->getMethod());
         return $avsAdapter->getCode($orderPayment);
     }
@@ -197,7 +195,6 @@ class PurchaseBuilder
      */
     private function getCvvCode(OrderPaymentInterface $orderPayment)
     {
-        /** @var PaymentVerificationInterface $cvvAdapter */
         $cvvAdapter = $this->paymentVerificationFactory->createPaymentCvv($orderPayment->getMethod());
         return $cvvAdapter->getCode($orderPayment);
     }
