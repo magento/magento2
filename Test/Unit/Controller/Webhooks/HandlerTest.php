@@ -144,7 +144,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteSuccessfully()
     {
-        $eventTopic = 'cases\test';
+        $eventTopic = 'cases/creation';
         $caseId = 1;
         $data = ['score' => 200, 'caseId' => $caseId];
 
@@ -155,7 +155,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $webhookMessage = $this->getMockBuilder(WebhookMessage::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $webhookMessage->expects($this->once())
+        $webhookMessage->expects($this->exactly(2))
             ->method('getEventTopic')
             ->willReturn($eventTopic);
         $webhookMessage->expects($this->once())
@@ -194,7 +194,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteCaseUpdatingServiceException()
     {
-        $eventTopic = 'cases\test';
+        $eventTopic = 'cases/creation';
         $caseId = 1;
         $data = ['score' => 200, 'caseId' => $caseId];
 
@@ -205,7 +205,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $webhookMessage = $this->getMockBuilder(WebhookMessage::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $webhookMessage->expects($this->once())
+        $webhookMessage->expects($this->exactly(2))
             ->method('getEventTopic')
             ->willReturn($eventTopic);
         $webhookMessage->expects($this->once())
@@ -266,6 +266,37 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Case when webhook request has test event topic.
+     */
+    public function testExecuteWithTestEventTopic()
+    {
+        $this->webhookRequestValidator->expects($this->once())
+            ->method('validate')
+            ->willReturn(true);
+        $this->redirect->expects($this->never())
+            ->method('redirect');
+
+        $webhookMessage = $this->getMockBuilder(WebhookMessage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $webhookMessage->expects($this->once())
+            ->method('getEventTopic')
+            ->willReturn('cases/test');
+        $webhookMessage->expects($this->never())
+            ->method('getData');
+
+        $this->webhookMessageReader->expects($this->once())
+            ->method('read')
+            ->with($this->webhookRequest)
+            ->willReturn($webhookMessage);
+
+        $this->caseUpdatingServiceFactory->expects($this->never())
+            ->method('create');
+
+        $this->controller->execute();
+    }
+
+    /**
      * Checks a test case when received input data does not contain Signifyd case id.
      *
      * @covers \Magento\Signifyd\Controller\Webhooks\Handler::execute
@@ -278,8 +309,10 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
 
         $webhookMessage = $this->getMockBuilder(WebhookMessage::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
             ->getMock();
+        $webhookMessage->expects($this->once())
+            ->method('getEventTopic')
+            ->willReturn('cases/creation');
         $webhookMessage->expects(self::once())
             ->method('getData')
             ->willReturn([
