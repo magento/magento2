@@ -73,9 +73,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $productCollectionFactoryMock;
 
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -140,18 +137,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $collection->expects($this->any())
-            ->method('setOrderFilter')
-            ->willReturnSelf();
-        $collection->expects($this->any())
-            ->method('getItems')
-            ->willReturn([$this->item]);
-        $collection->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->item]));
-        $this->orderItemCollectionFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($collection);
+        $collection->expects($this->any())->method('setOrderFilter')->willReturnSelf();
+        $collection->expects($this->any())->method('getItems')->willReturn([$this->item]);
+        $collection->expects($this->any())->method('getIterator')->willReturn(new \ArrayIterator([$this->item]));
+        $this->orderItemCollectionFactoryMock->expects($this->any())->method('create')->willReturn($collection);
 
         $this->priceCurrency = $this->getMockForAbstractClass(
             \Magento\Framework\Pricing\PriceCurrencyInterface::class,
@@ -162,14 +151,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             true,
             ['round']
         );
-
         $this->incrementId = '#00000001';
         $this->eventManager = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
         $context = $this->getMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher'], [], '', false);
-        $context->expects($this->any())
-            ->method('getEventDispatcher')
-            ->willReturn($this->eventManager);
-
+        $context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManager);
         $this->order = $helper->getObject(
             \Magento\Sales\Model\Order::class,
             [
