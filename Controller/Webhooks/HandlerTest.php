@@ -132,6 +132,4 @@ class HandlerTest extends AbstractController
 
         return $webhookRequest;
     }
-
-
 }
