@@ -69,8 +69,8 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $basePath = str_replace('\\', '/', $basePath);
 
         $directoryList = new DirectoryList($basePath);
-        $this->_generationDir = $directoryList->getPath(DirectoryList::GENERATION);
-        $this->_compilationDir = $directoryList->getPath(DirectoryList::DI);
+        $this->_generationDir = $directoryList->getPath(DirectoryList::GENERATED_CODE);
+        $this->_compilationDir = $directoryList->getPath(DirectoryList::GENERATED_METADATA);
 
         $this->_command = 'php ' . $basePath . '/bin/magento setup:di:compile';
 

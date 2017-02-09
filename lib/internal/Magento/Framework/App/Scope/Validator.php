@@ -3,14 +3,14 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Store\Model\Scope;
+namespace Magento\Framework\App\Scope;
 
 use InvalidArgumentException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Phrase;
 
 /**
  * Class Validator validates scope and scope code.
@@ -40,14 +40,14 @@ class Validator implements ValidatorInterface
         }
 
         if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT && !empty($scopeCode)) {
-            throw new LocalizedException(__(
+            throw new LocalizedException(new Phrase(
                 'The "%1" scope can\'t include a scope code. Try again without entering a scope code.',
-                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                [ScopeConfigInterface::SCOPE_TYPE_DEFAULT]
             ));
         }
 
         if (empty($scope)) {
-            throw new LocalizedException(__('Enter a scope before proceeding.'));
+            throw new LocalizedException(new Phrase('Enter a scope before proceeding.'));
         }
 
         $this->validateScopeCode($scopeCode);
@@ -56,9 +56,11 @@ class Validator implements ValidatorInterface
             $scopeResolver = $this->scopeResolverPool->get($scope);
             $scopeResolver->getScope($scopeCode)->getId();
         } catch (InvalidArgumentException $e) {
-            throw new LocalizedException(__('The "%1" value doesn\'t exist. Enter another value.', $scope));
+            throw new LocalizedException(new Phrase('The "%1" value doesn\'t exist. Enter another value.', [$scope]));
         } catch (NoSuchEntityException $e) {
-            throw new LocalizedException(__('The "%1" value doesn\'t exist. Enter another value.', $scopeCode));
+            throw new LocalizedException(
+                new Phrase('The "%1" value doesn\'t exist. Enter another value.', [$scopeCode])
+            );
         }
 
         return true;
@@ -75,11 +77,11 @@ class Validator implements ValidatorInterface
     private function validateScopeCode($scopeCode)
     {
         if (empty($scopeCode)) {
-            throw new LocalizedException(__('Enter a scope code before proceeding.'));
+            throw new LocalizedException(new Phrase('Enter a scope code before proceeding.'));
         }
 
         if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $scopeCode)) {
-            throw new LocalizedException(__(
+            throw new LocalizedException(new Phrase(
                 'The scope code can include only lowercase letters (a-z), numbers (0-9) and underscores (_). '
                 . 'Also, the first character must be a letter.'
             ));
