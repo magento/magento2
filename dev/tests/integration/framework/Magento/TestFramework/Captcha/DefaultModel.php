@@ -6,9 +6,12 @@
 namespace Magento\TestFramework\Captcha;
 
 /**
- * Implementation of \Zend\Captcha\Image
+ * Implementation of \Zend\Captcha\Image for integration test environment.
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * With introducing "zendframework/zend-captcha": "~2.4.6" (see https://github.com/magento/magento2/pull/8356)
+ * validation happens in \Zend\Captcha\Image class constructor that blocks testing on Travis CI, even for cases
+ * when this functionality is not needed.
+ * For test environment that supports freetype functional behaviour should not be changed.
  */
 class DefaultModel extends \Magento\Captcha\Model\DefaultModel
 {
@@ -26,9 +29,16 @@ class DefaultModel extends \Magento\Captcha\Model\DefaultModel
         \Magento\Captcha\Model\ResourceModel\LogFactory $resLogFactory,
         $formId
     ) {
-        $this->session = $session;
-        $this->captchaData = $captchaData;
-        $this->resLogFactory = $resLogFactory;
-        $this->formId = $formId;
+        /**
+         * Workaround for test environments that do not support freetype.
+         */
+        if (function_exists("imageftbbox")) {
+            parent::__construct($session, $captchaData, $resLogFactory, $formId);
+        } else {
+            $this->session = $session;
+            $this->captchaData = $captchaData;
+            $this->resLogFactory = $resLogFactory;
+            $this->formId = $formId;
+        }
     }
 }
