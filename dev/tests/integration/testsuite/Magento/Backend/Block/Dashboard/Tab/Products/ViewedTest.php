@@ -11,7 +11,6 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Backend\Block\Dashboard\Tab\Products\Viewed as ViewedProductsTabBlock;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Event\ManagerInterface as EventManager;
-use Magento\Catalog\Pricing\Price\FinalPrice;
 
 /**
  * @magentoAppArea frontend
