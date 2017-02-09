@@ -74,7 +74,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
         $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->context->expects($this->once())->method('getStoreManager')->willReturn($this->storeManager);
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class,[],[],'',false);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class,[],[],'',false);
 
         $this->model = new \Magento\Checkout\Block\Cart\Shipping(
             $this->context,

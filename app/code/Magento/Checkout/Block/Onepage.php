@@ -37,7 +37,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
     protected $layoutProcessors;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -46,7 +46,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param array $data
      * @throws \RuntimeException
      */
@@ -55,7 +55,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -65,7 +65,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
         $this->configProvider = $configProvider;
         $this->layoutProcessors = $layoutProcessors;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**

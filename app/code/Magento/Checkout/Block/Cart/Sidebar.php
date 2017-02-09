@@ -28,7 +28,7 @@ class Sidebar extends AbstractCart
     protected $imageHelper;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -38,8 +38,9 @@ class Sidebar extends AbstractCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param array $data
-     * @codeCoverageIgnore
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -47,7 +48,7 @@ class Sidebar extends AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         array $data = []
     ) {
         if (isset($data['jsLayout'])) {
@@ -60,7 +61,7 @@ class Sidebar extends AbstractCart
         $this->_isScopePrivate = false;
         $this->imageHelper = $imageHelper;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**

@@ -21,7 +21,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $layoutProcessors;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $serializer;
 
@@ -31,7 +31,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
-     * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param array $data
      * @throws \RuntimeException
      */
@@ -41,7 +41,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         array $data = []
     ) {
         $this->configProvider = $configProvider;
@@ -49,7 +49,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\SerializerInterface::class);
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
