@@ -132,7 +132,7 @@ class DiCompileCommand extends Command
 
         $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         $libraryPaths = $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
-        $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
+        $generationPath = $this->directoryList->getPath(DirectoryList::GENERATED_CODE);
 
         $this->objectManager->get(\Magento\Framework\App\Cache::class)->clean();
         $compiledPathsList = [
@@ -152,7 +152,7 @@ class DiCompileCommand extends Command
             $this->cleanupFilesystem(
                 [
                     DirectoryList::CACHE,
-                    DirectoryList::DI,
+                    DirectoryList::GENERATED_METADATA,
                 ]
             );
             foreach ($operations as $operationCode => $arguments) {
