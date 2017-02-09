@@ -7,13 +7,16 @@
 
 namespace Magento\LayeredNavigation\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Util\Command\Cli\Cache;
+use Magento\Mtf\Util\Command\Cli\Indexer;
 
 /**
  * Preconditions:
  * 1. Setup Layered Navigation configuration.
+ * 2. Run full reindex.
+ * 3. Clear cache.
  *
  * Steps:
  * 1. Create category.
@@ -41,10 +44,20 @@ class FilterProductListTest extends Injectable
      *
      * @param string $configData
      * @param Category $category
+     * @param Indexer $indexer
+     * @param Cache $cache
+     * @param string $runReindex
+     * @param string $flushCache
      * @return array
      */
-    public function test($configData, Category $category)
-    {
+    public function test(
+        $configData,
+        Category $category,
+        Indexer $indexer,
+        Cache $cache,
+        $runReindex = "No",
+        $flushCache = "No"
+    ) {
         $this->configData = $configData;
 
         // Preconditions
@@ -52,6 +65,9 @@ class FilterProductListTest extends Injectable
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData]
         )->run();
+
+        $runReindex == 'Yes' ? $indexer->reindex() : null;
+        $flushCache == 'Yes' ? $cache->flush() : null;
 
         // Steps
         $category->persist();

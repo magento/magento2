@@ -113,5 +113,39 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
             <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertCategorySortingOnFilteredProductList" />
         </variation>
+        <variation name="FilterProductListTestVariation5">
+            <data name="configData" xsi:type="string">layered_navigation_manual_range_10</data>
+            <data name="runReindex" xsi:type="string">Yes</data>
+            <data name="flushCache" xsi:type="string">Yes</data>
+            <data name="category/dataset" xsi:type="string">default_anchor_subcategory</data>
+            <data name="category/data/category_products/dataset" xsi:type="string">
+                catalogProductSimple::product_1_dollar, catalogProductSimple::product_5_dollar, catalogProductSimple::product_9_99_dollar, catalogProductSimple::product_10_dollar, catalogProductSimple::product_15_dollar, catalogProductSimple::product_21_dollar
+            </data>
+            <data name="layeredNavigation" xsi:type="array">
+                <item name="filters_0" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Price</item>
+                        <item name="linkPattern" xsi:type="string">`^.+0\.00 - .+9\.99 3$`m</item>
+                        <item name="products" xsi:type="string">product_0, product_1, product_2</item>
+                    </item>
+                </item>
+                <item name="filters_1" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Price</item>
+                        <item name="linkPattern" xsi:type="string">`^.+10\.00 - .+19\.99 2$`m</item>
+                        <item name="products" xsi:type="string">product_3, product_4</item>
+                    </item>
+                </item>
+                <item name="filters_2" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Price</item>
+                        <item name="linkPattern" xsi:type="string">`^.+20\.00 and above 1$`m</item>
+                        <item name="products" xsi:type="string">product_5</item>
+                    </item>
+                </item>
+            </data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
+            <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertFilterProductList" />
+        </variation>
     </testCase>
 </config>
