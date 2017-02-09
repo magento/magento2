@@ -8,16 +8,16 @@ namespace Magento\Swatches\Helper;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\App\Helper\Context;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Catalog\Model\Product as ModelProduct;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 use Magento\Swatches\Model\Swatch;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Framework\Exception\InputException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Helper Data
@@ -82,24 +82,34 @@ class Data
     ];
 
     /**
+     * Serializer to/from JSON.
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param CollectionFactory $productCollectionFactory
      * @param ProductRepositoryInterface $productRepository
      * @param StoreManagerInterface $storeManager
      * @param SwatchCollectionFactory $swatchCollectionFactory
      * @param Image $imageHelper
+     * @param Json|null $serializer
      */
     public function __construct(
         CollectionFactory $productCollectionFactory,
         ProductRepositoryInterface $productRepository,
         StoreManagerInterface $storeManager,
         SwatchCollectionFactory $swatchCollectionFactory,
-        Image $imageHelper
+        Image $imageHelper,
+        Json $serializer = null
     ) {
         $this->productCollectionFactory   = $productCollectionFactory;
         $this->productRepository = $productRepository;
         $this->storeManager = $storeManager;
         $this->swatchCollectionFactory = $swatchCollectionFactory;
         $this->imageHelper = $imageHelper;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
     }
 
     /**
@@ -111,7 +121,7 @@ class Data
         $initialAdditionalData = [];
         $additionalData = (string) $attribute->getData('additional_data');
         if (!empty($additionalData)) {
-            $additionalData = unserialize($additionalData);
+            $additionalData = $this->serializer->unserialize($additionalData);
             if (is_array($additionalData)) {
                 $initialAdditionalData = $additionalData;
             }
@@ -125,7 +135,7 @@ class Data
             }
         }
         $additionalData = array_merge($initialAdditionalData, $dataToAdd);
-        $attribute->setData('additional_data', serialize($additionalData));
+        $attribute->setData('additional_data', $this->serializer->serialize($additionalData));
         return $this;
     }
 
@@ -135,7 +145,7 @@ class Data
      */
     private function populateAdditionalDataEavAttribute(Attribute $attribute)
     {
-        $additionalData = unserialize($attribute->getData('additional_data'));
+        $additionalData = $this->serializer->unserialize($attribute->getData('additional_data'));
         if (isset($additionalData) && is_array($additionalData)) {
             foreach ($this->eavAttributeAdditionalDataKeys as $key) {
                 if (isset($additionalData[$key])) {

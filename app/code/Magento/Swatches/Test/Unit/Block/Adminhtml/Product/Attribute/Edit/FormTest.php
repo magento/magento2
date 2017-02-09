@@ -50,7 +50,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [
-                    'additional_data' => serialize($additionalData),
+                    'additional_data' => json_encode($additionalData),
                     'frontend_input' => 'select',
                 ]
             ],

@@ -78,6 +78,11 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $serializer = $this->getMock(
+            \Magento\Framework\Serialize\Serializer\Json::class,
+            null
+        );
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->eavAttribute = $objectManager->getObject(
             \Magento\Swatches\Model\Plugin\EavAttribute::class,
@@ -85,6 +90,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                 'collectionFactory' => $this->collectionFactory,
                 'swatchFactory' => $this->swatchFactory,
                 'swatchHelper' => $this->swatchHelper,
+                'serializer' => $serializer,
             ]
         );
 
@@ -283,13 +289,13 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             ['additional_data']
         )->willReturnOnConsecutiveCalls(
             Swatch::SWATCH_INPUT_TYPE_DROPDOWN,
-            serialize($additionalData)
+            json_encode($additionalData)
         );
 
         $this->attribute
             ->expects($this->once())
             ->method('setData')
-            ->with('additional_data', serialize($shortAdditionalData))
+            ->with('additional_data', json_encode($shortAdditionalData))
             ->will($this->returnSelf());
 
         $this->swatchHelper->expects($this->never())->method('assembleAdditionalDataEavAttribute');

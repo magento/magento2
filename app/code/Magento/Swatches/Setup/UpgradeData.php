@@ -14,6 +14,9 @@ use Magento\Store\Model\Store;
 use Magento\Swatches\Model\Swatch;
 use Zend_Db;
 use Zend_Db_Expr;
+use Magento\Framework\DB\FieldDataConverterFactory;
+use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Upgrade Data script
@@ -29,13 +32,22 @@ class UpgradeData implements UpgradeDataInterface
     private $eavSetupFactory;
 
     /**
-     * Init
-     *
-     * @param EavSetupFactory $eavSetupFactory
+     * @var FieldDataConverterFactory
      */
-    public function __construct(EavSetupFactory $eavSetupFactory)
-    {
+    private $fieldDataConverterFactory;
+
+    /**
+     * Init
+     * @param EavSetupFactory $eavSetupFactory
+     * @param FieldDataConverterFactory|null $fieldDataConverterFactory
+     */
+    public function __construct(
+        EavSetupFactory $eavSetupFactory,
+        FieldDataConverterFactory $fieldDataConverterFactory = null
+    ) {
         $this->eavSetupFactory = $eavSetupFactory;
+        $this->fieldDataConverterFactory = $fieldDataConverterFactory
+            ?: ObjectManager::getInstance()->get(FieldDataConverterFactory::class);
     }
 
     /**
@@ -61,10 +73,20 @@ class UpgradeData implements UpgradeDataInterface
         if (version_compare($context->getVersion(), '2.0.2', '<')) {
             $this->updateAdminTextSwatchValues($setup);
         }
+        if (version_compare($context->getVersion(), '2.0.3', '<')) {
+            $this->convertAddDataToJson($setup);
+        }
 
         $setup->endSetup();
     }
 
+    /**
+     * Add fallback for default scope.
+     *
+     * @param ModuleDataSetupInterface $setup
+     *
+     * @return void
+     */
     private function updateAdminTextSwatchValues(ModuleDataSetupInterface $setup)
     {
         $storeData = $setup->getConnection()
@@ -106,5 +128,22 @@ class UpgradeData implements UpgradeDataInterface
                 )
             );
         }
+    }
+
+    /**
+     * Convert additional data column from serialized view to JSON for swatch attributes.
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     */
+    private function convertAddDataToJson(ModuleDataSetupInterface $setup)
+    {
+        $fieldConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
+        $fieldConverter->convert(
+            $setup->getConnection(),
+            $setup->getTable('catalog_eav_attribute'),
+            'attribute_id',
+            'additional_data'
+        );
     }
 }
