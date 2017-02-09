@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Model;
 
+use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -16,12 +17,15 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
     private $customerRepository;
 
     /** @var CustomerMetadataInterface */
-    private $_service;
+    private $service;
+
+    /** @var CustomerMetadataInterface */
+    private $service2;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
      */
-    private $_extensibleDataObjectConverter;
+    private $extensibleDataObjectConverter;
 
     protected function setUp()
     {
@@ -37,22 +41,29 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
         $this->customerRepository = $objectManager->create(
             \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
-        $this->_service = $objectManager->create(\Magento\Customer\Api\CustomerMetadataInterface::class);
-        $this->_extensibleDataObjectConverter = $objectManager->get(
+        $this->service = $objectManager->create(\Magento\Customer\Api\CustomerMetadataInterface::class);
+        $this->service2 = $objectManager->create(\Magento\Customer\Api\CustomerMetadataInterface::class);
+        $this->extensibleDataObjectConverter = $objectManager->get(
             \Magento\Framework\Api\ExtensibleDataObjectConverter::class
         );
     }
 
     public function testGetCustomAttributesMetadata()
     {
-        $customAttributesMetadata = $this->_service->getCustomAttributesMetadata();
+        $customAttributesMetadata = $this->service->getCustomAttributesMetadata();
         $this->assertCount(0, $customAttributesMetadata, "Invalid number of attributes returned.");
+
+        $customAttributesMetadata1 = $this->service->getCustomAttributesMetadata();
+        $this->assertCount(0, $customAttributesMetadata1, "Invalid number of attributes returned.");
+
+        $customAttributesMetadata2 = $this->service2->getCustomAttributesMetadata();
+        $this->assertCount(0, $customAttributesMetadata2, "Invalid number of attributes returned.");
     }
 
     public function testGetNestedOptionsCustomAttributesMetadata()
     {
         $nestedOptionsAttribute = 'store_id';
-        $customAttributesMetadata = $this->_service->getAttributeMetadata($nestedOptionsAttribute);
+        $customAttributesMetadata = $this->service->getAttributeMetadata($nestedOptionsAttribute);
         $options = $customAttributesMetadata->getOptions();
         $nestedOptionExists = false;
         foreach ($options as $option) {
@@ -66,6 +77,14 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
         if (!$nestedOptionExists) {
             $this->fail('Nested attribute options were expected.');
         }
+
+        $customAttributesMetadata1 = $this->service->getAttributeMetadata($nestedOptionsAttribute);
+        $customAttributesMetadata1->getOptions();
+        $this->assertEquals($customAttributesMetadata, $customAttributesMetadata1);
+
+        $customAttributesMetadata2 = $this->service2->getAttributeMetadata($nestedOptionsAttribute);
+        $customAttributesMetadata2->getOptions();
+        $this->assertEquals($customAttributesMetadata, $customAttributesMetadata2);
     }
 
     /**
@@ -73,7 +92,7 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomAttributesMetadataWithAttributeNamedCustomAttribute()
     {
-        $customAttributesMetadata = $this->_service->getCustomAttributesMetadata();
+        $customAttributesMetadata = $this->service->getCustomAttributesMetadata();
         $expectedCustomAttributeCodeArray = ['custom_attribute1', 'custom_attribute2', 'customer_image'];
         $actual = [];
         foreach ($customAttributesMetadata as $attribute) {
@@ -84,6 +103,33 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
             array_intersect($expectedCustomAttributeCodeArray, $actual),
             "Expected attributes not returned from the service."
         );
+
+        $customAttributesMetadata1 = $this->service->getCustomAttributesMetadata();
+        foreach ($customAttributesMetadata1 as $attribute) {
+            $attribute->getAttributeCode();
+        }
+        $this->assertEquals($customAttributesMetadata, $customAttributesMetadata1);
+
+        $customAttributesMetadata2 = $this->service2->getCustomAttributesMetadata();
+        foreach ($customAttributesMetadata2 as $attribute) {
+            $attribute->getAttributeCode();
+        }
+        $this->assertEquals($customAttributesMetadata, $customAttributesMetadata2);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
+     */
+    public function testGetAllAttributesMetadataWithAttributeNamedCustomAttribute()
+    {
+        $allAttributesMetadata = $this->service->getAllAttributesMetadata();
+        $this->assertCount(30, $allAttributesMetadata, "Invalid number of attributes returned.");
+
+        $allAttributesMetadata2 = $this->service->getAllAttributesMetadata();
+        $this->assertEquals($allAttributesMetadata, $allAttributesMetadata2);
+
+        $allAttributesMetadata3 = $this->service2->getAllAttributesMetadata();
+        $this->assertEquals($allAttributesMetadata, $allAttributesMetadata3);
     }
 
     /**
@@ -116,7 +162,7 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
         $customer = $this->customerRepository->getById(1);
         $this->assertNotNull($customer);
 
-        $attributes = $this->_extensibleDataObjectConverter->toFlatArray(
+        $attributes = $this->extensibleDataObjectConverter->toFlatArray(
             $customer,
             [],
             \Magento\Customer\Api\Data\CustomerInterface::class
@@ -126,8 +172,14 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
         foreach ($attributes as $attributeCode => $attributeValue) {
             $this->assertNotNull($attributeCode);
             $this->assertNotNull($attributeValue);
-            $attributeMetadata = $this->_service->getAttributeMetadata($attributeCode);
+            $attributeMetadata = $this->service->getAttributeMetadata($attributeCode);
+            $attributeMetadata1 = $this->service->getAttributeMetadata($attributeCode);
+            $attributeMetadata2 = $this->service2->getAttributeMetadata($attributeCode);
             $attrMetadataCode = $attributeMetadata->getAttributeCode();
+            $attributeMetadata1->getAttributeCode();
+            $attributeMetadata2->getAttributeCode();
+            $this->assertEquals($attributeMetadata, $attributeMetadata1);
+            $this->assertEquals($attributeMetadata, $attributeMetadata2);
             $this->assertSame($attributeCode, $attrMetadataCode);
             if (($key = array_search($attrMetadataCode, $expectAttrsWOutVals)) !== false) {
                 unset($expectAttrsWOutVals[$key]);
@@ -148,7 +200,27 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomerAttributeMetadataNoSuchEntity()
     {
         try {
-            $this->_service->getAttributeMetadata('wrong_attribute_code');
+            $this->service->getAttributeMetadata('wrong_attribute_code');
+            $this->fail('Expected exception not thrown.');
+        } catch (NoSuchEntityException $e) {
+            $this->assertEquals(
+                'No such entity with entityType = customer, attributeCode = wrong_attribute_code',
+                $e->getMessage()
+            );
+        }
+
+        try {
+            $this->service->getAttributeMetadata('wrong_attribute_code');
+            $this->fail('Expected exception not thrown.');
+        } catch (NoSuchEntityException $e) {
+            $this->assertEquals(
+                'No such entity with entityType = customer, attributeCode = wrong_attribute_code',
+                $e->getMessage()
+            );
+        }
+
+        try {
+            $this->service2->getAttributeMetadata('wrong_attribute_code');
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $e) {
             $this->assertEquals(
@@ -160,7 +232,7 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAttributes()
     {
-        $formAttributesMetadata = $this->_service->getAttributes('adminhtml_customer');
+        $formAttributesMetadata = $this->service->getAttributes('adminhtml_customer');
         $this->assertCount(14, $formAttributesMetadata, "Invalid number of attributes for the specified form.");
 
         /** Check some fields of one attribute metadata */
@@ -170,6 +242,15 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($attributeMetadata->getValidationRules(), 'Validation rules are not set');
         $this->assertEquals('1', $attributeMetadata->isSystem(), '"Is system" field value is invalid');
         $this->assertEquals('40', $attributeMetadata->getSortOrder(), 'Sort order is invalid');
+
+        $formAttributesMetadata1 = $this->service->getAttributes('adminhtml_customer');
+        $this->assertEquals($formAttributesMetadata, $formAttributesMetadata1);
+
+        $formAttributesMetadata2 = $this->service2->getAttributes('adminhtml_customer');
+        $attributeMetadata2 = $formAttributesMetadata2['firstname'];
+        $attributeMetadata2->getAttributeCode();
+        $attributeMetadata2->getValidationRules();
+        $this->assertEquals($formAttributesMetadata, $formAttributesMetadata2);
     }
 
     protected function tearDown()
@@ -179,5 +260,6 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
         /* @var \Magento\Framework\Config\CacheInterface $cache */
         $cache = $objectManager->create(\Magento\Framework\Config\CacheInterface::class);
         $cache->remove('extension_attributes_config');
+        CacheCleaner::cleanAll();
     }
 }
