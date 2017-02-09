@@ -59,7 +59,9 @@ class Csv implements WriterInterface
      */
     public function __destructor()
     {
-        fclose($this->_fileHandler);
+        if (is_resource($this->_fileHandler)) {
+            fclose($this->_fileHandler);
+        }
     }
 
     /**
@@ -67,6 +69,8 @@ class Csv implements WriterInterface
      */
     public function __destruct()
     {
-        fclose($this->_fileHandler);
+        if (is_resource($this->_fileHandler)) {
+            fclose($this->_fileHandler);
+        }
     }
 }

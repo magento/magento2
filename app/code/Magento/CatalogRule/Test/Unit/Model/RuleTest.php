@@ -149,8 +149,44 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 'resourceIterator' => $this->_resourceIterator,
                 'extensionFactory' => $extensionFactoryMock,
                 'customAttributeFactory' => $attributeValueFactoryMock,
+                'serializer' => $this->getSerializerMock(),
             ]
         );
+    }
+
+    /**
+     * Get mock for serializer
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getSerializerMock()
+    {
+        $serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['serialize', 'unserialize'])
+            ->getMock();
+
+        $serializerMock->expects($this->any())
+            ->method('serialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_encode($value);
+                    }
+                )
+            );
+
+        $serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->will(
+                $this->returnCallback(
+                    function ($value) {
+                        return json_decode($value, true);
+                    }
+                )
+            );
+
+        return $serializerMock;
     }
 
     /**

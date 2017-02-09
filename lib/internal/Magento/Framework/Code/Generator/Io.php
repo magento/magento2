@@ -6,7 +6,6 @@
 namespace Magento\Framework\Code\Generator;
 
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Filesystem\DriverInterface;
 
 class Io
 {
