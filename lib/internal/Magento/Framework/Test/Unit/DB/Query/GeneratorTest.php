@@ -7,6 +7,7 @@ namespace Magento\Framework\Test\Unit\DB\Query;
 
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Query\BatchIteratorFactory;
+use Magento\Framework\DB\Query\BatchRangeIteratorFactory;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Query\BatchIterator;
 
@@ -33,14 +34,20 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     private $iteratorMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $rangeFactoryMock;
+
+    /**
      * Setup test dependencies.
      */
     protected function setUp()
     {
         $this->factoryMock = $this->getMock(BatchIteratorFactory::class, [], [], '', false, false);
+        $this->rangeFactoryMock = $this->getMock(BatchRangeIteratorFactory::class, ['create'], [], '', false, false);
         $this->selectMock = $this->getMock(Select::class, [], [], '', false, false);
         $this->iteratorMock = $this->getMock(BatchIterator::class, [], [], '', false, false);
-        $this->model = new Generator($this->factoryMock);
+        $this->model = new Generator($this->factoryMock, $this->rangeFactoryMock);
     }
 
     /**
@@ -70,8 +77,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'batchSize' => 100,
                 'correlationName' => 'cp',
                 'rangeField' => 'entity_id',
-                'rangeFieldAlias' => 'product_id',
-                'batchStrategy' => 'unique'
+                'rangeFieldAlias' => 'product_id'
             ]
         )->willReturn($this->iteratorMock);
         $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
@@ -127,8 +133,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'batchSize' => 100,
                 'correlationName' => 'cp',
                 'rangeField' => 'entity_id',
-                'rangeFieldAlias' => 'entity_id',
-                'batchStrategy' => 'unique'
+                'rangeFieldAlias' => 'entity_id'
             ]
         )->willReturn($this->iteratorMock);
         $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
@@ -162,8 +167,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'batchSize' => 100,
                 'correlationName' => 'cp',
                 'rangeField' => 'entity_id',
-                'rangeFieldAlias' => 'entity_id',
-                'batchStrategy' => 'unique'
+                'rangeFieldAlias' => 'entity_id'
             ]
         )->willReturn($this->iteratorMock);
         $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100));
@@ -196,8 +200,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'batchSize' => 100,
                 'correlationName' => 'cp',
                 'rangeField' => 'entity_id',
-                'rangeFieldAlias' => 'product_id',
-                'batchStrategy' => 'non_unique'
+                'rangeFieldAlias' => 'product_id'
             ]
         )->willReturn($this->iteratorMock);
         $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100, 'non_unique'));

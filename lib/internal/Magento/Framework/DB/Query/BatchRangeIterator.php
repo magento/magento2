@@ -21,7 +21,7 @@ use Magento\Framework\DB\Select;
  * @see \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
  * @see \Magento\Framework\DB\Adapter\Pdo\Mysql
  */
-class BatchRangeIterator implements \Iterator
+class BatchRangeIterator implements BatchIteratorInterface
 {
     /**
      * @var Select

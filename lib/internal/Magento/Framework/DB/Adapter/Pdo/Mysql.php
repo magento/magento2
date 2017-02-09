@@ -3375,34 +3375,18 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
-     * Get an array of select queries using the batching strategy
+     * Get insert queries in array for insert by range with step parameter
      *
-     * Depending on the $batchStrategy parameter chooses a strategy. This strategy will be used to create
-     * an array of select queries. By default method use $batchStrategy parameter:
-     * \Magento\Framework\DB\Query\BatchIteratorFactory::UNIQUE_FIELD_ITERATOR.
-     * This parameter means that values of $rangeField have relationship
-     * one-to-one.
-     * If values of $rangeField is non-unique and have relationship one-to-many,
-     * than must be used next $batchStrategy parameter:
-     * \Magento\Framework\DB\Query\BatchIteratorFactory::NON_UNIQUE_FIELD_ITERATOR.
-     *
-     * @see BatchIteratorFactory
-     * @param string $rangeField - Field which is used for the range mechanism in select
-     * @param Select $select
-     * @param int $batchSize - Determines on how many parts will be divided
-     * the number of values in the select.
-     * @param string $batchStrategy - It determines which strategy is chosen
+     * @param string $rangeField
+     * @param \Magento\Framework\DB\Select $select
+     * @param int $stepCount
      * @return \Magento\Framework\DB\Select[]
-     * @throws LocalizedException Throws if incorrect "FROM" part in \Select exists
+     * @throws LocalizedException
+     * @deprecated
      */
-    public function selectsByRange(
-        $rangeField,
-        \Magento\Framework\DB\Select $select,
-        $batchSize = 100,
-        $batchStrategy = \Magento\Framework\DB\Query\BatchIteratorFactory::UNIQUE_FIELD_ITERATOR
-    ) {
-        $iterator = $this->getQueryGenerator()->generate($rangeField, $select, $batchSize, $batchStrategy);
-
+    public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100)
+    {
+        $iterator = $this->getQueryGenerator()->generate($rangeField, $select, $stepCount);
         $queries = [];
         foreach ($iterator as $query) {
             $queries[] = $query;

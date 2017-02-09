@@ -8,6 +8,8 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
+use Magento\Framework\DB\Query\BatchIteratorInterface as BatchIteratorInterface;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
@@ -103,6 +105,11 @@ abstract class AbstractAction
     protected $tempTreeIndexTableName;
 
     /**
+     * @var QueryGenerator
+     */
+    private $queryGenerator;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
@@ -110,12 +117,14 @@ abstract class AbstractAction
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Config $config
+        \Magento\Catalog\Model\Config $config,
+        QueryGenerator $queryGenerator
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
         $this->config = $config;
+        $this->queryGenerator = $queryGenerator;
     }
 
     /**
@@ -309,16 +318,25 @@ abstract class AbstractAction
      * @param int $range
      * @return \Magento\Framework\DB\Select[]
      */
-    protected function prepareSelectsByRange(\Magento\Framework\DB\Select $select, $field, $range = self::RANGE_CATEGORY_STEP)
-    {
-        return $this->isRangingNeeded() ? $this->connection->selectsByRange(
-            $field,
-            $select,
-            $range,
-            \Magento\Framework\DB\Query\BatchIteratorFactory::NON_UNIQUE_FIELD_ITERATOR
-        ) : [
-            $select
-        ];
+    protected function prepareSelectsByRange(
+        \Magento\Framework\DB\Select $select,
+        $field,
+        $range = self::RANGE_CATEGORY_STEP
+    ) {
+        if($this->isRangingNeeded()) {
+            $iterator = $this->queryGenerator->generate(
+                $field,
+                $select,
+                $range
+            );
+
+            $queries = [];
+            foreach ($iterator as $query) {
+                $queries[] = $query;
+            }
+            return $queries;
+        }
+        return [$select];
     }
 
     /**
