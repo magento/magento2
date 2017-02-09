@@ -82,8 +82,8 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             $this->checkoutSession,
             $this->configProvider,
             [$this->layoutProcessor],
-            $this->serializer,
-            ['jsLayout' => $this->layout]
+            ['jsLayout' => $this->layout],
+            $this->serializer
         );
     }
 

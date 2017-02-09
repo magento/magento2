@@ -66,8 +66,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             $this->formKeyMock,
             $this->configProviderMock,
             [$this->layoutProcessorMock],
-            $this->serializer,
-            []
+            [],
+            $this->serializer
         );
     }
 

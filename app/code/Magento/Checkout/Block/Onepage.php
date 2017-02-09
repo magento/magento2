@@ -46,8 +46,8 @@ class Onepage extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
      */
     public function __construct(
@@ -55,8 +55,8 @@ class Onepage extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($context, $data);
         $this->formKey = $formKey;

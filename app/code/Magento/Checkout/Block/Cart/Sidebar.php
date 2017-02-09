@@ -38,8 +38,8 @@ class Sidebar extends AbstractCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
      */
     public function __construct(
@@ -48,8 +48,8 @@ class Sidebar extends AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         if (isset($data['jsLayout'])) {
             $this->jsLayout = array_merge_recursive($jsLayoutDataProvider->getData(), $data['jsLayout']);

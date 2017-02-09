@@ -31,8 +31,8 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
      */
     public function __construct(
@@ -41,8 +41,8 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->configProvider = $configProvider;
         $this->layoutProcessors = $layoutProcessors;
