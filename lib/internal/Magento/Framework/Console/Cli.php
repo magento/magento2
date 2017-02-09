@@ -98,8 +98,8 @@ class Cli extends Console\Application
             $output->writeln(
                 "<error>We're sorry, an error occurred. Try clearing the cache and code generation directories. "
                 . "By default, they are: " . $this->getDefaultDirectoryPath(DirectoryList::CACHE) . ", "
-                . $this->getDefaultDirectoryPath(DirectoryList::DI) . ", "
-                . $this->getDefaultDirectoryPath(DirectoryList::GENERATION) . ", and var/page_cache.</error>"
+                . $this->getDefaultDirectoryPath(DirectoryList::GENERATED_METADATA) . ", "
+                . $this->getDefaultDirectoryPath(DirectoryList::GENERATED_CODE) . ", and var/page_cache.</error>"
             );
 
             throw $this->initException;
@@ -241,7 +241,7 @@ class Cli extends Console\Application
         $output->writeln(
             '<error>'
             . 'Command line user does not have read and write permissions on '
-            . $this->getDefaultDirectoryPath(DirectoryList::GENERATION) . ' directory. '
+            . $this->getDefaultDirectoryPath(DirectoryList::GENERATED_CODE) . ' directory. '
             . 'Please address this issue before using Magento command line.'
             . '</error>'
         );
