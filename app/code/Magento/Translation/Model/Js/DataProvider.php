@@ -6,10 +6,12 @@
 
 namespace Magento\Translation\Model\Js;
 
-use Magento\Framework\LocalizedException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * DataProvider for js translation
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider implements DataProviderInterface
 {
@@ -126,7 +128,7 @@ class DataProvider implements DataProviderInterface
      *
      * @param string $content
      * @return string[]
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getPhrases($content)
     {
