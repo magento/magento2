@@ -41,7 +41,7 @@ class UpgradeData implements UpgradeDataInterface
             $this->upgradeHash($setup);
         }
 
-        if (version_compare($context->getVersion(), '2.0.3', '<')) {
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
             $this->upgradeSerializedFields($setup);
         }
 
