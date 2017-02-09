@@ -40,7 +40,7 @@ class Grid extends \Magento\Checkout\Block\Cart
      *
      * @var bool
      */
-    private $isDisplayPager;
+    private $isPagerDisplayed;
 
     /**
      * Grid constructor.
@@ -88,7 +88,7 @@ class Grid extends \Magento\Checkout\Block\Cart
      */
     protected function _construct()
     {
-        if (!$this->isDisplayPagerOnPage()) {
+        if (!$this->isPagerDisplayedOnPage()) {
             parent::_construct();
         }
         if ($this->hasData('template')) {
@@ -102,7 +102,7 @@ class Grid extends \Magento\Checkout\Block\Cart
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        if ($this->isDisplayPagerOnPage()) {
+        if ($this->isPagerDisplayedOnPage()) {
             $availableLimit = (int)$this->_scopeConfig->getValue(
                 self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -143,7 +143,7 @@ class Grid extends \Magento\Checkout\Block\Cart
      */
     public function getItems()
     {
-        if (!$this->isDisplayPagerOnPage()) {
+        if (!$this->isPagerDisplayedOnPage()) {
             return parent::getItems();
         }
         return $this->getItemsForGrid()->getItems();
@@ -155,15 +155,15 @@ class Grid extends \Magento\Checkout\Block\Cart
      *
      * @return bool
      */
-    private function isDisplayPagerOnPage()
+    private function isPagerDisplayedOnPage()
     {
-        if (!$this->isDisplayPager) {
+        if (!$this->isPagerDisplayed) {
             $availableLimit = (int)$this->_scopeConfig->getValue(
                 self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
-            $this->isDisplayPager = !$this->getCustomItems() && $availableLimit < $this->getItemsCount();
+            $this->isPagerDisplayed = !$this->getCustomItems() && $availableLimit < $this->getItemsCount();
         }
-        return $this->isDisplayPager;
+        return $this->isPagerDisplayed;
     }
 }

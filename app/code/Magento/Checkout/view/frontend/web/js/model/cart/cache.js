@@ -99,7 +99,7 @@ define([
         /**
          * Set data to customer data.
          * Concatenate provided key with method name and call method if it exist or makes set by key.
-         * @example _setCustomAddress method will be called, if it exist.
+         * @example _setCustomAddress method will be called, if it exists.
          *  set('address', customAddressValue)
          * @example Will set value by provided key.
          *  set('rates', ratesToCompare)
