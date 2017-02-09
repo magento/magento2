@@ -9,7 +9,7 @@
     <event name="tag_tag_product_collection_load_after">
         <observer name="review" instance="Magento\Review\Observer\TagProductCollectionLoadAfterObserver" shared="false" />
     </event>
-    <event name="catalog_block_product_list_collection">
-        <observer name="review" instance="Magento\Review\Observer\CatalogBlockProductCollectionBeforeToHtmlObserver" shared="false" />
+    <event name="catalog_product_collection_load_after">
+        <observer name="review" instance="Magento\Review\Observer\CatalogBlockProductCollectionLoadAfter" shared="false" />
     </event>
 </config>

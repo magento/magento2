@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-class CatalogBlockProductCollectionBeforeToHtmlObserver implements ObserverInterface
+class CatalogBlockProductCollectionLoadAfter implements ObserverInterface
 {
     /**
      * Review model
@@ -35,7 +35,6 @@ class CatalogBlockProductCollectionBeforeToHtmlObserver implements ObserverInter
     {
         $productCollection = $observer->getEvent()->getCollection();
         if ($productCollection instanceof \Magento\Framework\Data\Collection) {
-            $productCollection->load();
             $this->_reviewFactory->create()->appendSummary($productCollection);
         }
 
