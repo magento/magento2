@@ -18,11 +18,6 @@
             <argument name="fetchStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Category\Collection\FetchStrategy</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Indexer\AbstractFlatState">
-        <arguments>
-            <argument name="isAvailable" xsi:type="boolean">true</argument>
-        </arguments>
-    </type>
     <virtualType name="Magento\Catalog\Block\ShortcutButtons\InCatalog" type="Magento\Catalog\Block\ShortcutButtons">
         <arguments>
             <argument name="isCatalogProduct" xsi:type="boolean">true</argument>
@@ -34,11 +29,6 @@
             <argument name="orPosition" xsi:type="const">Magento\Catalog\Block\ShortcutButtons::POSITION_AFTER</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Catalog\Model\Indexer\Product\Flat\State">
-        <arguments>
-            <argument name="isAvailable" xsi:type="boolean">true</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\View\Layout">
         <plugin name="catalog-session-depersonalize"
                 type="Magento\Catalog\Model\Layout\DepersonalizePlugin" sortOrder="10"/>
