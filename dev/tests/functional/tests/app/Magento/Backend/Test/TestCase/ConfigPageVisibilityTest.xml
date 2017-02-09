@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Backend\Test\TestCase\ConfigPageVisibilityTest" summary="Check Developer section and Locale field">
+        <variation name="VisibilityOfDeveloperSectionAndLocaleField" summary="Check Developer section and Locale field" ticketId="MAGETWO-63625, MAGETWO-63624">
+            <data name="tag" xsi:type="string">severity:S1</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertLocaleCodeVisibility" />
+            <constraint name="Magento\Backend\Test\Constraint\AssertDeveloperSectionVisibility" />
+        </variation>
+    </testCase>
+</config>
