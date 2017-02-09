@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ce5a9b438108d958029ff640047ce7e6",
-    "content-hash": "e79bcacd835ffe597a53ea3ba407e928",
+    "hash": "19f69b22940e467182c3276cb21d25c2",
+    "content-hash": "63dfc7237cae2286c4d8f36d66ddde03",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2017,6 +2017,59 @@
                 "zf2"
             ],
             "time": "2015-11-23 16:33:27"
+        },
+        {
+            "name": "zendframework/zend-db",
+            "version": "2.4.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-db.git",
+                "reference": "b78b12c68bdafffaecb87f684426ad446b95204f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-db/zipball/b78b12c68bdafffaecb87f684426ad446b95204f",
+                "reference": "b78b12c68bdafffaecb87f684426ad446b95204f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.23",
+                "zendframework/zend-stdlib": "self.version"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "1.7.*",
+                "phpunit/phpunit": "~4.0",
+                "satooshi/php-coveralls": "dev-master",
+                "zendframework/zend-eventmanager": "self.version",
+                "zendframework/zend-servicemanager": "self.version",
+                "zendframework/zend-stdlib": "self.version"
+            },
+            "suggest": {
+                "zendframework/zend-eventmanager": "Zend\\EventManager component",
+                "zendframework/zend-servicemanager": "Zend\\ServiceManager component"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4-dev",
+                    "dev-develop": "2.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Db\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "homepage": "https://github.com/zendframework/zend-db",
+            "keywords": [
+                "db",
+                "zf2"
+            ],
+            "time": "2015-05-07 14:55:31"
         },
         {
             "name": "zendframework/zend-di",
