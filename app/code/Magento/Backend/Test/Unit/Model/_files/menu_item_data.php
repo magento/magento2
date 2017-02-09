@@ -29,6 +29,7 @@ return [
             'tooltip' => 'Item tooltip',
             'title' => 'Item Title',
             'sub_menu' => null,
+            'target' => null
         ]
     ],
     'with submenu' => [
@@ -74,7 +75,8 @@ return [
                 'depends_on_module' => 'Magento_Backend',
                 'depends_on_config' => 'system/config/isEnabled',
                 'tooltip' => 'Item tooltip',
-            ]
+            ],
+            'target' => null
         ]
     ],
     'small set of data' => [
@@ -112,7 +114,8 @@ return [
                 'depends_on_module' => 'Magento_Backend',
                 'depends_on_config' => 'system/config/isEnabled',
                 'tooltip' => 'Item tooltip',
-            ]
+            ],
+            'target' => null
         ]
     ]
 ];

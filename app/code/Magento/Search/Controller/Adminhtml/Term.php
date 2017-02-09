@@ -24,7 +24,7 @@ abstract class Term extends Action
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('Magento_Search::search_term')
+        $resultPage->setActiveMenu('Magento_Search::search_terms')
             ->addBreadcrumb(__('Search'), __('Search'));
         return $resultPage;
     }

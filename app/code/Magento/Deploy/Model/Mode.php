@@ -105,8 +105,8 @@ class Mode
         $this->filesystem->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
-                DirectoryList::GENERATION,
-                DirectoryList::DI,
+                DirectoryList::GENERATED_CODE,
+                DirectoryList::GENERATED_METADATA,
                 DirectoryList::TMP_MATERIALIZATION_DIR,
                 DirectoryList::STATIC_VIEW,
             ]

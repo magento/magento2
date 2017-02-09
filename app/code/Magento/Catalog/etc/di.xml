@@ -893,6 +893,7 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface" type="Magento\Catalog\Pricing\Price\MinimalTierPriceCalculator" />
     <type name="Magento\Catalog\Model\Indexer\AbstractFlatState">
         <arguments>
             <argument name="isAvailable" xsi:type="boolean">true</argument>

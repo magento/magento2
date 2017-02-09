@@ -35,7 +35,7 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
             ->method('addPsr4')
             ->with(
                 'Magento\\',
-                [DirectoryList::GENERATION . '/Magento/'],
+                [DirectoryList::GENERATED_CODE . '/Magento/'],
                 true
             );
         $mockAutoloader->expects($this->at(1))
@@ -46,7 +46,7 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
             ->with('Credis_', DirectoryList::LIB_INTERNAL, true);
         $mockAutoloader->expects($this->at(3))
             ->method('addPsr0')
-            ->with('', [DirectoryList::GENERATION]);
+            ->with('', [DirectoryList::GENERATED_CODE]);
 
         Populator::populateMappings($mockAutoloader, $this->mockDirectoryList);
     }
