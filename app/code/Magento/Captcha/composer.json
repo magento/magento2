@@ -7,7 +7,8 @@
         "magento/module-customer": "100.2.*",
         "magento/module-checkout": "100.2.*",
         "magento/module-backend": "100.2.*",
-        "magento/framework": "100.2.*"
+        "magento/framework": "100.2.*",
+        "zendframework/zend-db": "~2.4.6"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",
