@@ -99,7 +99,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ->method('getRequest')
             ->will($this->returnValue($this->requestMock));
 
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class,[],[],'',false);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
 
         $this->model = $this->_objectManager->getObject(
             \Magento\Checkout\Block\Cart\Sidebar::class,

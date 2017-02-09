@@ -59,7 +59,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class,[],[],'',false);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
 
         $this->model = new \Magento\Checkout\Block\Onepage(
             $contextMock,
