@@ -77,8 +77,8 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
         $pathToConfig = 'path/to/config';
 
         $getPathMap =     [
-            [DirectoryList::GENERATION, $pathToGeneration],
-            [DirectoryList::DI, $pathToDi],
+            [DirectoryList::GENERATED_CODE, $pathToGeneration],
+            [DirectoryList::GENERATED_METADATA, $pathToDi],
             [DirectoryList::CACHE, $pathToCache],
             [DirectoryList::CONFIG, $pathToConfig],
         ];
