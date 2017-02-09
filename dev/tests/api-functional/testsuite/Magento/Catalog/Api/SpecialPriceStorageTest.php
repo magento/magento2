@@ -61,39 +61,6 @@ class SpecialPriceStorageTest extends WebapiAbstract
     }
 
     /**
-     * Test get method, called with not existing SKUs.
-     */
-    public function testGetWithInvalidSku()
-    {
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => '/V1/products/special-price-information',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Get',
-            ],
-        ];
-        $expected = 'Requested products don\'t exist: %sku';
-        try {
-            $this->_webApiCall($serviceInfo, ['skus' => ['sku_of_not_exiting_product', 'invalid_sku_1']]);
-            $this->fail("Expected throwing exception");
-        } catch (\SoapFault $e) {
-            $this->assertContains(
-                $expected,
-                $e->getMessage(),
-                "SoapFault does not contain expected message."
-            );
-        } catch (\Exception $e) {
-            $error = $this->processRestExceptionResult($e);
-            $this->assertEquals($expected, $error['message']);
-            $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
-        }
-    }
-
-    /**
      * Test update method.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php

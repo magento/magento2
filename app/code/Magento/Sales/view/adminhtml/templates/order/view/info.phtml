@@ -145,6 +145,7 @@ $orderStoreDate = $block->formatDate(
                             <td><?php echo $block->escapeHtml($data['value']) ?></td>
                         </tr>
                     <?php endforeach;?>
+                    <?php echo $block->getChildHtml('extra_customer_info') ?>
                 </table>
             </div>
         </div>
