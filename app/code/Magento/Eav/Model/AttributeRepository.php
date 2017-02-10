@@ -103,7 +103,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
             'main_table.entity_type_id = entity_type.entity_type_id',
             []
         );
-        $attributeCollection->join(
+        $attributeCollection->getSelect()->joinLeft(
             ['eav_entity_attribute' => $attributeCollection->getTable('eav_entity_attribute')],
             'main_table.attribute_id = eav_entity_attribute.attribute_id',
             []
