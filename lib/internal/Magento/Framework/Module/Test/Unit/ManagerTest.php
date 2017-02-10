@@ -34,6 +34,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $outputConfig;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->moduleList = $this->getMockBuilder(ModuleListInterface::class)
