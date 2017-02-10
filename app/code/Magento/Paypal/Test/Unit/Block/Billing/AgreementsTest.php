@@ -62,6 +62,9 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
      */
     private $block;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
