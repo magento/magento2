@@ -38,7 +38,8 @@ define([
      * @returns {Object}
      */
     function collectData(items) {
-        var result = {};
+        var result = {},
+            name;
 
         items = Array.prototype.slice.call(items);
 
@@ -55,7 +56,7 @@ define([
                     break;
 
                 case 'select-multiple':
-                    var name = item.name.substring(0,(item.name.length - 2)); //remove [] from the name ending
+                    name = item.name.substring(0, item.name.length - 2); //remove [] from the name ending
                     result[name] = _.pluck(item.selectedOptions, 'value');
                     break;
 

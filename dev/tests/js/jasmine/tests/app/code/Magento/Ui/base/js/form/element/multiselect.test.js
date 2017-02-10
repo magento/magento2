@@ -15,7 +15,8 @@ define([
                 on: jasmine.createSpy()
             },
             'Magento_Ui/js/lib/registry/registry': {
-                get: function() {
+                /** Method stub. */
+                get: function () {
                     return {
                         get: jasmine.createSpy(),
                         set: jasmine.createSpy()

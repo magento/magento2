@@ -314,6 +314,7 @@ define([
 
         /**
          * Reload price.
+         *
          * @return {undefined|Number}
          */
         reloadPrice: function () {
@@ -324,7 +325,7 @@ define([
                 i, selected;
 
             if (this.config.disablePriceReload) {
-                return;
+                return undefined;
             }
 
             for (i = this.settings.length - 1; i >= 0; i--) {

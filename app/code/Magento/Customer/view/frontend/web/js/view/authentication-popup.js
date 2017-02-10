@@ -66,30 +66,29 @@ define([
             }
         },
 
-            /**
-             * Provide login action
-             *
-             * @return {Boolean}
-             */
-            login: function (formUiElement, event) {
-                var loginData = {},
-                    formElement = $(event.currentTarget),
-                    formDataArray = formElement.serializeArray();
+        /**
+         * Provide login action
+         *
+         * @return {Boolean}
+         */
+        login: function (formUiElement, event) {
+            var loginData = {},
+                formElement = $(event.currentTarget),
+                formDataArray = formElement.serializeArray();
 
-                event.stopPropagation();
-                formDataArray.forEach(function (entry) {
-                    loginData[entry.name] = entry.value;
-                });
+            event.stopPropagation();
+            formDataArray.forEach(function (entry) {
+                loginData[entry.name] = entry.value;
+            });
 
-                if (formElement.validation() &&
-                    formElement.validation('isValid')
-                ) {
-                    this.isLoading(true);
-                    loginAction(loginData);
-                }
-
-                return false;
+            if (formElement.validation() &&
+                formElement.validation('isValid')
+            ) {
+                this.isLoading(true);
+                loginAction(loginData);
             }
-        });
-    }
-);
+
+            return false;
+        }
+    });
+});
