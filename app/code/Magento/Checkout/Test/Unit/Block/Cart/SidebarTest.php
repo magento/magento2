@@ -53,6 +53,11 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
      */
     protected $requestMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -94,12 +99,15 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ->method('getRequest')
             ->will($this->returnValue($this->requestMock));
 
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
+
         $this->model = $this->_objectManager->getObject(
             \Magento\Checkout\Block\Cart\Sidebar::class,
             [
                 'context' => $contextMock,
                 'imageHelper' => $this->imageHelper,
-                'checkoutSession' => $this->checkoutSessionMock
+                'checkoutSession' => $this->checkoutSessionMock,
+                'serializer' => $this->serializer
             ]
         );
     }
