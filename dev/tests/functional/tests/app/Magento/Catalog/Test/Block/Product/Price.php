@@ -78,6 +78,16 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
     }
 
     /**
+     * This method returns price with currency symbol represented by the block.
+     *
+     * @return string|null
+     */
+    public function getPriceWithCurrency()
+    {
+        return $this->getTypePriceWithCurrencySymbol('regular_price');
+    }
+
+    /**
      * This method returns the old price represented by the block.
      *
      * @param string $currency

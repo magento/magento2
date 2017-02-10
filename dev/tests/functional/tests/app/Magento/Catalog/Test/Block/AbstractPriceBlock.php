@@ -36,6 +36,17 @@ abstract class AbstractPriceBlock extends Block
     }
 
     /**
+     * Get price with currency symbol.
+     *
+     * @param string $type
+     * @return string|null
+     */
+    protected function getTypePriceWithCurrencySymbol($type)
+    {
+        return $this->getTypePriceElement($type)->getText();
+    }
+
+    /**
      * Get specify type price element.
      *
      * @param string $type
