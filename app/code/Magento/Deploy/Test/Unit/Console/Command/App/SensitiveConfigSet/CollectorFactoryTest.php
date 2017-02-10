@@ -25,6 +25,9 @@ class CollectorFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)

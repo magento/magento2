@@ -27,6 +27,9 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

@@ -31,6 +31,9 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registry;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->context = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
