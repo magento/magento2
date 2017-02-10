@@ -18,6 +18,7 @@ $autoloadWrapper->addPsr4(
         $testsBaseDir . '/../integration/framework/Magento/TestFramework/',
     ]
 );
+$autoloadWrapper->addPsr4('Magento\\MessDetector\\', $testsBaseDir . '/framework/Magento/MessDetector/src');
 
 $generatedCode = DirectoryList::getDefaultConfig()[DirectoryList::GENERATED_CODE][DirectoryList::PATH];
 $autoloadWrapper->addPsr4('Magento\\', $baseDir . '/' . $generatedCode . '/Magento/');
