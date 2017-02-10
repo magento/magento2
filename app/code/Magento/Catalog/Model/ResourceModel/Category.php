@@ -1022,7 +1022,7 @@ class Category extends AbstractResource
         $this->getEntityManager()->delete($object);
         $this->_eventManager->dispatch(
             'catalog_category_delete_after_done',
-            ['category' => $object]
+            ['product' => $object, 'category' => $object] 
         );
         return $this;
     }
