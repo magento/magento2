@@ -58,7 +58,8 @@ class AssertReorderButtonIsNotVisibleOnFrontend extends AbstractConstraint
         $errorMessage = implode(', ', $filter);
         \PHPUnit_Framework_Assert::assertFalse(
             $orderHistory->getOrderHistoryBlock()->isReorderButtonPresentByOrderId($filter['id']),
-            '"Reorder" button for order with following data \'' . $errorMessage . '\' is present in Orders block on frontend.'
+            '"Reorder" button for order with following data \'' . $errorMessage
+            . '\' is present in Orders block on frontend.'
         );
     }
 
