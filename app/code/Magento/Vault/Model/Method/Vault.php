@@ -28,7 +28,7 @@ use Magento\Vault\Model\VaultPaymentInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-final class Vault implements VaultPaymentInterface
+class Vault implements VaultPaymentInterface
 {
     /**
      * @deprecated

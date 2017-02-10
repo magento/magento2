@@ -27,7 +27,7 @@ use Magento\Vault\Model\VaultPaymentInterface;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-final class TokensConfigProvider
+class TokensConfigProvider
 {
     /**
      * @var PaymentTokenRepositoryInterface
