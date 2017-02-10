@@ -180,7 +180,7 @@
                                 </container>
                             </block>
                         </container>
-                        <block class="Magento\Checkout\Block\Cart" name="checkout.cart.form" as="cart-items" template="cart/form.phtml" after="cart.summary">
+                        <block class="Magento\Checkout\Block\Cart\Grid" name="checkout.cart.form" as="cart-items" template="cart/form.phtml" after="cart.summary">
                             <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list"/>
                             <block class="Magento\Framework\View\Element\Text\ListText" name="checkout.cart.order.actions"/>
                         </block>
