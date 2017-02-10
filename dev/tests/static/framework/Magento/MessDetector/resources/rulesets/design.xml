@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<ruleset name="Magento Specific Design Rules"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+    <rule name="FinalImplementation"
+          class="Magento\MessDetector\Rule\Design\FinalImplementation"
+          message= "The {0} {1} declared as final.">
+        <description>
+            <![CDATA[
+Final keyword is prohibited in Magento as this decreases extensibility and customizability.
+Final classes and method are not compatible with plugins and proxies.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties />
+        <example>
+            <![CDATA[
+final class Foo
+{
+    public function bar() {}
+}
+class Baz {
+    final public function bad() {}
+}
+            ]]>
+        </example>
+    </rule>
+</ruleset>
