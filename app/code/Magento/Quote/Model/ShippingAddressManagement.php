@@ -118,7 +118,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $address->setCollectShippingRates(true);
 
         if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
-            throw new InputException(__($this->getMinimumAmountErrorMessage()->getMessage()));
+            throw new InputException($this->getMinimumAmountErrorMessage()->getMessage());
         }
 
         try {
