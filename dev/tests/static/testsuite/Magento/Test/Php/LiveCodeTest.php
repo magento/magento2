@@ -8,7 +8,6 @@
 
 namespace Magento\Test\Php;
 
-use Magento\Framework\App\Utility;
 use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
@@ -74,44 +73,89 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public static function getWhitelist($fileTypes = ['php'], $changedFilesBaseDir = '', $baseFilesFolder = '')
     {
-        $globPatternsFolder = self::getBaseFilesFolder();
-        if ('' !== $baseFilesFolder) {
-            $globPatternsFolder = $baseFilesFolder;
+        $changedFiles = self::getChangedFilesList($changedFilesBaseDir);
+        if (empty($changedFiles)) {
+            return [];
         }
-        $directoriesToCheck = Files::init()->readLists($globPatternsFolder . '/_files/whitelist/common.txt');
 
+        $globPatternsFolder = ('' !== $baseFilesFolder) ? $baseFilesFolder : self::getBaseFilesFolder();
+        $directoriesToCheck = Files::init()->readLists($globPatternsFolder . '/_files/whitelist/common.txt');
+        $targetFiles = self::filterFiles($changedFiles, $fileTypes, $directoriesToCheck);
+
+        return $targetFiles;
+    }
+
+    private static function getChangedFilesList($changedFilesBaseDir)
+    {
         $changedFiles = [];
+
         $globFilesListPattern = ($changedFilesBaseDir ?: self::getChangedFilesBaseDir()) . '/_files/changed_files*';
-        foreach (glob($globFilesListPattern) as $listFile) {
-            $changedFiles = array_merge($changedFiles, file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+        $listFiles = glob($globFilesListPattern);
+        if (count($listFiles)) {
+            foreach ($listFiles as $listFile) {
+                $changedFiles = array_merge(
+                    $changedFiles,
+                    file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
+                );
+            }
+        } else {
+            // if no list files, probably, this is the dev environment
+            @exec('git diff --name-only', $changedFiles);
         }
+
         array_walk(
             $changedFiles,
             function (&$file) {
                 $file = BP . '/' . $file;
             }
         );
-        $changedFiles = array_filter(
-            $changedFiles,
-            function ($path) use ($directoriesToCheck, $fileTypes) {
-                if (!file_exists($path)) {
-                    return false;
-                }
-                $path = realpath($path);
-                foreach ($directoriesToCheck as $directory) {
-                    $directory = realpath($directory);
-                    if (strpos($path, $directory) === 0) {
-                        if (!empty($fileTypes)) {
-                            return in_array(pathinfo($path, PATHINFO_EXTENSION), $fileTypes);
-                        }
+
+        return $changedFiles;
+    }
+
+    private static function filterFiles(array $files, array $allowedFileTypes, array $allowedDirectories)
+    {
+        if (empty($allowedFileTypes)) {
+            $fileHasAllowedType = function () {
+               return true;
+            };
+        } else {
+            $fileHasAllowedType = function ($file) use ($allowedFileTypes) {
+                return in_array(pathinfo($file, PATHINFO_EXTENSION), $allowedFileTypes);
+            };
+        }
+
+        if (empty($allowedDirectories)) {
+            $fileIsInAllowedDirectory = function () {
+                return true;
+            };
+        } else {
+            $allowedDirectories = array_map('realpath', $allowedDirectories);
+            usort($allowedDirectories, function ($dir1, $dir2) {
+                return strlen($dir1) - strlen($dir2);
+            });
+            $fileIsInAllowedDirectory = function ($file) use ($allowedDirectories) {
+                foreach ($allowedDirectories as $directory) {
+                    if (strpos($file, $directory) === 0) {
                         return true;
                     }
                 }
                 return false;
+            };
+        }
+
+        $filtered = array_filter(
+            $files,
+            function ($file) use ($fileHasAllowedType, $fileIsInAllowedDirectory) {
+                $file = realpath($file);
+                if (false === $file) {
+                    return false;
+                }
+                return $fileHasAllowedType($file) && $fileIsInAllowedDirectory($file);
             }
         );
 
-        return $changedFiles;
+        return $filtered;
     }
 
     /**
