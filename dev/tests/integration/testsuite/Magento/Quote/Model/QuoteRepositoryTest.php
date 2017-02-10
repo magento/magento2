@@ -17,6 +17,9 @@ use Magento\Quote\Api\Data\CartExtension;
 use Magento\User\Api\Data\UserInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
