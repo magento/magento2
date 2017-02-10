@@ -17,6 +17,9 @@
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" />
     </scenario>
+    <scenario name="FrontendOrderPagerTest" firstStep="createOrder">
+        <step name="createOrder" module="Magento_Sales" />
+    </scenario>
     <scenario name="CreateOrderBackendTest" firstStep="setupConfiguration">
         <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
         <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
