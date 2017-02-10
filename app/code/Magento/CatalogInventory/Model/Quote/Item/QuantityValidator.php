@@ -9,6 +9,7 @@ namespace Magento\CatalogInventory\Model\Quote\Item;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Helper\Data;
@@ -133,7 +134,9 @@ class QuantityValidator
         }
 
         if ($stockStatus) {
-            if (!$stockStatus->getStockStatus() || $parentStockStatus && !$parentStockStatus->getStockStatus()) {
+            if ($stockStatus->getStockStatus() == Stock::STOCK_OUT_OF_STOCK
+                    || $parentStockStatus && $parentStockStatus->getStockStatus() == Stock::STOCK_OUT_OF_STOCK
+            ) {
                 $quoteItem->addErrorInfo(
                     'cataloginventory',
                     Data::ERROR_QTY,
