@@ -53,7 +53,7 @@
     <div data-role="tabs" id="product-edit-form-tabs"></div> <?php /* @TODO: remove id after elimination of setDestElementId('product-edit-form-tabs') */?>
     <?php echo $block->getChildHtml('product-type-tabs') ?>
     <input type="hidden" id="product_type_id" value="<?php /* @escapeNotVerified */ echo $block->getProduct()->getTypeId()?>"/>
-    <input type="hidden" id="attribute_set_id" value="<?php /* @escapeNotVerified */ echo $block->getProduct()->getAttributeSetId()?>"/>
+    <input type="hidden" id="attribute_set_id" name="set" value="<?php /* @escapeNotVerified */ echo $block->getProduct()->getAttributeSetId()?>"/>
     <button type="submit" class="hidden"></button>
 <?php if ($block->getUseContainer()): ?>
 </form>
