@@ -28,6 +28,9 @@ class ConfigWriterTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)

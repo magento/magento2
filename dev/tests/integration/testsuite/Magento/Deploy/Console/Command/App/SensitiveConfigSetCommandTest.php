@@ -49,6 +49,9 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $filesystem;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -251,6 +254,9 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
     public function tearDown()
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->delete(
