@@ -9,7 +9,7 @@ use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Backend\Block\Dashboard\Tab\Products\Viewed as ViewedProductsTabBlock;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 
 /**
@@ -28,6 +28,11 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
     private $layout;
 
     /**
+     * @var ProductRepository
+     */
+    private $productRepository;
+
+    /**
      * @var EventManager
      */
     private $eventManager;
@@ -36,6 +41,7 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = BootstrapHelper::getObjectManager();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
+        $this->productRepository = $this->objectManager->get(ProductRepository::class);
         $this->eventManager = $this->objectManager->get(EventManager::class);
     }
 
@@ -48,9 +54,7 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
     {
         /** @var ViewedProductsTabBlock $viewedProductsTabBlock */
         $viewedProductsTabBlock = $this->layout->createBlock(ViewedProductsTabBlock::class);
-        /** @var Product $product */
-        $product = $this->objectManager->create(Product::class);
-        $product->load(1);
+        $product = $this->productRepository->getById(1);
         $this->eventManager->dispatch('catalog_controller_product_view', ['product' => $product]);
 
         $this->assertEquals(
