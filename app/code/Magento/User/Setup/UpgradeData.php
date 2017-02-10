@@ -82,6 +82,8 @@ class UpgradeData implements UpgradeDataInterface
      * Convert serialized data in fields to json format
      *
      * @param ModuleDataSetupInterface $setup
+     *
+     * @return void
      */
     private function upgradeSerializedFields($setup)
     {
