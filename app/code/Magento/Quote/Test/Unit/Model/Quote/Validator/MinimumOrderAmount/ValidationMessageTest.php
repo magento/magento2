@@ -5,6 +5,8 @@
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Validator\MinimumOrderAmount;
 
+use Magento\Framework\Phrase;
+
 class ValidationMessageTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -86,6 +88,9 @@ class ValidationMessageTest extends \PHPUnit_Framework_TestCase
             ->with('sales/minimum_order/description', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->willReturn($configMessage);
 
-        $this->assertEquals($configMessage, $this->model->getMessage());
+        $message = $this->model->getMessage();
+
+        $this->assertEquals(Phrase::class , get_class($message));
+        $this->assertEquals($configMessage, $message->__toString());
     }
 }

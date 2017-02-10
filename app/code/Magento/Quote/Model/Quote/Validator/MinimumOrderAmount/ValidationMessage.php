@@ -38,7 +38,9 @@ class ValidationMessage
     }
 
     /**
-     * @return \Magento\Framework\Phrase|mixed
+     * Get validation message.
+     *
+     * @return \Magento\Framework\Phrase
      * @throws \Zend_Currency_Exception
      */
     public function getMessage()
@@ -56,6 +58,9 @@ class ValidationMessage
                 )
             );
             $message = __('Minimum order amount is %1', $minimumAmount);
+        } else {
+            //Added in order to address the issue: https://github.com/magento/magento2/issues/8287
+            $message = __($message);
         }
 
         return $message;
