@@ -71,8 +71,8 @@ define([
             } else {
                 // rendererTemplates are provided via layout
                 rendererTemplate = address.getType() != undefined && this.rendererTemplates[address.getType()] != undefined ? //eslint-disable-line
-                        utils.extend({}, defaultRendererTemplate, this.rendererTemplates[address.getType()]) :
-                        defaultRendererTemplate;
+                    utils.extend({}, defaultRendererTemplate, this.rendererTemplates[address.getType()]) :
+                    defaultRendererTemplate;
                 templateData = {
                     parentName: this.name,
                     name: address.getType()

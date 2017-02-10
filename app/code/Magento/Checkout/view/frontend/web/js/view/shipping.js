@@ -204,11 +204,10 @@ define([
         rates: shippingService.getShippingRates(),
         isLoading: shippingService.isLoading,
         isSelected: ko.computed(function () {
-                return quote.shippingMethod() ?
-                    quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
-                    null;
-            }
-        ),
+            return quote.shippingMethod() ?
+                quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
+                null;
+        }),
 
         /**
          * @param {Object} shippingMethod

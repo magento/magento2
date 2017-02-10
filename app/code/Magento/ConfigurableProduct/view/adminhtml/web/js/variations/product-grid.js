@@ -312,8 +312,8 @@ define([
 
             if (this.callbackName == 'appendProducts') { //eslint-disable-line eqeqeq
                 selectedRows = _.filter(this.productsProvider().data.items, function (row) {
-                        return selected.indexOf(row['entity_id']) !== -1;
-                    });
+                    return selected.indexOf(row['entity_id']) !== -1;
+                });
                 selectedVariationKeys = _.values(this._getVariationKeyMap(selectedRows));
                 this._disableRows(this.productsProvider().data.items, selectedVariationKeys, selected);
             }

@@ -24,11 +24,10 @@ define([
         shippingRates: shippingService.getShippingRates(),
         shippingRateGroups: ko.observableArray([]),
         selectedShippingMethod: ko.computed(function () {
-                return quote.shippingMethod() ?
-                    quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
-                    null;
-            }
-        ),
+            return quote.shippingMethod() ?
+                quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
+                null;
+        }),
 
         /**
          * @override

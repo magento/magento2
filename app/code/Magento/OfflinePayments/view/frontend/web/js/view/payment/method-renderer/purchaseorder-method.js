@@ -33,7 +33,6 @@ define([
                 'po_number': this.purchaseOrderNumber(),
                 'additional_data': null
             };
-
         },
 
         /**

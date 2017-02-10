@@ -28,15 +28,15 @@ define([
             formsSelector: '[data-container="address-forms"]',
             addAddressSelector: '[data-container="add-address"]',
             formFirstNameSelector: ':input' +
-            '[data-ui-id="adminhtml-edit-tab-addresses-fieldset-element-text-address-template-firstname"]',
+                '[data-ui-id="adminhtml-edit-tab-addresses-fieldset-element-text-address-template-firstname"]',
             accountFirstNameSelector: ':input' +
-            '[data-ui-id="adminhtml-edit-tab-account-fieldset-element-text-account-firstname"]',
+                '[data-ui-id="adminhtml-edit-tab-account-fieldset-element-text-account-firstname"]',
             formLastNameSelector: ':input' +
-            '[data-ui-id="adminhtml-edit-tab-addresses-fieldset-element-text-address-template-lastname"]',
+                '[data-ui-id="adminhtml-edit-tab-addresses-fieldset-element-text-address-template-lastname"]',
             accountLastNameSelector: ':input' +
-            '[data-ui-id="adminhtml-edit-tab-account-fieldset-element-text-account-lastname"]',
+                '[data-ui-id="adminhtml-edit-tab-account-fieldset-element-text-account-lastname"]',
             accountWebsiteIdSelector: ':input' +
-            '[data-ui-id="store-switcher-form-renderer-fieldset-element-select-account-website-id"]',
+                '[data-ui-id="store-switcher-form-renderer-fieldset-element-select-account-website-id"]',
             formCountrySelector: 'customer-edit-tab-addresses-fieldset-element-form-field-country-id',
             addAddressButtonSelector: ':button[data-ui-id="adminhtml-edit-tab-addresses-add-address-button"]'
         },
