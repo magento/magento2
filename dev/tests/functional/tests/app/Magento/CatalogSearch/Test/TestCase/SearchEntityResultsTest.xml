@@ -75,7 +75,9 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchQueryLength" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
         </variation>
-        <variation name="SearchEntityResultsTestVariation16" summary="Search for two simple products and check their order" ticketId="MAGETWO-58964">
+        <variation name="SearchEntityResultsTestVariation16"
+                   summary="Search for two simple products for text in attributes with same search weight and check their sort order"
+                   ticketId="MAGETWO-64501">
             <data name="catalogSearch/data/query_text/search_query" xsi:type="string">alaska</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="array">
                 <item name="product_2" xsi:type="string">catalogProductSimple::search_weight_term_twice_weight_1</item>
@@ -83,7 +85,9 @@
             </data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResultOrder" />
         </variation>
-        <variation name="SearchEntityResultsTestVariation17" summary="Search for two simple products and check their order" ticketId="MAGETWO-58964">
+        <variation name="SearchEntityResultsTestVariation17"
+                   summary="Search for two simple products for text in attributes with different search weight and check their sort order"
+                   ticketId="MAGETWO-64502">
             <data name="catalogSearch/data/query_text/search_query" xsi:type="string">alaska</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="array">
                 <item name="product_1" xsi:type="string">catalogProductSimple::search_weight_term_once_weight_5</item>
