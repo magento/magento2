@@ -85,7 +85,7 @@
 
         <dataset name="us_ny_rate_8_1">
             <field name="code" xsi:type="string">US-NY-*-%isolation%</field>
-            <field name="tax_region_id" xsi:type="string">%id%</field>
+            <field name="tax_region_id" xsi:type="string">New York</field>
             <field name="rate" xsi:type="string">8.1</field>
             <field name="tax_country_id" xsi:type="string">United States</field>
             <field name="tax_postcode" xsi:type="string">*</field>
@@ -119,7 +119,7 @@
             <field name="zip_from" xsi:type="string">90001</field>
             <field name="zip_to" xsi:type="string">96162</field>
             <field name="tax_country_id" xsi:type="string">United States</field>
-            <field name="tax_region_id" xsi:type="string">%id%</field>
+            <field name="tax_region_id" xsi:type="string">California</field>
             <field name="rate" xsi:type="string">15.5</field>
         </dataset>
 
