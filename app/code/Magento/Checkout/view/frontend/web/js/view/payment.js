@@ -15,7 +15,8 @@ define(
         'Magento_Checkout/js/model/payment-service',
         'Magento_Checkout/js/model/payment/method-converter',
         'Magento_Checkout/js/action/get-payment-information',
-        'Magento_Checkout/js/model/checkout-data-resolver'
+        'Magento_Checkout/js/model/checkout-data-resolver',
+        'mage/translate',
     ],
     function (
         $,
@@ -27,7 +28,8 @@ define(
         paymentService,
         methodConverter,
         getPaymentInformation,
-        checkoutDataResolver
+        checkoutDataResolver,
+        $t
     ) {
         'use strict';
 
@@ -51,7 +53,7 @@ define(
                 stepNavigator.registerStep(
                     'payment',
                     null,
-                    'Review & Payments',
+                    $t('Review & Payments'),
                     this.isVisible,
                     _.bind(this.navigate, this),
                     20
