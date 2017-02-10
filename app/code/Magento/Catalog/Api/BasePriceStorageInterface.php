@@ -17,7 +17,6 @@ interface BasePriceStorageInterface
      *
      * @param string[] $skus
      * @return \Magento\Catalog\Api\Data\BasePriceInterface[]
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get(array $skus);
 
