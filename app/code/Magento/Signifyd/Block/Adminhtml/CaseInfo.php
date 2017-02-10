@@ -9,18 +9,12 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\CaseManagement;
-use Magento\Signifyd\Model\Config;
 
 /**
  * Get Signifyd Case Info
  */
 class CaseInfo extends Template
 {
-    /**
-     * @var Config
-     */
-    private $config;
-
     /**
      * @var CaseInterface
      */
@@ -33,30 +27,17 @@ class CaseInfo extends Template
 
     /**
      * @param Context $context
-     * @param Config $config
      * @param CaseManagement $caseManagement
      * @param array $data
      */
     public function __construct(
         Context $context,
-        Config $config,
         CaseManagement $caseManagement,
         array $data = []
     ) {
-        $this->config = $config;
         $this->caseManagement = $caseManagement;
 
         parent::__construct($context, $data);
-    }
-
-    /**
-     * Checks if service is enabled.
-     *
-     * @return boolean
-     */
-    public function isServiceActive()
-    {
-        return $this->config->isActive();
     }
 
     /**

@@ -40,15 +40,18 @@ class CaseInfoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Checks that block does not give contents
-     * if Signifyd module is inactive.
+     * Checks that block has contents when case entity for order is exists
+     * even if Signifyd module is inactive.
      *
      * @magentoConfigFixture current_store fraud_protection/signifyd/active 0
+     * @magentoDataFixture Magento/Signifyd/_files/case.php
      * @magentoAppArea adminhtml
      */
     public function testModuleIsInactive()
     {
-        static::assertEmpty($this->getBlockContents());
+        $this->order->loadByIncrementId('100000001');
+
+        static::assertNotEmpty($this->getBlockContents());
     }
 
     /**
