@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\MessDetector\Rule\Design;
+namespace Magento\CodeMessDetector\Rule\Design;
 
 use PHPMD\AbstractNode;
 use PHPMD\AbstractRule;
