@@ -5,6 +5,9 @@
  */
 namespace Magento\Widget\Test\Unit\Model;
 
+/**
+ * Test class for \Magento\Widget\Model\Widget
+ */
 class WidgetTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -13,19 +16,40 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     protected $dataStorageMock;
 
     /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $escaperMock;
+
+    /**
      * @var \Magento\Widget\Model\Widget
      */
     protected $widget;
 
-    public function setUp()
+    /**
+     * @var \Magento\Widget\Helper\Conditions
+     */
+    private $conditionsHelper;
+
+    protected function setUp()
     {
-        $this->dataStorageMock = $this->getMockBuilder('Magento\Widget\Model\Config\Data')
+        $this->dataStorageMock = $this->getMockBuilder(\Magento\Widget\Model\Config\Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->conditionsHelper = $this->getMockBuilder(\Magento\Widget\Helper\Conditions::class)
+            ->setMethods(['encode'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->widget = $objectManagerHelper->getObject(
-            'Magento\Widget\Model\Widget',
-            ['dataStorage' => $this->dataStorageMock]
+            \Magento\Widget\Model\Widget::class,
+            [
+                'dataStorage' => $this->dataStorageMock,
+                'conditionsHelper' => $this->conditionsHelper,
+                'escaper' => $this->escaperMock,
+            ]
         );
     }
 
@@ -83,8 +107,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($widgets);
 
-        $resultObject = $this->widget->getConfigAsObject('Magento\Cms\Block\Widget\Page\Link');
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultObject);
+        $resultObject = $this->widget->getConfigAsObject(\Magento\Cms\Block\Widget\Page\Link::class);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultObject);
 
         $this->assertSame('CMS Page Link', $resultObject->getName());
         $this->assertSame('Link to a CMS Page', $resultObject->getDescription());
@@ -92,9 +116,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('Magento_Cms::images/widget_page_link.png', $resultObject->getPlaceholderImage());
 
         $resultParameters = $resultObject->getParameters();
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['page_id' ]);
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['anchor_text']);
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['template']);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultParameters['page_id' ]);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultParameters['anchor_text']);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultParameters['template']);
 
         $supportedContainersExpected = [
             '0' => [
@@ -115,8 +139,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn([]);
 
-        $resultObject = $this->widget->getConfigAsObject('Magento\Cms\Block\Widget\Page\Link');
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultObject);
+        $resultObject = $this->widget->getConfigAsObject(\Magento\Cms\Block\Widget\Page\Link::class);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultObject);
         $this->assertSame([], $resultObject->getData());
     }
 }

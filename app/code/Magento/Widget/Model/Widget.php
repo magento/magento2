@@ -294,7 +294,7 @@ class Widget
                 }
             }
             if ($value) {
-                $directive .= sprintf(' %s="%s"', $name, $value);
+                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeQuote($value));
             }
         }
         $directive .= '}}';
