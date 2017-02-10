@@ -53,6 +53,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCaptcha()
     {
+        if (!function_exists("imageftbbox")) {
+            $this->markTestSkipped('imageftbbox is not available on the test environment');
+        }
+
         $this->configMock->expects(
             $this->once()
         )->method(

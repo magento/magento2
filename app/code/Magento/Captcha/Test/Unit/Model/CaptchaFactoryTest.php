@@ -21,10 +21,6 @@ class CaptchaFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreatePositive()
     {
-        if (!function_exists("imageftbbox")) {
-            $this->markTestSkipped('imageftbbox is not available on the test environment');
-        }
-
         $captchaType = 'default';
 
         $defaultCaptchaMock = $this->getMock(\Magento\Captcha\Model\DefaultModel::class, [], [], '', false);
