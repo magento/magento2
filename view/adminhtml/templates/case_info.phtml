@@ -9,7 +9,7 @@
 <?php /** @var $block Magento\Signifyd\Block\Adminhtml\CaseInfo */ ?>
 <?php
 
-    if (!$block->isServiceActive() || $block->isEmptyCase()) {
+    if ($block->isEmptyCase()) {
         return '';
     }
 ?>
