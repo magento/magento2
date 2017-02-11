@@ -82,11 +82,11 @@ class Ga extends \Magento\Framework\View\Element\Template
 
         $anonymizeIp = "";
         if ($this->_googleAnalyticsData->isAnonymizedIpActive()) {
-          $anonymizeIp = ", {'anonymizeIp': true}";
+          $anonymizeIp = "\nga('set', 'anonymizeIp', true);";
         }
 
         return "\nga('create', '" . $this->escapeHtmlAttr($accountId, false)
-           . ", 'auto');\nga('send', 'pageview'{$optPageURL}{$anonymizeIp});\n";
+           . ", 'auto');{$anonymizeIp}\nga('send', 'pageview'{$optPageURL});\n";
     }
 
     /**
@@ -110,11 +110,6 @@ class Ga extends \Magento\Framework\View\Element\Template
         $result = [];
 
         $result[] = "ga('require', 'ec', 'ec.js');";
-
-        $anonymizeIp = "";
-        if ($this->_googleAnalyticsData->isAnonymizedIpActive()) {
-          $anonymizeIp = ", {'anonymizeIp': true}";
-        }
 
         foreach ($collection as $order) {
             if ($order->getIsVirtual()) {
@@ -153,7 +148,7 @@ class Ga extends \Magento\Framework\View\Element\Template
                 $order->getBaseShippingAmount()
             );
 
-            $result[] = "ga('send', 'pageview'{$anonymizeIp});";
+            $result[] = "ga('send', 'pageview');";
         }
         return implode("\n", $result);
     }
