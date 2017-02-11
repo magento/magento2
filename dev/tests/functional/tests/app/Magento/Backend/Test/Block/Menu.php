@@ -68,10 +68,11 @@ class Menu extends Block
      * Open backend page via menu.
      *
      * @param string $menuItem
+     * @param bool $waitMenuItemNotVisible
      * @return void
      * @throws \Exception
      */
-    public function navigate($menuItem)
+    public function navigate($menuItem, $waitMenuItemNotVisible = true)
     {
         $menuChain = array_map('trim', explode('>', $menuItem));
         $mainMenu = $menuChain[0];
@@ -98,7 +99,9 @@ class Menu extends Block
         } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException  $e) {
         }
         $this->_rootElement->find($subMenuItem, Locator::SELECTOR_XPATH)->click();
-        $this->waitForElementNotVisible($subMenuSelector, Locator::SELECTOR_XPATH);
+        if ($waitMenuItemNotVisible) {
+            $this->waitForElementNotVisible($subMenuSelector, Locator::SELECTOR_XPATH);
+        }
     }
 
     /**

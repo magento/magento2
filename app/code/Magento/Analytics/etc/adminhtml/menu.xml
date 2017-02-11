@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magento_Analytics::bi_essentials" title="BI Essentials" translate="title" module="Magento_Analytics" sortOrder="90" parent="Magento_Reports::report" resource="Magento_Analytics::bi_essentials" />
+        <add id="Magento_Analytics::report_basic_tier" title="Basic Tier" translate="title" module="Magento_Analytics" sortOrder="90" parent="Magento_Analytics::bi_essentials" action="analytics/basictier/signup" target="_blank" resource="Magento_Analytics::report_basic_tier" />
+    </menu>
+</config>
