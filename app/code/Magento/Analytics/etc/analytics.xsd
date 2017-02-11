@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="file" type="fileDeclaration" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="uniqueFileName">
+            <xs:selector xpath="file" />
+            <xs:field xpath="@name" />
+        </xs:unique>
+    </xs:element>
+    <xs:complexType name="fileDeclaration">
+        <xs:sequence>
+            <xs:element name="providers" type="providers" minOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="name" type="fileName" use="required" />
+        <xs:attribute name="prefix" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="providers">
+        <xs:choice>
+            <xs:sequence>
+                <xs:element name="reportProvider" type="reportProvider" />
+                <xs:element name="customProvider" type="customProvider" minOccurs="0" />
+            </xs:sequence>
+            <xs:element name="customProvider" type="customProvider" />
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="provider" abstract="true">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="class" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="reportProvider">
+        <xs:complexContent>
+            <xs:extension base="provider">
+                <xs:all>
+                    <xs:element name="parameters">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="name" type="notEmptyString" maxOccurs="1" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:all>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="customProvider">
+        <xs:complexContent>
+            <xs:extension base="provider" />
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="fileName">
+        <xs:annotation>
+            <xs:documentation>
+                File name attribute can has only [a-zA-Z0-9/_].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9/_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="notEmptyString">
+        <xs:annotation>
+            <xs:documentation>
+                Value is required.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
