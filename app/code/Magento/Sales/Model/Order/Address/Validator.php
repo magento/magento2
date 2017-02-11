@@ -61,6 +61,14 @@ class Validator
         if ($this->isTelephoneRequired()) {
             $this->required['telephone'] = 'Phone Number';
         }
+
+        if ($this->isCompanyRequired()) {
+            $this->required['company'] = 'Company';
+        }
+
+        if ($this->isFaxRequired()) {
+            $this->required['fax'] = 'Fax';
+        }
     }
 
     /**
@@ -121,6 +129,18 @@ class Validator
             }
         }
 
+        if ($this->isCompanyRequired()) {
+            if ($this->isEmpty($address->getCompany())) {
+                $errors[] = __('Please enter the company.');
+            }
+        }
+
+        if ($this->isFaxRequired()) {
+            if ($this->isEmpty($address->getFax())) {
+                $errors[] = __('Please enter the fax number.');
+            }
+        }
+
         $countryId = $address->getCountryId();
 
         if ($this->isZipRequired($countryId) && $this->isEmpty($address->getPostcode())) {
@@ -176,5 +196,21 @@ class Validator
     protected function isTelephoneRequired()
     {
         return ($this->eavConfig->getAttribute('customer_address', 'telephone')->getIsRequired());
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isCompanyRequired()
+    {
+        return ($this->eavConfig->getAttribute('customer_address', 'company')->getIsRequired());
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isFaxRequired()
+    {
+        return ($this->eavConfig->getAttribute('customer_address', 'fax')->getIsRequired());
     }
 }
