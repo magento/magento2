@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\Order\Address;
 
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Sales\Model\Order\Address;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Directory\Model\CountryFactory;
@@ -24,7 +25,6 @@ class Validator
         'street' => 'Street',
         'city' => 'City',
         'email' => 'Email',
-        'telephone' => 'Phone Number',
         'country_id' => 'Country',
         'firstname' => 'First Name',
         'address_type' => 'Address Type',
@@ -41,15 +41,26 @@ class Validator
     protected $countryFactory;
 
     /**
+     * @var EavConfig
+     */
+    protected $eavConfig;
+
+    /**
      * @param DirectoryHelper $directoryHelper
      * @param CountryFactory $countryFactory
      */
     public function __construct(
         DirectoryHelper $directoryHelper,
-        CountryFactory $countryFactory
+        CountryFactory $countryFactory,
+        EavConfig $eavConfig
     ) {
         $this->directoryHelper = $directoryHelper;
         $this->countryFactory = $countryFactory;
+        $this->eavConfig = $eavConfig;
+
+        if ($this->isTelephoneRequired()) {
+            $this->required['telephone'] = 'Phone Number';
+        }
     }
 
     /**
@@ -103,8 +114,11 @@ class Validator
         if ($this->isEmpty($address->getCity())) {
             $errors[] = __('Please enter the city.');
         }
-        if ($this->isEmpty($address->getTelephone())) {
-            $errors[] = __('Please enter the phone number.');
+
+        if ($this->isTelephoneRequired()) {
+            if ($this->isEmpty($address->getTelephone())) {
+                $errors[] = __('Please enter the phone number.');
+            }
         }
 
         $countryId = $address->getCountryId();
@@ -154,5 +168,13 @@ class Validator
     {
         $country = $this->countryFactory->create()->load($countryId);
         return $this->directoryHelper->isRegionRequired($countryId) && $country->getRegionCollection()->getSize();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isTelephoneRequired()
+    {
+        return ($this->eavConfig->getAttribute('customer_address', 'telephone')->getIsRequired());
     }
 }

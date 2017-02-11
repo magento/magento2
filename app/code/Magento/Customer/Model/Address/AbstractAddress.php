@@ -579,7 +579,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $errors[] = __('%fieldName is a required field.', ['fieldName' => 'city']);
         }
 
-        if ($this->isTelephoneFieldRequired()) {
+        if ($this->isTelephoneRequired()) {
             if (!\Zend_Validate::is($this->getTelephone(), 'NotEmpty')) {
                 $errors[] = __('%fieldName is a required field.', ['fieldName' => 'telephone']);
 
@@ -646,7 +646,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     /**
      * @return bool
      */
-    protected function isTelephoneFieldRequired()
+    protected function isTelephoneRequired()
     {
         return ($this->_eavConfig->getAttribute('customer_address', 'telephone')->getIsRequired());
     }
