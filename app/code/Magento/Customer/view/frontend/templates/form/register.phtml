@@ -51,12 +51,11 @@
                     <input type="text" name="company" id="company" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getCompany()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Company')) ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('company')) ?>">
                 </div>
             </div>
-            <div class="field telephone">
-                <label for="telephone" class="label"><span><?php echo $block->escapeHtml(__('Phone Number')) ?></span></label>
-                <div class="control">
-                    <input type="text" name="telephone" id="telephone" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getTelephone()) ?>" title="<?php echo $block->escapeHtmlAttr(__('Phone Number')) ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('telephone')) ?>">
-                </div>
-            </div>
+
+            <?php $_telephone = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Telephone') ?>
+            <?php if ($_telephone->isEnabled()): ?>
+                <?php echo $_telephone->setTelephone($block->getFormData()->getTelephone())->toHtml() ?>
+            <?php endif ?>
 
             <?php $_streetValidationClass = $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('street'); ?>
 
@@ -176,7 +175,7 @@ require([
 
     var dataForm = $('#form-validate');
     var ignore = <?php /* @noEscape */ echo $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null'; ?>;
-    
+
     dataForm.mage('validation', {
     <?php if ($_dob->isEnabled()): ?>
         errorPlacement: function(error, element) {
