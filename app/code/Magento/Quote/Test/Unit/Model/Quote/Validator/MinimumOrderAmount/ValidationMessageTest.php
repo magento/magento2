@@ -62,7 +62,6 @@ class ValidationMessageTest extends \PHPUnit_Framework_TestCase
         $storeMock->expects($this->once())->method('getCurrentCurrencyCode')->willReturn($currencyCode);
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
-
         $currencyMock = $this->getMock(\Magento\Framework\Currency::class, [], [], '', false);
         $this->currencyMock->expects($this->once())
             ->method('getCurrency')
