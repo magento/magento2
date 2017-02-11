@@ -150,17 +150,6 @@ class Telephone extends AbstractWidget
      *
      * @return bool
      */
-    private function _isAttributeRequired($attributeCode)
-    {
-        $attributeMetadata = $this->_getAttribute($attributeCode);
-        return $attributeMetadata ? (bool)$attributeMetadata->isRequired() : false;
-    }
-
-    /**
-     * @param string $attributeCode
-     *
-     * @return bool
-     */
     private function _isAttributeVisible($attributeCode)
     {
         $attributeMetadata = $this->_getAttribute($attributeCode);
