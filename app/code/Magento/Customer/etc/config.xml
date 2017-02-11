@@ -51,6 +51,7 @@
                 <suffix_options />
                 <dob_show />
                 <gender_show />
+                <telephone_show>req</telephone_show>
             </address>
             <startup>
                 <redirect_dashboard>1</redirect_dashboard>
