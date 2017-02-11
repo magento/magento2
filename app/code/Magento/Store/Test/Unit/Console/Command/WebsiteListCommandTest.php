@@ -7,6 +7,7 @@ use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\TableHelper;
 use Magento\Store\Model\Website;
 use Magento\Framework\Console\Cli;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 
 /**
  * @package Magento\Store\Test\Unit\Console\Command
@@ -32,7 +33,7 @@ class WebsiteListCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->websiteRepositoryMock = $this->getMockForAbstractClass(\Magento\Store\Api\WebsiteRepositoryInterface::class);
+        $this->websiteRepositoryMock = $this->getMockForAbstractClass(WebsiteRepositoryInterface::class);
 
         $this->command = $this->objectManager->getObject(
             WebsiteListCommand::class,
