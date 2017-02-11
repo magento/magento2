@@ -90,7 +90,7 @@ class ValidationMessageTest extends \PHPUnit_Framework_TestCase
 
         $message = $this->model->getMessage();
 
-        $this->assertEquals(Phrase::class , get_class($message));
+        $this->assertEquals(Phrase::class, get_class($message));
         $this->assertEquals($configMessage, $message->__toString());
     }
 }
