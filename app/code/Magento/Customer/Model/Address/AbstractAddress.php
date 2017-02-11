@@ -579,9 +579,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $errors[] = __('%fieldName is a required field.', ['fieldName' => 'city']);
         }
 
-        if (!\Zend_Validate::is($this->getTelephone(), 'NotEmpty')) {
-            $errors[] = __('%fieldName is a required field.', ['fieldName' => 'telephone']);
+        if ($this->isTelephoneFieldRequired()) {
+            if (!\Zend_Validate::is($this->getTelephone(), 'NotEmpty')) {
+                $errors[] = __('%fieldName is a required field.', ['fieldName' => 'telephone']);
 
+            }
         }
 
         $_havingOptionalZip = $this->_directoryData->getCountriesWithOptionalZip();
@@ -639,5 +641,13 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     public function unsRegion()
     {
         return $this->unsetData("region");
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isTelephoneFieldRequired()
+    {
+        return ($this->_eavConfig->getAttribute('customer_address', 'telephone')->getIsRequired());
     }
 }
