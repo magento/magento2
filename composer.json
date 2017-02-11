@@ -2,7 +2,7 @@
     "name": "magefan/module-login-as-customer",
     "description": "N/A",
     "type": "magento2-module",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
