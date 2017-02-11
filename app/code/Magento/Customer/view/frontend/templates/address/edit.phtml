@@ -8,6 +8,7 @@
 
 /** @var \Magento\Customer\Block\Address\Edit $block */
 ?>
+<?php $_telephone = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Telephone') ?>
 <form class="form-address-edit"
       action="<?php echo $block->escapeUrl($block->getSaveUrl()) ?>"
       method="post"
@@ -31,19 +32,11 @@
                        class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('company')) ?>">
             </div>
         </div>
-        <div class="field telephone required">
-            <label class="label" for="telephone">
-                <span><?php echo $block->escapeHtml(__('Phone Number')) ?></span>
-            </label>
-            <div class="control">
-                <input type="text"
-                       name="telephone"
-                       value="<?php echo $block->escapeHtmlAttr($block->getAddress()->getTelephone()) ?>"
-                       title="<?php echo $block->escapeHtmlAttr(__('Phone Number')) ?>"
-                       class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('telephone')) ?>"
-                       id="telephone">
-            </div>
-        </div>
+
+        <?php if ($_telephone->isEnabled()): ?>
+            <?php echo $_telephone->setTelephone($block->getAddress()->getTelephone())->toHtml() ?>
+        <?php endif ?>
+
         <div class="field fax">
             <label class="label" for="fax"><span><?php echo $block->escapeHtml(__('Fax')) ?></span></label>
             <div class="control">
