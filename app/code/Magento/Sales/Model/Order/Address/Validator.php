@@ -6,6 +6,7 @@
 namespace Magento\Sales\Model\Order\Address;
 
 use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\Order\Address;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Directory\Model\CountryFactory;
@@ -53,11 +54,12 @@ class Validator
     public function __construct(
         DirectoryHelper $directoryHelper,
         CountryFactory $countryFactory,
-        EavConfig $eavConfig
+        EavConfig $eavConfig = null
     ) {
         $this->directoryHelper = $directoryHelper;
         $this->countryFactory = $countryFactory;
-        $this->eavConfig = $eavConfig;
+        $this->eavConfig = $eavConfig ?: ObjectManager::getInstance()
+            ->get(EavConfig::class);
 
         if ($this->isTelephoneRequired()) {
             $this->required['telephone'] = 'Phone Number';
