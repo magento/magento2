@@ -47,7 +47,8 @@ class Validator
 
     /**
      * @param DirectoryHelper $directoryHelper
-     * @param CountryFactory $countryFactory
+     * @param CountryFactory  $countryFactory
+     * @param EavConfig       $eavConfig
      */
     public function __construct(
         DirectoryHelper $directoryHelper,
