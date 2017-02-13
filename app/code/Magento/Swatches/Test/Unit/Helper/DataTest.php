@@ -52,7 +52,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
         $this->imageHelperMock = $this->getMock(\Magento\Catalog\Helper\Image::class, [], [], '', false);
         $this->productCollectionFactoryMock = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
@@ -125,12 +124,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $serializer->expects($this->any())
-            ->method('serialize')->willReturnCallback(function($parameter) {
+            ->method('serialize')->willReturnCallback(function ($parameter) {
                 return json_encode($parameter);
             });
-
         $serializer->expects($this->any())
-            ->method('unserialize')->willReturnCallback(function($parameter) {
+            ->method('unserialize')->willReturnCallback(function ($parameter) {
                 return json_decode($parameter, true);
             });
 
