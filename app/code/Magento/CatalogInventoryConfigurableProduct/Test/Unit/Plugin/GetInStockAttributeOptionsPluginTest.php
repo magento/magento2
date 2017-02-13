@@ -68,6 +68,7 @@ class GetInStockAttributeOptionsPluginTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->stockStatusCollection = $this->getMockBuilder(StockStatusCollectionInterface::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getItems'])
             ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -120,13 +121,115 @@ class GetInStockAttributeOptionsPluginTest extends \PHPUnit_Framework_TestCase
         $this->stockStatusRepository->expects($this->once())
             ->method('getList')
             ->willReturn($this->stockStatusCollection);
-        $this->stockStatusCollection->expects($this->at(0))
+        $this->stockStatusCollection->expects($this->once())
+            ->method('getTotalCount')
+            ->willReturn(2);
+        $this->stockStatusCollection->expects($this->any())
             ->method('getItems')
             ->willReturn($statuses);
         $status1->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn('Configurable1-White');
         $status2->expects($this->atLeastOnce())
+            ->method('getData')
+            ->willReturn('Configurable1-Red');
+
+        $this->assertEquals(
+            $expectedOptions,
+            $this->plugin->afterGetAttributeOptions($this->attributeOptionProvider, $options)
+        );
+    }
+
+    /**
+     * @param array $options
+     * @dataProvider testOptionsDataProvider
+     */
+    public function testGetInStockAttributeOptionsWithAllOutOfStock(array $options)
+    {
+        $expectedOptions = [];
+        $this->stockStatusCriteriaFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->stockStatusCriteria);
+        $this->stockStatusCriteria->expects($this->atLeastOnce())
+            ->method('addFilter')
+            ->willReturnSelf();
+        $this->stockStatusRepository->expects($this->once())
+            ->method('getList')
+            ->willReturn($this->stockStatusCollection);
+        $this->stockStatusCollection->expects($this->once())
+            ->method('getTotalCount')
+            ->willReturn(0);
+
+        $this->assertEquals(
+            $expectedOptions,
+            $this->plugin->afterGetAttributeOptions($this->attributeOptionProvider, $options)
+        );
+    }
+
+    /**
+     * @param array $options
+     * @dataProvider testOptionsDataProvider
+     */
+    public function testGetInStockAttributeOptionsWithAllInStock(array $options)
+    {
+        $expectedOptions = [
+            [
+                'sku' => 'Configurable1-Black',
+                'product_id' => 4,
+                'attribute_code' => 'color',
+                'value_index' => '13',
+                'option_title' => 'Black'
+            ],
+            [
+                'sku' => 'Configurable1-White',
+                'product_id' => 4,
+                'attribute_code' => 'color',
+                'value_index' => '14',
+                'option_title' => 'White'
+            ],
+            [
+                'sku' => 'Configurable1-Red',
+                'product_id' => 4,
+                'attribute_code' => 'color',
+                'value_index' => '15',
+                'option_title' => 'Red'
+            ]
+        ];
+        $status1 = $this->getMockBuilder(StockStatusInterface::class)
+            ->setMethods(['getData'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $status2 = $this->getMockBuilder(StockStatusInterface::class)
+            ->setMethods(['getData'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $status3 = $this->getMockBuilder(StockStatusInterface::class)
+            ->setMethods(['getData'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $statuses = [$status1, $status2, $status3];
+        $this->stockStatusCriteriaFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->stockStatusCriteria);
+        $this->stockStatusCriteria->expects($this->atLeastOnce())
+            ->method('addFilter')
+            ->willReturnSelf();
+        $this->stockStatusRepository->expects($this->once())
+            ->method('getList')
+            ->willReturn($this->stockStatusCollection);
+        $this->stockStatusCollection->expects($this->once())
+            ->method('getTotalCount')
+            ->willReturn(3);
+        $this->stockStatusCollection->expects($this->any())
+            ->method('getItems')
+            ->willReturn($statuses);
+        $status1->expects($this->atLeastOnce())
+            ->method('getData')
+            ->willReturn('Configurable1-Black');
+        $status2->expects($this->atLeastOnce())
+            ->method('getData')
+            ->willReturn('Configurable1-White');
+        $status3->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn('Configurable1-Red');
 

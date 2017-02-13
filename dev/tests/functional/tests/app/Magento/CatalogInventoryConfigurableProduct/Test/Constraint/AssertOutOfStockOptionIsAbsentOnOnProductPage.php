@@ -14,7 +14,7 @@ use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 /**
  * Assert that out of stock configurable option is not displayed on product page.
  */
-class AssertProductOptionsOnProductPage extends AbstractConstraint
+class AssertOutOfStockOptionIsAbsentOnOnProductPage extends AbstractConstraint
 {
     /**
      * Assert that out of stock configurable option is not displayed on product page on frontend.
@@ -32,31 +32,31 @@ class AssertProductOptionsOnProductPage extends AbstractConstraint
         $outOfStockOption
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        $listOptions = $catalogProductView->getConfigurableAttributesBlock()->getListOptions();
+        $listOptions = $catalogProductView->getConfigurableAttributesBlock()->getPresentOptions();
         $productOptions = [];
         foreach ($listOptions as $option) {
-            $productOptions = $catalogProductView->getConfigurableAttributesBlock()->getDropdownData($option);
+            $productOptions = $catalogProductView->getConfigurableAttributesBlock()->getSelectOptionsData($option);
         }
-        $option = $this->searchForOption($outOfStockOption, $productOptions);
-        \PHPUnit_Framework_Assert::assertNull($option, 'Out of stock option is present on product page.');
+        $option = $this->isOptionPresent($outOfStockOption, $productOptions);
+        \PHPUnit_Framework_Assert::assertTrue($option, 'Out of stock option is present on product page.');
     }
 
     /**
-     * Search for option.
+     * Check if option is present on product page.
      *
      * @param string $needle
      * @param array $haystack
-     * @return int|null|string
+     * @return bool
      */
-    private function searchForOption($needle, $haystack) {
+    private function isOptionPresent($needle, array $haystack) {
         foreach ($haystack as $options) {
             foreach ($options as $key => $option) {
                 if ($option['title'] === $needle) {
-                    return $key;
+                    return false;
                 }
             }
         }
-        return null;
+        return true;
     }
 
     /**

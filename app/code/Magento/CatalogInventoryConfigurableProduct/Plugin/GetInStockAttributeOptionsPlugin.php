@@ -9,6 +9,9 @@ use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface;
 
+/**
+ * Check what option is out of stock and remove it from result
+ */
 class GetInStockAttributeOptionsPlugin
 {
     /**
@@ -52,15 +55,16 @@ class GetInStockAttributeOptionsPlugin
         $criteria->addFilter('sku', 'sku', ['in' => $sku], 'public');
         $collection = $this->stockStatusRepository->getList($criteria);
 
+        if (!$collection->getTotalCount()) {
+            return [];
+        }
         $inStockSku = [];
         foreach ($collection->getItems() as $inStockOption) {
             $inStockSku[] = $inStockOption->getData('sku');
         }
-        if (!empty($inStockSku)) {
-            foreach ($options as $key => $option) {
-                if (!in_array($options[$key]['sku'], $inStockSku)) {
-                    unset($options[$key]);
-                }
+        foreach ($options as $key => $option) {
+            if (!in_array($options[$key]['sku'], $inStockSku)) {
+                unset($options[$key]);
             }
         }
         $options = array_values($options);
