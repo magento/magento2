@@ -468,14 +468,14 @@ define([
                     return true;
                 }
                 value = (value || '').replace(/^\s+/, '').replace(/\s+$/, '');
-                return (/^(http|https|ftp):\/\/(([A-Z0-9]([A-Z0-9_-]*[A-Z0-9]|))(\.[A-Z0-9]([A-Z0-9_-]*[A-Z0-9]|))*)(:(\d+))?(\/[A-Z0-9~](([A-Z0-9_~-]|\.)*[A-Z0-9~]|))*\/?(.*)?$/i).test(value);
+                 return /^((http|https|ftp):\/\/)(([A-Z0-9][A-Z0-9_-]{1,62}\.)+([A-Z]{2,63}(\.[A-Z]{2,63})?))(:(\d+))?(\/[^\?#\s]*)?(\?[^#\s]*)?(#[^\s]*)?$/i.test(value);
 
             },
             $.mage.__('Please enter a valid URL. Protocol is required (http://, https:// or ftp://).')
         ],
         "validate-clean-url": [
             function(value) {
-                return utils.isEmptyNoTrim(value) || /^(http|https|ftp):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+.(com|org|net|dk|at|us|tv|info|uk|co.uk|biz|se)$)(:(\d+))?\/?/i.test(v) || /^(www)((\.[A-Z0-9][A-Z0-9_-]*)+.(com|org|net|dk|at|us|tv|info|uk|co.uk|biz|se)$)(:(\d+))?\/?/i.test(value);
+                 return utils.isEmptyNoTrim(value) || /^((http|https|ftp):\/\/)?(([A-Z0-9][A-Z0-9_-]{1,62}\.)+([A-Z]{2,63}(\.[A-Z]{2,63})?))(:(\d+))?(\/[^\?#\s]*)?(\?[^#\s]*)?(#[^\s]*)?$/i.test(value);
 
             },
             $.mage.__('Please enter a valid URL. For example http://www.example.com or www.example.com.')
