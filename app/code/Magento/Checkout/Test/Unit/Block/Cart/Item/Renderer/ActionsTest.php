@@ -26,6 +26,9 @@ class ActionsTest extends \PHPUnit_Framework_TestCase
      */
     protected $layoutMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
