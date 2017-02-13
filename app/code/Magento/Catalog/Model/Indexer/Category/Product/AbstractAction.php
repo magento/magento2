@@ -327,7 +327,8 @@ abstract class AbstractAction
             $iterator = $this->queryGenerator->generate(
                 $field,
                 $select,
-                $range
+                $range,
+                \Magento\Framework\DB\Query\BatchIteratorInterface::NON_UNIQUE_FIELD_ITERATOR
             );
 
             $queries = [];
