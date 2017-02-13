@@ -56,7 +56,7 @@ class CollectionProvider
             $itemPosition = $item["position"];
             if (!isset($realoutput[$itemPosition])) {
                 $realoutput[$itemPosition] = $item;
-            }
+            } 
             else {
                 $newPosition = $itemPosition+1;
                 $realoutput[$newPosition] = $item;
