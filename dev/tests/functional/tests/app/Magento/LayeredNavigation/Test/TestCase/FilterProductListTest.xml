@@ -144,7 +144,6 @@
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
             <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertFilterProductList" />
         </variation>
     </testCase>
