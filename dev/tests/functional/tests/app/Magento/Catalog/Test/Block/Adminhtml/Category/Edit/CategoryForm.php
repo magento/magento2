@@ -58,11 +58,8 @@ class CategoryForm extends FormSections
                 ['element' => $modalElement]
             );
             $modal->acceptAlert();
+            $modal->waitModalWindowToDisappear();
         }
-        if ($fixture->hasData('use_default_url_key')) {
-            $this->openContainer('seo');
-        }
-
         return parent::fill($fixture, $element);
     }
 }

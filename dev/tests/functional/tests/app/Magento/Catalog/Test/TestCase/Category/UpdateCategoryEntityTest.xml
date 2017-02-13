@@ -65,7 +65,7 @@
             <data name="category/data/store_id/dataset" xsi:type="string">custom</data>
             <data name="category/data/use_default_url_key" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryCheckDefaultUrl" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
     </testCase>
 </config>
