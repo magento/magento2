@@ -59,6 +59,10 @@ class CategoryForm extends FormSections
             );
             $modal->acceptAlert();
         }
+        if ($fixture->hasData('use_default_url_key')) {
+            $this->openContainer('seo');
+        }
+
         return parent::fill($fixture, $element);
     }
 }
