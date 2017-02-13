@@ -54,7 +54,7 @@ class CollectionProvider
         }
         foreach ($output as $item) {
             $itemPosition = $item["position"];
-            if (!isset($realoutput[$itemposition])) {
+            if (!isset($realoutput[$itemPosition])) {
                 $realoutput[$itemPosition] = $item;
             }
             else {
