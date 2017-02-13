@@ -39,9 +39,9 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
     private $validationResult;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\InvalidSkuChecker
+     * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
      */
-    private $invalidSkuChecker;
+    private $invalidSkuProcessor;
 
     /**
      * Allowed product types.
@@ -68,7 +68,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
      * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
-     * @param \Magento\Catalog\Model\Product\Price\InvalidSkuChecker $invalidSkuChecker
+     * @param \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor
      * @param array $allowedProductTypes [optional]
      */
     public function __construct(
@@ -77,7 +77,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
         \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator,
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
         \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult,
-        \Magento\Catalog\Model\Product\Price\InvalidSkuChecker $invalidSkuChecker,
+        \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor,
         array $allowedProductTypes = []
     ) {
         $this->pricePersistenceFactory = $pricePersistenceFactory;
@@ -85,7 +85,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
         $this->productIdLocator = $productIdLocator;
         $this->storeRepository = $storeRepository;
         $this->validationResult = $validationResult;
-        $this->invalidSkuChecker = $invalidSkuChecker;
+        $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->allowedProductTypes = $allowedProductTypes;
     }
 
@@ -94,7 +94,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
      */
     public function get(array $skus)
     {
-        $this->invalidSkuChecker->isSkuListValid($skus, $this->allowedProductTypes);
+        $skus = $this->invalidSkuProcessor->filterSkuList($skus, $this->allowedProductTypes);
         $rawPrices = $this->getPricePersistence()->get($skus);
         $prices = [];
         foreach ($rawPrices as $rawPrice) {
@@ -140,7 +140,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
      */
     public function delete(array $skus)
     {
-        $this->invalidSkuChecker->isSkuListValid($skus, $this->allowedProductTypes);
+        $skus = $this->invalidSkuProcessor->filterSkuList($skus, $this->allowedProductTypes);
         $this->getPricePersistence()->delete($skus);
 
         return true;
@@ -173,7 +173,7 @@ class CostStorage implements \Magento\Catalog\Api\CostStorageInterface
                 return $price->getSku();
             }, $prices)
         );
-        $invalidSkus = $this->invalidSkuChecker->retrieveInvalidSkuList($skus, $this->allowedProductTypes);
+        $invalidSkus = $this->invalidSkuProcessor->retrieveInvalidSkuList($skus, $this->allowedProductTypes);
 
         foreach ($prices as $id => $price) {
             if (!$price->getSku() || in_array($price->getSku(), $invalidSkus)) {

@@ -7,29 +7,19 @@
 namespace Magento\Catalog\Test\Unit\Model;
 
 /**
- * Class ProductIdLocatorTest.
+ * Unit test for ProductIdLocator class.
  */
 class ProductIdLocatorTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $filterBuilder;
-
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     private $metadataPool;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $productRepository;
+    private $collectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductIdLocator
@@ -43,45 +33,20 @@ class ProductIdLocatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->searchCriteriaBuilder = $this->getMock(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class,
-            ['addFilters', 'create'],
-            [],
-            '',
-            false
-        );
-        $this->filterBuilder = $this->getMock(
-            \Magento\Framework\Api\FilterBuilder::class,
-            ['setField', 'setConditionType', 'setValue', 'create'],
-            [],
-            '',
-            false
-        );
-        $this->metadataPool = $this->getMock(
-            \Magento\Framework\EntityManager\MetadataPool::class,
-            ['getMetadata'],
-            [],
-            '',
-            false
-        );
-        $this->productRepository = $this->getMockForAbstractClass(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getList']
-        );
+        $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+            ->setMethods(['getMetadata'])
+            ->disableOriginalConstructor()->getMock();
+        $this->collectionFactory = $this
+            ->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             \Magento\Catalog\Model\ProductIdLocator::class,
             [
-                'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
-                'filterBuilder' => $this->filterBuilder,
                 'metadataPool' => $this->metadataPool,
-                'productRepository' => $this->productRepository,
+                'collectionFactory' => $this->collectionFactory,
             ]
         );
     }
@@ -92,55 +57,19 @@ class ProductIdLocatorTest extends \PHPUnit_Framework_TestCase
     public function testRetrieveProductIdsBySkus()
     {
         $skus = ['sku_1', 'sku_2'];
-        $searchCriteria = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $searchResults = $this->getMockForAbstractClass(
-            \Magento\Catalog\Api\Data\ProductSearchResultsInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getItems']
-        );
-        $product = $this->getMockForAbstractClass(
-            \Magento\Catalog\Api\Data\ProductInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getSku', 'getData', 'getTypeId']
-        );
-        $metaDataInterface = $this->getMockForAbstractClass(
-            \Magento\Framework\EntityManager\EntityMetadataInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getLinkField']
-        );
-        $this->searchCriteriaBuilder->expects($this->once())->method('addFilters')->willReturnSelf();
-        $this->filterBuilder->expects($this->once())->method('setField')->with('sku')->willReturnSelf();
-        $this->filterBuilder->expects($this->once())->method('setConditionType')->with('in')->willReturnSelf();
-        $this->filterBuilder->expects($this->once())->method('setValue')->with(['sku_1', 'sku_2'])->willReturnSelf();
-        $this->filterBuilder->expects($this->once())->method('create')->willReturnSelf();
-        $this->searchCriteriaBuilder
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($searchCriteria);
-        $this->productRepository
-            ->expects($this->once())
-            ->method('getList')
-            ->with($searchCriteria)
-            ->willReturn($searchResults);
-        $searchResults->expects($this->once())->method('getItems')->willReturn([$product]);
+        $collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
+            ->setMethods(['getIterator', 'addFieldToFilter'])
+            ->disableOriginalConstructor()->getMock();
+        $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->setMethods(['getSku', 'getData', 'getTypeId'])
+            ->disableOriginalConstructor()->getMockForAbstractClass();
+        $metaDataInterface = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
+            ->setMethods(['getLinkField'])
+            ->disableOriginalConstructor()->getMockForAbstractClass();
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
+        $collection->expects($this->once())->method('addFieldToFilter')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::SKU, ['in' => $skus])->willReturnSelf();
+        $collection->expects($this->once())->method('getIterator')->willReturn(new \ArrayIterator([$product]));
         $this->metadataPool
             ->expects($this->once())
             ->method('getMetadata')
