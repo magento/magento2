@@ -80,8 +80,18 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
 
         $serializer = $this->getMock(
             \Magento\Framework\Serialize\Serializer\Json::class,
-            null
+            ['serialize', 'unserialize']
         );
+
+        $serializer->expects($this->any())
+            ->method('serialize')->willReturnCallback(function($parameter) {
+                return json_encode($parameter);
+            });
+
+        $serializer->expects($this->any())
+            ->method('unserialize')->willReturnCallback(function($parameter) {
+                return json_decode($parameter, true);
+            });
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->eavAttribute = $objectManager->getObject(
