@@ -55,11 +55,14 @@
             <data name="product/data/short_description" xsi:type="string">Simple Product short_description %isolation%</data>
             <data name="product/data/description" xsi:type="string">Simple Product description %isolation%</data>
             <data name="product/data/weight" xsi:type="string">52</data>
+            <data name="product/data/news_from_date" xsi:type="string"></data>
+            <data name="product/data/custom_design_from" xsi:type="string"></data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">659</data>
             <data name="product/data/custom_options/dataset" xsi:type="string">drop_down_with_one_option_fixed_price</data>
             <data name="product/data/checkout_data/dataset" xsi:type="string">simple_drop_down_with_one_option_fixed_price</data>
             <data name="product/data/price/dataset" xsi:type="string">MAGETWO-23029</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
