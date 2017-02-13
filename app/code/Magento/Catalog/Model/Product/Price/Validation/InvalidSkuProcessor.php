@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Model\Product\Price;
+namespace Magento\Catalog\Model\Product\Price\Validation;
 
 /**
  * Class is responsible to detect list of invalid SKU values from list of provided skus and allowed product types.
  */
-class InvalidSkuChecker
+class InvalidSkuProcessor
 {
     /**
      * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
@@ -24,14 +24,14 @@ class InvalidSkuChecker
     }
 
     /**
-     * Retrieve not found or invalid SKUs and and check that their type corresponds to allowed types list.
+     * Retrieve not found or invalid SKUs which product types are included to allowed types list.
      *
      * @param array $skus
      * @param array $allowedProductTypes
-     * @param int|bool $allowedPriceTypeValue
+     * @param int|null $allowedPriceTypeValue
      * @return array
      */
-    public function retrieveInvalidSkuList(array $skus, array $allowedProductTypes, $allowedPriceTypeValue = false)
+    public function retrieveInvalidSkuList(array $skus, array $allowedProductTypes, $allowedPriceTypeValue = null)
     {
         $idsBySku = $this->productIdLocator->retrieveProductIdsBySkus($skus);
         $existingSkus = array_keys($idsBySku);
@@ -63,24 +63,16 @@ class InvalidSkuChecker
     }
 
     /**
-     * Check that SKU list is valid or return exception if it contains invalid values.
+     * Filter invalid values in SKUs list.
      *
      * @param array $skus
      * @param array $allowedProductTypes
-     * @param int|bool $allowedPriceTypeValue
-     * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param int|null $allowedPriceTypeValue
+     * @return array
      */
-    public function isSkuListValid(array $skus, array $allowedProductTypes, $allowedPriceTypeValue = false)
+    public function filterSkuList(array $skus, array $allowedProductTypes, $allowedPriceTypeValue = null)
     {
         $failedItems = $this->retrieveInvalidSkuList($skus, $allowedProductTypes, $allowedPriceTypeValue);
-
-        if (!empty($failedItems)) {
-            $values = implode(', ', $failedItems);
-            $description = count($failedItems) == 1
-                ? __('Requested product doesn\'t exist: %sku', ['sku' => $values])
-                : __('Requested products don\'t exist: %sku', ['sku' => $values]);
-            throw new \Magento\Framework\Exception\NoSuchEntityException($description);
-        }
+        return array_diff($skus, $failedItems);
     }
 }
