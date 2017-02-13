@@ -8,12 +8,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <analytics>
-            <cron>
-                <time>01,00,00</time>
-            </cron>
             <url>
                 <signup>http://drakelair1.corp.magento.com/mamock/signup</signup>
                 <update>http://drakelair1.corp.magento.com/mamock/update</update>
+                <basic_tier>https://dashboard.rjmetrics.com/v2/magento/signup</basic_tier>
+                <otp>http://drakelair1.corp.magento.com/mamock/otp</otp>
+                <report>http://drakelair1.corp.magento.com/mamock/report</report>
             </url>
             <integration_name>Magento Analytics user</integration_name>
         </analytics>

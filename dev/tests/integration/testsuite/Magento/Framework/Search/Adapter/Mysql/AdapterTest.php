@@ -6,6 +6,7 @@
 namespace Magento\Framework\Search\Adapter\Mysql;
 
 use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Search\Model\EngineResolver;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -77,7 +78,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertPreConditions()
     {
-        $currentEngine = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
+        $currentEngine = $this->objectManager->get(MutableScopeConfigInterface::class)
             ->getValue(EngineInterface::CONFIG_ENGINE_PATH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $this->assertEquals($this->searchEngine, $currentEngine);
     }
@@ -478,6 +479,72 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
         $queryResponse = $this->executeQuery();
         $this->assertEquals(0, $queryResponse->count());
+    }
+
+    /**
+     * Test for search weight customization to ensure that search weight works correctly,
+     * and affects search results.
+     *
+     * @magentoDataFixture Magento/Framework/Search/_files/search_weight_products.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     */
+    public function testSearchQueryBoost()
+    {
+        $this->requestBuilder->bind('query', 'antarctica');
+        $this->requestBuilder->setRequestName('search_boost');
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(2, $queryResponse->count());
+
+        /** @var \Magento\Framework\Api\Search\DocumentInterface $products */
+        $products = iterator_to_array($queryResponse);
+        /*
+         * Products now contain search query in two attributes which are boosted with the same value: 1
+         * The search keyword (antarctica) is mentioned twice only in one of the products.
+         * And, as both attributes have the same search weight and boost, we expect that
+         * the product with doubled keyword should be prioritized by a search engine as a most relevant
+         *  and therefore will be first in the search result.
+         */
+        $firstProduct = reset($products);
+        $this->assertEquals(1222, $firstProduct->getId());
+        $secondProduct = end($products);
+        $this->assertEquals(1221, $secondProduct->getId());
+
+        /** @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository */
+        $productAttributeRepository = $this->objectManager->get(
+            \Magento\Catalog\Api\ProductAttributeRepositoryInterface::class
+        );
+
+        /**
+         * Now we're going to change search weight of one of the attributes to ensure that it will affect
+         * how products are ordered in the search result
+         */
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        $attribute = $productAttributeRepository->get('name');
+        $attribute->setSearchWeight(20);
+        $productAttributeRepository->save($attribute);
+
+        $this->requestBuilder->bind('query', 'antarctica');
+        $this->requestBuilder->setRequestName('search_boost_name');
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(2, $queryResponse->count());
+
+        /** @var \Magento\Framework\Api\Search\DocumentInterface $products */
+        $products = iterator_to_array($queryResponse);
+        /*
+         * As for the first case, we have two the same products.
+         * One of them has search keyword mentioned twice in the field which has search weight 1.
+         * However, we've changed the search weight of another attribute
+         *   which has only one mention of the search keyword in another product.
+         *
+         * The case is mostly the same but search weight has been changed and we expect that
+         *   less relevant (with only one mention) but more boosted (search weight = 20) product
+         *   will be prioritized higher than more relevant, but less boosted product.
+         */
+        $firstProduct = reset($products);
+        $this->assertEquals(1221, $firstProduct->getId());
+        //$firstProduct
+        $secondProduct = end($products);
+        $this->assertEquals(1222, $secondProduct->getId());
     }
 
     public function dateDataProvider()
