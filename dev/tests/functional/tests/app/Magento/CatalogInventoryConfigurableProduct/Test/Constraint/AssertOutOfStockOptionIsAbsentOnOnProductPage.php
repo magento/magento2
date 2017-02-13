@@ -48,9 +48,10 @@ class AssertOutOfStockOptionIsAbsentOnOnProductPage extends AbstractConstraint
      * @param array $haystack
      * @return bool
      */
-    private function isOptionPresent($needle, array $haystack) {
+    private function isOptionPresent($needle, array $haystack)
+    {
         foreach ($haystack as $options) {
-            foreach ($options as $key => $option) {
+            foreach ($options as $option) {
                 if ($option['title'] === $needle) {
                     return false;
                 }
