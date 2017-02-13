@@ -39,7 +39,7 @@ abstract class AbstractPriceBlock extends Block
      * Get price with currency symbol.
      *
      * @param string $type
-     * @return string|null
+     * @return string
      */
     protected function getTypePriceWithCurrencySymbol($type)
     {
