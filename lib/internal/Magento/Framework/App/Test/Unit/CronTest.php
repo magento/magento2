@@ -46,18 +46,42 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $this->_request = $this->getMock(\Magento\Framework\App\Console\Request::class, [], [], '', false);
         $this->_responseMock = $this->getMock(\Magento\Framework\App\Console\Response::class, [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_model = new Cron($this->_stateMock, $this->_request, $this->_responseMock, $this->objectManager);
+        $this->_model = new Cron(
+            $this->_stateMock,
+            $this->_request,
+            $this->_responseMock,
+            $this->objectManager,
+            [],
+            $this->prepareAreaListMock()
+        );
+    }
+
+    protected function prepareAreaListMock()
+    {
+        $areaMock = $this->getMock(\Magento\Framework\App\Area::class, [], [], '', false);
+        $areaMock->expects($this->once())
+            ->method('load')
+            ->with(Area::PART_TRANSLATE);
+
+        $areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $areaListMock->expects($this->any())
+            ->method('getArea')
+            ->with(Area::AREA_CRONTAB)
+            ->willReturn($areaMock);
+
+        return $areaListMock;
     }
 
     public function testLaunchDispatchesCronEvent()
     {
         $configLoader = $this->getMockForAbstractClass(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
         $eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
                 [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
-                [\Magento\Framework\Event\ManagerInterface::class, $eventManagerMock],
+                [\Magento\Framework\Event\ManagerInterface::class, $eventManagerMock]
             ]));
         $crontabConfig = ['config'];
         $configLoader->expects($this->once())
