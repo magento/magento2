@@ -60,9 +60,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-
         $this->productCollectionMock = $this->objectManager->getCollectionMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
