@@ -9,5 +9,6 @@
     <page name="Dashboard" area="Adminhtml" mca="admin/dashboard" module="Magento_Backend">
         <block name="subscriptionBlock" class="Magento\Analytics\Test\Block\Adminhtml\Dashboard\Analytics\SubscriptionBlock" locator=".analytics_subscription_form_analytics_subscription_form_analytics_subscription_modal" strategy="css selector" />
         <block name="modalBlock" class="Magento\Ui\Test\Block\Adminhtml\Modal" locator="._show[data-role=modal]" strategy="css selector" />
+        <block name="pageActionsBlock" class="Magento\Analytics\Test\Block\Adminhtml\Dashboard\Page\Actions" locator=".page-actions:not([data-mage-init])" strategy="css selector" />
     </page>
 </config>
