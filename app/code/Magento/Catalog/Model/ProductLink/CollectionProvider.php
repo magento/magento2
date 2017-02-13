@@ -53,7 +53,14 @@ class CollectionProvider
             $output[$item->getId()] = $converter->convert($item);
         }
         foreach ($output as $item) {
-            $realoutput[$item["position"]] = $item;
+            $itemPosition = $item["position"];
+            if (!isset($realoutput[$itemposition])) {
+                $realoutput[$itemPosition] = $item;
+            }
+            else {
+                $newPosition = $itemPosition+1;
+                $realoutput[$newPosition] = $item;
+            }
         }
         ksort($realoutput);
         return $realoutput;
