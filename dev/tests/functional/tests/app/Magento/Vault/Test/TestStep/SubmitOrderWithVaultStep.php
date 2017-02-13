@@ -61,6 +61,9 @@ class SubmitOrderWithVaultStep implements TestStepInterface
     private $products;
 
     /**
+     * Vault data.
+     * - method
+     *
      * @var array
      */
     private $vault;

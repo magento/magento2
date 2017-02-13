@@ -21,7 +21,58 @@
             </field>
         </dataset>
 
+        <dataset name="captured_price_139.90">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">139.90</item>
+            </field>
+        </dataset>
+
+        <dataset name="captured_price_15.00">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">15.00</item>
+            </field>
+        </dataset>
+
+        <dataset name="captured_price_145.98">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">145.98</item>
+            </field>
+        </dataset>
+
+        <dataset name="captured_price_226.50">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">226.50</item>
+            </field>
+        </dataset>
+
+        <dataset name="capture_price_135.15">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">135.15</item>
+            </field>
+        </dataset>
+
+       <dataset name="captured_prices_108.25_118.25">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">108.25</item>
+                <item name="1" xsi:type="string">118.25</item>
+            </field>
+        </dataset>
+
+        <dataset name="captured_and_grand_invoice_price_118.25">
+            <field name="invoice" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="grand_invoice_total" xsi:type="string">118.25</item>
+                </item>
+            </field>
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">118.25</item>
+            </field>
+        </dataset>
+
         <dataset name="full_invoice_with_product_10_dollar">
+            <field name="captured_prices" xsi:type="array">
+                <item name="0" xsi:type="string">15</item>
+            </field>
             <field name="invoice" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="grand_order_total" xsi:type="string">15</item>
