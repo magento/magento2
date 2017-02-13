@@ -12,7 +12,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Util\Command\Cli\Indexer;
 
 /**
- * Check whether attribute is displayed in the advanced search form on the frontend.
+ * Check whether attribute is absent in the advanced search form on the frontend.
  */
 class AssertAdvancedSearchAttributeIsAbsent extends AbstractConstraint
 {
@@ -21,6 +21,7 @@ class AssertAdvancedSearchAttributeIsAbsent extends AbstractConstraint
      *
      * @param CatalogProductAttribute $attribute
      * @param AdvancedSearch $advancedSearch
+     * @param Indexer $cli
      * @return void
      */
     public function processAssert(CatalogProductAttribute $attribute, AdvancedSearch $advancedSearch, Indexer $cli)

@@ -85,8 +85,8 @@
         </dataset>
 
         <dataset name="attribute_type_multiple_select">
-            <field name="frontend_label" xsi:type="string">attribute_multipleselect%isolation%</field>
-            <field name="attribute_code" xsi:type="string">attribute_multipleselect%isolation%</field>
+            <field name="frontend_label" xsi:type="string">multipleselect%isolation%</field>
+            <field name="attribute_code" xsi:type="string">multipleselect%isolation%</field>
             <field name="frontend_input" xsi:type="string">Multiple Select</field>
             <field name="is_required" xsi:type="string">No</field>
             <field name="options" xsi:type="array">

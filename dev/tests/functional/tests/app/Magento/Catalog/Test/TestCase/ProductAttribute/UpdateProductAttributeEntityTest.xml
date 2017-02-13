@@ -77,7 +77,7 @@
         </variation>
         <variation name="UpdateProductAttributeEntityTestVariation5" summary="Create product attribute of type Multiple Select and check its visibility on frontend in Advanced Search form" ticketId="MAGETWO-12941">
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
-            <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_dropdown</data>
+            <data name="productAttributeOriginal/dataset" xsi:type="string">attribute_type_multiple_select</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_%isolation%</data>
             <data name="attribute/data/is_searchable" xsi:type="string">Yes</data>
             <data name="attribute/data/is_visible_in_advanced_search" xsi:type="string">No</data>
