@@ -101,7 +101,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
      */
     public function get(array $skus)
     {
-        $this->tierPriceValidator->validateSkus($skus);
+        $skus = $this->tierPriceValidator->validateSkus($skus);
 
         return $this->getExistingPrices($skus);
     }
@@ -117,7 +117,7 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
                 return $price->getSku();
             }, $prices)
         );
-        $result = $this->tierPriceValidator->retrieveValidationResult($prices, $this->getExistingPrices($skus));
+        $result = $this->tierPriceValidator->retrieveValidationResult($prices, $this->getExistingPrices($skus, true));
         $prices = $this->removeIncorrectPrices($prices, $result->getFailedRowIds());
         $formattedPrices = $this->retrieveFormattedPrices($prices);
         $this->tierPricePersistence->update($formattedPrices);
@@ -163,9 +163,10 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
      * Get existing prices by SKUs.
      *
      * @param array $skus
+     * @param bool $groupBySku [optional]
      * @return array
      */
-    private function getExistingPrices(array $skus)
+    private function getExistingPrices(array $skus, $groupBySku = false)
     {
         $ids = $this->retrieveAffectedIds($skus);
         $rawPrices = $this->tierPricePersistence->get($ids);
@@ -173,7 +174,12 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
 
         foreach ($rawPrices as $rawPrice) {
             $sku = $this->retrieveSkuById($rawPrice[$this->tierPricePersistence->getEntityLinkField()], $skus);
-            $prices[] = $this->tierPriceFactory->create($rawPrice, $sku);
+            $price = $this->tierPriceFactory->create($rawPrice, $sku);
+            if ($groupBySku) {
+                $prices[$sku][] = $price;
+            } else {
+                $prices[] = $price;
+            }
         }
 
         return $prices;
@@ -298,12 +304,12 @@ class TierPriceStorage implements \Magento\Catalog\Api\TierPriceStorageInterface
      *
      * @param int $id
      * @param array $skus
-     * @return int|null
+     * @return string|null
      */
     private function retrieveSkuById($id, $skus)
     {
         foreach ($this->productIdLocator->retrieveProductIdsBySkus($skus) as $sku => $ids) {
-            if (false !== array_key_exists($id, $ids)) {
+            if (isset($ids[$id])) {
                 return $sku;
             }
         }
