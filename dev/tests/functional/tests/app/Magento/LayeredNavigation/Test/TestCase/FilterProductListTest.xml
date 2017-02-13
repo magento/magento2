@@ -113,10 +113,10 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
             <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertCategorySortingOnFilteredProductList" />
         </variation>
-        <variation name="FilterProductListTestVariation5">
+        <variation name="FilterProductListTestVariation5" summary="Use Layered Navigation by Price" ticketId="MAGETWO-30615">
             <data name="configData" xsi:type="string">layered_navigation_manual_range_10</data>
             <data name="runReindex" xsi:type="string">Yes</data>
-            <data name="flushCache" xsi:type="string">Yes</data>
+            <data name="flushCache" xsi:type="boolean">true</data>
             <data name="category/dataset" xsi:type="string">default_anchor_subcategory</data>
             <data name="category/data/category_products/dataset" xsi:type="string">
                 catalogProductSimple::product_1_dollar, catalogProductSimple::product_5_dollar, catalogProductSimple::product_9_99_dollar, catalogProductSimple::product_10_dollar, catalogProductSimple::product_15_dollar, catalogProductSimple::product_21_dollar

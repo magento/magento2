@@ -9,7 +9,6 @@ namespace Magento\LayeredNavigation\Test\TestCase;
 
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Mtf\Util\Command\Cli\Indexer;
 
 /**
@@ -40,34 +39,39 @@ class FilterProductListTest extends Injectable
     protected $configData;
 
     /**
+     * Should cache be flushed.
+     *
+     * @var bool
+     */
+    private $flushCache;
+
+    /**
      * Filtering product in the Frontend via layered navigation.
      *
      * @param string $configData
      * @param Category $category
      * @param Indexer $indexer
-     * @param Cache $cache
      * @param string $runReindex
-     * @param string $flushCache
+     * @param bool $flushCache
      * @return array
      */
     public function test(
         $configData,
         Category $category,
         Indexer $indexer,
-        Cache $cache,
         $runReindex = "No",
-        $flushCache = "No"
+        $flushCache = false
     ) {
         $this->configData = $configData;
+        $this->flushCache = $flushCache;
 
         // Preconditions
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $this->configData]
+            ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
 
         $runReindex == 'Yes' ? $indexer->reindex() : null;
-        $flushCache == 'Yes' ? $cache->flush() : null;
 
         // Steps
         $category->persist();
@@ -82,7 +86,7 @@ class FilterProductListTest extends Injectable
     {
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-            ['configData' => $this->configData, 'rollback' => true]
+            ['configData' => $this->configData, 'rollback' => true, 'flushCache' => $this->flushCache]
         )->run();
     }
 }
