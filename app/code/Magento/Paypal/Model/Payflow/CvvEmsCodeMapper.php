@@ -38,7 +38,6 @@ class CvvEmsCodeMapper implements PaymentVerificationInterface
 
     /**
      * Gets payment CVV verification code.
-     * Returns null if payment does not contain any CVV details.
      * Throws an exception if specified order payment has different payment method code.
      *
      * @param OrderPaymentInterface $orderPayment

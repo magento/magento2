@@ -40,7 +40,6 @@ class AvsEmsCodeMapper implements PaymentVerificationInterface
 
     /**
      * Gets payment AVS verification code.
-     * Returns null if payment does not contain any AVS details.
      * Throws an exception if specified order payment has different payment method code.
      *
      * @param OrderPaymentInterface $orderPayment
