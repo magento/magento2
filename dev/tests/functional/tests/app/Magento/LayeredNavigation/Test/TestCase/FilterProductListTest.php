@@ -51,7 +51,7 @@ class FilterProductListTest extends Injectable
      * @param string $configData
      * @param Category $category
      * @param Indexer $indexer
-     * @param string $runReindex
+     * @param bool $runReindex
      * @param bool $flushCache
      * @return array
      */
@@ -59,7 +59,7 @@ class FilterProductListTest extends Injectable
         $configData,
         Category $category,
         Indexer $indexer,
-        $runReindex = "No",
+        $runReindex = false,
         $flushCache = false
     ) {
         $this->configData = $configData;
@@ -71,7 +71,9 @@ class FilterProductListTest extends Injectable
             ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
 
-        $runReindex == 'Yes' ? $indexer->reindex() : null;
+        if ($runReindex) {
+            $indexer->reindex();
+        }
 
         // Steps
         $category->persist();
