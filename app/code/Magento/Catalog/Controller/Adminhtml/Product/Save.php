@@ -117,6 +117,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $productId = $product->getEntityId();
                 $productAttributeSetId = $product->getAttributeSetId();
                 $productTypeId = $product->getTypeId();
+                $this->getRequest()->setParam('type', $productTypeId);
 
                 $this->copyToStores($data, $productId);
 
