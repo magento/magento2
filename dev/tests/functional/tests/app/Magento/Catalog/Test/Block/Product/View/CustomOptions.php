@@ -153,7 +153,7 @@ class CustomOptions extends Form
      *
      * @return array
      */
-    protected function getListOptions()
+    public function getListOptions()
     {
         $customOptions = [];
 
@@ -226,7 +226,7 @@ class CustomOptions extends Form
      * @param SimpleElement $option
      * @return array
      */
-    protected function getDropdownData(SimpleElement $option)
+    public function getDropdownData(SimpleElement $option)
     {
         $select = $option->find($this->selectOption, Locator::SELECTOR_XPATH, 'select');
         // Skip "Choose option ..."(option #1)
