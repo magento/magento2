@@ -138,7 +138,7 @@ class PaymentVerificationFactoryTest extends \PHPUnit_Framework_TestCase
      * Checks a test case, when mapper implementation does not corresponding to PaymentVerificationInterface.
      *
      * @covers \Magento\Signifyd\Model\PaymentVerificationFactory::createPaymentCvv
-     * @expectedException \Exception
+     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
      * @expectedExceptionMessage stdClass must implement Magento\Payment\Api\PaymentVerificationInterface
      */
     public function testCreateWithUnsupportedImplementation()
