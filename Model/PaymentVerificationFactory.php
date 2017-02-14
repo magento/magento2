@@ -8,6 +8,7 @@ namespace Magento\Signifyd\Model;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Api\PaymentVerificationInterface;
 use Magento\Payment\Gateway\ConfigInterface;
+use Magento\Framework\Exception\ConfigurationMismatchException;
 
 /**
  * Creates verification service for provided payment method, or PaymentVerificationInterface::class
@@ -82,13 +83,13 @@ class PaymentVerificationFactory
     /**
      * Creates instance of PaymentVerificationInterface.
      * Default implementation will be returned if payment method does not implement PaymentVerificationInterface.
-     * Exception will be thrown if payment verification instance does not implement PaymentVerificationInterface.
      *
      * @param PaymentVerificationInterface $defaultAdapter
      * @param string $paymentCode
      * @param string $configKey
      * @return PaymentVerificationInterface
-     * @throws \Exception
+     * @throws ConfigurationMismatchException If payment verification instance
+     * does not implement PaymentVerificationInterface.
      */
     private function create(PaymentVerificationInterface $defaultAdapter, $paymentCode, $configKey)
     {
@@ -99,7 +100,9 @@ class PaymentVerificationFactory
         }
         $mapper = $this->objectManager->create($verificationClass);
         if (!$mapper instanceof PaymentVerificationInterface) {
-            throw new \Exception($verificationClass . ' must implement ' . PaymentVerificationInterface::class);
+            throw new ConfigurationMismatchException(
+                __('%1 must implement %2', $verificationClass, PaymentVerificationInterface::class)
+            );
         }
         return $mapper;
     }
