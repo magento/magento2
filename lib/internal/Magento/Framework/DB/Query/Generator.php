@@ -26,6 +26,7 @@ class Generator
      * Initialize dependencies.
      *
      * @param BatchIteratorFactory $iteratorFactory
+     * @param BatchRangeIteratorFactory $rangeIteratorFactory
      */
     public function __construct(
         BatchIteratorFactory $iteratorFactory,

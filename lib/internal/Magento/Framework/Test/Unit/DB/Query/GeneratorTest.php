@@ -203,6 +203,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'rangeFieldAlias' => 'product_id'
             ]
         )->willReturn($this->iteratorMock);
-        $this->assertEquals($this->iteratorMock, $this->model->generate('entity_id', $this->selectMock, 100, 'non_unique'));
+        $this->assertEquals(
+            $this->iteratorMock,
+            $this->model->generate('entity_id', $this->selectMock, 100, 'non_unique')
+        );
     }
 }
