@@ -8,8 +8,8 @@ namespace Magento\Framework\App\Scope;
 use InvalidArgumentException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverPool;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Phrase;
 
 /**
@@ -40,14 +40,14 @@ class Validator implements ValidatorInterface
         }
 
         if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT && !empty($scopeCode)) {
-            throw new LocalizedException(new Phrase(
+            throw new ValidatorException(new Phrase(
                 'The "%1" scope can\'t include a scope code. Try again without entering a scope code.',
                 [ScopeConfigInterface::SCOPE_TYPE_DEFAULT]
             ));
         }
 
         if (empty($scope)) {
-            throw new LocalizedException(new Phrase('Enter a scope before proceeding.'));
+            throw new ValidatorException(new Phrase('Enter a scope before proceeding.'));
         }
 
         $this->validateScopeCode($scopeCode);
@@ -56,9 +56,9 @@ class Validator implements ValidatorInterface
             $scopeResolver = $this->scopeResolverPool->get($scope);
             $scopeResolver->getScope($scopeCode)->getId();
         } catch (InvalidArgumentException $e) {
-            throw new LocalizedException(new Phrase('The "%1" value doesn\'t exist. Enter another value.', [$scope]));
+            throw new ValidatorException(new Phrase('The "%1" value doesn\'t exist. Enter another value.', [$scope]));
         } catch (NoSuchEntityException $e) {
-            throw new LocalizedException(
+            throw new ValidatorException(
                 new Phrase('The "%1" value doesn\'t exist. Enter another value.', [$scopeCode])
             );
         }
@@ -72,16 +72,16 @@ class Validator implements ValidatorInterface
      *
      * @param string $scopeCode
      * @return void
-     * @throws LocalizedException if scope code is empty or has a wrong format
+     * @throws ValidatorException if scope code is empty or has a wrong format
      */
     private function validateScopeCode($scopeCode)
     {
         if (empty($scopeCode)) {
-            throw new LocalizedException(new Phrase('Enter a scope code before proceeding.'));
+            throw new ValidatorException(new Phrase('Enter a scope code before proceeding.'));
         }
 
         if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $scopeCode)) {
-            throw new LocalizedException(new Phrase(
+            throw new ValidatorException(new Phrase(
                 'The scope code can include only lowercase letters (a-z), numbers (0-9) and underscores (_). '
                 . 'Also, the first character must be a letter.'
             ));

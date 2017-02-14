@@ -232,4 +232,14 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     {
         return $this->getQuote()->getItemsCount();
     }
+
+    /**
+     * Render pagination HTML
+     *
+     * @return string
+     */
+    public function getPagerHtml()
+    {
+        return $this->getChildHtml('pager');
+    }
 }

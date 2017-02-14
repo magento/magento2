@@ -32,7 +32,8 @@ class CollectorFactory
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param array $types
+     * @param array $types list of collector class names this factory can create.
+     * Every class should implement \Magento\Deploy\Console\Command\App\SensitiveConfigSet\CollectorInterface
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -43,7 +44,12 @@ class CollectorFactory
     }
 
     /**
-     * Create instance of CollectorInterface by given type.
+     * Creates instance of CollectorInterface by given type.
+     *
+     * The value of the $type associated with the name of the class of collector object to create
+     * There are several types of collectors
+     * @see \Magento\Deploy\Console\Command\App\SensitiveConfigSet\InteractiveCollector
+     * @see \Magento\Deploy\Console\Command\App\SensitiveConfigSet\SimpleCollector
      *
      * @param string $type
      * @return CollectorInterface
