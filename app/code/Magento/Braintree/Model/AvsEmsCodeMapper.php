@@ -43,11 +43,10 @@ class AvsEmsCodeMapper implements PaymentVerificationInterface
 
     /**
      * Gets payment AVS verification code.
-     * Throws an exception if specified order payment has different payment method code.
      *
      * @param OrderPaymentInterface $orderPayment
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException If specified order payment has different payment method code.
      */
     public function getCode(OrderPaymentInterface $orderPayment)
     {

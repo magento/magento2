@@ -42,11 +42,10 @@ class CvvEmsCodeMapper implements PaymentVerificationInterface
 
     /**
      * Gets payment CVV verification code.
-     * Throws an exception if specified order payment has different payment method code.
      *
      * @param OrderPaymentInterface $orderPayment
      * @return string
-     * @throws \Exception
+     * @throws \InvalidArgumentException If specified order payment has different payment method code.
      */
     public function getCode(OrderPaymentInterface $orderPayment)
     {
