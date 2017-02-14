@@ -9,7 +9,7 @@
     <xs:element name="config">
         <xs:complexType>
             <xs:sequence>
-                <xs:element minOccurs="1" maxOccurs="unbounded" name="payment_list" type="payment_method_list"/>
+                <xs:element minOccurs="1" maxOccurs="unbounded" name="payment_method_list" type="payment_method_list"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
