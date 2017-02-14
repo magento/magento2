@@ -117,14 +117,6 @@ class Reader
                 }
                 $allFilesData[$fileKey] = $fileData;
                 if (!empty($fileData)) {
-                    $intersection = array_intersect_key($result, $fileData);
-                    if (!empty($intersection)) {
-                        $displayMessage = $this->findFilesWithKeys(array_keys($intersection), $allFilesData);
-                        throw new \Exception(
-                            "Key collision! The following keys occur in multiple config files:"
-                            . PHP_EOL . $displayMessage
-                        );
-                    }
                     $result = array_merge($result, $fileData);
                 }
             }

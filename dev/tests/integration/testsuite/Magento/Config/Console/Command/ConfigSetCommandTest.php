@@ -102,12 +102,12 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
+            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
             "<?php\n return array();\n"
         );
         /** @var Writer $writer */
         $writer = $this->objectManager->get(Writer::class);
-        $writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
+        $writer->saveConfig([ConfigFilePool::APP_ENV => $this->config]);
     }
 
     /**
@@ -116,8 +116,8 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private function loadConfig()
     {
         return $this->reader->loadConfigFile(
-            ConfigFilePool::APP_CONFIG,
-            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
+            ConfigFilePool::APP_ENV,
+            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
             true
         );
     }
