@@ -140,12 +140,12 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $this->updateAddressCollection($customerModel, $addressModel);
 
         $defaultBillingAddressId = null;
-        if ($customerModel->getDefaultBillingAddress() instanceof CustomerAddressModel) {
+        if ($customerModel->getDefaultBillingAddress()) {
             $defaultBillingAddressId = $customerModel->getDefaultBillingAddress()->getId();
         }
 
         $defaultShippingAddressId = null;
-        if ($customerModel->getDefaultShippingAddress() instanceof CustomerAddressModel) {
+        if ($customerModel->getDefaultShippingAddress()) {
             $defaultShippingAddressId = $customerModel->getDefaultShippingAddress()->getId();
         }
 
