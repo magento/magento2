@@ -111,11 +111,13 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
             $this->salesOrderView->getOrderForm()->openTab('invoices');
             $invoicesGrid->viewInvoice();
             $this->salesOrderView->getPageActions()->orderInvoiceCreditMemo();
-            $this->orderCreditMemoNew->getFormBlock()->fillProductData(
-                $refundData,
-                $this->cart->getItems()
-            );
-            $this->orderCreditMemoNew->getFormBlock()->updateQty();
+
+            $items = $this->cart->getItems();
+            $this->orderCreditMemoNew->getFormBlock()->fillProductData($refundData, $items);
+            if (count($refundData) !== count($items)) {
+                $this->orderCreditMemoNew->getFormBlock()->updateQty();
+            }
+
             $this->orderCreditMemoNew->getFormBlock()->submit();
         }
 

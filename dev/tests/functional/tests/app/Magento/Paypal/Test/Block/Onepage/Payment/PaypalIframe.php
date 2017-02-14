@@ -51,6 +51,13 @@ class PaypalIframe extends Method
     protected $formBlockCc;
 
     /**
+     * CSS selector for loader block in iframe.
+     *
+     * @var string
+     */
+    private $loader = '#lightBoxDiv;';
+
+    /**
      * Fill credit card data in PayPal iframe form.
      *
      * @param FixtureInterface $creditCard
@@ -65,6 +72,17 @@ class PaypalIframe extends Method
         );
         $formBlock->fill($creditCard, $iframeRootElement);
         $iframeRootElement->find($this->payNowButton)->click();
+
+        $loaderElement = $iframeRootElement->find($this->loader);
+
+        $loaderElement->waitUntil(function () use ($loaderElement) {
+            return $loaderElement->isVisible() ? true : null;
+        });
+
+        $loaderElement->waitUntil(function () use ($loaderElement) {
+            return !$loaderElement->isVisible() ? true : null;
+        });
+
         $this->browser->switchToFrame();
     }
 
