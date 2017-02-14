@@ -64,15 +64,19 @@ class CreateProductsStep implements TestStepInterface
             $this->products = explode(',', $this->products);
         }
         foreach ($this->products as $key => $productDataSet) {
-            $productDataSet = explode('::', $productDataSet);
-            $fixtureClass = $productDataSet[0];
-            $dataset = isset($productDataSet[1]) ? $productDataSet[1] : '';
-            $data = isset($this->data[$key]) ? $this->data[$key] : [];
-            /** @var FixtureInterface[] $products */
-            $products[$key] = $this->fixtureFactory->createByCode(
-                trim($fixtureClass),
-                ['dataset' => trim($dataset), 'data' => $data]
-            );
+            if ($productDataSet instanceof FixtureInterface) {
+                $products[$key] = $productDataSet;
+            } else {
+                $productDataSet = explode('::', $productDataSet);
+                $fixtureClass = $productDataSet[0];
+                $dataset = isset($productDataSet[1]) ? $productDataSet[1] : '';
+                $data = isset($this->data[$key]) ? $this->data[$key] : [];
+                /** @var FixtureInterface[] $products */
+                $products[$key] = $this->fixtureFactory->createByCode(
+                    trim($fixtureClass),
+                    ['dataset' => trim($dataset), 'data' => $data]
+                );
+            }
             if ($products[$key]->hasData('id') === false) {
                 $products[$key]->persist();
             }
