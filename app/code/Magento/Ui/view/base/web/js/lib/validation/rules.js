@@ -770,7 +770,10 @@ define([
             }, $.mage.__('Please enter issue number or start date for switch/solo card type.')
         ],
         'required-entry': [
-            function(value) {
+            function(value, mandatoryCheck) {
+                if (mandatoryCheck === false) {
+                    return true;
+                }                
                 return !utils.isEmpty(value);
             }, $.mage.__('This is a required field.')
         ],
