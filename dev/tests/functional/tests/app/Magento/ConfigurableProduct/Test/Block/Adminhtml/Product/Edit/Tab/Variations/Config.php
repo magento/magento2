@@ -8,9 +8,9 @@ namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Vari
 
 use Magento\Backend\Test\Block\Template;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
+use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AssociatedProductGrid;
 
 /**
  * Adminhtml catalog super product configurable tab.
@@ -82,6 +82,13 @@ class Config extends Tab
      * @var string
      */
     protected $variationsContent = '#product_info_tabs_super_config_content';
+
+    /**
+     * Button to add products manually to variations.
+     *
+     * @var string
+     */
+    protected $addProductsManuallyButton = '//button[contains(@data-bind, "showManuallyGrid")]';
 
     /**
      * Fill variations fieldset.
@@ -221,5 +228,43 @@ class Config extends Tab
             $element->find($this->actionMenu)->click();
             $element->find($this->deleteVariation)->click();
         }
+    }
+
+    /**
+     * Add products manually to configurable variations.
+     *
+     * @param array|null $configurableAttributesData
+     * @return array|string
+     */
+    public function addProductsManually($configurableAttributesData = null)
+    {
+        $errors = [];
+
+        if (is_null($configurableAttributesData) || !$configurableAttributesData['matrix']) {
+            $errors[] = sprintf("\nThere are no simples assigned to configurable.");
+            return $errors;
+        }
+
+        /** @var SimpleElement $content */
+        $content = $this->_rootElement->find($this->variationsTabContent);
+        /** @var SimpleElement $addProductsManuallyButton */
+        $addProductsManuallyButton = $content->find($this->addProductsManuallyButton, Locator::SELECTOR_XPATH);
+        /** @var AssociatedProductGrid $associatedProductsGrid */
+        $associatedProductsGrid = $this->getVariationsBlock()->getAssociatedProductGrid();
+
+        foreach ($configurableAttributesData['matrix'] as $variation) {
+            if ($addProductsManuallyButton->isVisible()) {
+                $addProductsManuallyButton->click();
+                $this->getTemplateBlock()->waitLoader();
+                $productSku = $variation['sku'];
+                $associatedProductsGrid->resetFilter();
+                $associatedProductsGrid->searchAndSelect(['sku' => $productSku]);
+                $associatedProductsGrid->closeGrid();
+            } else {
+                $errors[] = sprintf("Add Products Manually button is invisible");
+            }
+        }
+
+        return $errors;
     }
 }
