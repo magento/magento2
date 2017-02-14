@@ -56,6 +56,7 @@ class SignUpRequestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->httpClientFactoryMock = $this->getMockBuilder(HttpClientFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->httpClientMock = $this->getMockBuilder(HttpClient::class)
@@ -94,7 +95,7 @@ class SignUpRequestTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['analytics/url/signup', null, null, 'ma-signup-url'],
-                    [Store::XML_PATH_UNSECURE_BASE_URL, null, null, 'magento-url']
+                    [Store::XML_PATH_SECURE_BASE_URL, null, null, 'magento-url']
                 ]
             );
         $this->httpClientFactoryMock->expects($this->once())
@@ -137,7 +138,7 @@ class SignUpRequestTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['analytics/url/signup', null, null, 'ma-signup-url'],
-                    [Store::XML_PATH_UNSECURE_BASE_URL, null, null, 'magento-url']
+                    [Store::XML_PATH_SECURE_BASE_URL, null, null, 'magento-url']
                 ]
             );
         $this->httpClientFactoryMock->expects($this->once())
@@ -183,7 +184,7 @@ class SignUpRequestTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     ['analytics/url/signup', null, null, 'ma-signup-url'],
-                    [Store::XML_PATH_UNSECURE_BASE_URL, null, null, 'magento-url']
+                    [Store::XML_PATH_SECURE_BASE_URL, null, null, 'magento-url']
                 ]
             );
         $this->httpClientFactoryMock->expects($this->once())

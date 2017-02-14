@@ -254,5 +254,35 @@
                 </item>
             </field>
         </dataset>
+
+        <dataset name="search_weight_term_once_weight_1">
+            <field name="frontend_label" xsi:type="string">search_weight_term_once_weight_1_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">search_weight_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Text Field</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="is_searchable" xsi:type="string">Yes</field>
+            <field name="search_weight" xsi:type="string">1</field>
+            <field name="default_value_text" xsi:type="string">Alaska Lorem ipsum dolor sit amet</field>
+        </dataset>
+
+        <dataset name="search_weight_term_once_weight_5">
+            <field name="frontend_label" xsi:type="string">search_weight_term_once_weight_5_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">search_weight_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Text Field</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="is_searchable" xsi:type="string">Yes</field>
+            <field name="search_weight" xsi:type="string">5</field>
+            <field name="default_value_text" xsi:type="string">Alaska Lorem ipsum dolor sit amet</field>
+        </dataset>
+
+        <dataset name="search_weight_term_twice_weight_1">
+            <field name="frontend_label" xsi:type="string">search_weight_term_twice_weight_1_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">search_weight_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Text Field</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="is_searchable" xsi:type="string">Yes</field>
+            <field name="search_weight" xsi:type="string">1</field>
+            <field name="default_value_text" xsi:type="string">Alaska Lorem ipsum dolor sit Alaska amet</field>
+        </dataset>
     </repository>
 </config>
