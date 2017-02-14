@@ -48,7 +48,7 @@
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
-            <data name="order/data/price/dataset">captured_price_145.98</data>
+            <data name="order/data/price/dataset" xsi:type="string">captured_price_145.98</data>
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
