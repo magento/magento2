@@ -6,40 +6,40 @@
 
 namespace Magento\CurrencySymbol\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check that correct currency symbol displayed on Product Page in Main Website.
+ * Check that correct currency symbol displayed on Product Page on Main Website.
  */
 class AssertCurrencySymbolOnProductPageMainWebsite extends AbstractConstraint
 {
     /**
-     * Assert that correct currency symbol displayed on Product Page in Main Website.
+     * Assert that correct currency symbol displayed on Product Page on Main Website.
      *
-     * @param CatalogProductSimple $product
+     * @param InjectableFixture $product,
      * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
-     * @param array|null $currencySymbol
+     * @param array $currencySymbol
      * @return void
      */
     public function processAssert(
-        CatalogProductSimple $product,
+        InjectableFixture $product,
         BrowserInterface $browser,
         CatalogProductView $catalogProductView,
         array $currencySymbol  = []
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        $price = $catalogProductView->getViewBlock()->getPriceBlock()->getPriceWithCurrency();
-        preg_match('`(.*?)\d`', $price, $matches);
+        $priceBlock = $catalogProductView->getViewBlock()->getPriceBlock();
+        $price = $priceBlock->getPrice('');
+        $symbolOnPage = $priceBlock->getCurrencySymbol($price);
 
-        $symbolOnPage = isset($matches[1]) ? $matches[1] : null;
         \PHPUnit_Framework_Assert::assertEquals(
             $currencySymbol['mainWebsite'],
-            $symbolOnPage,
-            'Wrong Currency Symbol is displayed on Product page in the Main Website.'
+            $symbolOnPage[1],
+            'Wrong Currency Symbol is displayed on Product page on the Main Website.'
         );
     }
 
@@ -50,6 +50,6 @@ class AssertCurrencySymbolOnProductPageMainWebsite extends AbstractConstraint
      */
     public function toString()
     {
-        return "Correct Currency Symbol displayed on Product page in the Main Website.";
+        return "Correct Currency Symbol displayed on Product page on the Main Website.";
     }
 }

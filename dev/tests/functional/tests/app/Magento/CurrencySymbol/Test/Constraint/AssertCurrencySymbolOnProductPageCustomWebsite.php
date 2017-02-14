@@ -6,27 +6,27 @@
 
 namespace Magento\CurrencySymbol\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check that correct currency symbol displayed on Product Page in Custom Website.
+ * Check that correct currency symbol displayed on Product Page on Custom Website.
  */
 class AssertCurrencySymbolOnProductPageCustomWebsite extends AbstractConstraint
 {
     /**
-     * Assert that correct currency symbol displayed on Product Page in Custom Website.
+     * Assert that correct currency symbol displayed on Product Page on Custom Website.
      *
-     * @param CatalogProductSimple $product
+     * @param InjectableFixture $product,
      * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
-     * @param array|null $currencySymbol
+     * @param array $currencySymbol
      * @return void
      */
     public function processAssert(
-        CatalogProductSimple $product,
+        InjectableFixture $product,
         BrowserInterface $browser,
         CatalogProductView $catalogProductView,
         array $currencySymbol  = []
@@ -34,14 +34,14 @@ class AssertCurrencySymbolOnProductPageCustomWebsite extends AbstractConstraint
         $website = $product->getDataFieldConfig('website_ids')['source']->getWebsites()[0];
         $url = $_ENV['app_frontend_url'] . 'websites/' . $website->getCode() . '/' . $product->getUrlKey() . '.html';
         $browser->open($url);
-        $price = $catalogProductView->getViewBlock()->getPriceBlock()->getPriceWithCurrency();
-        preg_match('`(.*?)\d`', $price, $matches);
+        $priceBlock = $catalogProductView->getViewBlock()->getPriceBlock();
+        $price = $priceBlock->getPrice('');
+        $symbolOnPage = $priceBlock->getCurrencySymbol($price);
 
-        $symbolOnPage = isset($matches[1]) ? $matches[1] : null;
         \PHPUnit_Framework_Assert::assertEquals(
             $currencySymbol['customWebsite'],
-            $symbolOnPage,
-            'Wrong Currency Symbol is displayed on Product page in Custom website.'
+            $symbolOnPage[1],
+            'Wrong Currency Symbol is displayed on Product page on Custom website.'
         );
     }
 
@@ -52,6 +52,6 @@ class AssertCurrencySymbolOnProductPageCustomWebsite extends AbstractConstraint
      */
     public function toString()
     {
-        return "Correct Currency Symbol displayed on Product page in Custom website.";
+        return "Correct Currency Symbol displayed on Product page on Custom website.";
     }
 }

@@ -60,12 +60,12 @@ class EditCurrencyCustomWebsiteTest extends Injectable
      * Change Currency on Custom Website test.
      *
      * @param string $configData
-     * @param string $product
+     * @param array $product
      * @param Store $store
      * @param array|null $currencies
-     * @return void
+     * @return array
      */
-    public function test($configData, $product, Store $store, array $currencies = [])
+    public function test($configData, array $product, Store $store, array $currencies = [])
     {
         // Preconditions
         $this->stepFactory->create(
@@ -75,8 +75,8 @@ class EditCurrencyCustomWebsiteTest extends Injectable
 
         $store->persist();
         $product = $this->fixtureFactory->createByCode(
-            'catalogProductSimple',
-            ['dataset' => $product['dataset'], 'data' => ['website_ids' => [['store' => $store]]]]
+            $product[0],
+            ['dataset' => $product[1], 'data' => ['website_ids' => [['store' => $store]]]]
         );
         $product->persist();
         $websites = $product->getDataFieldConfig('website_ids')['source']->getWebsites();
