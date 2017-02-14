@@ -6,7 +6,6 @@
 namespace Magento\Braintree\Test\TestCase;
 
 use Magento\Mtf\TestCase\Scenario;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Preconditions:
@@ -42,7 +41,7 @@ class CheckoutWithBraintreePaypalMinicartTest extends Scenario
      *
      * @return void
      */
-    public function test(OrderInjectable $order)
+    public function test()
     {
         $this->executeScenario();
     }
