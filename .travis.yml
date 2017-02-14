@@ -52,9 +52,11 @@ before_script:
       sudo apt-get remove --purge mysql-common mysql-server-5.5 mysql-server-core-5.5 mysql-client-5.5 mysql-client-core-5.5;
       sudo apt-get autoremove;
       sudo apt-get autoclean;
-      sudo apt-add-repository ppa:ondrej/mysql-5.6 -y;
+      echo 'deb http://repo.mysql.com/apt/ubuntu/ precise mysql-apt-config' | sudo tee /etc/apt/sources.list.d/mysql.list;
+      echo 'deb http://repo.mysql.com/apt/ubuntu/ precise mysql-5.6' | sudo tee /etc/apt/sources.list.d/mysql.list;
+      curl -s http://ronaldbradford.com/mysql/mysql.gpg | sudo apt-key add -;
       sudo apt-get update;
-      sudo apt-get install mysql-server-5.6 mysql-client-5.6;
+      sudo apt-get install -y mysql-server;
       mysql -uroot -e 'SET @@global.sql_mode = NO_ENGINE_SUBSTITUTION; CREATE DATABASE magento_integration_tests;';
       mv dev/tests/integration/etc/install-config-mysql.travis.php.dist dev/tests/integration/etc/install-config-mysql.php;
       fi"
