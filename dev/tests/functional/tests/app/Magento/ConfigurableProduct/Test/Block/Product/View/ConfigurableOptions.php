@@ -46,7 +46,7 @@ class ConfigurableOptions extends CustomOptions
      *
      * @var string
      */
-    protected $configurableOptionElement = '#product-options-wrapper > * > .configurable';
+    private $configurableOptionElement = '#product-options-wrapper > * > .configurable';
 
     /**
      * Get configurable product options

@@ -19,7 +19,7 @@
             <data name="product/data/description" xsi:type="string">Configurable Product description %isolation%</data>
             <data name="outOfStockOption" xsi:type="string">SIZE_S</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
-            <constraint name="Magento\CatalogInventoryConfigurableProduct\Test\Constraint\AssertOutOfStockOptionIsAbsentOnOnProductPage" />
+            <constraint name="Magento\CatalogInventoryConfigurableProduct\Test\Constraint\AssertOutOfStockOptionIsAbsentOnProductPage" />
         </variation>
     </testCase>
 </config>

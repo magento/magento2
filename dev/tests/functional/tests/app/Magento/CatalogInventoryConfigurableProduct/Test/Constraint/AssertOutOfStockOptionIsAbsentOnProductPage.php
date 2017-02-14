@@ -14,7 +14,7 @@ use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 /**
  * Assert that out of stock configurable option is not displayed on product page.
  */
-class AssertOutOfStockOptionIsAbsentOnOnProductPage extends AbstractConstraint
+class AssertOutOfStockOptionIsAbsentOnProductPage extends AbstractConstraint
 {
     /**
      * Assert that out of stock configurable option is not displayed on product page on frontend.
@@ -37,18 +37,18 @@ class AssertOutOfStockOptionIsAbsentOnOnProductPage extends AbstractConstraint
         foreach ($listOptions as $option) {
             $productOptions = $catalogProductView->getConfigurableAttributesBlock()->getSelectOptionsData($option);
         }
-        $option = $this->isOptionPresent($outOfStockOption, $productOptions);
+        $option = $this->isOptionAbsent($outOfStockOption, $productOptions);
         \PHPUnit_Framework_Assert::assertTrue($option, 'Out of stock option is present on product page.');
     }
 
     /**
-     * Check if option is present on product page.
+     * Check if option is absent on product page.
      *
      * @param string $needle
      * @param array $haystack
      * @return bool
      */
-    private function isOptionPresent($needle, array $haystack)
+    private function isOptionAbsent($needle, array $haystack)
     {
         foreach ($haystack as $options) {
             foreach ($options as $option) {
