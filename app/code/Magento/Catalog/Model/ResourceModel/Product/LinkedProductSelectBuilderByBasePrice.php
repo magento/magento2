@@ -101,12 +101,12 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
         if (!$this->catalogHelper->isPriceGlobal()) {
             $priceSelectStore = clone $priceSelect;
             $priceSelectStore->where('t.store_id = ?', $this->storeManager->getStore()->getId());
-            $select[] = $priceSelectStore;
+            $selects[] = $priceSelectStore;
         }
 
         $priceSelect->where('t.store_id = ?', Store::DEFAULT_STORE_ID);
-        $select[] = $priceSelect;
+        $selects[] = $priceSelect;
 
-        return $select;
+        return $selects;
     }
 }
