@@ -30,10 +30,8 @@ class AssertOrderCommentsHistoryNotifyStatus extends AbstractConstraint
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
         $refundsData = $order->getRefund();
-        $sendMail = isset($refundsData[0]['form_data']['send_email']) ? filter_var(
-            $refundsData[0]['form_data']['send_email'],
-            FILTER_VALIDATE_BOOLEAN
-        ) : false;
+        $sendMail = isset($refundsData[0]['form_data']['send_email'])
+            ? filter_var($refundsData[0]['form_data']['send_email'], FILTER_VALIDATE_BOOLEAN) : false;
 
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');

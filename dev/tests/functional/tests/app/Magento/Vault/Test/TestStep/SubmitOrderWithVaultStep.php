@@ -61,21 +61,12 @@ class SubmitOrderWithVaultStep implements TestStepInterface
     private $products;
 
     /**
-     * Vault data.
-     * - method
-     *
-     * @var array
-     */
-    private $vault;
-
-    /**
      * @param OrderCreateIndex $orderCreateIndex
      * @param SalesOrderView $salesOrderView
      * @param FixtureFactory $fixtureFactory
      * @param Customer $customer
      * @param \Magento\Mtf\Fixture\FixtureInterface[] $products
      * @param OrderCreateIndex $orderCreateIndex
-     * @param array $vault
      * @param Address|null $billingAddress
      */
     public function __construct(
@@ -84,7 +75,6 @@ class SubmitOrderWithVaultStep implements TestStepInterface
         FixtureFactory $fixtureFactory,
         Customer $customer,
         array $products,
-        array $vault,
         Address $billingAddress = null
     ) {
         $this->orderCreateIndex = $orderCreateIndex;
@@ -93,7 +83,6 @@ class SubmitOrderWithVaultStep implements TestStepInterface
         $this->customer = $customer;
         $this->billingAddress = $billingAddress;
         $this->products = $products;
-        $this->vault = $vault;
     }
 
     /**
@@ -103,9 +92,6 @@ class SubmitOrderWithVaultStep implements TestStepInterface
      */
     public function run()
     {
-        $block = $this->orderCreateIndex->getCreateBlock();
-        $block->selectPaymentMethod($this->vault);
-        $block->selectVaultToken('token_switcher_' . $this->vault['method']);
         $this->orderCreateIndex->getCreateBlock()->submitOrder();
         $this->salesOrderView->getMessagesBlock()->waitSuccessMessage();
         $orderId = trim($this->salesOrderView->getTitleBlock()->getTitle(), '#');
