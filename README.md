@@ -5,7 +5,7 @@ Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a 
 
 The installation instructions that used to be here are now published on our GitHub site. Use the information on this page to get started or go directly to the <a href="http://devdocs.magento.com/guides/v2.0/install-gde/bk-install-guide.html" target="_blank">guide</a>.
 
-<h2>New to Magento? Need some help?</h2>
+<h2>New to Magento? Need some help??</h2>
 If you're not sure about the following, you probably need a little help before you start installing the Magento software:
 
 *	Is the Magento software <a href="http://devdocs.magento.com/guides/v2.0/install-gde/basics/basics_magento-installed.html">installed already</a>?
