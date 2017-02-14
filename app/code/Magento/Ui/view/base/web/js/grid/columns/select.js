@@ -33,6 +33,8 @@ define([
                 return value + '';
             });
 
+            options = this.flatOptions(options);
+
             options.forEach(function (item) {
                 if (_.contains(values, item.value + '')) {
                     label.push(item.label);
@@ -40,6 +42,26 @@ define([
             });
 
             return label.join(', ');
+        },
+
+        /**
+         * Transformation tree options structure to liner array.
+         *
+         * @param {Array} options
+         * @returns {Array}
+         */
+        flatOptions: function (options) {
+            var self = this;
+
+            return options.reduce(function (options, option) {
+                if (_.isArray(option.value)) {
+                    options = options.concat(self.flatOptions(option.value));
+                } else {
+                    options.push(option);
+                }
+
+                return options;
+            }, []);
         }
 
         /*eslint-enable eqeqeq*/

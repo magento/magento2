@@ -132,18 +132,20 @@ class TierPriceStorageTest extends WebapiAbstract
         ];
         $response = $this->_webApiCall($serviceInfo, ['prices' => [$invalidPrice]]);
         $this->assertNotEmpty($response);
-        $this->assertEquals('Invalid attribute %fieldName = %fieldValue.', $response[0]['message']);
-        $this->assertEquals('Website Id', $response[0]['parameters'][0]);
+        $message = 'Invalid attribute Website ID = %websiteId. '
+            . 'Row ID: SKU = %SKU, Website ID: %websiteId, '
+            . 'Customer Group: %customerGroup, Quantity: %qty.';
+        $this->assertEquals($message, $response[0]['message']);
+        $this->assertEquals('simple', $response[0]['parameters'][0]);
         $this->assertEquals('2', $response[0]['parameters'][1]);
-        $message = 'We found a duplicate website, tier price, customer group and quantity: %fieldName1 '
-            . '= %fieldValue1, %fieldName2 = %fieldValue2, %fieldName3 = %fieldValue3.';
+        $message = 'We found a duplicate website, tier price, customer group and quantity: '
+            . 'Customer Group = %customerGroup, Website ID = %websiteId, Quantity = %qty. '
+            . 'Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.';
         $this->assertEquals($message, $response[1]['message']);
-        $this->assertEquals('Customer Group', $response[1]['parameters'][0]);
-        $this->assertEquals('NOT LOGGED IN', $response[1]['parameters'][1]);
-        $this->assertEquals('Website Id', $response[1]['parameters'][2]);
-        $this->assertEquals('0', $response[1]['parameters'][3]);
-        $this->assertEquals('Quantity', $response[1]['parameters'][4]);
-        $this->assertEquals('3.0000', $response[1]['parameters'][5]);
+        $this->assertEquals('simple', $response[1]['parameters'][0]);
+        $this->assertEquals('0', $response[1]['parameters'][1]);
+        $this->assertEquals('NOT LOGGED IN', $response[1]['parameters'][2]);
+        $this->assertEquals('3.0000', $response[1]['parameters'][3]);
     }
 
     /**
