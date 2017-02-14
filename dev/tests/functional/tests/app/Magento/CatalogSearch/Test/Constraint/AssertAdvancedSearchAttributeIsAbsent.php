@@ -12,12 +12,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Util\Command\Cli\Indexer;
 
 /**
- * Check whether attribute is absent in the advanced search form on the frontend.
+ * Assert that created custom product attribute is absent in the advanced search form on the frontend.
  */
 class AssertAdvancedSearchAttributeIsAbsent extends AbstractConstraint
 {
     /**
-     * Check that the attribute is absent in the advanced search form on the frontend.
+     * Assert that created custom product attribute is absent in the advanced search form on the frontend.
      *
      * @param CatalogProductAttribute $attribute
      * @param AdvancedSearch $advancedSearch
@@ -28,13 +28,13 @@ class AssertAdvancedSearchAttributeIsAbsent extends AbstractConstraint
     {
         $cli->reindex();
         $advancedSearch->open();
-        $formLabels = $advancedSearch->getForm()->getFormlabels();
+        $formLabels = $advancedSearch->getForm()->getFormLabels();
         $label = $attribute->hasData('manage_frontend_label')
             ? $attribute->getManageFrontendLabel()
             : $attribute->getFrontendLabel();
         \PHPUnit_Framework_Assert::assertFalse(
             in_array($label, $formLabels),
-            'Attribute is present on advanced search form.'
+            'Created custom product attribute is present in advanced search form on frontend but must be absent.'
         );
     }
 
@@ -45,6 +45,6 @@ class AssertAdvancedSearchAttributeIsAbsent extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Attribute is absent on advanced search form.';
+        return 'Created custom product attribute is absent in advanced search form on frontend.';
     }
 }
