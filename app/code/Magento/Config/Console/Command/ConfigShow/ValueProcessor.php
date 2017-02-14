@@ -12,12 +12,20 @@ use Magento\Config\Model\Config\StructureFactory;
 use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\App\Area;
+use Magento\Config\Model\Config\Backend\Encrypted;
 
 /**
  * Class processes values using backend model which declared in system.xml.
  */
 class ValueProcessor
 {
+    /**
+     * Placeholder for the output of sensitive data.
+     *
+     * @const
+     */
+    const SAFE_PLACEHOLDER = '******';
+
     /**
      * System configuration structure factory.
      *
@@ -84,6 +92,8 @@ class ValueProcessor
         $backendModel->setValue($value);
         $backendModel->afterLoad();
 
-        return $backendModel->getValue();
+        return ($backendModel instanceof Encrypted)
+            ? self::SAFE_PLACEHOLDER
+            : $backendModel->getValue();
     }
 }
