@@ -131,7 +131,6 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation10" summary="Add Products Manualy To Configurable Product" ticketId="MAGETWO-63563">
-            <data name="tag" xsi:type="string">test_type:add_manually_products</data>
             <data name="description" xsi:type="string">Create product with assigned products to options</data>
             <data name="variationsAddType" xsi:type="string">manually</data>
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
