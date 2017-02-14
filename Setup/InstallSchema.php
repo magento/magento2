@@ -23,12 +23,17 @@ class InstallSchema implements InstallSchemaInterface
     private static $table = 'signifyd_case';
 
     /**
+     * @var string
+     */
+    private static $connectionName = 'sales';
+
+    /**
      * @inheritdoc
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         /** @var AdapterInterface $connection */
-        $connection = $setup->startSetup()->getConnection();
+        $connection = $setup->startSetup()->getConnection(self::$connectionName);
 
         $table = $connection->newTable($setup->getTable(static::$table));
         $table->addColumn(
@@ -40,7 +45,12 @@ class InstallSchema implements InstallSchemaInterface
         $table->addColumn('order_id', Table::TYPE_INTEGER, null, ['unsigned' => true]);
         $table->addColumn('case_id', Table::TYPE_INTEGER, null, ['unsigned' => true]);
         $table->addColumn('guarantee_eligible', Table::TYPE_BOOLEAN, null);
-        $table->addColumn('guarantee_disposition', Table::TYPE_TEXT, 32);
+        $table->addColumn(
+            'guarantee_disposition',
+            Table::TYPE_TEXT,
+            32,
+            ['default' => CaseInterface::GUARANTEE_PENDING]
+        );
         $table->addColumn('status', Table::TYPE_TEXT, 32, ['default' => CaseInterface::STATUS_PENDING]);
         $table->addColumn('score', Table::TYPE_INTEGER, null, ['unsigned' => true]);
         $table->addColumn('associated_team', Table::TYPE_TEXT, '64k');
