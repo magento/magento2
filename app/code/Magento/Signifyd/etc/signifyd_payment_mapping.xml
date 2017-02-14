@@ -16,7 +16,7 @@
   */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Signifyd:etc/payment_mapping.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Signifyd:etc/signifyd_payment_mapping.xsd">
     <payment_method_list>
         <payment_method>
             <magento_code>braintree</magento_code>
