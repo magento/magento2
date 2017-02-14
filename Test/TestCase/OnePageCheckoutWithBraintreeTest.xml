@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Signifyd\Test\TestCase\OnePageCheckoutWithBraintreeTest" summary="One page checkout with Braintree payment method.">
+        <variation name="OnePageCheckoutWithBraintreeVariation1" summary="Registered Checkout within Braintree Credit Card from Storefront with Signifyd" ticketId="MAGETWO-62120">
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="customer/dataset" xsi:type="string">signifyd_approve_us_customer</data>
+            <data name="shippingAddress/dataset" xsi:type="string">signifyd_approve_us_shipping_address</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_default</data>
+            <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
+            <data name="configData" xsi:type="string">braintree,signifyd</data>
+            <data name="sandboxMerchant/dataset" xsi:type="string">sandbox_default</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+        </variation>
+    </testCase>
+</config>
