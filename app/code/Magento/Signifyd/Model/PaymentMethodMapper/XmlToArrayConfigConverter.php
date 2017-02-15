@@ -13,25 +13,32 @@ use Magento\Framework\Config\Dom\ValidationSchemaException;
 class XmlToArrayConfigConverter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
-     * Node type for payment methods
+     * Node type wrapper for magento and signifyd payment codes
      *
      * @var string
      */
-    private static $paymentMethodNodeType = 'magento_code';
+    private static $paymentMethodNodeType = 'payment_method';
 
     /**
-     * Node type for Sygnifyd payment methods
+     * Node type for payment methods code
      *
      * @var string
      */
-    private static $signifydPaymentMethodNodeType = 'signifyd_code';
+    private static $magentoCodeNodeType = 'magento_code';
+
+    /**
+     * Node type for Sygnifyd payment methods code
+     *
+     * @var string
+     */
+    private static $signifydCodeNodeType = 'signifyd_code';
 
     /**
      * @inheritdoc
      */
     public function convert($source)
     {
-        $paymentMethods = $source->getElementsByTagName('payment_method');
+        $paymentMethods = $source->getElementsByTagName(self::$paymentMethodNodeType);
         $paymentsList = [];
         foreach ($paymentMethods as $paymentMethod) {
             $paymentsList += $this->getPaymentMethodMapping($paymentMethod);
@@ -50,8 +57,8 @@ class XmlToArrayConfigConverter implements \Magento\Framework\Config\ConverterIn
      */
     private function getPaymentMethodMapping(\DOMElement $payment)
     {
-        $paymentMethodCode = $this->readSubnodeValue($payment, self::$paymentMethodNodeType);
-        $signifyPaymentMethodCode = $this->readSubnodeValue($payment, self::$signifydPaymentMethodNodeType);
+        $paymentMethodCode = $this->readSubnodeValue($payment, self::$magentoCodeNodeType);
+        $signifyPaymentMethodCode = $this->readSubnodeValue($payment, self::$signifydCodeNodeType);
 
         return [$paymentMethodCode => $signifyPaymentMethodCode];
     }
@@ -71,7 +78,7 @@ class XmlToArrayConfigConverter implements \Magento\Framework\Config\ConverterIn
             throw new ValidationSchemaException(__('Only single entrance of "%1" node is required.', $subNodeType));
         }
 
-        $subNodeValue = $domList[0]->nodeValue;
+        $subNodeValue = trim($domList[0]->nodeValue);
         if (!$subNodeValue) {
             throw new ValidationSchemaException(__('Not empty value for "%1" node is required.', $subNodeType));
         }
