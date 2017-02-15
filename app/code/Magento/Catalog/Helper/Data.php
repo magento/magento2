@@ -267,7 +267,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return current category path or get it from current category
      * and creating array of categories|product paths for breadcrumbs
      *
-     * @return string
+     * @return array
      */
     public function getBreadcrumbPath()
     {
