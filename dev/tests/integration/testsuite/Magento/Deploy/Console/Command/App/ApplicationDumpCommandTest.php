@@ -14,6 +14,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
