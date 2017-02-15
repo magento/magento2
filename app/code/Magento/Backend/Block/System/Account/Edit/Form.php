@@ -45,6 +45,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param array $data
+     * @param ListFilterInterface $localesListFilter
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -53,11 +54,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\User\Model\UserFactory $userFactory,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Locale\ListsInterface $localeLists,
-        array $data = []
+        array $data = [],
+        ListFilterInterface $localesListFilter = null
     ) {
         $this->_userFactory = $userFactory;
         $this->_authSession = $authSession;
         $this->_localeLists = $localeLists;
+        $this->localesListFilter = $localesListFilter
+            ?: ObjectManager::getInstance()->create(ListFilterInterface::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -162,22 +166,5 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setForm($form);
 
         return parent::_prepareForm();
-    }
-
-    /**
-     * Get instance of ListFilterInterface.
-     *
-     * @return ListFilterInterface
-     * @deprecated Added to not break backward compatibility of the constructor signature
-     *             by injecting the new dependency directly.
-     *             The method can be removed in a future major release, when constructor signature can be changed.
-     */
-    private function getLocalesListFilter()
-    {
-        if (null === $this->localesListFilter) {
-            $this->localesListFilter = ObjectManager::getInstance()->create(ListFilterInterface::class);
-        }
-
-        return $this->localesListFilter;
     }
 }

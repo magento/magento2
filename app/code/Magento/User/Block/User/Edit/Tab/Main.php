@@ -9,6 +9,7 @@
 namespace Magento\User\Block\User\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\DeployedListInterface;
 use Magento\Framework\Locale\ListFilterInterface;
 
 /**
@@ -31,9 +32,9 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_LocaleLists;
 
     /**
-     * @var ListFilterInterface
+     * @var DeployedListInterface
      */
-    private $localesListFilter;
+    private $deployedLocaleList;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -42,6 +43,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param array $data
+     * @param DeployedListInterface $deployedLocaleList
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -49,10 +51,13 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Locale\ListsInterface $localeLists,
-        array $data = []
+        array $data = [],
+        DeployedListInterface $deployedLocaleList = null
     ) {
         $this->_authSession = $authSession;
         $this->_LocaleLists = $localeLists;
+        $this->deployedLocaleList = $deployedLocaleList
+            ?: ObjectManager::getInstance()->create(DeployedListInterface::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -235,23 +240,5 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                 'required' => $isRequired
             ]
         );
-    }
-
-
-    /**
-     * Get instance of ListFilterInterface.
-     *
-     * @return ListFilterInterface
-     * @deprecated Added to not break backward compatibility of the constructor signature
-     *             by injecting the new dependency directly.
-     *             The method can be removed in a future major release, when constructor signature can be changed.
-     */
-    private function getLocalesListFilter()
-    {
-        if (null === $this->localesListFilter) {
-            $this->localesListFilter = ObjectManager::getInstance()->get(ListFilterInterface::class);
-        }
-
-        return $this->localesListFilter;
     }
 }
