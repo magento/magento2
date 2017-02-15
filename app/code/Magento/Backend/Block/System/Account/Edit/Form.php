@@ -165,8 +165,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Get instance of ListFilterInterface.
+     *
      * @return ListFilterInterface
-     * @deprecated
+     * @deprecated Added to not break backward compatibility of the constructor signature
+     *             by injecting the new dependency directly.
+     *             The method can be removed in a future major release, when constructor signature can be changed.
      */
     private function getLocalesListFilter()
     {
