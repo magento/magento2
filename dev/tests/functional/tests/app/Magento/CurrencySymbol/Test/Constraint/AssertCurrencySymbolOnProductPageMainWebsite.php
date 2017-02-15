@@ -33,7 +33,7 @@ class AssertCurrencySymbolOnProductPageMainWebsite extends AbstractConstraint
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $priceBlock = $catalogProductView->getViewBlock()->getPriceBlock();
-        $symbolOnPage = $priceBlock->getCurrencySymbol('');
+        $symbolOnPage = $priceBlock->getCurrencySymbol();
 
         \PHPUnit_Framework_Assert::assertEquals(
             $currencySymbol['mainWebsite'],
