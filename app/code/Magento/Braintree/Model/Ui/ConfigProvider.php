@@ -13,7 +13,7 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 /**
  * Class ConfigProvider
  */
-final class ConfigProvider implements ConfigProviderInterface
+class ConfigProvider implements ConfigProviderInterface
 {
     const CODE = 'braintree';
 
