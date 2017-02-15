@@ -6,7 +6,7 @@
 namespace Magento\Backend\Block\System\Account\Edit;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Locale\ListFilterInterface;
+use Magento\Framework\Locale\DeployedListInterface;
 
 /**
  * Adminhtml edit admin user account form
@@ -33,9 +33,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_localeLists;
 
     /**
-     * @var ListFilterInterface
+     * Operates with deployed locales
+     *
+     * @var DeployedListInterface
      */
-    private $localesListFilter;
+    private $deployedLocaleList;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -45,7 +47,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param array $data
-     * @param ListFilterInterface $localesListFilter
+     * @param DeployedListInterface $deployedLocaleList
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -55,13 +57,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Locale\ListsInterface $localeLists,
         array $data = [],
-        ListFilterInterface $localesListFilter = null
+        DeployedListInterface $deployedLocaleList = null
     ) {
         $this->_userFactory = $userFactory;
         $this->_authSession = $authSession;
         $this->_localeLists = $localeLists;
-        $this->localesListFilter = $localesListFilter
-            ?: ObjectManager::getInstance()->create(ListFilterInterface::class);
+        $this->deployedLocaleList = $deployedLocaleList
+            ?: ObjectManager::getInstance()->create(DeployedListInterface::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -133,7 +135,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'interface_locale',
                 'label' => __('Interface Locale'),
                 'title' => __('Interface Locale'),
-                'values' => $this->getLocalesListFilter()->filter($this->_localeLists->getTranslatedOptionLocales()),
+                'values' => $this->deployedLocaleList->getTranslatedLocales(),
                 'class' => 'select'
             ]
         );

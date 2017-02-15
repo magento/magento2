@@ -10,7 +10,6 @@ namespace Magento\User\Block\User\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\DeployedListInterface;
-use Magento\Framework\Locale\ListFilterInterface;
 
 /**
  * Cms page edit form main tab
@@ -32,6 +31,8 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_LocaleLists;
 
     /**
+     * Operates with deployed locales
+     *
      * @var DeployedListInterface
      */
     private $deployedLocaleList;
@@ -151,7 +152,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'interface_locale',
                 'label' => __('Interface Locale'),
                 'title' => __('Interface Locale'),
-                'values' => $this->getLocalesListFilter()->filter($this->_LocaleLists->getTranslatedOptionLocales()),
+                'values' => $this->deployedLocaleList->getLocales(),
                 'class' => 'select'
             ]
         );
