@@ -14,7 +14,7 @@
     </type>
     <type name="Magento\ImportExport\Test\Constraint\AssertImportCheckDataErrorMessage">
         <arguments>
-            <argument name="severity" xsi:type="string">low</argument>
+            <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
     <type name="Magento\ImportExport\Test\Fixture\Import\File">

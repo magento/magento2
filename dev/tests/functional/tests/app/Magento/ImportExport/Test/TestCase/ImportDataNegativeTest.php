@@ -18,13 +18,12 @@ use Magento\Mtf\TestCase\Scenario;
  * 4. Click "Check Data" button.
  * 5. Perform assertions.
  *
- * @group Advanced_Pricing_Import_Export
- * @ZephyrId MAGETWO-46155
+ * @group ImportExport
  */
-class ImportDataTest extends Scenario
+class ImportDataNegativeTest extends Scenario
 {
     /* tags */
-    const MVP = 'no';
+    const SEVERITY = 'S1';
     /* end tags */
 
     /**

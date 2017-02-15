@@ -6,12 +6,12 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\ImportExport\Test\TestCase\ImportDataTest" summary="Import data" ticketId="MAGETWO-46155">
-        <variation name="PreventImportAdvancedPricingIfIncorrectData" summary="Import advanced pricing if incorrect data">
-            <data name="errors" xsi:type="array">
+    <testCase name="Magento\ImportExport\Test\TestCase\ImportDataNegativeTest" summary="Import data">
+        <variation name="PreventImportAdvancedPricingIfIncorrectData" ticketId="MAGETWO-46155" summary="Import advanced pricing if incorrect data">
+            <data name="patterns" xsi:type="array">
                 <item name="0" xsi:type="array">
-                    <item name="attribute" xsi:type="string">tier_price</item>
-                    <item name="rows" xsi:type="number">1</item>
+                    <item name="0" xsi:type="string">Value for 'tier_price' attribute</item>
+                    <item name="1" xsi:type="string">in row(s): 1</item>
                 </item>
             </data>
             <data name="import/data" xsi:type="array">

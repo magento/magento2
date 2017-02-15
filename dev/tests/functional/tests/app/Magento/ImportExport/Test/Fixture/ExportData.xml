@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-    <fixture name="importExport"
+    <fixture name="exportData"
              module="Magento_ImportExport"
              type="flat"
              entity_type="importexport_importdata"

@@ -43,7 +43,7 @@ class Result extends Block
     }
 
     /**
-     * Get errors messages list
+     * Get errors messages list.
      *
      * @return array|false
      */
@@ -57,6 +57,6 @@ class Result extends Block
 
         $text = $this->_rootElement->find($this->validationErrorList)->getText();
 
-        return (array) explode("\n", strip_tags($text));
+        return (array) explode(PHP_EOL, strip_tags($text));
     }
 }

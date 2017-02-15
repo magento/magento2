@@ -13,39 +13,70 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertImportCheckDataErrorMessagesList extends AbstractConstraint
 {
-    /* Errors parts pattern. */
-    const ERROR_ATTRIBUTE_PATTERN = 'Value for \'%s\' attribute';
-    const ERROR_ROWS_PATTERN = 'in row(s): %d';
-    /* end */
-
     /**
      * Assert that error message is present.
      *
-     * @param array $errors
+     * @param array $patterns
      * @param AdminImportIndex $adminImportIndex
      * @return void
      */
-    public function processAssert(array $errors, AdminImportIndex $adminImportIndex)
+    public function processAssert(array $patterns, AdminImportIndex $adminImportIndex)
     {
         $messages = $adminImportIndex->getImportResult()->getErrorsList();
 
         \PHPUnit_Framework_Assert::assertNotFalse($messages, 'Errors messages block is absent.');
         \PHPUnit_Framework_Assert::assertNotEmpty($messages, 'Errors messages is absent.');
 
+        $errors = [];
         foreach ($messages as $message) {
-            foreach ($errors as $error) {
-                \PHPUnit_Framework_Assert::assertContains(
-                    sprintf(static::ERROR_ATTRIBUTE_PATTERN, $error['attribute']),
-                    $message,
-                    'Attribute name is absent in error message.'
-                );
-                \PHPUnit_Framework_Assert::assertContains(
-                    sprintf(static::ERROR_ROWS_PATTERN, $error['rows']),
-                    $message,
-                    'Count of rows is not contained is the message.'
-                );
+            if ($this->isNotMatched($patterns, $message)) {
+                $errors[] = sprintf('This message "%s" mismatch with any pattern', $message);
             }
         }
+
+        \PHPUnit_Framework_Assert::assertEmpty(
+            $errors,
+            'This assertions contains next errors:' . PHP_EOL . implode(PHP_EOL, $errors)
+        );
+    }
+
+    /**
+     * Checking message.
+     *
+     * @param array $patterns
+     * @param string $message
+     * @return bool
+     */
+    private function isNotMatched(array $patterns, $message)
+    {
+        $isNotMatch = true;
+        foreach ($patterns as $parts) {
+            $parts = (array) $parts;
+            if ($isNotMatch && $this->match($message, $parts) === count($parts)) {
+                $isNotMatch = false;
+            }
+        }
+
+        return $isNotMatch;
+    }
+
+    /**
+     * Check if patterns are contained in a message.
+     *
+     * @param string $message
+     * @param array $patterns
+     * @return int
+     */
+    private function match($message, array $patterns)
+    {
+        $matchCount = 0;
+        foreach ($patterns as $pattern) {
+            if (strpos($message, $pattern) !== false) {
+                ++$matchCount;
+            }
+        }
+
+        return $matchCount;
     }
 
     /**
@@ -55,7 +86,6 @@ class AssertImportCheckDataErrorMessagesList extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Attribute with error contains in message. '
-            . 'Count rows with errors equals count rows in the test variation.';
+        return 'All messages for errors match the patterns.';
     }
 }

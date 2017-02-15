@@ -57,7 +57,7 @@ class File extends DataSource
      * @param FixtureFactory $fixtureFactory
      * @param Generator $generator
      * @param array $params
-     * @param array $data
+     * @param array|string $data
      */
     public function __construct(
         ObjectManager $objectManager,
