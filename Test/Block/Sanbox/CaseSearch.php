@@ -21,6 +21,7 @@ class CaseSearch extends Form
 
     public function fillSearchCriteria($searchCriteria)
     {
+        $this->waitForElementVisible($this->searchInput);
         $this->_rootElement->find($this->searchInput)->setValue($searchCriteria);
     }
 

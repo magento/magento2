@@ -5,8 +5,11 @@
  */
 namespace Magento\Signifyd\Test\TestStep;
 
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Signifyd\Test\Constraint\AssertCaseInfo;
 use Magento\Signifyd\Test\Fixture\SandboxMerchant;
 use Magento\Signifyd\Test\Page\Sandbox\SignifydCases;
 use Magento\Signifyd\Test\Page\Sandbox\SignifydLogin;
@@ -36,21 +39,50 @@ class ObserveSignifydCaseStep implements TestStepInterface
     private $customer;
 
     /**
+     * @var AssertCaseInfo
+     */
+    private $assertCaseInfo;
+
+    /**
+     * @var OrderInjectable
+     */
+    private $order;
+
+    /**
+     * @var array
+     */
+    private $cartPrice;
+    /**
+     * @var Address
+     */
+    private $billingAddress;
+
+    /**
      * @param SandboxMerchant $sandboxMerchant
      * @param SignifydLogin $signifydLogin
      * @param SignifydCases $signifydCases
      * @param Customer $customer
+     * @param AssertCaseInfo $assertCaseInfo
+     * @param OrderInjectable $order
      */
     public function __construct(
         SandboxMerchant $sandboxMerchant,
         SignifydLogin $signifydLogin,
         SignifydCases $signifydCases,
-        Customer $customer
+        Customer $customer,
+        AssertCaseInfo $assertCaseInfo,
+        OrderInjectable $order,
+        Address $billingAddress,
+        array $cartPrice
     ) {
         $this->sandboxMerchant = $sandboxMerchant;
         $this->signifydLogin = $signifydLogin;
         $this->signifydCases = $signifydCases;
         $this->customer = $customer;
+        $this->assertCaseInfo = $assertCaseInfo;
+        $this->order = $order;
+        $this->cartPrice = $cartPrice;
+        $this->billingAddress = $billingAddress;
     }
 
     /**
@@ -64,12 +96,13 @@ class ObserveSignifydCaseStep implements TestStepInterface
         $this->signifydLogin->getLoginBlock()->fill($this->sandboxMerchant);
         $this->signifydLogin->getLoginBlock()->sandboxLogin();
 
-        $this->signifydCases->getCaseSearchBlock()->waitForElementVisible('#queueSearchBar');
         $this->signifydCases->getCaseSearchBlock()
             ->fillSearchCriteria($this->customer->getFirstname() . ' ' . $this->customer->getLastname());
         $this->signifydCases->getCaseSearchBlock()->searchCase();
 
         $this->signifydCases->getCaseSearchBlock()->selectCase();
         $this->signifydCases->getCaseInfoBlock()->flagCaseGood();
+
+        $this->assertCaseInfo->processAssert($this->signifydCases, $this->customer, $this->order, $this->billingAddress, $this->cartPrice);
     }
 }

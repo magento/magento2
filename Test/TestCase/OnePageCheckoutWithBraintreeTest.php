@@ -24,7 +24,8 @@ class OnePageCheckoutWithBraintreeTest extends Scenario
      *
      * @return void
      */
-    public function test() {
+    public function test()
+    {
         $this->executeScenario();
     }
 }
