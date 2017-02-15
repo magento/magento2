@@ -8,7 +8,7 @@ namespace Magento\Deploy\Console\Command\App;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,10 +26,41 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $reader;
 
+    /**
+     * @var ConfigFilePool
+     */
+    private $configFilePool;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var array
+     */
+    private $config;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->reader = $this->objectManager->get(DeploymentConfig\Reader::class);
+        $this->filesystem = $this->objectManager->get(Filesystem::class);
+        $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
+
+        // Snapshot of configuration.
+        $this->config = $this->loadConfig();
+    }
+
+    /**
+     * @return array
+     */
+    private function loadConfig()
+    {
+        return $this->reader->load(ConfigFilePool::APP_CONFIG);
     }
 
     /**
@@ -65,7 +96,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $command = $this->objectManager->create(ApplicationDumpCommand::class);
         $command->run($this->getMock(InputInterface::class), $outputMock);
 
-        $config = $this->reader->loadConfigFile(ConfigFilePool::APP_CONFIG, $this->getFileName());
+        $config = $this->loadConfig();
 
         $this->validateSystemSection($config);
         $this->validateThemesSection($config);
@@ -139,31 +170,21 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     public function tearDown()
     {
-        $file = $this->getFileName();
-        /** @var DirectoryList $dirList */
-        $dirList = $this->objectManager->get(DirectoryList::class);
-        $path = $dirList->getPath(DirectoryList::CONFIG);
-        $driverPool = $this->objectManager->get(DriverPool::class);
-        $fileDriver = $driverPool->getDriver(DriverPool::FILE);
-        if ($fileDriver->isExists($path . '/' . $file)) {
-            unlink($path . '/' . $file);
-        }
+        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
+            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
+            "<?php\n return array();\n"
+        );
+        /** @var DeploymentConfig\Writer $writer */
+        $writer = $this->objectManager->get(DeploymentConfig\Writer::class);
+        $writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
+
         /** @var DeploymentConfig $deploymentConfig */
         $deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
         $deploymentConfig->resetData();
-    }
-
-    /**
-     * @return string
-     */
-    private function getFileName()
-    {
-        /** @var ConfigFilePool $configFilePool */
-        $configFilePool = $this->objectManager->get(ConfigFilePool::class);
-        $filePool = $configFilePool->getInitialFilePools();
-
-        return $filePool[ConfigFilePool::LOCAL][ConfigFilePool::APP_CONFIG];
     }
 }

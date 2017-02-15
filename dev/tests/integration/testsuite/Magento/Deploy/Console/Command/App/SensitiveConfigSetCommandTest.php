@@ -35,9 +35,19 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $reader;
 
     /**
+     * @var Writer
+     */
+    private $writer;
+
+    /**
      * @var ConfigFilePool
      */
     private $configFilePool;
+
+    /**
+     * @var array
+     */
+    private $envConfig;
 
     /**
      * @var array
@@ -56,12 +66,16 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->reader = $this->objectManager->get(Reader::class);
+        $this->writer = $this->objectManager->get(Writer::class);
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
-        $this->config = $this->loadConfig();
         $this->filesystem = $this->objectManager->get(Filesystem::class);
+
+        $this->envConfig = $this->loadEnvConfig();
+        $this->config = $this->loadConfig();
+
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->getFileName(),
-            file_get_contents(__DIR__ . '/../../../_files/_config.local.php')
+            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
+            file_get_contents(__DIR__ . '/../../../_files/config.php')
         );
     }
 
@@ -71,14 +85,14 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      * @param callable $assertCallback
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDbIsolation enabled
-     * @dataProvider testExecuteDataProvider
+     * @dataProvider executeDataProvider
      */
     public function testExecute($scope, $scopeCode, callable $assertCallback)
     {
         $outputMock = $this->getMock(OutputInterface::class);
         $outputMock->expects($this->at(0))
             ->method('writeln')
-            ->with('<info>Configuration value saved in app/etc/config.php</info>');
+            ->with('<info>Configuration value saved in app/etc/env.php</info>');
 
         $inputMock = $this->getMock(InputInterface::class);
         $inputMock->expects($this->exactly(2))
@@ -108,12 +122,12 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $command = $this->objectManager->create(SensitiveConfigSetCommand::class);
         $command->run($inputMock, $outputMock);
 
-        $config = $this->loadConfig();
+        $config = $this->loadEnvConfig();
 
         $assertCallback($config);
     }
 
-    public function testExecuteDataProvider()
+    public function executeDataProvider()
     {
         return [
             [
@@ -147,7 +161,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      * @param callable $assertCallback
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDbIsolation enabled
-     * @dataProvider testExecuteInteractiveDataProvider
+     * @dataProvider executeInteractiveDataProvider
      */
     public function testExecuteInteractive($scope, $scopeCode, callable $assertCallback)
     {
@@ -158,7 +172,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             ->with('<info>Please set configuration values or skip them by pressing [Enter]:</info>');
         $outputMock->expects($this->at(1))
             ->method('writeln')
-            ->with('<info>Configuration values saved in app/etc/config.php</info>');
+            ->with('<info>Configuration values saved in app/etc/env.php</info>');
         $inputMock->expects($this->exactly(3))
             ->method('getOption')
             ->withConsecutive(
@@ -201,12 +215,12 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         );
         $command->run($inputMock, $outputMock);
 
-        $config = $this->loadConfig();
+        $config = $this->loadEnvConfig();
 
         $assertCallback($config);
     }
 
-    public function testExecuteInteractiveDataProvider()
+    public function executeInteractiveDataProvider()
     {
         return [
             [
@@ -259,28 +273,30 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->delete(
-            $this->getFileName()
-        );
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
             "<?php\n return array();\n"
         );
+        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
+            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
+            "<?php\n return array();\n"
+        );
+
+        /** @var Writer $writer */
+        $writer = $this->objectManager->get(Writer::class);
+        $writer->saveConfig([ConfigFilePool::APP_ENV => $this->envConfig]);
+
         /** @var Writer $writer */
         $writer = $this->objectManager->get(Writer::class);
         $writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
     }
 
     /**
-     * @return string
+     * @return array
      */
-    private function getFileName()
+    private function loadEnvConfig()
     {
-        /** @var ConfigFilePool $configFilePool */
-        $configFilePool = $this->objectManager->get(ConfigFilePool::class);
-        $filePool = $configFilePool->getInitialFilePools();
-
-        return $filePool[ConfigFilePool::LOCAL][ConfigFilePool::APP_CONFIG];
+        return $this->reader->load(ConfigFilePool::APP_ENV);
     }
 
     /**
@@ -288,10 +304,6 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function loadConfig()
     {
-        return $this->reader->loadConfigFile(
-            ConfigFilePool::APP_CONFIG,
-            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
-            true
-        );
+        return $this->reader->load(ConfigFilePool::APP_CONFIG);
     }
 }

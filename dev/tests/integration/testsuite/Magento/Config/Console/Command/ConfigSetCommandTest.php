@@ -115,11 +115,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function loadConfig()
     {
-        return $this->reader->loadConfigFile(
-            ConfigFilePool::APP_ENV,
-            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
-            true
-        );
+        return $this->reader->load(ConfigFilePool::APP_ENV);
     }
 
     /**

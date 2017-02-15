@@ -170,6 +170,10 @@
                     <item name="source" xsi:type="object">systemConfigInitialDataProvider</item>
                     <item name="sortOrder" xsi:type="string">1000</item>
                 </item>
+                <item name="env" xsi:type="array">
+                    <item name="source" xsi:type="object">environmentConfigInitialDataProvider</item>
+                    <item name="sortOrder" xsi:type="string">10000</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -213,8 +217,12 @@
                     <item name="sortOrder" xsi:type="string">1000</item>
                 </item>
                 <item name="env" xsi:type="array">
-                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</item>
+                    <item name="source" xsi:type="object">environmentConfigInitialDataProvider</item>
                     <item name="sortOrder" xsi:type="string">2000</item>
+                </item>
+                <item name="envVariable" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</item>
+                    <item name="sortOrder" xsi:type="string">3000</item>
                 </item>
             </argument>
         </arguments>

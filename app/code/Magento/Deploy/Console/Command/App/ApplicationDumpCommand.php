@@ -76,11 +76,10 @@ class ApplicationDumpCommand extends Command
                     : $sourceData['comment']->get();
             }
         }
-        $this->writer
-            ->saveConfig(
+        $this->writer->saveConfig(
                 [ConfigFilePool::APP_CONFIG => $dump],
                 true,
-                ConfigFilePool::LOCAL,
+                null,
                 $comments
             );
         if (!empty($comments)) {

@@ -58,6 +58,14 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $config;
 
+    /**
+     * @var array
+     */
+    private $envConfig;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -67,15 +75,14 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
         $this->writer = $this->objectManager->get(Writer::class);
 
         $this->config = $this->loadConfig();
+        $this->envConfig = $this->loadEnvConfig();
         $this->env = $_ENV;
 
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->getFileName(),
-            file_get_contents(__DIR__ . '/../../_files/_config.local.php')
-        );
-
-        $config = include(__DIR__ . '/../../_files/_config.php');
+        $config = include(__DIR__ . '/../../_files/config.php');
         $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => $config]);
+
+        $config = include(__DIR__ . '/../../_files/env.php');
+        $this->writer->saveConfig([ConfigFilePool::APP_ENV => $config]);
 
         $_ENV['CONFIG__DEFAULT__WEB__TEST2__TEST_VALUE_4'] = 'value4.env.default.test';
         $_ENV['CONFIG__WEBSITES__BASE__WEB__TEST2__TEST_VALUE_4'] = 'value4.env.website_base.test';
@@ -276,37 +283,35 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return string
+     * @return array
      */
-    private function getFileName()
+    private function loadConfig()
     {
-        $filePool = $this->configFilePool->getInitialFilePools();
-
-        return $filePool[ConfigFilePool::LOCAL][ConfigFilePool::APP_CONFIG];
+        return $this->reader->load(ConfigFilePool::APP_CONFIG);
     }
 
     /**
      * @return array
      */
-    private function loadConfig()
+    private function loadEnvConfig()
     {
-        return $this->reader->loadConfigFile(
-            ConfigFilePool::APP_CONFIG,
-            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
-            true
-        );
+        return $this->reader->load(ConfigFilePool::APP_ENV);
     }
 
     public function tearDown()
     {
         $_ENV = $this->env;
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->delete(
-            $this->getFileName()
-        );
+
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
             "<?php\n return array();\n"
         );
+        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
+            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
+            "<?php\n return array();\n"
+        );
+
         $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
+        $this->writer->saveConfig([ConfigFilePool::APP_ENV => $this->envConfig]);
     }
 }
