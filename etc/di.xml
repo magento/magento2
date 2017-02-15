@@ -82,7 +82,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="paymentMapperSchemaLocator" type="Magento\Framework\Config\GenericSchemaLocator">
+    <virtualType name="PaymentMapperSchemaLocator" type="Magento\Framework\Config\GenericSchemaLocator">
         <arguments>
             <argument name="moduleName" xsi:type="string">Magento_Signifyd</argument>
             <argument name="schema" xsi:type="string">signifyd_payment_mapping.xsd</argument>
@@ -91,7 +91,7 @@
     <virtualType name="PaymentMapperConfigReader" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="converter" xsi:type="object">Magento\Signifyd\Model\PaymentMethodMapper\XmlToArrayConfigConverter</argument>
-            <argument name="schemaLocator" xsi:type="object">paymentMapperSchemaLocator</argument>
+            <argument name="schemaLocator" xsi:type="object">PaymentMapperSchemaLocator</argument>
             <argument name="fileName" xsi:type="string">signifyd_payment_mapping.xml</argument>
         </arguments>
     </virtualType>
