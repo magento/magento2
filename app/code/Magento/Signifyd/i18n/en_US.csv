@@ -24,5 +24,5 @@
 "The case entity should not be empty.","The case entity should not be empty."
 "Guarantee has been cancelled for your order.","Guarantee has been cancelled for your order."
 "Sorry, we cannot cancel Guarantee for order.","Sorry, we cannot cancel Guarantee for order."
-"Not empty value for "%1" node is required."
-"Only single entrance of "%1" node is required."
+"Not empty value for "%1" node is required.","Not empty value for "%1" node is required."
+"Only single entrance of "%1" node is required.","Only single entrance of "%1" node is required."

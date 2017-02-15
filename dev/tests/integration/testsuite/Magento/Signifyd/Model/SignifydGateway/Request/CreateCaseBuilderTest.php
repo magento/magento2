@@ -115,7 +115,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                         'itemUrl' => $product->getProductUrl(),
                         'itemWeight' => $product->getWeight()
                     ]
-                ]
+                ],
+                'paymentMethod' => 'PAYPAL_ACCOUNT'
             ],
             'card' => [
                 'cardHolderName' => 'firstname lastname',
@@ -215,7 +216,8 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                         'itemQuantity' => $orderItems[0]->getQtyOrdered(),
                         'itemUrl' => $product->getProductUrl()
                     ],
-                ]
+                ],
+                'paymentMethod' => 'PAYPAL_ACCOUNT'
             ],
             'card' => [
                 'cardHolderName' => 'firstname lastname',
