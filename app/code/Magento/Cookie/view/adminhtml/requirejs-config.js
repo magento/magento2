@@ -8,5 +8,5 @@ var config = {
         '*': {
             requireCookie: 'Magento_Cookie/js/require-cookie'
         }
-    } 
+    }
 };
