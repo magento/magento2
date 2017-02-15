@@ -1,36 +1,41 @@
-The Magento_Signifyd module provides integration with [Signifyd](https://www.signifyd.com/) fraud protection tool.
+# The Magento Signifyd module overview
 
-#### Introduction
+The Magento_Signifyd module provides integration with the [Signifyd](https://www.signifyd.com/) fraud protection tool.
 
-Current implementation allows to create a [case](https://www.signifyd.com/docs/api/#/reference/cases) for the placed order,
-automatically retrieves [guarantee](https://www.signifyd.com/docs/api/#/reference/guarantees) for a created case and
-can cancel Signifyd guarantee on the order canceling.
+## Introduction
 
-Magento integration uses Signifyd API and all needed technical details can be found in the [Signifyd API docs](https://www.signifyd.com/docs/api/#/introduction/).
+The module implementation allows to:
 
-Magento_Signifyd module has extension points for 3d-party developers marked with `@api` annotation:
+ - create the Signifyd [case](https://www.signifyd.com/docs/api/#/reference/cases) for a placed order
+ - automatically receive the Signifyd [guarantee](https://www.signifyd.com/docs/api/#/reference/guarantees) for a created case
+ - automatically cancel a guarantee when the order is canceled.
 
- - `CaseInterface` - common absraction for a Signifyd case entity, provides methods to set or retrieve all case data fields.
- - `CaseManagementInterface` - contains methods to create new case entity or retrieve existing for a specified order.
- - `CaseCreationServiceInterface` - provides an ability to create case entity for a specified order and send request thru Signifyd API to create a new case.
- - `CaseRepositoryInterface` - describes methods to work with case entity.
- - `GuaranteeCreationServiceInterface` - allows to send request thru Signifyd API to create new case guarantee.
- - `GuaranteeCancelingServiceInterface` - allows to send request thru Signifyd API to cancel Signifyd case guarantee.
- - `CaseSearchResultsInterface` - might be used by `CaseRepositoryInterface` to retrieve list of case entities by specific
+Magento integration uses the Signifyd API; see the [Signifyd API docs](https://www.signifyd.com/docs/api/#/introduction/) for technical details.
+
+For external developers, the module contains these extension points (marked with `@api` annotation):
+
+ - `CaseInterface` - common absraction for the Signifyd case entity, provides methods to set or retrieve all case data fields.
+ - `CaseManagementInterface` - contains methods to create a new case entity or retrieve existing for a specified order.
+ - `CaseCreationServiceInterface` - provides an ability to create case entity for a specified order and send request through the Signifyd API to create a new case.
+ - `CaseRepositoryInterface` - describes methods to work with a case entity.
+ - `GuaranteeCreationServiceInterface` - allows to send request through the Signifyd API to create a new case guarantee.
+ - `GuaranteeCancelingServiceInterface` - allows to send request through the Signifyd API to cancel the Signifyd case guarantee.
+ - `CaseSearchResultsInterface` - might be used by `CaseRepositoryInterface` to retrieve a list of case entities by specific
 conditions.
 
-To update case(guarantee) entity data Magento implementation uses [Signifyd Webhooks](https://www.signifyd.com/docs/api/#/reference/webhooks) mechanism.
-New created case entity will have `PENDING` status for a case and guarantee. After receiving Webhook, both statuses will be changed to appropriate Signifyd statuses.
+To update entity data for a case or guarantee this module uses the [Signifyd Webhooks](https://www.signifyd.com/docs/api/#/reference/webhooks) mechanism.
+Newly created case entity will have `PENDING` status for a case and guarantee. After receiving Webhook, both statuses will be changed to appropriate Signifyd statuses.
 
-#### Customization
+## Customization
 
-Signifyd service collects a lof of different information related for order (all fields described in [API](https://www.signifyd.com/docs/api/#/reference/cases/create-a-case)),
-most of these fields are optional but some of them are required (like `avsResponseCode`, `cvvResponseCode`),
-so, for more accurate calculations,3d party integrations, like payment methods, might provide some additional details, like CVV/AVS response codes.
+The Signifyd service collects a lot of information about an order (all fields described in [API](https://www.signifyd.com/docs/api/#/reference/cases/create-a-case)),
+most of these fields are optional but some of them are required (like `avsResponseCode`, `cvvResponseCode`).
+So, for more accurate calculations, external integrations, like payment methods, might provide some additional details, like CVV/AVS response codes.
 
-The 3d party payment methods can implement `\Magento\Payment\Api\PaymentVerificationInterface` to provide AVS/CVV mapping 
-from specific codes to [EMS standard](http://www.emsecommerce.net/avs_cvv2_response_codes.htm) and register these mappers in custom payment module `condig.xml` file.
-For example, the mappers registration might look similar to the next:
+The custom payment methods can implement `\Magento\Payment\Api\PaymentVerificationInterface` to provide AVS/CVV mapping 
+from specific codes to [EMS standard](http://www.emsecommerce.net/avs_cvv2_response_codes.htm) and register these mappers in the `condig.xml` file
+of a custom payment module.
+For example, the mappers registration might look like this:
 
 ```xml
 <default>
@@ -46,14 +51,14 @@ For example, the mappers registration might look similar to the next:
 </default>
 ```
 
-Described steps are enough to provide custom AVS/CVV mapping for custom payment integrations, everything else, like mapper initialization,
-will be provided by Magento Signifyd infrastructure.
+These steps are enough to provide custom AVS/CVV mapping for payment integrations, everything else, like mapper initialization,
+will be provided by the Magento Signifyd infrastructure.
 
-Also, Signifyd can retrieve payment method for a placed order (Magento Signifyd module implementation contains
-predefined list of mapped Magento payment method codes to Signifyd payment codes, this mapping located in `Magento\Signifyd\etc\signifyd_payment_mapping.xml` file).
-The 3d party payment integrations can add own mapping for [Signifyd payment codes](https://www.signifyd.com/docs/api/#/reference/cases/create-a-case),
+Also, Signifyd can retrieve payment method for a placed order (the Magento Signifyd module can map Magento and Signifyd
+payment codes using the predefined XML list, located in `Magento\Signifyd\etc\signifyd_payment_mapping.xml` file).
+The 3rd-party payment integrations can apply own mappings for the [Signifyd payment codes](https://www.signifyd.com/docs/api/#/reference/cases/create-a-case),
 it's enough to add `signifyd_payment_mapping.xml` to custom payment method implementation and specify needed mapping.
-For example, it might look like this:
+For example:
 
 ```xml
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -67,5 +72,5 @@ For example, it might look like this:
 </config>    
 ```
 
- - `magento_code` attribute value should be code for a custom payment method (the same as in  the payment `config.xml`).
- - `signifyd_code` attribute value should be one of available Signifyd payment method codes.
+ - `magento_code` attribute value should be the code for a custom payment method (the same as in the payment's `config.xml`).
+ - `signifyd_code` attribute value should be one of available the Signifyd payment method codes.
