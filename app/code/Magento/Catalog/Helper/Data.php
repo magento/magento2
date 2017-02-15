@@ -46,7 +46,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Breadcrumb Path cache
      *
-     * @var string
+     * @var array
      */
     protected $_categoryPath;
 
