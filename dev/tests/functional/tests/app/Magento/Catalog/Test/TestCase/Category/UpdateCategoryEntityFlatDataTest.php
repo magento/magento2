@@ -9,10 +9,9 @@ namespace Magento\Catalog\Test\TestCase\Category;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Util\Command\Cli\Cron;
 use Magento\Mtf\Util\Command\Cli\Indexer;
+use Magento\Mtf\Util\Command\Cli\Cron;
 
 /**
  * Test Creation for UpdateCategoryEntity
@@ -30,34 +29,30 @@ use Magento\Mtf\Util\Command\Cli\Indexer;
  * 6. Perform asserts
  *
  * @group Category_Management
- * @ZephyrId MAGETWO-23290
+ * @ZephyrId MAGETWO-20169
  */
-class UpdateCategoryEntityTest extends Injectable
+class UpdateCategoryEntityFlatDataTest extends UpdateCategoryEntityTest
 {
-    /* tags */
-    const MVP = 'yes';
-    /* end tags */
+    /**
+     * Perform bin/magento commands for reindex indexers.
+     *
+     * @var Indexer
+     */
+    private $indexer;
 
     /**
-     * Catalog category index page
+     * Should cache be flushed.
      *
-     * @var CatalogCategoryIndex
+     * @var bool
      */
-    protected $catalogCategoryIndex;
+    private $flushCache;
 
     /**
-     * Catalog category edit page
+     * Configuration Data
      *
-     * @var CatalogCategoryEdit
+     * @var ValueInterface $configData
      */
-    protected $catalogCategoryEdit;
-
-    /**
-     * Fixture Factory.
-     *
-     * @var FixtureFactory
-     */
-    protected $fixtureFactory;
+    private $configData;
 
     /**
      * Inject page end prepare default category
@@ -79,6 +74,7 @@ class UpdateCategoryEntityTest extends Injectable
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogCategoryIndex = $catalogCategoryIndex;
         $this->catalogCategoryEdit = $catalogCategoryEdit;
+        $this->indexer = $indexer;
         $initialCategory->persist();
         return ['initialCategory' => $initialCategory];
     }
@@ -88,11 +84,45 @@ class UpdateCategoryEntityTest extends Injectable
      *
      * @param Category $category
      * @param Category $initialCategory
+     * @param null $indexersMode
+     * @param $configData
+     * @param bool $flushCache
      * @param Cron $cron
      * @return array
      */
-    public function test(Category $category, Category $initialCategory, Cron $cron)
-    {
+    public function test(
+        Category $category,
+        Category $initialCategory,
+        Cron $cron,
+        $indexersMode = null,
+        $configData = null,
+        $flushCache = true
+    ) {
+        $this->flushCache = $flushCache;
+        $this->configData = $configData;
+
+        //Preconditions
+        $firstStore = $this->fixtureFactory->createByCode('store', ['dataset' => 'custom']);
+        $secondStore = $this->fixtureFactory->createByCode('store', ['dataset' => 'custom']);
+        $firstStore->persist();
+        $secondStore->persist();
+        $cron->run();
+        $cron->run();
+
+
+
+        if (isset($this->configData)) {
+            $this->objectManager->create(
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+                ['configData' => $this->configData, 'flushCache' => $this->flushCache]
+            )->run();
+        }
+
+        if (isset($indexersMode)) {
+            $this->indexer->setMode($indexersMode);
+        }
+        $this->indexer->reindex();
+
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);
         $this->catalogCategoryEdit->getEditForm()->fill($category);
@@ -100,32 +130,20 @@ class UpdateCategoryEntityTest extends Injectable
         return ['category' => $this->prepareCategory($category, $initialCategory)];
     }
 
+
     /**
-     * Prepare Category fixture with the updated data.
+     * Set default configuration.
      *
-     * @param Category $category
-     * @param Category $initialCategory
-     * @return Category
+     * @return void
      */
-    protected function prepareCategory(Category $category, Category $initialCategory)
+    public function tearDown()
     {
-        $parentCategory = $category->hasData('parent_id')
-            ? $category->getDataFieldConfig('parent_id')['source']->getParentCategory()
-            : $initialCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
-
-        $rewriteData = ['parent_id' => ['source' => $parentCategory]];
-        if ($category->hasData('store_id')) {
-            $rewriteData['store_id'] = ['source' => $category->getDataFieldConfig('store_id')['source']->getStore()];
+        if (isset($this->configData)) {
+            $this->objectManager->create(
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+                ['configData' => $this->configData, 'rollback' => true, 'flushCache' => $this->flushCache]
+            )->run();
         }
-
-        $data = [
-            'data' => array_merge(
-                $initialCategory->getData(),
-                $category->getData(),
-                $rewriteData
-            )
-        ];
-
-        return $this->fixtureFactory->createByCode('category', $data);
+        $this->indexer->reindex();
     }
 }
