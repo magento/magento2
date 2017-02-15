@@ -25,6 +25,7 @@ define([
                 data = {
                     key: 'value-prepared-before-save'
                 };
+
             expect(utils.filterFormData(data, suffix, separator)).toEqual(data);
             expect(utils.filterFormData(data, suffix)).toEqual(data);
             expect(utils.filterFormData(data)).toEqual(data);

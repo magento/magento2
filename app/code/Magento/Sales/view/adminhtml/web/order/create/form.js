@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* global AdminOrder */
 define([
     'jquery',
     'Magento_Sales/order/create/scripts'

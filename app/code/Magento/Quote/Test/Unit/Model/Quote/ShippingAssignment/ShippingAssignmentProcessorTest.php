@@ -155,7 +155,7 @@ class ShippingAssignmentProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getById')
             ->with($customerAddressId)
             ->willThrowException(new NoSuchEntityException());
-        $this->shippingAddressMock->expects(static::exactly(2))
+        $this->shippingAddressMock->expects(static::once())
             ->method('setCustomerAddressId')
             ->with(null)
             ->willReturn($this->shippingAddressMock);
