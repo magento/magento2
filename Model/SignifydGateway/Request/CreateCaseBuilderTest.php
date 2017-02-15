@@ -217,7 +217,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
                         'itemUrl' => $product->getProductUrl()
                     ],
                 ],
-                'paymentMethod' => 'PAYPAL_ACCOUNT'
+                'paymentMethod' => 'PAYMENT_CARD'
             ],
             'card' => [
                 'cardHolderName' => 'firstname lastname',
