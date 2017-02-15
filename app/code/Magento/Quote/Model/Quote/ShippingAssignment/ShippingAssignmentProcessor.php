@@ -99,7 +99,6 @@ class ShippingAssignmentProcessor
             try {
                 $this->addressRepository->getById($shippingAddress->getCustomerAddressId());
             } catch (NoSuchEntityException $e) {
-                $shippingAddress->setCustomerAddressId(null);
                 $shippingAssignment->getShipping()->getAddress()->setCustomerAddressId(null);
             }
         }

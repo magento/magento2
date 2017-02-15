@@ -117,7 +117,6 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteRepository->save($quote);
 
         $this->assertNull($quote->getBillingAddress()->getCustomerAddressId());
-        $this->assertNull($quote->getShippingAddress()->getCustomerAddressId());
         $this->assertNull(
             $quote->getExtensionAttributes()
                 ->getShippingAssignments()[0]
