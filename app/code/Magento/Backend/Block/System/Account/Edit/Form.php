@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Block\System\Account\Edit;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\ListFilterInterface;
+
 /**
  * Adminhtml edit admin user account form
  *
@@ -28,6 +31,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @var \Magento\Framework\Locale\ListsInterface
      */
     protected $_localeLists;
+
+    /**
+     * @var ListFilterInterface
+     */
+    private $localesListFilter;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -121,7 +129,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'interface_locale',
                 'label' => __('Interface Locale'),
                 'title' => __('Interface Locale'),
-                'values' => $this->_localeLists->getTranslatedOptionLocales(),
+                'values' => $this->getLocalesListFilter()->filter($this->_localeLists->getTranslatedOptionLocales()),
                 'class' => 'select'
             ]
         );
@@ -154,5 +162,18 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setForm($form);
 
         return parent::_prepareForm();
+    }
+
+    /**
+     * @return ListFilterInterface
+     * @deprecated
+     */
+    private function getLocalesListFilter()
+    {
+        if (null === $this->localesListFilter) {
+            $this->localesListFilter = ObjectManager::getInstance()->create(ListFilterInterface::class);
+        }
+
+        return $this->localesListFilter;
     }
 }

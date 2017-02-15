@@ -8,6 +8,9 @@
 
 namespace Magento\User\Block\User\Edit\Tab;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\ListFilterInterface;
+
 /**
  * Cms page edit form main tab
  *
@@ -26,6 +29,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
      * @var \Magento\Framework\Locale\ListsInterface
      */
     protected $_LocaleLists;
+
+    /**
+     * @var ListFilterInterface
+     */
+    private $localesListFilter;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -138,7 +146,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'interface_locale',
                 'label' => __('Interface Locale'),
                 'title' => __('Interface Locale'),
-                'values' => $this->_LocaleLists->getTranslatedOptionLocales(),
+                'values' => $this->getLocalesListFilter()->filter($this->_LocaleLists->getTranslatedOptionLocales()),
                 'class' => 'select'
             ]
         );
@@ -227,5 +235,19 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                 'required' => $isRequired
             ]
         );
+    }
+
+
+    /**
+     * @return ListFilterInterface
+     * @deprecated
+     */
+    private function getLocalesListFilter()
+    {
+        if (null === $this->localesListFilter) {
+            $this->localesListFilter = ObjectManager::getInstance()->get(ListFilterInterface::class);
+        }
+
+        return $this->localesListFilter;
     }
 }
