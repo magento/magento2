@@ -39,9 +39,9 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
     private $validationResult;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\InvalidSkuChecker
+     * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
      */
-    private $invalidSkuChecker;
+    private $invalidSkuProcessor;
 
     /**
      * @var array
@@ -54,7 +54,7 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
      * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
-     * @param \Magento\Catalog\Model\Product\Price\InvalidSkuChecker $invalidSkuChecker
+     * @param \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor
      * @param array $allowedProductTypes [optional]
      */
     public function __construct(
@@ -63,7 +63,7 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
         \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator,
         \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
         \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult,
-        \Magento\Catalog\Model\Product\Price\InvalidSkuChecker $invalidSkuChecker,
+        \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor,
         array $allowedProductTypes = []
     ) {
         $this->specialPriceResource = $specialPriceResource;
@@ -71,7 +71,7 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
         $this->productIdLocator = $productIdLocator;
         $this->storeRepository = $storeRepository;
         $this->validationResult = $validationResult;
-        $this->invalidSkuChecker = $invalidSkuChecker;
+        $this->invalidSkuProcessor = $invalidSkuProcessor;
         $this->allowedProductTypes = $allowedProductTypes;
     }
 
@@ -80,7 +80,7 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
      */
     public function get(array $skus)
     {
-        $this->invalidSkuChecker->isSkuListValid($skus, $this->allowedProductTypes);
+        $skus = $this->invalidSkuProcessor->filterSkuList($skus, $this->allowedProductTypes);
         $rawPrices = $this->specialPriceResource->get($skus);
 
         $prices = [];
@@ -136,7 +136,7 @@ class SpecialPriceStorage implements \Magento\Catalog\Api\SpecialPriceStorageInt
                 return $price->getSku();
             }, $prices)
         );
-        $failedSkus = $this->invalidSkuChecker->retrieveInvalidSkuList($skus, $this->allowedProductTypes);
+        $failedSkus = $this->invalidSkuProcessor->retrieveInvalidSkuList($skus, $this->allowedProductTypes);
 
         foreach ($prices as $key => $price) {
             if (!$price->getSku() || in_array($price->getSku(), $failedSkus)) {

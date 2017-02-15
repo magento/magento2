@@ -40,7 +40,7 @@ class UpgradeCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -61,7 +61,7 @@ class UpgradeCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
