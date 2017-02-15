@@ -13,6 +13,8 @@ use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\App\Area;
 use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
+use Magento\Config\Model\Config\Backend\Encrypted;
+
 
 class ValueProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -59,10 +61,19 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
      * @param bool $hasBackendModel
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsGetBackendModel
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsCreate
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsGetValue
+     * @param string $expectsValue
+     * @param string $className
      * @dataProvider processDataProvider
      */
-    public function testProcess($hasBackendModel, $expectsGetBackendModel, $expectsCreate)
-    {
+    public function testProcess(
+        $hasBackendModel,
+        $expectsGetBackendModel,
+        $expectsCreate,
+        $expectsGetValue,
+        $expectsValue,
+        $className
+    ) {
         $scope = 'someScope';
         $scopeCode = 'someScopeCode';
         $value = 'someValue';
@@ -87,8 +98,8 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($structureMock);
 
-        /** @var Value|\PHPUnit_Framework_MockObject_MockObject $valueMock */
-        $backendModelMock = $this->getMockBuilder(Value::class)
+        /** @var Value|Encrypted|\PHPUnit_Framework_MockObject_MockObject $valueMock */
+        $backendModelMock = $this->getMockBuilder($className)
             ->disableOriginalConstructor()
             ->setMethods(['setPath', 'setScope', 'setScopeId', 'setValue', 'getValue', 'afterLoad'])
             ->getMock();
@@ -111,7 +122,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
         $backendModelMock->expects($this->once())
             ->method('afterLoad')
             ->willReturnSelf();
-        $backendModelMock->expects($this->once())
+        $backendModelMock->expects($expectsGetValue)
             ->method('getValue')
             ->willReturn($value);
 
@@ -134,7 +145,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($path)
             ->willReturn($fieldMock);
 
-        $this->assertSame($value, $this->valueProcessor->process($scope, $scopeCode, $value, $path));
+        $this->assertSame($expectsValue, $this->valueProcessor->process($scope, $scopeCode, $value, $path));
     }
 
     /**
@@ -143,8 +154,30 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
     public function processDataProvider()
     {
         return [
-            ['hasBackendModel' => true, 'expectsGetBackendModel' => $this->once(), 'expectsCreate' => $this->never()],
-            ['hasBackendModel' => false, 'expectsGetBackendModel' => $this->never(), 'expectsCreate' => $this->once()],
+            [
+                'hasBackendModel' => true,
+                'expectsGetBackendModel' => $this->once(),
+                'expectsCreate' => $this->never(),
+                'expectsGetValue' => $this->once(),
+                'expectsValue' => 'someValue',
+                'className' => Value::class
+            ],
+            [
+                'hasBackendModel' => false,
+                'expectsGetBackendModel' => $this->never(),
+                'expectsCreate' => $this->once(),
+                'expectsGetValue' => $this->once(),
+                'expectsValue' => 'someValue',
+                'className' => Value::class
+            ],
+            [
+                'hasBackendModel' => true,
+                'expectsGetBackendModel' => $this->once(),
+                'expectsCreate' => $this->never(),
+                'expectsGetValue' => $this->never(),
+                'expectsValue' => ValueProcessor::SAFE_PLACEHOLDER,
+                'className' => Encrypted::class,
+            ],
         ];
     }
 }
