@@ -7,22 +7,28 @@
 -->
 <config xmlns:xi="http://www.w3.org/2001/XInclude">
     <profile>
-        <websites>5</websites> <!-- Number of websites to generate -->
-        <store_groups>5</store_groups> <!--Number of stores-->
-        <store_views>1</store_views> <!-- Number of store views -->
+        <websites>25</websites> <!-- Number of websites to generate -->
+        <store_groups>25</store_groups> <!--Number of stores-->
+        <store_views>50</store_views> <!-- Number of store views -->
         <assign_entities_to_all_websites>0</assign_entities_to_all_websites> <!-- Whether to assign all products per each website -->
-        <simple_products>300000</simple_products> <!-- Simple products count -->
+        <simple_products>4000</simple_products> <!-- Simple products count -->
         <configurable_products> <!-- Configurable product -->
             <config>
                 <attributes>1</attributes>
                 <options>24</options>
                 <sku>Configurable Product %s</sku>
-                <products>8000</products>
+                <products>800</products>
+            </config>
+            <config>
+                <attributes>1</attributes>
+                <options>200</options>
+                <sku>Big Configurable Product %s</sku>
+                <products>79</products>
             </config>
         </configurable_products>
-        <categories>3000</categories> <!-- Number of categories to generate -->
-        <categories_nesting_level>5</categories_nesting_level> <!-- Nesting level for categories -->
-        <customers>5000</customers> <!-- Number of customers to generate -->
+        <categories>100</categories> <!-- Number of categories to generate -->
+        <categories_nesting_level>3</categories_nesting_level> <!-- Nesting level for categories -->
+        <customers>2000</customers> <!-- Number of customers to generate -->
 
         <catalog_price_rules>20</catalog_price_rules> <!-- Number of catalog price rules -->
         <catalog_target_rules>5</catalog_target_rules> <!-- Number of catalog target rules -->
@@ -36,7 +42,7 @@
         <order_quotes_enable>true</order_quotes_enable>
         <order_simple_product_count_from>2</order_simple_product_count_from>
         <order_simple_product_count_to>2</order_simple_product_count_to>
-        <orders>100000</orders> <!-- Orders count -->
+        <orders>50000</orders> <!-- Orders count -->
 
         <configs> <!-- Config variables and values for change -->
             <config>
