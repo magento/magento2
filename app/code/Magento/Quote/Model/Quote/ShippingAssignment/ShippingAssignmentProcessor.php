@@ -93,13 +93,13 @@ class ShippingAssignmentProcessor
             }
         }
 
-        $shippingAddress = $quote->getShippingAddress();
+        $shippingAddress = $shippingAssignment->getShipping()->getAddress();
 
         if ($shippingAddress->getCustomerAddressId()) {
             try {
                 $this->addressRepository->getById($shippingAddress->getCustomerAddressId());
             } catch (NoSuchEntityException $e) {
-                $shippingAssignment->getShipping()->getAddress()->setCustomerAddressId(null);
+                $shippingAddress->setCustomerAddressId(null);
             }
         }
 
