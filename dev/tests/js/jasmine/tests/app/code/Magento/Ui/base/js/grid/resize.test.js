@@ -4,9 +4,6 @@
  */
 
 /*eslint max-nested-callbacks: 0*/
-/*jscs:disable requirePaddingNewLinesInObjects*/
-/*jscs:disable jsDoc*/
-
 define([
     'underscore',
     'uiRegistry',
@@ -14,7 +11,7 @@ define([
     'Magento_Ui/js/grid/resize',
     'Magento_Ui/js/lib/view/utils/dom-observer',
     'Magento_Ui/js/lib/view/utils/async'
-], function (_, registry, ko, Constr, observer,$) {
+], function (_, registry, ko, Constr, observer, $) {
     'use strict';
 
     describe('Magento_Ui/js/grid/resize', function () {
@@ -57,16 +54,21 @@ define([
             });
         });
         describe('"initColumn" method', function () {
-            beforeEach(function(){
+            beforeEach(function () {
                 spyOn(ko, 'dataFor').and.callFake(function (data) {
                     return {
                         index: 1,
                         column: data,
-                        on: function (arg1, arg2) {}
+
+                        /** Stub */
+                        on: function () {}
                     };
                 });
                 spyOn(ko, 'contextFor').and.callFake(function () {
-                    return {$index: 1, $parent: obj};
+                    return {
+                        $index: 1,
+                        $parent: obj
+                    };
                 });
                 $._data = jasmine.createSpy().and.callFake(function () {
                     return {
@@ -84,16 +86,20 @@ define([
             });
         });
         describe('"initResizableElement" method', function () {
-            beforeEach(function(){
+            beforeEach(function () {
                 spyOn(ko, 'dataFor').and.callFake(function (data) {
                     return {
                         index: 1,
                         column: data,
-                        on: function (arg1, arg2) {}
-                    }
+
+                        /** Stub */
+                        on: function () {}
+                    };
                 });
                 spyOn(ko, 'contextFor').and.callFake(function () {
-                    return {$index: 1, $parent: obj}
+                    return {
+                        $index: 1, $parent: obj
+                    };
                 });
             });
             it('Check for defined ', function () {
@@ -146,21 +152,29 @@ define([
             });
         });
         describe('"mousedownHandler" method', function () {
-            beforeEach(function(){
+            beforeEach(function () {
                 spyOn(ko, 'dataFor').and.callFake(function (data) {
                     return {
                         index: 1,
                         column: data,
-                        on: function (arg1, arg2) {}
-                    }
+
+                        /** Stub */
+                        on: function () {}
+                    };
                 });
                 spyOn(ko, 'contextFor').and.callFake(function () {
-                    return {$index: ko.observable(1), $parent: obj};
+                    return {
+                        $index: ko.observable(1),
+                        $parent: obj
+                    };
                 });
                 spyOn(obj, 'getNextElements').and.callFake(function () {
                     return true;
                 });
-                event = {stopImmediatePropagation: function(){}}
+                event = {
+                    /** Stub */
+                    stopImmediatePropagation: function () {}
+                };
             });
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('mousedownHandler')).toBeDefined();
@@ -182,21 +196,31 @@ define([
             });
         });
         describe('"mousemoveHandler" method', function () {
-            beforeEach(function(){
-                event = {stopImmediatePropagation: function(){}}
+            beforeEach(function () {
+                event = {
+                    /** Stub */
+                    stopImmediatePropagation: function () {}
+                };
             });
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('mousemoveHandler')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.mousemoveHandler;
-                expect(type).toEqual('function');
+                var t = typeof obj.mousemoveHandler;
+
+                expect(t).toEqual('function');
             });
         });
         describe('"mouseupHandler" method', function () {
 
-            beforeEach(function(){
-                event = {stopPropagation: function () {}, preventDefault: function () {}}
+            beforeEach(function () {
+                event = {
+                    /** Stub */
+                    stopPropagation: function () {},
+
+                    /** Stub */
+                    preventDefault: function () {}
+                };
             });
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('mouseupHandler')).toBeDefined();
@@ -223,16 +247,20 @@ define([
             });
         });
         describe('"getNextElements" method', function () {
-            beforeEach(function(){
+            beforeEach(function () {
                 spyOn(ko, 'dataFor').and.callFake(function (data) {
                     return {
                         index: 1,
                         column: data,
+
+                        /** Stub */
                         visible: function () {
                             return true;
                         },
-                        on: function (arg1, arg2) {}
-                    }
+
+                        /** Stub */
+                        on: function () {}
+                    };
                 });
             });
             it('Check for defined ', function () {
@@ -257,17 +285,21 @@ define([
             });
         });
         describe('"getDefaultWidth" method', function () {
-            beforeEach(function(){
+            beforeEach(function () {
                 spyOn(ko, 'dataFor').and.callFake(function (data) {
                     return {
                         index: 1,
                         column: data,
                         resizeDefaultWidth: 200,
+
+                        /** Stub */
                         visible: function () {
                             return true;
                         },
-                        on: function (arg1, arg2) {}
-                    }
+
+                        /** Stub */
+                        on: function () {}
+                    };
                 });
             });
             it('Check for defined ', function () {
@@ -295,12 +327,18 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check return value type if "returned" arguments if false', function () {
-                arg = { index: 'magento' };
+                arg = {
+                    index: 'magento'
+                };
                 expect(typeof obj.hasColumn(arg, false)).toEqual('boolean');
             });
             it('Must return true if object columnsElements has  model.index property', function () {
-                arg = { index: 'magento' };
-                obj.columnsElements = {magento: 'magentoProp'};
+                arg = {
+                    index: 'magento'
+                };
+                obj.columnsElements = {
+                    magento: 'magentoProp'
+                };
                 expect(obj.hasColumn(arg, false)).toEqual(true);
             });
         });
@@ -313,22 +351,30 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check return value type if "returned" arguments if false', function () {
-                arg = { elem: 'magento' };
+                arg = {
+                    elem: 'magento'
+                };
                 expect(typeof obj.hasRow(arg, false)).toEqual('boolean');
             });
             it('Must return false if object maxRowsHeight has not elem property', function () {
-                arg = { elem: 'magento' };
+                arg = {
+                    elem: 'magento'
+                };
                 obj.maxRowsHeight([]);
                 expect(obj.hasRow(arg, false)).toEqual(false);
             });
             it('Must return true if object maxRowsHeight has  elem property', function () {
                 arg = 'magento';
-                obj.maxRowsHeight([{elem: 'magento'}]);
+                obj.maxRowsHeight([{
+                    elem: 'magento'
+                }]);
                 expect(obj.hasRow(arg, false)).toEqual(true);
             });
             it('Must return property if object maxRowsHeight has property and second argument is true', function () {
                 arg = 'magento';
-                obj.maxRowsHeight([{elem: 'magento'}]);
+                obj.maxRowsHeight([{
+                    elem: 'magento'
+                }]);
                 expect(typeof obj.hasRow(arg, true)).toEqual('object');
             });
         });
