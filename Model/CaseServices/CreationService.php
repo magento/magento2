@@ -74,7 +74,7 @@ class CreationService implements CaseCreationServiceInterface
     public function createForOrder($orderId)
     {
         $case = $this->caseManagement->create($orderId);
-        $this->orderGridUpdater->update($case->getOrderId());
+        $this->orderGridUpdater->update($orderId);
 
         try {
             $caseId = $this->signifydGateway->createCase($orderId);
