@@ -52,7 +52,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
         $this->imageHelperMock = $this->getMock(\Magento\Catalog\Helper\Image::class, [], [], '', false);
         $this->productCollectionFactoryMock = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
@@ -61,9 +60,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-
         $this->productCollectionMock = $this->objectManager->getCollectionMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
@@ -118,6 +115,21 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $serializer = $this->getMock(
+            \Magento\Framework\Serialize\Serializer\Json::class,
+            ['serialize', 'unserialize']
+        );
+
+        $serializer->expects($this->any())
+            ->method('serialize')->willReturnCallback(function ($parameter) {
+                return json_encode($parameter);
+            });
+        $serializer->expects($this->any())
+            ->method('unserialize')->willReturnCallback(function ($parameter) {
+                return json_decode($parameter, true);
+            });
+
         $this->swatchHelperObject = $this->objectManager->getObject(
             \Magento\Swatches\Helper\Data::class,
             [
@@ -127,6 +139,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->storeManagerMock,
                 'swatchCollectionFactory' => $this->swatchCollectionFactoryMock,
                 'imageHelper' => $this->imageHelperMock,
+                'serializer' => $serializer,
             ]
         );
         $this->objectManager->setBackwardCompatibleProperty(
@@ -145,7 +158,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         ];
         return [
             [
-                serialize($additionalData),
+                json_encode($additionalData),
                 [
                     'getData' => 1,
                     'setData' => 3,
@@ -196,7 +209,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         ];
         return [
             [
-                serialize($additionalData),
+                json_encode($additionalData),
                 [
                     'swatch_input_type' => 'visual',
                     'update_product_preview_image' => 1,
@@ -833,7 +846,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         ];
         return [
             [
-                serialize($additionalData),
+                json_encode($additionalData),
                 [
                     'getData' => 1,
                     'setData' => 3,
@@ -889,7 +902,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         ];
         return [
             [
-                serialize($additionalData),
+                json_encode($additionalData),
                 [
                     'getData' => 1,
                     'setData' => 3,

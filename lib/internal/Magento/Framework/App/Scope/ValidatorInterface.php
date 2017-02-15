@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Scope;
 
-use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Interface Validator for validating scope and scope code
@@ -19,7 +19,7 @@ interface ValidatorInterface
      * @param string $scope
      * @param string $scopeCode
      * @return boolean
-     * @throws ValidatorException
+     * @throws LocalizedException
      */
     public function isValid($scope, $scopeCode = null);
 }
