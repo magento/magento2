@@ -84,6 +84,14 @@ class QuoteUpdater extends AbstractHelper
 
         $quote->collectTotals();
 
+        /**
+         * Unset shipping assignment to prevent from saving / applying outdated data
+         * @see \Magento\Quote\Model\QuoteRepository\SaveHandler::processShippingAssignment
+         */
+        if ($quote->getExtensionAttributes()) {
+            $quote->getExtensionAttributes()->setShippingAssignments(null);
+        }
+
         $this->quoteRepository->save($quote);
     }
 
