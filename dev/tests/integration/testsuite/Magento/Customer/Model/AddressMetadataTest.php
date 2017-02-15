@@ -118,7 +118,6 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetAllAttributesMetadataWithCustomAttribute()
     {
         $allAttributesMetadata = $this->service->getAllAttributesMetadata();
-        $this->assertCount(21, $allAttributesMetadata, "Invalid number of attributes returned.");
 
         // Verify the consistency of getAllAttributesMetadata() function from the 2nd call of the same service
         $allAttributesMetadata2 = $this->service->getAllAttributesMetadata();
