@@ -64,7 +64,7 @@ class SignUpCommand implements AnalyticsCommandInterface
         $integrationToken = $this->integrationManager->generateToken();
         if ($integrationToken) {
             $this->integrationManager->activateIntegration();
-            $responseToken = $this->signUpRequest->call($integrationToken);
+            $responseToken = $this->signUpRequest->call($integrationToken->getToken());
             if ($responseToken) {
                 $this->analyticsToken->storeToken($responseToken);
             }
