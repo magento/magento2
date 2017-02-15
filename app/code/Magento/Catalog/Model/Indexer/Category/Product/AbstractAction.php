@@ -113,18 +113,20 @@ abstract class AbstractAction
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
+     * @param QueryGenerator $queryGenerator
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $config,
-        QueryGenerator $queryGenerator
+        QueryGenerator $queryGenerator = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
         $this->config = $config;
-        $this->queryGenerator = $queryGenerator;
+        $this->queryGenerator = $queryGenerator ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(QueryGenerator::class);
     }
 
     /**

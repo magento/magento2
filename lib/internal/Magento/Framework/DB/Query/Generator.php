@@ -30,10 +30,11 @@ class Generator
      */
     public function __construct(
         BatchIteratorFactory $iteratorFactory,
-        BatchRangeIteratorFactory $rangeIteratorFactory
+        BatchRangeIteratorFactory $rangeIteratorFactory = null
     ) {
         $this->iteratorFactory = $iteratorFactory;
-        $this->rangeIteratorFactory = $rangeIteratorFactory;
+        $this->rangeIteratorFactory = $rangeIteratorFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\DB\Query\BatchRangeIteratorFactory::class);
     }
 
     /**
