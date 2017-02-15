@@ -102,6 +102,30 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      * @param array $miscParams
      * @dataProvider getPathDataProvider
      */
+    public function testGetNotUnixPath($filePath, $miscParams)
+    {
+        $imageModel = new Image(
+            $this->mediaConfig,
+            $this->imageContext,
+            $this->encryptor,
+            $filePath,
+            $miscParams
+        );
+        $absolutePath = 'C:\www\magento2ce\pub\media\catalog\product';
+        $hashPath = md5(implode('_', $miscParams));
+        $this->imageContext->expects($this->once())->method('getPath')->willReturn($absolutePath);
+        $this->encryptor->expects($this->once())->method('hash')->willReturn($hashPath);
+        $this->assertEquals(
+            $absolutePath . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $hashPath . $filePath,
+            $imageModel->getPath()
+        );
+    }
+
+    /**
+     * @param string $filePath
+     * @param array $miscParams
+     * @dataProvider getPathDataProvider
+     */
     public function testGetUrl($filePath, $miscParams)
     {
         $imageModel = new Image(
