@@ -8,5 +8,5 @@ var config = {
         '*': {
             integration: 'Magento_Integration/js/integration'
         }
-    } 
+    }
 };

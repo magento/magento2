@@ -4,7 +4,6 @@
  */
 
 /*eslint max-nested-callbacks: 0*/
-
 define([
     'Magento_Ui/js/form/element/select'
 ], function (SelectElement) {
