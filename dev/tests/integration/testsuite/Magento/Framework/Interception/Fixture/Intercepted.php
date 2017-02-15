@@ -48,6 +48,7 @@ class Intercepted extends InterceptedParent implements InterceptedInterface
 
     /**
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @SuppressWarnings(PHPMD.FinalImplementation) Suppressed as is a fixture but not a real code
      */
     final public function E($param1)
     {
