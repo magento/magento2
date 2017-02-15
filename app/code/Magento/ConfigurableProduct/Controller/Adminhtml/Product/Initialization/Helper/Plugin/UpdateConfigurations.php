@@ -51,10 +51,19 @@ class UpdateConfigurations
             $configurations = json_decode($this->request->getParam('configurations_serialized'), true);
         }
         $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
+        $productsAttributeSets = [];
+
         foreach ($configurations as $productId => $productData) {
             /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->productRepository->getById($productId, false, $this->request->getParam('store', 0));
             $productData = $this->variationHandler->processMediaGallery($product, $productData);
+            $productAttributeSetId = $product->getAttributeSetId();
+
+            if (!array_key_exists($productAttributeSetId, $productsAttributeSets)) {
+                $product->getResource()->getSortedAttributes($productAttributeSetId);
+                $productsAttributeSets[$productAttributeSetId] = 1;
+            }
+
             $product->addData($productData);
             if ($product->hasDataChanges()) {
                 $product->save();

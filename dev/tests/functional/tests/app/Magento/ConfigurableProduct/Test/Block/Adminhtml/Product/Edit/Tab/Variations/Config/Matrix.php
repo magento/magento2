@@ -12,13 +12,12 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Class Matrix
- * Matrix row form
+ * Matrix row form.
  */
 class Matrix extends Form
 {
     /**
-     * Mapping for get optional fields
+     * Mapping for get optional fields.
      *
      * @var array
      */
@@ -51,21 +50,21 @@ class Matrix extends Form
     ];
 
     /**
-     * Selector for variation row by number
+     * Selector for variation row by number.
      *
      * @var string
      */
     protected $variationRowByNumber = './/tr[@data-role="row"][%d]';
 
     /**
-     * Selector for variation row
+     * Selector for variation row.
      *
      * @var string
      */
     protected $variationRow = './/tr[@data-role="row"]';
 
     /**
-     * Button for assign product to variation
+     * Button for assign product to variation.
      *
      * @var string
      */
@@ -73,7 +72,7 @@ class Matrix extends Form
 
     // @codingStandardsIgnoreStart
     /**
-     * Selector for row on product grid by product id
+     * Selector for row on product grid by product id.
      *
      * @var string
      */
@@ -86,6 +85,28 @@ class Matrix extends Form
      * @var string
      */
     protected $template = './ancestor::body';
+
+    /**
+     * Action menu.
+     *
+     * @var string
+     */
+    protected $actionMenu = '.action-select';
+
+    /**
+     * Choose a different Product button selector.
+     *
+     * @var string
+     */
+    protected $chooseProduct = '[data-bind*="showGrid"]';
+
+    /**
+     * Selector for row on product grid by product id.
+     *
+     * @var string
+     */
+    protected $associatedProductGrid =
+        '[data-bind*="configurable_associated_product_listing.configurable_associated_product_listing"]';
 
     /**
      * Fill variations.
@@ -102,36 +123,37 @@ class Matrix extends Form
                 Locator::SELECTOR_XPATH
             );
             ksort($variation);
+            ++$count;
+
+            if (isset($variation['configurable_attribute'])) {
+                $this->assignProduct($variationRow, $variation['sku']);
+                continue;
+            }
+
             $mapping = $this->dataMapping($variation);
 
             $this->_fill($mapping, $variationRow);
-            if (isset($variation['configurable_attribute'])) {
-                $this->assignProduct($variationRow, $variation['configurable_attribute']);
-            }
-
-            ++$count;
         }
     }
 
     /**
-     * Assign product to variation matrix
+     * Assign product to variation matrix.
      *
      * @param SimpleElement $variationRow
-     * @param int $productId
+     * @param string $productSku
      * @return void
      */
-    protected function assignProduct(SimpleElement $variationRow, $productId)
+    protected function assignProduct(SimpleElement $variationRow, $productSku)
     {
-        $variationRow->find($this->configurableAttribute)->click();
+        $variationRow->find($this->actionMenu)->hover();
+        $variationRow->find($this->actionMenu)->click();
+        $variationRow->find($this->chooseProduct)->click();
         $this->getTemplateBlock()->waitLoader();
-        $this->_rootElement->find(
-            sprintf($this->selectAssociatedProduct, $productId),
-            Locator::SELECTOR_XPATH
-        )->click();
+        $this->getAssociatedProductGrid()->searchAndSelect(['sku' => $productSku]);
     }
 
     /**
-     * Get variations data
+     * Get variations data.
      *
      * @return array
      */
@@ -179,8 +201,21 @@ class Matrix extends Form
     public function getTemplateBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Template',
+            \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->template, Locator::SELECTOR_XPATH)]
+        );
+    }
+
+    /**
+     * Get products grid.
+     *
+     * @return \Magento\Ui\Test\Block\Adminhtml\DataGrid
+     */
+    public function getAssociatedProductGrid()
+    {
+        return $this->blockFactory->create(
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AssociatedProductGrid::class,
+            ['element' => $this->browser->find($this->associatedProductGrid)]
         );
     }
 }

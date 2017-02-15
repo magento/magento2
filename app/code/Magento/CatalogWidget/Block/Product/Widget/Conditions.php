@@ -82,11 +82,16 @@ class Conditions extends Template implements RendererInterface
     protected function _construct()
     {
         $widget = $this->registry->registry('current_widget_instance');
+        $widgetOptions = $this->getLayout()->getBlock('wysiwyg_widget.options');
+
         if ($widget) {
             $widgetParameters = $widget->getWidgetParameters();
-            if (isset($widgetParameters['conditions'])) {
-                $this->rule->loadPost($widgetParameters);
-            }
+        } elseif ($widgetOptions) {
+            $widgetParameters = $widgetOptions->getWidgetValues();
+        }
+
+        if (isset($widgetParameters['conditions'])) {
+            $this->rule->loadPost($widgetParameters);
         }
     }
 

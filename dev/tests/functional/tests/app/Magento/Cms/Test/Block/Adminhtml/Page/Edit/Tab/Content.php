@@ -124,7 +124,9 @@ class Content extends Tab
      */
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
-        $element->find($this->content)->setValue($fields['content']['value']['content']);
+        if (isset($fields['content']['value']['content'])) {
+            $element->find($this->content)->setValue($fields['content']['value']['content']);
+        }
         if (isset($fields['content_heading']['value'])) {
             $element->find($this->contentHeading)->setValue($fields['content_heading']['value']);
         }
@@ -157,5 +159,18 @@ class Content extends Tab
             'content' => [],
             'content_heading' => ''
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        $contentElement = $this->_rootElement->find($this->content);
+        $content = '';
+        if ($contentElement->isVisible()) {
+            $content = $contentElement->getText() ? : $contentElement->getValue();
+        }
+        return $content;
     }
 }

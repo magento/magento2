@@ -94,6 +94,15 @@ class Content extends DataSource
             if ($widget['widget_type'] == 'Catalog New Products List') {
                 $this->createProduct();
             }
+            if ($widget['widget_type'] == 'Catalog Products List') {
+                $data['widget']['dataset'][$key]['widget_type'] = $widget['widget_type'];
+                $data['widget']['dataset'][$key]['title'] = $widget['title'];
+                $data['widget']['dataset'][$key]['template'] = $widget['template'];
+                $data['widget']['dataset'][$key]['serialized_conditions'] = $this->prepareConditions(
+                    $widget['conditions'],
+                    $widget['entities']
+                );
+            }
             if ($widget['widget_type'] == 'CMS Static Block') {
                 $block = $this->createBlock($widget);
                 $blockIdentifier = $block->getIdentifier();
@@ -157,5 +166,29 @@ class Content extends DataSource
         }
 
         return $block;
+    }
+
+    /**
+     * @param array $conditions
+     * @param array $entities
+     * @return string
+     */
+    private function prepareConditions(array $conditions, array $entities)
+    {
+        $products = [];
+        $serializedCondition = '';
+        foreach ($entities as $entity) {
+            $params = explode('::', $entity);
+            /** @var CatalogProductSimple $product */
+            $product = $this->fixtureFactory->createByCode($params[0], ['dataset' => $params[1]]);
+            $product->persist();
+            array_push($products, $product);
+        }
+        foreach ($conditions as $key => $condition) {
+            $product = array_shift($products);
+            $value = $product->getData($key);
+            $serializedCondition .= str_replace("%{$key}%", $value, $condition);
+        }
+        return $serializedCondition;
     }
 }

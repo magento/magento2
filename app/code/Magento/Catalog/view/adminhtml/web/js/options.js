@@ -58,6 +58,7 @@ define([
 
                     if (render) {
                         this.render();
+                        this.updateItemsCountField();
                     }
                 },
                 remove: function (event) {

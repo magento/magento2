@@ -10,9 +10,10 @@ $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Ma
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var $product \Magento\Catalog\Model\Product */
+/** @var \Magento\Catalog\Model\Product $product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
-$product->load(1);
+$product->load(6);
+
 if ($product->getId()) {
     $product->delete();
 }

@@ -75,7 +75,7 @@ define(
                     stepNavigator.registerStep(
                         'shipping',
                         '',
-                        'Shipping',
+                        $t('Shipping'),
                         this.visible, _.bind(this.navigate, this),
                         10
                     );

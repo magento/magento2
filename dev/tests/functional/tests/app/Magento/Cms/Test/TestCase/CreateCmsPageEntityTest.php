@@ -10,6 +10,7 @@ use Magento\Cms\Test\Fixture\CmsPage as CmsPageFixture;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageIndex;
 use Magento\Cms\Test\Page\Adminhtml\CmsPageNew;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -84,8 +85,28 @@ class CreateCmsPageEntityTest extends Injectable
         //TODO: remove cms page new refresh after resolve issue with static js files publication (MAGETWO-37898)
         $this->cmsPageNew->open();
         $this->cmsPageNew->getPageForm()->fill($cms);
+        $conditions = $this->getConditions($cms);
         $this->cmsPageNew->getPageMainActions()->save();
 
-        return ['cms' => $cms];
+        return ['cms' => $cms, 'conditions' => $conditions];
+    }
+
+    /**
+     * @param FixtureInterface $cms
+     * @return string
+     */
+    private function getConditions($cms)
+    {
+        $conditions = '';
+        if (isset($cms->getData('content')['widget']['dataset'])) {
+            foreach ($cms->getData('content')['widget']['dataset'] as $dataset) {
+                if (isset($dataset['serialized_conditions'])) {
+                    $this->cmsPageNew->getPageForm()->openTab('content');
+                    $conditions = $this->cmsPageNew->getPageForm()->getTab('content')->getContent();
+                    break;
+                }
+            }
+        }
+        return $conditions;
     }
 }

@@ -169,6 +169,13 @@ class View extends AbstractConfigureBlock
     protected $ajaxLoading = 'body.ajax-loading';
 
     /**
+     * Video Container selector
+     *
+     * @var string
+     */
+    private $videoContainer = 'div.fotorama-video-container';
+
+    /**
      * Get block price.
      *
      * @return Price
@@ -465,5 +472,15 @@ class View extends AbstractConfigureBlock
     public function isGalleryVisible()
     {
         return $this->_rootElement->find($this->mediaGallery)->isVisible();
+    }
+
+    /**
+     * Check is video is visible on product page
+     *
+     * @return bool
+     */
+    public function isVideoVisible()
+    {
+        return $this->_rootElement->find($this->videoContainer)->isVisible();
     }
 }

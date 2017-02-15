@@ -164,10 +164,11 @@
                 $('[data-role=new-variations-attribute-set-id]').val($('#attribute_set_id').val());
                 return; // all selected configurable attributes belong to current attribute set
             }
-            if (!$('[data-role=product-variations-matrix] [data-column=entity_id]')
-                .closest('tr').has('input[name$="[name]"]').length
-            ) {
-                return; // no new simple products to save from matrix: uniting attribute set is not needed
+
+            var regex = /id\/(\d+)(?:\/)?/g;
+            var existingProductPage = regex.exec(BASE_URL);
+            if (existingProductPage != null) {
+                return; // it is not new product page
             }
 
             event.stopImmediatePropagation();
