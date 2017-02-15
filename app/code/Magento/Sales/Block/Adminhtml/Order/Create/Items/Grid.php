@@ -150,6 +150,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                 foreach ($stockItemToCheck as $productId) {
                     $check = $this->stockState->checkQuoteItemQty(
                         $productId,
+                        $item->getProduct(),
                         $item->getQty(),
                         $item->getQty(),
                         $item->getQty(),

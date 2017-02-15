@@ -142,18 +142,20 @@ class StockState implements StockStateInterface
 
     /**
      * @param int $productId
+     * @param $product
      * @param float $itemQty
      * @param float $qtyToCheck
      * @param float $origQty
      * @param int $scopeId
      * @return int
      */
-    public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null)
+    public function checkQuoteItemQty($productId, $product, $itemQty, $qtyToCheck, $origQty, $scopeId = null)
     {
         // if ($scopeId === null) {
             $scopeId = $this->stockConfiguration->getDefaultScopeId();
         // }
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $scopeId);
+        $stockItem->setProduct($product);
         return $this->stockStateProvider->checkQuoteItemQty($stockItem, $itemQty, $qtyToCheck, $origQty);
     }
 }
