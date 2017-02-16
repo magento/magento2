@@ -16,6 +16,9 @@ use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Input\ArgvInput;
 use Zend\ServiceManager\ServiceManager;
 
+/**
+ * Class prepares folders for code generation
+ */
 class CompilerPreparation
 {
     /**

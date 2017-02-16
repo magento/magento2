@@ -24,14 +24,15 @@ define(['squire'], function (Squire) {
         obj;
 
     loginAction.registerLoginCallback = jasmine.createSpy();
-    window.authenticationPopup = {
-        customerRegisterUrl: 'register_url',
-        customerForgotPasswordUrl: 'forgot_password_url',
-        autocomplete: 'autocomplete_flag',
-        baseUrl: 'base_url'
-    };
 
     beforeEach(function (done) {
+        window.authenticationPopup = {
+            customerRegisterUrl: 'register_url',
+            customerForgotPasswordUrl: 'forgot_password_url',
+            autocomplete: 'autocomplete_flag',
+            baseUrl: 'base_url'
+        };
+
         injector.mock(mocks);
         injector.require(['Magento_Customer/js/view/authentication-popup'], function (Constr) {
             obj = new Constr({

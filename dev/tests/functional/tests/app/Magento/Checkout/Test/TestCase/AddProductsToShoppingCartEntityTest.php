@@ -214,6 +214,12 @@ class AddProductsToShoppingCartEntityTest extends Injectable
             $_ENV['app_frontend_url'] = preg_replace('/(http[s]?)/', 'http', $_ENV['app_frontend_url']);
             $this->cache->flush();
         }
+
+        $this->testStepFactory->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData, 'rollback' => true, 'flushCache' => $this->flushCache]
+        )->run();
+
     }
 
     /**

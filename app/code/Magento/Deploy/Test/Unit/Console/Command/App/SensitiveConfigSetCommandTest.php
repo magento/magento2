@@ -55,6 +55,9 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $command;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->configFilePoolMock = $this->getMockBuilder(ConfigFilePool::class)

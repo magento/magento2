@@ -13,20 +13,6 @@ namespace Magento\Catalog\Model;
 class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterface
 {
     /**
-     * Search Criteria builder.
-     *
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * Filter builder.
-     *
-     * @var \Magento\Framework\Api\FilterBuilder
-     */
-    private $filterBuilder;
-
-    /**
      * Metadata pool.
      *
      * @var \Magento\Framework\EntityManager\MetadataPool
@@ -34,11 +20,9 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
     private $metadataPool;
 
     /**
-     * Product repository.
-     *
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
-    private $productRepository;
+    private $collectionFactory;
 
     /**
      * IDs by SKU cache.
@@ -48,23 +32,15 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
     private $idsBySku = [];
 
     /**
-     * ProductIdLocatorInterface constructor.
-     *
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      */
     public function __construct(
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
     ) {
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->filterBuilder = $filterBuilder;
         $this->metadataPool = $metadataPool;
-        $this->productRepository = $productRepository;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -72,33 +48,34 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
      */
     public function retrieveProductIdsBySkus(array $skus)
     {
-        $skus = array_map('trim', $skus);
-        $skusInCache = $this->idsBySku ? array_keys($this->idsBySku) : [];
-        $neededSkus = array_diff($skus, $skusInCache);
-
-        if (!empty($neededSkus)) {
-            $searchCriteria = $this->searchCriteriaBuilder->addFilters(
-                [
-                    $this->filterBuilder
-                        ->setField(\Magento\Catalog\Api\Data\ProductInterface::SKU)
-                        ->setConditionType('in')
-                        ->setValue($neededSkus)
-                        ->create(),
-                ]
-            );
-            $items = $this->productRepository->getList($searchCriteria->create())->getItems();
-            $linkField = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
-                ->getLinkField();
-
-            foreach ($items as $item) {
-                $this->idsBySku[$item->getSku()][$item->getData($linkField)] = $item->getTypeId();
+        $neededSkus = [];
+        foreach ($skus as $sku) {
+            $unifiedSku = strtolower(trim($sku));
+            if (!isset($this->idsBySku[$unifiedSku])) {
+                $neededSkus[] = $sku;
             }
         }
 
-        return array_intersect_ukey(
-            $this->idsBySku,
-            array_flip($skus),
-            'strcasecmp'
-        );
+        if (!empty($neededSkus)) {
+            /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+            $collection = $this->collectionFactory->create();
+            $collection->addFieldToFilter(\Magento\Catalog\Api\Data\ProductInterface::SKU, ['in' => $neededSkus]);
+            $linkField = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+
+            foreach ($collection as $item) {
+                $this->idsBySku[strtolower(trim($item->getSku()))][$item->getData($linkField)] = $item->getTypeId();
+            }
+        }
+
+        $productIds = [];
+        foreach ($skus as $sku) {
+            $unifiedSku = strtolower(trim($sku));
+            if (isset($this->idsBySku[$unifiedSku])) {
+                $productIds[$sku] = $this->idsBySku[$unifiedSku];
+            }
+        }
+
+        return $productIds;
     }
 }
