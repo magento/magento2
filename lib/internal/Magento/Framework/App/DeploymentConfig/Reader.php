@@ -79,11 +79,14 @@ class Reader
     }
 
     /**
-     * Loads the configuration file.
+     * Method loads merged configuration within all configuration files.
+     * To retrieve specific file configuration, use FileReader.
+     * $fileKey option is deprecated since version 2.2.0.
      *
-     * @param string $fileKey The file key
+     * @param string $fileKey The file key (deprecated)
      * @return array
      * @throws \Exception
+     * @see FileReader
      */
     public function load($fileKey = null)
     {

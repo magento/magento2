@@ -98,6 +98,8 @@ class Writer
 
     /**
      * Saves config in specified file.
+     * $pool option is deprecated since version 2.2.0.
+     *
      * Usage:
      * ```php
      * saveConfig(
@@ -111,11 +113,12 @@ class Writer
      * ```
      *
      * @param array $data The data to be saved
-     * @param bool $override Whether values should be overrided
+     * @param bool $override Whether values should be overridden
      * @param string $pool The file pool (deprecated)
      * @param array $comments The array of comments
      * @return void
      * @throws FileSystemException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function saveConfig(array $data, $override = false, $pool = null, array $comments = [])
     {

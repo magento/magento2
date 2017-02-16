@@ -8,7 +8,7 @@ namespace Magento\Deploy\Console\Command\App;
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\CollectorFactory;
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\InteractiveCollector;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\DeploymentConfig\FileReader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -30,7 +30,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var Reader
+     * @var FileReader
      */
     private $reader;
 
@@ -65,7 +65,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->reader = $this->objectManager->get(Reader::class);
+        $this->reader = $this->objectManager->get(FileReader::class);
         $this->writer = $this->objectManager->get(Writer::class);
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
