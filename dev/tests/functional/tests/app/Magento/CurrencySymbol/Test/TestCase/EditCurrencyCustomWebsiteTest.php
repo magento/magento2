@@ -13,13 +13,13 @@ use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Preconditions:
- * 1. Change configuration of Main Website.
- * 1. Create custom website.
- * 2. Create simple product.
- * 3. Assign created product to the main and custom websites.
+ * 1. Setup configuration of main website.
+ * 2. Create custom website.
+ * 3. Create product.
+ * 4. Assign created product to the main and custom websites.
  *
  * Steps:
- * 1. Change currency settings for custom website.
+ * 1. Setup configuration of custom website.
  * 2. Perform all asserts.
  *
  * @group Currency
@@ -46,7 +46,7 @@ class EditCurrencyCustomWebsiteTest extends Injectable
      *
      * @param FixtureFactory $fixtureFactory
      * @param TestStepFactory $stepFactory
-     * @return array
+     * @return void
      */
     public function __inject(
         FixtureFactory $fixtureFactory,
