@@ -49,7 +49,7 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
 
             $template->loadDefault($templateId);
             $template->setData('orig_template_code', $templateId);
-            $template->setData('template_variables', \Zend_Json::encode($template->getVariablesOptionArray(true)));
+            $template->setData('template_variables', \Zend\Json\Encoder::encode($template->getVariablesOptionArray(true)));
 
             $templateBlock = $this->_view->getLayout()->createBlock(
                 \Magento\Email\Block\Adminhtml\Template\Edit::class

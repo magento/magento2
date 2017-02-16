@@ -15,7 +15,7 @@ interface DecoderInterface
     /**
      * Decodes the given $data string which is encoded in the JSON format into a PHP type (array, string literal, etc.)
      *
-     * @param string $data
+     * @param $data
      * @return mixed
      */
     public function decode($data);

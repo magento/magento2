@@ -80,7 +80,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         /** Prepare mocks for SUT constructor. */
         $this->decoderMock->expects($this->once())
             ->method('decode')
-            ->will($this->throwException(new \Zend_Json_Exception));
+            ->will($this->throwException(new \RuntimeException()));
         $this->_appStateMock->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue('production'));
@@ -109,7 +109,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             'decode'
         )->will(
             $this->throwException(
-                new \Zend_Json_Exception('Decoding error:' . PHP_EOL . 'Decoding failed: Syntax error')
+                new \RuntimeException('Decoding error:' . PHP_EOL . 'Decoding failed: Syntax error')
             )
         );
         $this->_appStateMock->expects($this->once())

@@ -289,7 +289,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         $variables = [];
         if ($variablesString && is_string($variablesString)) {
             $variablesString = str_replace("\n", '', $variablesString);
-            $variables = \Zend_Json::decode($variablesString);
+            $variables = \Zend\Json\Decoder::decode($variablesString, \Zend\Json\Json::TYPE_ARRAY);
         }
         return $variables;
     }

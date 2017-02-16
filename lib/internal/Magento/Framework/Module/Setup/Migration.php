@@ -694,8 +694,8 @@ class Migration
      * @param int $objectDecodeType
      * @return mixed
      */
-    protected function _jsonDecode($encodedValue, $objectDecodeType = \Zend_Json::TYPE_ARRAY)
+    protected function _jsonDecode($encodedValue, $objectDecodeType = \Zend\Json\Json::TYPE_ARRAY)
     {
-        return \Zend_Json::decode($encodedValue, $objectDecodeType);
+        return \Zend\Json\Decoder::decode($encodedValue, $objectDecodeType);
     }
 }

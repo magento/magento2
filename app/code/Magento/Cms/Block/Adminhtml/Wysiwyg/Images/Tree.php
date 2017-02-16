@@ -65,7 +65,7 @@ class Tree extends \Magento\Backend\Block\Template
                 'cls' => 'folder',
             ];
         }
-        return \Zend_Json::encode($jsonArray);
+        return \Zend\Json\Encoder::encode($jsonArray);
     }
 
     /**

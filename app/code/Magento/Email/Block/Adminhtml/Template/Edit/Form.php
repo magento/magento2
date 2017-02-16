@@ -100,7 +100,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'variables',
             'hidden',
-            ['name' => 'variables', 'value' => \Zend_Json::encode($this->getVariables())]
+            ['name' => 'variables', 'value' => \Zend\Json\Encoder::encode($this->getVariables())]
         );
         $fieldset->addField('template_variables', 'hidden', ['name' => 'template_variables']);
 

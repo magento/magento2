@@ -269,13 +269,14 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         /** @var $cookieManager CookieManagerInterface */
         $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
         try {
-            $messages = \Zend_Json::decode(
-                $cookieManager->getCookie(MessagePlugin::MESSAGES_COOKIES_NAME, \Zend_Json::encode([]))
+            $messages = \Zend\Json\Decoder::decode(
+                $cookieManager->getCookie(MessagePlugin::MESSAGES_COOKIES_NAME, \Zend\Json\Encoder::encode([])),
+                \Zend\Json\Json::TYPE_ARRAY
             );
             if (!is_array($messages)) {
                 $messages = [];
             }
-        } catch (\Zend_Json_Exception $e) {
+        } catch (\RuntimeException $e) {
             $messages = [];
         }
 

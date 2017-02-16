@@ -244,6 +244,6 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
 
         $this->cookieManagerMock->expects($this->any())
             ->method('getCookie')
-            ->willReturn(\Zend_Json::encode($cookieMessages));
+            ->willReturn(\Zend\Json\Encoder::encode($cookieMessages));
     }
 }
