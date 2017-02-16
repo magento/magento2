@@ -8,21 +8,14 @@ namespace Magento\Analytics\Test\TestStep;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
-use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
 
 /**
- * Navigate to menu Stores > Configuration > General > Analytics > General
- *
+ * Steps:
+ * 1. Log in to backend.
+ * 2. Navigate to Stores->Configuration->General->Analytics->General menu.
  */
-class RestoreConfigAnalyticsStep implements TestStepInterface
+class OpenAnalyticsConfigStep implements TestStepInterface
 {
-    /**
-     * Analytics Config settings page.
-     *
-     * @var configAnalytics
-     */
-    private $configAnalytics;
-
     /**
      * Dashboard page.
      *
@@ -38,6 +31,8 @@ class RestoreConfigAnalyticsStep implements TestStepInterface
     private $systemConfigPage;
 
     /**
+     * AcceptSubscriptionStep constructor.
+     *
      * @param Dashboard $dashboard
      * @param SystemConfigEdit $systemConfigPage
      */
@@ -48,7 +43,7 @@ class RestoreConfigAnalyticsStep implements TestStepInterface
     }
 
     /**
-     * Open Config Analytics settings menu and restore sending data to the Analytics
+     * Navigate to Stores->Configuration->General->Analytics->General menu.
      *
      * @return void
      */
@@ -57,8 +52,5 @@ class RestoreConfigAnalyticsStep implements TestStepInterface
         $this->dashboard->open();
         $this->dashboard->getMenuBlock()->navigate('Stores > Configuration');
         $this->systemConfigPage->getForm()->getGroup('analytics', 'general');
-        $this->configAnalytics->getAnalyticsForm()->enableAnalytics();
-        $this->configAnalytics->getAnalyticsForm()->saveConfig();
-        $this->dashboard->getMessagesBlock()->assertSuccessMessage();
     }
 }

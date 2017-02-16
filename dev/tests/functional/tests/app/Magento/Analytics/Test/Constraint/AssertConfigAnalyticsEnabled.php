@@ -18,20 +18,24 @@ class AssertConfigAnalyticsEnabled extends AbstractConstraint
     /**
      * Assert Analytics is enabled in Stores > Configuration > General > Analytics menu.
      *
+     * @param ConfigAnalytics $configAnalytics
      * @param Dashboard $dashboard
      * @param SystemConfigEdit $systemConfigPage
-     * @param ConfigAnalytics $configAnalytics
+     * @return void
      */
     public function processAssert(
+        ConfigAnalytics $configAnalytics,
         Dashboard $dashboard,
-        SystemConfigEdit $systemConfigPage,
-        ConfigAnalytics $configAnalytics
+        SystemConfigEdit $systemConfigPage
     ) {
-        $dashboard->open();
-        $dashboard->getMenuBlock()->navigate('Stores > Configuration');
-        $systemConfigPage->getForm()->getGroup('analytics', 'general');
-
-        \PHPUnit_Framework_Assert::assertFalse(
+        $this->objectManager->create(
+            \Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep::class,
+            [
+                'dashboard' => $dashboard,
+                'systemConfigPage' => $systemConfigPage
+            ]
+        )->run();
+        \PHPUnit_Framework_Assert::assertTrue(
             (bool)$configAnalytics->getAnalyticsForm()->isAnalyticsEnabled(),
             'Magento Analytics is not enabled'
         );
