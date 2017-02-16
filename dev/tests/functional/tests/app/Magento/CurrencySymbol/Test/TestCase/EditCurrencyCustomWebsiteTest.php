@@ -75,8 +75,8 @@ class EditCurrencyCustomWebsiteTest extends Injectable
 
         $store->persist();
         $product = $this->fixtureFactory->createByCode(
-            $product[0],
-            ['dataset' => $product[1], 'data' => ['website_ids' => [['store' => $store]]]]
+            $product['fixture'],
+            ['dataset' => $product['dataset'], 'data' => ['website_ids' => [['store' => $store]]]]
         );
         $product->persist();
         $websites = $product->getDataFieldConfig('website_ids')['source']->getWebsites();

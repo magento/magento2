@@ -10,8 +10,8 @@
         <variation name="EditCurrencyCustomWebsiteTestVariation1" summary="Using default USD currency on default website and EUR currency on custom website" ticketId="MAGETWO-12941">
             <data name="configData" xsi:type="string">price_scope_website</data>
             <data name="product" xsi:type="array">
-                <item name="0" xsi:type="string">catalogProductSimple</item>
-                <item name="1" xsi:type="string">default</item>
+                <item name="fixture" xsi:type="string">catalogProductSimple</item>
+                <item name="dataset" xsi:type="string">default</item>
             </data>
             <data name="store/dataset" xsi:type="string">custom_store</data>
             <data name="currencies" xsi:type="array">
