@@ -374,14 +374,4 @@
             <argument name="attributeMetadataCache" xsi:type="object">Magento\Customer\Model\Metadata\AttributeMetadataCache\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Customer\Model\Metadata\CustomerCachedMetadata">
-        <arguments>
-            <argument name="metadata" xsi:type="object">Magento\Customer\Api\CustomerMetadataInterface\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Model\Metadata\AddressCachedMetadata">
-        <arguments>
-            <argument name="metadata" xsi:type="object">Magento\Customer\Api\AddressMetadataInterface\Proxy</argument>
-        </arguments>
-    </type>
 </config>
