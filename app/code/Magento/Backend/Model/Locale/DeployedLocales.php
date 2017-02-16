@@ -6,7 +6,6 @@
 namespace Magento\Backend\Model\Locale;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\AvailableLocalesInterface;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\DesignInterface;
@@ -18,11 +17,15 @@ use Magento\Framework\Filesystem;
 class DeployedLocales implements AvailableLocalesInterface
 {
     /**
+     * Works with file system.
+     *
      * @var Filesystem
      */
     private $fileSystem;
 
     /**
+     * Factory for creating objects that implements \Magento\Framework\View\Design\ThemeInterface
+     *
      * @var FlyweightFactory
      */
     private $flyweightFactory;
@@ -33,7 +36,7 @@ class DeployedLocales implements AvailableLocalesInterface
      */
     public function __construct(
         FlyweightFactory $flyweightFactory,
-        FileSystem $fileSystem
+        Filesystem $fileSystem
     ) {
         $this->fileSystem = $fileSystem;
         $this->flyweightFactory = $flyweightFactory;
@@ -42,7 +45,7 @@ class DeployedLocales implements AvailableLocalesInterface
     /**
      * {@inheritdoc}
      *
-     * If theme or theme file directory with static content does not exist then return an empty array.
+     * If theme or file directory for theme static content does not exist then return an empty array.
      */
     public function getList($code, $area = DesignInterface::DEFAULT_AREA)
     {
@@ -50,7 +53,7 @@ class DeployedLocales implements AvailableLocalesInterface
             $theme = $this->flyweightFactory->create($code, $area);
             $reader = $this->fileSystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
             $dirs = $reader->read($theme->getFullPath());
-        } catch (LocalizedException $e) {
+        } catch (\Exception $e) {
             return [];
         }
 

@@ -82,15 +82,15 @@ class DeployedList implements DeployedListInterface
      *     $locales = [
      *        0 => [
      *           'value' => 'da_DK'
-     *           'label' => 'Dansk (Danmark) / Danish (Denmark)'
+     *           'label' => 'Danish (Denmark)'
      *        ],
      *        1 => [
      *           'value' => 'de_DE'
-     *           'label' => 'Deutsch (Deutschland) / German (Germany)'
+     *           'label' => 'German (Germany)'
      *        ],
      *        2 => [
      *           'value' => 'en_GB'
-     *           'label' => 'English (United Kingdom) / English (United Kingdom)'
+     *           'label' => 'English (United Kingdom)'
      *        ],
      *    ]
      * ```
@@ -99,7 +99,7 @@ class DeployedList implements DeployedListInterface
      *    [
      *        2 => [
      *           'value' => 'en_GB'
-     *           'label' => 'English (United Kingdom) / English (United Kingdom)'
+     *           'label' => 'English (United Kingdom)'
      *        ],
      *    ]
      * ```

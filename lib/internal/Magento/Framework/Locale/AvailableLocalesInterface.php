@@ -15,8 +15,8 @@ interface AvailableLocalesInterface
     /**
      * Returns list of generated locales for theme by given theme code and area.
      *
-     * @param string $code theme code
-     * @param string $area theme area
+     * @param string $code theme code identifier
+     * @param string $area area in which theme can be applied
      * @return array of locales codes, for example: ['en_US', 'en_GB']
      */
     public function getList($code, $area = DesignInterface::DEFAULT_AREA);
