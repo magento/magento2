@@ -5,14 +5,10 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata;
 
+use Magento\Customer\Model\Metadata\AttributeMetadataHydrator;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
-use Magento\Customer\Api\Data\OptionInterface;
-use Magento\Customer\Api\Data\OptionInterfaceFactory;
-use Magento\Customer\Api\Data\ValidationRuleInterface;
-use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Eav\Model\Cache\Type;
 use Magento\Eav\Model\Entity\Attribute;
@@ -39,19 +35,14 @@ class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
     private $stateMock;
 
     /**
-     * @var AttributeMetadataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $attributeMetadataFactoryMock;
+    private $attributeMetadataMock;
 
     /**
-     * @var OptionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataHydrator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $optionFactoryMock;
-
-    /**
-     * @var ValidationRuleInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $validationRuleFactoryMock;
+    private $attributeMetadataHydratorMock;
 
     /**
      * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -68,40 +59,22 @@ class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
         $this->cacheMock = $this->getMock(CacheInterface::class);
         $this->stateMock = $this->getMock(StateInterface::class);
-        $this->attributeMetadataFactoryMock = $this->getMock(
-            AttributeMetadataInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->optionFactoryMock = $this->getMock(
-            OptionInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->validationRuleFactoryMock = $this->getMock(
-            ValidationRuleInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
         $this->serializerMock = $this->getMock(SerializerInterface::class);
         $this->attributeMetadataMock = $this->getMock(AttributeMetadataInterface::class);
-        $this->optionMock = $this->getMock(OptionInterface::class);
-        $this->validationRuleMock = $this->getMock(ValidationRuleInterface::class);
+        $this->attributeMetadataHydratorMock = $this->getMock(
+            AttributeMetadataHydrator::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->attributeMetadataCache = $objectManager->getObject(
             AttributeMetadataCache::class,
             [
                 'cache' => $this->cacheMock,
                 'state' => $this->stateMock,
-                'attributeMetadataFactory' => $this->attributeMetadataFactoryMock,
-                'optionFactory' => $this->optionFactoryMock,
-                'validationRuleFactory' => $this->validationRuleFactoryMock,
-                'serializer' => $this->serializerMock
+                'serializer' => $this->serializerMock,
+                'attributeMetadataHydrator' => $this->attributeMetadataHydratorMock
             ]
         );
     }
@@ -134,9 +107,6 @@ class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->attributeMetadataCache->load($entityType, $suffix));
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
     public function testLoad()
     {
         $entityType = 'EntityType';
@@ -169,6 +139,7 @@ class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
             'options' => [$optionOneData, $optionTwoData],
             'validation_rules' => [$validationRuleOneData]
         ];
+        $attributesMetadataData = [$attributeMetadataOneData];
         $this->stateMock->expects($this->once())
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
@@ -180,53 +151,32 @@ class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->with($serializedString)
-            ->willReturn([$attributeMetadataOneData]);
+            ->willReturn($attributesMetadataData);
 
-        $optionOne = new Option($optionOneData);
-        $this->optionFactoryMock->expects($this->at(0))
-            ->method('create')
-            ->with(['data' => $optionOneData])
-            ->willReturn($optionOne);
-        $optionThree = new Option($optionThreeData);
-        $this->optionFactoryMock->expects($this->at(1))
-            ->method('create')
-            ->with(['data' => $optionThreeData])
-            ->willReturn($optionThree);
-        $optionFour = new Option($optionFourData);
-        $this->optionFactoryMock->expects($this->at(2))
-            ->method('create')
-            ->with(['data' => $optionFourData])
-            ->willReturn($optionFour);
-
-        $optionTwoDataForFactory = [
+        $optionTwoDataPartiallyConverted = [
             'label' => 'Label 2',
-            'options' => [$optionThree, $optionFour]
+            'options' => [
+                new Option($optionThreeData),
+                new Option($optionFourData)
+            ]
         ];
-        $optionFour = new Option($optionTwoDataForFactory);
-        $this->optionFactoryMock->expects($this->at(3))
-            ->method('create')
-            ->with(['data' => $optionTwoDataForFactory])
-            ->willReturn($optionFour);
 
         $validationRule = new ValidationRule($validationRuleOneData);
-        $this->validationRuleFactoryMock->expects($this->once())
-            ->method('create')
-            ->with(['data' => $validationRuleOneData])
-            ->willReturn($validationRule);
 
-        $attributeMetadataDataForFactory = [
+        $attributeMetadataDataPartiallyConverted = [
             'attribute_code' => 'attribute_code',
             'frontend_input' => 'hidden',
-            'options' => [$optionOne, $optionFour],
+            'options' => [
+                new Option($optionOneData),
+                new Option($optionTwoDataPartiallyConverted)
+            ],
             'validation_rules' => [$validationRule]
         ];
 
-        $this->attributeMetadataFactoryMock->expects($this->once())
-            ->method('create')
-            ->with(['data' => $attributeMetadataDataForFactory])
-            ->willReturn(
-                new AttributeMetadata($attributeMetadataDataForFactory)
-            );
+        $this->attributeMetadataHydratorMock->expects($this->once())
+            ->method('hydrate')
+            ->with($attributeMetadataOneData)
+            ->willReturn(new AttributeMetadata($attributeMetadataDataPartiallyConverted));
 
         $attributeMetadata = $this->attributeMetadataCache->load($entityType, $suffix);
 
@@ -278,15 +228,10 @@ class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(true);
-        $attributeMetadataMock = $this->getMock(
-            AttributeMetadata::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $attributeMetadataMock->expects($this->once())
-            ->method('__toArray')
+        $this->attributeMetadataMock = $this->getMock(AttributeMetadataInterface::class);
+        $this->attributeMetadataHydratorMock->expects($this->once())
+            ->method('extract')
+            ->with($this->attributeMetadataMock)
             ->willReturn($attributeMetadataOneData);
         $this->serializerMock->expects($this->once())
             ->method('serialize')
@@ -303,7 +248,7 @@ class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
                     System::CACHE_TAG
                 ]
             );
-        $attributesMetadata = [$attributeMetadataMock];
+        $attributesMetadata = [$this->attributeMetadataMock];
         $this->attributeMetadataCache->save($entityType, $attributesMetadata, $suffix);
         $this->assertSame(
             $attributesMetadata,

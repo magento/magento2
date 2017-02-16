@@ -98,7 +98,7 @@ class AttributeMetadataHydrator
     }
 
     /**
-     * @param $attributeMetadata
+     * @param AttributeMetadataInterface $attributeMetadata
      * @return array
      */
     public function extract($attributeMetadata)
