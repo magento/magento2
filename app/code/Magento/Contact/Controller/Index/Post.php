@@ -70,7 +70,7 @@ class Post extends \Magento\Contact\Controller\Index
      * @param array $post Post data from contact form
      * @return void
      */
-    protected function sendEmail($post)
+    private function sendEmail($post)
     {
         $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
         $transport = $this->_transportBuilder
@@ -104,7 +104,7 @@ class Post extends \Magento\Contact\Controller\Index
      * @return array
      * @throws \Exception
      */
-    protected function validatedParams()
+    private function validatedParams()
     {
         $request = $this->getRequest();
         if (trim($request->getParam('name')) === '') {
