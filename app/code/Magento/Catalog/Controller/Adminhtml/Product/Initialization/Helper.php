@@ -142,6 +142,11 @@ class Helper
         $dateFieldFilters = [];
         $attributes = $product->getAttributes();
         foreach ($attributes as $attrKey => $attribute) {
+            if ($attribute->getFrontendInput() == 'multiselect') {
+                if (empty($productData[$attrKey])) {
+                    $productData[$attrKey] = '';
+                }
+            }
             if ($attribute->getBackend()->getType() == 'datetime') {
                 if (array_key_exists($attrKey, $productData) && $productData[$attrKey] != '') {
                     $dateFieldFilters[$attrKey] = $this->getDateTimeFilter();
