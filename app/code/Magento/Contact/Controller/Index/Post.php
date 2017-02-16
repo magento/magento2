@@ -7,6 +7,7 @@
 namespace Magento\Contact\Controller\Index;
 
 use Magento\Contact\Api\ConfigInterface;
+use Magento\Contact\Api\MailInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
@@ -22,38 +23,25 @@ class Post extends \Magento\Contact\Controller\Index
      * @var DataPersistorInterface
      */
     private $dataPersistor;
-
-    /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder
-     */
-    private $transportBuilder;
-
-    /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface
-     */
-    private $inlineTranslation;
     /**
      * @var Context
      */
     private $context;
     /**
-     * @var ConfigInterface
+     * @var MailInterface
      */
-    private $contactsConfig;
+    private $mail;
 
     public function __construct(
         Context $context,
+        MailInterface $mail,
         ConfigInterface $contactsConfig,
-        TransportBuilder $transportBuilder,
-        StateInterface $inlineTranslation,
         DataPersistorInterface $dataPersistor
     ) {
         parent::__construct($context, $contactsConfig);
         $this->context = $context;
-        $this->transportBuilder = $transportBuilder;
-        $this->inlineTranslation = $inlineTranslation;
+        $this->mail = $mail;
         $this->dataPersistor = $dataPersistor;
-        $this->contactsConfig = $contactsConfig;
     }
 
 
@@ -67,8 +55,6 @@ class Post extends \Magento\Contact\Controller\Index
         if (! $this->isPostRequest()) {
             return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
-
-        $this->inlineTranslation->suspend();
         try {
             $this->sendEmail($this->validatedParams());
             $this->messageManager->addSuccess(
@@ -83,8 +69,6 @@ class Post extends \Magento\Contact\Controller\Index
                 __('We can\'t process your request right now. Sorry, that\'s all we know.')
             );
             $this->getDataPersistor()->set('contact_us', $this->getRequest()->getParams());
-        } finally {
-            $this->inlineTranslation->resume();
         }
         return $this->resultRedirectFactory->create()->setPath('contact/index');
     }
@@ -110,22 +94,7 @@ class Post extends \Magento\Contact\Controller\Index
      */
     private function sendEmail($post)
     {
-        $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
-        $transport = $this->transportBuilder
-            ->setTemplateIdentifier($this->contactsConfig->emailTemplate())
-            ->setTemplateOptions(
-                [
-                    'area' => 'adminhtml',
-                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-                ]
-            )
-            ->setTemplateVars(['data' => new \Magento\Framework\DataObject($post)])
-            ->setFrom($this->contactsConfig->emailSender())
-            ->addTo($this->contactsConfig->emailRecipient())
-            ->setReplyTo($post['email'])
-            ->getTransport();
-
-        $transport->sendMessage();
+        $this->mail->send($post['email'], ['data' => new \Magento\Framework\DataObject($post)]);
     }
 
     /**

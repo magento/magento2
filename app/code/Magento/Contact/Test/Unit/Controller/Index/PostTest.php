@@ -7,6 +7,7 @@
 namespace Magento\Contact\Test\Unit\Controller\Index;
 
 use Magento\Contact\Api\ConfigInterface;
+use Magento\Contact\Api\MailInterface;
 use Magento\Framework\Controller\Result\Redirect;
 
 /**
@@ -45,16 +46,6 @@ class PostTest extends \PHPUnit_Framework_TestCase
     private $requestStub;
 
     /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $transportBuilderMock;
-
-    /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $inlineTranslationMock;
-
-    /**
      * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $messageManagerMock;
@@ -68,9 +59,14 @@ class PostTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $dataPersistorMock;
+    /**
+     * @var MailInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mailMock;
 
     protected function setUp()
     {
+        $this->mailMock = $this->getMockBuilder(MailInterface::class)->getMockForAbstractClass();
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
         $context = $this->getMock(
             \Magento\Framework\App\Action\Context::class,
@@ -108,20 +104,6 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->redirectResultMock);
         $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
-        $this->transportBuilderMock = $this->getMock(
-            \Magento\Framework\Mail\Template\TransportBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->inlineTranslationMock = $this->getMock(
-            \Magento\Framework\Translate\Inline\StateInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
         $this->dataPersistorMock = $this->getMockBuilder(\Magento\Framework\App\Request\DataPersistorInterface::class)
             ->getMockForAbstractClass();
         $context->expects($this->any())
@@ -146,9 +128,8 @@ class PostTest extends \PHPUnit_Framework_TestCase
 
         $this->controller = new \Magento\Contact\Controller\Index\Post(
             $context,
+            $this->mailMock,
             $this->configMock,
-            $this->transportBuilderMock,
-            $this->inlineTranslationMock,
             $this->dataPersistorMock
         );
     }
@@ -173,11 +154,6 @@ class PostTest extends \PHPUnit_Framework_TestCase
                 ->method('set')
                 ->with('contact_us', $postData);
         }
-        $this->inlineTranslationMock->expects($this->once())
-            ->method('resume');
-
-        $this->inlineTranslationMock->expects($this->once())
-            ->method('suspend');
 
         $this->controller->execute();
     }
@@ -203,50 +179,6 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->with('contact_us');
 
         $this->stubRequestPostData($post);
-
-        $transport = $this->getMock(\Magento\Framework\Mail\TransportInterface::class, [], [], '', false);
-
-        $this->transportBuilderMock->expects($this->once())
-            ->method('setTemplateIdentifier')
-            ->will($this->returnSelf());
-
-        $this->transportBuilderMock->expects($this->once())
-            ->method('setTemplateOptions')
-            ->with([
-                'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-            ])
-            ->will($this->returnSelf());
-
-        $this->transportBuilderMock->expects($this->once())
-            ->method('setTemplateVars')
-            ->will($this->returnSelf());
-
-        $this->transportBuilderMock->expects($this->once())
-            ->method('setFrom')
-            ->will($this->returnSelf());
-
-        $this->transportBuilderMock->expects($this->once())
-            ->method('addTo')
-            ->will($this->returnSelf());
-
-        $this->transportBuilderMock->expects($this->once())
-            ->method('setReplyTo')
-            ->with($post['email'])
-            ->will($this->returnSelf());
-
-        $this->transportBuilderMock->expects($this->once())
-            ->method('getTransport')
-            ->willReturn($transport);
-
-        $transport->expects($this->once())
-            ->method('sendMessage');
-
-        $this->inlineTranslationMock->expects($this->once())
-            ->method('resume');
-
-        $this->inlineTranslationMock->expects($this->once())
-            ->method('suspend');
 
         $this->controller->execute();
     }
