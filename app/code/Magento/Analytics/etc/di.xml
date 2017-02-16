@@ -9,6 +9,8 @@
     <preference for="Magento\Analytics\ReportXML\ConfigInterface" type="Magento\Analytics\ReportXML\Config" />
     <preference for="Magento\Analytics\Model\ConfigInterface" type="Magento\Analytics\Model\Config" />
     <preference for="Magento\Analytics\Model\ReportWriterInterface" type="Magento\Analytics\Model\ReportWriter" />
+    <preference for="Magento\Analytics\Api\LinkProviderInterface" type="Magento\Analytics\Model\LinkProvider" />
+    <preference for="Magento\Analytics\Api\Data\LinkInterface" type="Magento\Analytics\Model\Link" />
     <type name="Magento\Analytics\Model\AnalyticsConnector">
         <arguments>
             <argument name="commands" xsi:type="array">
