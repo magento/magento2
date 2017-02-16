@@ -111,7 +111,7 @@ class Options implements OptionInterface
      */
     private function filterLocales(array $locales)
     {
-        if ($this->state->getMode() == State::MODE_PRODUCTION) {
+        if ($this->state->getMode() != State::MODE_PRODUCTION) {
             return $locales;
         }
 

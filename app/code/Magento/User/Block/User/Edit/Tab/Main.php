@@ -9,7 +9,7 @@
 namespace Magento\User\Block\User\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Locale\DeployedListInterface;
+use Magento\Framework\Locale\Deployed\OptionInterface;
 
 /**
  * Cms page edit form main tab
@@ -33,9 +33,9 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Operates with deployed locales
      *
-     * @var DeployedListInterface
+     * @var OptionInterface
      */
-    private $deployedLocaleList;
+    private $deployedLocales;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -44,7 +44,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param array $data
-     * @param DeployedListInterface $deployedLocaleList
+     * @param OptionInterface $deployedLocales
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -53,12 +53,12 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Locale\ListsInterface $localeLists,
         array $data = [],
-        DeployedListInterface $deployedLocaleList = null
+        OptionInterface $deployedLocales = null
     ) {
         $this->_authSession = $authSession;
         $this->_LocaleLists = $localeLists;
-        $this->deployedLocaleList = $deployedLocaleList
-            ?: ObjectManager::getInstance()->create(DeployedListInterface::class);
+        $this->deployedLocales = $deployedLocales
+            ?: ObjectManager::getInstance()->create(OptionInterface::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -152,7 +152,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'interface_locale',
                 'label' => __('Interface Locale'),
                 'title' => __('Interface Locale'),
-                'values' => $this->deployedLocaleList->getLocales(),
+                'values' => $this->deployedLocales->getLocales(),
                 'class' => 'select'
             ]
         );
