@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Contact\Api\MailInterface" type="Magento\Contact\Model\Mail" />
     <preference for="Magento\Contact\Api\ConfigInterface" type="Magento\Contact\Model\Config" />
     <type name="Magento\Config\Model\Config\Export\ExcludeList">
         <arguments>
