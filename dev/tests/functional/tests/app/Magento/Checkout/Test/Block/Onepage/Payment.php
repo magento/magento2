@@ -82,7 +82,7 @@ class Payment extends Block
     public function selectPaymentMethod(
         array $payment,
         CreditCard $creditCard = null,
-        $paymentForm,
+        $paymentForm = 'default',
         $fillCreditCardOn3rdParty = false
     ) {
         $paymentMethod = $payment['method'];
