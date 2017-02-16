@@ -32,8 +32,10 @@ $debug = function ($val) {
     echo 'debug: '.$val.PHP_EOL.'<br/>'.PHP_EOL;
 };
 
-/* Note: the code below is experimental and not intended to be used outside development environment.
-The code is protected against running outside of PHP built-in web server. */
+/**
+ * Note: the code below is experimental and not intended to be used outside development environment.
+ * The code is protected against running outside of PHP built-in web server.
+ */
 
 if (php_sapi_name() === 'cli-server') {
     $debug($_SERVER["REQUEST_URI"]);
