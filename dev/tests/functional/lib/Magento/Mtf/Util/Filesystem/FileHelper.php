@@ -24,6 +24,18 @@ class FileHelper
             return $path;
         }
 
+        return $this->realpath($ds, $path);
+    }
+
+    /**
+     * Returns canonicalized pathname.
+     *
+     * @param string $ds
+     * @param string $path
+     * @return string
+     */
+    private function realpath($ds, $path)
+    {
         $parts = [];
         foreach (explode($ds, $path) as $part) {
             if ($part === '..' && !empty($parts) && end($parts) !== '..') {
@@ -34,6 +46,7 @@ class FileHelper
                 $parts[] = $part;
             }
         }
+
         $path = implode($ds, $parts);
 
         return $path === '' ? '.' : $path;
