@@ -122,11 +122,20 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getCctypesMapper')
             ->willReturn($mapperArray);
 
+        $this->serializer = $this->getMock(
+            \Magento\Framework\Serialize\Serializer\Json::class,
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->paymentHandler = new VaultDetailsHandler(
             $this->paymentTokenFactory,
             $this->paymentExtensionFactory,
             $this->config,
-            $this->subjectReader
+            $this->subjectReader,
+            $this->serializer
         );
     }
 

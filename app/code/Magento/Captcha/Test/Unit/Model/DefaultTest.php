@@ -88,6 +88,9 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        if (!function_exists("imageftbbox")) {
+            $this->markTestSkipped('imageftbbox is not available on the test environment');
+        }
         $this->session = $this->_getSessionStub();
 
         $this->_storeManager = $this->getMock(

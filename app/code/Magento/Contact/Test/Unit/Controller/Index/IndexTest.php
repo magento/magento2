@@ -8,12 +8,12 @@ namespace Magento\Contact\Test\Unit\Controller\Index;
 
 use Magento\Contact\Api\ConfigInterface;
 use Magento\Contact\Model\Config;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Controller
-     *
      * @var \Magento\Contact\Controller\Index\Index
      */
     private $controller;
@@ -24,13 +24,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     private $configMock;
 
     /**
-     * View mock
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $view;
+    protected $resultFactory;
 
     /**
-     * Url mock
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $url;
@@ -42,7 +40,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $context = $this->getMockBuilder(
             \Magento\Framework\App\Action\Context::class
         )->setMethods(
-            ['getRequest', 'getResponse', 'getView', 'getUrl']
+            ['getRequest', 'getResponse', 'getResultFactory', 'getUrl']
         )->disableOriginalConstructor(
         )->getMock();
 
@@ -64,14 +62,14 @@ class IndexTest extends \PHPUnit_Framework_TestCase
                 $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)->getMockForAbstractClass()
             ));
 
-        $this->view = $this->getMockBuilder(
-            \Magento\Framework\App\ViewInterface::class
+        $this->resultFactory = $this->getMockBuilder(
+            ResultFactory::class
         )->disableOriginalConstructor(
         )->getMock();
 
         $context->expects($this->once())
-            ->method('getView')
-            ->will($this->returnValue($this->view));
+            ->method('getResultFactory')
+            ->will($this->returnValue($this->resultFactory));
 
         $this->controller = new \Magento\Contact\Controller\Index\Index(
             $context,
@@ -81,12 +79,12 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $this->view->expects($this->once())
-            ->method('loadLayout');
+        $resultStub = $this->getMockForAbstractClass(ResultInterface::class);
+        $this->resultFactory->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_PAGE)
+            ->willReturn($resultStub);
 
-        $this->view->expects($this->once())
-            ->method('renderLayout');
-
-        $this->controller->execute();
+        $this->assertSame($resultStub, $this->controller->execute());
     }
 }

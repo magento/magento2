@@ -44,7 +44,7 @@ class GenerationDirectoryAccess
             ? $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
             : [];
         $directoryList = new DirectoryList(BP, $filesystemDirPaths);
-        $generationDirectoryPath = $directoryList->getPath(DirectoryList::GENERATION);
+        $generationDirectoryPath = $directoryList->getPath(DirectoryList::GENERATED_CODE);
         $driverPool = new DriverPool();
         $fileWriteFactory = new WriteFactory($driverPool);
         /** @var \Magento\Framework\Filesystem\DriverInterface $driver */
