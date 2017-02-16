@@ -6,8 +6,6 @@
 namespace Magento\Analytics\Model\AnalyticsConnector;
 
 use Magento\Config\Model\Config;
-use Magento\Framework\HTTP\Adapter\CurlFactory;
-use Magento\Framework\HTTP\ZendClient as HttpClient;
 use Zend_Http_Response as HttpResponse;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
@@ -30,14 +28,9 @@ class SignUpRequest
     private $config;
 
     /**
-     * @var CurlFactory
+     * @var Client\Curl
      */
-    private $curlFactory;
-
-    /**
-     * @var HttpResponseFactory
-     */
-    private $httpResponseFactory;
+    private $httpClient;
 
     /**
      * @var LoggerInterface
@@ -46,19 +39,16 @@ class SignUpRequest
 
     /**
      * @param Config $config
-     * @param CurlFactory $curlFactory
-     * @param HttpResponseFactory $httpResponseFactory
+     * @param Client\Curl $httpClient
      * @param LoggerInterface $logger
      */
     public function __construct(
         Config $config,
-        CurlFactory $curlFactory,
-        HttpResponseFactory $httpResponseFactory,
+        Client\Curl $httpClient,
         LoggerInterface $logger
     ) {
         $this->config = $config;
-        $this->curlFactory = $curlFactory;
-        $this->httpResponseFactory = $httpResponseFactory;
+        $this->httpClient = $httpClient;
         $this->logger = $logger;
     }
 
@@ -115,44 +105,24 @@ class SignUpRequest
     {
         $token = false;
 
-        $curl = $this->curlFactory->create();
-
-        $curl->write(
-            HttpClient::POST,
-            $this->config->getConfigDataValue($this->signUpUrlPath),
-            '1.1',
-            ['Content-Type: application/json'],
-            $this->getRequestJson($integrationToken)
-        );
-
         try {
-            $result = $curl->read();
+            $response = $this->httpClient->post(
+                $this->config->getConfigDataValue($this->signUpUrlPath),
+                $this->getRequestJson($integrationToken),
+                ['Content-Type: application/json']
+            );
 
-            if ($curl->getErrno()) {
-                $this->logger->critical(
-                    new \Exception(
+            if ($response) {
+                $token = $this->extractAccessToken($response);
+
+                if (!$token) {
+                    $this->logger->warning(
                         sprintf(
-                            'MBI service CURL connection error #%s: %s',
-                            $curl->getErrno(),
-                            $curl->getError()
+                            'Subscription for MBI service has been failed. An error occurred during token exchange: %s',
+                            !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
                         )
-                    )
-                );
-
-                return false;
-            }
-
-            $response = $this->httpResponseFactory->create($result);
-
-            $token = $this->extractAccessToken($response);
-
-            if (!$token) {
-                $this->logger->warning(
-                    sprintf(
-                        'Subscription for MBI service has been failed. An error occurred during token exchange: %s',
-                        !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
-                    )
-                );
+                    );
+                }
             }
         } catch (\Exception $e) {
             $this->logger->critical($e);
