@@ -9,29 +9,27 @@ namespace Magento\Signifyd\Test\Constraint;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory as SalesAssert;
 
 /**
- * Assert that comment about created Signifyd Case exists in Comments History section on order page in Admin.
+ * Assert that comment about authorized amount exists in Comments History section on order page in Admin.
  */
-class AssertSignifydCaseInCommentsHistory extends AbstractConstraint
+class AssertAuthorizationInCommentsHistory extends AbstractConstraint
 {
     /**
-     * Pattern of message about created Signifyd Case in order.
-     */
-    const CASE_CREATED_PATTERN = '/Signifyd Case (\d)+ has been created for order\./';
-
-    /**
-     * Assert that comment about Signifyd Case exists in Comments History section on order page in Admin.
+     * Assert that comment about authorized amount exists in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
      * @param string $orderId
+     * @param array $prices
      * @return void
      */
     public function processAssert(
         SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
-        $orderId
+        $orderId,
+        array $prices
     ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
@@ -42,9 +40,9 @@ class AssertSignifydCaseInCommentsHistory extends AbstractConstraint
         $commentsMessages = array_column($orderComments, 'comment');
 
         \PHPUnit_Framework_Assert::assertRegExp(
-            self::CASE_CREATED_PATTERN,
+            sprintf(SalesAssert::AUTHORIZED_AMOUNT_PATTERN, $prices['grandTotal']),
             implode('. ', $commentsMessages),
-            'Signifyd case is not created for the order #' . $orderId
+            'Incorrect authorized amount value for the order #' . $orderId
         );
     }
 
@@ -55,6 +53,6 @@ class AssertSignifydCaseInCommentsHistory extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message about Signifyd Case is available in Comments History section.";
+        return "Message about authorized amount is available in Comments History section.";
     }
 }

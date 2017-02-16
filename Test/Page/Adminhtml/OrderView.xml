@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="OrderView" area="Adminhtml" mca="sales/order/view" module="Magento_Signifyd">
+        <block name="fraudProtectionBlock" class="Magento\Signifyd\Test\Block\Adminhtml\Order\View\FraudProtection" locator=".admin__page-section.order-case-info" strategy="css selector" />
+        <block name="salesOrderGrid" class="Magento\Signifyd\Test\Block\Adminhtml\Order\Grid" locator="//div[contains(@data-bind, 'sales_order_grid')]" strategy="xpath"/>
+    </page>
+</config>

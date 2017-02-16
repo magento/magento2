@@ -19,8 +19,8 @@
         <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
         <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
         <step name="placeOrder" module="Magento_Checkout" next="observeSignifydCase" />
-        <step name="observeSignifydCase" module="Magento_Signifyd" next="openOrder" />
-        <step name="openOrder" module="Magento_Sales" next="cancelOrder" />
+        <step name="observeSignifydCase" module="Magento_Signifyd" next="openOrderGrid" />
+        <step name="openOrderGrid" module="Magento_Signifyd" next="cancelOrder" />
         <step name="cancelOrder" module="Magento_Sales" />
     </scenario>
 </config>
