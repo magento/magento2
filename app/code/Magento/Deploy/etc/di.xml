@@ -20,6 +20,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\FrontController">
+        <plugin name="configHash" type="Magento\Framework\App\DeploymentConfig\Plugin\ConfigHashValidator" sortOrder="-99"/>
+    </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -27,6 +30,7 @@
                 <item name="showModeCommand" xsi:type="object">Magento\Deploy\Console\Command\ShowModeCommand</item>
                 <item name="dumpApplicationCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\ApplicationDumpCommand</item>
                 <item name="sensitiveConfigSetCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\SensitiveConfigSetCommand</item>
+                <item name="configSyncCommand" xsi:type="object">Magento\Deploy\Console\Command\App\ConfigImportCommand</item>
             </argument>
         </arguments>
     </type>

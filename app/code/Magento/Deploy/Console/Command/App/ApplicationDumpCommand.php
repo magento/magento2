@@ -12,6 +12,8 @@ use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\DeploymentConfig\ConfigHashManager;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Command for dump application state
@@ -29,18 +31,26 @@ class ApplicationDumpCommand extends Command
     private $sources;
 
     /**
+     * @var ConfigHashManager
+     */
+    private $configHashManager;
+
+    /**
      * ApplicationDumpCommand constructor.
      *
      * @param Writer $writer
      * @param array $sources
+     * @param ConfigHashManager $configHashManager
      */
     public function __construct(
         Writer $writer,
-        array $sources
+        array $sources,
+        ConfigHashManager $configHashManager = null
     ) {
         parent::__construct();
         $this->writer = $writer;
         $this->sources = $sources;
+        $this->configHashManager = $configHashManager ?: ObjectManager::getInstance()->get(ConfigHashManager::class);
     }
 
     /**
@@ -86,6 +96,10 @@ class ApplicationDumpCommand extends Command
         if (!empty($comments)) {
             $output->writeln($comments);
         }
+
+        // Generate and save new hash of deployment configuration
+        $this->configHashManager->generateHash();
+
         $output->writeln('<info>Done.</info>');
         return Cli::RETURN_SUCCESS;
     }
