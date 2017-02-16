@@ -344,7 +344,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
             }
 
-            return $virtualCount == count($selections);
+            return $virtualCount === $selections->getSize();
         }
 
         return false;
@@ -627,7 +627,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 if (!empty($selectionIds)) {
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
 
-                    if (count($selections->getItems()) !== count($selectionIds)) {
+                    if ($selections->getSize() !== count($selectionIds)) {
                         throw new \Magento\Framework\Exception\LocalizedException(
                             __('The options you selected are not available.')
                         );
@@ -972,7 +972,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             ->getAllIds();
         $collection = $this->getSelectionsCollection($optionIds, $product);
 
-        if (count($collection) > 0 || $product->getOptions()) {
+        if ($collection->getSize() > 0 || $product->getOptions()) {
             return true;
         }
 
