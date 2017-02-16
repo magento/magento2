@@ -54,7 +54,7 @@ class AssertConfigAnalyticsDisabled extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Magento Analytics is disabled in Stores > Configuration > General > Analytics > General menu
-        and has disabled status';
+        return 'Magento Analytics is disabled in Stores > Configuration > General > Analytics > General menu'
+            . ' and has Disabled status';
     }
 }

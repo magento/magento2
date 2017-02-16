@@ -9,12 +9,12 @@ use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Verify that admin user accepted analytics pop-up
+ * Verify that admin user chose to accept subscription in Analytics pop-up.
  */
 class AssertAcceptSubscriptionPopup extends AbstractConstraint
 {
     /**
-     * Verify that admin user accepted analytics pop-up
+     * Verify that admin user chose to accept subscription in Analytics pop-up.
      *
      * @param Dashboard $dashboard
      * @return void
@@ -31,7 +31,7 @@ class AssertAcceptSubscriptionPopup extends AbstractConstraint
     }
 
     /**
-     * Returns success message if equals to expected message.
+     * Returns a string representation of the object.
      *
      * @return string
      */

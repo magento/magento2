@@ -16,7 +16,7 @@ use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 class AssertConfigAnalyticsRestored extends AbstractConstraint
 {
     /**
-     * Assert Analytics sending data to the Analytics is restored.
+     * Assert sending data to the Analytics is restored.
      *
      * @param ConfigAnalytics $configAnalytics
      * @param Dashboard $dashboard
@@ -44,7 +44,7 @@ class AssertConfigAnalyticsRestored extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertTrue(
             $systemConfigPage->getMessagesBlock()->assertSuccessMessage(),
-            'Magento Analytics settings are not saved'
+            'Sending data to the Analytics is not saved'
         );
     }
 
@@ -55,6 +55,6 @@ class AssertConfigAnalyticsRestored extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Magento Analytics setting are saved';
+        return 'Sending data to the Analytics is saved';
     }
 }

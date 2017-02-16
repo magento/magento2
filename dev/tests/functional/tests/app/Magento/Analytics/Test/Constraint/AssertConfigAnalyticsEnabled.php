@@ -54,7 +54,7 @@ class AssertConfigAnalyticsEnabled extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Magento Analytics is enabled and has Pending status in
-         Stores > Configuration > General > Analytics > General menu.';
+        return 'Magento Analytics is enabled and has Pending status in'
+            . ' Stores > Configuration > General > Analytics > General menu.';
     }
 }

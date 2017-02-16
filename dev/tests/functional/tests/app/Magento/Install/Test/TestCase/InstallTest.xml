@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Install\Test\TestCase\InstallTest" summary="[Web Setup][Auto] Install CE Magento via Web Interface" ticketId="MAGETWO-31431">
+    <testCase name="Magento\Install\Test\TestCase\InstallTest" summary="[Web Setup][Auto] Install CE Magento via Web Interface; restore Magento analytics subscription" ticketId="MAGETWO-31431, MAGETWO-63196">
         <variation name="InstallTestVariation1" summary="Install with custom admin path">
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/admin" xsi:type="string">custom</data>
@@ -17,7 +17,7 @@
             <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsRestored" />
             <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" />
         </variation>
-        <variation name="InstallTestVariation2" summary="Install with custom encryption key and changed currency and locale">
+        <variation name="InstallTestVariation2" summary="Install with custom encryption key and changed currency and locale; decline Magento analytics subscription" ticketId="MAGETWO-63156">
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/keyOwn" xsi:type="string">I want to use my own encryption key</data>
             <data name="install/keyValue" xsi:type="string">123123qa</data>
@@ -32,7 +32,7 @@
             <constraint name="Magento\Analytics\Test\Constraint\AssertDeclineSubscriptionPopup" />
             <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled" />
         </variation>
-        <variation name="InstallTestVariation3" summary="Install with table prefix">
+        <variation name="InstallTestVariation3" summary="Install with table prefix; accept Magento analytics subscription" ticketId="MAGETWO-63108">
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/dbTablePrefix" xsi:type="string">pref_</data>
             <data name="install/storeLanguage" xsi:type="string">Chinese (China)</data>

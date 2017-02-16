@@ -31,7 +31,7 @@ class AssertSkipSubscriptionPopup extends AbstractConstraint
     }
 
     /**
-     * Returns success message if equals to expected message.
+     * Returns a string representation of the object.
      *
      * @return string
      */
