@@ -59,6 +59,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $dataPersistorMock;
+
     /**
      * @var MailInterface|\PHPUnit_Framework_MockObject_MockObject
      */

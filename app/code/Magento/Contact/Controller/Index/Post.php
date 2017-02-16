@@ -23,15 +23,23 @@ class Post extends \Magento\Contact\Controller\Index
      * @var DataPersistorInterface
      */
     private $dataPersistor;
+
     /**
      * @var Context
      */
     private $context;
+
     /**
      * @var MailInterface
      */
     private $mail;
 
+    /**
+     * @param Context $context
+     * @param MailInterface $mail
+     * @param ConfigInterface $contactsConfig
+     * @param DataPersistorInterface $dataPersistor
+     */
     public function __construct(
         Context $context,
         MailInterface $mail,
@@ -43,7 +51,6 @@ class Post extends \Magento\Contact\Controller\Index
         $this->mail = $mail;
         $this->dataPersistor = $dataPersistor;
     }
-
 
     /**
      * Post user question

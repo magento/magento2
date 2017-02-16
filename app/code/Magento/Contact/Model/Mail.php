@@ -16,15 +16,22 @@ class Mail implements MailInterface
      * @var ConfigInterface
      */
     private $contactsConfig;
+
     /**
      * @var TransportBuilder
      */
     private $transportBuilder;
+
     /**
      * @var StateInterface
      */
     private $inlineTranslation;
 
+    /**
+     * @param ConfigInterface $contactsConfig
+     * @param TransportBuilder $transportBuilder
+     * @param StateInterface $inlineTranslation
+     */
     public function __construct(
         ConfigInterface $contactsConfig,
         TransportBuilder $transportBuilder,
@@ -35,6 +42,12 @@ class Mail implements MailInterface
         $this->inlineTranslation = $inlineTranslation;
     }
 
+    /**
+     * Send email from contact form
+     *
+     * @param string $replyTo
+     * @param array $variables
+     */
     public function send($replyTo, $variables)
     {
         $this->inlineTranslation->suspend();
@@ -58,5 +71,4 @@ class Mail implements MailInterface
             $this->inlineTranslation->resume();
         }
     }
-
 }

@@ -19,6 +19,9 @@ class Config implements ConfigInterface
      */
     private $scopeConfig;
 
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
@@ -67,5 +70,4 @@ class Config implements ConfigInterface
             ScopeInterface::SCOPE_STORE
         );
     }
-
 }
