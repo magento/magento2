@@ -6,7 +6,7 @@
 namespace Magento\Framework\Locale;
 
 /**
- * Interface for classes that returning list of deployed locales.
+ * Interface for classes that returning options array of deployed locales for locale dropdown.
  */
 interface DeployedListInterface
 {

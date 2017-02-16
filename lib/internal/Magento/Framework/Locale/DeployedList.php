@@ -9,7 +9,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\View\DesignInterface;
 
 /**
- * Returns locales that have deployed static content.
+ * Returns options array of locales that have deployed static content.
  */
 class DeployedList implements DeployedListInterface
 {
@@ -21,6 +21,8 @@ class DeployedList implements DeployedListInterface
     private $state;
 
     /**
+     * Operates with available locales.
+     *
      * @var AvailableLocalesInterface
      */
     private $availableLocales;
@@ -31,6 +33,8 @@ class DeployedList implements DeployedListInterface
     private $design;
 
     /**
+     * Locales lists.
+     *
      * @var ListsInterface
      */
     private $localeLists;

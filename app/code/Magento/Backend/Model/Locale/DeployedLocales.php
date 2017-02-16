@@ -13,9 +13,9 @@ use Magento\Framework\View\DesignInterface;
 use Magento\Framework\Filesystem;
 
 /**
- * Returns the list of available locales for the theme.
+ * Returns the list of deployed locales for the theme.
  */
-class AvailableLocales implements AvailableLocalesInterface
+class DeployedLocales implements AvailableLocalesInterface
 {
     /**
      * @var Filesystem
