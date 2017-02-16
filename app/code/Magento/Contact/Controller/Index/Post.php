@@ -77,7 +77,7 @@ class Post extends \Magento\Contact\Controller\Index
             ->setTemplateIdentifier($this->scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, $storeScope))
             ->setTemplateOptions(
                 [
-                    'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                    'area' => 'adminhtml',
                     'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                 ]
             )
