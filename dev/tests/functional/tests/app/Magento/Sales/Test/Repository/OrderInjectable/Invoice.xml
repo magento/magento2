@@ -50,7 +50,7 @@
             </field>
         </dataset>
 
-        <dataset name="partial_capture_qty_0">
+        <dataset name="partial_capture_first_item_qty_0">
             <field name="0" xsi:type="array">
                 <item name="items_data" xsi:type="array">
                     <item name="0" xsi:type="array">
