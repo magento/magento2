@@ -22,7 +22,15 @@ use Magento\Framework\App\Config\FileResolver;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Config\ScopeInterface as ConfigScopeInterface;
 use Magento\Framework\Config\FileIteratorFactory;
+use \Magento\Framework\App\AreaList;
+use \Magento\Backend\App\Area\FrontNameResolver;
 
+/**
+ * Test for ConfigShowCommand.
+ *
+ * @see ConfigShowCommand
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -67,9 +75,13 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        Bootstrap::getInstance()->reinitialize();
+
         $this->objectManager = Bootstrap::getObjectManager();
 
         $this->objectManager->get(ConfigScopeInterface::class)->setCurrentScope(Area::AREA_ADMINHTML);
+
+        $this->objectManager->get(AreaList::class)->getArea(FrontNameResolver::AREA_CODE)->load(Area::PART_CONFIG);
 
         $fileIteratorFactory = $this->objectManager->get(FileIteratorFactory::class);
         $fileIterator = $fileIteratorFactory->create([__DIR__ . '/../../_files/system.xml']);

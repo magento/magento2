@@ -15,7 +15,11 @@ use Magento\Framework\App\Area;
 use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
 use Magento\Config\Model\Config\Backend\Encrypted;
 
-
+/**
+ * Test for ValueProcessor.
+ *
+ * @see ValueProcessor
+ */
 class ValueProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
