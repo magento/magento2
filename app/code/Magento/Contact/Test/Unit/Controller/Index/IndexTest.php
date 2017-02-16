@@ -13,89 +13,82 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      *
      * @var \Magento\Contact\Controller\Index\Index
      */
-    protected $_controller;
+    private $controller;
 
     /**
      * Scope config mock
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_scopeConfig;
+    private $scopeConfig;
 
     /**
      * View mock
      * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_view;
+    private $view;
 
     /**
      * Url mock
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_url;
+    private $url;
 
     protected function setUp()
     {
-        $this->_scopeConfig = $this->getMockForAbstractClass(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
-            ['isSetFlag'],
-            '',
-            false
-        );
-        $context = $this->getMock(
-            \Magento\Framework\App\Action\Context::class,
-            ['getRequest', 'getResponse', 'getView', 'getUrl'],
-            [],
-            '',
-            false
-        );
+        $this->scopeConfig = $this->getMockBuilder(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
+        )->setMethods(
+            ['isSetFlag']
+        )->getMockForAbstractClass();
 
-        $this->_url = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class, [], '', false);
+        $context = $this->getMockBuilder(
+            \Magento\Framework\App\Action\Context::class
+        )->setMethods(
+            ['getRequest', 'getResponse', 'getView', 'getUrl']
+        )->disableOriginalConstructor(
+        )->getMock();
+
+        $this->url = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)->getMockForAbstractClass();
 
         $context->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue($this->_url));
+            ->will($this->returnValue($this->url));
 
         $context->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue(
-                $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false)
+                $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMockForAbstractClass()
             ));
 
         $context->expects($this->any())
             ->method('getResponse')
             ->will($this->returnValue(
-                $this->getMockForAbstractClass(\Magento\Framework\App\ResponseInterface::class, [], '', false)
+                $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)->getMockForAbstractClass()
             ));
 
-        $this->_view = $this->getMock(
-            \Magento\Framework\App\ViewInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->view = $this->getMockBuilder(
+            \Magento\Framework\App\ViewInterface::class
+        )->disableOriginalConstructor(
+        )->getMock();
 
         $context->expects($this->once())
             ->method('getView')
-            ->will($this->returnValue($this->_view));
+            ->will($this->returnValue($this->view));
 
-        $this->_controller = new \Magento\Contact\Controller\Index\Index(
+        $this->controller = new \Magento\Contact\Controller\Index\Index(
             $context,
-            $this->getMock(\Magento\Framework\Mail\Template\TransportBuilder::class, [], [], '', false),
-            $this->getMockForAbstractClass(\Magento\Framework\Translate\Inline\StateInterface::class, [], '', false),
-            $this->_scopeConfig,
-            $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class, [], '', false)
+            $this->scopeConfig
         );
     }
 
     public function testExecute()
     {
-        $this->_view->expects($this->once())
+        $this->view->expects($this->once())
             ->method('loadLayout');
 
-        $this->_view->expects($this->once())
+        $this->view->expects($this->once())
             ->method('renderLayout');
 
-        $this->_controller->execute();
+        $this->controller->execute();
     }
 }

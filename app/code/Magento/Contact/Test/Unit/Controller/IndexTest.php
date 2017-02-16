@@ -6,6 +6,10 @@
 
 namespace Magento\Contact\Test\Unit\Controller;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -13,36 +17,35 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      *
      * @var \Magento\Contact\Controller\Index
      */
-    protected $_controller;
+    private $controller;
 
     /**
      * Scope config instance
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_scopeConfig;
+    private $scopeConfig;
 
     protected function setUp()
     {
-        $this->_scopeConfig = $this->getMockForAbstractClass(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
-            ['isSetFlag'],
-            '',
-            false
-        );
-        $context = $this->getMock(
-            \Magento\Framework\App\Action\Context::class,
-            ['getRequest', 'getResponse'],
-            [],
-            '',
-            false
-        );
+        $this->scopeConfig = $this->getMockBuilder(
+            ScopeConfigInterface::class
+        )->setMethods(
+            ['isSetFlag']
+        )->getMockForAbstractClass();
+
+        $context = $this->getMockBuilder(
+            \Magento\Framework\App\Action\Context::class
+        )->setMethods(
+            ['getRequest', 'getResponse']
+        )->disableOriginalConstructor(
+        )->getMock();
 
         $context->expects($this->any())
             ->method('getRequest')
             ->will(
                 $this->returnValue(
-                    $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false)
+                    $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass()
                 )
             );
 
@@ -50,16 +53,13 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('getResponse')
             ->will(
                 $this->returnValue(
-                    $this->getMockForAbstractClass(\Magento\Framework\App\ResponseInterface::class, [], '', false)
+                    $this->getMockBuilder(ResponseInterface::class)->getMockForAbstractClass()
                 )
             );
 
-        $this->_controller = new \Magento\Contact\Test\Unit\Controller\Stub\IndexStub(
+        $this->controller = new \Magento\Contact\Test\Unit\Controller\Stub\IndexStub(
             $context,
-            $this->getMock(\Magento\Framework\Mail\Template\TransportBuilder::class, [], [], '', false),
-            $this->getMockForAbstractClass(\Magento\Framework\Translate\Inline\StateInterface::class, [], '', false),
-            $this->_scopeConfig,
-            $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class, [], '', false)
+            $this->scopeConfig
         );
     }
 
@@ -70,7 +70,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     public function testDispatch()
     {
-        $this->_scopeConfig->expects($this->once())
+        $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
             ->with(
                 \Magento\Contact\Controller\Index::XML_PATH_ENABLED,
@@ -78,8 +78,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnValue(false));
 
-        $this->_controller->dispatch(
-            $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false)
+        $this->controller->dispatch(
+            $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass()
         );
     }
 }

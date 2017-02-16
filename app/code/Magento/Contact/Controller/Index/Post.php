@@ -6,11 +6,15 @@
  */
 namespace Magento\Contact\Controller\Index;
 
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
+use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\Translate\Inline\StateInterface;
 
 class Post extends \Magento\Contact\Controller\Index
 {
@@ -18,6 +22,36 @@ class Post extends \Magento\Contact\Controller\Index
      * @var DataPersistorInterface
      */
     private $dataPersistor;
+
+    /**
+     * @var \Magento\Framework\Mail\Template\TransportBuilder
+     */
+    private $transportBuilder;
+
+    /**
+     * @var \Magento\Framework\Translate\Inline\StateInterface
+     */
+    private $inlineTranslation;
+    /**
+     * @var Context
+     */
+    private $context;
+
+    public function __construct(
+        Context $context,
+        ScopeConfigInterface $scopeConfig,
+        TransportBuilder $transportBuilder,
+        StateInterface $inlineTranslation,
+        DataPersistorInterface $dataPersistor
+    ) {
+        parent::__construct($context, $scopeConfig);
+        $this->context = $context;
+        $this->scopeConfig = $scopeConfig;
+        $this->transportBuilder = $transportBuilder;
+        $this->inlineTranslation = $inlineTranslation;
+        $this->dataPersistor = $dataPersistor;
+    }
+
 
     /**
      * Post user question
@@ -73,7 +107,7 @@ class Post extends \Magento\Contact\Controller\Index
     private function sendEmail($post)
     {
         $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
-        $transport = $this->_transportBuilder
+        $transport = $this->transportBuilder
             ->setTemplateIdentifier($this->scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, $storeScope))
             ->setTemplateOptions(
                 [
