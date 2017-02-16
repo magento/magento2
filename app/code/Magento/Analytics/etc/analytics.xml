@@ -15,4 +15,9 @@
             </reportProvider>
         </providers>
     </file>
+    <file name="store_config">
+        <providers>
+            <reportProvider name="store_config" class="Magento\Analytics\Model\StoreConfigurationProvider"/>
+        </providers>
+    </file>
 </config>
