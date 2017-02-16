@@ -15,7 +15,6 @@
     <preference for="Magento\Backend\Block\Widget\Button\ToolbarInterface" type="Magento\Backend\Block\Widget\Button\Toolbar" />
     <preference for="Magento\Backend\Service\V1\ModuleServiceInterface" type="Magento\Backend\Service\V1\ModuleService" />
     <preference for="Magento\Backend\Model\View\Layout\FilterInterface" type="Magento\Backend\Model\View\Layout\Filter" />
-    <preference for="Magento\Framework\Locale\AvailableLocalesInterface" type="Magento\Backend\Model\Locale\DeployedLocales" />
     <type name="Magento\Backend\Block\Widget\Button\ButtonList" shared="false" />
     <type name="Magento\Framework\App\AreaList">
         <arguments>

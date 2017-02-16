@@ -3,12 +3,12 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Locale;
+namespace Magento\Framework\Locale\Deployed;
 
 /**
  * Interface for classes that returning array of deployed locales.
  */
-interface DeployedListInterface
+interface OptionInterface
 {
     /**
      * Get array of deployed locales.

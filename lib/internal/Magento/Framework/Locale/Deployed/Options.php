@@ -3,15 +3,17 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Locale;
+namespace Magento\Framework\Locale\Deployed;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Locale\AvailableLocalesInterface;
+use Magento\Framework\Locale\ListsInterface;
 use Magento\Framework\View\DesignInterface;
 
 /**
  * Returns options array of locales that have deployed static content.
  */
-class DeployedList implements DeployedListInterface
+class Options implements OptionInterface
 {
     /**
      * Application state class.
@@ -109,7 +111,7 @@ class DeployedList implements DeployedListInterface
      */
     private function filterLocales(array $locales)
     {
-        if ($this->state->getMode() != State::MODE_PRODUCTION) {
+        if ($this->state->getMode() == State::MODE_PRODUCTION) {
             return $locales;
         }
 
