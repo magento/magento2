@@ -3,18 +3,18 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Phrase;
 
 /**
- * Deployment configuration writer to files: env.php, config.php (config.local.php, config.dist.php)
+ * Deployment configuration writer to files: env.php, config.php.
  */
 class Writer
 {
@@ -24,6 +24,13 @@ class Writer
      * @var Reader
      */
     private $reader;
+
+    /**
+     * Deployment file config reader
+     *
+     * @var FileReader
+     */
+    private $fileReader;
 
     /**
      * Application filesystem
@@ -50,26 +57,27 @@ class Writer
     private $deploymentConfig;
 
     /**
-     * Constructor
-     *
      * @param Reader $reader
      * @param Filesystem $filesystem
      * @param ConfigFilePool $configFilePool
      * @param DeploymentConfig $deploymentConfig
      * @param Writer\FormatterInterface $formatter
+     * @param FileReader $fileReader
      */
     public function __construct(
         Reader $reader,
         Filesystem $filesystem,
         ConfigFilePool $configFilePool,
         DeploymentConfig $deploymentConfig,
-        Writer\FormatterInterface $formatter = null
+        Writer\FormatterInterface $formatter = null,
+        FileReader $fileReader = null
     ) {
         $this->reader = $reader;
         $this->filesystem = $filesystem;
-        $this->formatter = $formatter ?: new Writer\PhpFormatter();
         $this->configFilePool = $configFilePool;
         $this->deploymentConfig = $deploymentConfig;
+        $this->formatter = $formatter ?: ObjectManager::getInstance()->get(Writer\PhpFormatter::class);
+        $this->fileReader = $fileReader ?: ObjectManager::getInstance()->get(FileReader::class);
     }
 
     /**
@@ -89,22 +97,33 @@ class Writer
     }
 
     /**
-     * Saves config
+     * Saves config in specified file.
+     * Usage:
+     * ```php
+     * saveConfig(
+     *      [
+     *          ConfigFilePool::APP_ENV => ['some' => 'value'],
+     *      ],
+     *      true,
+     *      null,
+     *      []
+     * )
+     * ```
      *
-     * @param array $data
-     * @param bool $override
-     * @param string $pool
-     * @param array $comments
+     * @param array $data The data to be saved
+     * @param bool $override Whether values should be overrided
+     * @param string $pool The file pool (deprecated)
+     * @param array $comments The array of comments
      * @return void
      * @throws FileSystemException
      */
     public function saveConfig(array $data, $override = false, $pool = null, array $comments = [])
     {
-        foreach ($data as $fileKey => $config) {
-            $paths = $pool ? $this->configFilePool->getPathsByPool($pool) : $this->configFilePool->getPaths();
+        $paths = $this->configFilePool->getPaths();
 
+        foreach ($data as $fileKey => $config) {
             if (isset($paths[$fileKey])) {
-                $currentData = $this->reader->loadConfigFile($fileKey, $paths[$fileKey], true);
+                $currentData = $this->fileReader->load($fileKey);
                 if ($currentData) {
                     if ($override) {
                         $config = array_merge($currentData, $config);
