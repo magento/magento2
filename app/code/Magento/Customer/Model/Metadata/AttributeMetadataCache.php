@@ -8,10 +8,6 @@ namespace Magento\Customer\Model\Metadata;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
-use Magento\Customer\Api\Data\OptionInterface;
-use Magento\Customer\Api\Data\OptionInterfaceFactory;
-use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Eav\Model\Cache\Type;
 use Magento\Eav\Model\Entity\Attribute;
@@ -48,19 +44,9 @@ class AttributeMetadataCache
     private $isAttributeCacheEnabled;
 
     /**
-     * @var AttributeMetadataInterfaceFactory
+     * @var AttributeMetadataFactory
      */
     private $attributeMetadataFactory;
-
-    /**
-     * @var OptionInterfaceFactory
-     */
-    private $optionFactory;
-
-    /**
-     * @var ValidationRuleInterfaceFactory
-     */
-    private $validationRuleFactory;
 
     /**
      * @var SerializerInterface
@@ -72,24 +58,18 @@ class AttributeMetadataCache
      *
      * @param CacheInterface $cache
      * @param StateInterface $state
-     * @param AttributeMetadataInterfaceFactory $attributeMetadataFactory
-     * @param OptionInterfaceFactory $optionFactory
-     * @param ValidationRuleInterfaceFactory $validationRuleFactory
+     * @param AttributeMetadataFactory $attributeMetadataFactory
      * @param SerializerInterface $serializer
      */
     public function __construct(
         CacheInterface $cache,
         StateInterface $state,
-        AttributeMetadataInterfaceFactory $attributeMetadataFactory,
-        OptionInterfaceFactory $optionFactory,
-        ValidationRuleInterfaceFactory $validationRuleFactory,
+        AttributeMetadataFactory $attributeMetadataFactory,
         SerializerInterface $serializer
     ) {
         $this->cache = $cache;
         $this->state = $state;
         $this->attributeMetadataFactory = $attributeMetadataFactory;
-        $this->optionFactory = $optionFactory;
-        $this->validationRuleFactory = $validationRuleFactory;
         $this->serializer = $serializer;
     }
 
@@ -112,7 +92,7 @@ class AttributeMetadataCache
                 $attributesData = $this->serializer->unserialize($serializedData);
                 $attributes = [];
                 foreach ($attributesData as $key => $attributeData) {
-                    $attributes[$key] = $this->createMetadataAttribute($attributeData);
+                    $attributes[$key] = $this->attributeMetadataFactory->create($attributeData);
                 }
                 $this->attributes[$entityType . $suffix] = $attributes;
                 return $attributes;
@@ -180,45 +160,5 @@ class AttributeMetadataCache
             $this->isAttributeCacheEnabled = $this->state->isEnabled(Type::TYPE_IDENTIFIER);
         }
         return $this->isAttributeCacheEnabled;
-    }
-
-    /**
-     * Create and populate with data AttributeMetadataInterface
-     *
-     * @param array $data
-     * @return AttributeMetadataInterface
-     */
-    private function createMetadataAttribute($data)
-    {
-        if (isset($data[AttributeMetadataInterface::OPTIONS])) {
-            $data[AttributeMetadataInterface::OPTIONS] = $this->createOptions(
-                $data[AttributeMetadataInterface::OPTIONS]
-            );
-        }
-        if (isset($data[AttributeMetadataInterface::VALIDATION_RULES])) {
-            $validationRules = [];
-            foreach ($data[AttributeMetadataInterface::VALIDATION_RULES] as $validationRuleData) {
-                $validationRules[] = $this->validationRuleFactory->create(['data' => $validationRuleData]);
-            }
-            $data[AttributeMetadataInterface::VALIDATION_RULES] = $validationRules;
-        }
-        return $this->attributeMetadataFactory->create(['data' => $data]);
-    }
-
-    /**
-     * Create and populate with data OptionInterface
-     *
-     * @param array $data
-     * @return OptionInterface[]
-     */
-    private function createOptions($data)
-    {
-        foreach ($data as $key => $optionData) {
-            if (isset($optionData[OptionInterface::OPTIONS])) {
-                $optionData[OptionInterface::OPTIONS] = $this->createOptions($optionData[OptionInterface::OPTIONS]);
-            }
-            $data[$key] = $this->optionFactory->create(['data' => $optionData]);
-        }
-        return $data;
     }
 }
