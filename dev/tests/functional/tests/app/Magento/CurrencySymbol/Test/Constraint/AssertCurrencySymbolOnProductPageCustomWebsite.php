@@ -29,7 +29,7 @@ class AssertCurrencySymbolOnProductPageCustomWebsite extends AbstractConstraint
         InjectableFixture $product,
         BrowserInterface $browser,
         CatalogProductView $catalogProductView,
-        array $currencySymbol  = []
+        array $currencySymbol = []
     ) {
         $website = $product->getDataFieldConfig('website_ids')['source']->getWebsites()[0];
         $url = $_ENV['app_frontend_url'] . 'websites/' . $website->getCode() . '/' . $product->getUrlKey() . '.html';
