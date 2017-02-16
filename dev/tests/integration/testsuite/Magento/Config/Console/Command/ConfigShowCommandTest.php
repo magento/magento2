@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig\FileReader;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Console\Cli;
@@ -13,7 +14,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 
 class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
@@ -39,7 +39,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
     private $configFilePool;
 
     /**
-     * @var Reader
+     * @var FileReader
      */
     private $reader;
 
@@ -71,7 +71,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
-        $this->reader = $this->objectManager->get(Reader::class);
+        $this->reader = $this->objectManager->get(FileReader::class);
         $this->writer = $this->objectManager->get(Writer::class);
 
         $this->config = $this->loadConfig();

@@ -7,7 +7,7 @@ namespace Magento\Config\Console\Command;
 
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\DeploymentConfig\FileReader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -50,7 +50,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $scopeConfig;
 
     /**
-     * @var Reader
+     * @var FileReader
      */
     private $reader;
 
@@ -81,7 +81,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $this->reader = $this->objectManager->get(Reader::class);
+        $this->reader = $this->objectManager->get(FileReader::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
         $this->arrayManager = $this->objectManager->get(ArrayManager::class);

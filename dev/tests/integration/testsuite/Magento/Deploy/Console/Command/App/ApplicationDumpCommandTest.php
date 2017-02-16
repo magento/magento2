@@ -25,7 +25,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var DeploymentConfig\Reader
+     * @var DeploymentConfig\FileReader
      */
     private $reader;
 
@@ -50,7 +50,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->reader = $this->objectManager->get(DeploymentConfig\Reader::class);
+        $this->reader = $this->objectManager->get(DeploymentConfig\FileReader::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
 

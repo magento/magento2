@@ -15,24 +15,9 @@ return [
     ],
     'db' => [
         'table_prefix' => '',
-        'connection' => [
-            'default' => [
-                'host' => 'localhost',
-                'dbname' => 'magento',
-                'username' => 'root',
-                'password' => '1234',
-                'model' => 'mysql4',
-                'engine' => 'innodb',
-                'initStatements' => 'SET NAMES utf8;',
-                'active' => '1',
-            ],
-        ],
+        'connection' => [],
     ],
-    'resource' => [
-        'default_setup' => [
-            'connection' => 'default',
-        ],
-    ],
+    'resource' => [],
     'x-frame-options' => 'SAMEORIGIN',
     'MAGE_MODE' => 'default',
     'cache_types' => [

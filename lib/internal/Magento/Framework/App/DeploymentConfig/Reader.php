@@ -11,7 +11,10 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
- * Deployment configuration reader
+ * Deployment configuration reader.
+ * Loads the merged configuration from config files.
+ *
+ * @see FileReader The reader for specific configuration file
  */
 class Reader
 {
@@ -105,7 +108,7 @@ class Reader
                 }
                 $allFilesData[$configFile] = $fileData;
                 if (!empty($fileData)) {
-                    $result = array_merge($result, $fileData);
+                    $result = array_replace_recursive($result, $fileData);
                 }
             }
         }
