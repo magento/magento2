@@ -41,7 +41,7 @@ class CsvTemplate implements TemplateInterface
         $filename = MTF_TESTS_PATH . $this->config['filename'] . '.php';
 
         if (!file_exists($filename)) {
-            throw new \Exception('File "' . $filename . '" does not exists.');
+            throw new \Exception('File "' . $filename . '" does not exist.');
         }
 
         $data = include $filename;

@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ImportExport\Test\TestCase\ImportDataNegativeTest" summary="Import data">
         <variation name="PreventImportAdvancedPricingIfIncorrectData" ticketId="MAGETWO-46155" summary="Import advanced pricing if incorrect data">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="patterns" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="0" xsi:type="string">Value for 'tier_price' attribute</item>

@@ -17,28 +17,14 @@ class FormPageActions extends \Magento\Backend\Test\Block\PageActions
      *
      * @var string
      */
-    protected $checkDataButton = '#upload_button';
-
-    /**
-     * Magento new loader.
-     *
-     * @var string
-     */
-    protected $spinner = '[data-role="spinner"]';
+    private $checkDataButton = '#upload_button';
 
     /**
      * Magento loader.
      *
      * @var string
      */
-    protected $loader = '//ancestor::body/div[@data-role="loader"]';
-
-    /**
-     * Magento varienLoader.js loader.
-     *
-     * @var string
-     */
-    protected $loaderOld = '//ancestor::body/div[@id="loading-mask"]';
+    private $loader = '//ancestor::body/div[@data-role="loader"]';
 
     /**
      * Click "Check Data" button.
@@ -49,8 +35,6 @@ class FormPageActions extends \Magento\Backend\Test\Block\PageActions
     {
         $this->waitForElementVisible($this->checkDataButton);
         $this->_rootElement->find($this->checkDataButton)->click();
-        $this->waitForElementNotVisible($this->spinner);
         $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
-        $this->waitForElementNotVisible($this->loaderOld, Locator::SELECTOR_XPATH);
     }
 }
