@@ -6,6 +6,9 @@
 
 namespace Magento\Contact\Test\Unit\Controller\Index;
 
+use Magento\Contact\Api\ConfigInterface;
+use Magento\Contact\Model\Config;
+
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -16,10 +19,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
-     * Scope config mock
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $scopeConfig;
+    private $configMock;
 
     /**
      * View mock
@@ -35,11 +37,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfig = $this->getMockBuilder(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
-        )->setMethods(
-            ['isSetFlag']
-        )->getMockForAbstractClass();
+        $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
 
         $context = $this->getMockBuilder(
             \Magento\Framework\App\Action\Context::class
@@ -77,7 +75,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         $this->controller = new \Magento\Contact\Controller\Index\Index(
             $context,
-            $this->scopeConfig
+            $this->configMock
         );
     }
 

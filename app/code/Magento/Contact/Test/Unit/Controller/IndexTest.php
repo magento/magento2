@@ -6,7 +6,7 @@
 
 namespace Magento\Contact\Test\Unit\Controller;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Contact\Api\ConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 
@@ -20,19 +20,15 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
-     * Scope config instance
+     * Module config instance
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $scopeConfig;
+    private $configMock;
 
     protected function setUp()
     {
-        $this->scopeConfig = $this->getMockBuilder(
-            ScopeConfigInterface::class
-        )->setMethods(
-            ['isSetFlag']
-        )->getMockForAbstractClass();
+        $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
 
         $context = $this->getMockBuilder(
             \Magento\Framework\App\Action\Context::class
@@ -59,7 +55,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         $this->controller = new \Magento\Contact\Test\Unit\Controller\Stub\IndexStub(
             $context,
-            $this->scopeConfig
+            $this->configMock
         );
     }
 
@@ -70,13 +66,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     public function testDispatch()
     {
-        $this->scopeConfig->expects($this->once())
-            ->method('isSetFlag')
-            ->with(
-                \Magento\Contact\Controller\Index::XML_PATH_ENABLED,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
-            ->will($this->returnValue(false));
+        $this->configMock->method('isEnabled')->willReturn(false);
 
         $this->controller->dispatch(
             $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass()

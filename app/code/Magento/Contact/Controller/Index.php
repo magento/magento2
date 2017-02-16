@@ -5,9 +5,10 @@
  */
 namespace Magento\Contact\Controller;
 
-use Magento\Framework\Exception\NotFoundException;
+use Magento\Contact\Api\ConfigInterface;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Contact module base controller
@@ -17,38 +18,38 @@ abstract class Index extends \Magento\Framework\App\Action\Action
     /**
      * Recipient email config path
      */
-    const XML_PATH_EMAIL_RECIPIENT = 'contact/email/recipient_email';
+    const XML_PATH_EMAIL_RECIPIENT = ConfigInterface::XML_PATH_EMAIL_RECIPIENT;
 
     /**
      * Sender email config path
      */
-    const XML_PATH_EMAIL_SENDER = 'contact/email/sender_email_identity';
+    const XML_PATH_EMAIL_SENDER = ConfigInterface::XML_PATH_EMAIL_SENDER;
 
     /**
      * Email template config path
      */
-    const XML_PATH_EMAIL_TEMPLATE = 'contact/email/email_template';
+    const XML_PATH_EMAIL_TEMPLATE = ConfigInterface::XML_PATH_EMAIL_TEMPLATE;
 
     /**
      * Enabled config path
      */
-    const XML_PATH_ENABLED = 'contact/contact/enabled';
+    const XML_PATH_ENABLED = ConfigInterface::XML_PATH_ENABLED;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ConfigInterface
      */
-    protected $scopeConfig;
+    private $contactsConfig;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
+     * @param Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        Context $context,
+        ConfigInterface $contactsConfig
     ) {
         parent::__construct($context);
-        $this->scopeConfig = $scopeConfig;
+        $this->contactsConfig = $contactsConfig;
     }
 
     /**
@@ -60,7 +61,7 @@ abstract class Index extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE)) {
+        if (!$this->contactsConfig->isEnabled()) {
             throw new NotFoundException(__('Page not found.'));
         }
         return parent::dispatch($request);

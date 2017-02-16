@@ -6,6 +6,7 @@
  */
 namespace Magento\Contact\Test\Unit\Controller\Index;
 
+use Magento\Contact\Api\ConfigInterface;
 use Magento\Framework\Controller\Result\Redirect;
 
 /**
@@ -16,17 +17,17 @@ class PostTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Contact\Controller\Index\Index
      */
-    protected $controller;
+    private $controller;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $scopeConfigMock;
+    private $configMock;
 
     /**
      * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $redirectResultFactoryMock;
+    private $redirectResultFactoryMock;
 
     /**
      * @var Redirect|\PHPUnit_Framework_MockObject_MockObject
@@ -36,46 +37,41 @@ class PostTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $urlMock;
+    private $urlMock;
 
     /**
      * @var \Magento\Framework\App\Request\HttpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestStub;
+    private $requestStub;
 
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $transportBuilderMock;
+    private $transportBuilderMock;
 
     /**
      * @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $inlineTranslationMock;
+    private $inlineTranslationMock;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $messageManagerMock;
+    private $messageManagerMock;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManagerMock;
+    private $storeManagerMock;
 
     /**
      * @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dataPersistorMock;
+    private $dataPersistorMock;
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
-            ['isSetFlag'],
-            '',
-            false
-        );
+        $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
         $context = $this->getMock(
             \Magento\Framework\App\Action\Context::class,
             ['getRequest', 'getResponse', 'getResultRedirectFactory', 'getUrl', 'getRedirect', 'getMessageManager'],
@@ -148,21 +144,11 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->redirectResultFactoryMock);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $this->controller = $objectManagerHelper->getObject(
-            \Magento\Contact\Controller\Index\Post::class,
-            [
-                'context' => $context,
-                'transportBuilder' => $this->transportBuilderMock,
-                'inlineTranslation' => $this->inlineTranslationMock,
-                'scopeConfig' => $this->scopeConfigMock,
-                'storeManager' => $this->storeManagerMock
-            ]
-        );
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->controller,
-            'dataPersistor',
+        $this->controller = new \Magento\Contact\Controller\Index\Post(
+            $context,
+            $this->configMock,
+            $this->transportBuilderMock,
+            $this->inlineTranslationMock,
             $this->dataPersistorMock
         );
     }

@@ -6,10 +6,10 @@
  */
 namespace Magento\Contact\Controller\Index;
 
+use Magento\Contact\Api\ConfigInterface;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
@@ -36,20 +36,24 @@ class Post extends \Magento\Contact\Controller\Index
      * @var Context
      */
     private $context;
+    /**
+     * @var ConfigInterface
+     */
+    private $contactsConfig;
 
     public function __construct(
         Context $context,
-        ScopeConfigInterface $scopeConfig,
+        ConfigInterface $contactsConfig,
         TransportBuilder $transportBuilder,
         StateInterface $inlineTranslation,
         DataPersistorInterface $dataPersistor
     ) {
-        parent::__construct($context, $scopeConfig);
+        parent::__construct($context, $contactsConfig);
         $this->context = $context;
-        $this->scopeConfig = $scopeConfig;
         $this->transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
         $this->dataPersistor = $dataPersistor;
+        $this->contactsConfig = $contactsConfig;
     }
 
 
@@ -108,7 +112,7 @@ class Post extends \Magento\Contact\Controller\Index
     {
         $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
         $transport = $this->transportBuilder
-            ->setTemplateIdentifier($this->scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, $storeScope))
+            ->setTemplateIdentifier($this->contactsConfig->emailTemplate())
             ->setTemplateOptions(
                 [
                     'area' => 'adminhtml',
@@ -116,8 +120,8 @@ class Post extends \Magento\Contact\Controller\Index
                 ]
             )
             ->setTemplateVars(['data' => new \Magento\Framework\DataObject($post)])
-            ->setFrom($this->scopeConfig->getValue(self::XML_PATH_EMAIL_SENDER, $storeScope))
-            ->addTo($this->scopeConfig->getValue(self::XML_PATH_EMAIL_RECIPIENT, $storeScope))
+            ->setFrom($this->contactsConfig->emailSender())
+            ->addTo($this->contactsConfig->emailRecipient())
             ->setReplyTo($post['email'])
             ->getTransport();
 
