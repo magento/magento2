@@ -125,7 +125,7 @@ class Writer
         $paths = $this->configFilePool->getPaths();
 
         foreach ($data as $fileKey => $config) {
-            if (isset($paths[$fileKey])) {
+            if ($this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->isExist($paths[$fileKey])) {
                 $currentData = $this->fileReader->load($fileKey);
                 if ($currentData) {
                     if ($override) {

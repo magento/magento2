@@ -195,8 +195,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->dirWrite->expects($this->any())
             ->method('isExist')
             ->willReturn(true);
-        $this->formatter
-            ->expects($this->once())
+        $this->formatter->expects($this->once())
             ->method('format')
             ->with($testSetExpected[ConfigFilePool::APP_CONFIG])
             ->willReturn([]);
@@ -245,6 +244,9 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryRead')
             ->with(DirectoryList::CONFIG)
             ->willReturn($this->dirRead);
+        $this->dirWrite->expects($this->any())
+            ->method('isExist')
+            ->willReturn(true);
 
         $this->object->saveConfig([ConfigFilePool::APP_ENV => ['key' => 'value']]);
     }
