@@ -25,6 +25,8 @@
             <constraint name="Magento\Install\Test\Constraint\AssertKeyCreated" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\Install\Test\Constraint\AssertCurrencySelected" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertDeclineSubscriptionPopup" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled" />
         </variation>
         <variation name="InstallTestVariation3" summary="Install with table prefix">
             <data name="user/dataset" xsi:type="string">default</data>

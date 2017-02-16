@@ -31,9 +31,9 @@ class AssertConfigAnalyticsEnabled extends AbstractConstraint
         $dashboard->getMenuBlock()->navigate('Stores > Configuration');
         $systemConfigPage->getForm()->getGroup('analytics', 'general');
 
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertFalse(
             (bool)$configAnalytics->getAnalyticsForm()->isAnalyticsEnabled(),
-            'Magento Analytics is disabled'
+            'Magento Analytics is not enabled'
         );
 
         \PHPUnit_Framework_Assert::assertEquals(
