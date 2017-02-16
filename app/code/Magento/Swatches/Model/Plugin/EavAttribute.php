@@ -8,6 +8,8 @@ namespace Magento\Swatches\Model\Plugin;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Swatches\Model\Swatch;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Plugin model for Catalog Resource Attribute
@@ -51,18 +53,28 @@ class EavAttribute
     protected $isSwatchExists;
 
     /**
+     * Serializer from arrays to string.
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory
      * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
-        \Magento\Swatches\Helper\Data $swatchHelper
+        \Magento\Swatches\Helper\Data $swatchHelper,
+        Json $serializer = null
     ) {
         $this->swatchCollectionFactory = $collectionFactory;
         $this->swatchFactory = $swatchFactory;
         $this->swatchHelper = $swatchHelper;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
     }
 
     /**
@@ -135,10 +147,10 @@ class EavAttribute
         if ($attribute->getData(Swatch::SWATCH_INPUT_TYPE_KEY) == Swatch::SWATCH_INPUT_TYPE_DROPDOWN) {
             $additionalData = $attribute->getData('additional_data');
             if (!empty($additionalData)) {
-                $additionalData = unserialize($additionalData);
+                $additionalData = $this->serializer->unserialize($additionalData);
                 if (is_array($additionalData) && isset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY])) {
                     unset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY]);
-                    $attribute->setData('additional_data', serialize($additionalData));
+                    $attribute->setData('additional_data', $this->serializer->serialize($additionalData));
                 }
             }
         }
