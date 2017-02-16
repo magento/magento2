@@ -11,11 +11,10 @@ define([
 
     describe('ui/js/grid/sticky/sticky', function () {
         var stickyObj,
-            data,
-            stub;
+            data;
 
-        Sticky.prototype.initialize = function () {
-        };
+        /** Stub */
+        Sticky.prototype.initialize = function () {};
 
         stickyObj = new Sticky({});
 
@@ -63,7 +62,8 @@ define([
         });
         describe('has handlers', function () {
             it('has onWindowScroll event', function () {
-                stickyObj.adjustOffset = function (){
+                /** Stub */
+                stickyObj.adjustOffset = function () {
                     return this;
                 };
 
@@ -86,6 +86,7 @@ define([
         describe('has getters', function () {
             it('has getListingWidth', function () {
                 stickyObj.listingNode = {
+                    /** Stub */
                     width: function () {
                         return 100500;
                     }
@@ -144,10 +145,13 @@ define([
                 expect(stickyObj.visible).toEqual(false);
             });
             it('has adjustContainerElemsWidth event', function () {
-                stickyObj.resizeContainer = function(){
+                /** Stub */
+                stickyObj.resizeContainer = function () {
                     return this;
                 };
-                stickyObj.resizeCols = function(){
+
+                /** Stub */
+                stickyObj.resizeCols = function () {
                     return this;
                 };
                 spyOn(stickyObj, 'resizeBulk');
@@ -160,5 +164,5 @@ define([
                 expect(stickyObj.adjustOffset).toHaveBeenCalled();
             });
         });
-    })
+    });
 });

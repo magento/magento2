@@ -170,7 +170,7 @@ define([
         _setClasses: function () {
             var additional = this.additionalClasses;
 
-            if (_.isString(additional)){
+            if (_.isString(additional)) {
                 this.additionalClasses = {};
 
                 if (additional.trim().length) {
@@ -206,8 +206,10 @@ define([
             values.some(function (v) {
                 if (v !== null && v !== undefined) {
                     value = v;
+
                     return true;
                 }
+
                 return false;
             });
 
@@ -435,6 +437,7 @@ define([
         setDifferedFromDefault: function () {
             var value = typeof this.value() != 'undefined' && this.value() !== null ? this.value() : '',
                 defaultValue = typeof this.default != 'undefined' && this.default !== null ? this.default : '';
+
             this.isDifferedFromDefault(value !== defaultValue);
         },
 
