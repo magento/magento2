@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Test\Unit\Config\Scope;
+namespace Magento\Framework\App\Test\Unit\Scope;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeInterface;
@@ -13,11 +13,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Scope\Validator;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-/**
- * @deprecated As tested model class was moved to another directory,
- *             unit test was created in the appropriate directory.
- * @see \Magento\Framework\App\Test\Unit\Scope\ValidatorTest
- */
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**

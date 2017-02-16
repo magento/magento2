@@ -3,17 +3,19 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Scope;
+namespace Magento\Framework\App\Config\Scope;
 
 use InvalidArgumentException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Framework\App\ScopeResolverPool;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 
 /**
- * Class Validator validates scope and scope code.
+ * @deprecated Added in order to avoid backward incompatibility because class was moved to another directory.
+ * @see \Magento\Framework\App\Scope\Validator
  */
 class Validator implements ValidatorInterface
 {
