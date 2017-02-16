@@ -22,6 +22,7 @@
                 <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="paymentForm" xsi:type="string">braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="configData" xsi:type="string">braintree</data>
@@ -52,6 +53,7 @@
                 <item name="0" xsi:type="string">145.98</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="paymentForm" xsi:type="string">braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="configData" xsi:type="string">braintree, braintree_sale</data>
@@ -79,6 +81,7 @@
                 <item name="grandTotal" xsi:type="string">145.98</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="paymentForm" xsi:type="string">braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree_fraud_rejected</data>
             <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Processing</data>

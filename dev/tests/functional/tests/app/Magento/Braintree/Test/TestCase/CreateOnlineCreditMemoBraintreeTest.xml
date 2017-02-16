@@ -24,6 +24,7 @@
                 <item name="shipping_method" xsi:type="string">Fixed</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="paymentForm" xsi:type="string">braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="configData" xsi:type="string">braintree</data>
@@ -64,6 +65,7 @@
                 <item name="shipping_method" xsi:type="string">Fixed</item>
             </data>
             <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="paymentForm" xsi:type="string">braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="configData" xsi:type="string">braintree</data>

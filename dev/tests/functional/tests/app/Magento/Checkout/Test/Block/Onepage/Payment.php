@@ -75,13 +75,14 @@ class Payment extends Block
      *
      * @param array $payment
      * @param CreditCard|null $creditCard
+     * @param string $paymentForm
      * @param bool $fillCreditCardOn3rdParty
      * @throws \Exception
-     * @return void
      */
     public function selectPaymentMethod(
         array $payment,
         CreditCard $creditCard = null,
+        $paymentForm,
         $fillCreditCardOn3rdParty = false
     ) {
         $paymentMethod = $payment['method'];
@@ -109,13 +110,7 @@ class Payment extends Block
             $this->_rootElement->find($this->purchaseOrderNumber)->setValue($payment['po_number']);
         }
         if ($creditCard !== null && $fillCreditCardOn3rdParty === false) {
-            $module = $creditCard->hasData('payment_code') ? ucfirst($creditCard->getPaymentCode()) : 'Payment';
-            /** @var \Magento\Payment\Test\Block\Form\PaymentCc $formBlock */
-            $formBlock = $this->blockFactory->create(
-                "\\Magento\\{$module}\\Test\\Block\\Form\\{$module}Cc",
-                ['element' => $this->_rootElement->find('#payment_form_' . $paymentMethod)]
-            );
-            $formBlock->fill($creditCard);
+            $this->callRender($paymentForm, 'fill', [$creditCard]);
         }
     }
 
