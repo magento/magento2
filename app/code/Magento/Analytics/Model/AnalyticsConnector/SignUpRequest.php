@@ -3,21 +3,19 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Analytics\Model\AnalyticsConnector;
 
 use Magento\Config\Model\Config;
-use Magento\Framework\HTTP\ZendClientFactory as HttpClientFactory;
+use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Magento\Framework\HTTP\ZendClient as HttpClient;
 use Zend_Http_Response as HttpResponse;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class SignUpRequest
+ * Representation of a 'SignUp' request.
  *
- * Perform direct call to MA services for subscription.
- * In case of success returns MA access token.
+ * Prepares and sends the request to the MBI service, processes response.
  */
 class SignUpRequest
 {
@@ -32,9 +30,14 @@ class SignUpRequest
     private $config;
 
     /**
-     * @var HttpClientFactory
+     * @var CurlFactory
      */
-    private $httpClientFactory;
+    private $curlFactory;
+
+    /**
+     * @var HttpResponseFactory
+     */
+    private $httpResponseFactory;
 
     /**
      * @var LoggerInterface
@@ -42,24 +45,25 @@ class SignUpRequest
     private $logger;
 
     /**
-     * SignUpRequest constructor.
-     *
      * @param Config $config
-     * @param HttpClientFactory $httpClientFactory
+     * @param CurlFactory $curlFactory
+     * @param HttpResponseFactory $httpResponseFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
         Config $config,
-        HttpClientFactory $httpClientFactory,
+        CurlFactory $curlFactory,
+        HttpResponseFactory $httpResponseFactory,
         LoggerInterface $logger
     ) {
         $this->config = $config;
-        $this->httpClientFactory = $httpClientFactory;
+        $this->curlFactory = $curlFactory;
+        $this->httpResponseFactory = $httpResponseFactory;
         $this->logger = $logger;
     }
 
     /**
-     * Prepares json string with request data
+     * Prepares request data in JSON format.
      *
      * @param string $integrationToken
      * @return string
@@ -69,33 +73,40 @@ class SignUpRequest
         return json_encode(
             [
                 "token" => $integrationToken,
-                "url" => $this->config->getConfigDataValue(Store::XML_PATH_SECURE_BASE_URL)
+                "url" => $this->config->getConfigDataValue(
+                    Store::XML_PATH_SECURE_BASE_URL
+                )
             ]
         );
     }
 
     /**
-     * Extracts token from the response
+     * Extracts an MBI access token from the response.
+     *
+     * Returns the token or FALSE if the token is not found.
      *
      * @param HttpResponse $response
      * @return string|false
      */
-    private function extractResponseToken(HttpResponse $response)
+    private function extractAccessToken(HttpResponse $response)
     {
         $token = false;
-        if ($response->getStatus() === 200) {
+
+        if ($response->getStatus() === 201) {
             $body = json_decode($response->getBody(), 1);
-            if (isset($body['token']) && !empty($body['token'])) {
-                $token = $body['token'];
+
+            if (isset($body['access-token']) && !empty($body['access-token'])) {
+                $token = $body['access-token'];
             }
         }
+
         return $token;
     }
 
     /**
-     * Performs signUp call to MA
-     * Sends data about instance base url and integration user token
-     * Returns MA access token as a result
+     * Performs a 'signUp' call to MBI service.
+     *
+     * Returns MBI access token or FALSE in case of failure.
      *
      * @param string $integrationToken
      * @return string|false
@@ -103,19 +114,50 @@ class SignUpRequest
     public function call($integrationToken)
     {
         $token = false;
-        /** @var HttpClient $httpClient */
-        $httpClient = $this->httpClientFactory->create();
-        $httpClient->setUri($this->config->getConfigDataValue($this->signUpUrlPath));
-        $httpClient->setRawData($this->getRequestJson($integrationToken));
-        $httpClient->setMethod(HttpClient::POST);
+
+        $curl = $this->curlFactory->create();
+
+        $curl->write(
+            HttpClient::POST,
+            $this->config->getConfigDataValue($this->signUpUrlPath),
+            '1.1',
+            ['Content-Type: application/json'],
+            $this->getRequestJson($integrationToken)
+        );
+
         try {
-            $token = $this->extractResponseToken($httpClient->request());
+            $result = $curl->read();
+
+            if ($curl->getErrno()) {
+                $this->logger->critical(
+                    new \Exception(
+                        sprintf(
+                            'MBI service CURL connection error #%s: %s',
+                            $curl->getErrno(),
+                            $curl->getError()
+                        )
+                    )
+                );
+
+                return false;
+            }
+
+            $response = $this->httpResponseFactory->create($result);
+
+            $token = $this->extractAccessToken($response);
+
             if (!$token) {
-                $this->logger->warning('The attempt of subscription was unsuccessful on step sign-up.');
+                $this->logger->warning(
+                    sprintf(
+                        'Subscription for MBI service has been failed. An error occurred during token exchange: %s',
+                        !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
+                    )
+                );
             }
         } catch (\Exception $e) {
             $this->logger->critical($e);
         }
+
         return $token;
     }
 }

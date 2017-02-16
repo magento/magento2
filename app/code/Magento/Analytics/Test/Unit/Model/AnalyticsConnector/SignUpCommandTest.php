@@ -9,6 +9,7 @@ use Magento\Analytics\Model\AnalyticsConnector\SignUpCommand;
 use Magento\Analytics\Model\AnalyticsConnector\SignUpRequest;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\IntegrationManager;
+use Magento\Integration\Model\Oauth\Token as IntegrationToken;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -32,6 +33,11 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
     private $integrationManagerMock;
 
     /**
+     * @var IntegrationToken|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $integrationToken;
+
+    /**
      * @var SignUpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     private $signUpRequestMock;
@@ -44,6 +50,13 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
         $this->integrationManagerMock = $this->getMockBuilder(IntegrationManager::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->integrationToken = $this->getMockBuilder(IntegrationToken::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getToken'])
+            ->getMock();
+        $this->integrationToken->expects($this->any())
+            ->method('getToken')
+            ->willReturn('IntegrationToken');
         $this->signUpRequestMock = $this->getMockBuilder(SignUpRequest::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -62,7 +75,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->integrationManagerMock->expects($this->once())
             ->method('generateToken')
-            ->willReturn('IntegrationToken');
+            ->willReturn($this->integrationToken);
         $this->integrationManagerMock->expects($this->once())
             ->method('activateIntegration')
             ->willReturn(true);
@@ -98,7 +111,7 @@ class SignUpCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->integrationManagerMock->expects($this->once())
             ->method('generateToken')
-            ->willReturn('IntegrationToken');
+            ->willReturn($this->integrationToken);
         $this->integrationManagerMock->expects($this->once())
             ->method('activateIntegration')
             ->willReturn(true);
