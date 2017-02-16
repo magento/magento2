@@ -55,7 +55,7 @@ class PaypalIframe extends Method
      *
      * @var string
      */
-    private $loader = '#lightBoxDiv;';
+    private $loader = '#lightBoxDiv';
 
     /**
      * Fill credit card data in PayPal iframe form.

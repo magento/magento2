@@ -9,10 +9,11 @@ use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Preconditions:
- * 1. Complete a sales order with online payment method.
+ * 1. Create order with PayPal Payflow Link.
+ * 2. Create online invoice on full amount with PayPal Payflow Link.
  *
  * Steps:
- * 1. Go to Order from PreConditions Detail Page.
+ * 1. Go to Order.
  * 2. Open Invoice.
  * 3. Click "Credit Memo" button on the Invoice page.
  * 4. Click "Refund".
@@ -26,7 +27,6 @@ use Magento\Mtf\TestCase\Scenario;
 class CreateOnlineCreditMemoPayflowLinkTest extends Scenario
 {
     /* tags */
-    const MVP = 'yes';
     const TEST_TYPE = '3rd_party_test';
     const SEVERITY = 'S0';
     /* end tags */
