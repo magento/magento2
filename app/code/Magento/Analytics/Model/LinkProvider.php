@@ -43,13 +43,9 @@ class LinkProvider implements LinkProviderInterface
     public function get()
     {
         $flagData = ['path' => 'Documents/data.tgz', 'iv' => '42'];
-        return $this->linkInterfaceFactory->create(
-            [
-                'data' => [
-                    'url' => $this->mediaConfig->getMediaUrl($flagData['path']),
-                    'iv' => $flagData['iv']
-                ]
-            ]
-        );
+        $link = $this->linkInterfaceFactory->create();
+        $link->setUrl($this->mediaConfig->getMediaUrl($flagData['path']));
+        $link->setInitializedVector($this->mediaConfig->getMediaUrl($flagData['path']));
+        return $link;
     }
 }

@@ -21,5 +21,15 @@ interface LinkInterface
     /**
      * @return string
      */
-    public function getIV();
+    public function getInitializedVector();
+
+    /**
+     * @param string $url
+     */
+    public function setUrl($url);
+
+    /**
+     * @param string $initializedVector
+     */
+    public function setInitializedVector($initializedVector);
 }

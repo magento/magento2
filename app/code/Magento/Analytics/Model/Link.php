@@ -20,18 +20,7 @@ class Link implements LinkInterface
     /**
      * @var string
      */
-    private $iv;
-
-    /**
-     * Link constructor.
-     *
-     * @param array $data
-     */
-    public function __construct(array $data = [])
-    {
-        $this->url = array_key_exists('url', $data) ? $data['url'] : null;
-        $this->iv = array_key_exists('iv', $data) ? $data['iv'] : null;
-    }
+    private $initializedVector;
 
     /**
      * @return string
@@ -44,8 +33,24 @@ class Link implements LinkInterface
     /**
      * @return string
      */
-    public function getIV()
+    public function getInitializedVector()
     {
-        return $this->iv;
+        return $this->initializedVector;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
+    /**
+     * @param string $initializedVector
+     */
+    public function setInitializedVector($initializedVector)
+    {
+        $this->initializedVector = $initializedVector;
     }
 }
