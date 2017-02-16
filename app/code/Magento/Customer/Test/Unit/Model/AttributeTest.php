@@ -236,7 +236,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'indexerRegistry' => $this->indexerRegistryMock,
                 'resource' => $this->resourceMock,
                 'attributeCache' => $this->attributeCacheMock,
-                'attributeMetadataCache' => $this->attributeMetadataCacheMock,
+                'attributeMetadataCache' => $this->attributeMetadataCacheMock
             ]
         );
     }
@@ -248,7 +248,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('clear');
         $this->attributeMetadataCacheMock
             ->expects($this->once())
-            ->method('clear');
+            ->method('clean');
         $this->attribute->afterSave();
     }
 
@@ -259,7 +259,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('clear');
         $this->attributeMetadataCacheMock
             ->expects($this->once())
-            ->method('clear');
+            ->method('clean');
         $this->attribute->afterDelete();
     }
 
