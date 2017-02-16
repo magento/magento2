@@ -31,8 +31,6 @@ class OpenAnalyticsConfigStep implements TestStepInterface
     private $systemConfigPage;
 
     /**
-     * AcceptSubscriptionStep constructor.
-     *
      * @param Dashboard $dashboard
      * @param SystemConfigEdit $systemConfigPage
      */
