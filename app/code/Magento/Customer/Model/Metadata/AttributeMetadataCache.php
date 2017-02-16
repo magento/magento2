@@ -44,9 +44,9 @@ class AttributeMetadataCache
     private $isAttributeCacheEnabled;
 
     /**
-     * @var AttributeMetadataFactory
+     * @var AttributeMetadataHydrator
      */
-    private $attributeMetadataFactory;
+    private $attributeMetadataHydrator;
 
     /**
      * @var SerializerInterface
@@ -58,19 +58,19 @@ class AttributeMetadataCache
      *
      * @param CacheInterface $cache
      * @param StateInterface $state
-     * @param AttributeMetadataFactory $attributeMetadataFactory
      * @param SerializerInterface $serializer
+     * @param AttributeMetadataHydrator $attributeMetadataHydrator
      */
     public function __construct(
         CacheInterface $cache,
         StateInterface $state,
-        AttributeMetadataFactory $attributeMetadataFactory,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        AttributeMetadataHydrator $attributeMetadataHydrator
     ) {
         $this->cache = $cache;
         $this->state = $state;
-        $this->attributeMetadataFactory = $attributeMetadataFactory;
         $this->serializer = $serializer;
+        $this->attributeMetadataHydrator = $attributeMetadataHydrator;
     }
 
     /**
@@ -92,7 +92,7 @@ class AttributeMetadataCache
                 $attributesData = $this->serializer->unserialize($serializedData);
                 $attributes = [];
                 foreach ($attributesData as $key => $attributeData) {
-                    $attributes[$key] = $this->attributeMetadataFactory->create($attributeData);
+                    $attributes[$key] = $this->attributeMetadataHydrator->hydrate($attributeData);
                 }
                 $this->attributes[$entityType . $suffix] = $attributes;
                 return $attributes;
@@ -109,14 +109,14 @@ class AttributeMetadataCache
      * @param string $suffix
      * @return void
      */
-    public function save($entityType, $attributes, $suffix = '')
+    public function save($entityType, array $attributes, $suffix = '')
     {
         $this->attributes[$entityType . $suffix] = $attributes;
         if ($this->isEnabled()) {
             $cacheKey = self::ATTRIBUTE_METADATA_CACHE_PREFIX . $entityType . $suffix;
             $attributesData = [];
             foreach ($attributes as $key => $attribute) {
-                $attributesData[$key] = $attribute->__toArray();
+                $attributesData[$key] = $this->attributeMetadataHydrator->extract($attribute);
             }
             $serializedData = $this->serializer->serialize($attributesData);
             $this->cache->save(

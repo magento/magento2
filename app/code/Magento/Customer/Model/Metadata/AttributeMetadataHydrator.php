@@ -10,11 +10,12 @@ use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
 use Magento\Customer\Api\Data\OptionInterface;
 use Magento\Customer\Api\Data\OptionInterfaceFactory;
 use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
+use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
- * Factory for AttributeMetadataInterface
+ * Hydrator for AttributeMetadataInterface
  */
-class AttributeMetadataFactory
+class AttributeMetadataHydrator
 {
     /**
      * @var AttributeMetadataInterfaceFactory
@@ -32,29 +33,37 @@ class AttributeMetadataFactory
     private $validationRuleFactory;
 
     /**
+     * @var DataObjectProcessor
+     */
+    private $dataObjectProcessor;
+
+    /**
      * Constructor
      *
      * @param AttributeMetadataInterfaceFactory $attributeMetadataFactory
      * @param OptionInterfaceFactory $optionFactory
      * @param ValidationRuleInterfaceFactory $validationRuleFactory
+     * @param DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(
         AttributeMetadataInterfaceFactory $attributeMetadataFactory,
         OptionInterfaceFactory $optionFactory,
-        ValidationRuleInterfaceFactory $validationRuleFactory
+        ValidationRuleInterfaceFactory $validationRuleFactory,
+        DataObjectProcessor $dataObjectProcessor
     ) {
         $this->attributeMetadataFactory = $attributeMetadataFactory;
         $this->optionFactory = $optionFactory;
         $this->validationRuleFactory = $validationRuleFactory;
+        $this->dataObjectProcessor = $dataObjectProcessor;
     }
 
     /**
-     * Create and populate with data AttributeMetadataInterface
+     * Convert array to AttributeMetadataInterface
      *
      * @param array $data
      * @return AttributeMetadataInterface
      */
-    public function create($data)
+    public function hydrate(array $data)
     {
         if (isset($data[AttributeMetadataInterface::OPTIONS])) {
             $data[AttributeMetadataInterface::OPTIONS] = $this->createOptions(
@@ -72,12 +81,12 @@ class AttributeMetadataFactory
     }
 
     /**
-     * Create and populate with data OptionInterface
+     * Convert AttributeMetadataInterface to array
      *
      * @param array $data
      * @return OptionInterface[]
      */
-    private function createOptions($data)
+    private function createOptions(array $data)
     {
         foreach ($data as $key => $optionData) {
             if (isset($optionData[OptionInterface::OPTIONS])) {
@@ -86,5 +95,17 @@ class AttributeMetadataFactory
             $data[$key] = $this->optionFactory->create(['data' => $optionData]);
         }
         return $data;
+    }
+
+    /**
+     * @param $attributeMetadata
+     * @return array
+     */
+    public function extract($attributeMetadata)
+    {
+        return $this->dataObjectProcessor->buildOutputDataArray(
+            $attributeMetadata,
+            AttributeMetadataInterface::class
+        );
     }
 }
