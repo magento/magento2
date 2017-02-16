@@ -10,7 +10,7 @@ memory_limit = 64M
 max_execution_time = 18000
 
 ; disable automatic session start
-; before autoload was initialized
+; before autoload was initializedqwe
 
 flag session.auto_start = off
 
