@@ -25,7 +25,7 @@ class ConfigHashValidator
     private $configHashManager;
 
     /**
-     * @param ConfigHashManager $configHashManager the manager of deployment configuration hash.
+     * @param ConfigHashManager $configHashManager the manager of deployment configuration hash
      */
     public function __construct(ConfigHashManager $configHashManager)
     {

@@ -7,6 +7,7 @@ namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Phrase;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Pool of all deployment configuration importers.
@@ -51,10 +52,19 @@ class ConfigImporterPool
     private $importers = [];
 
     /**
-     * @param array $importers the list of sections and their importers.
+     * Magento object manager.
+     *
+     * @var ObjectManagerInterface
      */
-    public function __construct(array $importers = [])
+    private $objectManager;
+
+    /**
+     * @param ObjectManagerInterface $objectManager the Magento object manager
+     * @param array $importers the list of sections and their importers
+     */
+    public function __construct(ObjectManagerInterface $objectManager, array $importers = [])
     {
+        $this->objectManager = $objectManager;
         $this->importers = $importers;
     }
 
@@ -95,7 +105,7 @@ class ConfigImporterPool
         $result = [];
 
         foreach ($this->importers as $section => $importer) {
-            $importerObj = \Magento\Framework\App\ObjectManager::getInstance()->get($importer);
+            $importerObj = $this->objectManager->get($importer);
             if (!$importerObj instanceof ImporterInterface) {
                 throw new ConfigurationMismatchException(new Phrase(
                     '%1: Instance of %2 is expected, got %3 instead',

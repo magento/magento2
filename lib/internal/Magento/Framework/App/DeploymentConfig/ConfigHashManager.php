@@ -7,6 +7,7 @@ namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Manages deployment configuration hash: generates a new hash, checks that hash is valid.
@@ -40,18 +41,28 @@ class ConfigHashManager
     private $writer;
 
     /**
+     * Serializes data into string.
+     *
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param ConfigImporterPool $configImporterPool the pool of all deployment configuration importers
      * @param DeploymentConfig $deploymentConfig the application deployment configuration
      * @param Writer $writer the configuration writer that writes to files
+     * @param SerializerInterface $serializer the serializer that serializes data into string
      */
     public function __construct(
         ConfigImporterPool $configImporterPool,
         DeploymentConfig $deploymentConfig,
-        Writer $writer
+        Writer $writer,
+        SerializerInterface $serializer
     ) {
         $this->configImporterPool = $configImporterPool;
         $this->deploymentConfig = $deploymentConfig;
         $this->writer = $writer;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -70,6 +81,17 @@ class ConfigHashManager
         }
 
         return $this->getHash($config) === $this->getSavedHash();
+    }
+
+    /**
+     * Generates and saves a new deployment configuration hash to storage.
+     *
+     * @return void
+     */
+    public function generateHash()
+    {
+        $hash = $this->getHash($this->getConfig());
+        $this->writer->saveConfig([ConfigFilePool::APP_ENV => [self::CONFIG_KEY => $hash]]);
     }
 
     /**
@@ -104,17 +126,6 @@ class ConfigHashManager
     }
 
     /**
-     * Generates and saves a new deployment configuration hash to storage.
-     *
-     * @return void
-     */
-    public function generateHash()
-    {
-        $hash = $this->getHash($this->getConfig());
-        $this->writer->saveConfig([ConfigFilePool::APP_ENV => [self::CONFIG_KEY => $hash]]);
-    }
-
-    /**
      * Generates and retrieves hash of deployment configuration data.
      *
      * @param array|string $data the deployment configuration data from files
@@ -122,6 +133,6 @@ class ConfigHashManager
      */
     private function getHash($data)
     {
-        return sha1(serialize($data));
+        return sha1($this->serializer->serialize($data));
     }
 }
