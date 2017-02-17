@@ -16,7 +16,7 @@
         </variation>
         <variation name="InstallTestVariation2" summary="Decline Magento analytics subscription" ticketId="MAGETWO-63156">
             <data name="tag" xsi:type="string">severity:S1</data>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertDeclineSubscriptionPopup" prev="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertDeclineSubscriptionPopup" prev="Magento\Install\Test\Constraint\AssertCurrencySelected" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled" />
             <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled" prev="Magento\Analytics\Test\Constraint\AssertDeclineSubscriptionPopup" />
         </variation>
         <variation name="InstallTestVariation3" summary="Accept Magento analytics subscription" ticketId="MAGETWO-63108">
