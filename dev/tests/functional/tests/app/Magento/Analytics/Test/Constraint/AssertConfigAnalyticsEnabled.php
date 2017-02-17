@@ -7,8 +7,7 @@ namespace Magento\Analytics\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
-use Magento\Backend\Test\Page\Adminhtml\Dashboard;
-use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
+use Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep;
 
 /**
  * Assert Analytics is enabled in Stores > Configuration > General > Analytics > General menu.
@@ -19,31 +18,22 @@ class AssertConfigAnalyticsEnabled extends AbstractConstraint
      * Assert Analytics is enabled in Stores > Configuration > General > Analytics menu.
      *
      * @param ConfigAnalytics $configAnalytics
-     * @param Dashboard $dashboard
-     * @param SystemConfigEdit $systemConfigPage
+     * @param OpenAnalyticsConfigStep $openAnalyticsConfigStep
      * @return void
      */
-    public function processAssert(
-        ConfigAnalytics $configAnalytics,
-        Dashboard $dashboard,
-        SystemConfigEdit $systemConfigPage
-    ) {
-        $this->objectManager->create(
-            \Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep::class,
-            [
-                'dashboard' => $dashboard,
-                'systemConfigPage' => $systemConfigPage
-            ]
-        )->run();
+    public function processAssert(ConfigAnalytics $configAnalytics, OpenAnalyticsConfigStep $openAnalyticsConfigStep)
+    {
+        $openAnalyticsConfigStep->run();
+
         \PHPUnit_Framework_Assert::assertTrue(
             (bool)$configAnalytics->getAnalyticsForm()->isAnalyticsEnabled(),
-            'Magento Analytics is not enabled'
+            'Magento Analytics is not enabled.'
         );
 
         \PHPUnit_Framework_Assert::assertEquals(
             $configAnalytics->getAnalyticsForm()->getAnalyticsStatus(),
             'Subscription status: Pending',
-            'Magento Analytics status is not pending'
+            'Magento Analytics status is not pending.'
         );
     }
 

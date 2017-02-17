@@ -7,8 +7,7 @@ namespace Magento\Analytics\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
-use Magento\Backend\Test\Page\Adminhtml\Dashboard;
-use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
+use Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep;
 
 /**
  * Assert Analytics is disabled in Stores>Configuration>General>Analytics->General menu.
@@ -19,31 +18,21 @@ class AssertConfigAnalyticsDisabled extends AbstractConstraint
      * Assert Analytics is disabled in Stores > Configuration > General > Analytics menu.
      *
      * @param ConfigAnalytics $configAnalytics
-     * @param Dashboard $dashboard
-     * @param SystemConfigEdit $systemConfigPage
+     * @param OpenAnalyticsConfigStep $openAnalyticsConfigStep
      * @return void
      */
-    public function processAssert(
-        ConfigAnalytics $configAnalytics,
-        Dashboard $dashboard,
-        SystemConfigEdit $systemConfigPage
-    ) {
-        $this->objectManager->create(
-            \Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep::class,
-            [
-                'dashboard' => $dashboard,
-                'systemConfigPage' => $systemConfigPage
-            ]
-        )->run();
+    public function processAssert(ConfigAnalytics $configAnalytics, OpenAnalyticsConfigStep $openAnalyticsConfigStep)
+    {
+        $openAnalyticsConfigStep->run();
 
         \PHPUnit_Framework_Assert::assertFalse(
             (bool)$configAnalytics->getAnalyticsForm()->isAnalyticsEnabled(),
-            'Magento Analytics is not disabled'
+            'Magento Analytics is not disabled.'
         );
         \PHPUnit_Framework_Assert::assertEquals(
             $configAnalytics->getAnalyticsForm()->getAnalyticsStatus(),
             'Subscription status: Disabled',
-            'Magento Analytics status is not disabled'
+            'Magento Analytics status is not disabled.'
         );
     }
 
@@ -55,6 +44,6 @@ class AssertConfigAnalyticsDisabled extends AbstractConstraint
     public function toString()
     {
         return 'Magento Analytics is disabled in Stores > Configuration > General > Analytics > General menu'
-            . ' and has Disabled status';
+            . ' and has Disabled status.';
     }
 }

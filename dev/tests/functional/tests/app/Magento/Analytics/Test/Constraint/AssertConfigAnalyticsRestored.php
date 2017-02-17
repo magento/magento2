@@ -7,7 +7,7 @@ namespace Magento\Analytics\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
-use Magento\Backend\Test\Page\Adminhtml\Dashboard;
+use Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 
 /**
@@ -19,24 +19,18 @@ class AssertConfigAnalyticsRestored extends AbstractConstraint
      * Assert sending data to the Analytics is restored.
      *
      * @param ConfigAnalytics $configAnalytics
-     * @param Dashboard $dashboard
+     * @param OpenAnalyticsConfigStep $openAnalyticsConfigStep
      * @param SystemConfigEdit $systemConfigPage
      * @param string $vertical
      * @return void
      */
     public function processAssert(
         ConfigAnalytics $configAnalytics,
-        Dashboard $dashboard,
+        OpenAnalyticsConfigStep $openAnalyticsConfigStep,
         SystemConfigEdit $systemConfigPage,
         $vertical
     ) {
-        $this->objectManager->create(
-            \Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep::class,
-            [
-                'dashboard' => $dashboard,
-                'systemConfigPage' => $systemConfigPage
-            ]
-        )->run();
+        $openAnalyticsConfigStep->run();
 
         $configAnalytics->getAnalyticsForm()->enableAnalytics();
         $configAnalytics->getAnalyticsForm()->setAnalyticsVertical($vertical);
@@ -44,7 +38,7 @@ class AssertConfigAnalyticsRestored extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertTrue(
             $systemConfigPage->getMessagesBlock()->assertSuccessMessage(),
-            'Sending data to the Analytics is not saved'
+            'Sending data to the Analytics is not saved.'
         );
     }
 
@@ -55,6 +49,6 @@ class AssertConfigAnalyticsRestored extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Sending data to the Analytics is saved';
+        return 'Sending data to the Analytics is saved.';
     }
 }
