@@ -7,6 +7,8 @@ namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Model\ProductRepository;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -32,7 +34,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $productRepository = Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
-        $product = $productRepository->get('virtual-product');
+        $product = $productRepository->get('virtual-product', false, null, true);
         $quote->addProduct($product);
         $quote->collectTotals();
 
@@ -46,9 +48,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
-        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
+        /** @var CustomerInterfaceFactory $customerFactory */
         $customerFactory = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+            CustomerInterfaceFactory::class
         );
         /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
         $dataObjectHelper = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\DataObjectHelper::class);
@@ -73,7 +75,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
         $customerFactory = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+            CustomerInterfaceFactory::class
         );
         /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
         $dataObjectHelper = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\DataObjectHelper::class);
@@ -118,9 +120,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomerGroupFromCustomer()
     {
         /** Preconditions */
-        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
+        /** @var CustomerInterfaceFactory $customerFactory */
         $customerFactory = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+            CustomerInterfaceFactory::class
         );
         $customerGroupId = 3;
         $customerData = $customerFactory->create()->setId(1)->setGroupId($customerGroupId);
@@ -302,7 +304,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $productRepository = Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
-        $product = $productRepository->get('simple-1');
+        $product = $productRepository->get('simple-1', false, null, true);
 
         $quote->addProduct($product, 50);
         $quote->setTotalsCollectedFlag(false)->collectTotals();
@@ -422,5 +424,30 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quote->setReservedOrderId('100000001');
         $quote->reserveOrderId();
         $this->assertNotEquals('100000001', $quote->getReservedOrderId());
+    }
+
+    /**
+     * Test to verify that disabled product cannot be added to cart
+     * @magentoDataFixture Magento/Quote/_files/disabled_product.php
+     * @magentoAppIsolation enabled
+     */
+    public function testAddedProductToQuoteIsSalable()
+    {
+        $productId = 1;
+        $objectManager = Bootstrap::getObjectManager();
+
+        /** @var ProductRepository $productRepository */
+        $productRepository = $objectManager->get(ProductRepository::class);
+
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $product = $productRepository->getById($productId, false, null, true);
+
+        $this->setExpectedException(
+            LocalizedException::class,
+            'Product that you are trying to add is not available.'
+        );
+
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
+        $quote->addProduct($product);
     }
 }
