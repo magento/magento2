@@ -14,6 +14,16 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertCaseInfoOnBackend extends AbstractConstraint
 {
     /**
+     * @var OrderView
+     */
+    private $orderView;
+
+    /**
+     * @var string
+     */
+    private $orderId;
+
+    /**
      * @var string
      */
     private static $caseStatus = 'Open';
@@ -39,25 +49,54 @@ class AssertCaseInfoOnBackend extends AbstractConstraint
         OrderView $orderView,
         $orderId
     ) {
-        $orderView->open(['order_id' => $orderId]);
-        $fraudBlock = $orderView->getFraudProtectionBlock();
+        $this->orderView = $orderView;
+        $this->orderView->open(['order_id' => $orderId]);
+        $this->orderId = $orderId;
 
+        $this->checkCaseStatus();
+        $this->checkCaseGuaranteeDisposition();
+        $this->checkCaseReviewDisposition();
+    }
+
+    /**
+     * Checks case status match
+     *
+     * @return void
+     */
+    private function checkCaseStatus()
+    {
         \PHPUnit_Framework_Assert::assertEquals(
             self::$caseStatus,
-            $fraudBlock->getCaseStatus(),
-            'Case status is wrong for order #'.$orderId
+            $this->orderView->getFraudProtectionBlock()->getCaseStatus(),
+            'Case status is wrong for order #' . $this->orderId
         );
+    }
 
+    /**
+     * Checks case guarantee disposition match
+     *
+     * @return void
+     */
+    private function checkCaseGuaranteeDisposition()
+    {
         \PHPUnit_Framework_Assert::assertEquals(
             self::$guaranteeDisposition,
-            $fraudBlock->getCaseGuaranteeDisposition(),
-            'Case Guarantee Disposition status is wrong for order #'.$orderId
+            $this->orderView->getFraudProtectionBlock()->getCaseGuaranteeDisposition(),
+            'Case Guarantee Disposition status is wrong for order #' . $this->orderId
         );
+    }
 
+    /**
+     * Checks case review disposition match
+     *
+     * @return void
+     */
+    private function checkCaseReviewDisposition()
+    {
         \PHPUnit_Framework_Assert::assertEquals(
             self::$reviewDisposition,
-            $fraudBlock->getCaseReviewDisposition(),
-            'Case Review Disposition status is wrong for order #'.$orderId
+            $this->orderView->getFraudProtectionBlock()->getCaseReviewDisposition(),
+            'Case Review Disposition status is wrong for order #' . $this->orderId
         );
     }
 

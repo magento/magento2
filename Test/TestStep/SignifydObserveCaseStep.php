@@ -8,13 +8,15 @@ namespace Magento\Signifyd\Test\TestStep;
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Signifyd\Test\Constraint\AssertCaseInfo;
 use Magento\Signifyd\Test\Fixture\SandboxMerchant;
 use Magento\Signifyd\Test\Page\Sandbox\SignifydCases;
 use Magento\Signifyd\Test\Page\Sandbox\SignifydLogin;
 
-class ObserveSignifydCaseStep implements TestStepInterface
+/**
+ * Class SignifydObserveCaseStep
+ */
+class SignifydObserveCaseStep implements TestStepInterface
 {
     /**
      * Signifyd Sandbox merchant fixture.
@@ -39,50 +41,54 @@ class ObserveSignifydCaseStep implements TestStepInterface
     private $customer;
 
     /**
-     * @var AssertCaseInfo
-     */
-    private $assertCaseInfo;
-
-    /**
-     * @var OrderInjectable
-     */
-    private $order;
-
-    /**
-     * @var array
-     */
-    private $cartPrice;
-    /**
      * @var Address
      */
     private $billingAddress;
 
     /**
+     * @var array
+     */
+    private $prices;
+
+    /**
+     * @var string
+     */
+    private $orderId;
+
+    /**
+     * @var AssertCaseInfo
+     */
+    private $assertCaseInfo;
+
+    /**
+     * ObserveSignifydCaseStep constructor.
      * @param SandboxMerchant $sandboxMerchant
      * @param SignifydLogin $signifydLogin
      * @param SignifydCases $signifydCases
      * @param Customer $customer
+     * @param Address $billingAddress
+     * @param array $prices
+     * @param string $orderId
      * @param AssertCaseInfo $assertCaseInfo
-     * @param OrderInjectable $order
      */
     public function __construct(
         SandboxMerchant $sandboxMerchant,
         SignifydLogin $signifydLogin,
         SignifydCases $signifydCases,
         Customer $customer,
-        AssertCaseInfo $assertCaseInfo,
-        OrderInjectable $order,
         Address $billingAddress,
-        array $cartPrice
+        array $prices,
+        $orderId,
+        AssertCaseInfo $assertCaseInfo
     ) {
         $this->sandboxMerchant = $sandboxMerchant;
         $this->signifydLogin = $signifydLogin;
         $this->signifydCases = $signifydCases;
         $this->customer = $customer;
-        $this->assertCaseInfo = $assertCaseInfo;
-        $this->order = $order;
-        $this->cartPrice = $cartPrice;
         $this->billingAddress = $billingAddress;
+        $this->prices = $prices;
+        $this->orderId = $orderId;
+        $this->assertCaseInfo = $assertCaseInfo;
     }
 
     /**
@@ -92,17 +98,29 @@ class ObserveSignifydCaseStep implements TestStepInterface
      */
     public function run()
     {
-        $this->signifydLogin->open();
-        $this->signifydLogin->getLoginBlock()->fill($this->sandboxMerchant);
-        $this->signifydLogin->getLoginBlock()->sandboxLogin();
-
+        //Login in Signifyd sandbox provides on signifydSetWebhooksAddress step
+        $this->signifydCases->open();
         $this->signifydCases->getCaseSearchBlock()
-            ->fillSearchCriteria($this->customer->getFirstname() . ' ' . $this->customer->getLastname());
+            ->fillSearchCriteria($this->getCustomerFullName($this->customer));
         $this->signifydCases->getCaseSearchBlock()->searchCase();
-
         $this->signifydCases->getCaseSearchBlock()->selectCase();
         $this->signifydCases->getCaseInfoBlock()->flagCaseGood();
 
-        $this->assertCaseInfo->processAssert($this->signifydCases, $this->customer, $this->order, $this->billingAddress, $this->cartPrice);
+        $this->assertCaseInfo->processAssert(
+            $this->signifydCases,
+            $this->billingAddress,
+            $this->prices,
+            $this->orderId,
+            $this->getCustomerFullName($this->customer)
+        );
+    }
+
+    /**
+     * @param Customer $customer
+     * @return string
+     */
+    private function getCustomerFullName(Customer $customer)
+    {
+        return sprintf('%s %s', $customer->getFirstname(), $customer->getLastname());
     }
 }

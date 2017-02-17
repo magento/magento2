@@ -9,10 +9,6 @@
     <testCase name="Magento\Signifyd\Test\TestCase\OnePageCheckoutWithBraintreeTest" summary="One page checkout with Braintree payment method.">
         <variation name="OnePageCheckoutWithBraintreeVariation1" summary="Registered Checkout within Braintree Credit Card from Storefront with Signifyd" ticketId="MAGETWO-62120">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
-            <data name="prices/grand_total" xsi:type="string">15.00</data>
-            <data name="cartPrice/grand_total" xsi:type="string">15</data>
-            <data name="cartPrice/sub_total" xsi:type="string">10</data>
-            <data name="cartPrice/shipping_price" xsi:type="number">5</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="customer/dataset" xsi:type="string">signifyd_approve_us_customer</data>
             <data name="billingAddress/dataset" xsi:type="string">signifyd_approve_us_shipping_address</data>
@@ -29,10 +25,13 @@
             <data name="sandboxMerchant/dataset" xsi:type="string">sandbox_default</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory" />
-            <constraint name="Magento\Signifyd\Test\Constraint\AssertAuthorizationInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCanceled" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertCancelInCommentsHistory" />
+            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydGuaranteeCancelInCommentsHistory" />
         </variation>
     </testCase>
 </config>

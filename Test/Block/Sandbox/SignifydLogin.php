@@ -3,18 +3,21 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Test\Block\Sanbox;
+namespace Magento\Signifyd\Test\Block\Sandbox;
 
 use Magento\Mtf\Block\Form;
 
-class Login extends Form
+/**
+ * Signifyd login block.
+ */
+class SignifydLogin extends Form
 {
     /**
      * Login button on Signifyd side.
      *
      * @var string
      */
-    protected $loginButton = '[type=submit]';
+    private $loginButton = '[type=submit]';
 
     /**
      * Login to Signifyd Sandbox.

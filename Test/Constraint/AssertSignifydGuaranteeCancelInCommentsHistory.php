@@ -9,7 +9,10 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
-class AssertGuaranteeCancelInCommentsHistory extends AbstractConstraint
+/**
+ * Class AssertSignifydGuaranteeCancelInCommentsHistory
+ */
+class AssertSignifydGuaranteeCancelInCommentsHistory extends AbstractConstraint
 {
     /**
      * Pattern of message about canceled amount in order.
@@ -32,19 +35,13 @@ class AssertGuaranteeCancelInCommentsHistory extends AbstractConstraint
 
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
         $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
-        $comments = $infoTab->getCommentsHistoryBlock()->getComments();
+        $orderComments = $infoTab->getCommentsHistoryBlock()->getComments();
+        $commentsMessages = array_column($orderComments, 'comment');
 
-        foreach ($comments as $key => $comment) {
-            if (strstr($comment['comment'], 'Case Update') === false) {
-                unset($comments[$key]);
-            }
-        }
-        $comments = array_values($comments);
-
-        \PHPUnit_Framework_Assert::assertRegExp(
+        \PHPUnit_Framework_Assert::assertContains(
             $this->guaranteeCancelPattern,
-            $comments[0]['comment'],
-            'Incorrect guarantee cancel for the order #' . $orderId
+            implode('. ', $commentsMessages),
+            'Signifyd guarantee cancel incorrect for the order #' . $orderId
         );
     }
 
@@ -55,6 +52,6 @@ class AssertGuaranteeCancelInCommentsHistory extends AbstractConstraint
      */
     public function toString()
     {
-        return "Message about guarantee cancel is available in Comments History section.";
+        return "Message about Signifyd guarantee cancel is available in Comments History section.";
     }
 }

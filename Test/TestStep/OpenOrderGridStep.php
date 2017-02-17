@@ -10,14 +10,13 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\TestStep\OpenOrderStep;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect as AssertOrderStatus;
 use Magento\Signifyd\Test\Constraint\AssertSignifydCaseInOrdersGrid as AssertOrdersGrid;
 use Magento\Signifyd\Test\Constraint\AssertCaseInfoOnBackend;
 use Magento\Signifyd\Test\Page\Adminhtml\OrderView;
 
 /**
- * Open order step.
+ * Open order grid step.
  */
 class OpenOrderGridStep extends OpenOrderStep
 {
@@ -52,7 +51,6 @@ class OpenOrderGridStep extends OpenOrderStep
     private $orderView;
 
     /**
-     * @constructor
      * @param string $status
      * @param OrderInjectable $order
      * @param OrderIndex $orderIndex

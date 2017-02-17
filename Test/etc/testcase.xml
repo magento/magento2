@@ -7,7 +7,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
     <scenario name="OnePageCheckoutWithBraintreeTest" firstStep="setupConfiguration">
-        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="setupConfiguration" module="Magento_Config" next="signifydSetWebhooksAddress" />
+        <step name="signifydSetWebhooksAddress" module="Magento_Signifyd" next="createProducts" />
         <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
         <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
         <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckoutFromMiniShoppingCart" />
@@ -18,8 +19,8 @@
         <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
         <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation" />
         <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder" />
-        <step name="placeOrder" module="Magento_Checkout" next="observeSignifydCase" />
-        <step name="observeSignifydCase" module="Magento_Signifyd" next="openOrderGrid" />
+        <step name="placeOrder" module="Magento_Checkout" next="signifydObserveCase" />
+        <step name="signifydObserveCase" module="Magento_Signifyd" next="openOrderGrid" />
         <step name="openOrderGrid" module="Magento_Signifyd" next="cancelOrder" />
         <step name="cancelOrder" module="Magento_Sales" />
     </scenario>
