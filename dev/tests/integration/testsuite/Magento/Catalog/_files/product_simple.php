@@ -225,3 +225,4 @@ $categoryLinkManagement->assignProductToCategories(
 );
 
 $productRepositoryFactory->getById(1, false, null, true);
+$productRepositoryFactory->get('simple', false, null, true);
