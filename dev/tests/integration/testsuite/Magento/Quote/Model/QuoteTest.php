@@ -429,11 +429,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * Test to verify that disabled product cannot be added to cart
      * @magentoDataFixture Magento/Quote/_files/disabled_product.php
-     * @magentoAppIsolation enabled
      */
     public function testAddedProductToQuoteIsSalable()
     {
-        $productId = 1;
+        $productId = 99;
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var ProductRepository $productRepository */

@@ -223,3 +223,5 @@ $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
     [2]
 );
+
+$productRepositoryFactory->getById(1, false, null, true);

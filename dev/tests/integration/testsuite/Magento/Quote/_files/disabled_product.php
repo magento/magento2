@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setId(1)
+    ->setId(99)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
     ->setName('Simple Product')
@@ -34,3 +34,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     )
     ->setCanSaveCustomOptions(true)
     ->setHasOptions(true);
+
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
+$productRepositoryFactory = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepositoryFactory->save($product);
