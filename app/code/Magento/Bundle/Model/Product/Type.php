@@ -544,7 +544,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         $isSalable = false;
-        foreach ($this->getOptionsCollection($product)->getItems() as $option) {
+        foreach ($this->getOptionsCollection($product) as $option) {
             $hasSalable = false;
 
             $selectionsCollection = $this->_bundleCollection->create();
