@@ -17,6 +17,8 @@ use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Payment method facade. Abstract method adapter
@@ -82,15 +84,23 @@ class Adapter implements MethodInterface
     private $commandExecutor;
 
     /**
+     * Logger for exception details
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ManagerInterface $eventManager
      * @param ValueHandlerPoolInterface $valueHandlerPool
      * @param PaymentDataObjectFactory $paymentDataObjectFactory
      * @param string $code
      * @param string $formBlockType
      * @param string $infoBlockType
-     * @param CommandPoolInterface $commandPool
-     * @param ValidatorPoolInterface $validatorPool
-     * @param CommandManagerInterface $commandExecutor
+     * @param CommandPoolInterface|null $commandPool
+     * @param ValidatorPoolInterface|null $validatorPool
+     * @param CommandManagerInterface|null $commandExecutor
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         ManagerInterface $eventManager,
@@ -101,7 +111,8 @@ class Adapter implements MethodInterface
         $infoBlockType,
         CommandPoolInterface $commandPool = null,
         ValidatorPoolInterface $validatorPool = null,
-        CommandManagerInterface $commandExecutor = null
+        CommandManagerInterface $commandExecutor = null,
+        LoggerInterface $logger = null
     ) {
         $this->valueHandlerPool = $valueHandlerPool;
         $this->validatorPool = $validatorPool;
@@ -112,6 +123,7 @@ class Adapter implements MethodInterface
         $this->eventManager = $eventManager;
         $this->paymentDataObjectFactory = $paymentDataObjectFactory;
         $this->commandExecutor = $commandExecutor;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -382,6 +394,7 @@ class Adapter implements MethodInterface
         try {
             $validator = $this->getValidatorPool()->get('global');
         } catch (\Exception $e) {
+            $this->logger->critical($e);
             return $this;
         }
 
