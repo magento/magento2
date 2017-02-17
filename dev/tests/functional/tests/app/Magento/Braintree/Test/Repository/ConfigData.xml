@@ -263,6 +263,24 @@
             </field>
         </dataset>
 
+        <dataset name="braintree_paypal_require_billing_address">
+            <field name="payment/braintree_paypal/require_billing_address" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+
+        <dataset name="braintree_paypal_require_billing_address_rollback">
+            <field name="payment/braintree_paypal/require_billing_address" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+
         <dataset name="braintree_fraudprotection">
             <field name="payment/braintree/fraudprotection" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
