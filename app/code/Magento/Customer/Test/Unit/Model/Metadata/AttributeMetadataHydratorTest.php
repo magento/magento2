@@ -18,6 +18,9 @@ use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
 use Magento\Customer\Model\Metadata\AttributeMetadataHydrator;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AttributeMetadataHydratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -93,6 +96,9 @@ class AttributeMetadataHydratorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testHydrate()
     {
         $optionOneData = [
