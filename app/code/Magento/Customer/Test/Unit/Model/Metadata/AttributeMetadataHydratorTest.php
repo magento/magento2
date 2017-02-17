@@ -7,14 +7,16 @@ namespace Magento\Customer\Test\Unit\Model\Metadata;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
-use Magento\Customer\Api\Data\OptionInterfaceFactory;
-use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
 use Magento\Customer\Model\Data\AttributeMetadata;
+use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
+use Magento\Customer\Api\Data\OptionInterface;
 use Magento\Customer\Model\Data\Option;
+use Magento\Customer\Api\Data\OptionInterfaceFactory;
+use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Model\Data\ValidationRule;
-use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
 use Magento\Customer\Model\Metadata\AttributeMetadataHydrator;
+use Magento\Framework\Reflection\DataObjectProcessor;
 
 class AttributeMetadataHydratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -168,18 +170,43 @@ class AttributeMetadataHydratorTest extends \PHPUnit_Framework_TestCase
 
         $attributeMetadata = $this->attributeMetadataHydrator->hydrate($attributeMetadataData);
 
+        $this->assertInstanceOf(AttributeMetadataInterface::class, $attributeMetadata);
         $this->assertEquals(
             $attributeMetadataData['attribute_code'],
             $attributeMetadata->getAttributeCode()
         );
+        $this->assertInternalType(
+            \PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            $attributeMetadata->getOptions()
+        );
+        $this->assertArrayHasKey(
+            0,
+            $attributeMetadata->getOptions()
+        );
+        $this->assertInstanceOf(OptionInterface::class, $attributeMetadata->getOptions()[0]);
         $this->assertEquals(
             $optionOneData['label'],
             $attributeMetadata->getOptions()[0]->getLabel()
         );
+        $this->assertArrayHasKey(1, $attributeMetadata->getOptions());
+        $this->assertInstanceOf(OptionInterface::class, $attributeMetadata->getOptions()[1]);
+
+        $this->assertInternalType(
+            \PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            $attributeMetadata->getOptions()[1]->getOptions()
+        );
+        $this->assertArrayHasKey(0, $attributeMetadata->getOptions()[1]->getOptions());
+        $this->assertInstanceOf(OptionInterface::class, $attributeMetadata->getOptions()[1]->getOptions()[0]);
         $this->assertEquals(
             $optionThreeData['label'],
             $attributeMetadata->getOptions()[1]->getOptions()[0]->getLabel()
         );
+        $this->assertInternalType(
+            \PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            $attributeMetadata->getValidationRules()
+        );
+        $this->assertArrayHasKey(0, $attributeMetadata->getValidationRules());
+        $this->assertInstanceOf(ValidationRuleInterface::class, $attributeMetadata->getValidationRules()[0]);
         $this->assertEquals(
             $validationRuleOneData['name'],
             $attributeMetadata->getValidationRules()[0]->getName()

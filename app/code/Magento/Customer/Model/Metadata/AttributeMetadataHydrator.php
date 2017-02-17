@@ -9,6 +9,7 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
 use Magento\Customer\Api\Data\OptionInterface;
 use Magento\Customer\Api\Data\OptionInterfaceFactory;
+use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
@@ -71,17 +72,15 @@ class AttributeMetadataHydrator
             );
         }
         if (isset($data[AttributeMetadataInterface::VALIDATION_RULES])) {
-            $validationRules = [];
-            foreach ($data[AttributeMetadataInterface::VALIDATION_RULES] as $validationRuleData) {
-                $validationRules[] = $this->validationRuleFactory->create(['data' => $validationRuleData]);
-            }
-            $data[AttributeMetadataInterface::VALIDATION_RULES] = $validationRules;
+            $data[AttributeMetadataInterface::VALIDATION_RULES] = $this->createValidationRules(
+                $data[AttributeMetadataInterface::VALIDATION_RULES]
+            );
         }
         return $this->attributeMetadataFactory->create(['data' => $data]);
     }
 
     /**
-     * Convert AttributeMetadataInterface to array
+     * Populate options with data
      *
      * @param array $data
      * @return OptionInterface[]
@@ -98,6 +97,22 @@ class AttributeMetadataHydrator
     }
 
     /**
+     * Populate validation rules with data
+     *
+     * @param array $data
+     * @return ValidationRuleInterface[]
+     */
+    private function createValidationRules(array $data)
+    {
+        foreach ($data as $key => $validationRuleData) {
+            $data[$key] = $this->validationRuleFactory->create(['data' => $validationRuleData]);
+        }
+        return $data;
+    }
+
+    /**
+     * Convert AttributeMetadataInterface to array
+     *
      * @param AttributeMetadataInterface $attributeMetadata
      * @return array
      */

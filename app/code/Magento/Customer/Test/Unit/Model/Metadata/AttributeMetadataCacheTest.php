@@ -75,7 +75,10 @@ class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->with(Type::TYPE_IDENTIFIER)
             ->willReturn(false);
+        $this->cacheMock->expects($this->never())
+            ->method('load');
         $this->assertFalse($this->attributeMetadataCache->load($entityType, $suffix));
+        // Make sure isEnabled called once
         $this->attributeMetadataCache->load($entityType, $suffix);
     }
 
@@ -124,9 +127,18 @@ class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
             ->method('hydrate')
             ->with($attributeMetadataOneData)
             ->willReturn($attributeMetadataMock);
+        $attributesMetadata = $this->attributeMetadataCache->load($entityType, $suffix);
+        $this->assertInternalType(
+            \PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            $attributesMetadata
+        );
+        $this->assertArrayHasKey(
+            0,
+            $attributesMetadata
+        );
         $this->assertInstanceOf(
             AttributeMetadataInterface::class,
-            $this->attributeMetadataCache->load($entityType, $suffix)[0]
+            $attributesMetadata[0]
         );
     }
 
