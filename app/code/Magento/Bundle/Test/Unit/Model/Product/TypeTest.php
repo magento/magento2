@@ -2307,9 +2307,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     private function getSelectionCollectionMock(array $selectedOptions)
     {
         $selectionCollectionMock = $this->getMockBuilder(
-                \Magento\Bundle\Model\ResourceModel\Selection\Collection::class
-            )->disableOriginalConstructor()
-            ->getMock();
+            \Magento\Bundle\Model\ResourceModel\Selection\Collection::class
+        )->disableOriginalConstructor()
+        ->getMock();
 
         $selectionCollectionMock
             ->expects($this->any())
