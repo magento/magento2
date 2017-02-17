@@ -3,10 +3,10 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Test\Unit\Model\AnalyticsConnector;
+namespace Magento\Analytics\Test\Unit\Model\Connector;
 
-use Magento\Analytics\Model\AnalyticsConnector\SignUpCommand;
-use Magento\Analytics\Model\AnalyticsConnector\SignUpRequest;
+use Magento\Analytics\Model\Connector\SignUpCommand;
+use Magento\Analytics\Model\Connector\SignUpRequest;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\IntegrationManager;
 use Magento\Integration\Model\Oauth\Token as IntegrationToken;

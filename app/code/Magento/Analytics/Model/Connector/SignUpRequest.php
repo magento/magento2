@@ -3,9 +3,10 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Model\AnalyticsConnector;
+namespace Magento\Analytics\Model\Connector;
 
 use Magento\Config\Model\Config;
+use Magento\Framework\HTTP\ZendClient;
 use Zend_Http_Response as HttpResponse;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
@@ -28,7 +29,7 @@ class SignUpRequest
     private $config;
 
     /**
-     * @var Client\Curl
+     * @var Http\ClientInterface
      */
     private $httpClient;
 
@@ -39,12 +40,12 @@ class SignUpRequest
 
     /**
      * @param Config $config
-     * @param Client\Curl $httpClient
+     * @param Http\ClientInterface $httpClient
      * @param LoggerInterface $logger
      */
     public function __construct(
         Config $config,
-        Client\Curl $httpClient,
+        Http\ClientInterface $httpClient,
         LoggerInterface $logger
     ) {
         $this->config = $config;
@@ -106,7 +107,8 @@ class SignUpRequest
         $token = false;
 
         try {
-            $response = $this->httpClient->post(
+            $response = $this->httpClient->request(
+                ZendClient::POST,
                 $this->config->getConfigDataValue($this->signUpUrlPath),
                 $this->getRequestJson($integrationToken),
                 ['Content-Type: application/json']

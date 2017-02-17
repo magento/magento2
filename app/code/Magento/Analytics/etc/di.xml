@@ -11,10 +11,11 @@
     <preference for="Magento\Analytics\Model\ReportWriterInterface" type="Magento\Analytics\Model\ReportWriter" />
     <preference for="Magento\Analytics\Api\LinkProviderInterface" type="Magento\Analytics\Model\LinkProvider" />
     <preference for="Magento\Analytics\Api\Data\LinkInterface" type="Magento\Analytics\Model\Link" />
-    <type name="Magento\Analytics\Model\AnalyticsConnector">
+    <preference for="Magento\Analytics\Model\Connector\Http\ClientInterface" type="Magento\Analytics\Model\Connector\Http\Client\Curl" />
+    <type name="Magento\Analytics\Model\Connector">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="signUp" xsi:type="string">Magento\Analytics\Model\AnalyticsConnector\SignUpCommand</item>
+                <item name="signUp" xsi:type="string">Magento\Analytics\Model\Connector\SignUpCommand</item>
             </argument>
         </arguments>
     </type>

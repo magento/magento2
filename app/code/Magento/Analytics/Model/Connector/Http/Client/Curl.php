@@ -3,18 +3,18 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Model\AnalyticsConnector\Client;
+namespace Magento\Analytics\Model\Connector\Http\Client;
 
 use Psr\Log\LoggerInterface;
-use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
+use Magento\Analytics\Model\Connector\Http\ResponseFactory;
 
 /**
  * A CURL HTTP client.
  *
  * Sends requests via a CURL adapter.
  */
-class Curl
+class Curl implements \Magento\Analytics\Model\Connector\Http\ClientInterface
 {
     /**
      * @var LoggerInterface
@@ -47,22 +47,13 @@ class Curl
     }
 
     /**
-     * Sends a POST request using given parameters.
-     *
-     * Returns an HTTP response object or FALSE in case of failure.
-     *
-     * @param string $url
-     * @param string $body
-     * @param array $headers
-     * @param string $version
-     *
-     * @return \Zend_Http_Response|bool
+     * {@inheritdoc}
      */
-    public function post($url, $body = '', array $headers = [], $version = '1.1')
+    public function request($method, $url, $body = '', array $headers = [], $version = '1.1')
     {
         $curl = $this->curlFactory->create();
 
-        $curl->write(ZendClient::POST, $url, $version, $headers, $body);
+        $curl->write($method, $url, $version, $headers, $body);
 
         $result = $curl->read();
 

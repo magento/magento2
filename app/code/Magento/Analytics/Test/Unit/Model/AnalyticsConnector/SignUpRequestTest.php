@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Analytics\Test\Unit\Model\AnalyticsConnector;
+namespace Magento\Analytics\Test\Unit\Model\Connector;
 
 use Magento\Config\Model\Config;
-use Magento\Analytics\Model\AnalyticsConnector\SignUpRequest;
+use Magento\Analytics\Model\Connector\SignUpRequest;
 use Magento\Framework\HTTP\ZendClientFactory as HttpClientFactory;
 use Magento\Framework\HTTP\ZendClient as HttpClient;
 use Zend_Http_Response as HttpResponse;
