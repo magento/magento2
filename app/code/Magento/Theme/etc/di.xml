@@ -259,4 +259,14 @@
     <type name="Magento\Store\Model\Group">
         <plugin name="themeDesignConfigGridIndexerStoreGroup" type="Magento\Theme\Model\Indexer\Design\Config\Plugin\StoreGroup"/>
     </type>
+    <type name="Magento\Deploy\Console\Command\App\ApplicationDumpCommand">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="themes" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Theme\Model\Source\InitialThemeSource</item>
+                    <item name="namespace" xsi:type="string">themes</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -194,7 +194,7 @@ class Template extends AbstractBlock
      * Get absolute path to template
      *
      * @param string|null $template
-     * @return string
+     * @return string|bool
      */
     public function getTemplateFile($template = null)
     {

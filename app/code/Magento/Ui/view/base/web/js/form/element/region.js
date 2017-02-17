@@ -67,7 +67,7 @@ define([
                     // hide select and corresponding text input field if region must not be shown for selected country
                     this.setVisible(false);
 
-                    if (this.customEntry) {
+                    if (this.customEntry) {// eslint-disable-line max-depth
                         this.toggleInput(false);
                     }
                 }

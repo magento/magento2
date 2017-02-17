@@ -15,5 +15,6 @@
     <block name="customerActivitiesBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities" locator=".customer-current-activity" strategy="css selector"/>
     <block name="configureProductBlock" class="Magento\Catalog\Test\Block\Adminhtml\Product\Composite\Configure" locator="//*[@data-role='modal' and .//*[@id='product_composite_configure'] and contains(@class,'_show')]" strategy="xpath"/>
     <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages .messages" strategy="css selector"/>
+    <block name="totalsBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\Totals" locator="#order-totals" strategy="css selector"/>
   </page>
 </config>

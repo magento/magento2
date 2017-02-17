@@ -6,7 +6,9 @@
 namespace Magento\ConfigurableImportExport\Model\Export;
 
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
-use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\ImportExport\Model\Import;
 
 class RowCustomizer implements RowCustomizerInterface
@@ -19,51 +21,45 @@ class RowCustomizer implements RowCustomizerInterface
     /**
      * Prepare configurable data for export
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param ProductCollection $collection
      * @param int[] $productIds
      * @return void
      */
     public function prepareData($collection, $productIds)
     {
         $productCollection = clone $collection;
-        $productCollection->addAttributeToFilter(
-            'entity_id',
-            ['in' => $productIds]
-        )->addAttributeToFilter(
-            'type_id',
-            ['eq' => \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE]
-        );
+        $productCollection->addAttributeToFilter('entity_id', ['in' => $productIds])
+            ->addAttributeToFilter('type_id', ['eq' => ConfigurableProductType::TYPE_CODE]);
 
         while ($product = $productCollection->fetchItem()) {
             $productAttributesOptions = $product->getTypeInstance()->getConfigurableOptions($product);
+            $this->configurableData[$product->getId()] = [];
+            $variations = [];
+            $variationsLabels = [];
 
             foreach ($productAttributesOptions as $productAttributeOption) {
-                $this->configurableData[$product->getId()] = [];
-                $variations = [];
-                $variationsLabels = [];
-
                 foreach ($productAttributeOption as $optValues) {
-                    $variations[$optValues['sku']][] =
-                        $optValues['attribute_code'] . '=' . $optValues['option_title'];
+                    $variations[$optValues['sku']][] = $optValues['attribute_code'] . '=' . $optValues['option_title'];
+
                     if (!empty($optValues['super_attribute_label'])) {
-                        $variationsLabels[$optValues['attribute_code']] =
-                            $optValues['attribute_code'] . '=' . $optValues['super_attribute_label'];
+                        $variationsLabels[$optValues['attribute_code']] = $optValues['attribute_code'] . '='
+                            . $optValues['super_attribute_label'];
                     }
                 }
-
-                foreach ($variations as $sku => $values) {
-                    $variations[$sku] =
-                        'sku=' . $sku . Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-                        . implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $values);
-                }
-                $variations = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $variations);
-                $variationsLabels = implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $variationsLabels);
-
-                $this->configurableData[$product->getId()] = [
-                    'configurable_variations' => $variations,
-                    'configurable_variation_labels' => $variationsLabels,
-                ];
             }
+
+            foreach ($variations as $sku => $values) {
+                $variations[$sku] = 'sku=' . $sku . Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                    . implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $values);
+            }
+
+            $this->configurableData[$product->getId()] = [
+                'configurable_variations' => implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $variations),
+                'configurable_variation_labels' => implode(
+                    Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+                    $variationsLabels
+                )
+            ];
         }
     }
 

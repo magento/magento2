@@ -44,11 +44,15 @@ class FlyweightFactory
     /**
      * Creates or returns a shared model of theme
      *
-     * @param string $themeKey
-     * @param string $area
-     * @return \Magento\Framework\View\Design\ThemeInterface|null
-     * @throws \InvalidArgumentException
-     * @throws \LogicException
+     * Search for theme in File System by specific path or load theme from DB
+     * by specific path (e.g. adminhtml/Magento/backend) or by identifier (theme primary key) and return it
+     * Can be used to deploy static or in other setup commands, even if Magento is not installed yet.
+     *
+     * @param string $themeKey Should looks like Magento/backend or should be theme primary key
+     * @param string $area Can be adminhtml, frontend, etc...
+     * @return \Magento\Framework\View\Design\ThemeInterface
+     * @throws \InvalidArgumentException when incorrect $themeKey was specified
+     * @throws \LogicException when theme with appropriate $themeKey was not found
      */
     public function create($themeKey, $area = \Magento\Framework\View\DesignInterface::DEFAULT_AREA)
     {
@@ -61,7 +65,7 @@ class FlyweightFactory
         } else {
             $themeModel = $this->_loadByPath($themeKey, $area);
         }
-        if (!$themeModel->getId()) {
+        if (!$themeModel->getCode()) {
             throw new \LogicException("Unable to load theme by specified key: '{$themeKey}'");
         }
         $this->_addTheme($themeModel);

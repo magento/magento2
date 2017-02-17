@@ -56,6 +56,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
         'custom_design_from',
         'updated_in',
         'tax_class_id',
+        'description'
     ];
 
     protected function setUp()
