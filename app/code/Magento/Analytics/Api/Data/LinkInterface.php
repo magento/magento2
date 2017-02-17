@@ -24,11 +24,13 @@ interface LinkInterface
 
     /**
      * @param string $url
+     * @return void
      */
     public function setUrl($url);
 
     /**
      * @param string $initializedVector
+     * @return void
      */
     public function setInitializedVector($initializedVector);
 }

@@ -42,6 +42,7 @@ class Link implements LinkInterface
 
     /**
      * @param string $url
+     * @return void
      */
     public function setUrl($url)
     {
@@ -50,6 +51,7 @@ class Link implements LinkInterface
 
     /**
      * @param string $initializedVector
+     * @return void
      */
     public function setInitializedVector($initializedVector)
     {
