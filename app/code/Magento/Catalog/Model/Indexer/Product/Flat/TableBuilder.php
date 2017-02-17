@@ -101,11 +101,11 @@ class TableBuilder
             $temporaryTableName = $this->_getTemporaryTableName($tableName);
 
             //Add primary key to temporary table for increase speed of joins in future
-            $this->_addPrimaryKeyToTable($temporaryTableName);
+            $this->_addPrimaryKeyToTable($temporaryTableName, 'row_id');
 
             //Create temporary table for composite attributes
             if (isset($valueTables[$temporaryTableName . $valueFieldSuffix])) {
-                $this->_addPrimaryKeyToTable($temporaryTableName . $valueFieldSuffix);
+                $this->_addPrimaryKeyToTable($temporaryTableName . $valueFieldSuffix, 'row_id');
             }
 
             //Fill temporary tables with attributes grouped by it type
