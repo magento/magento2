@@ -7,26 +7,27 @@
 namespace Magento\Catalog\Test\TestCase\Category;
 
 use Magento\Catalog\Test\Fixture\Category;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Util\Command\Cli\Indexer;
 use Magento\Mtf\Util\Command\Cli\Cron;
 
 /**
- * Test Creation for UpdateCategoryEntity
+ * Test Creation for UpdateCategoryEntityFlatData
  *
  * Test Flow:
  * Preconditions:
- * 1. Create category
+ * 1. Create category.
+ * 2. Create two stores.
+ * 3. Set configuration settings.
+ * 4. Run cron twice.
+ * 5. Perform full reindex: "bin/magento indexer:reindex".
  *
  * Steps:
- * 1. Login as admin
- * 2. Navigate Products->Categories
- * 3. Open category created in preconditions
- * 4. Update data according to data set
- * 5. Save
- * 6. Perform asserts
+ * 1. Login as admin.
+ * 2. Navigate Products->Categories.
+ * 3. Open category created in preconditions.
+ * 4. Update data according to data set.
+ * 5. Save.
+ * 6. Perform asserts.
  *
  * @group Category_Management
  * @ZephyrId MAGETWO-20169
@@ -41,64 +42,47 @@ class UpdateCategoryEntityFlatDataTest extends UpdateCategoryEntityTest
     private $indexer;
 
     /**
-     * Should cache be flushed.
+     * Handle cron for tests executions.
      *
-     * @var bool
+     * @var Cron
      */
-    private $flushCache;
+    private $cron;
 
     /**
-     * Configuration Data
+     * Configuration data.
      *
-     * @var ValueInterface $configData
+     * @var string
      */
     private $configData;
 
     /**
-     * Inject page end prepare default category
+     * Prepare test data.
      *
-     * @param Category $initialCategory
-     * @param CatalogCategoryIndex $catalogCategoryIndex
-     * @param CatalogCategoryEdit $catalogCategoryEdit
-     * @param FixtureFactory $fixtureFactory
+     * @param Cron $cron
      * @param Indexer $indexer
      * @return array
      */
-    public function __inject(
-        Category $initialCategory,
-        CatalogCategoryIndex $catalogCategoryIndex,
-        CatalogCategoryEdit $catalogCategoryEdit,
-        FixtureFactory $fixtureFactory,
-        Indexer $indexer
-    ) {
-        $this->fixtureFactory = $fixtureFactory;
-        $this->catalogCategoryIndex = $catalogCategoryIndex;
-        $this->catalogCategoryEdit = $catalogCategoryEdit;
+    public function __prepare(Cron $cron, Indexer $indexer)
+    {
+        $this->cron = $cron;
         $this->indexer = $indexer;
-        $initialCategory->persist();
-        return ['initialCategory' => $initialCategory];
     }
 
     /**
-     * Test for update category
+     * Test for update category if use category flat.
      *
      * @param Category $category
      * @param Category $initialCategory
      * @param null $indexersMode
-     * @param $configData
-     * @param bool $flushCache
-     * @param Cron $cron
+     * @param string|null $configData
      * @return array
      */
     public function test(
         Category $category,
         Category $initialCategory,
-        Cron $cron,
         $indexersMode = null,
-        $configData = null,
-        $flushCache = true
+        $configData = null
     ) {
-        $this->flushCache = $flushCache;
         $this->configData = $configData;
 
         //Preconditions
@@ -106,28 +90,20 @@ class UpdateCategoryEntityFlatDataTest extends UpdateCategoryEntityTest
         $secondStore = $this->fixtureFactory->createByCode('store', ['dataset' => 'custom']);
         $firstStore->persist();
         $secondStore->persist();
-        $cron->run();
-        $cron->run();
+        $this->cron->run();
+        $this->cron->run();
 
+        $this->objectManager->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData, 'flushCache' => true]
+        )->run();
 
-
-        if (isset($this->configData)) {
-            $this->objectManager->create(
-                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-                ['configData' => $this->configData, 'flushCache' => $this->flushCache]
-            )->run();
-        }
-
-        if (isset($indexersMode)) {
+        if ($indexersMode !== null) {
             $this->indexer->setMode($indexersMode);
         }
         $this->indexer->reindex();
 
-        $this->catalogCategoryIndex->open();
-        $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);
-        $this->catalogCategoryEdit->getEditForm()->fill($category);
-        $this->catalogCategoryEdit->getFormPageActions()->save();
-        return ['category' => $this->prepareCategory($category, $initialCategory)];
+        return parent::test($category, $initialCategory);
     }
 
 
@@ -138,12 +114,10 @@ class UpdateCategoryEntityFlatDataTest extends UpdateCategoryEntityTest
      */
     public function tearDown()
     {
-        if (isset($this->configData)) {
-            $this->objectManager->create(
-                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
-                ['configData' => $this->configData, 'rollback' => true, 'flushCache' => $this->flushCache]
-            )->run();
-        }
+        $this->objectManager->create(
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData, 'rollback' => true, 'flushCache' => true]
+        )->run();
         $this->indexer->reindex();
     }
 }

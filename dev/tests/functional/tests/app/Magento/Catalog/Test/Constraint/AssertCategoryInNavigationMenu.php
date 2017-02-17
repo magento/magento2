@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Constraint;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Magento\Mtf\Client\BrowserInterface;
+use Magento\Cms\Test\Page\CmsIndex;
 
 /**
  * Check visibility of category in navigation menu.
@@ -21,26 +21,24 @@ class AssertCategoryInNavigationMenu extends AbstractConstraint
      *
      * @param Category $category
      * @param CatalogCategoryView $catalogCategoryView
-     * @param BrowserInterface $browser
+     * @param CmsIndex $cmsIndex
      * @return void
      */
     public function processAssert(
         Category $category,
         CatalogCategoryView $catalogCategoryView,
-        BrowserInterface $browser
+        CmsIndex $cmsIndex
     ) {
-        $categoryData = $category->getData();
-
-        $browser->open($_ENV['app_frontend_url']);
-        if (($categoryData['include_in_menu'] == 'Yes') && ($categoryData['is_active'] == 'Yes')) {
+        $cmsIndex->open();
+        if (($category->getIncludeInMenu() == 'Yes') && ($category->getIsActive() == 'Yes')) {
             \PHPUnit_Framework_Assert::assertTrue(
                 $catalogCategoryView->getTopmenu()->isCategoryVisible($category->getName()),
-                'Category ' . $category->getName() . ' is not visible in navigation menu.'
+                'Expected that ' . $category->getName() . ' is visible in navigation menu, but it is not.'
             );
         } else {
             \PHPUnit_Framework_Assert::assertFalse(
                 $catalogCategoryView->getTopmenu()->isCategoryVisible($category->getName()),
-                'Category ' . $category->getName() . ' is visible in navigation menu.'
+                'Expected that ' . $category->getName() . ' is not visible in navigation menu, but it is.'
             );
         }
     }
@@ -52,6 +50,6 @@ class AssertCategoryInNavigationMenu extends AbstractConstraint
      */
     public function toString()
     {
-        return "Unexpected category's visibility in navigation menu";
+        return "All category's visibility in navigation menu are true";
     }
 }

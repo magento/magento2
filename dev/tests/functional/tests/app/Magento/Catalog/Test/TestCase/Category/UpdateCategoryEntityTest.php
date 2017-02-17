@@ -11,8 +11,6 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Util\Command\Cli\Cron;
-use Magento\Mtf\Util\Command\Cli\Indexer;
 
 /**
  * Test Creation for UpdateCategoryEntity
@@ -66,15 +64,13 @@ class UpdateCategoryEntityTest extends Injectable
      * @param CatalogCategoryIndex $catalogCategoryIndex
      * @param CatalogCategoryEdit $catalogCategoryEdit
      * @param FixtureFactory $fixtureFactory
-     * @param Indexer $indexer
      * @return array
      */
     public function __inject(
         Category $initialCategory,
         CatalogCategoryIndex $catalogCategoryIndex,
         CatalogCategoryEdit $catalogCategoryEdit,
-        FixtureFactory $fixtureFactory,
-        Indexer $indexer
+        FixtureFactory $fixtureFactory
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->catalogCategoryIndex = $catalogCategoryIndex;
@@ -88,10 +84,9 @@ class UpdateCategoryEntityTest extends Injectable
      *
      * @param Category $category
      * @param Category $initialCategory
-     * @param Cron $cron
      * @return array
      */
-    public function test(Category $category, Category $initialCategory, Cron $cron)
+    public function test(Category $category, Category $initialCategory)
     {
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);
