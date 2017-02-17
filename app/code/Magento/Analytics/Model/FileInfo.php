@@ -29,7 +29,7 @@ class FileInfo
      * @param string $path
      * @return $this
      */
-    public function setPath(string $path)
+    public function setPath($path)
     {
         $this->path = $path;
         return $this;
@@ -47,7 +47,7 @@ class FileInfo
      * @param string $initializationVector
      * @return $this
      */
-    public function setInitializationVector(string $initializationVector)
+    public function setInitializationVector($initializationVector)
     {
         $this->initializationVector = $initializationVector;
         return $this;
