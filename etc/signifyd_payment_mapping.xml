@@ -5,12 +5,12 @@
  * See COPYING.txt for license details.
  */
  /**
-  * Custom payment method might adds a block in payment_list e.g.
-  *      <payment>
-  *         <payment_method>custom_payment_method</payment_method>
-  *          <signifyd_payment_method>PAYMENT_CARD</signifyd_payment_method>
-  *     </payment>
-  *  Appropriate value for the <signifyd_payment_method> tag from Signifyd documentation:
+  * Custom payment method might adds a block in payment_method_list e.g.
+  *      <payment_method>
+  *         <magento_code>custom_payment_method</magento_code>
+  *         <signifyd_code>PAYMENT_CARD</signifyd_code>
+  *     </payment_method>
+  *  Appropriate value for the <signifyd_code> tag from Signifyd documentation:
   *  @see https://www.signifyd.com/docs/api/#/reference/webhooks/manage-single-webhooks/create-a-case
   *  Create a Case -> Request -> ATTRIBUTES -> paymentMethod
   */
