@@ -16,9 +16,6 @@ use Magento\Customer\Model\Data\ValidationRule;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Customer\Model\Metadata\AttributeMetadataHydrator;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class AttributeMetadataHydratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -149,17 +146,17 @@ class AttributeMetadataHydratorTest extends \PHPUnit_Framework_TestCase
             ->with(['data' => $optionTwoDataPartiallyConverted])
             ->willReturn($optionFour);
 
-        $validationRule = new ValidationRule($validationRuleOneData);
+        $validationRuleOne = new ValidationRule($validationRuleOneData);
         $this->validationRuleFactoryMock->expects($this->once())
             ->method('create')
             ->with(['data' => $validationRuleOneData])
-            ->willReturn($validationRule);
+            ->willReturn($validationRuleOne);
 
         $attributeMetadataPartiallyConverted = [
             'attribute_code' => 'attribute_code',
             'frontend_input' => 'hidden',
             'options' => [$optionOne, $optionFour],
-            'validation_rules' => [$validationRule]
+            'validation_rules' => [$validationRuleOne]
         ];
 
         $this->attributeMetadataFactoryMock->expects($this->once())
