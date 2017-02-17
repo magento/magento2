@@ -6,10 +6,10 @@
 
 namespace Magento\Analytics\Controller\Adminhtml\Export;
 
+use Magento\Analytics\Model\ExportDataHandler;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Analytics\Model\Export;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
@@ -18,7 +18,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Example extends Action
 {
     /**
-     * @var Export
+     * @var ExportDataHandler
      */
     private $export;
 
@@ -31,12 +31,12 @@ class Example extends Action
      * Example constructor.
      *
      * @param Action\Context $context
-     * @param Export $export
+     * @param ExportDataHandler $export
      * @param FileFactory $fileFactory
      */
     public function __construct(
         Action\Context $context,
-        Export $export,
+        ExportDataHandler $export,
         FileFactory $fileFactory
     ) {
         parent::__construct($context);
@@ -52,10 +52,6 @@ class Example extends Action
      */
     public function execute()
     {
-        return $this->fileFactory->create(
-            'analytics-export.tgz',
-            $this->export->getArchiveContent(),
-            DirectoryList::VAR_DIR
-        );
+        $this->export->prepareExportData();
     }
 }
