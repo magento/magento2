@@ -31,7 +31,7 @@ class FileReader
     private $configFilePool;
 
     /**
-     * The pool of drivers.
+     * The pool of stream drivers.
      *
      * @var DriverPool
      */
@@ -40,7 +40,7 @@ class FileReader
     /**
      * @param DirectoryList $dirList The list of directories
      * @param DriverPool $driverPool The pool of config files
-     * @param ConfigFilePool $configFilePool The pool of drivers
+     * @param ConfigFilePool $configFilePool The pool of stream drivers
      */
     public function __construct(
         DirectoryList $dirList,
