@@ -74,7 +74,9 @@ class TableBuilder
         $attributes = $this->_productIndexerHelper->getAttributes();
         $eavAttributes = $this->_productIndexerHelper->getTablesStructure($attributes);
         $entityTableColumns = $eavAttributes[$entityTableName];
-        $linkField = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()
+            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
 
         $temporaryEavAttributes = $eavAttributes;
 
