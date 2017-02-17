@@ -1821,7 +1821,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->method('isVirtual')
             ->will($this->returnValue(true));
         $selectionMock->expects($this->once())
-            ->method('getSize')
+            ->method('count')
             ->will($this->returnValue(1));
 
         $this->assertTrue($this->model->isVirtual($productMock));
