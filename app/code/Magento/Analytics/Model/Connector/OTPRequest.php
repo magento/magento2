@@ -7,17 +7,18 @@ namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\HTTP\ZendClient as HttpClient;
-use Magento\Framework\HTTP\ZendClientFactory as HttpClientFactory;
+use Magento\Framework\HTTP\ZendClient;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 use Zend_Http_Response as HttpResponse;
 
 /**
- * Perform direct call to MBI services for getting OTP.
+ * Representation of an 'OTP' request.
  *
- * OTP (One-Time Password) is a password that is valid for only one login session
- * and has limited time when it is valid.
+ * The request is responsible for obtaining of an OTP from the MBI service.
+ *
+ * OTP (One-Time Password) is a password that is valid for short period of time
+ * and may be used only for one login session.
  */
 class OTPRequest
 {
@@ -29,9 +30,9 @@ class OTPRequest
     private $analyticsToken;
 
     /**
-     * @var HttpClientFactory
+     * @var Http\ClientInterface
      */
-    private $clientFactory;
+    private $httpClient;
 
     /**
      * @var LoggerInterface
@@ -44,7 +45,8 @@ class OTPRequest
     private $config;
 
     /**
-     * Path to config value with URL which provide OTP for MBI.
+     * Path to the configuration value which contains
+     * an URL that provides an OTP.
      *
      * @var string
      */
@@ -52,51 +54,64 @@ class OTPRequest
 
     /**
      * @param AnalyticsToken $analyticsToken
-     * @param HttpClientFactory $clientFactory
+     * @param Http\ClientInterface $httpClient
      * @param ScopeConfigInterface $config
      * @param LoggerInterface $logger
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
-        HttpClientFactory $clientFactory,
+        Http\ClientInterface $httpClient,
         ScopeConfigInterface $config,
         LoggerInterface $logger
     ) {
         $this->analyticsToken = $analyticsToken;
-        $this->clientFactory = $clientFactory;
+        $this->httpClient = $httpClient;
         $this->config = $config;
         $this->logger = $logger;
     }
 
     /**
-     * Performs call to MBI services for getting OTP.
+     * Performs obtaining of an OTP from the MBI service.
      *
-     * @return string|false OTP or false if request was unsuccessful.
+     * Returns received OTP or FALSE in case of failure.
+     *
+     * @return string|false
      */
     public function call()
     {
         $otp = false;
-        try {
-            if ($this->analyticsToken->isTokenExist()) {
-                /** @var HttpClient $client */
-                $client = $this->clientFactory->create();
-                $client->setUri($this->config->getValue($this->otpUrlConfigPath));
-                $client->setRawData($this->getRequestJson());
-                $client->setMethod(HttpClient::POST);
-                $otp = $this->extractOtp($client->request());
-                if (!$otp) {
-                    $this->logger->critical('The request for a OTP is unsuccessful.');
+
+        if ($this->analyticsToken->isTokenExist()) {
+            try {
+                $response = $this->httpClient->request(
+                    ZendClient::POST,
+                    $this->config->getValue($this->otpUrlConfigPath),
+                    $this->getRequestJson(),
+                    ['Content-Type: application/json']
+                );
+
+                if ($response) {
+                    $otp = $this->extractOtp($response);
+
+                    if (!$otp) {
+                        $this->logger->warning(
+                            sprintf(
+                                'Obtaining of an OTP from the MBI service has been failed: %s',
+                                !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
+                            )
+                        );
+                    }
                 }
+            } catch (\Exception $e) {
+                $this->logger->critical($e);
             }
-        } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
         }
 
         return $otp;
     }
 
     /**
-     * Prepares json string with data for request.
+     * Prepares request data in JSON format.
      *
      * @return string
      */
@@ -104,23 +119,27 @@ class OTPRequest
     {
         return json_encode(
             [
-                "token" => $this->analyticsToken->getToken(),
+                "access-token" => $this->analyticsToken->getToken(),
                 "url" => $this->config->getValue(Store::XML_PATH_SECURE_BASE_URL),
             ]
         );
     }
 
     /**
-     * Extracts OTP from the response.
+     * Extracts an OTP from the response.
+     *
+     * Returns the OTP or FALSE if the OTP is not found.
      *
      * @param HttpResponse $response
-     * @return string|false False if response doesn't contain required data.
+     * @return string|false
      */
     private function extractOtp(HttpResponse $response)
     {
         $otp = false;
-        if ($response->getStatus() === 200) {
+
+        if ($response->getStatus() === 201) {
             $body = json_decode($response->getBody(), 1);
+
             $otp = !empty($body['otp']) ? $body['otp'] : false;
         }
 
