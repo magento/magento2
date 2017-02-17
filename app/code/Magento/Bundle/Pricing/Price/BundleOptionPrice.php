@@ -109,13 +109,15 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
      */
     public function getOptionSelectionAmount($selection)
     {
-        $cacheKey = implode('_',
+        $cacheKey = implode(
+            '_',
             [
                 $this->product->getId(),
                 $selection->getOptionId(),
                 $selection->getSelectionId()
             ]
         );
+
         if (!isset($this->optionSelecionAmountCache[$cacheKey])) {
             $selectionPrice = $this->selectionFactory
                 ->create($this->product, $selection, $selection->getSelectionQty());
