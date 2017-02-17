@@ -9,7 +9,7 @@ namespace Magento\Analytics\Api\Data;
 /**
  * Interface LinkInterface
  *
- * Represents link with collected data and iv for decryption.
+ * Represents link with collected data and initialized vector for decryption.
  */
 interface LinkInterface
 {

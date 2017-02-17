@@ -10,8 +10,7 @@ use Magento\Analytics\Api\LinkProviderInterface;
 use Magento\Catalog\Model\Product\Media\Config as MediaConfig;
 
 /**
- * Class LinkRepository
- * {@inheritdoc}
+ * Provides link to file with collected report data.
  */
 class LinkProvider implements LinkProviderInterface
 {
