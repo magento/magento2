@@ -122,11 +122,11 @@ class Writer
      */
     public function saveConfig(array $data, $override = false, $pool = null, array $comments = [])
     {
-        $paths = $this->configFilePool->getPaths();
-
         foreach ($data as $fileKey => $config) {
-            if ($this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->isExist($paths[$fileKey])) {
-                $currentData = $this->fileReader->load($fileKey);
+            $paths = $this->configFilePool->getPaths();
+
+            if (isset($paths[$fileKey])) {
+                $currentData = $this->reader->load($fileKey);
                 if ($currentData) {
                     if ($override) {
                         $config = array_merge($currentData, $config);

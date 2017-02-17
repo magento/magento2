@@ -140,7 +140,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->dirWrite->expects($this->any())
             ->method('isExist')
             ->willReturn(true);
-        $this->fileReader->expects($this->once())
+        $this->reader->expects($this->once())
             ->method('load')
             ->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);
         $this->formatter->expects($this->once())
