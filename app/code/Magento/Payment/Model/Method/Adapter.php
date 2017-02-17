@@ -101,6 +101,7 @@ class Adapter implements MethodInterface
      * @param ValidatorPoolInterface|null $validatorPool
      * @param CommandManagerInterface|null $commandExecutor
      * @param LoggerInterface|null $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ManagerInterface $eventManager,
