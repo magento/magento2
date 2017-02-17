@@ -60,7 +60,7 @@ class UpdateCategoryEntityFlatDataTest extends UpdateCategoryEntityTest
      *
      * @param Cron $cron
      * @param Indexer $indexer
-     * @return array
+     * @return void
      */
     public function __prepare(Cron $cron, Indexer $indexer)
     {
@@ -73,7 +73,7 @@ class UpdateCategoryEntityFlatDataTest extends UpdateCategoryEntityTest
      *
      * @param Category $category
      * @param Category $initialCategory
-     * @param null $indexersMode
+     * @param array|null $indexersMode
      * @param string|null $configData
      * @return array
      */
