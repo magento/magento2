@@ -2246,7 +2246,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->bundleCollection->expects($this->exactly(2))
             ->method('create')
             ->will($this->onConsecutiveCalls(
-                $selectionCollectionMock1, $selectionCollectionMock2
+                $selectionCollectionMock1,
+                $selectionCollectionMock2
             ));
 
         $product = new \Magento\Framework\DataObject(
