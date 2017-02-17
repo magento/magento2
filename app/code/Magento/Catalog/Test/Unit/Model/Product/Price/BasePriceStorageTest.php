@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,8 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 
 /**
  * Class BasePriceStorageTest.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BasePriceStorageTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,14 +44,15 @@ class BasePriceStorageTest extends \PHPUnit_Framework_TestCase
     private $storeRepository;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
+     *      |\PHPUnit_Framework_MockObject_MockObject
      */
-    private $productRepository;
+    private $invalidSkuProcessor;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Price\Validation\Result|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $product;
+    private $validationResult;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\BasePriceStorage
@@ -63,72 +66,37 @@ class BasePriceStorageTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->pricePersistenceFactory = $this->getMock(
-            \Magento\Catalog\Model\Product\Price\PricePersistenceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->pricePersistence = $this->getMock(
-            \Magento\Catalog\Model\Product\Price\PricePersistence::class,
-            ['get', 'retrieveSkuById', 'update', 'getEntityLinkField'],
-            [],
-            '',
-            false
-        );
-        $this->basePriceInterfaceFactory = $this->getMock(
-            \Magento\Catalog\Api\Data\BasePriceInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->basePriceInterface = $this->getMockForAbstractClass(
-            \Magento\Catalog\Api\Data\BasePriceInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['setSku', 'setPrice', 'setStoreId', 'getSku', 'getPrice', 'getStoreId']
-        );
-        $this->productIdLocator = $this->getMockForAbstractClass(
-            \Magento\Catalog\Model\ProductIdLocatorInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['retrieveProductIdsBySkus']
-        );
-        $this->storeRepository = $this->getMockForAbstractClass(
-            \Magento\Store\Api\StoreRepositoryInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getById']
-        );
-        $this->productRepository = $this->getMockForAbstractClass(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['get']
-        );
-        $this->product = $this->getMockForAbstractClass(
-            \Magento\Catalog\Api\Data\ProductInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getPriceType']
-        );
+        $this->pricePersistenceFactory = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product\Price\PricePersistenceFactory::class
+        )
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->pricePersistence = $this->getMockBuilder(\Magento\Catalog\Model\Product\Price\PricePersistence::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->basePriceInterfaceFactory = $this->getMockBuilder(
+            \Magento\Catalog\Api\Data\BasePriceInterfaceFactory::class
+        )
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->basePriceInterface = $this->getMockBuilder(\Magento\Catalog\Api\Data\BasePriceInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->productIdLocator = $this->getMockBuilder(\Magento\Catalog\Model\ProductIdLocatorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->storeRepository = $this->getMockBuilder(\Magento\Store\Api\StoreRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->invalidSkuProcessor = $this
+            ->getMockBuilder(\Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->validationResult = $this->getMockBuilder(\Magento\Catalog\Model\Product\Price\Validation\Result::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -138,7 +106,8 @@ class BasePriceStorageTest extends \PHPUnit_Framework_TestCase
                 'basePriceInterfaceFactory' => $this->basePriceInterfaceFactory,
                 'productIdLocator' => $this->productIdLocator,
                 'storeRepository' => $this->storeRepository,
-                'productRepository' => $this->productRepository,
+                'invalidSkuProcessor' => $this->invalidSkuProcessor,
+                'validationResult' => $this->validationResult,
                 'allowedProductTypes' => ['simple', 'virtual', 'bundle', 'downloadable'],
             ]
         );
@@ -151,17 +120,8 @@ class BasePriceStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet()
     {
-        $skus = ['sku_1', 'sku_2'];
-        $idsBySku = [
-            'sku_1' =>
-                [
-                    1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-                ],
-            'sku_2' =>
-                [
-                    2 => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
-                ]
-        ];
+        $skus = ['sku_1', 'sku_2', 'sku_3'];
+        $validSkus = ['sku_1', 'sku_2'];
         $rawPrices = [
             [
                 'row_id' => 1,
@@ -174,68 +134,41 @@ class BasePriceStorageTest extends \PHPUnit_Framework_TestCase
                 'store_id' => 1
             ]
         ];
-        $this->productIdLocator
-            ->expects($this->once())
-            ->method('retrieveProductIdsBySkus')->with($skus)
-            ->willReturn($idsBySku);
-        $this->productRepository->expects($this->once())->method('get')->willReturn($this->product);
-        $this->product->expects($this->once())->method('getPriceType')->willReturn(1);
+        $this->invalidSkuProcessor->expects($this->once())
+            ->method('filterSkuList')
+            ->with($skus, ['simple', 'virtual', 'bundle', 'downloadable'], 1)
+            ->willReturn($validSkus);
         $this->pricePersistenceFactory
             ->expects($this->once())
             ->method('create')
             ->with(['attributeCode' => 'price'])
             ->willReturn($this->pricePersistence);
-        $this->pricePersistence->expects($this->once())->method('get')->with($skus)->willReturn($rawPrices);
-        $this->pricePersistence->expects($this->atLeastOnce())->method('getEntityLinkField')->willReturn('row_id');
+        $this->pricePersistence->expects($this->once())->method('get')->with($validSkus)->willReturn($rawPrices);
         $this->basePriceInterfaceFactory
-            ->expects($this->exactly(2))
+            ->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->basePriceInterface);
+        $this->pricePersistence->expects($this->atLeastOnce())->method('getEntityLinkField')->willReturn('row_id');
         $this->pricePersistence
-            ->expects($this->exactly(2))
+            ->expects($this->atLeastOnce())
             ->method('retrieveSkuById')
             ->willReturnOnConsecutiveCalls('sku_1', 'sku_2');
         $this->basePriceInterface
-            ->expects($this->exactly(2))
+            ->expects($this->atLeastOnce())
             ->method('setSku')
             ->withConsecutive(['sku_1'], ['sku_2'])
             ->willReturnSelf();
         $this->basePriceInterface
-            ->expects($this->exactly(2))
+            ->expects($this->atLeastOnce())
             ->method('setPrice')
             ->withConsecutive([15], [35])
             ->willReturnSelf();
         $this->basePriceInterface
-            ->expects($this->exactly(2))
+            ->expects($this->atLeastOnce())
             ->method('setStoreId')
             ->withConsecutive([1], [1])
             ->willReturnSelf();
-        $this->model->get($skus);
-    }
 
-    /**
-     * Test get method with exception.
-     *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested products don't exist: sku_1, sku_2
-     */
-    public function testGetWithException()
-    {
-        $skus = ['sku_1', 'sku_2'];
-        $idsBySku = [
-            'sku_1' =>
-                [
-                    1 => 'configurable'
-                ],
-            'sku_2' =>
-                [
-                    2 => 'grouped'
-                ]
-        ];
-        $this->productIdLocator
-            ->expects($this->once())
-            ->method('retrieveProductIdsBySkus')->with($skus)
-            ->willReturn($idsBySku);
         $this->model->get($skus);
     }
 
@@ -246,35 +179,37 @@ class BasePriceStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdate()
     {
-        $store = $this->getMockForAbstractClass(
-            \Magento\Store\Api\Data\StoreInterface::class,
-            [],
-            '',
-            false
-        );
+        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $sku = 'sku_1';
         $idsBySku = [
             'sku_1' =>
                 [
-                    1 => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
+                    1 => [
+                        $this->basePriceInterface
+                    ]
                 ]
         ];
-        $this->basePriceInterface->expects($this->exactly(4))->method('getSku')->willReturn($sku);
+        $this->basePriceInterface->expects($this->atLeastOnce())->method('getSku')->willReturn($sku);
+        $this->invalidSkuProcessor->expects($this->once())
+            ->method('retrieveInvalidSkuList')
+            ->with([1 => $sku], ['simple', 'virtual', 'bundle', 'downloadable'], 1)
+            ->willReturn([]);
+        $this->basePriceInterface->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);
+        $this->basePriceInterface->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
+        $this->validationResult->expects($this->once())->method('getFailedRowIds')->willReturn([]);
         $this->productIdLocator
-            ->expects($this->exactly(2))
+            ->expects($this->once())
             ->method('retrieveProductIdsBySkus')->with([$sku])
             ->willReturn($idsBySku);
-        $this->productRepository->expects($this->once())->method('get')->willReturn($this->product);
-        $this->product->expects($this->once())->method('getPriceType')->willReturn(1);
-        $this->basePriceInterface->expects($this->exactly(3))->method('getPrice')->willReturn(15);
-        $this->basePriceInterface->expects($this->exactly(2))->method('getStoreId')->willReturn(1);
-        $this->pricePersistence->expects($this->atLeastOnce())->method('getEntityLinkField')->willReturn('row_id');
-        $this->storeRepository->expects($this->once())->method('getById')->with(1)->willReturn($store);
         $this->pricePersistenceFactory
             ->expects($this->once())
             ->method('create')
             ->with(['attributeCode' => 'price'])
             ->willReturn($this->pricePersistence);
+        $this->pricePersistence->expects($this->atLeastOnce())->method('getEntityLinkField')->willReturn('row_id');
+        $this->storeRepository->expects($this->once())->method('getById')->with(1)->willReturn($store);
         $formattedPrices = [
             [
                 'store_id' => 1,
@@ -283,44 +218,69 @@ class BasePriceStorageTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $this->pricePersistence->expects($this->once())->method('update')->with($formattedPrices);
-        $this->assertTrue($this->model->update([$this->basePriceInterface]));
+        $this->validationResult->expects($this->any())->method('getFailedItems')->willReturn([]);
+        $this->assertEquals([], $this->model->update([1 => $this->basePriceInterface]));
     }
 
     /**
-     * Test update method without SKU.
+     * Test update method without SKU and with negative price.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid attribute sku: .
+     * @return void
      */
-    public function testUpdateWithoutSku()
+    public function testUpdateWithoutSkuAndWithNegativePrice()
     {
-        $this->basePriceInterface->expects($this->exactly(2))->method('getSku')->willReturn(null);
-        $this->model->update([$this->basePriceInterface]);
-    }
-
-    /**
-     * Test update method with negative price.
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid attribute Price: -15.
-     */
-    public function testUpdateWithNegativePrice()
-    {
-        $sku = 'sku_1';
-        $idsBySku = [
-            'sku_1' =>
+        $exception = new \Magento\Framework\Exception\NoSuchEntityException();
+        $this->basePriceInterface->expects($this->atLeastOnce())->method('getSku')->willReturn(null);
+        $this->basePriceInterface->expects($this->atLeastOnce())->method('getPrice')->willReturn(-10);
+        $this->pricePersistenceFactory
+            ->expects($this->once())
+            ->method('create')
+            ->with(['attributeCode' => 'price'])
+            ->willReturn($this->pricePersistence);
+        $this->invalidSkuProcessor->expects($this->once())
+            ->method('retrieveInvalidSkuList')
+            ->with([null], ['simple', 'virtual', 'bundle', 'downloadable'], 1)
+            ->willReturn([]);
+        $priceUpdateResult = $this->getMockBuilder(\Magento\Catalog\Api\Data\PriceUpdateResultInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->validationResult->expects($this->atLeastOnce())
+            ->method('addFailedItem')
+            ->withConsecutive(
                 [
-                    1 => \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
+                    0,
+                    __(
+                        'Invalid attribute %fieldName = %fieldValue.',
+                        ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                    ),
+                    ['fieldName' => 'SKU', 'fieldValue' => null]
+                ],
+                [
+                    0,
+                    __(
+                        'Invalid attribute %fieldName = %fieldValue.',
+                        ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
+                    ),
+                    ['fieldName' => 'Price', 'fieldValue' => -10]
+                ],
+                [
+                    0,
+                    __(
+                        'Requested store is not found. Row ID: SKU = %SKU, Store ID: %storeId.',
+                        ['SKU' => null, 'storeId' => 10]
+                    ),
+                    ['SKU' => null, 'storeId' => 10]
                 ]
-        ];
-        $this->basePriceInterface->expects($this->exactly(2))->method('getSku')->willReturn($sku);
-        $this->productIdLocator
-            ->expects($this->once(1))
-            ->method('retrieveProductIdsBySkus')->with([$sku])
-            ->willReturn($idsBySku);
-        $this->productRepository->expects($this->once())->method('get')->willReturn($this->product);
-        $this->product->expects($this->once())->method('getPriceType')->willReturn(1);
-        $this->basePriceInterface->expects($this->exactly(3))->method('getPrice')->willReturn(-15);
-        $this->model->update([$this->basePriceInterface]);
+            );
+        $this->basePriceInterface->expects($this->atLeastOnce())->method('getStoreId')->willReturn(10);
+        $this->storeRepository->expects($this->once())->method('getById')->with(10)->willThrowException($exception);
+        $this->validationResult->expects($this->once())->method('getFailedRowIds')->willReturn([0 => 0]);
+        $this->pricePersistence->expects($this->once())->method('update')->with([]);
+        $this->validationResult->expects($this->once())->method('getFailedItems')->willReturn([$priceUpdateResult]);
+
+        $this->assertEquals(
+            [$priceUpdateResult],
+            $this->model->update([$this->basePriceInterface])
+        );
     }
 }

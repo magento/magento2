@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ class AssertCancelSuccessMessageInShoppingCart extends AbstractConstraint
     /**
      * Cancel success message text.
      */
-    const SUCCESS_MESSAGE = 'Payment was canceled.';
+    const SUCCESS_MESSAGE = 'Your purchase process has been cancelled.';
 
     /**
      * Assert that success message about canceled order is present and correct.

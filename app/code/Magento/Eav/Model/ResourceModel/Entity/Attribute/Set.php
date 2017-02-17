@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
-use Magento\Framework\Serialize\SerializerInterface;
-
 class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * EAV cache ids
+     * EAV cache id
      */
     const ATTRIBUTES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES_BY_SET_ID';
 
@@ -25,16 +23,12 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $eavConfig;
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param string $connectionName
-     * @codeCoverageIgnore
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -234,20 +228,5 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $select->where('entity.attribute_set_id = :attribute_set_id');
         }
         return $connection->fetchAll($select, $bind);
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (null === $this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(SerializerInterface::class);
-        }
-        return $this->serializer;
     }
 }

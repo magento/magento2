@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,6 +34,13 @@ class PageForm extends FormTabs
      * @var string
      */
     protected $loader = "data-role='loader'";
+
+    /**
+     * Selector for action header.
+     *
+     * @var string
+     */
+    protected $header = 'header.page-content, [data-ui-id="page-actions-toolbar-content-header"]';
 
     /**
      * Page Content Show/Hide Editor toggle button.

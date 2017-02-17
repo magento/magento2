@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
@@ -70,7 +70,8 @@ class Sidebar extends AbstractCart
             'imageTemplate' => $this->getImageHtmlTemplate(),
             'baseUrl' => $this->getBaseUrl(),
             'minicartMaxItemsVisible' => $this->getMiniCartMaxItemsCount(),
-            'websiteId' => $this->_storeManager->getStore()->getWebsiteId()
+            'websiteId' => $this->_storeManager->getStore()->getWebsiteId(),
+            'maxItemsToDisplay' => $this->getMaxItemsToDisplay()
         ];
     }
 
@@ -187,5 +188,19 @@ class Sidebar extends AbstractCart
     private function getMiniCartMaxItemsCount()
     {
         return (int)$this->_scopeConfig->getValue('checkout/sidebar/count', ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * Returns maximum cart items to display
+     * This setting regulates how many items will be displayed in minicart
+     *
+     * @return int
+     */
+    private function getMaxItemsToDisplay()
+    {
+        return (int)$this->_scopeConfig->getValue(
+            'checkout/sidebar/max_items_display_count',
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }

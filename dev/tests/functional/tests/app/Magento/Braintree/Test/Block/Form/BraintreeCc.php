@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,11 +23,18 @@ class BraintreeCc extends PaymentCc
      * @var array
      */
     protected $braintreeForm = [
-        "cc_number" => "#braintree-hosted-field-number",
-        "cc_exp_month" => "#braintree-hosted-field-expirationMonth",
-        "cc_exp_year" => "#braintree-hosted-field-expirationYear",
-        "cc_cid" => "#braintree-hosted-field-cvv",
+        "cc_number" => "//*[@id='braintree-hosted-field-number']",
+        "cc_exp_month" => "//*[@id='braintree-hosted-field-expirationMonth']",
+        "cc_exp_year" => "//*[@id='braintree-hosted-field-expirationYear']",
+        "cc_cid" => "//*[@id='braintree-hosted-field-cvv']",
     ];
+
+    /**
+     * Error container selector.
+     *
+     * @var string
+     */
+    protected $errorSelector = "/../../div[@class='hosted-error']";
 
     /**
      * Fill Braintree credit card form.
@@ -38,16 +45,23 @@ class BraintreeCc extends PaymentCc
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
+        $this->braintreeForm = array_intersect_key($this->braintreeForm, $fixture->getData());
         $mapping = $this->dataMapping($fixture->getData());
         foreach ($this->braintreeForm as $field => $iframe) {
             $element = $this->browser->find('body');
             $this->browser->waitUntil(
                 function () use ($element, $iframe) {
-                    $fieldElement = $element->find($iframe);
+                    $fieldElement = $element->find($iframe, Locator::SELECTOR_XPATH);
                     return $fieldElement->isVisible() ? true : null;
                 }
             );
-            $iframeLocator = ObjectManager::getInstance()->create(Locator::class, ['value' => $iframe]);
+            $iframeLocator = ObjectManager::getInstance()->create(
+                Locator::class,
+                [
+                    'value' => $iframe,
+                    'strategy' => Locator::SELECTOR_XPATH
+                ]
+            );
             $this->browser->switchToFrame($iframeLocator);
             $element = $this->browser->find('body');
             $this->browser->waitUntil(
@@ -59,5 +73,23 @@ class BraintreeCc extends PaymentCc
             $this->_fill([$mapping[$field]], $element);
             $this->browser->switchToFrame();
         }
+    }
+
+    /**
+     * Returns visible error messages.
+     *
+     * @param array $messages
+     * @return array
+     */
+    public function getVisibleMessages(array $messages)
+    {
+        $textMessages = [];
+        foreach (array_keys($messages) as $field) {
+            $selector = $this->braintreeForm[$field] . $this->errorSelector;
+            $errorElement = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
+            $textMessages[$field] = $errorElement->isVisible() ? $errorElement->getText() : null;
+        }
+
+        return $textMessages;
     }
 }

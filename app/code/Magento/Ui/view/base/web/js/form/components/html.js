@@ -1,7 +1,8 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'underscore',
@@ -71,6 +72,7 @@ define([
             return this;
         },
 
+        /** @inheritdoc */
         initContainer: function (parent) {
             this._super();
 

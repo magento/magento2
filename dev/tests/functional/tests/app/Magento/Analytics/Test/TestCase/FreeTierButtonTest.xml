@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Analytics\Test\TestCase\FreeTierButtonTest" summary="Navigate through Free Tier button on dashboard to Sign Up page" ticketId="MAGETWO-63715">
+        <variation name="FreeTierButtonTest">
+            <constraint name="Magento\Analytics\Test\Constraint\AssertFreeTierLink" />
+        </variation>
+    </testCase>
+</config>

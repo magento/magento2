@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -22,7 +21,7 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
     const CAPTURED_AMOUNT_PATTERN = '/^Captured amount of \w*\W{1,2}%s online. Transaction ID: "[\w\-]*"/';
 
     /**
-     * Assert that comment about captured amount exist in Comments History section on order page in Admin.
+     * Assert that comment about captured amount exists in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
@@ -39,11 +38,21 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
-        $actualCapturedAmount = $salesOrderView->getOrderHistoryBlock()->getCapturedAmount();
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $comments = $infoTab->getCommentsHistoryBlock()->getComments();
+
+        foreach ($comments as $key => $comment) {
+            if (strstr($comment['comment'], 'Captured') === false) {
+                unset($comments[$key]);
+            }
+        }
+        $comments = array_values($comments);
+
         foreach ($capturedPrices as $key => $capturedPrice) {
             \PHPUnit_Framework_Assert::assertRegExp(
                 sprintf(self::CAPTURED_AMOUNT_PATTERN, $capturedPrice),
-                $actualCapturedAmount[$key],
+                $comments[$key]['comment'],
                 'Incorrect captured amount value for the order #' . $orderId
             );
         }

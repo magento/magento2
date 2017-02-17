@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Autoload;
@@ -22,7 +22,7 @@ class Populator
      */
     public static function populateMappings(AutoloaderInterface $autoloader, DirectoryList $dirList)
     {
-        $generationDir = $dirList->getPath(DirectoryList::GENERATION);
+        $generationDir = $dirList->getPath(DirectoryList::GENERATED_CODE);
         $frameworkDir = $dirList->getPath(DirectoryList::LIB_INTERNAL);
 
         $autoloader->addPsr4('Magento\\', [$generationDir . '/Magento/'], true);

@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Contact\Test\Unit\Controller\Index;
+
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +28,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      * View mock
      * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_view;
+    protected $resultFactory;
 
     /**
      * Url mock
@@ -43,7 +46,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
         $context = $this->getMock(
             \Magento\Framework\App\Action\Context::class,
-            ['getRequest', 'getResponse', 'getView', 'getUrl'],
+            ['getRequest', 'getResponse', 'getResultFactory', 'getUrl'],
             [],
             '',
             false
@@ -67,8 +70,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
                 $this->getMockForAbstractClass(\Magento\Framework\App\ResponseInterface::class, [], '', false)
             ));
 
-        $this->_view = $this->getMock(
-            \Magento\Framework\App\ViewInterface::class,
+        $this->resultFactory = $this->getMock(
+            ResultFactory::class,
             [],
             [],
             '',
@@ -76,8 +79,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
 
         $context->expects($this->once())
-            ->method('getView')
-            ->will($this->returnValue($this->_view));
+            ->method('getResultFactory')
+            ->will($this->returnValue($this->resultFactory));
 
         $this->_controller = new \Magento\Contact\Controller\Index\Index(
             $context,
@@ -90,12 +93,12 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $this->_view->expects($this->once())
-            ->method('loadLayout');
+        $resultStub = $this->getMockForAbstractClass(ResultInterface::class);
+        $this->resultFactory->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_PAGE)
+            ->willReturn($resultStub);
 
-        $this->_view->expects($this->once())
-            ->method('renderLayout');
-
-        $this->_controller->execute();
+        $this->assertSame($resultStub, $this->_controller->execute());
     }
 }

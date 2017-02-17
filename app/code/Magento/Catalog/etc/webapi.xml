@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -296,6 +296,24 @@
     </route>
     <route url="/V1/products/cost-delete" method="POST">
         <service class="Magento\Catalog\Api\CostStorageInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/special-price-information" method="POST">
+        <service class="Magento\Catalog\Api\SpecialPriceStorageInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/special-price" method="POST">
+        <service class="Magento\Catalog\Api\SpecialPriceStorageInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/special-price-delete" method="POST">
+        <service class="Magento\Catalog\Api\SpecialPriceStorageInterface" method="delete"/>
         <resources>
             <resource ref="Magento_Catalog::catalog"/>
         </resources>

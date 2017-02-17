@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -93,15 +93,59 @@ class TierPriceStorageTest extends WebapiAbstract
             'price_type' => \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_FIXED,
             'website_id' => 0,
             'sku' => self::SIMPLE_PRODUCT_SKU,
-            'customer_group' => 'ALL GROUPS',
+            'customer_group' => 'not logged in',
             'quantity' => $tierPrice->getQty()
         ];
         $response = $this->_webApiCall($serviceInfo, ['prices' => [$updatedPrice, $newPrice]]);
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $tierPrices = $productRepository->get(self::SIMPLE_PRODUCT_SKU)->getTierPrices();
-        $this->assertTrue($response);
+        $this->assertEmpty($response);
         $this->assertTrue($this->isPriceCorrect($newPrice, $tierPrices));
         $this->assertTrue($this->isPriceCorrect($updatedPrice, $tierPrices));
+    }
+
+    /**
+     * Call update method with specifying new website value for tier price with all websites value.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testUpdateWebsiteForAllWebsites()
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/tier-prices',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Update',
+            ],
+        ];
+        $invalidPrice = [
+            'price' => 40,
+            'price_type' => \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_FIXED,
+            'website_id' => 2,
+            'sku' => self::SIMPLE_PRODUCT_SKU,
+            'customer_group' => 'not logged in',
+            'quantity' => 3
+        ];
+        $response = $this->_webApiCall($serviceInfo, ['prices' => [$invalidPrice]]);
+        $this->assertNotEmpty($response);
+        $message = 'Invalid attribute Website ID = %websiteId. '
+            . 'Row ID: SKU = %SKU, Website ID: %websiteId, '
+            . 'Customer Group: %customerGroup, Quantity: %qty.';
+        $this->assertEquals($message, $response[0]['message']);
+        $this->assertEquals('simple', $response[0]['parameters'][0]);
+        $this->assertEquals('2', $response[0]['parameters'][1]);
+        $message = 'We found a duplicate website, tier price, customer group and quantity: '
+            . 'Customer Group = %customerGroup, Website ID = %websiteId, Quantity = %qty. '
+            . 'Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.';
+        $this->assertEquals($message, $response[1]['message']);
+        $this->assertEquals('simple', $response[1]['parameters'][0]);
+        $this->assertEquals('0', $response[1]['parameters'][1]);
+        $this->assertEquals('NOT LOGGED IN', $response[1]['parameters'][2]);
+        $this->assertEquals('3.0000', $response[1]['parameters'][3]);
     }
 
     /**
@@ -136,7 +180,7 @@ class TierPriceStorageTest extends WebapiAbstract
                 'price_type' => \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_FIXED,
                 'website_id' => 0,
                 'sku' => self::SIMPLE_PRODUCT_SKU,
-                'customer_group' => 'general',
+                'customer_group' => 'not logged in',
                 'quantity' => 33
             ]
         ];
@@ -144,12 +188,8 @@ class TierPriceStorageTest extends WebapiAbstract
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $tierPrices = $productRepository->get(self::SIMPLE_PRODUCT_SKU)->getTierPrices();
-        $this->assertTrue($response);
+        $this->assertEmpty($response);
         $this->assertEquals(count($newPrices), count($tierPrices));
-
-        foreach ($newPrices as $newPrice) {
-            $this->assertTrue($this->isPriceCorrect($newPrice, $tierPrices));
-        }
     }
 
     /**
@@ -197,7 +237,7 @@ class TierPriceStorageTest extends WebapiAbstract
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $tierPrices = $productRepository->get(self::SIMPLE_PRODUCT_SKU)->getTierPrices();
         $tierPrice = $tierPrices[0];
-        $this->assertTrue($response);
+        $this->assertEmpty($response);
         $this->assertEquals(1, count($tierPrices));
         $this->assertEquals($pricesToStore, $tierPrice);
     }
@@ -223,6 +263,7 @@ class TierPriceStorageTest extends WebapiAbstract
                 && $tierPrice->getExtensionAttributes()->getWebsiteId() == $price['website_id']
             ) {
                 $isCorrect = true;
+                break;
             }
         }
 

@@ -2,7 +2,7 @@
 /**
  * Preferences for classes like in di.xml (for integration tests)
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,4 +23,5 @@ return [
         \Magento\TestFramework\Db\ConnectionAdapter::class,
     \Magento\Framework\Filesystem\DriverInterface::class => \Magento\Framework\Filesystem\Driver\File::class,
     \Magento\Framework\App\Config\ScopeConfigInterface::class => \Magento\TestFramework\App\Config::class,
+    \Magento\Captcha\Model\DefaultModel::class => \Magento\TestFramework\Captcha\DefaultModel::class,
 ];

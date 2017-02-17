@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Setup;
@@ -342,7 +342,7 @@ class UpgradeData implements UpgradeDataInterface
         }
         
         if (version_compare($context->getVersion(), '2.0.7') < 0) {
-            /** @var EavSetup $eavSetupF */
+            /** @var EavSetup $eavSetup */
             $eavSetup= $this->eavSetupFactory->create(['setup' => $setup]);
 
             $eavSetup->updateAttribute(
@@ -353,7 +353,32 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             );
         }
-        
+
+        if (version_compare($context->getVersion(), '2.1.3') < 0) {
+            /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
+            $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+            $this->changePriceAttributeDefaultScope($categorySetup);
+        }
+
         $setup->endSetup();
+    }
+
+    /**
+     * @param \Magento\Catalog\Setup\CategorySetup $categorySetup
+     * @return void
+     */
+    private function changePriceAttributeDefaultScope($categorySetup)
+    {
+        $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+        foreach (['price', 'cost', 'special_price'] as $attributeCode) {
+            $attribute = $categorySetup->getAttribute($entityTypeId, $attributeCode);
+            $categorySetup->updateAttribute(
+                $entityTypeId,
+                $attribute['attribute_id'],
+                'is_global',
+                \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
+            );
+
+        }
     }
 }

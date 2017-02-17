@@ -2,7 +2,7 @@
 /**
  * Import entity configurable product type model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -388,13 +388,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             )->joinLeft(
                 ['o' => $optionTable],
                 $this->connection->quoteIdentifier(
-                    'o.attribute_id'
+                    'm.attribute_id'
                 ) . ' = ' . $this->connection->quoteIdentifier(
                     'o.attribute_id'
                 ),
                 ['option_id']
             )->where(
-                'product_id IN ( ? )',
+                'm.product_id IN ( ? )',
                 $productIds
             );
 
@@ -498,6 +498,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             }
 
             if (!empty($fieldAndValuePairs['sku'])) {
+                $position = 0;
                 $additionalRow['_super_products_sku'] = $fieldAndValuePairs['sku'];
                 unset($fieldAndValuePairs['sku']);
                 $additionalRow['display'] = isset($fieldAndValuePairs['display']) ? $fieldAndValuePairs['display'] : 1;
@@ -505,8 +506,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 foreach ($fieldAndValuePairs as $attrCode => $attrValue) {
                     $additionalRow['_super_attribute_code'] = $attrCode;
                     $additionalRow['_super_attribute_option'] = $attrValue;
+                    $additionalRow['_super_attribute_position'] = $position;
                     $additionalRows[] = $additionalRow;
                     $additionalRow = [];
+                    $position += 1;
                 }
             }
         }
@@ -712,7 +715,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $attrParams = $this->_superAttributes[$data['_super_attribute_code']];
         $this->_superAttributesData['attributes'][$productId][$attrParams['id']] = [
             'product_super_attribute_id' => $productSuperAttrId,
-            'position' => 0,
+            'position' => $data['_super_attribute_position'],
         ];
         $label = isset($variationLabels[$data['_super_attribute_code']])
                 ? $variationLabels[$data['_super_attribute_code']]

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -20,6 +20,7 @@ define([
                 method: 'GET',
                 dataType: 'json'
             },
+            dataScope: '',
             data: {}
         },
 
@@ -29,7 +30,15 @@ define([
          * @returns {DataStorage} Chainable.
          */
         initConfig: function () {
+            var scope;
+
             this._super();
+
+            scope = this.dataScope;
+
+            if (typeof scope === 'string') {
+                this.dataScope = scope ? [scope] : [];
+            }
 
             this._requests = [];
 
@@ -77,10 +86,12 @@ define([
          * @returns {jQueryPromise}
          */
         getData: function (params, options) {
-            var cachedRequest = this.getRequest(params);
+            var cachedRequest;
 
-            if (params && params.filters && params.filters['store_id']) {
-                cachedRequest = false;
+            if (this.hasScopeChanged(params)) {
+                this.clearRequests();
+            } else {
+                cachedRequest = this.getRequest(params);
             }
 
             options = options || {};
@@ -88,6 +99,30 @@ define([
             return !options.refresh && cachedRequest ?
                 this.getRequestData(cachedRequest) :
                 this.requestData(params);
+        },
+
+        /**
+         * Tells whether one of the parameters defined in the "dataScope" has
+         * changed since the last request.
+         *
+         * @param {Object} params - Request parameters.
+         * @returns {Boolean}
+         */
+        hasScopeChanged: function (params) {
+            var lastRequest = _.last(this._requests),
+                keys,
+                diff;
+
+            if (!lastRequest) {
+                return false;
+            }
+
+            diff = utils.compare(lastRequest.params, params);
+
+            keys = _.pluck(diff.changes, 'path');
+            keys = keys.concat(Object.keys(diff.containers));
+
+            return _.intersection(this.dataScope, keys).length > 0;
         },
 
         /**

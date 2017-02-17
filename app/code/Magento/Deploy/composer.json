@@ -6,7 +6,8 @@
         "magento/framework": "100.2.*",
         "magento/module-store": "100.2.*",
         "magento/module-require-js": "100.2.*",
-        "magento/module-user": "100.2.*"
+        "magento/module-user": "100.2.*",
+        "magento/module-config": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",

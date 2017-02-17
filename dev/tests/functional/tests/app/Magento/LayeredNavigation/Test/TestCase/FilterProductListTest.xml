@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -92,6 +92,26 @@
             </data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
             <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertFilterProductList" />
+        </variation>
+        <variation name="FilterProductListTestVariation4" summary="Use sorting category filter when layered navigation is applied" ticketId="MAGETWO-42701">
+            <data name="configData" xsi:type="string">layered_navigation_manual_range_10</data>
+            <data name="category/dataset" xsi:type="string">default_anchor_subcategory</data>
+            <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::product_10_dollar, catalogProductSimple::product_20_dollar, configurableProduct::filterable_two_options_with_zero_price</data>
+            <data name="layeredNavigation" xsi:type="array">
+                <item name="filters_0" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="title" xsi:type="string">Price</item>
+                        <item name="linkPattern" xsi:type="string">`^.+10\.00 - .+19\.99 2$`m</item>
+                        <item name="products" xsi:type="string">product_0, product_2</item>
+                    </item>
+                </item>
+            </data>
+            <data name="sortBy" xsi:type="array">
+                <item name="field" xsi:type="string">Product Name</item>
+                <item name="direction" xsi:type="string">asc</item>
+            </data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForAssignedProducts" />
+            <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertCategorySortingOnFilteredProductList" />
         </variation>
     </testCase>
 </config>

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -62,6 +62,37 @@
                 </item>
             </field>
             <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+        </dataset>
+
+        <dataset name="withSimpleProducts_without_qty">
+            <field name="name" xsi:type="string">Test grouped product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_grouped_product_%isolation%</field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="associated" xsi:type="array">
+                <item name="dataset" xsi:type="string">defaultSimpleProduct_without_qty</item>
+            </field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">test-grouped-product-%isolation%</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
         </dataset>

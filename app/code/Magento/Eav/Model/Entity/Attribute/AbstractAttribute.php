@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Entity/Attribute/Model - attribute abstract
@@ -120,9 +120,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * Serializer Instance.
      *
-     * @var SerializerInterface
+     * @var Json
      */
-    private $serializer;
+    protected $serializer;
 
     /**
      * Array of attribute types that have empty string as a possible value.
@@ -197,12 +197,12 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Get Serializer instance.
      * @deprecated
      *
-     * @return SerializerInterface
+     * @return Json
      */
-    private function getSerializer()
+    protected function getSerializer()
     {
         if ($this->serializer === null) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->create(SerializerInterface::class);
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->create(Json::class);
         }
 
         return $this->serializer;

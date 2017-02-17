@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model\Product;
@@ -9,6 +9,10 @@ use Magento\Bundle\Model\ResourceModel\Option\Collection;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
 use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Bundle\Model\Selection;
+use Magento\Catalog\Model\Product;
 
 /**
  * Class TypeTest
@@ -72,13 +76,30 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     private $priceCurrency;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @return void
      */
     protected function setUp()
     {
         $this->bundleCollection =
             $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory::class)
-            ->setMethods(['create'])
+            ->setMethods(
+                [
+                    'create',
+                    'addAttributeToSelect',
+                    'setFlag',
+                    'setPositionOrder',
+                    'addStoreFilter',
+                    'setStoreId',
+                    'addFilterByRequiredOptions',
+                    'setOptionIdsFilter',
+                    'getItemById'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->catalogData = $this->getMockBuilder(\Magento\Catalog\Helper\Data::class)
@@ -121,6 +142,12 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->serializer = $this->getMockBuilder(Json::class)
+            ->setMethods(null)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject(
             \Magento\Bundle\Model\Product\Type::class,
@@ -135,7 +162,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'stockState' => $this->stockState,
                 'catalogProduct' => $this->catalogProduct,
                 'priceCurrency' => $this->priceCurrency,
-
+                'serializer' => $this->serializer
             ]
         );
     }
@@ -1535,7 +1562,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $sku = 'sku';
         $itemSku = 'item';
         $selectionIds = [1, 2, 3];
-        $serializeIds = serialize($selectionIds);
+        $serializeIds = json_encode($selectionIds);
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__wakeup', 'getData', 'hasCustomOptions', 'getCustomOption'])
             ->disableOriginalConstructor()
@@ -1612,7 +1639,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $weight = 5;
         $selectionIds = [1, 2, 3];
-        $serializeIds = serialize($selectionIds);
+        $serializeIds = json_encode($selectionIds);
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__wakeup', 'getData', 'hasCustomOptions', 'getCustomOption'])
             ->disableOriginalConstructor()
@@ -1666,7 +1693,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $weight = 5;
         $qtyOption = 5;
         $selectionIds = [1, 2, 3];
-        $serializeIds = serialize($selectionIds);
+        $serializeIds = json_encode($selectionIds);
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__wakeup', 'getData', 'hasCustomOptions', 'getCustomOption'])
             ->disableOriginalConstructor()
@@ -1741,7 +1768,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     public function testIsVirtual()
     {
         $selectionIds = [1, 2, 3];
-        $serializeIds = serialize($selectionIds);
+        $serializeIds = json_encode($selectionIds);
 
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
@@ -2550,5 +2577,169 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $optionCollection->expects($this->once())->method('getAllIds')->willReturn(['ids']);
 
         $this->assertTrue($this->model->hasOptions($product));
+    }
+
+    /**
+     * Bundle product without options should not be possible to buy.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Please specify product option
+     */
+    public function testCheckProductBuyStateEmptyOptionsException()
+    {
+        $this->mockBundleCollection();
+        $product = $this->getProductMock();
+        $product->method('getCustomOption')->willReturnMap([
+            ['bundle_selection_ids', new DataObject(['value' => ''])],
+            ['info_buyRequest', new DataObject(['value' => json_encode(['bundle_option' => ''])])],
+        ]);
+        $product->setCustomOption(json_encode([]));
+
+        $this->model->checkProductBuyState($product);
+    }
+
+    /**
+     * Previously selected options are not more available for buying.
+     *
+     * @param object $element
+     * @param string $expectedMessage
+     * @param bool $check
+     *
+     * @throws LocalizedException
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @dataProvider notAvailableOptionProvider
+     */
+    public function testCheckProductBuyStateMissedOptionException($element, $expectedMessage, $check)
+    {
+        $this->mockBundleCollection();
+        $product = $this->getProductMock();
+        $product->method('getCustomOption')->willReturnMap([
+            ['bundle_selection_ids', new DataObject(['value' => json_encode([1])])],
+            ['info_buyRequest', new DataObject(['value' => json_encode(['bundle_option' => [1]])])],
+        ]);
+        $product->setCustomOption(json_encode([]));
+
+        $this->bundleCollection->method('getItemById')->willReturn($element);
+        $this->catalogProduct->setSkipSaleableCheck($check);
+
+        try {
+            $this->model->checkProductBuyState($product);
+        } catch (LocalizedException $e) {
+            $this->assertContains(
+                $expectedMessage,
+                $e->getMessage()
+            );
+            throw $e;
+        }
+    }
+
+    /**
+     * In case of missed selection for required options, bundle product should be not able to buy.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testCheckProductBuyStateRequiredOptionException()
+    {
+        $this->mockBundleCollection();
+        $product = $this->getProductMock();
+        $product->method('getCustomOption')->willReturnMap([
+            ['bundle_selection_ids', new DataObject(['value' => json_encode([])])],
+            ['info_buyRequest', new DataObject(['value' => json_encode(['bundle_option' => [1]])])],
+        ]);
+        $product->setCustomOption(json_encode([]));
+
+        $falseSelection = $this->getMockBuilder(Selection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isSalable'])
+            ->getMock();
+        $falseSelection->method('isSalable')->willReturn(false);
+
+        $this->bundleCollection->method('getItemById')->willReturn($falseSelection);
+        $this->catalogProduct->setSkipSaleableCheck(false);
+
+        try {
+            $this->model->checkProductBuyState($product);
+        } catch (LocalizedException $e) {
+            $this->assertContains(
+                'Please select all required options',
+                $e->getMessage()
+            );
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Prepare product mock for testing.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getProductMock()
+    {
+        $product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                '_wakeup',
+                'getHasOptions',
+                'getId',
+                'getStoreId',
+                'getCustomOption',
+                'getTypeInstance',
+                'setStoreFilter',
+            ])
+            ->getMock();
+        $product->method('getTypeInstance')->willReturn($product);
+        $product->method('setStoreFilter')->willReturn($product);
+        $optionCollectionCache = new DataObject();
+        $optionCollectionCache->setAllIds([]);
+        $optionCollectionCache->setItems([
+            new DataObject([
+                'required' => true,
+                'id' => 1
+            ]),
+        ]);
+        $product->setData('_cache_instance_options_collection', $optionCollectionCache);
+        return $product;
+    }
+
+    /**
+     * Preparation mocks for checkProductsBuyState.
+     */
+    public function mockBundleCollection()
+    {
+        $this->bundleCollection->method('create')->willReturn($this->bundleCollection);
+        $this->bundleCollection->method('addAttributeToSelect')->willReturn($this->bundleCollection);
+        $this->bundleCollection->method('setFlag')->willReturn($this->bundleCollection);
+        $this->bundleCollection->method('setPositionOrder')->willReturn($this->bundleCollection);
+        $this->bundleCollection->method('addStoreFilter')->willReturn($this->bundleCollection);
+        $this->bundleCollection->method('setStoreId')->willReturn($this->bundleCollection);
+        $this->bundleCollection->method('addFilterByRequiredOptions')->willReturn($this->bundleCollection);
+        $this->bundleCollection->method('setOptionIdsFilter')->willReturn($this->bundleCollection);
+    }
+
+    /**
+     * Data provider for not available option.
+     * @return array
+     */
+    public function notAvailableOptionProvider()
+    {
+        $falseSelection = $this->getMockBuilder(Selection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isSalable'])
+            ->getMock();
+        $falseSelection->method('isSalable')->willReturn(false);
+        return [
+            [
+                false,
+                'The required options you selected are not available',
+                false,
+            ],
+            [
+                $falseSelection,
+                'The required options you selected are not available',
+                false
+            ],
+        ];
     }
 }
