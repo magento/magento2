@@ -7,7 +7,7 @@ namespace Magento\Analytics\Model;
 
 use Magento\Analytics\Api\Data\LinkInterfaceFactory;
 use Magento\Analytics\Api\LinkProviderInterface;
-use Magento\Catalog\Model\Product\Media\Config as MediaConfig;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -15,11 +15,6 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class LinkProvider implements LinkProviderInterface
 {
-    /**
-     * @var MediaConfig
-     */
-    private $mediaConfig;
-
     /**
      * @var LinkInterfaceFactory
      */
@@ -36,18 +31,15 @@ class LinkProvider implements LinkProviderInterface
     private $storeManager;
 
     /**
-     * @param MediaConfig $mediaConfig
      * @param LinkInterfaceFactory $linkInterfaceFactory
      * @param FileInfoManager $fileInfoManager
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        MediaConfig $mediaConfig,
         LinkInterfaceFactory $linkInterfaceFactory,
         FileInfoManager $fileInfoManager,
         StoreManagerInterface $storeManager
     ) {
-        $this->mediaConfig = $mediaConfig;
         $this->linkInterfaceFactory = $linkInterfaceFactory;
         $this->fileInfoManager = $fileInfoManager;
         $this->storeManager = $storeManager;
@@ -62,10 +54,10 @@ class LinkProvider implements LinkProviderInterface
         $link = $this->linkInterfaceFactory->create();
         $link->setUrl(
             $this->storeManager->getStore()->getBaseUrl(
-                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                UrlInterface::URL_TYPE_MEDIA
             ) . $fileInfo->getPath()
         );
-        $link->setInitializedVector($fileInfo->getInitializationVector());
+        $link->setInitializationVector($fileInfo->getInitializationVector());
         return $link;
     }
 }

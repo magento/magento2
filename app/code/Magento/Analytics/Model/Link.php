@@ -22,7 +22,7 @@ class Link implements LinkInterface
     /**
      * @var string
      */
-    private $initializedVector;
+    private $initializationVector;
 
     /**
      * @return string
@@ -35,9 +35,9 @@ class Link implements LinkInterface
     /**
      * @return string
      */
-    public function getInitializedVector()
+    public function getInitializationVector()
     {
-        return $this->initializedVector;
+        return $this->initializationVector;
     }
 
     /**
@@ -50,11 +50,11 @@ class Link implements LinkInterface
     }
 
     /**
-     * @param string $initializedVector
+     * @param string $initializationVector
      * @return void
      */
-    public function setInitializedVector($initializedVector)
+    public function setInitializationVector($initializationVector)
     {
-        $this->initializedVector = $initializedVector;
+        $this->initializationVector = $initializationVector;
     }
 }

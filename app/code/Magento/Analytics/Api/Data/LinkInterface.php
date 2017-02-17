@@ -20,7 +20,7 @@ interface LinkInterface
     /**
      * @return string
      */
-    public function getInitializedVector();
+    public function getInitializationVector();
 
     /**
      * @param string $url
@@ -29,8 +29,9 @@ interface LinkInterface
     public function setUrl($url);
 
     /**
-     * @param string $initializedVector
-     * @return void
+     * @param string $initializationVector
+     *
+*@return void
      */
-    public function setInitializedVector($initializedVector);
+    public function setInitializationVector($initializationVector);
 }
