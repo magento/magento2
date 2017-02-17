@@ -15,6 +15,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class StoreConfigurationProvider
+ * Provides config data report
  */
 class StoreConfigurationProvider
 {
@@ -38,6 +39,12 @@ class StoreConfigurationProvider
      */
     private $scopeTreeProvider;
 
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
+     * @param ScopeTreeProviderInterface $scopeTreeProvider
+     * @param $configPaths
+     */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
@@ -74,11 +81,11 @@ class StoreConfigurationProvider
                 $configReport
             );
         }
-        return new \IteratorIterator(new \ArrayObject($configReport));
+        return new \IteratorIterator(new \ArrayIterator($configReport));
     }
 
     /**
-     * Create report row from config with scope type and scope id.
+     * Creates report from config for scope type and scope id.
      * @param string $scope
      * @param int $scope_id
      * @return array
