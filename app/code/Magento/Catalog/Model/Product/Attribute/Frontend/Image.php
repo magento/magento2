@@ -11,7 +11,7 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Frontend;
 
-class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
+class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend
 {
     /**
      * Store manager
