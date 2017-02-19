@@ -74,9 +74,6 @@ class BackendDecorator implements CurlInterface
             'login[password]' => $this->configuration->get('application/0/backendPassword/0/value'),
             'form_key' => $this->formKey,
         ];
-        if (isset($_ENV['captcha'])) {
-            $data['captcha[backend_login]'] = $_ENV['captcha'];
-        }
         $this->transport->write($url, $data, CurlInterface::POST);
         $response = $this->read();
         if (strpos($response, 'login-form')) {

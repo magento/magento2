@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-    <fixture name="user" module="Magento_Captcha">
-        <field name="captcha" source="Magento\Captcha\Test\Fixture\User\Captcha" />
+    <fixture name="user">
+        <field name="captcha" is_required="0" />
     </fixture>
 </config>

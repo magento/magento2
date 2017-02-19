@@ -14,5 +14,8 @@
         <password>
             <selector>#login</selector>
         </password>
+        <captcha>
+            <selector>#captcha</selector>
+        </captcha>
     </fields>
 </mapping>
