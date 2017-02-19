@@ -12,7 +12,8 @@ interface LinkedProductSelectBuilderInterface
 {
     /**
      * @param int $productId
+     * @param int $limit
      * @return \Magento\Framework\DB\Select[]
      */
-    public function build($productId);
+    public function build($productId, $limit = 1);
 }

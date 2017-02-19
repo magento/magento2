@@ -71,7 +71,7 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
     /**
      * {@inheritdoc}
      */
-    public function build($productId)
+    public function build($productId, $limit = 1)
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $priceAttribute = $this->eavConfig->getAttribute(Product::ENTITY, 'price');
@@ -95,9 +95,8 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
             ->where('t.attribute_id = ?', $priceAttribute->getAttributeId())
             ->where('t.value IS NOT NULL')
             ->order('t.value ' . Select::SQL_ASC)
-            ->limit(1);
+            ->limit($limit);
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
-
         $priceSelectDefault = clone $priceSelect;
         $priceSelectDefault->where('t.store_id = ?', Store::DEFAULT_STORE_ID);
         $select[] = $priceSelectDefault;

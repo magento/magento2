@@ -74,7 +74,7 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
     /**
      * {@inheritdoc}
      */
-    public function build($productId)
+    public function build($productId, $limit = 1)
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $productTable = $this->resource->getTableName('catalog_product_entity');
@@ -97,9 +97,8 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
             ->where('t.all_groups = 1 OR customer_group_id = ?', $this->customerSession->getCustomerGroupId())
             ->where('t.qty = ?', 1)
             ->order('t.value ' . Select::SQL_ASC)
-            ->limit(1);
+            ->limit($limit);
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
-
         $priceSelectDefault = clone $priceSelect;
         $priceSelectDefault->where('t.website_id = ?', self::DEFAULT_WEBSITE_ID);
         $select[] = $priceSelectDefault;
