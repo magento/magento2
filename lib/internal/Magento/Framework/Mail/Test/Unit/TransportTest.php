@@ -25,7 +25,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The message should be an instance of \Zend_Mail
+     * @expectedExceptionMessage The message should be an instance of \Zend\Mail\Message
      */
     public function testTransportWithIncorrectMessageObject()
     {

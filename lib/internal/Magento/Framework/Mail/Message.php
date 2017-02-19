@@ -7,14 +7,17 @@
  */
 namespace Magento\Framework\Mail;
 
-class Message extends \Zend_Mail implements MessageInterface
+use Zend\Mime\Mime;
+use Zend\Mime\Part;
+
+class Message extends \Zend\Mail\Message implements MessageInterface
 {
     /**
      * @param string $charset
      */
     public function __construct($charset = 'utf-8')
     {
-        parent::__construct($charset);
+        parent::setEncoding($charset);
     }
 
     /**
@@ -24,25 +27,14 @@ class Message extends \Zend_Mail implements MessageInterface
      */
     protected $messageType = self::TYPE_TEXT;
 
-    /**
-     * Set message body
-     *
-     * @param string $body
-     * @return $this
-     */
-    public function setBody($body)
+    private function htmlMimeFromString($htmlBody)
     {
-        return $this->messageType == self::TYPE_TEXT ? $this->setBodyText($body) : $this->setBodyHtml($body);
-    }
-
-    /**
-     * Set message body
-     *
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->messageType == self::TYPE_TEXT ? $this->getBodyText() : $this->getBodyHtml();
+        $htmlPart = new Part($htmlBody);
+        $htmlPart->setCharset($this->getEncoding());
+        $htmlPart->setType(Mime::TYPE_HTML);
+        $mimeMessage = new \Zend\Mime\Message();
+        $mimeMessage->addPart($htmlPart);
+        return $mimeMessage;
     }
 
     /**
@@ -56,4 +48,17 @@ class Message extends \Zend_Mail implements MessageInterface
         $this->messageType = $type;
         return $this;
     }
+
+    /**
+     * @param null|object|string|\Zend\Mime\Message $body
+     * @return \Zend\Mail\Message
+     */
+    public function setBody($body)
+    {
+        if (is_string($body) && $this->messageType === MessageInterface::TYPE_HTML) {
+            $body = self::htmlMimeFromString($body);
+        }
+        return parent::setBody($body);
+    }
+
 }
