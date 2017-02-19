@@ -6,7 +6,7 @@
 
 namespace Magento\Contact\Helper;
 
-use Magento\Contact\Api\ConfigInterface;
+use Magento\Contact\Model\ConfigInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Framework\App\Request\DataPersistorInterface;

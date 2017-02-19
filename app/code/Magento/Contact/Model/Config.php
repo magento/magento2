@@ -5,7 +5,7 @@
  */
 namespace Magento\Contact\Model;
 
-use Magento\Contact\Api\ConfigInterface;
+use Magento\Contact\Model\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 

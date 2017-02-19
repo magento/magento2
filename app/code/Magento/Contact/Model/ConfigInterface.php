@@ -2,10 +2,12 @@
 /**
  * Contact module base controller
  */
-namespace Magento\Contact\Api;
+namespace Magento\Contact\Model;
 
 /**
  * Contact module configuration
+ *
+ * @api
  */
 interface ConfigInterface
 {
@@ -53,7 +55,7 @@ interface ConfigInterface
     /**
      * Return email recipient address
      *
-     * @return mixed
+     * @return string
      */
     public function emailRecipient();
 }

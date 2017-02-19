@@ -6,7 +6,7 @@
 
 namespace Magento\Contact\Test\Unit\Controller;
 
-use Magento\Contact\Api\ConfigInterface;
+use Magento\Contact\Model\ConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 

@@ -6,7 +6,7 @@
  */
 namespace Magento\Contact\Test\Integration\Model;
 
-use Magento\Contact\Api\ConfigInterface;
+use Magento\Contact\Model\ConfigInterface;
 use Magento\Contact\Model\Mail;
 
 class MailTest extends \PHPUnit_Framework_TestCase

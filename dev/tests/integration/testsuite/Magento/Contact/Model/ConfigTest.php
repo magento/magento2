@@ -6,7 +6,7 @@
 
 namespace Magento\Contact\Test\Integration\Model;
 
-use Magento\Contact\Api\ConfigInterface;
+use Magento\Contact\Model\ConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -18,7 +18,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configModel = Bootstrap::getObjectManager()->create(\Magento\Contact\Api\ConfigInterface::class);
+        $this->configModel = Bootstrap::getObjectManager()->create(\Magento\Contact\Model\ConfigInterface::class);
     }
 
     /**

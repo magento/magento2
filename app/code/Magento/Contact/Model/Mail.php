@@ -5,8 +5,8 @@
  */
 namespace Magento\Contact\Model;
 
-use Magento\Contact\Api\ConfigInterface;
-use Magento\Contact\Api\MailInterface;
+use Magento\Contact\Model\ConfigInterface;
+use Magento\Contact\Model\MailInterface;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Translate\Inline\StateInterface;
 

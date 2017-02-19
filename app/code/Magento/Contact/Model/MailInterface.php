@@ -2,8 +2,13 @@
 /**
  * Contact module base controller
  */
-namespace Magento\Contact\Api;
+namespace Magento\Contact\Model;
 
+/**
+ * Email from contact form
+ *
+ * @api
+ */
 interface MailInterface
 {
     /**

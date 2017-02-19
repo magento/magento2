@@ -6,8 +6,8 @@
  */
 namespace Magento\Contact\Test\Unit\Controller\Index;
 
-use Magento\Contact\Api\ConfigInterface;
-use Magento\Contact\Api\MailInterface;
+use Magento\Contact\Model\ConfigInterface;
+use Magento\Contact\Model\MailInterface;
 use Magento\Framework\Controller\Result\Redirect;
 
 /**

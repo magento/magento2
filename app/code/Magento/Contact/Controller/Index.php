@@ -5,7 +5,7 @@
  */
 namespace Magento\Contact\Controller;
 
-use Magento\Contact\Api\ConfigInterface;
+use Magento\Contact\Model\ConfigInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NotFoundException;

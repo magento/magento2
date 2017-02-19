@@ -6,7 +6,7 @@
 
 namespace Magento\Contact\Test\Unit\Controller\Index;
 
-use Magento\Contact\Api\ConfigInterface;
+use Magento\Contact\Model\ConfigInterface;
 use Magento\Contact\Model\Config;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
