@@ -18,5 +18,5 @@ interface MailInterface
      * @param array $variables Email template variables
      * @return void
      */
-    public function send($replyTo, $variables);
+    public function send($replyTo, array $variables);
 }

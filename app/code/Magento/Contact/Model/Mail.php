@@ -47,8 +47,9 @@ class Mail implements MailInterface
      *
      * @param string $replyTo
      * @param array $variables
+     * @return void
      */
-    public function send($replyTo, $variables)
+    public function send($replyTo, array $variables)
     {
         $this->inlineTranslation->suspend();
         try {
