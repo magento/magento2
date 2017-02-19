@@ -10,14 +10,22 @@ namespace Magento\Framework\Mail;
 use Zend\Mime\Mime;
 use Zend\Mime\Part;
 
+/**
+ * @todo composition instead of inheritance for better testability
+ * - add a ZendMailDecorator interface with getZendMail() method for usage in \Magento\Framework\Mail\Transport
+ * @todo get rid of temporal coupling (setMessageType() + setBody())
+ * - deprecate setMessageType(), implement a HtmlMessage decorator instead
+ * - change usage in \Magento\Framework\Mail\Template\TransportBuilder::prepareMessage()
+ */
 class Message extends \Zend\Mail\Message implements MessageInterface
 {
+
     /**
      * @param string $charset
      */
     public function __construct($charset = 'utf-8')
     {
-        parent::setEncoding($charset);
+        $this->encoding = $charset;
     }
 
     /**
@@ -26,16 +34,6 @@ class Message extends \Zend\Mail\Message implements MessageInterface
      * @var string
      */
     protected $messageType = self::TYPE_TEXT;
-
-    private function htmlMimeFromString($htmlBody)
-    {
-        $htmlPart = new Part($htmlBody);
-        $htmlPart->setCharset($this->getEncoding());
-        $htmlPart->setType(Mime::TYPE_HTML);
-        $mimeMessage = new \Zend\Mime\Message();
-        $mimeMessage->addPart($htmlPart);
-        return $mimeMessage;
-    }
 
     /**
      * Set message type
@@ -61,4 +59,17 @@ class Message extends \Zend\Mail\Message implements MessageInterface
         return parent::setBody($body);
     }
 
+    /**
+     * @param string $htmlBody
+     * @return \Zend\Mime\Message
+     */
+    private function htmlMimeFromString($htmlBody)
+    {
+        $htmlPart = new Part($htmlBody);
+        $htmlPart->setCharset($this->getEncoding());
+        $htmlPart->setType(Mime::TYPE_HTML);
+        $mimeMessage = new \Zend\Mime\Message();
+        $mimeMessage->addPart($htmlPart);
+        return $mimeMessage;
+    }
 }

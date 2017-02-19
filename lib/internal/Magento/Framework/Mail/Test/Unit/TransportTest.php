@@ -5,45 +5,32 @@
  */
 namespace Magento\Framework\Mail\Test\Unit;
 
+use Zend\Mail\Headers;
+
 class TransportTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject
-     */
-    protected $_messageMock;
-
-    /**
-     * @var \Magento\Framework\Mail\Transport
-     */
-    protected $_transport;
-
-    protected function setUp()
-    {
-        $this->_messageMock = $this->getMock(\Magento\Framework\Mail\Message::class, [], [], '', false);
-        $this->_transport = new \Magento\Framework\Mail\Transport($this->_messageMock);
-    }
-
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The message should be an instance of \Zend\Mail\Message
      */
     public function testTransportWithIncorrectMessageObject()
     {
-        $this->_messageMock = $this->getMock(\Magento\Framework\Mail\MessageInterface::class);
-        $this->_transport = new \Magento\Framework\Mail\Transport($this->_messageMock);
+        new \Magento\Framework\Mail\Transport(
+            $this->getMock(\Magento\Framework\Mail\MessageInterface::class)
+        );
     }
 
     /**
      * @covers \Magento\Framework\Mail\Transport::sendMessage
      * @expectedException \Magento\Framework\Exception\MailException
-     * @expectedExceptionMessage No body specified
+     * @expectedExceptionMessage Invalid email; contains no "To" header
      */
     public function testSendMessageBrokenMessage()
     {
-        $this->_messageMock->expects($this->any())
-            ->method('getParts')
-            ->will($this->returnValue(['a', 'b']));
+        $transport = new \Magento\Framework\Mail\Transport(
+            new \Magento\Framework\Mail\Message()
+        );
 
-        $this->_transport->sendMessage();
+        $transport->sendMessage();
     }
 }

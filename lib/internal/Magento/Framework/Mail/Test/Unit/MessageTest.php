@@ -14,6 +14,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('obsolete ZF 1 test');
         $this->_messageMock = $this->getMock(
             \Magento\Framework\Mail\Message::class,
             ['getBodyText', 'getBodyHtml', 'setBodyText', 'setBodyHtml']

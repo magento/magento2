@@ -7,6 +7,7 @@ namespace Magento\Framework\Mail\Test\Unit\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Mail\MessageInterface;
+use Zend\Mail\Headers;
 
 class TransportBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,6 +54,7 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->templateFactoryMock = $this->getMock(\Magento\Framework\Mail\Template\FactoryInterface::class);
         $this->messageMock = $this->getMock(\Magento\Framework\Mail\Message::class);
+        $this->messageMock->method('getHeaders')->willReturn(new Headers());
         $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->senderResolverMock = $this->getMock(\Magento\Framework\Mail\Template\SenderResolverInterface::class);
         $this->mailTransportFactoryMock = $this->getMockBuilder(
