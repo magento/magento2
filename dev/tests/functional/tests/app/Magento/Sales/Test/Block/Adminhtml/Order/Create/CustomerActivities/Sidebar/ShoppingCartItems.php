@@ -6,13 +6,30 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 use Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 
 /**
- * Class ShoppingCartItems
- * Chopping cart items block
+ * Chopping cart items block on Sidebar on Create Order page on backend.
  */
 class ShoppingCartItems extends Sidebar
 {
-    //
+    /**
+     * Shopping Cart items on backend.
+     *
+     * @var string
+     */
+    protected $itemName = '//td[@class="col-product"]//span[contains(@class, "title") and normalize-space(text()) = "%s"]';
+
+    /**
+     * Get product name from Customer Shopping Cart on backend.
+     *
+     * @param $product
+     * @return string
+     */
+    public function getItemName($product)
+    {
+        return $this->_rootElement->find(sprintf($this->itemName, $product->getName()), Locator::SELECTOR_XPATH)->getText();
+    }
 }

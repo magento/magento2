@@ -23,6 +23,20 @@ class Items extends Block
     protected $addProducts = "//button[span='Add Products']";
 
     /**
+     * Locator for Select element with action in Items Ordered grid.
+     *
+     * @var string
+     */
+    protected $actionSelect = ".//span[.='%s']//parent::td//following-sibling::td/select";
+
+    /**
+     * "No items ordered" message locator.
+     *
+     * @var string
+     */
+    protected $noItemsOrderedMessage = '.empty-text';
+
+    /**
      * Item product.
      *
      * @var string
@@ -74,6 +88,46 @@ class Items extends Block
             \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items\ItemProduct::class,
             ['element' => $this->_rootElement->find(sprintf($this->itemProduct, $name), Locator::SELECTOR_XPATH)]
         );
+    }
+
+    /**
+     * Get "No items ordered" message.
+     *
+     * @return string
+     */
+    public function getNoItemsOrderedMessage()
+    {
+        return $this->_rootElement->find($this->noItemsOrderedMessage, Locator::SELECTOR_CSS)->getText();
+    }
+
+    /**
+     * Get all added to order item names.
+     *
+     * @return array
+     */
+    public function getItemsNames()
+    {
+        $this->getTemplateBlock()->waitLoader();
+        $items = $this->_rootElement->getElements($this->productNames, Locator::SELECTOR_XPATH);
+        foreach ($items as $item) {
+            $itemNames[] = $item->getText();
+        }
+
+        return $itemNames;
+    }
+
+    /**
+     * Select action for item added to order.
+     *
+     * @param Fixture $product
+     * @param string $action
+     * @return void
+     */
+    public function selectItemAction($product, $action)
+    {
+        $this->_rootElement
+            ->find(sprintf($this->actionSelect, $product->getName()), Locator::SELECTOR_XPATH, 'select')
+            ->setValue($action);
     }
 
     /**

@@ -22,6 +22,13 @@ class FormPageActions extends ParentFormPageActions
     protected $createOrderButton = '#order';
 
     /**
+     * "Manage Shopping Cart" button.
+     *
+     * @var string
+     */
+    protected $manageShoppingCartButton = '#manage_quote';
+
+    /**
      * Click on "Create Order" button
      *
      * @return void
@@ -29,6 +36,16 @@ class FormPageActions extends ParentFormPageActions
     public function createOrder()
     {
         $this->_rootElement->find($this->createOrderButton)->click();
+    }
+
+    /**
+     * Click on "Manage Shopping Cart" button.
+     *
+     * @return void
+     */
+    public function manageShoppingCart()
+    {
+        $this->_rootElement->find($this->manageShoppingCartButton)->click();
     }
 
     /**
