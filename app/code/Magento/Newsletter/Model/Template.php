@@ -36,12 +36,6 @@ namespace Magento\Newsletter\Model;
  */
 class Template extends \Magento\Email\Model\AbstractTemplate
 {
-    /**
-     * Mail object
-     *
-     * @var \Zend_Mail
-     */
-    protected $_mail;
 
     /**
      * Store manager to emulate design
