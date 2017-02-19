@@ -210,12 +210,12 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
     {
         $catalogRulePrice = 7.1;
         $convertedPrice = 5.84;
-        
+
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->with($catalogRulePrice)
             ->will($this->returnValue($convertedPrice));
-        
+
         $this->saleableItemMock->expects($this->once())->method('hasData')
             ->with('catalog_rule_price')->willReturn(true);
         $this->saleableItemMock->expects($this->once())->method('getData')
