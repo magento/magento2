@@ -12,16 +12,21 @@ use Magento\Framework\Archive;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
+/**
+ * Class for the handling of a new data collection for MBI.
+ */
 class ExportDataHandler
 {
     /**
-     * Subdirectory for temporary files.
+     * Subdirectory path for all temporary files.
      *
      * @var string
      */
     private $subdirectoryPath = 'analytics/';
 
     /**
+     * Filename of archive with collected data.
+     *
      * @var string
      */
     private $archiveName = 'data.tgz';
@@ -37,16 +42,22 @@ class ExportDataHandler
     private $archive;
 
     /**
+     * Resource for write data of reports into separate files.
+     *
      * @var ReportWriterInterface
      */
     private $reportWriter;
 
     /**
-     * @var Coder
+     * Resource for encrypting data.
+     *
+     * @var Cryptographer
      */
-    private $coder;
+    private $cryptographer;
 
     /**
+     * Resource for registration a new file.
+     *
      * @var FileRecorder
      */
     private $fileRecorder;
@@ -55,24 +66,26 @@ class ExportDataHandler
      * @param Filesystem $filesystem
      * @param Archive $archive
      * @param ReportWriterInterface $reportWriter
-     * @param Coder $coder
+     * @param Cryptographer $cryptographer
      * @param FileRecorder $fileRecorder
      */
     public function __construct(
         Filesystem $filesystem,
         Archive $archive,
         ReportWriterInterface $reportWriter,
-        Coder $coder,
+        Cryptographer $cryptographer,
         FileRecorder $fileRecorder
     ) {
         $this->filesystem = $filesystem;
         $this->archive = $archive;
         $this->reportWriter = $reportWriter;
-        $this->coder = $coder;
+        $this->cryptographer = $cryptographer;
         $this->fileRecorder = $fileRecorder;
     }
 
     /**
+     * Execute collecting new data for MBI.
+     *
      * @return bool
      */
     public function prepareExportData()
@@ -80,19 +93,19 @@ class ExportDataHandler
         try {
             $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
 
-            $tmpFilesDirAbsolutePath = $this->prepareDirectory($tmpDirectory, $this->getTmpFilesDirRelativePath());
+            $this->prepareDirectory($tmpDirectory, $this->getTmpFilesDirRelativePath());
             $this->reportWriter->write($tmpDirectory, $this->getTmpFilesDirRelativePath());
 
-            $this->validateSource($tmpDirectory, $this->getTmpFilesDirRelativePath());
+            $tmpFilesDirectoryAbsolutePath = $this->validateSource($tmpDirectory, $this->getTmpFilesDirRelativePath());
             $archiveAbsolutePath = $this->prepareFileDirectory($tmpDirectory, $this->getArchiveRelativePath());
             $this->pack(
-                $tmpFilesDirAbsolutePath,
+                $tmpFilesDirectoryAbsolutePath,
                 $archiveAbsolutePath
             );
 
             $this->validateSource($tmpDirectory, $this->getArchiveRelativePath());
             $this->fileRecorder->recordNewFile(
-                $this->coder->encode(file_get_contents($archiveAbsolutePath))
+                $this->cryptographer->encode($tmpDirectory->readFile($this->getArchiveRelativePath()))
             );
         } finally {
             $tmpDirectory->delete($this->getTmpFilesDirRelativePath());
@@ -103,6 +116,8 @@ class ExportDataHandler
     }
 
     /**
+     * Return relative path to a directory for temporary files with reports data.
+     *
      * @return string
      */
     public function getTmpFilesDirRelativePath()
@@ -111,6 +126,8 @@ class ExportDataHandler
     }
 
     /**
+     * Return relative path to a directory for an archive.
+     *
      * @return string
      */
     public function getArchiveRelativePath()
@@ -119,6 +136,8 @@ class ExportDataHandler
     }
 
     /**
+     * Clean up a directory.
+     *
      * @param WriteInterface $directory
      * @param string $path
      * @return string
@@ -131,6 +150,8 @@ class ExportDataHandler
     }
 
     /**
+     * Remove a file and a create parent directory a file.
+     *
      * @param WriteInterface $directory
      * @param string $path
      * @return string
@@ -146,8 +167,10 @@ class ExportDataHandler
     }
 
     /**
+     * Packing data into an archive.
+     *
      * @param string $source
-     * @param $destination
+     * @param string $destination
      * @return bool
      */
     private function pack($source, $destination)
@@ -162,17 +185,21 @@ class ExportDataHandler
     }
 
     /**
+     * Validate that data source exist.
+     *
+     * Return absolute path in a validated data source.
+     *
      * @param WriteInterface $directory
-     * @param $path
-     * @return bool
-     * @throws LocalizedException
+     * @param string $path
+     * @return string
+     * @throws LocalizedException If source is not exist.
      */
     private function validateSource(WriteInterface $directory, $path)
     {
         if (!$directory->isExist($path)) {
-            throw new LocalizedException(__(''));
+            throw new LocalizedException(__('Source "%1" is not exist', $directory->getAbsolutePath($path)));
         }
 
-        return true;
+        return $directory->getAbsolutePath($path);
     }
 }

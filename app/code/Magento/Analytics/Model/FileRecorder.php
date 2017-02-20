@@ -9,9 +9,14 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
+/**
+ * Class for the handling of registration a new file for MBI.
+ */
 class FileRecorder
 {
     /**
+     * Resource for managing FileInfo object.
+     *
      * @var FileInfoManager
      */
     private $fileInfoManager;
@@ -22,11 +27,15 @@ class FileRecorder
     private $fileInfoFactory;
 
     /**
+     * Subdirectory path for an encoded file.
+     *
      * @var string
      */
-    private $encodedFileSubdirectoryPath = 'analytics/';
+    private $fileSubdirectoryPath = 'analytics/';
 
     /**
+     * File name of an encoded file.
+     *
      * @var string
      */
     private $encodedFileName = 'data.tgz';
@@ -52,6 +61,8 @@ class FileRecorder
     }
 
     /**
+     * Save new encrypted file, register it and remove old registered file.
+     *
      * @param EncodedContext $encodedContext
      * @return bool
      */
@@ -59,7 +70,7 @@ class FileRecorder
     {
         $directory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
 
-        $fileRelativePath = $this->getEncodedFileRelativePath();
+        $fileRelativePath = $this->getFileRelativePath();
         $directory->writeFile($fileRelativePath, $encodedContext->getContent());
 
         $fileInfo = $this->fileInfoManager->load();
@@ -71,15 +82,19 @@ class FileRecorder
     }
 
     /**
+     * Return relative path to encoded file.
+     *
      * @return string
      */
-    private function getEncodedFileRelativePath()
+    private function getFileRelativePath()
     {
-        return $this->encodedFileSubdirectoryPath . hash('sha256', time())
+        return $this->fileSubdirectoryPath . hash('sha256', time())
             . '/' . $this->encodedFileName;
     }
 
     /**
+     * Register encoded file.
+     *
      * @param EncodedContext $encodedContext
      * @param $fileRelativePath
      * @return bool
@@ -95,6 +110,8 @@ class FileRecorder
     }
 
     /**
+     * Remove previously registered file.
+     *
      * @param FileInfo $fileInfo
      * @param WriteInterface $directory
      * @return bool
@@ -109,10 +126,7 @@ class FileRecorder
 
         $directoryName = dirname($fileInfo->getPath());
         if ($directoryName !== '.') {
-            $listing = array_diff(scandir($directory->getAbsolutePath($directoryName)), ['.', '..']);
-            if (!$listing) {
-                $directory->delete($directoryName);
-            }
+            $directory->delete($directoryName);
         }
 
         return true;
