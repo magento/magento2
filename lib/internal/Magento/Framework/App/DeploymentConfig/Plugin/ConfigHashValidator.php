@@ -39,6 +39,7 @@ class ConfigHashValidator
      * @param RequestInterface $request the object that contains request params
      * @return void
      * @throws LocalizedException is thrown if deployment configuration hash is not valid
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeDispatch(FrontController $subject, RequestInterface $request)
     {
@@ -46,7 +47,7 @@ class ConfigHashValidator
             throw new LocalizedException(
                 new Phrase(
                     'A change in configuration has been detected.'
-                        . ' Run config:sync or setup:upgrade command to synchronize configuration.'
+                    . ' Run config:sync or setup:upgrade command to synchronize configuration.'
                 )
             );
         }
