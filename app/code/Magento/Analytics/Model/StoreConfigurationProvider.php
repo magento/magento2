@@ -35,26 +35,18 @@ class StoreConfigurationProvider
     private $storeManager;
 
     /**
-     * @var ScopeTreeProviderInterface
-     */
-    private $scopeTreeProvider;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
-     * @param ScopeTreeProviderInterface $scopeTreeProvider
-     * @param $configPaths
+     * @param string[] $configPaths
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
-        ScopeTreeProviderInterface $scopeTreeProvider,
-        $configPaths
+        array $configPaths
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->configPaths = $configPaths;
         $this->storeManager = $storeManager;
-        $this->scopeTreeProvider = $scopeTreeProvider;
     }
 
     /**
