@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Model\Plugin;
 
 use Magento\Analytics\Model\FlagManager;
+use Magento\Analytics\Model\SubscriptionStatusProvider;
 
 /**
  * Class BaseUrlConfigPlugin
@@ -19,14 +20,24 @@ class BaseUrlConfigPlugin
      */
     private $flagManager;
 
-    private $oldUrlFlagCode = 'analytics_old_base_url';
+    /**
+     * @var SubscriptionStatusProvider
+     */
+    private $subscriptionStatusProvider;
+
+    /**
+     * Represents a flag code for analytics old base url.
+     */
+    const OLD_BASE_URL_FLAG_CODE = 'analytics_old_base_url';
 
     /**
      * @param FlagManager $flagManager
+     * @param SubscriptionStatusProvider $subscriptionStatusProvider
      */
-    public function __construct(FlagManager $flagManager)
+    public function __construct(FlagManager $flagManager, SubscriptionStatusProvider $subscriptionStatusProvider)
     {
         $this->flagManager = $flagManager;
+        $this->subscriptionStatusProvider = $subscriptionStatusProvider;
     }
 
     /**
@@ -41,8 +52,11 @@ class BaseUrlConfigPlugin
         \Magento\Framework\App\Config\Value $subject,
         \Magento\Framework\App\Config\Value $result
     ) {
-        if ($result->isValueChanged()) {
-            $this->flagManager->saveFlag($this->oldUrlFlagCode, $result->getOldValue());
+        if (
+            $result->isValueChanged()
+            && $this->subscriptionStatusProvider->getStatus() === SubscriptionStatusProvider::ENABLED
+        ) {
+            $this->flagManager->saveFlag(static::OLD_BASE_URL_FLAG_CODE, $result->getOldValue());
         }
 
         return $result;

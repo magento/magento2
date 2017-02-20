@@ -13,6 +13,21 @@ use Magento\Config\App\Config\Type\System;
 class SubscriptionStatusProvider
 {
     /**
+     * Represents an enabled subscription state.
+     */
+    const ENABLED = "Enabled";
+
+    /**
+     * Represents a pending subscription state.
+     */
+    const PENDING = "Pending";
+
+    /**
+     * Represents a disabled subscription state.
+     */
+    const DISABLED = "Disabled";
+
+    /**
      * @var System
      */
     private $systemConfig;
@@ -45,13 +60,13 @@ class SubscriptionStatusProvider
      */
     public function getStatus()
     {
-        $status = "Disabled";
+        $status = static::DISABLED;
 
         if ($this->systemConfig->get('default/analytics/subscription/enabled')) {
-            $status = "Enabled";
+            $status = static::ENABLED;
 
             if (!$this->analyticsToken->isTokenExist()) {
-                $status = "Pending";
+                $status = static::PENDING;
             }
         }
 
