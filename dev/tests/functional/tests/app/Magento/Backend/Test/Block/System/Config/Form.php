@@ -117,7 +117,7 @@ class Form extends Block
      * @param string $tabName
      * @return string
      */
-     private function getTabUrl($tabName)
+    private function getTabUrl($tabName)
     {
         $tabIndex = 'index/section/' . $tabName;
         if (strpos($this->baseUrl, '/key/') !== false) {
@@ -126,11 +126,9 @@ class Form extends Block
              * or somewhere else in url additionally.
              */
             $tabUrl =  str_replace('/index/', '/' . $tabIndex . '/', $this->baseUrl);
-        }
-        elseif (strpos($this->baseUrl, '/edit/') !== false) {
+        } elseif (strpos($this->baseUrl, '/edit/') !== false) {
             $tabUrl =  str_replace('/edit/', '/' . $tabIndex . '/', $this->baseUrl);
-        }
-        else {
+        } else {
             $tabUrl = $this->baseUrl . $tabIndex;
         }
 
