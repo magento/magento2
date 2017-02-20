@@ -60,7 +60,6 @@
                 </item>
             </item>
         </argument>
-
         <fieldset name="analytics_subscription_fieldset">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

@@ -102,6 +102,12 @@ define([
          */
         _setClasses: function () {
             if (typeof this.additionalClasses === 'string') {
+                if (this.additionalClasses === '') {
+                    this.additionalClasses = {};
+
+                    return this;
+                }
+
                 this.additionalClasses = this.additionalClasses
                     .trim()
                     .split(' ')
@@ -119,7 +125,7 @@ define([
         /**
          * Extends 'buttonClasses' object.
          *
-         * @returns {Abstract} Chainable.
+         * @returns {Object} Chainable.
          */
         _setButtonClasses: function () {
             var additional = this.buttonClasses;

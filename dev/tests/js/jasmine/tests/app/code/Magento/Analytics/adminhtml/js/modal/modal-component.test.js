@@ -123,5 +123,15 @@ define([
                 expect(obj.closeModal).toHaveBeenCalled();
             });
         });
+
+        describe('"actionDeclineAlert" method', function () {
+            it('should open alert', function () {
+                var title = 'Some title',
+                    description = 'Some description';
+
+                obj.actionDeclineAlert(title, description);
+                expect(mocks['Magento_Ui/js/modal/alert']).toHaveBeenCalled();
+            });
+        });
     });
 });
