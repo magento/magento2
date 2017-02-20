@@ -5,6 +5,8 @@
  */
 namespace Magento\Config\Console\Command;
 
+use Magento\Config\Model\Config\PathValidator;
+use Magento\Config\Model\Config\PathValidatorFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig\Reader;
@@ -12,14 +14,14 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Filesystem;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * Tests the different flows of config:set command.
@@ -43,6 +45,16 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      * @var OutputInterface|Mock
      */
     private $outputMock;
+
+    /**
+     * @var PathValidatorFactory|Mock
+     */
+    private $pathValidatorFactoryMock;
+
+    /**
+     * @var PathValidator|Mock
+     */
+    private $pathValidatorMock;
 
     /**
      * @var ScopeConfigInterface
@@ -94,6 +106,18 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
+        $this->pathValidatorFactoryMock = $this->getMockBuilder(PathValidatorFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->pathValidatorMock = $this->getMockBuilder(PathValidator::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validate'])
+            ->getMock();
+
+        $this->pathValidatorFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->pathValidatorMock);
     }
 
     /**
@@ -155,7 +179,9 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             );
 
         /** @var ConfigSetCommand $command */
-        $command = $this->objectManager->create(ConfigSetCommand::class);
+        $command = $this->objectManager->create(ConfigSetCommand::class, [
+            'pathValidatorFactory' => $this->pathValidatorFactoryMock,
+        ]);
         $status = $command->run($this->inputMock, $this->outputMock);
 
         $this->assertSame(Cli::RETURN_SUCCESS, $status);
@@ -212,7 +238,9 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             );
 
         /** @var ConfigSetCommand $command */
-        $command = $this->objectManager->create(ConfigSetCommand::class);
+        $command = $this->objectManager->create(ConfigSetCommand::class, [
+            'pathValidatorFactory' => $this->pathValidatorFactoryMock,
+        ]);
         /** @var ConfigPathResolver $resolver */
         $resolver = $this->objectManager->get(ConfigPathResolver::class);
         $status = $command->run($this->inputMock, $this->outputMock);
@@ -310,7 +338,9 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             ->with($expectedMessage);
 
         /** @var ConfigSetCommand $command */
-        $command = $this->objectManager->create(ConfigSetCommand::class);
+        $command = $this->objectManager->create(ConfigSetCommand::class, [
+            'pathValidatorFactory' => $this->pathValidatorFactoryMock,
+        ]);
         $status = $command->run($input, $output);
 
         $this->assertSame($expectedCode, $status);
@@ -360,7 +390,9 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $expectations($this->outputMock);
 
         /** @var ConfigSetCommand $command */
-        $command = $this->objectManager->create(ConfigSetCommand::class);
+        $command = $this->objectManager->create(ConfigSetCommand::class, [
+            'pathValidatorFactory' => $this->pathValidatorFactoryMock,
+        ]);
         $command->run($this->inputMock, $this->outputMock);
     }
 
@@ -415,6 +447,82 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
                 'value',
                 ScopeInterface::SCOPE_WEBSITE,
                 'invalid_scope_code'
+            ]
+        ];
+    }
+
+    /**
+     * Tests different scenarios for scope options.
+     *
+     * @param \Closure $expectations
+     * @param string $path
+     * @param string $value
+     * @param string $scope
+     * @param string $scopeCode
+     * @magentoDbIsolation enabled
+     * @dataProvider getRunPathValidationDataProvider
+     */
+    public function testRunPathValidation(
+        \Closure $expectations,
+        $path,
+        $value,
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        $scopeCode = null
+    ) {
+        $this->inputMock->expects($this->any())
+            ->method('getArgument')
+            ->willReturnMap([
+                [ConfigSetCommand::ARG_PATH, $path],
+                [ConfigSetCommand::ARG_VALUE, $value]
+            ]);
+        $this->inputMock->expects($this->any())
+            ->method('getOption')
+            ->willReturnMap([
+                [ConfigSetCommand::OPTION_SCOPE, $scope],
+                [ConfigSetCommand::OPTION_SCOPE_CODE, $scopeCode]
+            ]);
+
+        $expectations($this->outputMock);
+
+        /** @var ConfigSetCommand $command */
+        $command = $this->objectManager->create(ConfigSetCommand::class);
+        $command->run($this->inputMock, $this->outputMock);
+    }
+
+    /**
+     * Retrieves variations with callback, path, value, scope and scope code.
+     *
+     * @return array
+     */
+    public function getRunPathValidationDataProvider()
+    {
+        return [
+            [
+                function (Mock $output) {
+                    $output->expects($this->once())
+                        ->method('writeln')
+                        ->with('<info>Value was saved.</info>');
+                },
+                'web/unsecure/base_url',
+                'http://magento2.local/',
+            ],
+            [
+                function (Mock $output) {
+                    $output->expects($this->once())
+                        ->method('writeln')
+                        ->with('<error>Invalid Base URL. Value must be a URL or one of placeholders: {{base_url}}</error>');
+                },
+                'web/unsecure/base_url',
+                'value',
+            ],
+            [
+                function (Mock $output) {
+                    $output->expects($this->once())
+                        ->method('writeln')
+                        ->with('<error>The "test/test/test" path does not exists</error>');
+                },
+                'test/test/test',
+                'value',
             ]
         ];
     }

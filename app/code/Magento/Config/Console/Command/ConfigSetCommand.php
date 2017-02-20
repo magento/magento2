@@ -6,6 +6,7 @@
 namespace Magento\Config\Console\Command;
 
 use Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorFactory;
+use Magento\Config\Model\Config\PathValidatorFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Scope\ValidatorInterface;
@@ -48,18 +49,26 @@ class ConfigSetCommand extends Command
     private $scope;
 
     /**
+     * @var PathValidatorFactory
+     */
+    private $pathValidatorFactory;
+
+    /**
      * @param ConfigSetProcessorFactory $configSetProcessorFactory
      * @param ValidatorInterface $validator
      * @param ScopeInterface $scope
+     * @param PathValidatorFactory $pathValidatorFactory
      */
     public function __construct(
         ConfigSetProcessorFactory $configSetProcessorFactory,
         ValidatorInterface $validator,
-        ScopeInterface $scope
+        ScopeInterface $scope,
+        PathValidatorFactory $pathValidatorFactory
     ) {
         $this->configSetProcessorFactory = $configSetProcessorFactory;
         $this->validator = $validator;
         $this->scope = $scope;
+        $this->pathValidatorFactory = $pathValidatorFactory;
 
         parent::__construct();
     }
@@ -117,6 +126,14 @@ class ConfigSetCommand extends Command
 
             // Emulating adminhtml scope to be able to read configs.
             $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
+
+            /**
+             * Validates the entered config path.
+             * Requires emulated area.
+             */
+            $this->pathValidatorFactory->create()->validate(
+                $input->getArgument(ConfigSetCommand::ARG_PATH)
+            );
 
             $processor = $input->getOption(static::OPTION_LOCK)
                 ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
