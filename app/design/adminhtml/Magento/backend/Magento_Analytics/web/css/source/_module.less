@@ -1,0 +1,67 @@
+// /**
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Advanced Reports Subscription Modal on dashboard
+//  ---------------------------------------------
+
+.advanced-reports-subscription-modal {
+    .modal-inner-wrap {
+        max-width: 70rem;
+    }
+
+    .admin__fieldset {
+        padding: 0;
+    }
+}
+
+.advanced-reports-subscription-text {
+    line-height: @line-height__xl;
+}
+
+.advanced-reports-subscription-actions {
+    font-size: 0;
+    text-align: justify;
+
+    &:after {
+        content: '';
+        display: inline-block;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+        width: 100%;
+    }
+
+    .action-basic {
+        padding: @button__padding-vertical__l @button__padding-horizontal @button__padding-vertical__l;
+    }
+
+    .action-additional {
+        padding: @button__padding-vertical__l 0 @button__padding-vertical__l;
+    }
+
+    .advanced-reports-subscription-postpone,
+    .advanced-reports-subscription-disable,
+    .advanced-reports-subscription-enable {
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+.advanced-reports-subscription-enable {
+    .admin__field {
+        max-width: 22rem;
+    }
+
+    .admin__field-label {
+        font-size: @font-size__s;
+        line-height: @line-height__l;
+    }
+
+    .action-basic {
+        &:extend(.abs-action-primary all);
+        margin-bottom: @indent__s;
+    }
+}

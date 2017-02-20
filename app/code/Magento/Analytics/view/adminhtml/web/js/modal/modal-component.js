@@ -61,6 +61,16 @@ define([
         actionCancel: function () {
             this.sendPostponeRequest(this.postponeOptions);
             this.closeModal();
+        },
+
+        /**
+         * Additional information appeared after subscription delcine.
+         */
+        actionDeclineAlert: function (title, message) {
+            alert({
+                title: title,
+                content: message
+            });
         }
     });
 });

@@ -13,6 +13,7 @@ define([
 
     return Element.extend({
         defaults: {
+            buttonClasses: {},
             additionalClasses: {},
             displayArea: 'outsideGroup',
             displayAsLink: false,
@@ -30,7 +31,8 @@ define([
          */
         initialize: function () {
             return this._super()
-                ._setClasses();
+                ._setClasses()
+                ._setButtonClasses();
         },
 
         /** @inheritdoc */
@@ -110,6 +112,36 @@ define([
                     }, {}
                 );
             }
+
+            return this;
+        },
+
+        /**
+         * Extends 'buttonClasses' object.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        _setButtonClasses: function () {
+            var additional = this.buttonClasses;
+
+            if (_.isString(additional)) {
+                this.buttonClasses = {};
+
+                if (additional.trim().length) {
+                    additional = additional.trim().split(' ');
+
+                    additional.forEach(function (name) {
+                        if (name.length) {
+                            this.buttonClasses[name] = true;
+                        }
+                    }, this);
+                }
+            }
+
+            _.extend(this.buttonClasses, {
+                'action-basic': !this.displayAsLink,
+                'action-additional': this.displayAsLink
+            });
 
             return this;
         }
