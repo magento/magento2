@@ -5,32 +5,17 @@
  */
 namespace Magento\Config\Console\Command;
 
-use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Store\Model\ScopeInterface as ModelScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Config\Model\Config\Structure\Data;
-use Magento\Config\Model\Config\Structure;
-use Magento\Config\Model\Config\Structure\Reader as StructureReader;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\ObjectManagerInterface;
+use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\DeploymentConfig\Reader as DeploymentConfigReader;
-use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\App\Area;
-use Magento\Framework\App\Config\FileResolver;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Config\ScopeInterface as ConfigScopeInterface;
-use Magento\Framework\Config\FileIteratorFactory;
-use \Magento\Framework\App\AreaList;
-use \Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\DeploymentConfig\Writer;
 
-/**
- * Test for ConfigShowCommand.
- *
- * @see ConfigShowCommand
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -54,7 +39,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
     private $configFilePool;
 
     /**
-     * @var DeploymentConfigReader
+     * @var Reader
      */
     private $reader;
 
@@ -75,26 +60,10 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        Bootstrap::getInstance()->reinitialize();
-
         $this->objectManager = Bootstrap::getObjectManager();
-
-        $this->objectManager->get(ConfigScopeInterface::class)->setCurrentScope(Area::AREA_ADMINHTML);
-
-        $this->objectManager->get(AreaList::class)->getArea(FrontNameResolver::AREA_CODE)->load(Area::PART_CONFIG);
-
-        $fileIteratorFactory = $this->objectManager->get(FileIteratorFactory::class);
-        $fileIterator = $fileIteratorFactory->create([__DIR__ . '/../../_files/system.xml']);
-
-        $fileResolverMock = $this->getMockBuilder(FileResolver::class)->disableOriginalConstructor()->getMock();
-        $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileIterator));
-        $structureReader = $this->objectManager->create(StructureReader::class, ['fileResolver' => $fileResolverMock]);
-        $structureData = $this->objectManager->create(Data::class, ['reader' => $structureReader]);
-        $this->objectManager->create(Structure::class, ['structureData' => $structureData]);
-
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
-        $this->reader = $this->objectManager->get(DeploymentConfigReader::class);
+        $this->reader = $this->objectManager->get(Reader::class);
         $this->writer = $this->objectManager->get(Writer::class);
 
         $this->config = $this->loadConfig();
@@ -169,7 +138,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                     'web/test/test_value_2' => ['value2.local_config.default.test'],
                     'web/test2/test_value_3' => ['value3.config.default.test'],
                     'web/test2/test_value_4' => ['value4.env.default.test'],
-                    'web/test3/test_value_5' => ['******'],
+                    'carriers/fedex/account' => ['******'],
                     'web/test' => [
                         'web/test/test_value_1 - value1.db.default.test',
                         'web/test/test_value_2 - value2.local_config.default.test',
@@ -189,12 +158,12 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                         'web/test/test_value_2 - value2.local_config.default.test',
                         'web/test2/test_value_3 - value3.config.default.test',
                         'web/test2/test_value_4 - value4.env.default.test',
-                        'web/test3/test_value_5 - ******',
+                        'carriers/fedex/account - ******',
                     ],
                 ]
             ],
             [
-                ModelScopeInterface::SCOPE_WEBSITES,
+                ScopeInterface::SCOPE_WEBSITES,
                 'base',
                 Cli::RETURN_SUCCESS,
                 [
@@ -225,7 +194,7 @@ class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             [
-                ModelScopeInterface::SCOPE_STORES,
+                ScopeInterface::SCOPE_STORES,
                 'default',
                 Cli::RETURN_SUCCESS,
                 [
