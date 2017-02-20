@@ -29,6 +29,7 @@ return [
                             'children' => [
                                 'field_2' => [
                                     'id' => 'field_2',
+                                    'config_path' => 'config_path_2',
                                     'translate' => 'label',
                                     'showInWebsite' => '1',
                                     'type' => 'text',
@@ -133,6 +134,7 @@ return [
                                 ],
                                 'field_4' => [
                                     'id' => 'field_4',
+                                    'config_path' => 'config_path_4',
                                     'translate' => 'label',
                                     'showInWebsite' => '1',
                                     'type' => 'text',
