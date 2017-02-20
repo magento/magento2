@@ -6,7 +6,7 @@
 
 namespace Magento\Captcha\Test\Constraint;
 
-use Magento\Captcha\Test\Page\CustomerAccountLoginWithCaptcha;
+use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -15,16 +15,16 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertCaptchaFieldOnStorefront extends AbstractConstraint
 {
     /**
-     * Assert captcha and reload button visibility on storefront login page.
+     * Assert captcha and reload button are visible on storefront login page.
      *
-     * @param CustomerAccountLoginWithCaptcha $loginPage
+     * @param CustomerAccountLogin $loginPage
      * @return void
      */
-    public function processAssert(CustomerAccountLoginWithCaptcha $loginPage)
+    public function processAssert(CustomerAccountLogin $loginPage)
     {
         \PHPUnit_Framework_Assert::assertTrue(
             $loginPage->getLoginBlockWithCaptcha()->getCaptcha()->isVisible(),
-            'Captcha image is not present on storefront login page'
+            'Captcha image is not present on storefront login page.'
         );
 
         \PHPUnit_Framework_Assert::assertTrue(

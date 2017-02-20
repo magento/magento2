@@ -11,7 +11,7 @@ use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnStorefront;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Captcha\Test\Page\CustomerAccountLoginWithCaptcha;
+use Magento\Customer\Test\Page\CustomerAccountLogin;
 
 /**
  * Check CAPTCHA on Storefront Login Page.
@@ -22,6 +22,7 @@ use Magento\Captcha\Test\Page\CustomerAccountLoginWithCaptcha;
  * Test Flow:
  * 1. Open storefront login form.
  * 2. Log in using captcha.
+ *
  * @group Captcha
  * @ZephyrId MAGETWO-43603
  */
@@ -68,14 +69,14 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
      * @param CmsIndex $cmsIndex
      * @param TestStepFactory $stepFactory
      * @param AssertCaptchaFieldOnStorefront $assertCaptcha
-     * @param CustomerAccountLoginWithCaptcha $customerAccountLogin
+     * @param CustomerAccountLogin $customerAccountLogin
      * @return void
      */
     public function __inject(
         CmsIndex $cmsIndex,
         TestStepFactory $stepFactory,
         AssertCaptchaFieldOnStorefront $assertCaptcha,
-        CustomerAccountLoginWithCaptcha $customerAccountLogin
+        CustomerAccountLogin $customerAccountLogin
     ) {
         $this->stepFactory = $stepFactory;
         $this->assertCaptcha = $assertCaptcha;
