@@ -11,6 +11,7 @@ use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\User\Test\Fixture\User;
 use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnBackend;
 use Magento\Captcha\Test\Page\Captcha\AdminAuthLoginWithCaptcha;
+use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 
 /**
  * Check CAPTCHA on Admin Login Page.
@@ -45,9 +46,16 @@ class CaptchaOnAdminLoginTest extends Injectable
     /**
      * Admin login page.
      *
-     * @var AdminAuthLogin
+     * @var AdminAuthLoginWithCaptcha
      */
     protected $adminAuthWithCaptcha;
+
+    /**
+     * System configuration page.
+     *
+     * @var SystemConfigEdit
+     */
+    private $systemConfigEditPage;
 
     /**
      * Configuration setting.
@@ -62,23 +70,26 @@ class CaptchaOnAdminLoginTest extends Injectable
      * @param AdminAuthLoginWithCaptcha $adminAuthWithCaptcha
      * @param TestStepFactory $stepFactory
      * @param AssertCaptchaFieldOnBackend $assertCaptcha
+     * @param SystemConfigEdit $systemConfigEditPage
      * @return void
      */
     public function __inject(
         AdminAuthLoginWithCaptcha $adminAuthWithCaptcha,
         TestStepFactory $stepFactory,
-        AssertCaptchaFieldOnBackend $assertCaptcha
+        AssertCaptchaFieldOnBackend $assertCaptcha,
+        SystemConfigEdit $systemConfigEditPage
     ) {
         $this->stepFactory = $stepFactory;
         $this->adminAuthWithCaptcha = $adminAuthWithCaptcha;
         $this->assertCaptcha = $assertCaptcha;
+        $this->systemConfigEditPage = $systemConfigEditPage;
     }
 
     /**
-     * Login customer in backend.
+     * Login user on backend.
      *
      * @param User $customAdmin
-     * @param $configData
+     * @param string $configData
      * @return void
      */
     public function test(
@@ -107,13 +118,9 @@ class CaptchaOnAdminLoginTest extends Injectable
      */
     public function tearDown()
     {
-        $configurationPage = \Magento\Mtf\ObjectManagerFactory::getObjectManager()->create(
-            \Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit::class
-        );
-
-        $configurationPage->open();
-        $configurationPage->getForm()
+        $this->systemConfigEditPage->open();
+        $this->systemConfigEditPage->getForm()
             ->getGroup('admin', 'captcha')->setValue('admin', 'captcha', 'enable', 'No');
-        $configurationPage->getPageActions()->save();
+        $this->systemConfigEditPage->getPageActions()->save();
     }
 }

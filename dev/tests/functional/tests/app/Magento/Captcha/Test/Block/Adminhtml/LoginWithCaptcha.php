@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Captcha\Test\Block\Admin;
+namespace Magento\Captcha\Test\Block\Adminhtml;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
@@ -30,7 +30,7 @@ class LoginWithCaptcha extends Login
     private $captchaReload = '#captcha-reload';
 
     /**
-     * Return captcha element.
+     * Get captcha element.
      *
      * @return SimpleElement
      */
@@ -40,9 +40,9 @@ class LoginWithCaptcha extends Login
     }
 
     /**
-     * Return captcha reload button element.
+     * Get captcha reload button element.
      *
-     * @return SimpleElement
+     * @return ElementInterface
      */
     public function getCaptchaReloadButton()
     {

@@ -15,7 +15,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertCaptchaFieldOnBackend extends AbstractConstraint
 {
     /**
-     * Assert captcha and reload button visibility on backend login page.
+     * Assert captcha and reload button are visible on backend login page.
      *
      * @param AdminAuthLoginWithCaptcha $adminAuthLogin
      * @return void
