@@ -240,6 +240,9 @@ class Webapi extends AbstractWebapi implements CustomerInterface
                 unset($data['customer'][$fieldName]);
             }
         }
+        if (isset($data['customer']['extension_attributes']['captcha'])) {
+            unset($data['customer']['extension_attributes']['captcha']);
+        }
 
         return $data;
     }
