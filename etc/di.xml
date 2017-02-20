@@ -27,6 +27,18 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\MessageQueue\Bulk\PublisherPool">
+        <arguments>
+            <argument name="publishers" xsi:type="array">
+                <item name="async" xsi:type="array">
+                    <item name="amqp" xsi:type="object">Magento\Framework\MessageQueue\Bulk\Publisher</item>
+                </item>
+                <item name="sync" xsi:type="array">
+                    <item name="amqp" xsi:type="object">Magento\Framework\MessageQueue\Bulk\Rpc\Publisher</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\MessageQueue\ConnectionTypeResolver">
         <arguments>
             <argument name="resolvers" xsi:type="array">
@@ -41,6 +53,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\MessageQueue\Bulk\ExchangeFactory">
+        <arguments>
+            <argument name="exchangeFactories" xsi:type="array">
+                <item name="amqp" xsi:type="object">Magento\Framework\Amqp\Bulk\ExchangeFactory</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\MessageQueue\QueueFactory">
         <arguments>
             <argument name="queueFactories" xsi:type="array">
@@ -48,4 +67,9 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Framework\Amqp\Bulk\ExchangeFactory" type="Magento\Framework\Amqp\ExchangeFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">\Magento\Framework\Amqp\Bulk\Exchange</argument>
+        </arguments>
+    </virtualType>
 </config>
