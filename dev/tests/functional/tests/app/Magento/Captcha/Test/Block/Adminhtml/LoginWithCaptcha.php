@@ -32,7 +32,7 @@ class LoginWithCaptcha extends Login
     /**
      * Get captcha element.
      *
-     * @return SimpleElement
+     * @return ElementInterface
      */
     public function getCaptcha()
     {
