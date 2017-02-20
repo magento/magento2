@@ -19,4 +19,32 @@
             <attribute name="value"/>
         </source>
     </report>
+    <report name="stores" connection="default">
+        <source name="store">
+            <attribute name="store_id"/>
+            <attribute name="code"/>
+            <attribute name="website_id"/>
+            <attribute name="group_id"/>
+            <attribute name="name"/>
+            <attribute name="is_active"/>
+        </source>
+    </report>
+    <report name="websites" connection="default">
+        <source name="store_website">
+            <attribute name="website_id"/>
+            <attribute name="code"/>
+            <attribute name="name"/>
+            <attribute name="default_group_id"/>
+            <attribute name="is_default"/>
+        </source>
+    </report>
+    <report name="groups" connection="default">
+        <source name="store_group">
+            <attribute name="group_id"/>
+            <attribute name="website_id"/>
+            <attribute name="name"/>
+            <attribute name="root_category_id"/>
+            <attribute name="default_store_id"/>
+        </source>
+    </report>
 </config>
