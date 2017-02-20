@@ -152,10 +152,12 @@
                 <button name="analytics_subscription_button_accept">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
-                            <item name="component" xsi:type="string">Magento_Analytics/js/form/button</item>
                             <item name="controlCheckbox" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_checkbox:checked</item>
                             <item name="displayArea" xsi:type="string">actions-primary</item>
                             <item name="title" xsi:type="string">Enable Advance Reporting</item>
+                            <item name="imports" xsi:type="array">
+                                <item name="disabled" xsi:type="string">!${ $.controlCheckbox }</item>
+                            </item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = analytics_subscription_form</item>
