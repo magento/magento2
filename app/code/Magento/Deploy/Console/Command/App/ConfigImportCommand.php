@@ -78,12 +78,12 @@ class ConfigImportCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $output->writeln('<info>' . __('Start import:') . '</info>');
+            $output->writeln('<info>Start import:</info>');
 
             $importers = $this->configImporterPool->getImporters();
 
             if (empty($importers) || $this->configHashManager->isHashValid()) {
-                $output->writeln('<info>' . __('Nothing to import') . '</info>');
+                $output->writeln('<info>Nothing to import</info>');
             } else {
                 /**
                  * @var string $namespace
