@@ -321,7 +321,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     public function testGetFieldPaths()
     {
         $expected = [
-            'config_path_2' => [
+            'section/group/field2' => [
                 'field_2'
             ],
             'field_3' => [
@@ -333,7 +333,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
             'field_3_1_1' => [
                 'field_3_1_1'
             ],
-            'config_path_4' => [
+            'section/group/field4' => [
                 'field_4',
             ],
             'field_5' => [
