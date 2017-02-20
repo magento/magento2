@@ -5,215 +5,271 @@
  */
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
-use Magento\Analytics\Model\Connector\OTPRequest;
-use Magento\Analytics\Model\AnalyticsToken;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Store\Model\Store;
-use Psr\Log\LoggerInterface;
-
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * A unit test for testing of the representation of a 'OTP' request.
  */
 class OTPRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\Model\Connector\OTPRequest
      */
-    private $configMock;
+    private $subject;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $analyticsTokenMock;
-
-    /**
-     * @var ZendClientFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $httpClientFactoryMock;
-
-    /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \Zend_Http_Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $httpResponseMock;
+    private $configMock;
 
     /**
-     * @var ZendClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend_Http_Response|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $responseMock;
+
+    /**
+     * @var \Magento\Analytics\Model\Connector\Http\ClientInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $httpClientMock;
 
     /**
-     * @var ObjectManagerHelper
+     * @var \Magento\Analytics\Model\AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $analyticsTokenMock;
+
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     private $objectManagerHelper;
 
     /**
-     * @var OTPRequest
-     */
-    private $otpRequestModel;
-
-    /**
-     * @var string
-     */
-    private $otpUrlConfigPath = 'path/url/otp';
-
-    /**
      * @return void
      */
-    protected function setUp()
+    public function setUp()
     {
-        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->loggerMock = $this->getMockBuilder(
+            \Psr\Log\LoggerInterface::class
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
 
-        $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->getMockBuilder(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
 
-        $this->httpClientFactoryMock = $this->getMockBuilder(ZendClientFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->responseMock = $this->getMockBuilder(
+            \Zend_Http_Response::class
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->httpClientMock = $this->getMockBuilder(
+            \Magento\Analytics\Model\Connector\Http\ClientInterface::class
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
 
-        $this->httpResponseMock = $this->getMockBuilder(\Zend_Http_Response::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->analyticsTokenMock = $this->getMockBuilder(
+            \Magento\Analytics\Model\AnalyticsToken::class
+        )
+        ->disableOriginalConstructor()
+        ->getMock();
 
-        $this->httpClientMock = $this->getMockBuilder(ZendClient::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManagerHelper =
+            new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-
-        $this->otpRequestModel = $this->objectManagerHelper->getObject(
-            OTPRequest::class,
+        $this->subject = $this->objectManagerHelper->getObject(
+            \Magento\Analytics\Model\Connector\OTPRequest::class,
             [
-                'config' => $this->configMock,
                 'analyticsToken' => $this->analyticsTokenMock,
-                'clientFactory' => $this->httpClientFactoryMock,
-                'logger' => $this->loggerMock,
-                'otpUrlConfigPath' => $this->otpUrlConfigPath,
+                'config' => $this->configMock,
+                'httpClient' => $this->httpClientMock,
+                'logger' => $this->loggerMock
             ]
         );
     }
 
     /**
-     * @param string|null $token If null token is not exist.
-     * @param int $responseCode
-     * @param string|null $otp If null OTP was not received.
+     * Returns test parameters for request.
      *
-     * @dataProvider callDataProvider
+     * @return array
      */
-    public function testCallSuccess($token, $responseCode, $otp)
+    private function getTestData()
     {
-        $otpUrl = 'https://example.com/otp';
-        $baseUrl = 'https://base.com';
-        $requestBody = json_encode(["token" => $token, "url" => $baseUrl]);
-        $responseBody = json_encode(["otp" => $otp]);
-
-        $this->analyticsTokenMock
-            ->expects($this->once())
-            ->method('isTokenExist')
-            ->with()
-            ->willReturn((bool)$token);
-        if ($token) {
-            $this->httpClientFactoryMock
-                ->expects($this->once())
-                ->method('create')
-                ->with()
-                ->willReturn($this->httpClientMock);
-            $this->configMock
-                ->expects($this->exactly(2))
-                ->method('getValue')
-                ->withConsecutive(
-                    [$this->otpUrlConfigPath],
-                    [Store::XML_PATH_SECURE_BASE_URL]
-                )
-                ->willReturnOnConsecutiveCalls($otpUrl, $baseUrl);
-            $this->httpClientMock
-                ->expects($this->once())
-                ->method('setUri')
-                ->with($otpUrl)
-                ->willReturnSelf();
-            $this->analyticsTokenMock
-                ->expects($this->once())
-                ->method('getToken')
-                ->with()
-                ->willReturn($token);
-            $this->httpClientMock
-                ->expects($this->once())
-                ->method('setRawData')
-                ->with($requestBody)
-                ->willReturnSelf();
-            $this->httpClientMock
-                ->expects($this->once())
-                ->method('setMethod')
-                ->with(ZendClient::POST)
-                ->willReturnSelf();
-            $this->httpClientMock
-                ->expects($this->once())
-                ->method('request')
-                ->with()
-                ->willReturn($this->httpResponseMock);
-            $this->httpResponseMock
-                ->expects($this->once())
-                ->method('getStatus')
-                ->with()
-                ->willReturn($responseCode);
-            $this->httpResponseMock
-                ->expects(($responseCode === 200) ? $this->once() : $this->never())
-                ->method('getBody')
-                ->with()
-                ->willReturn($responseBody);
-            $this->loggerMock
-                ->expects($otp ? $this->never() : $this->once())
-                ->method('critical')
-                ->with('The request for a OTP is unsuccessful.')
-                ->willReturn(null);
-        }
-        $this->assertSame($otp ?: false, $this->otpRequestModel->call());
+        return [
+            'otp' => 'thisisotp',
+            'url' => 'http://www.mystore.com',
+            'access-token' => 'thisisaccesstoken',
+            'headers' => ['Content-Type: application/json'],
+            'method' => \Magento\Framework\HTTP\ZendClient::POST,
+            'body'=> '{"access-token":"thisisaccesstoken","url":"http:\/\/www.mystore.com"}',
+        ];
     }
 
     /**
      * @return void
      */
-    public function testCallWithException()
+    public function testCallSuccess()
     {
-        $exception = new \Exception('Error');
-        $this->analyticsTokenMock
-            ->expects($this->once())
+        $data = $this->getTestData();
+
+        $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
-            ->with()
-            ->willThrowException($exception);
-        $this->loggerMock
-            ->expects($this->once())
-            ->method('critical')
-            ->with($exception->getMessage())
-            ->willReturn(null);
-        $this->assertFalse($this->otpRequestModel->call());
+            ->willReturn(true);
+        $this->analyticsTokenMock->expects($this->once())
+            ->method('getToken')
+            ->willReturn($data['access-token']);
+
+        $this->configMock->expects($this->any())
+            ->method('getValue')
+            ->willReturn($data['url']);
+
+        $this->httpClientMock->expects($this->once())
+            ->method('request')
+            ->with(
+                $data['method'],
+                $data['url'],
+                $data['body'],
+                $data['headers']
+            )
+            ->willReturn($this->responseMock);
+
+        $this->responseMock->expects($this->any())
+            ->method('getStatus')
+            ->willReturn(201);
+        $this->responseMock->expects($this->any())
+            ->method('getBody')
+            ->willReturn('{"otp": "' . $data['otp'] . '"}');
+
+        $this->assertEquals(
+            $data['otp'],
+            $this->subject->call()
+        );
     }
 
     /**
-     * @return array
+     * @return void
      */
-    public function callDataProvider()
+    public function testCallNoAccessToken()
     {
-        return [
-            'TokenDoesNotExist' => [null, 0, null],
-            'TokenExistAndResponseWithRedirect' => ['9f17967951d23e550695', 303, null],
-            'TokenExistAndRequestIsSuccessfulWithOtpEmpty' => ['9f17967951d23e550695', 200, null],
-            'TokenExistAndRequestIsSuccessfulWithOtpValid' => ['9f17967951d23e550695', 200, '249e6b658877bde2a77bc4ab'],
-        ];
+        $this->analyticsTokenMock->expects($this->once())
+            ->method('isTokenExist')
+            ->willReturn(false);
+
+        $this->httpClientMock->expects($this->never())
+            ->method('request');
+
+        $this->assertFalse($this->subject->call());
+    }
+
+    /**
+     * @return void
+     */
+    public function testCallTransportFailure()
+    {
+        $data = $this->getTestData();
+
+        $this->analyticsTokenMock->expects($this->once())
+            ->method('isTokenExist')
+            ->willReturn(true);
+        $this->analyticsTokenMock->expects($this->once())
+            ->method('getToken')
+            ->willReturn($data['access-token']);
+
+        $this->configMock->expects($this->any())
+            ->method('getValue')
+            ->willReturn($data['url']);
+
+        $this->httpClientMock->expects($this->once())
+            ->method('request')
+            ->with(
+                $data['method'],
+                $data['url'],
+                $data['body'],
+                $data['headers']
+            )
+            ->willReturn(false);
+
+        $this->assertFalse($this->subject->call());
+    }
+
+    /**
+     * @return void
+     */
+    public function testCallNoOtp()
+    {
+        $data = $this->getTestData();
+
+        $this->analyticsTokenMock->expects($this->once())
+            ->method('isTokenExist')
+            ->willReturn(true);
+        $this->analyticsTokenMock->expects($this->once())
+            ->method('getToken')
+            ->willReturn($data['access-token']);
+
+        $this->configMock->expects($this->any())
+            ->method('getValue')
+            ->willReturn($data['url']);
+
+        $this->httpClientMock->expects($this->once())
+            ->method('request')
+            ->with(
+                $data['method'],
+                $data['url'],
+                $data['body'],
+                $data['headers']
+            )
+            ->willReturn($this->responseMock);
+
+        $this->responseMock->expects($this->any())
+            ->method('getStatus')
+            ->willReturn(409);
+
+        $this->loggerMock->expects($this->once())
+            ->method('warning');
+
+        $this->assertFalse($this->subject->call());
+    }
+
+    /**
+     * @return void
+     */
+    public function testCallException()
+    {
+        $data = $this->getTestData();
+
+        $exception = new \Exception('Test Exception');
+
+        $this->analyticsTokenMock->expects($this->once())
+            ->method('isTokenExist')
+            ->willReturn(true);
+        $this->analyticsTokenMock->expects($this->once())
+            ->method('getToken')
+            ->willReturn($data['access-token']);
+
+        $this->configMock->expects($this->any())
+            ->method('getValue')
+            ->willReturn($data['url']);
+
+        $this->httpClientMock->expects($this->once())
+            ->method('request')
+            ->with(
+                $data['method'],
+                $data['url'],
+                $data['body'],
+                $data['headers']
+            )
+            ->willThrowException($exception);
+
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->with($exception);
+
+        $this->assertFalse($this->subject->call());
     }
 }

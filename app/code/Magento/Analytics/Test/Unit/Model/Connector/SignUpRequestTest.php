@@ -133,6 +133,9 @@ class SignUpRequestTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testCallTransportFailure()
     {
         $data = $this->getTestData();
