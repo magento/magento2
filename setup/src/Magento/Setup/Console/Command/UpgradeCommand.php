@@ -89,8 +89,8 @@ class UpgradeCommand extends AbstractSetupCommand
             }
 
             if ($this->deploymentConfig->isAvailable()) {
-                $syncCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
-                $syncCommand->run(new ArrayInput([]), $output);
+                $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
+                $importConfigCommand->run(new ArrayInput([]), $output);
             }
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());

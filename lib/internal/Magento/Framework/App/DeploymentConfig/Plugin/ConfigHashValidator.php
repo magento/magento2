@@ -44,8 +44,10 @@ class ConfigHashValidator
     {
         if (!$this->configHashManager->isHashValid()) {
             throw new LocalizedException(
-                new Phrase('A change in configuration has been detected.'
-                    . ' Run config:sync or setup:upgrade command to synchronize configuration.')
+                new Phrase(
+                    'A change in configuration has been detected.'
+                        . ' Run config:sync or setup:upgrade command to synchronize configuration.'
+                )
             );
         }
     }

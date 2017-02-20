@@ -30,7 +30,7 @@
                 <item name="showModeCommand" xsi:type="object">Magento\Deploy\Console\Command\ShowModeCommand</item>
                 <item name="dumpApplicationCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\ApplicationDumpCommand</item>
                 <item name="sensitiveConfigSetCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\SensitiveConfigSetCommand</item>
-                <item name="configSyncCommand" xsi:type="object">Magento\Deploy\Console\Command\App\ConfigImportCommand</item>
+                <item name="configImportCommand" xsi:type="object">Magento\Deploy\Console\Command\App\ConfigImportCommand</item>
             </argument>
         </arguments>
     </type>

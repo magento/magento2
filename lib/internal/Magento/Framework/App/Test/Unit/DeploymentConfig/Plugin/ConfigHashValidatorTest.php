@@ -72,7 +72,7 @@ class ConfigHashValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->configHashManagerMock->expects($this->once())
             ->method('isHashValid')
-            ->willReturn(true);
+            ->willReturn(false);
         $this->configHashValidator->beforeDispatch($this->frontControllerMock, $this->requestMock);
     }
 }
