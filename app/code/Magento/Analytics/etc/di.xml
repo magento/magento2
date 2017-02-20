@@ -140,4 +140,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Config\Model\Config\Backend\Baseurl">
+        <plugin name="updateAnalyticsSubscription" type="Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin" />
+    </type>
 </config>
