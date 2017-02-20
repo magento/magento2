@@ -176,6 +176,6 @@ class QuoteUpdater extends AbstractHelper
         // PayPal's address supposes not saving against customer account
         $address->setSaveInAddressBook(false);
         $address->setSameAsBilling(false);
-        $address->unsCustomerAddressId();
+        $address->setCustomerAddressId(null);
     }
 }
