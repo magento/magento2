@@ -63,7 +63,7 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string[] $queueNames
      * @return $this
      */
-    public function linkQueues($messageId, array $queueNames)
+    public function linkQueues($messageId, $queueNames)
     {
         return $this->linkMessagesWithQueues([$messageId], $queueNames);
     }
