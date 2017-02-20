@@ -9,7 +9,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
-use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\Framework\MessageQueue\BulkPublisherInterface;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory;
@@ -37,7 +37,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
     private $operationCollectionFactory;
 
     /**
-     * @var PublisherInterface
+     * @var BulkPublisherInterface
      */
     private $publisher;
 
@@ -61,7 +61,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
      * @param EntityManager $entityManager
      * @param BulkSummaryInterfaceFactory $bulkSummaryFactory
      * @param CollectionFactory $operationCollectionFactory
-     * @param PublisherInterface $publisher
+     * @param BulkPublisherInterface $publisher
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
      * @param \Psr\Log\LoggerInterface $logger
@@ -70,7 +70,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
         EntityManager $entityManager,
         BulkSummaryInterfaceFactory $bulkSummaryFactory,
         CollectionFactory $operationCollectionFactory,
-        PublisherInterface $publisher,
+        BulkPublisherInterface $publisher,
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection,
         \Psr\Log\LoggerInterface $logger
@@ -110,16 +110,13 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
             $this->logger->critical($exception->getMessage());
             return false;
         }
+        $this->publishOperations($operations);
 
-        // publish operation to message queue
-        foreach ($operations as $operation) {
-            $this->publisher->publish($operation->getTopicName(), $operation);
-        }
         return true;
     }
 
     /**
-     * Retry bulk operations that failed due to given errors
+     * Retry bulk operations that failed due to given errors.
      *
      * @param string $bulkUuid target bulk UUID
      * @param array $errorCodes list of corresponding error codes
@@ -171,12 +168,26 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
             $this->logger->critical($exception->getMessage());
             return 0;
         }
+        $this->publishOperations($retriablyFailedOperations);
 
-        // publish operation to message queue
-        foreach ($retriablyFailedOperations as $operation) {
-            $this->publisher->publish($operation->getTopicName(), $operation);
-        }
         return count($retriablyFailedOperations);
+    }
+
+    /**
+     * Publish list of operations to the corresponding message queues.
+     *
+     * @param array $operations
+     * @return void
+     */
+    private function publishOperations(array $operations)
+    {
+        $operationsByTopics = [];
+        foreach ($operations as $operation) {
+            $operationsByTopics[$operation->getTopicName()][] = $operation;
+        }
+        foreach ($operationsByTopics as $topicName => $operations) {
+            $this->publisher->publish($topicName, $operations);
+        }
     }
 
     /**

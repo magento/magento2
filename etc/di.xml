@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface" type="Magento\AsynchronousOperations\Model\BulkSummary" />
     <preference for="Magento\AsynchronousOperations\Api\Data\OperationInterface" type="Magento\AsynchronousOperations\Model\Operation" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\OperationListInterface" type="Magento\AsynchronousOperations\Model\OperationList" />
     <preference for="Magento\Framework\Bulk\BulkManagementInterface" type="Magento\AsynchronousOperations\Model\BulkManagement" />
     <preference for="Magento\Framework\Bulk\BulkStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus" />
     <preference for="Magento\Framework\Bulk\OperationManagementInterface" type="Magento\AsynchronousOperations\Model\OperationManagement" />
@@ -21,6 +22,10 @@
                 <item name="Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface" xsi:type="array">
                     <item name="entityTableName" xsi:type="string">magento_bulk</item>
                     <item name="identifierField" xsi:type="string">uuid</item>
+                </item>
+                <item name="Magento\AsynchronousOperations\Api\Data\OperationListInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">magento_operation</item>
+                    <item name="identifierField" xsi:type="string">id</item>
                 </item>
             </argument>
         </arguments>
@@ -56,6 +61,16 @@
                 <item name="retriable_operation_listing_data_source" xsi:type="string">Magento\AsynchronousOperations\Ui\Component\DataProvider\Operation\Retriable\SearchResult</item>
                 <item name="failed_operation_modal_listing_data_source" xsi:type="string">Magento\AsynchronousOperations\Ui\Component\DataProvider\Operation\Failed\SearchResult</item>
                 <item name="retriable_operation_modal_listing_data_source" xsi:type="string">Magento\AsynchronousOperations\Ui\Component\DataProvider\Operation\Retriable\SearchResult</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\OperationPool">
+        <arguments>
+            <argument name="operations" xsi:type="array">
+                <item name="Magento\AsynchronousOperations\Api\Data\OperationListInterface" xsi:type="array">
+                    <item name="checkIfExists" xsi:type="string">Magento\AsynchronousOperations\Model\ResourceModel\Operation\CheckIfExists</item>
+                    <item name="create" xsi:type="string">Magento\AsynchronousOperations\Model\ResourceModel\Operation\Create</item>
+                </item>
             </argument>
         </arguments>
     </type>

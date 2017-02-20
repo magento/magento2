@@ -6,273 +6,291 @@
 
 namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
-use Magento\AsynchronousOperations\Model\BulkManagement;
-use Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection as OperationCollection;
-use Magento\AsynchronousOperations\Api\Data\OperationInterface;
-use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
-
 /**
+ * Unit test for BulkManagement model.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BulkManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\EntityManager\EntityManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $entityManager;
+
+    /**
+     * @var \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory
+     *      |\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $bulkSummaryFactory;
+
+    /**
+     * @var \Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory
+     *      |\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $operationCollectionFactory;
+
+    /**
+     * @var \Magento\Framework\MessageQueue\BulkPublisherInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $publisher;
+
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $metadataPool;
+
+    /**
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceConnection;
+
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $logger;
+
+    /**
      * @var \Magento\AsynchronousOperations\Model\BulkManagement
      */
-    private $model;
+    private $bulkManagement;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * Set up.
+     *
+     * @return void
      */
-    private $entityManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $bulkSummaryFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $publisherMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $metadataPoolMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $resourceConnectionMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $entityMetadataMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $connectionMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $bulkSummaryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $operationMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $collectionFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $loggerMock;
-
     protected function setUp()
     {
-        $this->entityManagerMock = $this->getMock(
-            \Magento\Framework\EntityManager\EntityManager::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->bulkSummaryFactoryMock = $this->getMock(
-            \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->publisherMock = $this->getMock(\Magento\Framework\MessageQueue\PublisherInterface::class);
-        $this->metadataPoolMock = $this->getMock(
-            \Magento\Framework\EntityManager\MetadataPool::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->resourceConnectionMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->entityMetadataMock = $this->getMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
-        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->bulkSummaryMock = $this->getMock(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class);
-        $this->operationMock = $this->getMock(\Magento\AsynchronousOperations\Api\Data\OperationInterface::class);
-        $this->collectionFactoryMock = $this->getMock(
-            \Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->model = new BulkManagement(
-            $this->entityManagerMock,
-            $this->bulkSummaryFactoryMock,
-            $this->collectionFactoryMock,
-            $this->publisherMock,
-            $this->metadataPoolMock,
-            $this->resourceConnectionMock,
-            $this->loggerMock
+        $this->entityManager = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityManager::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->bulkSummaryFactory = $this
+            ->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->operationCollectionFactory = $this
+            ->getMockBuilder(\Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->publisher = $this->getMockBuilder(\Magento\Framework\MessageQueue\BulkPublisherInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->resourceConnection = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->bulkManagement = $objectManager->getObject(
+            \Magento\AsynchronousOperations\Model\BulkManagement::class,
+            [
+                'entityManager' => $this->entityManager,
+                'bulkSummaryFactory' => $this->bulkSummaryFactory,
+                'operationCollectionFactory' => $this->operationCollectionFactory,
+                'publisher' => $this->publisher,
+                'metadataPool' => $this->metadataPool,
+                'resourceConnection' => $this->resourceConnection,
+                'logger' => $this->logger,
+            ]
         );
     }
 
+    /**
+     * Test for scheduleBulk method.
+     *
+     * @return void
+     */
     public function testScheduleBulk()
     {
-        $bulkUuid = 'bulk-1';
-        $description = 'description';
+        $bulkUuid = 'bulk-001';
+        $description = 'Bulk summary description...';
         $userId = 1;
-        $connectionName = 'connection_name';
-        $entityType = \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class;
-        $this->metadataPoolMock
-            ->expects($this->once())
-            ->method('getMetadata')
-            ->with($entityType)
-            ->willReturn($this->entityMetadataMock);
-        $this->entityMetadataMock
-            ->expects($this->once())
-            ->method('getEntityConnectionName')
-            ->willReturn($connectionName);
-
-        $this->resourceConnectionMock
-            ->expects($this->once())
-            ->method('getConnectionByName')
-            ->with($connectionName)
-            ->willReturn($this->connectionMock);
-        $this->connectionMock->expects($this->once())->method('beginTransaction')->willReturnSelf();
-        $this->bulkSummaryFactoryMock->expects($this->once())->method('create')->willReturn($this->bulkSummaryMock);
-        $this->bulkSummaryMock->expects($this->once())->method('setBulkId')->with($bulkUuid);
-        $this->bulkSummaryMock->expects($this->once())->method('setDescription')->with($description);
-        $this->bulkSummaryMock->expects($this->once())->method('setUserId')->with($userId);
-        $this->entityManagerMock->expects($this->any())->method('save');
-        $this->connectionMock->expects($this->once())->method('commit');
-        $this->connectionMock->expects($this->never())->method('rollBack');
-        $this->operationMock->expects($this->once())->method('getTopicName')->willReturn('topic_name');
-        $this->publisherMock->expects($this->once())->method('publish')->with('topic_name', $this->operationMock);
+        $connectionName = 'default';
+        $topicNames = ['topic.name.0', 'topic.name.1'];
+        $operation = $this->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\OperationInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->metadataPool->expects($this->once())->method('getMetadata')
+            ->with(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class)
+            ->willReturn($metadata);
+        $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->resourceConnection->expects($this->once())
+            ->method('getConnectionByName')->with($connectionName)->willReturn($connection);
+        $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
+        $bulkSummary = $this->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->bulkSummaryFactory->expects($this->once())->method('create')->willReturn($bulkSummary);
+        $this->entityManager->expects($this->once())
+            ->method('load')->with($bulkSummary, $bulkUuid)->willReturn($bulkSummary);
+        $bulkSummary->expects($this->once())->method('setBulkId')->with($bulkUuid)->willReturnSelf();
+        $bulkSummary->expects($this->once())->method('setDescription')->with($description)->willReturnSelf();
+        $bulkSummary->expects($this->once())->method('setUserId')->with($userId)->willReturnSelf();
+        $bulkSummary->expects($this->once())->method('getOperationCount')->willReturn(1);
+        $bulkSummary->expects($this->once())->method('setOperationCount')->with(3)->willReturnSelf();
+        $this->entityManager->expects($this->once())->method('save')->with($bulkSummary)->willReturn($bulkSummary);
+        $connection->expects($this->once())->method('commit')->willReturnSelf();
+        $operation->expects($this->exactly(2))->method('getTopicName')
+            ->willReturnOnConsecutiveCalls($topicNames[0], $topicNames[1]);
+        $this->publisher->expects($this->exactly(2))->method('publish')
+            ->withConsecutive([$topicNames[0], [$operation]], [$topicNames[1], [$operation]])->willReturn(null);
         $this->assertTrue(
-            $this->model->scheduleBulk($bulkUuid, [$this->operationMock], $description, $userId)
+            $this->bulkManagement->scheduleBulk($bulkUuid, [$operation, $operation], $description, $userId)
         );
     }
 
+    /**
+     * Test for scheduleBulk method with exception.
+     *
+     * @return void
+     */
     public function testScheduleBulkWithException()
     {
-        $bulkUuid = 'bulk-1';
-        $description = 'description';
+        $bulkUuid = 'bulk-001';
+        $description = 'Bulk summary description...';
         $userId = 1;
-        $connectionName = 'connection_name';
-        $entityType = \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class;
-        $this->metadataPoolMock
-            ->expects($this->once())
-            ->method('getMetadata')
-            ->with($entityType)
-            ->willReturn($this->entityMetadataMock);
-        $this->entityMetadataMock
-            ->expects($this->once())
-            ->method('getEntityConnectionName')
-            ->willReturn($connectionName);
-
-        $this->resourceConnectionMock
-            ->expects($this->once())
-            ->method('getConnectionByName')
-            ->with($connectionName)
-            ->willReturn($this->connectionMock);
-        $this->connectionMock->expects($this->once())->method('beginTransaction')->willReturnSelf();
-        $this->bulkSummaryFactoryMock->expects($this->once())->method('create')->willReturn($this->bulkSummaryMock);
-        $this->bulkSummaryMock->expects($this->once())->method('setBulkId')->with($bulkUuid);
-        $this->bulkSummaryMock->expects($this->once())->method('setDescription')->with($description);
-        $this->bulkSummaryMock->expects($this->once())->method('setUserId')->with($userId);
-        $this->entityManagerMock->expects($this->once())->method('save')->willThrowException(new \Exception());
-        $this->connectionMock->expects($this->never())->method('commit');
-        $this->connectionMock->expects($this->once())->method('rollBack');
-        $this->publisherMock->expects($this->never())->method('publish');
-        $this->loggerMock->expects($this->once())->method('critical');
-        $this->assertFalse(
-            $this->model->scheduleBulk($bulkUuid, [$this->operationMock], $description, $userId)
-        );
+        $connectionName = 'default';
+        $exceptionMessage = 'Exception message';
+        $operation = $this->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\OperationInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->metadataPool->expects($this->once())->method('getMetadata')
+            ->with(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class)
+            ->willReturn($metadata);
+        $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->resourceConnection->expects($this->once())
+            ->method('getConnectionByName')->with($connectionName)->willReturn($connection);
+        $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
+        $bulkSummary = $this->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->bulkSummaryFactory->expects($this->once())->method('create')->willReturn($bulkSummary);
+        $this->entityManager->expects($this->once())->method('load')
+            ->with($bulkSummary, $bulkUuid)->willThrowException(new \LogicException($exceptionMessage));
+        $connection->expects($this->once())->method('rollBack')->willReturnSelf();
+        $this->logger->expects($this->once())->method('critical')->with($exceptionMessage);
+        $this->publisher->expects($this->never())->method('publish');
+        $this->assertFalse($this->bulkManagement->scheduleBulk($bulkUuid, [$operation], $description, $userId));
     }
 
+    /**
+     * Test for retryBulk method.
+     *
+     * @return void
+     */
     public function testRetryBulk()
     {
-        $bulkUuid = '49da7406-1ec3-4100-95ae-9654c83a6801';
-        $errorCodes = [1111, 2222];
-        $operations = [$this->operationMock];
-        $topicName = 'test.topic.name';
-        $connectionName = 'connection.name';
-
-        $this->metadataPoolMock
-            ->expects($this->once())
-            ->method('getMetadata')
-            ->with(BulkSummaryInterface::class)
-            ->willReturn($this->entityMetadataMock);
-        $this->entityMetadataMock
-            ->expects($this->once())
-            ->method('getEntityConnectionName')
-            ->willReturn($connectionName);
-
-        $this->resourceConnectionMock
-            ->expects($this->once())
-            ->method('getConnectionByName')
-            ->with($connectionName)
-            ->willReturn($this->connectionMock);
-
-        $operationCollectionMock = $this->getMock(OperationCollection::class, [], [], '', false);
-        $this->collectionFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($operationCollectionMock);
-        $operationCollectionMock->expects($this->at(0))
-            ->method('addFieldToFilter')
-            ->with('error_code', ['in' => $errorCodes])
+        $bulkUuid = 'bulk-001';
+        $errorCodes = ['errorCode'];
+        $connectionName = 'default';
+        $operationId = 1;
+        $operationTable = 'magento_operation';
+        $topicName = 'topic.name';
+        $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->metadataPool->expects($this->once())->method('getMetadata')
+            ->with(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class)
+            ->willReturn($metadata);
+        $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->resourceConnection->expects($this->once())
+            ->method('getConnectionByName')->with($connectionName)->willReturn($connection);
+        $operationCollection = $this
+            ->getMockBuilder(\Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->operationCollectionFactory->expects($this->once())->method('create')->willReturn($operationCollection);
+        $operationCollection->expects($this->exactly(2))->method('addFieldToFilter')
+            ->withConsecutive(['error_code', ['in' => $errorCodes]], ['bulk_uuid', ['eq' => $bulkUuid]])
             ->willReturnSelf();
-        $operationCollectionMock->expects($this->at(1))
-            ->method('addFieldToFilter')
-            ->with('bulk_uuid', ['eq' => $bulkUuid])
-            ->willReturnSelf();
-        $operationCollectionMock->expects($this->at(2))
-            ->method('getItems')
-            ->willReturn($operations);
-
-        $this->connectionMock->expects($this->once())->method('beginTransaction');
-        $this->connectionMock->expects($this->once())->method('commit');
-        $this->connectionMock->expects($this->never())->method('rollBack');
-
-        $this->operationMock->expects($this->any())->method('getTopicName')->willReturn($topicName);
-        $this->connectionMock->expects($this->once())->method('delete');
-
-        $this->publisherMock->expects($this->once())->method('publish')->with($topicName, $this->operationMock);
-
-        $this->assertEquals(count($operations), $this->model->retryBulk($bulkUuid, $errorCodes));
+        $operation = $this->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\OperationInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $operationCollection->expects($this->once())->method('getItems')->willReturn([$operation]);
+        $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
+        $operation->expects($this->once())->method('getId')->willReturn($operationId);
+        $operation->expects($this->once())->method('setId')->with(null)->willReturnSelf();
+        $this->resourceConnection->expects($this->once())
+            ->method('getTableName')->with($operationTable)->willReturn($operationTable);
+        $connection->expects($this->once())
+            ->method('quoteInto')->with('id IN (?)', [$operationId])->willReturn('id IN (' . $operationId .')');
+        $connection->expects($this->once())
+            ->method('delete')->with($operationTable, 'id IN (' . $operationId .')')->willReturn(1);
+        $connection->expects($this->once())->method('commit')->willReturnSelf();
+        $operation->expects($this->once())->method('getTopicName')->willReturn($topicName);
+        $this->publisher->expects($this->once())->method('publish')->with($topicName, [$operation])->willReturn(null);
+        $this->assertEquals(1, $this->bulkManagement->retryBulk($bulkUuid, $errorCodes));
     }
 
+    /**
+     * Test for retryBulk method with exception.
+     *
+     * @return void
+     */
+    public function testRetryBulkWithException()
+    {
+        $bulkUuid = 'bulk-001';
+        $errorCodes = ['errorCode'];
+        $connectionName = 'default';
+        $operationId = 1;
+        $operationTable = 'magento_operation';
+        $exceptionMessage = 'Exception message';
+        $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->metadataPool->expects($this->once())->method('getMetadata')
+            ->with(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class)
+            ->willReturn($metadata);
+        $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->resourceConnection->expects($this->once())
+            ->method('getConnectionByName')->with($connectionName)->willReturn($connection);
+        $operationCollection = $this
+            ->getMockBuilder(\Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->operationCollectionFactory->expects($this->once())->method('create')->willReturn($operationCollection);
+        $operationCollection->expects($this->exactly(2))->method('addFieldToFilter')
+            ->withConsecutive(['error_code', ['in' => $errorCodes]], ['bulk_uuid', ['eq' => $bulkUuid]])
+            ->willReturnSelf();
+        $operation = $this->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\OperationInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $operationCollection->expects($this->once())->method('getItems')->willReturn([$operation]);
+        $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
+        $operation->expects($this->once())->method('getId')->willReturn($operationId);
+        $operation->expects($this->once())->method('setId')->with(null)->willReturnSelf();
+        $this->resourceConnection->expects($this->once())
+            ->method('getTableName')->with($operationTable)->willReturn($operationTable);
+        $connection->expects($this->once())
+            ->method('quoteInto')->with('id IN (?)', [$operationId])->willReturn('id IN (' . $operationId .')');
+        $connection->expects($this->once())
+            ->method('delete')->with($operationTable, 'id IN (' . $operationId .')')
+            ->willThrowException(new \Exception($exceptionMessage));
+        $connection->expects($this->once())->method('rollBack')->willReturnSelf();
+        $this->logger->expects($this->once())->method('critical')->with($exceptionMessage);
+        $this->publisher->expects($this->never())->method('publish');
+        $this->assertEquals(0, $this->bulkManagement->retryBulk($bulkUuid, $errorCodes));
+    }
+
+    /**
+     * Test for deleteBulk method.
+     *
+     * @return void
+     */
     public function testDeleteBulk()
     {
-        $bulkUuid = 'bulk-1';
-        $this->bulkSummaryFactoryMock
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($this->bulkSummaryMock);
-        $this->entityManagerMock
-            ->expects($this->once())
-            ->method('load')
-            ->with($this->bulkSummaryMock, $bulkUuid)
-            ->willReturn($this->bulkSummaryMock);
-        $this->entityManagerMock
-            ->expects($this->once())
-            ->method('delete')
-            ->with($this->bulkSummaryMock)
-            ->willReturn(true);
-        $this->assertTrue($this->model->deleteBulk($bulkUuid));
+        $bulkUuid = 'bulk-001';
+        $bulkSummary = $this->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->bulkSummaryFactory->expects($this->once())->method('create')->willReturn($bulkSummary);
+        $this->entityManager->expects($this->once())
+            ->method('load')->with($bulkSummary, $bulkUuid)->willReturn($bulkSummary);
+        $this->entityManager->expects($this->once())->method('delete')->with($bulkSummary)->willReturn(true);
+        $this->assertTrue($this->bulkManagement->deleteBulk($bulkUuid));
     }
 }
