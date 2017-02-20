@@ -169,7 +169,7 @@ class DataGrid extends Grid
      */
     public function resetFilter()
     {
-        $chipsHolder = $this->_rootElement->find($this->appliedFiltersList);
+        $chipsHolder = $this->getGridHeaderElement()->find($this->appliedFiltersList);
         if ($chipsHolder->isVisible()) {
             parent::resetFilter();
         }
@@ -341,13 +341,16 @@ class DataGrid extends Grid
     {
         $actionType = is_array($action) ? key($action) : $action;
         $this->getGridHeaderElement()->find($this->actionButton)->click();
-        $this->getGridHeaderElement()
-            ->find(sprintf($this->actionList, $actionType), Locator::SELECTOR_XPATH)
-            ->click();
+        $toggle = $this->getGridHeaderElement()->find(sprintf($this->actionList, $actionType), Locator::SELECTOR_XPATH);
+        $toggle->hover();
+        if ($toggle->isVisible() === false) {
+            $this->getGridHeaderElement()->find($this->actionButton)->click();
+        }
+        $toggle->click();
         if (is_array($action)) {
-            $this->getGridHeaderElement()
-                ->find(sprintf($this->actionList, end($action)), Locator::SELECTOR_XPATH)
-                ->click();
+            $locator = sprintf($this->actionList, end($action));
+            $this->getGridHeaderElement()->find($locator, Locator::SELECTOR_XPATH)->hover();
+            $this->getGridHeaderElement()->find($locator, Locator::SELECTOR_XPATH)->click();
         }
     }
 
@@ -403,6 +406,7 @@ class DataGrid extends Grid
      * Sort grid by column.
      *
      * @param string $columnLabel
+     * @return void
      */
     public function sortByColumn($columnLabel)
     {

@@ -361,6 +361,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 true
             ],
             [
+                'isWrongApplyDiscountSettingIgnored',
+                Config::XML_PATH_TAX_NOTIFICATION_IGNORE_APPLY_DISCOUNT,
+                true,
+                true
+            ],
+            [
                 'getInfoUrl',
                 Config::XML_PATH_TAX_NOTIFICATION_INFO_URL,
                 'http:\\kiwis.rule.com',

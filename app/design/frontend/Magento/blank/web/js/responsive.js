@@ -13,8 +13,13 @@ define([
 
     mediaCheck({
         media: '(min-width: 768px)',
-        // Switch to Desktop Version
+
+        /**
+         * Switch to Desktop Version.
+         */
         entry: function () {
+            var galleryElement;
+
             (function () {
 
                 var productInfoMain = $('.product-info-main'),
@@ -27,7 +32,7 @@ define([
 
             })();
 
-            var galleryElement = $('[data-role=media-gallery]');
+            galleryElement = $('[data-role=media-gallery]');
 
             if (galleryElement.length && galleryElement.data('mageZoom')) {
                 galleryElement.zoom('enable');
@@ -39,23 +44,27 @@ define([
                 galleryElement.gallery('option', 'showThumbs', true);
             }
         },
-        // Switch to Mobile Version
+
+        /**
+         * Switch to Mobile Version.
+         */
         exit: function () {
-            $('.action.toggle.checkout.progress')
-                .on('click.gotoCheckoutProgress', function () {
-                    var myWrapper = '#checkout-progress-wrapper';
-                    scrollTo(myWrapper + ' .title');
-                    $(myWrapper + ' .title').addClass('active');
-                    $(myWrapper + ' .content').show();
-                });
+            var galleryElement;
 
-            $('body')
-                .on('click.checkoutProgress', '#checkout-progress-wrapper .title', function () {
-                    $(this).toggleClass('active');
-                    $('#checkout-progress-wrapper .content').toggle();
-                });
+            $('.action.toggle.checkout.progress').on('click.gotoCheckoutProgress', function () {
+                var myWrapper = '#checkout-progress-wrapper';
 
-            var galleryElement = $('[data-role=media-gallery]');
+                scrollTo(myWrapper + ' .title');
+                $(myWrapper + ' .title').addClass('active');
+                $(myWrapper + ' .content').show();
+            });
+
+            $('body').on('click.checkoutProgress', '#checkout-progress-wrapper .title', function () {
+                $(this).toggleClass('active');
+                $('#checkout-progress-wrapper .content').toggle();
+            });
+
+            galleryElement = $('[data-role=media-gallery]');
 
             setTimeout(function () {
                 if (galleryElement.length && galleryElement.data('mageZoom')) {

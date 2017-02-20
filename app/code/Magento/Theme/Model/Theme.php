@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 
@@ -79,6 +80,11 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     protected $_customFactory;
 
     /**
+     * @var ThemeFactory
+     */
+    private $themeModelFactory;
+
+    /**
      * @var ThemeInterface[]
      */
     protected $inheritanceSequence;
@@ -96,7 +102,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      * @param \Magento\Theme\Model\ResourceModel\Theme $resource
      * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $resourceCollection
      * @param array $data
-     *
+     * @param ThemeFactory $themeModelFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -109,7 +115,8 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         \Magento\Framework\View\Design\Theme\CustomizationFactory $customizationFactory,
         \Magento\Theme\Model\ResourceModel\Theme $resource = null,
         ThemeCollection $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ThemeFactory $themeModelFactory = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_themeFactory = $themeFactory;
@@ -117,6 +124,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         $this->_imageFactory = $imageFactory;
         $this->_validator = $validator;
         $this->_customFactory = $customizationFactory;
+        $this->themeModelFactory = $themeModelFactory ?: ObjectManager::getInstance()->get(ThemeFactory::class);
         $this->addData(['type' => self::TYPE_VIRTUAL]);
     }
 
@@ -377,52 +385,54 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function __sleep()
+    public function toArray(array $keys = [])
     {
-        $properties = parent::__sleep();
-        $key =  array_search('_logger', $properties);
-        if (false !== $key) {
-            unset($properties[$key]);
+        $data = parent::toArray($keys);
+        if (isset($data['parent_theme'])) {
+            $data['parent_theme'] = $this->getParentTheme()->toArray();
         }
-        return array_diff(
-            $properties,
-            [
-                '_resource',
-                '_resourceCollection',
-                '_themeFactory',
-                '_domainFactory',
-                '_imageFactory',
-                '_validator',
-                '_customFactory'
-            ]
-        );
+
+        if (isset($data['inherited_themes'])) {
+            foreach ($data['inherited_themes'] as $key => $inheritedTheme) {
+                $data['inherited_themes'][$key] = $inheritedTheme->toArray();
+            }
+        }
+
+        return $data;
     }
 
     /**
-     * {@inheritdoc}
+     * Populate Theme object from an array
+     *
+     * @param array $data
+     * @return Theme
      */
-    public function __wakeup()
+    public function populateFromArray(array $data)
     {
-        parent::__wakeup();
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_resource = $objectManager->get(\Magento\Theme\Model\ResourceModel\Theme::class);
-        $this->_resourceCollection = $objectManager->get(\Magento\Theme\Model\ResourceModel\Theme\Collection::class);
-        $this->_themeFactory = $objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
-        $this->_domainFactory = $objectManager->get(\Magento\Framework\View\Design\Theme\Domain\Factory::class);
-        $this->_imageFactory = $objectManager->get(\Magento\Framework\View\Design\Theme\ImageFactory::class);
-        $this->_validator = $objectManager->get(\Magento\Framework\View\Design\Theme\Validator::class);
-        $this->_customFactory = $objectManager->get(\Magento\Framework\View\Design\Theme\CustomizationFactory::class);
+        $this->_data = $data;
+        if (isset($data['parent_theme'])) {
+            $this->_data['parent_theme'] = $this->createThemeInstance()->populateFromArray($data['parent_theme']);
+        }
+
+        if (isset($data['inherited_themes'])) {
+            foreach ($data['inherited_themes'] as $key => $inheritedTheme) {
+                $themeInstance = $this->createThemeInstance()->populateFromArray($inheritedTheme);
+                $this->_data['inherited_themes'][$key] = $themeInstance;
+            }
+        }
+
+        return $this;
     }
 
     /**
-     * @param int $modelId
-     * @param null $field
-     * @return $this
+     * Create Theme instance
+     *
+     * @return \Magento\Theme\Model\Theme
      */
-    public function load($modelId, $field = null)
+    private function createThemeInstance()
     {
-        return parent::load($modelId, $field); // TODO: Change the autogenerated stub
+        return $this->themeModelFactory->create();
     }
 }

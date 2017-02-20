@@ -28,7 +28,8 @@ return [
             'depends_on_module' => 'Magento_Backend',
             'tooltip' => 'Item tooltip',
             'title' => 'Item Title',
-            'sub_menu' => null
+            'sub_menu' => null,
+            'target' => null
         ],
     ],
     'data without submenu to constructor' => [
@@ -75,7 +76,8 @@ return [
             'depends_on_module' => null,
             'tooltip' => '',
             'title' => null,
-            'sub_menu' => ['submenuArray']
+            'sub_menu' => ['submenuArray'],
+            'target' => null
         ],
     ],
     'data with submenu to constructor' => [
@@ -127,7 +129,8 @@ return [
             'depends_on_module' => null,
             'tooltip' => '',
             'title' => null,
-            'sub_menu' => ['submenuArray']
+            'sub_menu' => ['submenuArray'],
+            'target' => null
         ],
     ]
 ];

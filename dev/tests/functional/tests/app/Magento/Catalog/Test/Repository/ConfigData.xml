@@ -45,6 +45,39 @@
                 <item name="inherit" xsi:type="number">1</item>
             </field>
         </dataset>
+        <dataset name="inventory_threshold_5">
+            <field name="cataloginventory/options/stock_threshold_qty" xsi:type="array">
+                <item name="value" xsi:type="number">5</item>
+            </field>
+        </dataset>
+        <dataset name="inventory_threshold_5_rollback">
+            <field name="cataloginventory/options/stock_threshold_qty" xsi:type="array">
+                <item name="value" xsi:type="number">0</item>
+                <item name="inherit" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="inventory_max_qty_5">
+            <field name="cataloginventory/item_options/max_sale_qty" xsi:type="array">
+                <item name="value" xsi:type="number">5</item>
+            </field>
+        </dataset>
+        <dataset name="inventory_max_qty_5_rollback">
+            <field name="cataloginventory/item_options/max_sale_qty" xsi:type="array">
+                <item name="value" xsi:type="number">0</item>
+                <item name="inherit" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="inventory_min_qty_3">
+            <field name="cataloginventory/item_options/min_sale_qty" xsi:type="array">
+                <item name="value" xsi:type="number">3</item>
+            </field>
+        </dataset>
+        <dataset name="inventory_min_qty_3_rollback">
+            <field name="cataloginventory/item_options/min_sale_qty" xsi:type="array">
+                <item name="value" xsi:type="number">0</item>
+                <item name="inherit" xsi:type="number">1</item>
+            </field>
+        </dataset>
         <dataset name="price_scope_website">
             <field name="catalog/price/scope" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>

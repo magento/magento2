@@ -65,6 +65,12 @@
             </field>
         </dataset>
 
+        <dataset name="full_shipment">
+            <field name="0" xsi:type="array">
+                <item name="grand_shipment_total" xsi:type="string">5</item>
+            </field>
+        </dataset>
+
         <dataset name="full_flow">
             <field name="refund" xsi:type="array">
                 <item name="0" xsi:type="array">

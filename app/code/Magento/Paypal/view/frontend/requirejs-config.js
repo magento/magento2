@@ -6,8 +6,8 @@
 var config = {
     map: {
         '*': {
-            orderReview:            'Magento_Paypal/order-review',
-            paypalCheckout:         'Magento_Paypal/js/paypal-checkout'
+            orderReview: 'Magento_Paypal/order-review',
+            paypalCheckout: 'Magento_Paypal/js/paypal-checkout'
         }
     },
     paths: {

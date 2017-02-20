@@ -16,6 +16,13 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class Grid extends DataGrid
 {
     /**
+     * Action button (located above the Grid).
+     *
+     * @var string
+     */
+    protected $actionButton = 'button.action-select';
+
+    /**
      * Select action toggle.
      *
      * @var string

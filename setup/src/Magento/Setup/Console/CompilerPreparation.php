@@ -16,6 +16,9 @@ use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Input\ArgvInput;
 use Zend\ServiceManager\ServiceManager;
 
+/**
+ * Class prepares folders for code generation
+ */
 class CompilerPreparation
 {
     /**
@@ -73,8 +76,8 @@ class CompilerPreparation
             ? $mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
             : [];
         $directoryList = new DirectoryList(BP, $mageDirs);
-        $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATION);
-        $compileDirList[] = $directoryList->getPath(DirectoryList::DI);
+        $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATED_CODE);
+        $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATED_METADATA);
 
         if (!$this->getGenerationDirectoryAccess()->check()) {
             throw new FileSystemException(

@@ -248,6 +248,7 @@
         <xs:attribute type="elementPositionType" name="after" use="optional"/>
         <xs:attribute type="elementOutputType" name="output" use="optional"/>
         <xs:attribute type="xs:string" name="acl" use="optional"/>
+        <xs:attribute type="xs:string" name="condition" use="optional"/>
         <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
         <xs:attribute type="xs:string" name="group" use="optional" />
         <xs:attribute type="xs:boolean" name="cacheable" default="true" use="optional"/>

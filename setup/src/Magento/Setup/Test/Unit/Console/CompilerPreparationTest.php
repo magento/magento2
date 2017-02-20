@@ -42,6 +42,9 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
      */
     private $generationDirectoryAccessMock;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->serviceManagerMock = $this->getMockBuilder(ServiceManager::class)
@@ -105,6 +108,9 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
         $this->model->handleCompilerEnvironment();
     }
 
+    /**
+     * @return array
+     */
     public function commandNameDataProvider()
     {
         return [

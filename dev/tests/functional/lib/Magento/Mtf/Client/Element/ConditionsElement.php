@@ -25,6 +25,8 @@ use Magento\Mtf\Client\ElementInterface;
  * {Type|Param|Param|...|Param:[Type|Param|Param|...|Param]}
  * 4. Combination condition with list conditions
  * {Type|Param|Param|...|Param:[[Type|Param|...|Param][Type|Param|...|Param]...[Type|Param|...|Param]]}
+ * 5. Top level condition
+ * {TopLevelCondition:[ANY|FALSE]}{Type|Param|Param|...|Param:[[Type|Param|...|Param]...[Type|Param|...|Param]]}
  *
  * Example value:
  * {Products subselection|total amount|greater than|135|ANY:[[Price in cart|is|100][Quantity in cart|is|100]]}
@@ -195,10 +197,16 @@ class ConditionsElement extends SimpleElement
     public function setValue($value)
     {
         $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
-
+        $this->clear();
         $conditions = $this->decodeValue($value);
         $context = $this->find($this->mainCondition, Locator::SELECTOR_XPATH);
-        $this->clear();
+        if (!empty($conditions[0]['TopLevelCondition'])) {
+            array_unshift($this->mapParams, 'aggregator');
+            $condition = $this->parseTopLevelCondition($conditions[0]['TopLevelCondition']);
+            $this->fillCondition($condition['rules'], $context);
+            unset($conditions[0]);
+            array_shift($this->mapParams);
+        }
         $this->addMultipleCondition($conditions, $context);
     }
 
@@ -430,7 +438,6 @@ class ConditionsElement extends SimpleElement
         $value = preg_replace('/\[([^\[{])/', '"$1', $value);
         $value = preg_replace('/([^\]}])\]/', '$1"', $value);
         $value = str_replace(array_keys($this->decodeChars), $this->decodeChars, $value);
-
         $value = "[{$value}]";
         $value = json_decode($value, true);
         if (null === $value) {
@@ -458,6 +465,24 @@ class ConditionsElement extends SimpleElement
         return [
             'type' => array_shift($match[1]),
             'rules' => array_values($match[1]),
+        ];
+    }
+
+    /**
+     * Parse top level condition.
+     *
+     * @param string $condition
+     * @return array
+     * @throws \Exception
+     */
+    protected function parseTopLevelCondition($condition)
+    {
+        if (preg_match_all('/([^|]+)\|?/', $condition, $match) === false) {
+            throw new \Exception('Bad format condition');
+        }
+
+        return [
+            'rules' => $match[1],
         ];
     }
 
@@ -496,6 +521,7 @@ class ConditionsElement extends SimpleElement
      * Param wait loader.
      *
      * @param ElementInterface $element
+     * @return void
      */
     protected function waitForCondition(ElementInterface $element)
     {

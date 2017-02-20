@@ -73,15 +73,12 @@ class WebsiteIds extends DataSource
         }
 
         foreach ($this->fixtureData as $dataset) {
-            if (is_array($dataset) && isset($dataset['dataset'])) {
-                $store = $this->fixtureFactory->createByCode('store', $dataset);
-                $this->processStore($store);
-            } elseif ($dataset instanceof Store) {
-                $this->processStore($dataset);
-            } elseif (isset($dataset['websites'])) {
+            if (is_array($dataset) && isset($dataset['websites'])) {
                 foreach ($dataset['websites'] as $website) {
                     $this->websites[] = $website;
                 }
+            } else {
+                $this->createStore($dataset);
             }
         }
 
@@ -89,12 +86,31 @@ class WebsiteIds extends DataSource
     }
 
     /**
-     * Add website by store fixture.
+     * Create store.
+     *
+     * @param array|object $dataset
+     * @return void
+     */
+    private function createStore($dataset)
+    {
+        if ($dataset instanceof Store) {
+            $store = $dataset;
+        } elseif (is_array($dataset)) {
+            $store = isset($dataset['store']) ? $dataset['store'] :
+                (isset($dataset['dataset']) ? $this->fixtureFactory->createByCode('store', $dataset) : null);
+        }
+        if (isset($store)) {
+            $this->setWebsiteStoreData($store);
+        }
+    }
+
+    /**
+     * Set website and store data.
      *
      * @param Store $store
      * @return void
      */
-    private function processStore(Store $store)
+    private function setWebsiteStoreData(Store $store)
     {
         if (!$store->getStoreId()) {
             $store->persist();

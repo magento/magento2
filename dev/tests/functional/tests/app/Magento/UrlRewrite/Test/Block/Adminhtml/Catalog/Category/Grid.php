@@ -9,13 +9,12 @@ namespace Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category;
 use Magento\Backend\Test\Block\Widget\Grid as ParentGrid;
 
 /**
- * Class Grid
- * URL Rewrite grid
+ * URL Rewrite grid.
  */
 class Grid extends ParentGrid
 {
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */
