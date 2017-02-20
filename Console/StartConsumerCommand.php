@@ -93,7 +93,7 @@ class StartConsumerCommand extends Command
             self::OPTION_BATCH_SIZE,
             null,
             InputOption::VALUE_REQUIRED,
-            'The number of messages per one batch. Applicable for the Batch Consumer only.'
+            'The number of messages per batch. Applicable for the batch consumer only.'
         );
         $this->addOption(
             self::OPTION_AREACODE,
@@ -114,7 +114,7 @@ To specify the number of messages which should be processed by consumer before i
 
     <comment>%command.full_name% someConsumer --max-messages=50</comment>
 
-To specify the number of messages per one batch for the Batch Consumer:
+To specify the number of messages per batch for the batch consumer:
 
     <comment>%command.full_name% someConsumer --batch-size=500</comment>
 
