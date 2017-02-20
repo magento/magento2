@@ -17,6 +17,9 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand\IntegrationTestImporter;
 use Magento\Framework\App\DeploymentConfig\ConfigHashManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**

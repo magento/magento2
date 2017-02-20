@@ -13,9 +13,6 @@ use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
