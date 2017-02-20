@@ -30,8 +30,7 @@ interface LinkInterface
 
     /**
      * @param string $initializationVector
-     *
-*@return void
+     * @return void
      */
     public function setInitializationVector($initializationVector);
 }
