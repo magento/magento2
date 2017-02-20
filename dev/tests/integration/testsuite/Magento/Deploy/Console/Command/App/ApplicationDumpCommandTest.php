@@ -16,6 +16,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\DeploymentConfig\ConfigHashManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
