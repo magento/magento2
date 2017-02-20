@@ -47,7 +47,7 @@ class ConfigHashValidator
             throw new LocalizedException(
                 new Phrase(
                     'A change in configuration has been detected.'
-                    . ' Run config:sync or setup:upgrade command to synchronize configuration.'
+                    . ' Run app:config:import or setup:upgrade command to synchronize configuration.'
                 )
             );
         }
