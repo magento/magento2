@@ -10,7 +10,7 @@ use Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Wish list block in Customer's Activities sidebar in create order on backend.
+ * Wishlist block in Customer's Activities sidebar on create order on backend.
  */
 class Wishlist extends Sidebar
 {
