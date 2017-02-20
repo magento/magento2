@@ -7,14 +7,21 @@ namespace Magento\Analytics\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 
-class Coder
+/**
+ * Class for encrypting data.
+ */
+class Cryptographer
 {
     /**
+     * Resource for handling MBI token value.
+     *
      * @var AnalyticsToken
      */
     private $analyticsToken;
 
     /**
+     * Cipher method for encryption.
+     *
      * @var string
      */
     private $cipherMethod = 'AES-256-CBC';
@@ -37,6 +44,8 @@ class Coder
     }
 
     /**
+     * Encrypt input data.
+     *
      * @param string $source
      * @return EncodedContext
      * @throws LocalizedException
@@ -47,31 +56,31 @@ class Coder
             try {
                 $source = (string)$source;
             } catch (\Exception $e) {
-                throw new LocalizedException(__(''));
+                throw new LocalizedException(__('Input data must be string or convertible into string.'));
             }
         }
         if (!$this->validateCipherMethod($this->cipherMethod)) {
-            throw new LocalizedException(__(''));
+            throw new LocalizedException(__('Not valid cipher method.'));
         }
         $initializationVector = $this->getInitializationVector();
 
-        $encodedContext = $this->encodedContextFactory->create();
-        $encodedContext
-            ->setContent(
-                openssl_encrypt(
-                    $source,
-                    $this->cipherMethod,
-                    $this->getKey(),
-                    OPENSSL_RAW_DATA,
-                    $initializationVector
-                )
-            )
-            ->setInitializationVector($initializationVector);
+        $encodedContext = $this->encodedContextFactory->create([
+            'content' => openssl_encrypt(
+                $source,
+                $this->cipherMethod,
+                $this->getKey(),
+                OPENSSL_RAW_DATA,
+                $initializationVector
+            ),
+            'initializationVector' => $initializationVector,
+        ]);
 
         return $encodedContext;
     }
 
     /**
+     * Return key for encryption.
+     *
      * @return string
      */
     private function getKey()
@@ -80,6 +89,8 @@ class Coder
     }
 
     /**
+     * Return established cipher method.
+     *
      * @return string
      */
     private function getCipherMethod()
@@ -88,6 +99,8 @@ class Coder
     }
 
     /**
+     * Return each time generated random initialization vector which depends on the cipher method.
+     *
      * @return string
      */
     private function getInitializationVector()
@@ -97,6 +110,8 @@ class Coder
     }
 
     /**
+     * Check that cipher method is allowed for encryption.
+     *
      * @param string $cipherMethod
      * @return bool
      */

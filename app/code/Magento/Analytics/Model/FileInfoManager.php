@@ -7,6 +7,9 @@ namespace Magento\Analytics\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Manage saving and loading FileInfo object.
+ */
 class FileInfoManager
 {
     /**
@@ -20,11 +23,15 @@ class FileInfoManager
     private $fileInfoFactory;
 
     /**
+     * Flag code for a stored FileInfo object.
+     *
      * @var string
      */
     private $flagCode = 'analytics_file_info';
 
     /**
+     * Parameters which have to be saved into encoded form.
+     *
      * @var array
      */
     private $encodedParameters = [
@@ -44,6 +51,8 @@ class FileInfoManager
     }
 
     /**
+     * Save FileInfo object.
+     *
      * @param FileInfo $fileInfo
      * @return bool
      * @throws LocalizedException
@@ -62,9 +71,7 @@ class FileInfoManager
         }
 
         foreach ($this->encodedParameters as $encodedParameter) {
-            if (isset($parameters[$encodedParameter])) {
-                $parameters[$encodedParameter] = $this->encodeValue($parameters[$encodedParameter]);
-            }
+            $parameters[$encodedParameter] = $this->encodeValue($parameters[$encodedParameter]);
         }
 
         $this->flagManager->saveFlag($this->flagCode, $parameters);
@@ -73,6 +80,27 @@ class FileInfoManager
     }
 
     /**
+     * Load FileInfo object.
+     *
+     * @return FileInfo
+     */
+    public function load()
+    {
+        $parameters = $this->flagManager->getFlagData($this->flagCode) ?: [];
+
+        $encodedParameters = array_intersect($this->encodedParameters, array_keys($parameters));
+        foreach ($encodedParameters as $encodedParameter) {
+            $parameters[$encodedParameter] = $this->decodeValue($parameters[$encodedParameter]);
+        }
+
+        $fileInfo = $this->fileInfoFactory->create($parameters);
+
+        return $fileInfo;
+    }
+
+    /**
+     * Encode value.
+     *
      * @param string $value
      * @return string
      */
@@ -82,28 +110,8 @@ class FileInfoManager
     }
 
     /**
-     * @return FileInfo
-     */
-    public function load()
-    {
-        $parameters = $this->flagManager->getFlagData($this->flagCode);
-        $fileInfo = $this->fileInfoFactory->create();
-
-        $encodedParameters = array_intersect($this->encodedParameters, array_keys($parameters));
-        foreach ($encodedParameters as $encodedParameter) {
-            $parameters[$encodedParameter] = $this->decodeValue($parameters[$encodedParameter]);
-        }
-
-        if ($parameters) {
-            foreach ($parameters as $parameter => $value) {
-                call_user_func([$fileInfo, 'set' . $parameter], $value);
-            }
-        }
-
-        return $fileInfo;
-    }
-
-    /**
+     * Decode value.
+     *
      * @param string $value
      * @return string
      */
