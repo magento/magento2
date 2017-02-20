@@ -93,9 +93,9 @@ class ConfigImportCommand extends Command
                     $messages = $importer->import($this->deploymentConfig->getConfigData($namespace));
                     $output->writeln($messages);
                 }
-            }
 
-            $this->configHashManager->generateHash();
+                $this->configHashManager->generateHash();
+            }
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return Cli::RETURN_FAILURE;
