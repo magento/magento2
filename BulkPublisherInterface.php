@@ -6,17 +6,16 @@
 namespace Magento\Framework\MessageQueue;
 
 /**
- * Producer to publish messages via a specific transport to a specific queue or exchange.
+ * Producer to publish messages in bulk via a specific transport to a specific queue or exchange.
  */
-interface PublisherInterface
+interface BulkPublisherInterface
 {
     /**
-     * Publishes a message to a specific queue or exchange.
+     * Publishes messages in bulk to a specific queue or exchange.
      *
      * @param string $topicName
      * @param array|object $data
      * @return null|mixed
-     * @throws \InvalidArgumentException If message is not formed properly
      */
     public function publish($topicName, $data);
 }

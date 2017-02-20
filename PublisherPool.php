@@ -13,7 +13,7 @@ use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 /**
  * Publishers pool.
  */
-class PublisherPool implements PublisherInterface
+class PublisherPool implements PublisherInterface, BulkPublisherInterface
 {
     const MODE_SYNC = 'sync';
     const MODE_ASYNC = 'async';
