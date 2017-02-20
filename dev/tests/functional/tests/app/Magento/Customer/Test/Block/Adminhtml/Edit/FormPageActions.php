@@ -9,13 +9,12 @@ namespace Magento\Customer\Test\Block\Adminhtml\Edit;
 use Magento\Backend\Test\Block\FormPageActions as ParentFormPageActions;
 
 /**
- * Class FormPageActions
- * Form page actions block for customer page
+ * Form page actions block for customer page.
  */
 class FormPageActions extends ParentFormPageActions
 {
     /**
-     * "Create Order" button
+     * "Create Order" button.
      *
      * @var string
      */
@@ -29,7 +28,7 @@ class FormPageActions extends ParentFormPageActions
     protected $manageShoppingCartButton = '#manage_quote';
 
     /**
-     * Click on "Create Order" button
+     * Click on "Create Order" button.
      *
      * @return void
      */

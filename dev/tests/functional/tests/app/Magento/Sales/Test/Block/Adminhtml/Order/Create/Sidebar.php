@@ -51,11 +51,25 @@ class Sidebar extends Block
     protected $productNames = '//div[@id="sidebar_data_cart"]//td[@class="col-item"]';
 
     /**
-     * Locator for 'Add To Order' checkbox in Shopping Cart section.
+     * Locator for Shopping Cart section in sidebar.
      *
      * @var string
      */
-    protected $addToOrder = '//div[@id="sidebar_data_cart"]//tr[td[contains(.,"%s")]][td/span[contains(., "%d")]]//input[contains(@name,"[add_cart_item]")]';
+    protected $cartSection = '//div[@id="sidebar_data_cart"]';
+
+    /**
+     * Locator for item row in Shopping Cart section in Sidebar.
+     *
+     * @var string
+     */
+    protected $itemRowCartSection = '//tr[td[contains(.,"%s")]][td/span[contains(., "%d")]]';
+
+    /**
+     * Locator for 'Add to Order' checkbox in Shopping Cart section in sidebar.
+     *
+     * @var string
+     */
+    protected $addToOrder = '//input[contains(@name,"[add_cart_item]")]';
 
     /**
      * Get backend order sidebar wishlist block.
@@ -104,7 +118,11 @@ class Sidebar extends Block
     public function selectItemToAddToOrder(InjectableFixture $product)
     {
         $checkBox = $this->_rootElement->find(
-            sprintf($this->addToOrder, $product->getName(), $product->getCheckoutData()['cartItem']['price']),
+            sprintf(
+                $this->cartSection . $this->itemRowCartSection . $this->addToOrder,
+                $product->getName(),
+                $product->getCheckoutData()['cartItem']['price']
+            ),
             Locator::SELECTOR_XPATH,
             'checkbox'
         );

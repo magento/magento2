@@ -223,11 +223,9 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
         $this->customerIndex->open();
         $this->customerIndex->getCustomerGridBlock()->searchAndOpen(['email' => $customer->getEmail()]);
         $this->customerIndexEdit->getPageActionsBlock()->createOrder();
-
         if ($this->orderCreateIndex->getStoreBlock()->isVisible()) {
             $this->orderCreateIndex->getStoreBlock()->selectStoreView($this->store);
         }
-
         $createBlock = $this->orderCreateIndex->getCreateBlock();
         $createBlock->getItemsBlock()->clickAddProducts();
         foreach ($products as $product) {
@@ -250,15 +248,30 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
         $this->orderCreateIndex->getCreateBlock()->updateItems();
         $this->assertItemsOrderedSectionContainsProducts->processAssert($this->orderCreateIndex, [$products[1]]);
         $this->assertProductIsPresentInCustomerBackendWishlist
-            ->processAssert($this->customerIndex, $customer, $this->customerIndexEdit, null, [$products[0], $products[2]]);
+            ->processAssert(
+                $this->customerIndex,
+                $customer,
+                $this->customerIndexEdit,
+                null,
+                [$products[0], $products[2]]
+            );
         $this->assertCartSectionIsEmptyOnBackendOrderPage->processAssert($this->orderCreateIndex);
-        $this->orderCreateIndex->getBackendOrderSidebarBlock()->getSidebarWishlistBlock()->getWishlistItemsBlock()->selectItemToAddToOrder($products[0], 1);
-        $this->orderCreateIndex->getBackendOrderSidebarBlock()->getSidebarWishlistBlock()->getWishlistItemsBlock()->selectItemToAddToOrder($products[2], 1);
+        $this->orderCreateIndex->getBackendOrderSidebarBlock()
+            ->getSidebarWishlistBlock()->getWishlistItemsBlock()->selectItemToAddToOrder($products[0], 1);
+        $this->orderCreateIndex
+            ->getBackendOrderSidebarBlock()->getSidebarWishlistBlock()
+            ->getWishlistItemsBlock()->selectItemToAddToOrder($products[2], 1);
         $this->orderCreateIndex->getBackendOrderSidebarBlock()->updateChangesClick();
         $createBlock->waitOrderItemsGrid();
         $this->assertItemsOrderedSectionContainsProducts->processAssert($this->orderCreateIndex, $products);
         $this->assertProductIsPresentInCustomerBackendWishlist
-            ->processAssert($this->customerIndex, $customer, $this->customerIndexEdit, null, [$products[0], $products[2]]);
+            ->processAssert(
+                $this->customerIndex,
+                $customer,
+                $this->customerIndexEdit,
+                null,
+                [$products[0], $products[2]]
+            );
         $this->assertCartSectionIsEmptyOnBackendOrderPage->processAssert($this->orderCreateIndex);
         foreach ($products as $product) {
             $createBlock->getItemsBlock()->selectItemAction($product, 'Move to Shopping Cart');
@@ -266,21 +279,39 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
         $this->orderCreateIndex->getCreateBlock()->updateItems();
         $this->assertItemsOrderedSectionOnBackendOrderIsEmpty->processAssert($this->orderCreateIndex);
         $this->assertProductIsPresentInCustomerBackendWishlist
-            ->processAssert($this->customerIndex, $customer, $this->customerIndexEdit, null, [$products[0], $products[2]]);
+            ->processAssert(
+                $this->customerIndex,
+                $customer,
+                $this->customerIndexEdit,
+                null,
+                [$products[0], $products[2]]
+            );
         $this->assertCartSectionWithProductsOnBackendOrderPage->processAssert($this->orderCreateIndex, $products);
-
         foreach ([$products[0], $products[2]] as $product) {
             $this->orderCreateIndex->getBackendOrderSidebarBlock()->selectItemToAddToOrder($product);
         }
         $this->orderCreateIndex->getBackendOrderSidebarBlock()->updateChangesClick();
         $createBlock->waitOrderItemsGrid();
-        $this->assertItemsOrderedSectionContainsProducts->processAssert($this->orderCreateIndex, [$products[0], $products[2]]);
+        $this->assertItemsOrderedSectionContainsProducts->processAssert(
+            $this->orderCreateIndex,
+            [$products[0], $products[2]]
+        );
         $this->assertProductIsPresentInCustomerBackendWishlist
-            ->processAssert($this->customerIndex, $customer, $this->customerIndexEdit, null, [$products[0], $products[2]]);
+            ->processAssert(
+                $this->customerIndex,
+                $customer,
+                $this->customerIndexEdit,
+                null,
+                [$products[0], $products[2]]
+            );
         $this->assertCartSectionWithProductsOnBackendOrderPage->processAssert($this->orderCreateIndex, [$products[1]]);
         $this->stepFactory->create(
             \Magento\Sales\Test\TestStep\FillBillingAddressStep::class,
-            ['orderCreateIndex' => $this->orderCreateIndex, 'billingAddress' => $billingAddress, 'setShippingAddress' => true]
+            [
+                'orderCreateIndex' => $this->orderCreateIndex,
+                'billingAddress' => $billingAddress,
+                'setShippingAddress' => true
+            ]
         )->run();
         $this->stepFactory->create(
             \Magento\Sales\Test\TestStep\SelectPaymentMethodForOrderStep::class,

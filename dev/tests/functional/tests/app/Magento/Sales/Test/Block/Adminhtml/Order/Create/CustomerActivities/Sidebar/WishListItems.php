@@ -14,8 +14,7 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Class Items
- * Wish list items block on backend
+ * Wishlist items block on backend.
  */
 class WishListItems extends Sidebar
 {
@@ -54,7 +53,14 @@ class WishListItems extends Sidebar
      *
      * @var string
      */
-    protected $configureBlock = "//*[@data-role='modal' and .//*[@id='product_composite_configure'] and contains(@class,'_show')]";
+    protected $configureBlock = "//*[@data-role='modal' and .//*[@id='product_composite_configure']";
+
+    /**
+     * Locator for element which contains _show class.
+     *
+     * @var string
+     */
+    protected $elementWithShowClass = " and contains(@class,'_show')]";
 
     /**
      * Get configure block.
@@ -65,7 +71,10 @@ class WishListItems extends Sidebar
     {
         return $this->blockFactory->create(
             \Magento\Catalog\Test\Block\Adminhtml\Product\Composite\Configure::class,
-            ['element' => $this->_rootElement->find($this->configureBlock, Locator::SELECTOR_XPATH)]
+            [
+                'element' => $this->_rootElement
+                    ->find($this->configureBlock . $this->elementWithShowClass, Locator::SELECTOR_XPATH)
+            ]
         );
     }
 

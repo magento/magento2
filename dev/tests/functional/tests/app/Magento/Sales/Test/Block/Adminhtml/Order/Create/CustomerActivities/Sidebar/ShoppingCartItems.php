@@ -20,7 +20,7 @@ class ShoppingCartItems extends Sidebar
      *
      * @var string
      */
-    protected $itemName = '//td[@class="col-product"]//span[contains(@class, "title") and normalize-space(text()) = "%s"]';
+    protected $itemName = '//td[@class="col-product"]//span[contains(@class,"title") and normalize-space(text())="%s"]';
 
     /**
      * Get product name from Customer Shopping Cart on backend.
@@ -30,6 +30,7 @@ class ShoppingCartItems extends Sidebar
      */
     public function getItemName($product)
     {
-        return $this->_rootElement->find(sprintf($this->itemName, $product->getName()), Locator::SELECTOR_XPATH)->getText();
+        return $this->_rootElement
+            ->find(sprintf($this->itemName, $product->getName()), Locator::SELECTOR_XPATH)->getText();
     }
 }
