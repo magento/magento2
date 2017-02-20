@@ -112,10 +112,10 @@ class LinkProviderTest extends \PHPUnit_Framework_TestCase
                 UrlInterface::URL_TYPE_MEDIA
             )
             ->willReturn($baseUrl);
-        $this->fileInfoMock->expects($this->once())
+        $this->fileInfoMock->expects($this->atLeastOnce())
             ->method('getPath')
             ->willReturn($fileInfoPath);
-        $this->fileInfoMock->expects($this->once())
+        $this->fileInfoMock->expects($this->atLeastOnce())
             ->method('getInitializationVector')
             ->willReturn($fileInitializationVector);
         $this->linkInterfaceMock->expects($this->once())->method('setUrl')->with(
@@ -125,5 +125,38 @@ class LinkProviderTest extends \PHPUnit_Framework_TestCase
             ->method('setInitializationVector')
             ->with($fileInitializationVector);
         $this->assertEquals($this->linkInterfaceMock, $this->linkProvider->get());
+    }
+
+    /**
+     * @param string|null$fileInfoPath
+     * @param string|null $fileInitializationVector
+     *
+     * @dataProvider fileNotReadyDataProvider
+     * @expectedException \Magento\Framework\Webapi\Exception
+     * @expectedExceptionMessage File is not ready yet.
+     */
+    public function testFileNotReady($fileInfoPath, $fileInitializationVector)
+    {
+        $this->fileInfoManagerMock->expects($this->once())
+            ->method('load')
+            ->willReturn($this->fileInfoMock);
+        $this->fileInfoMock->expects($this->once())
+            ->method('getPath')
+            ->willReturn($fileInfoPath);
+        $this->fileInfoMock->expects($this->any())
+            ->method('getInitializationVector')
+            ->willReturn($fileInitializationVector);
+        $this->linkProvider->get();
+    }
+
+    /**
+     * @return array
+     */
+    public function fileNotReadyDataProvider()
+    {
+        return [
+            [null, 'initVector'],
+            ['path', null]
+        ];
     }
 }

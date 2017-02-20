@@ -8,6 +8,7 @@ namespace Magento\Analytics\Model;
 use Magento\Analytics\Api\Data\LinkInterfaceFactory;
 use Magento\Analytics\Api\LinkProviderInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\Webapi\Exception;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -51,6 +52,9 @@ class LinkProvider implements LinkProviderInterface
     public function get()
     {
         $fileInfo = $this->fileInfoManager->load();
+        if ($fileInfo->getPath() === null || $fileInfo->getInitializationVector() === null) {
+            throw new Exception(__('File is not ready yet.'), 0, Exception::HTTP_NOT_FOUND);
+        }
         $link = $this->linkInterfaceFactory->create();
         $link->setUrl(
             $this->storeManager->getStore()->getBaseUrl(
