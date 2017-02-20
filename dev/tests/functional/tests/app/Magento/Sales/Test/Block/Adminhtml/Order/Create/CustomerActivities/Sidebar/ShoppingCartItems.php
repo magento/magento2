@@ -11,7 +11,7 @@ use Magento\Mtf\Client\Locator;
 use Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 
 /**
- * Chopping cart items block on Sidebar on Create Order page on backend.
+ * Shopping cart items block on Sidebar on Create Order page on backend.
  */
 class ShoppingCartItems extends Sidebar
 {
