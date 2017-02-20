@@ -32,7 +32,7 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
     private $urlBuilderMock;
 
     /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
-    private $serilizerMock;
+    private $serializerMock;
 
     protected function setUp()
     {
@@ -75,13 +75,13 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
             ->method('getEscaper')
             ->willReturn($escaperMock);
 
-        $this->serilizerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->getMock();
 
         $this->model = new AuthenticationPopup(
             $this->contextMock,
             [],
-            $this->serilizerMock
+            $this->serializerMock
         );
     }
 
@@ -221,7 +221,7 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
                     ['customer/account/forgotpassword', [], $forgotUrl],
                 ]
             );
-        $this->serilizerMock->expects($this->any())->method('serialize')
+        $this->serializerMock->expects($this->any())->method('serialize')
             ->willReturn(
                 json_encode($this->model->getConfig())
             );

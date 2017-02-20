@@ -61,6 +61,10 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns popup config in JSON format.
+     *
+     * Added in scope of https://github.com/magento/magento2/pull/8617
+     *
      * @return bool|string
      */
     public function getSerializedConfig()
