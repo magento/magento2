@@ -9,7 +9,7 @@ use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
-use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\Framework\MessageQueue\BulkPublisherInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\EntityManager;
@@ -40,7 +40,7 @@ class BulkManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->publisherMock = $this->getMock(PublisherInterface::class);
+        $this->publisherMock = $this->getMock(BulkPublisherInterface::class);
 
         $this->model = $this->objectManager->create(
             BulkManagement::class,
@@ -71,9 +71,9 @@ class BulkManagementTest extends \PHPUnit_Framework_TestCase
             $operations[] = $operation;
         }
 
-        $this->publisherMock->expects($this->exactly($operationCount))
+        $this->publisherMock->expects($this->once())
             ->method('publish')
-            ->with($topicName, $this->isInstanceOf(OperationInterface::class));
+            ->with($topicName, $operations);
 
         // schedule bulk
         $this->assertTrue($this->model->scheduleBulk($bulkUuid, $operations, $bulkDescription, $userId));
@@ -90,17 +90,22 @@ class BulkManagementTest extends \PHPUnit_Framework_TestCase
         $bulkUuid = 'bulk-uuid-5';
         $topicName = 'topic-4';
         $errorCodes = [1111, 2222];
-
-        $this->publisherMock->expects($this->exactly(2))
+        $operations = $this->objectManager->get(CollectionFactory::class)
+            ->create()
+            ->addFieldToFilter('bulk_uuid', ['eq' => $bulkUuid])
+            ->getItems();
+        foreach ($operations as $operation) {
+            $operation->setId(null);
+        }
+        $this->publisherMock->expects($this->once())
             ->method('publish')
-            ->with($topicName, $this->isInstanceOf(OperationInterface::class));
+            ->with($topicName, array_values($operations));
         $this->assertEquals(2, $this->model->retryBulk($bulkUuid, $errorCodes));
 
         $operations = $this->objectManager->get(CollectionFactory::class)
             ->create()
             ->addFieldToFilter('bulk_uuid', ['eq' => $bulkUuid])
             ->getItems();
-
         // Failed operations should be removed from database during bulk retry
         $this->assertCount(0, $operations);
     }
