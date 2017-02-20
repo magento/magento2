@@ -64,7 +64,7 @@ class ConfigHashValidatorTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage A change in configuration has been detected. Run config:sync or setup:upgrade command to synchronize configuration.
+     * @expectedExceptionMessage A change in configuration has been detected. Run app:config:import or setup:upgrade command to synchronize configuration.
      * @codingStandardsIgnoreEnd
      */
     public function testBeforeDispatchWithException()
