@@ -178,7 +178,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
                 'hasBackendModel' => true,
                 'expectsGetBackendModel' => $this->once(),
                 'expectsCreate' => $this->never(),
-                'expectsGetValue' => $this->never(),
+                'expectsGetValue' => $this->once(),
                 'expectsValue' => ValueProcessor::SAFE_PLACEHOLDER,
                 'className' => Encrypted::class,
             ],

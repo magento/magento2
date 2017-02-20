@@ -92,7 +92,7 @@ class ValueProcessor
         $backendModel->setValue($value);
         $backendModel->afterLoad();
 
-        return ($backendModel instanceof Encrypted)
+        return ($backendModel instanceof Encrypted) && !empty($backendModel->getValue())
             ? self::SAFE_PLACEHOLDER
             : $backendModel->getValue();
     }
