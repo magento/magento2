@@ -97,7 +97,7 @@ class ApplicationDumpCommand extends Command
             $output->writeln($comments);
         }
 
-        // Generate and save new hash of deployment configuration
+        // Generate and save new hash of deployment configuration.
         $this->configHashManager->generateHash();
 
         $output->writeln('<info>Done.</info>');

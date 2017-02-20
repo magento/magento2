@@ -21,7 +21,7 @@
         </arguments>
     </type>
     <type name="Magento\Framework\App\FrontController">
-        <plugin name="configHash" type="Magento\Framework\App\DeploymentConfig\Plugin\ConfigHashValidator" sortOrder="-99"/>
+        <plugin name="configHash" type="Magento\Framework\App\DeploymentConfig\Plugin\ConfigHashValidator" sortOrder="-90"/>
     </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>

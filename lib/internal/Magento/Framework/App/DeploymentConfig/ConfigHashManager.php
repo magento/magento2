@@ -67,7 +67,6 @@ class ConfigHashManager
 
     /**
      * Checks that deployment configuration hash is valid.
-     *
      * Returns true if the hash was not changed or deployment configuration files do not have data.
      *
      * @return bool
@@ -76,7 +75,7 @@ class ConfigHashManager
     {
         $config = $this->getConfig();
 
-        if (empty($config)) {
+        if (!$config) {
             return true;
         }
 
@@ -117,7 +116,7 @@ class ConfigHashManager
 
         foreach ($this->configImporterPool->getSections() as $section) {
             $data = $this->deploymentConfig->getConfigData($section);
-            if (!empty($data)) {
+            if ($data) {
                 $result[$section] = $data;
             }
         }

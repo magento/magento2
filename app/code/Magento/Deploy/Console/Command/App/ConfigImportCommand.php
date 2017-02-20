@@ -55,10 +55,11 @@ class ConfigImportCommand extends Command
         ConfigImporterPool $configImporterPool,
         DeploymentConfig $deploymentConfig
     ) {
-        parent::__construct();
         $this->configHashManager = $configHashManager;
         $this->configImporterPool = $configImporterPool;
         $this->deploymentConfig = $deploymentConfig;
+
+        parent::__construct();
     }
 
     /**
@@ -68,6 +69,7 @@ class ConfigImportCommand extends Command
     {
         $this->setName(self::COMMAND_NAME)
             ->setDescription('Import data from shared configuration files to appropriate data storage');
+
         parent::configure();
     }
 
@@ -82,7 +84,7 @@ class ConfigImportCommand extends Command
 
             $importers = $this->configImporterPool->getImporters();
 
-            if (empty($importers) || $this->configHashManager->isHashValid()) {
+            if (!$importers || $this->configHashManager->isHashValid()) {
                 $output->writeln('<info>Nothing to import</info>');
             } else {
                 /**
@@ -98,6 +100,7 @@ class ConfigImportCommand extends Command
             }
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+
             return Cli::RETURN_FAILURE;
         }
 
