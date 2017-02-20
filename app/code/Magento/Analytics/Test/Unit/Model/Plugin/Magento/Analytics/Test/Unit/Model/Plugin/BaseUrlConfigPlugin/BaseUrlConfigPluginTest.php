@@ -7,6 +7,7 @@ namespace Magento\Analytics\Test\Unit\Model\Plugin\BaseUrlConfigPlugin;
 
 use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
+use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -24,6 +25,11 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
      * @var Value | \PHPUnit_Framework_MockObject_MockObject
      */
     private $configValueMock;
+
+    /**
+     * @var SubscriptionStatusProvider | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subscriptionStatusProvider;
 
     /**
      * @var ObjectManagerHelper
@@ -46,11 +52,15 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
         $this->configValueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->subscriptionStatusProvider = $this->getMockBuilder(SubscriptionStatusProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
             BaseUrlConfigPlugin::class,
             [
-                'flagManager' => $this->flagManagerMock
+                'flagManager' => $this->flagManagerMock,
+                'subscriptionStatusProvider' => $this->subscriptionStatusProvider
             ]
         );
     }
@@ -67,6 +77,8 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
         $this->configValueMock->expects($this->once())
             ->method('getOldValue')
             ->willReturn($oldUrl);
+        $this->subscriptionStatusProvider->expects($this->once())->method('getStatus')
+            ->willReturn(SubscriptionStatusProvider::ENABLED);
         $this->flagManagerMock->expects($this->once())
             ->method('saveFlag')
             ->with('analytics_old_base_url', $oldUrl);
