@@ -7,7 +7,6 @@ namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
@@ -24,13 +23,6 @@ class Writer
      * @var Reader
      */
     private $reader;
-
-    /**
-     * Deployment file config reader
-     *
-     * @var FileReader
-     */
-    private $fileReader;
 
     /**
      * Application filesystem
@@ -62,22 +54,19 @@ class Writer
      * @param ConfigFilePool $configFilePool
      * @param DeploymentConfig $deploymentConfig
      * @param Writer\FormatterInterface $formatter
-     * @param FileReader $fileReader
      */
     public function __construct(
         Reader $reader,
         Filesystem $filesystem,
         ConfigFilePool $configFilePool,
         DeploymentConfig $deploymentConfig,
-        Writer\FormatterInterface $formatter = null,
-        FileReader $fileReader = null
+        Writer\FormatterInterface $formatter = null
     ) {
         $this->reader = $reader;
         $this->filesystem = $filesystem;
         $this->configFilePool = $configFilePool;
         $this->deploymentConfig = $deploymentConfig;
-        $this->formatter = $formatter ?: ObjectManager::getInstance()->get(Writer\PhpFormatter::class);
-        $this->fileReader = $fileReader ?: ObjectManager::getInstance()->get(FileReader::class);
+        $this->formatter = $formatter ?: new Writer\PhpFormatter();
     }
 
     /**

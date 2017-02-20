@@ -7,6 +7,7 @@ namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
@@ -56,8 +57,8 @@ class FileReader
      * Loads the configuration file.
      *
      * @param string $fileKey The file key
-     * @return array The configurations arrat
-     * @throws \Exception
+     * @return array The configurations array
+     * @throws FileSystemException If file key is not correct
      */
     public function load($fileKey)
     {

@@ -34,11 +34,6 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     private $reader;
 
     /**
-     * @var DeploymentConfig\FileReader|Mock
-     */
-    private $fileReader;
-
-    /**
      * @var WriteInterface|Mock
      */
     private $dirWrite;
@@ -83,9 +78,6 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileReader = $this->getMockBuilder(DeploymentConfig\FileReader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->dirWrite = $this->getMockForAbstractClass(WriteInterface::class);
         $this->dirRead = $this->getMockForAbstractClass(ReadInterface::class);
 
@@ -94,8 +86,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             $this->filesystem,
             $this->configFilePool,
             $this->deploymentConfig,
-            $this->formatter,
-            $this->fileReader
+            $this->formatter
         );
     }
 
