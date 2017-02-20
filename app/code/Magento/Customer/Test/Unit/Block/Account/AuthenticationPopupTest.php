@@ -31,6 +31,9 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
     /** @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $urlBuilderMock;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serilizerMock;
+
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -72,8 +75,13 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
             ->method('getEscaper')
             ->willReturn($escaperMock);
 
+        $this->serilizerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->getMock();
+
         $this->model = new AuthenticationPopup(
-            $this->contextMock
+            $this->contextMock,
+            [],
+            $this->serilizerMock
         );
     }
 
@@ -83,6 +91,7 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
      * @param string $registerUrl
      * @param string $forgotUrl
      * @param array $result
+     * @throws \PHPUnit_Framework_Exception
      *
      * @dataProvider dataProviderGetConfig
      */
@@ -171,5 +180,52 @@ class AuthenticationPopupTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * @param mixed $isAutocomplete
+     * @param string $baseUrl
+     * @param string $registerUrl
+     * @param string $forgotUrl
+     * @param array $result
+     * @throws \PHPUnit_Framework_Exception
+     *
+     * @dataProvider dataProviderGetConfig
+     */
+    public function testGetSerializedConfig($isAutocomplete, $baseUrl, $registerUrl, $forgotUrl, array $result)
+    {
+        $this->scopeConfigMock->expects($this->any())
+            ->method('getValue')
+            ->with(Form::XML_PATH_ENABLE_AUTOCOMPLETE, ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($isAutocomplete);
+
+        /** @var StoreInterface||\PHPUnit_Framework_MockObject_MockObject $storeMock */
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->setMethods(['getBaseUrl'])
+            ->getMockForAbstractClass();
+
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->with(null)
+            ->willReturn($storeMock);
+
+        $storeMock->expects($this->any())
+            ->method('getBaseUrl')
+            ->willReturn($baseUrl);
+
+        $this->urlBuilderMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturnMap(
+                [
+                    ['customer/account/create', [], $registerUrl],
+                    ['customer/account/forgotpassword', [], $forgotUrl],
+                ]
+            );
+        $this->serilizerMock->expects($this->any())->method('serialize')
+            ->willReturn(
+                json_encode($this->model->getConfig())
+            );
+
+        $this->assertEquals(json_encode($result), $this->model->getSerializedConfig());
     }
 }
