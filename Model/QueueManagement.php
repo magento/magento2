@@ -90,6 +90,21 @@ class QueueManagement
     }
 
     /**
+     * Add messages to all specified queues.
+     *
+     * @param string $topic
+     * @param array $messages
+     * @param string[] $queueNames
+     * @return $this
+     */
+    public function addMessagesToQueues($topic, $messages, $queueNames)
+    {
+        $messageIds = $this->messageResource->saveMessages($topic, $messages);
+        $this->messageResource->linkMessagesWithQueues($messageIds, $queueNames);
+        return $this;
+    }
+
+    /**
      * Mark messages to be deleted if sufficient amount of time passed since last update
      * Delete marked messages
      *
@@ -131,7 +146,7 @@ class QueueManagement
             $messageStatus->setStatus(self::MESSAGE_STATUS_TO_BE_DELETED)
                 ->save();
         } else if ($messageStatus->getStatus() == self::MESSAGE_STATUS_ERROR
-            && strtotime($messageStatus->getUpdatedAt()) < ($now - $this->getCompletedMessageLifetime())) {
+            && strtotime($messageStatus->getUpdatedAt()) < ($now - $this->getErrorMessageLifetime())) {
             $messageStatus->setStatus(self::MESSAGE_STATUS_TO_BE_DELETED)
                 ->save();
         } else if ($messageStatus->getStatus() == self::MESSAGE_STATUS_IN_PROGRESS
@@ -200,7 +215,7 @@ class QueueManagement
     private function getErrorMessageLifetime()
     {
         return  60 * (int)$this->scopeConfig->getValue(
-            self::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME,
+            self::XML_PATH_FAILED_MESSAGES_LIFETIME,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }

@@ -39,23 +39,55 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Save messages in bulk to 'queue_message' table.
+     *
+     * @param string $messageTopic
+     * @param array $messages
+     * @return array List of IDs of inserted records
+     */
+    public function saveMessages($messageTopic, array $messages)
+    {
+        $data = [];
+        foreach ($messages as $message) {
+            $data[] = ['topic_name' => $messageTopic, 'body' => $message];
+        }
+        $rowCount = $this->getConnection()->insertMultiple($this->getMessageTable(), $data);
+        $firstId = $this->getConnection()->lastInsertId($this->getMessageTable());
+        return range($firstId, $firstId + $rowCount - 1);
+    }
+
+    /**
      * Add associations between the specified message and queues.
      *
      * @param int $messageId
      * @param string[] $queueNames
      * @return $this
      */
-    public function linkQueues($messageId, $queueNames)
+    public function linkQueues($messageId, array $queueNames)
+    {
+        return $this->linkMessagesWithQueues([$messageId], $queueNames);
+    }
+
+    /**
+     * Add associations between the specified messages and queues.
+     *
+     * @param array $messageIds
+     * @param string[] $queueNames
+     * @return $this
+     */
+    public function linkMessagesWithQueues(array $messageIds, array $queueNames)
     {
         $connection = $this->getConnection();
         $queueIds = $this->getQueueIdsByNames($queueNames);
         $data = [];
-        foreach ($queueIds as $queueId) {
-            $data[] = [
-                $queueId,
-                $messageId,
-                QueueManagement::MESSAGE_STATUS_NEW
-            ];
+        foreach ($messageIds as $messageId) {
+            foreach ($queueIds as $queueId) {
+                $data[] = [
+                    $queueId,
+                    $messageId,
+                    QueueManagement::MESSAGE_STATUS_NEW
+                ];
+            }
         }
         if (!empty($data)) {
             $connection->insertArray(
