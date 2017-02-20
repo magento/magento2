@@ -8,6 +8,7 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sid
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 
 /**
@@ -25,10 +26,10 @@ class ShoppingCartItems extends Sidebar
     /**
      * Get product name from Customer Shopping Cart on backend.
      *
-     * @param $product
+     * @param InjectableFixture $product
      * @return string
      */
-    public function getItemName($product)
+    public function getItemName(InjectableFixture $product)
     {
         return $this->_rootElement
             ->find(sprintf($this->itemName, $product->getName()), Locator::SELECTOR_XPATH)->getText();

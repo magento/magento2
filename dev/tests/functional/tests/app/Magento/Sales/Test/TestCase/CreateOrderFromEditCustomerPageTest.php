@@ -56,6 +56,7 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
  *
  * @group Order_Management
  * @ZephyrId MAGETWO-19454
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateOrderFromEditCustomerPageTest extends Injectable
 {
@@ -104,42 +105,42 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
     /**
      * Assert that Items Ordered section on Create Order page on backend contains products.
      *
-     * @var $assertItemsOrderedSectionContainsProducts
+     * @var AssertItemsOrderedSectionContainsProducts
      */
     protected $assertItemsOrderedSectionContainsProducts;
 
     /**
      * Assert that customer's Wish List section on Order Create backend page is empty.
      *
-     * @var $assertCustomerWishlistOnBackendIsEmpty
+     * @var AssertCustomerWishlistOnBackendIsEmpty
      */
     protected $assertCustomerWishlistOnBackendIsEmpty;
 
     /**
      * Assert that customer's Shopping Cart section on Order Create backend page is empty.
      *
-     * @var $assertCartSectionIsEmptyOnBackendOrderPage
+     * @var AssertCartSectionIsEmptyOnBackendOrderPage
      */
     protected $assertCartSectionIsEmptyOnBackendOrderPage;
 
     /**
      * Assert that products added to wishlist are present on Customers account on backend.
      *
-     * @var $assertProductIsPresentInCustomerBackendWishlist
+     * @var AssertProductIsPresentInCustomerBackendWishlist
      */
     protected $assertProductIsPresentInCustomerBackendWishlist;
 
     /**
      * Assert that Items Ordered section on Create Order page on backend is empty.
      *
-     * @var $assertItemsOrderedSectionOnBackendOrderIsEmpty
+     * @var AssertItemsOrderedSectionOnBackendOrderIsEmpty
      */
     protected $assertItemsOrderedSectionOnBackendOrderIsEmpty;
 
     /**
      * Assert that customer's Shopping Cart section on Order Create backend page contains products.
      *
-     * @var $assertCartSectionWithProductsOnBackendOrderPage
+     * @var AssertCartSectionWithProductsOnBackendOrderPage
      */
     protected $assertCartSectionWithProductsOnBackendOrderPage;
 
@@ -159,6 +160,7 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
      * @param AssertItemsOrderedSectionOnBackendOrderIsEmpty $assertItemsOrderedSectionOnBackendOrderIsEmpty
      * @param AssertCartSectionWithProductsOnBackendOrderPage $assertCartSectionWithProductsOnBackendOrderPage
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __inject(
         TestStepFactory $stepFactory,
