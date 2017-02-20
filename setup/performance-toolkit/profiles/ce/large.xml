@@ -9,8 +9,8 @@
     <profile>
         <websites>5</websites> <!-- Number of websites to generate -->
         <store_groups>5</store_groups> <!--Number of stores-->
-        <store_views>1</store_views> <!-- Number of store views -->
-        <assign_entities_to_all_websites>0</assign_entities_to_all_websites> <!-- Whether to assign all products per each website -->
+        <store_views>5</store_views> <!-- Number of store views -->
+        <assign_entities_to_all_websites>1</assign_entities_to_all_websites> <!-- Whether to assign all products per each website -->
         <simple_products>300000</simple_products> <!-- Simple products count -->
         <configurable_products> <!-- Configurable product -->
             <config>
@@ -29,8 +29,8 @@
         <cart_price_rules>20</cart_price_rules> <!-- Number of cart price rules -->
         <cart_price_rules_floor>2</cart_price_rules_floor>
 
-        <product_attribute_sets>25</product_attribute_sets> <!-- Number of product attribute sets -->
-        <product_attribute_sets_attributes>5</product_attribute_sets_attributes> <!-- Number of attributes per set -->
+        <product_attribute_sets>200</product_attribute_sets> <!-- Number of product attribute sets -->
+        <product_attribute_sets_attributes>50</product_attribute_sets_attributes> <!-- Number of attributes per set -->
         <product_attribute_sets_attributes_values>2</product_attribute_sets_attributes_values> <!-- Number of values per attribute -->
 
         <order_quotes_enable>true</order_quotes_enable>
