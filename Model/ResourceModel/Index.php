@@ -10,6 +10,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 class Index extends AbstractDb
 {
@@ -24,21 +26,31 @@ class Index extends AbstractDb
     protected $metadataPool;
 
     /**
+     * @var FrontendResource
+     */
+    private $indexerFrontendResource;
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param MetadataPool $metadataPool
      * @param null $connectionName
+     * @param FrontendResource $indexerFrontendResource
      */
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
         MetadataPool $metadataPool,
-        $connectionName = null
+        $connectionName = null,
+        FrontendResource $indexerFrontendResource = null
     ) {
+        parent::__construct($context, $connectionName);
         $this->storeManager = $storeManager;
         $this->metadataPool = $metadataPool;
-        parent::__construct($context, $connectionName);
+        $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
+        );
     }
 
     /**
@@ -60,7 +72,7 @@ class Index extends AbstractDb
         $connection = $this->getConnection();
 
         $select = $connection->select()->from(
-            $this->getTable('catalog_product_index_price'),
+            $this->indexerFrontendResource->getMainTable(),
             ['entity_id', 'customer_group_id', 'website_id', 'min_price']
         );
 

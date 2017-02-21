@@ -32,4 +32,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\AdvancedSearch\Model\ResourceModel\Index">
+        <arguments>
+            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
+        </arguments>
+    </type>
 </config>
