@@ -30,7 +30,7 @@
     <preference for="Magento\Framework\View\Design\ThemeInterface" type="Magento\Theme\Model\Theme" />
     <preference for="Magento\Framework\View\Design\Theme\ResolverInterface" type="Magento\Theme\Model\Theme\Resolver" />
     <preference for="Magento\Framework\View\ConfigInterface" type="Magento\Framework\View\Config" />
-    <preference for="Magento\Framework\View\Asset\Bundle\ConfigInterface" type="\Magento\Framework\View\Asset\Bundle\Config" />
+    <preference for="Magento\Framework\View\Asset\Bundle\ConfigInterface" type="Magento\Framework\View\Asset\Bundle\Config" />
     <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\TranslatedLists" />
     <preference for="Magento\Framework\Api\AttributeTypeResolverInterface" type="Magento\Framework\Reflection\AttributeTypeResolver" />
     <preference for="Magento\Framework\Api\Search\SearchResultInterface" type="Magento\Framework\Api\Search\SearchResult" />
@@ -82,7 +82,7 @@
     <preference for="Magento\Framework\View\Design\Theme\Image\PathInterface" type="Magento\Theme\Model\Theme\Image\Path" />
     <preference for="Magento\Framework\Session\Config\ConfigInterface" type="Magento\Framework\Session\Config" />
     <preference for="Magento\Framework\Session\SidResolverInterface" type="Magento\Framework\Session\SidResolver\Proxy" />
-    <preference for="Magento\Framework\Stdlib\Cookie\CookieScopeInterface" type="\Magento\Framework\Stdlib\Cookie\CookieScope" />
+    <preference for="Magento\Framework\Stdlib\Cookie\CookieScopeInterface" type="Magento\Framework\Stdlib\Cookie\CookieScope" />
     <preference for="Magento\Framework\Stdlib\Cookie\CookieReaderInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieReader" />
     <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
     <preference for="Magento\Framework\TranslateInterface" type="Magento\Framework\Translate" />

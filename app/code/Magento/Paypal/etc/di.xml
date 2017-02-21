@@ -56,7 +56,7 @@
         </arguments>
     </type>
     <virtualType name="Magento\Paypal\Block\WpsBml\Shortcut" type="Magento\Paypal\Block\Bml\Shortcut"></virtualType>
-    <type name="\Magento\Paypal\Helper\Data">
+    <type name="Magento\Paypal\Helper\Data">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
                 <item name="expressCheckout" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS</item>
