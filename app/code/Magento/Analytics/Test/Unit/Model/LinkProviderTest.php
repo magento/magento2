@@ -128,7 +128,7 @@ class LinkProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string|null$fileInfoPath
+     * @param string|null $fileInfoPath
      * @param string|null $fileInitializationVector
      *
      * @dataProvider fileNotReadyDataProvider
