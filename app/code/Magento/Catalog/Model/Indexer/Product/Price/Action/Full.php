@@ -102,8 +102,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 
             $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
 
-            $notComposite = [];
-
             /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer $indexer */
             foreach ($this->getTypeIndexers() as $indexer) {
 
@@ -131,9 +129,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
                     if (!empty($entityIds)) {
                         $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
                         if ($indexer->getIsComposite()) {
-                            $this->_copyRelationIndexData($entityIds, $notComposite);
-                        } else {
-                            $notComposite = array_merge($notComposite, $entityIds);
+                            $this->_copyRelationIndexData($entityIds);
                         }
                         $this->_prepareTierPriceIndex($entityIds);
                         // Reindex entities by id
