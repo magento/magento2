@@ -5,25 +5,15 @@
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary\Writer\Csv;
 
+use Magento\Setup\Module\I18n\Dictionary\Writer\Csv\Stdo;
+
 class StdoTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var resource
-     */
-    protected $_handler;
-
-    protected function setUp()
-    {
-        $this->_handler = STDOUT;
-    }
-
     public function testThatHandlerIsRight()
     {
-        $this->markTestSkipped('This is skiped as we should not close the STDO!');
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Setup\Module\I18n\Dictionary\Writer\Csv $writer */
-        $writer = $objectManagerHelper->getObject(\Magento\Setup\Module\I18n\Dictionary\Writer\Csv\Stdo::class);
-
-        $this->assertAttributeEquals($this->_handler, '_fileHandler', $writer);
+        $handler = STDOUT;
+        // Mocking object's under test destructor here is perfectly valid as there is no way to reopen STDOUT
+        $writer = $this->getMock(Stdo::class, ['__destruct']);
+        $this->assertAttributeEquals($handler, '_fileHandler', $writer);
     }
 }
