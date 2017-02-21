@@ -27,7 +27,6 @@ define([
             if ($.nodeName(element, "iframe") && $(element).prop('src').indexOf(window.location.hostname) === -1) { 
                 return []; 
             }
-            
             $(element).contents().each(function (index, el) {
                 switch (el.nodeType) {
                     case 1: // ELEMENT_NODE
