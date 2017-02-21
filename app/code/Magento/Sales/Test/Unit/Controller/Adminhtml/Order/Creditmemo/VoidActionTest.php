@@ -6,11 +6,11 @@
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 
 /**
- * Class VoidTest
+ * Class VoidActionTest
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VoidTest extends \PHPUnit_Framework_TestCase
+class VoidActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\AddComment
@@ -179,7 +179,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->controller = $objectManager->getObject(
-            \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Void::class,
+            \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\VoidAction::class,
             [
                 'context' => $this->contextMock,
                 'creditmemoLoader' => $this->loaderMock,
