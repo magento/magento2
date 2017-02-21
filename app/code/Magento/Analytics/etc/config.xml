@@ -16,6 +16,11 @@
                 <report>https://advancedreporting.rjmetrics.com/report</report>
             </url>
             <integration_name>Magento Analytics user</integration_name>
+            <general>
+                <cron>
+                    <collection_time>02,00,00</collection_time>
+                </cron>
+            </general>
         </analytics>
     </default>
 </config>
