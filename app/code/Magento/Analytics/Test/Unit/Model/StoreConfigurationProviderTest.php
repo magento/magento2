@@ -81,30 +81,15 @@ class StoreConfigurationProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetReport()
     {
         $map = [
-            ['config_path' => 'web/unsecure/base_url', 'scope' => 'default1', 'scope_id' => 0, 'value' => '127.0.0.1'],
-            ['config_path' => 'currency/options/base', 'scope' => 'default', 'scope_id' => 0,  'value' => 'USD'],
-            [
-                'config_path' => 'general/locale/timezone',
-                'scope' => 'default',
-                'scope_id' => 0,
-                'value' => 'America/Dawson'
-            ],
-            ['config_path' => 'web/unsecure/base_url', 'scope' => 'websites', 'scope_id' => 1, 'value' => '127.0.0.2'],
-            ['config_path' => 'currency/options/base', 'scope' => 'websites', 'scope_id' => 1, 'value' => 'USD'],
-            [
-                'config_path' => 'general/locale/timezone',
-                'scope' => 'websites',
-                'scope_id' => 1,
-                'value' => 'America/Belem'
-            ],
-            ['config_path' => 'web/unsecure/base_url', 'scope' => 'stores', 'scope_id' => 2, 'value' => '127.0.0.3'],
-            ['config_path' => 'currency/options/base', 'scope' => 'stores', 'scope_id' => 2, 'value' => 'USD'],
-            [
-                'config_path' => 'general/locale/timezone',
-                'scope' => 'stores',
-                'scope_id' => 2,
-                'value' => 'America/Phoenix'
-            ],
+            ['web/unsecure/base_url', 'default', 0, '127.0.0.1'],
+            ['currency/options/base', 'default', 0, 'USD'],
+            ['general/locale/timezone', 'default', 0, 'America/Dawson'],
+            ['web/unsecure/base_url', 'websites', 1, '127.0.0.2'],
+            ['currency/options/base', 'websites', 1, 'USD'],
+            ['general/locale/timezone', 'websites', 1, 'America/Belem'],
+            ['web/unsecure/base_url', 'stores', 2, '127.0.0.3'],
+            ['currency/options/base', 'stores', 2, 'USD'],
+            ['general/locale/timezone', 'stores', 2, 'America/Phoenix'],
         ];
 
         $this->scopeConfigMock
@@ -127,10 +112,12 @@ class StoreConfigurationProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(2);
         $result = iterator_to_array($this->storeConfigurationProvider->getReport());
-
-        $this->assertEquals(
-            array_replace_recursive($result, $map),
-            $map
-        );
+        $resultValues = [];
+        foreach ($result as $item) {
+            $resultValues[] = array_values($item);
+        }
+        array_multisort($resultValues);
+        array_multisort($map);
+        $this->assertEquals($resultValues, $map);
     }
 }
