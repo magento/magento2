@@ -43,7 +43,6 @@
             <attribute name="group_id"/>
             <attribute name="website_id"/>
             <attribute name="name"/>
-            <attribute name="root_category_id"/>
             <attribute name="default_store_id"/>
         </source>
     </report>
