@@ -11,7 +11,7 @@ use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnStorefront;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Captcha\Test\Page\CustomerAccountLogin;
+use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
