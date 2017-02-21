@@ -167,34 +167,34 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Controller\Order\Creditmemo">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\History">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\Invoice">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\PrintAction">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\PrintCreditmemo">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\PrintInvoice">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\PrintShipment">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\Reorder">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\Shipment">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Sales\Controller\Order\View">
-        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+        <plugin name="authentication" type="Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
     <type name="Magento\Framework\App\Rss\RssManagerInterface">
         <arguments>
