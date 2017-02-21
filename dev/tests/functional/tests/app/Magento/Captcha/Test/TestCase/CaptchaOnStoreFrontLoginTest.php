@@ -11,7 +11,8 @@ use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnStorefront;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Page\CustomerAccountLogin;
+use Magento\Captcha\Test\Page\CustomerAccountLogin;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Check CAPTCHA on Storefront Login Page.
@@ -57,6 +58,13 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
     private $customerAccountLogin;
 
     /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
      * Configuration setting.
      *
      * @var string
@@ -70,18 +78,21 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
      * @param TestStepFactory $stepFactory
      * @param AssertCaptchaFieldOnStorefront $assertCaptcha
      * @param CustomerAccountLogin $customerAccountLogin
+     * @param FixtureFactory $fixtureFactory
      * @return void
      */
     public function __inject(
         CmsIndex $cmsIndex,
         TestStepFactory $stepFactory,
         AssertCaptchaFieldOnStorefront $assertCaptcha,
-        CustomerAccountLogin $customerAccountLogin
+        CustomerAccountLogin $customerAccountLogin,
+        FixtureFactory $fixtureFactory
     ) {
         $this->stepFactory = $stepFactory;
         $this->assertCaptcha = $assertCaptcha;
         $this->cmsIndex = $cmsIndex;
         $this->customerAccountLogin = $customerAccountLogin;
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
@@ -89,11 +100,13 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
      *
      * @param Customer $customer
      * @param null|string $configData
+     * @param string $captcha
      * @return void
      */
     public function test(
         Customer $customer,
-        $configData
+        $configData,
+        $captcha
     ) {
         $this->configData = $configData;
 
@@ -103,6 +116,14 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
             ['configData' => $this->configData]
         )->run();
         $customer->persist();
+
+        $customerData = $customer->getData();
+        $customerData['group_id'] = [
+            'customerGroup' => $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()
+        ];
+        $customerData['captcha'] = $captcha;
+
+        $customer = $this->fixtureFactory->createByCode('customer', ['data' => $customerData]);
 
         $this->cmsIndex->open();
         $this->cmsIndex->getLinksBlock()->openLink('Sign In');

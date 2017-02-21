@@ -6,7 +6,7 @@
 
 namespace Magento\Captcha\Test\Constraint;
 
-use Magento\Customer\Test\Page\CustomerAccountLogin;
+use Magento\Captcha\Test\Page\CustomerAccountLogin;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
