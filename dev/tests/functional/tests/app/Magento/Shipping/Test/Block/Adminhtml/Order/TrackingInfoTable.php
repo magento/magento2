@@ -29,13 +29,6 @@ class TrackingInfoTable extends Block
     private $addButton = '[data-ui-id="shipment-tracking-save-button"]';
 
     /**
-     * Selector for tracking number popup link.
-     *
-     * @var string
-     */
-    private $popup = './/tbody/tr[not(contains(@class,"no-display"))]/td/a[contains(normalize-space(.), "%s")]';
-
-    /**
      * Creates tracking number.
      *
      * @param array $data
@@ -46,17 +39,6 @@ class TrackingInfoTable extends Block
         $trackingItemBlock->fillRow($data);
 
         $this->_rootElement->find($this->addButton)->click();
-    }
-
-    /**
-     * Opens a popup with tracking number details.
-     *
-     * @param string $trackingNumber
-     */
-    public function openPopup($trackingNumber)
-    {
-        $popupLink = $this->_rootElement->find(sprintf($this->popup, $trackingNumber), Locator::SELECTOR_XPATH);
-        $popupLink->click();
     }
 
     /**

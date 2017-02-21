@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Fedex\Test\TestCase\TrackingShipmentForPlacedOrderTest" summary="Create shipment for order with FedEx shipping method.">
-        <variation name="TrackingShipmentForPlacedOrderTestVariation1" summary="Creating shipment for order placed within FedEx." ticketId="MAGETWO-58158">
+    <testCase name="Magento\Shipping\Test\TestCase\TrackingShipmentForPlacedOrderTest" summary="Create shipment for order with FedEx shipping method.">
+        <variation name="TrackingFedExShipmentForPlacedOrderTestVariation1" summary="Creating shipment for order placed within FedEx." ticketId="MAGETWO-58158">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>

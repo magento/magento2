@@ -7,8 +7,10 @@ namespace Magento\Shipping\Test\Constraint;
 
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Shipping\Test\Page\Adminhtml\SalesShipmentView;
-use Magento\Shipping\Test\Page\Adminhtml\ShipmentIndex;
+use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info;
+use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Class contains asserts for tracking number popup window.
@@ -26,25 +28,31 @@ class AssertTrackingDetailsIsPresent extends AbstractConstraint
      * Processes the assertions for tracking number data in the popup window.
      *
      * @param BrowserInterface $browser
-     * @param ShipmentIndex $shipmentIndex
-     * @param SalesShipmentView $salesShipmentView
-     * @param $shipmentIds
+     * @param OrderInjectable $order
+     * @param OrderIndex $orderIndex
+     * @param SalesOrderView $salesOrderView
      * @param $resultTrackingData
      */
     public function processAssert(
         BrowserInterface $browser,
-        ShipmentIndex $shipmentIndex,
-        SalesShipmentView $salesShipmentView,
-        $shipmentIds,
+        OrderInjectable $order,
+        OrderIndex $orderIndex,
+        SalesOrderView $salesOrderView,
         $resultTrackingData
     ) {
-        $shipmentIndex->open();
-        $shipmentIndex->getShipmentsGrid()
-            ->searchAndOpen(['id' => array_pop($shipmentIds)]);
+        $orderIndex->open();
+        $orderIndex->getSalesOrderGrid()
+            ->searchAndOpen(['id' => $order->getId()]);
+
+        /** @var Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()
+            ->openTab('info')
+            ->getTab('info');
 
         $mainWindow = $browser->getCurrentWindow();
-        $trackingInfoTable = $salesShipmentView->getTrackingInfoBlock();
-        $trackingInfoTable->openPopup($resultTrackingData['number']);
+        $shippingInfoBlock = $infoTab->getShippingInfoBlock();
+        $shippingInfoBlock->openTrackingPopup();
+
         $browser->selectWindow();
 
         $selector = '.close';
