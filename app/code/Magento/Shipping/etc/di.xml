@@ -8,5 +8,5 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Quote\Model\Quote\Address\RateCollectorInterface" type="Magento\Shipping\Model\Shipping" />
     <preference for="Magento\Shipping\Model\CarrierFactoryInterface" type="Magento\Shipping\Model\CarrierFactory" />
-    <preference for="Magento\Shipping\Model\Carrier\Source\GenericInterface" type="\Magento\Shipping\Model\Carrier\Source\GenericDefault" />
+    <preference for="Magento\Shipping\Model\Carrier\Source\GenericInterface" type="Magento\Shipping\Model\Carrier\Source\GenericDefault" />
 </config>

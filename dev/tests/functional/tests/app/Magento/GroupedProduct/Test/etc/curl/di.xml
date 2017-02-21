@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\GroupedProduct\Test\Handler\GroupedProduct\GroupedProductInterface" type="\Magento\GroupedProduct\Test\Handler\GroupedProduct\Curl" />
+    <preference for="Magento\GroupedProduct\Test\Handler\GroupedProduct\GroupedProductInterface" type="Magento\GroupedProduct\Test\Handler\GroupedProduct\Curl" />
 </config>
