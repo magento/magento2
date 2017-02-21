@@ -28,23 +28,34 @@ class UpdateCommand implements CommandInterface
      * @var AnalyticsToken
      */
     private $analyticsToken;
+
     /**
      * @var Http\ClientInterface
      */
     private $httpClient;
+
     /**
      * @var Config
      */
     private $config;
+
     /**
      * @var LoggerInterface
      */
     private $logger;
+
     /**
      * @var FlagManager
      */
     private $flagManager;
 
+    /**
+     * @param AnalyticsToken $analyticsToken
+     * @param Http\ClientInterface $httpClient
+     * @param Config $config
+     * @param LoggerInterface $logger
+     * @param FlagManager $flagManager
+     */
     public function __construct(
         AnalyticsToken $analyticsToken,
         Http\ClientInterface $httpClient,
@@ -75,18 +86,20 @@ class UpdateCommand implements CommandInterface
                     ['Content-Type: application/json']
                 );
 
-                if (!$response->getStatus() === 200) {
-                    $this->logger->warning(
-                        sprintf(
-                            'Subscription update for MBI service has been failed: %s',
-                            !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
-                        )
-                    );
+                if ($response) {
+                    $result = $response->getStatus() === 200;
+                    if (!$result) {
+                        $this->logger->warning(
+                            sprintf(
+                                'Subscription update for MBI service has been failed: %s',
+                                !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
+                            )
+                        );
+                    }
                 }
-                $result = true;
             }
         } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical($e);
         }
 
         return $result;
