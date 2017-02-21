@@ -15,9 +15,9 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 class AssertSignifydGuaranteeCancelInCommentsHistory extends AbstractConstraint
 {
     /**
-     * Pattern of message about canceled amount in order.
+     * Signifyd case guarantee cancel message in order view.
      */
-    private $guaranteeCancelPattern = 'Case Update: Case guarantee has been cancelled.';
+    private $guaranteeCancelMessage = 'Case Update: Case guarantee has been cancelled.';
 
     /**
      * @param SalesOrderView $salesOrderView
@@ -39,9 +39,10 @@ class AssertSignifydGuaranteeCancelInCommentsHistory extends AbstractConstraint
         $commentsMessages = array_column($orderComments, 'comment');
 
         \PHPUnit_Framework_Assert::assertContains(
-            $this->guaranteeCancelPattern,
+            $this->guaranteeCancelMessage,
             implode('. ', $commentsMessages),
-            'Signifyd guarantee cancel incorrect for the order #' . $orderId
+            'There is no message regarding Signifyd guarantee cancel in Comments History section for the order #'
+            . $orderId
         );
     }
 

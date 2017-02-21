@@ -14,44 +14,43 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertCaseInfoOnBackend extends AbstractConstraint
 {
     /**
+     * Customized order view page.
+     *
      * @var OrderView
      */
     private $orderView;
 
     /**
+     * Order id.
+     *
      * @var string
      */
     private $orderId;
 
     /**
-     * @var string
+     * Array of Signifyd config data.
+     *
+     * @var array
      */
-    private static $caseStatus = 'Open';
-
-    /**
-     * @var string
-     */
-    private static $guaranteeDisposition = 'Approved';
-
-    /**
-     * @var string
-     */
-    private static $reviewDisposition = 'Good';
+    private $signifydData;
 
     /**
      * Assert that Signifyd Case information is correct on backend.
      *
      * @param OrderView $orderView
      * @param string $orderId
+     * @param array $signifydData
      * @return void
      */
     public function processAssert(
         OrderView $orderView,
-        $orderId
+        $orderId,
+        $signifydData
     ) {
         $this->orderView = $orderView;
         $this->orderView->open(['order_id' => $orderId]);
         $this->orderId = $orderId;
+        $this->signifydData = $signifydData;
 
         $this->checkCaseStatus();
         $this->checkCaseGuaranteeDisposition();
@@ -59,42 +58,42 @@ class AssertCaseInfoOnBackend extends AbstractConstraint
     }
 
     /**
-     * Checks case status match
+     * Checks that case status matches.
      *
      * @return void
      */
     private function checkCaseStatus()
     {
         \PHPUnit_Framework_Assert::assertEquals(
-            self::$caseStatus,
+            $this->signifydData['caseStatus'],
             $this->orderView->getFraudProtectionBlock()->getCaseStatus(),
             'Case status is wrong for order #' . $this->orderId
         );
     }
 
     /**
-     * Checks case guarantee disposition match
+     * Checks that case guarantee disposition matches.
      *
      * @return void
      */
     private function checkCaseGuaranteeDisposition()
     {
         \PHPUnit_Framework_Assert::assertEquals(
-            self::$guaranteeDisposition,
+            $this->signifydData['guaranteeDisposition'],
             $this->orderView->getFraudProtectionBlock()->getCaseGuaranteeDisposition(),
             'Case Guarantee Disposition status is wrong for order #' . $this->orderId
         );
     }
 
     /**
-     * Checks case review disposition match
+     * Checks that case review disposition matches.
      *
      * @return void
      */
     private function checkCaseReviewDisposition()
     {
         \PHPUnit_Framework_Assert::assertEquals(
-            self::$reviewDisposition,
+            $this->signifydData['reviewDisposition'],
             $this->orderView->getFraudProtectionBlock()->getCaseReviewDisposition(),
             'Case Review Disposition status is wrong for order #' . $this->orderId
         );

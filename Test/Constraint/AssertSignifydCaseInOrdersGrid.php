@@ -20,17 +20,19 @@ class AssertSignifydCaseInOrdersGrid extends AbstractConstraint
      * @param string $orderId
      * @param string $status
      * @param OrderView $orderView
+     * @param array $signifydData
      * @return void
      */
     public function processAssert(
         $orderId,
         $status,
-        OrderView $orderView
+        OrderView $orderView,
+        array $signifydData
     ) {
         $filter = [
             'id' => $orderId,
             'status' => $status,
-            'signifyd_guarantee_status' => 'Approved'
+            'signifyd_guarantee_status' => $signifydData['guaranteeDisposition']
         ];
 
         $errorMessage = implode(', ', $filter);
@@ -50,6 +52,6 @@ class AssertSignifydCaseInOrdersGrid extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Signifyd case is present in sales orders grid.';
+        return 'Signifyd guarantee status is displayed in sales orders grid.';
     }
 }

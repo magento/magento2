@@ -14,38 +14,46 @@ use Magento\Mtf\Client\Locator;
 class WebhookAdd extends Form
 {
     /**
+     * Css selector of webhook url input.
+     *
      * @var string
      */
-    private $webhookUrl = '#webhookUrl';
+    private $webhookUrl = '[id="webhookUrl"]';
 
     /**
+     * XPath selector of test team select option.
+     *
      * @var string
      */
-    private $webhookTestTeamOption = './/select[@id="webhookTeams"]//option[text()="test"]';
+    private $webhookTeamOption = './/select[@id="webhookTeams"]//option[text()="%s"]';
 
     /**
+     * Css selector of webhook event select option.
+     *
      * @var string
      */
-    private $webhookEventOption = './/select[@id="webhookEvent"]//option[@value="%s"]';
+    private $webhookEventOption = 'select[id="webhookEvent"] option[value="%s"]';
 
     /**
-     * @var string
-     */
-    private $webhookAddedElement = '//tr[./td/span/text()="%s" and ./td/span/text()="%s"]';
-
-    /**
-     * Add webhook button.
+     * Css selector of webhook addition button.
      *
      * @var string
      */
     private $webhookAddButton = '[type=submit]';
 
     /**
-     * List of option values of webhook event select.
+     * XPath selector of webhook element added into grid.
+     *
+     * @var string
+     */
+    private $webhookAddedElement = '//tr[./td/span/text()="%s" and ./td/span/text()="%s"]';
+
+    /**
+     * Map of webhook event select option values on names of events in webhook grid.
      *
      * @var array
      */
-    private $webhookEventOptionsList = [
+    private $webhookEventOptionsMap = [
         'CASE_CREATION' => 'Case Creation',
         'CASE_RESCORE' => 'Case Rescore',
         'CASE_REVIEW' => 'Case Review',
@@ -53,35 +61,49 @@ class WebhookAdd extends Form
         'CLAIM_REVIEWED' => 'Claim Review'
     ];
 
-    public function createWebhooks()
+    /**
+     * Creates new set of webhooks.
+     *
+     * @param array $signifydData
+     * @return void
+     */
+    public function createWebhooks($signifydData)
     {
-        foreach ($this->webhookEventOptionsList as $webhookEventCode => $webhookEventName) {
+        foreach ($this->webhookEventOptionsMap as $webhookEventCode => $webhookEventName) {
             $this->setEvent($webhookEventCode);
-            $this->setTeam();
+            $this->setTeam($signifydData['team']);
             $this->setWebhookUrl();
+
             $this->addWebhook($webhookEventName);
         }
     }
 
     /**
+     * Sets appropriate webhook event select option by code.
+     *
      * @param $webhookEventCode
      * @return void
      */
     private function setEvent($webhookEventCode)
     {
-        $this->_rootElement->find(sprintf($this->webhookEventOption, $webhookEventCode), Locator::SELECTOR_XPATH)
+        $this->_rootElement->find(sprintf($this->webhookEventOption, $webhookEventCode))
             ->click();
     }
 
     /**
+     * Sets test team select option.
+     *
+     * @param string $team
      * @return void
      */
-    private function setTeam()
+    private function setTeam($team)
     {
-        $this->_rootElement->find($this->webhookTestTeamOption, Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement->find(sprintf($this->webhookTeamOption, $team), Locator::SELECTOR_XPATH)->click();
     }
 
     /**
+     * Sets webhook handler url input value.
+     *
      * @return void
      */
     private function setWebhookUrl()
@@ -90,15 +112,18 @@ class WebhookAdd extends Form
     }
 
     /**
-     * @param $webhookEventName
+     * Add webhook element.
+     *
+     * Selenium needs to wait until webhook will be added to grid
+     * before proceed to next step.
+     *
+     * @param string $webhookEventName
      * @return void
      */
     private function addWebhook($webhookEventName)
     {
         $this->_rootElement->find($this->webhookAddButton)->click();
 
-        // We need to wait until webhook will be added to grid
-        // before proceed to next step
         $this->_rootElement->waitUntil(
             function () use ($webhookEventName) {
                 return $this->_rootElement->find(
@@ -110,6 +135,8 @@ class WebhookAdd extends Form
     }
 
     /**
+     * Gets webhook handler url.
+     *
      * @return string
      */
     private function getWebhookUrl()

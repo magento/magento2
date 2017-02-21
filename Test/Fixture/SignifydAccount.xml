@@ -6,11 +6,11 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-    <fixture name="signifyd_sandbox_merchant"
+    <fixture name="signifyd_account"
              module="Magento_Signifyd"
              type="virtual"
-             repository_class="Magento\Signifyd\Test\Repository\SandboxMerchant"
-             class="Magento\Signifyd\Test\Fixture\SandboxMerchant">
+             repository_class="Magento\Signifyd\Test\Repository\SignifydAccount"
+             class="Magento\Signifyd\Test\Fixture\SignifydAccount">
         <field name="email" />
         <field name="password" />
     </fixture>

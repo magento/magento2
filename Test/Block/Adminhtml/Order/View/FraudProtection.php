@@ -6,7 +6,6 @@
 namespace Magento\Signifyd\Test\Block\Adminhtml\Order\View;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Information about fraud protection on order page.
@@ -41,7 +40,7 @@ class FraudProtection extends Block
      */
     public function getCaseStatus()
     {
-        return $this->_rootElement->find($this->caseStatus, Locator::SELECTOR_CSS)->getText();
+        return $this->_rootElement->find($this->caseStatus)->getText();
     }
 
     /**
@@ -51,7 +50,7 @@ class FraudProtection extends Block
      */
     public function getCaseGuaranteeDisposition()
     {
-        return $this->_rootElement->find($this->caseGuaranteeDisposition, Locator::SELECTOR_CSS)->getText();
+        return $this->_rootElement->find($this->caseGuaranteeDisposition)->getText();
     }
 
     /**
@@ -61,6 +60,6 @@ class FraudProtection extends Block
      */
     public function getCaseReviewDisposition()
     {
-        return $this->_rootElement->find($this->caseReviewDisposition, Locator::SELECTOR_CSS)->getText();
+        return $this->_rootElement->find($this->caseReviewDisposition)->getText();
     }
 }

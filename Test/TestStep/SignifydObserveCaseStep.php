@@ -8,87 +8,88 @@ namespace Magento\Signifyd\Test\TestStep;
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Signifyd\Test\Constraint\AssertCaseInfo;
-use Magento\Signifyd\Test\Fixture\SandboxMerchant;
+use Magento\Signifyd\Test\Constraint\AssertCaseInfoOnSignifydConsole;
 use Magento\Signifyd\Test\Page\Sandbox\SignifydCases;
-use Magento\Signifyd\Test\Page\Sandbox\SignifydLogin;
 
 /**
- * Class SignifydObserveCaseStep
+ * Observe case information in Signifyd console step.
  */
 class SignifydObserveCaseStep implements TestStepInterface
 {
     /**
-     * Signifyd Sandbox merchant fixture.
+     * Signifyd cases page.
      *
-     * @var SandboxMerchant
-     */
-    private $sandboxMerchant;
-
-    /**
-     * @var SignifydLogin
-     */
-    private $signifydLogin;
-
-    /**
      * @var SignifydCases
      */
     private $signifydCases;
 
     /**
+     * Customer fixture.
+     *
      * @var Customer
      */
     private $customer;
 
     /**
+     * Billing address fixture.
+     *
      * @var Address
      */
     private $billingAddress;
 
     /**
+     * Prices list.
+     *
      * @var array
      */
     private $prices;
 
     /**
+     * Order id.
+     *
      * @var string
      */
     private $orderId;
 
     /**
-     * @var AssertCaseInfo
+     * Array of Signifyd config data.
+     *
+     * @var array
      */
-    private $assertCaseInfo;
+    private $signifydData;
 
     /**
-     * ObserveSignifydCaseStep constructor.
-     * @param SandboxMerchant $sandboxMerchant
-     * @param SignifydLogin $signifydLogin
+     * Case information on Signifyd console assertion.
+     *
+     * @var AssertCaseInfoOnSignifydConsole
+     */
+    private $assertCaseInfoOnSignifydConsole;
+
+    /**
      * @param SignifydCases $signifydCases
      * @param Customer $customer
      * @param Address $billingAddress
      * @param array $prices
      * @param string $orderId
-     * @param AssertCaseInfo $assertCaseInfo
+     * @param array $signifydData
+     * @param AssertCaseInfoOnSignifydConsole $assertCaseInfoOnSignifydConsole
      */
     public function __construct(
-        SandboxMerchant $sandboxMerchant,
-        SignifydLogin $signifydLogin,
         SignifydCases $signifydCases,
         Customer $customer,
         Address $billingAddress,
         array $prices,
         $orderId,
-        AssertCaseInfo $assertCaseInfo
+        array $signifydData,
+        AssertCaseInfoOnSignifydConsole $assertCaseInfoOnSignifydConsole
     ) {
-        $this->sandboxMerchant = $sandboxMerchant;
-        $this->signifydLogin = $signifydLogin;
         $this->signifydCases = $signifydCases;
         $this->customer = $customer;
         $this->billingAddress = $billingAddress;
         $this->prices = $prices;
         $this->orderId = $orderId;
-        $this->assertCaseInfo = $assertCaseInfo;
+        $this->assertCaseInfoOnSignifydConsole = $assertCaseInfoOnSignifydConsole;
+        $this->signifydData = $signifydData;
     }
 
     /**
@@ -98,24 +99,25 @@ class SignifydObserveCaseStep implements TestStepInterface
      */
     public function run()
     {
-        //Login in Signifyd sandbox provides on signifydSetWebhooksAddress step
         $this->signifydCases->open();
         $this->signifydCases->getCaseSearchBlock()
-            ->fillSearchCriteria($this->getCustomerFullName($this->customer));
-        $this->signifydCases->getCaseSearchBlock()->searchCase();
+            ->searchCaseByCustomerName($this->getCustomerFullName($this->customer));
         $this->signifydCases->getCaseSearchBlock()->selectCase();
-        $this->signifydCases->getCaseInfoBlock()->flagCaseGood();
+        $this->signifydCases->getCaseInfoBlock()->flagCaseAsGood();
 
-        $this->assertCaseInfo->processAssert(
+        $this->assertCaseInfoOnSignifydConsole->processAssert(
             $this->signifydCases,
             $this->billingAddress,
             $this->prices,
             $this->orderId,
-            $this->getCustomerFullName($this->customer)
+            $this->getCustomerFullName($this->customer),
+            $this->signifydData
         );
     }
 
     /**
+     * Gets customer full name.
+     *
      * @param Customer $customer
      * @return string
      */

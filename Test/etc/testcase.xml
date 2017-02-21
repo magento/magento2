@@ -6,11 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
-    <scenario name="OnePageCheckoutWithBraintreeTest" firstStep="setupConfiguration">
-        <step name="setupConfiguration" module="Magento_Config" next="signifydSetWebhooksAddress" />
-        <step name="signifydSetWebhooksAddress" module="Magento_Signifyd" next="createProducts" />
-        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
-        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
+    <scenario name="CreateSignifydGuaranteeAndCancelOrderTest" firstStep="signifydLogin">
+        <step name="signifydLogin" module="Magento_Signifyd" next="signifydSetWebhookHandlers" />
+        <step name="signifydSetWebhookHandlers" module="Magento_Signifyd" next="setupConfiguration" />
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
         <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckoutFromMiniShoppingCart" />
         <step name="proceedToCheckoutFromMiniShoppingCart" module="Magento_Checkout" next="createCustomer" />
         <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />

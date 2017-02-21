@@ -13,18 +13,18 @@ use Magento\Mtf\Block\Form;
 class SignifydLogin extends Form
 {
     /**
-     * Login button on Signifyd side.
+     * Css selector of Signifyd login button.
      *
      * @var string
      */
     private $loginButton = '[type=submit]';
 
     /**
-     * Login to Signifyd Sandbox.
+     * Login to Signifyd.
      *
      * @return void
      */
-    public function sandboxLogin()
+    public function login()
     {
         $this->_rootElement->find($this->loginButton)->click();
     }

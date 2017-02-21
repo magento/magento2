@@ -6,73 +6,96 @@
 namespace Magento\Signifyd\Test\Block\Sandbox;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 
 /**
- * Block with case information.
+ * Case information block.
  */
 class CaseInfo extends Block
 {
     /**
+     * Css selector of "Flag Case As Good" button.
+     *
      * @var string
      */
-    private $flagGoodButton = '.flag-case-good';
+    private $flagCaseAsGoodButton = '[class*="flag-case-good"]';
 
     /**
+     * Css selector of guarantee status.
+     *
      * @var string
      */
-    private $guaranteeDisposition = '.guarantee-status';
+    private $guaranteeDisposition = '[class*="guarantee-status"]';
 
     /**
+     * Css selector of CVV response description.
+     *
      * @var string
      */
-    private $cvvResponseDescription = '//span[contains(@ng-bind, "caseOrderSummary.cvvResponseDescription")]';
+    private $cvvResponseDescription = '[ng-bind="caseOrderSummary.cvvResponseDescription"]';
 
     /**
+     * Css selector of CVV response code.
+     *
      * @var string
      */
-    private $cvvResponseCode = '//span[contains(@ng-bind, "caseOrderSummary.cvvResponseCode")]';
+    private $cvvResponseCode = '[ng-bind="caseOrderSummary.cvvResponseCode"]';
 
     /**
+     * Css selector of AVS response description.
+     *
      * @var string
      */
-    private $avsResponseDescription = '//span[contains(@ng-bind, "caseOrderSummary.avsResponseDescription")]';
+    private $avsResponseDescription = '[ng-bind="caseOrderSummary.avsResponseDescription"]';
 
     /**
+     * Css selector of AVS response code.
+     *
      * @var string
      */
-    private $avsResponseCode = '//span[contains(@ng-bind, "caseOrderSummary.avsResponseCode")]';
+    private $avsResponseCode = '[ng-bind="caseOrderSummary.avsResponseCode"]';
 
     /**
+     * Css selector of displayed case order id.
+     *
      * @var string
      */
-    private $orderId = '//span[contains(@ng-bind, "currentCase.caseIdDisplay")]';
+    private $orderId = '[ng-bind="currentCase.caseIdDisplay"]';
 
     /**
+     * Css selector of displayed order amount.
+     *
      * @var string
      */
-    private $orderAmount = '//span[contains(@ng-bind, "currentCase.orderAmount")]';
+    private $orderAmount = '[ng-bind*="currentCase.orderAmount"]';
 
     /**
+     * Css selector of displayed card holder name.
+     *
      * @var string
      */
-    private $cardHolder = '//a[contains(@data-dropdown, "peopleLinks0")]//span';
+    private $cardHolder = '[data-dropdown="peopleLinks0"] span';
 
     /**
+     * Css selector of displayed billing address.
+     *
      * @var string
      */
-    private $billingAddress = '//a[contains(@data-dropdown, "streetLinks0")]';
+    private $billingAddress = '[data-dropdown="streetLinks0"]';
 
     /**
+     * Flags case as good.
+     *
      * @return void
      */
-    public function flagCaseGood()
+    public function flagCaseAsGood()
     {
-        $this->_rootElement->find($this->flagGoodButton)->click();
+        $this->_rootElement->find($this->flagCaseAsGoodButton)->click();
     }
 
     /**
-     * @return array|string
+     * Gets guarantee disposition.
+     *
+     * @return string
      */
     public function getGuaranteeDisposition()
     {
@@ -80,58 +103,70 @@ class CaseInfo extends Block
     }
 
     /**
+     * Gets CVV response.
+     *
      * @return string
      */
     public function getCvvResponse()
     {
         return sprintf(
             '%s (%s)',
-            $this->_rootElement->find($this->cvvResponseDescription, Locator::SELECTOR_XPATH)->getText(),
-            $this->_rootElement->find($this->cvvResponseCode, Locator::SELECTOR_XPATH)->getText()
+            $this->_rootElement->find($this->cvvResponseDescription)->getText(),
+            $this->_rootElement->find($this->cvvResponseCode)->getText()
         );
     }
 
     /**
+     * Gets AVS response.
+     *
      * @return string
      */
     public function getAvsResponse()
     {
         return sprintf(
             '%s (%s)',
-            $this->_rootElement->find($this->avsResponseDescription, Locator::SELECTOR_XPATH)->getText(),
-            $this->_rootElement->find($this->avsResponseCode, Locator::SELECTOR_XPATH)->getText()
+            $this->_rootElement->find($this->avsResponseDescription)->getText(),
+            $this->_rootElement->find($this->avsResponseCode)->getText()
         );
     }
 
     /**
-     * @return array|string
+     * Gets displayed order id.
+     *
+     * @return string
      */
     public function getOrderId()
     {
-        return $this->_rootElement->find($this->orderId, Locator::SELECTOR_XPATH)->getText();
+        return $this->_rootElement->find($this->orderId)->getText();
     }
 
     /**
-     * @return array|string
+     * Gets displayed order amount.
+     *
+     * @return string
      */
     public function getOrderAmount()
     {
-        return $this->_rootElement->find($this->orderAmount, Locator::SELECTOR_XPATH)->getText();
+        return $this->_rootElement->find($this->orderAmount)->getText();
     }
 
     /**
-     * @return array|string
+     * Gets displayed card holder name.
+     *
+     * @return string
      */
     public function getCardHolder()
     {
-        return $this->_rootElement->find($this->cardHolder, Locator::SELECTOR_XPATH)->getText();
+        return $this->_rootElement->find($this->cardHolder)->getText();
     }
 
     /**
-     * @return array|string
+     * Gets displayed billing address.
+     *
+     * @return string
      */
     public function getBillingAddress()
     {
-        return $this->_rootElement->find($this->billingAddress, Locator::SELECTOR_XPATH)->getText();
+        return $this->_rootElement->find($this->billingAddress)->getText();
     }
 }
