@@ -58,7 +58,8 @@ class FileReader
      *
      * @param string $fileKey The file key
      * @return array The configurations array
-     * @throws FileSystemException If file key is not correct
+     * @throws FileSystemException If file can not be read
+     * @throws \Exception If file key is not correct
      */
     public function load($fileKey)
     {
