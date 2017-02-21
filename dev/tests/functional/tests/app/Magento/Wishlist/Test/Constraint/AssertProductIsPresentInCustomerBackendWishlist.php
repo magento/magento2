@@ -36,7 +36,7 @@ class AssertProductIsPresentInCustomerBackendWishlist extends AbstractConstraint
         InjectableFixture $product = null,
         array $products = null
     ) {
-        if ($product && $product instanceof InjectableFixture) {
+        if ($product !== null) {
             $products = [$product];
         }
         $customerIndex->open();

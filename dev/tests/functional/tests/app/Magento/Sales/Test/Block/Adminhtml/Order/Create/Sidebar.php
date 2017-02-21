@@ -16,21 +16,21 @@ use Magento\Mtf\Fixture\InjectableFixture;
 class Sidebar extends Block
 {
     /**
-     * Locator for Wish List section in sidebar on Create Order page on backebnd.
+     * Locator for Wish List section in sidebar on Create Order page on backend.
      *
      * @var string
      */
-    protected $orderSidebarWishlist = '#order-sidebar_wishlist';
+    protected $orderSidebarWishList = '#order-sidebar_wishlist';
 
     /**
-     * Locator for cart section on sidebar on Create Order page on backebnd.
+     * Locator for cart section in sidebar on Create Order page on backend.
      *
      * @var string
      */
     protected $orderSidebarCart = '#order-sidebar_cart';
 
     /**
-     * No items in wishlist message locator.
+     * No items in Wish List message locator.
      *
      * @var string
      */
@@ -44,7 +44,7 @@ class Sidebar extends Block
     protected $updateChangesButton = '[data-ui-id="widget-button-0"]';
 
     /**
-     * Product names in Shopping Cart section of sidebar.
+     * Product names in Shopping Cart section in sidebar.
      *
      * @var string
      */
@@ -58,7 +58,7 @@ class Sidebar extends Block
     protected $cartSection = '//div[@id="sidebar_data_cart"]';
 
     /**
-     * Locator for item row in Shopping Cart section in Sidebar.
+     * Locator for item row in Shopping Cart section in sidebar.
      *
      * @var string
      */
@@ -72,15 +72,15 @@ class Sidebar extends Block
     protected $addToOrder = '//input[contains(@name,"[add_cart_item]")]';
 
     /**
-     * Get backend order sidebar wishlist block.
+     * Get backend order sidebar Wish List block.
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Wishlist
      */
-    public function getSidebarWishlistBlock()
+    public function getSidebarWishListBlock()
     {
         return $this->blockFactory->create(
-            \Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Wishlist::class,
-            ['element' => $this->_rootElement->find($this->orderSidebarWishlist, Locator::SELECTOR_CSS)]
+            \Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar\Wishlist::class,
+            ['element' => $this->_rootElement->find($this->orderSidebarWishList, Locator::SELECTOR_CSS)]
         );
     }
 
@@ -101,6 +101,7 @@ class Sidebar extends Block
      */
     public function getCartItemsNames()
     {
+        $itemNames = [];
         $items = $this->_rootElement->getElements($this->productNames, Locator::SELECTOR_XPATH);
         foreach ($items as $item) {
             $itemNames[] = $item->getText();

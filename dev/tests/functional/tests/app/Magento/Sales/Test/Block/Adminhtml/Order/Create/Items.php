@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\Create;
 use Magento\Backend\Test\Block\Template;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Adminhtml sales order create items block.
@@ -34,7 +35,7 @@ class Items extends Block
      *
      * @var string
      */
-    protected $noItemsOrderedMessage = '.empty-text';
+    protected $emptyTextMessage = '.empty-text';
 
     /**
      * Item product.
@@ -97,7 +98,7 @@ class Items extends Block
      */
     public function getNoItemsOrderedMessage()
     {
-        return $this->_rootElement->find($this->noItemsOrderedMessage, Locator::SELECTOR_CSS)->getText();
+        return $this->_rootElement->find($this->emptyTextMessage, Locator::SELECTOR_CSS)->getText();
     }
 
     /**
@@ -107,6 +108,7 @@ class Items extends Block
      */
     public function getItemsNames()
     {
+        $itemNames = [];
         $this->getTemplateBlock()->waitLoader();
         $items = $this->_rootElement->getElements($this->productNames, Locator::SELECTOR_XPATH);
         foreach ($items as $item) {
@@ -119,11 +121,11 @@ class Items extends Block
     /**
      * Select action for item added to order.
      *
-     * @param Fixture $product
+     * @param InjectableFixture $product
      * @param string $action
      * @return void
      */
-    public function selectItemAction($product, $action)
+    public function selectItemAction(InjectableFixture $product, $action)
     {
         $this->_rootElement
             ->find(sprintf($this->actionSelect, $product->getName()), Locator::SELECTOR_XPATH, 'select')

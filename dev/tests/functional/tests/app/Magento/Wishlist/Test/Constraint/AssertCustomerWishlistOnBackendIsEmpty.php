@@ -24,15 +24,15 @@ class AssertCustomerWishlistOnBackendIsEmpty extends AbstractConstraint
     {
         $orderCreateIndex->open();
         $backendOrderSidebarBlock =  $orderCreateIndex->getBackendOrderSidebarBlock();
-        $backendOrderSidebarBlock->getSidebarWishlistBlock()->getWishlistItemsBlock()->noItemsInWishlistCheck();
+        $backendOrderSidebarBlock->getSidebarWishListBlock()->noItemsInWishListCheck();
         \PHPUnit_Framework_Assert::assertTrue(
-            $backendOrderSidebarBlock->getSidebarWishlistBlock()->getWishlistItemsBlock()->noItemsInWishlistCheck(),
+            $backendOrderSidebarBlock->getSidebarWishListBlock()->noItemsInWishListCheck(),
             "Assert that customer's Wish List section on Order Create backend page is not empty."
         );
     }
 
     /**
-     * Success assert that customer's Wish List section on Order Create backend page is empty.
+     * Assert success message that customer's Wish List section on Order Create backend page is empty.
      *
      * @return string
      */

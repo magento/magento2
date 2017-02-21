@@ -14,10 +14,24 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Wishlist items block on backend.
+ * Wish List items block on backend.
  */
-class WishListItems extends Sidebar
+class Wishlist extends Sidebar
 {
+    /**
+     * Wish list locator.
+     *
+     * @var string
+     */
+    protected $wishlist = '.sidebar-selector';
+
+    /**
+     * Wish list items locator.
+     *
+     * @var string
+     */
+    protected $wishlistItems = '#sidebar_data_wishlist';
+
     // @codingStandardsIgnoreStart
     /**
      * Locator for 'Add To Order' checkbox
@@ -79,6 +93,17 @@ class WishListItems extends Sidebar
     }
 
     /**
+     * Select wish list in Wish list dropdown.
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function selectWishlist($name)
+    {
+        $this->_rootElement->find($this->wishlist, Locator::SELECTOR_CSS, 'select')->setValue($name);
+    }
+
+    /**
      * Select item to add to order.
      *
      * @param InjectableFixture $product
@@ -122,7 +147,7 @@ class WishListItems extends Sidebar
      *
      * @return bool
      */
-    public function noItemsInWishlistCheck()
+    public function noItemsInWishListCheck()
     {
         return $this->_rootElement->find($this->noItemsMessage, Locator::SELECTOR_CSS)->isVisible() ? true : false;
     }

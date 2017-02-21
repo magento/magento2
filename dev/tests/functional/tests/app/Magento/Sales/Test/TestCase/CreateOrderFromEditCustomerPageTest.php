@@ -103,6 +103,13 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
     protected $orderCreateIndex;
 
     /**
+     * Order View Page.
+     *
+     * @var SalesOrderView
+     */
+    protected $salesOrderView;
+
+    /**
      * Assert that Items Ordered section on Create Order page on backend contains products.
      *
      * @var AssertItemsOrderedSectionContainsProducts
@@ -145,6 +152,24 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
     protected $assertCartSectionWithProductsOnBackendOrderPage;
 
     /**
+     * Prepare test data.
+     *
+     * @param AssertItemsOrderedSectionOnBackendOrderIsEmpty $assertItemsOrderedSectionOnBackendOrderIsEmpty
+     * @param AssertCartSectionWithProductsOnBackendOrderPage $assertCartSectionWithProductsOnBackendOrderPage
+     * @param AssertProductIsPresentInCustomerBackendWishlist $assertProductIsPresentInCustomerBackendWishlist
+     * @return void
+     */
+    public function __prepare(
+        AssertItemsOrderedSectionOnBackendOrderIsEmpty $assertItemsOrderedSectionOnBackendOrderIsEmpty,
+        AssertCartSectionWithProductsOnBackendOrderPage $assertCartSectionWithProductsOnBackendOrderPage,
+        AssertProductIsPresentInCustomerBackendWishlist $assertProductIsPresentInCustomerBackendWishlist
+    ) {
+        $this->assertItemsOrderedSectionOnBackendOrderIsEmpty = $assertItemsOrderedSectionOnBackendOrderIsEmpty;
+        $this->assertCartSectionWithProductsOnBackendOrderPage = $assertCartSectionWithProductsOnBackendOrderPage;
+        $this->assertProductIsPresentInCustomerBackendWishlist = $assertProductIsPresentInCustomerBackendWishlist;
+    }
+
+    /**
      * Inject pages.
      *
      * @param TestStepFactory $stepFactory
@@ -156,11 +181,7 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
      * @param AssertItemsOrderedSectionContainsProducts $assertItemsOrderedSectionContainsProducts
      * @param AssertCustomerWishlistOnBackendIsEmpty $assertCustomerWishlistOnBackendIsEmpty
      * @param AssertCartSectionIsEmptyOnBackendOrderPage $assertCartSectionIsEmptyOnBackendOrderPage
-     * @param AssertProductIsPresentInCustomerBackendWishlist $assertProductIsPresentInCustomerBackendWishlist
-     * @param AssertItemsOrderedSectionOnBackendOrderIsEmpty $assertItemsOrderedSectionOnBackendOrderIsEmpty
-     * @param AssertCartSectionWithProductsOnBackendOrderPage $assertCartSectionWithProductsOnBackendOrderPage
      * @return void
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __inject(
         TestStepFactory $stepFactory,
@@ -171,10 +192,7 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
         OrderCreateIndex $orderCreateIndex,
         AssertItemsOrderedSectionContainsProducts $assertItemsOrderedSectionContainsProducts,
         AssertCustomerWishlistOnBackendIsEmpty $assertCustomerWishlistOnBackendIsEmpty,
-        AssertCartSectionIsEmptyOnBackendOrderPage $assertCartSectionIsEmptyOnBackendOrderPage,
-        AssertProductIsPresentInCustomerBackendWishlist $assertProductIsPresentInCustomerBackendWishlist,
-        AssertItemsOrderedSectionOnBackendOrderIsEmpty $assertItemsOrderedSectionOnBackendOrderIsEmpty,
-        AssertCartSectionWithProductsOnBackendOrderPage $assertCartSectionWithProductsOnBackendOrderPage
+        AssertCartSectionIsEmptyOnBackendOrderPage $assertCartSectionIsEmptyOnBackendOrderPage
     ) {
         $this->stepFactory = $stepFactory;
         $this->customerIndex = $customerIndex;
@@ -185,9 +203,6 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
         $this->assertItemsOrderedSectionContainsProducts = $assertItemsOrderedSectionContainsProducts;
         $this->assertCustomerWishlistOnBackendIsEmpty = $assertCustomerWishlistOnBackendIsEmpty;
         $this->assertCartSectionIsEmptyOnBackendOrderPage = $assertCartSectionIsEmptyOnBackendOrderPage;
-        $this->assertProductIsPresentInCustomerBackendWishlist = $assertProductIsPresentInCustomerBackendWishlist;
-        $this->assertItemsOrderedSectionOnBackendOrderIsEmpty = $assertItemsOrderedSectionOnBackendOrderIsEmpty;
-        $this->assertCartSectionWithProductsOnBackendOrderPage = $assertCartSectionWithProductsOnBackendOrderPage;
     }
 
     /**
@@ -199,7 +214,7 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
      * @param string|null $configData
      * @param array|null $shipping
      * @param array|null $products
-     * @return void
+     * @return array
      */
     public function test(
         Customer $customer,
@@ -228,26 +243,19 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
         if ($this->orderCreateIndex->getStoreBlock()->isVisible()) {
             $this->orderCreateIndex->getStoreBlock()->selectStoreView($this->store);
         }
+        $this->stepFactory->create(
+            \Magento\Sales\Test\TestStep\AddProductsStep::class,
+            ['products' => $products]
+        )->run();
         $createBlock = $this->orderCreateIndex->getCreateBlock();
-        $createBlock->getItemsBlock()->clickAddProducts();
-        foreach ($products as $product) {
-            $createBlock->getGridBlock()->searchAndSelect(['sku' => $product->getSku()]);
-            $createBlock->getTemplateBlock()->waitLoader();
-            if ($this->orderCreateIndex->getConfigureProductBlock()->isVisible()) {
-                $this->orderCreateIndex->getConfigureProductBlock()->configProduct($product);
-            }
-        }
-        $createBlock->addSelectedProductsToOrder();
-        $createBlock->getTemplateBlock()->waitLoader();
         $this->assertItemsOrderedSectionContainsProducts->processAssert($this->orderCreateIndex, $products);
         $this->assertCustomerWishlistOnBackendIsEmpty->processAssert($this->orderCreateIndex);
         $this->assertCartSectionIsEmptyOnBackendOrderPage->processAssert($this->orderCreateIndex);
-
         foreach ([$products[0], $products[2]] as $product) {
             $createBlock->getItemsBlock()->selectItemAction($product, 'Move to Wish List');
         }
 
-        $this->orderCreateIndex->getCreateBlock()->updateItems();
+        $createBlock->updateItems();
         $this->assertItemsOrderedSectionContainsProducts->processAssert($this->orderCreateIndex, [$products[1]]);
         $this->assertProductIsPresentInCustomerBackendWishlist
             ->processAssert(
@@ -259,10 +267,9 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
             );
         $this->assertCartSectionIsEmptyOnBackendOrderPage->processAssert($this->orderCreateIndex);
         $this->orderCreateIndex->getBackendOrderSidebarBlock()
-            ->getSidebarWishlistBlock()->getWishlistItemsBlock()->selectItemToAddToOrder($products[0], 1);
+            ->getSidebarWishListBlock()->selectItemToAddToOrder($products[0], 1);
         $this->orderCreateIndex
-            ->getBackendOrderSidebarBlock()->getSidebarWishlistBlock()
-            ->getWishlistItemsBlock()->selectItemToAddToOrder($products[2], 1);
+            ->getBackendOrderSidebarBlock()->getSidebarWishListBlock()->selectItemToAddToOrder($products[2], 1);
         $this->orderCreateIndex->getBackendOrderSidebarBlock()->updateChangesClick();
         $createBlock->waitOrderItemsGrid();
         $this->assertItemsOrderedSectionContainsProducts->processAssert($this->orderCreateIndex, $products);
@@ -278,7 +285,7 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
         foreach ($products as $product) {
             $createBlock->getItemsBlock()->selectItemAction($product, 'Move to Shopping Cart');
         }
-        $this->orderCreateIndex->getCreateBlock()->updateItems();
+        $createBlock->updateItems();
         $this->assertItemsOrderedSectionOnBackendOrderIsEmpty->processAssert($this->orderCreateIndex);
         $this->assertProductIsPresentInCustomerBackendWishlist
             ->processAssert(
@@ -323,7 +330,7 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
             \Magento\Sales\Test\TestStep\SelectShippingMethodForOrderStep::class,
             ['shipping' => $shipping]
         )->run();
-        $this->orderCreateIndex->getCreateBlock()->submitOrder();
+        $createBlock->submitOrder();
         $orderId = trim($this->salesOrderView->getTitleBlock()->getTitle(), '#');
         return [
             'orderId' => $orderId,
