@@ -76,6 +76,11 @@ abstract class AbstractAction
     private $productResource;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource
+     */
+    private $indexerFrontendResource;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -84,6 +89,7 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $indexerFrontendResource
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
@@ -93,7 +99,8 @@ abstract class AbstractAction
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
+        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null
     ) {
         $this->_config = $config;
         $this->_storeManager = $storeManager;
@@ -104,6 +111,10 @@ abstract class AbstractAction
         $this->_indexerPriceFactory = $indexerPriceFactory;
         $this->_defaultIndexerResource = $defaultIndexerResource;
         $this->_connection = $this->_defaultIndexerResource->getConnection();
+        $this->indexerFrontendResource = $indexerFrontendResource ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(
+                \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
+            );
     }
 
     /**
@@ -124,7 +135,7 @@ abstract class AbstractAction
     {
         // delete invalid rows
         $select = $this->_connection->select()->from(
-            ['index_price' => $this->_defaultIndexerResource->getTable('catalog_product_index_price')],
+            ['index_price' => $this->indexerFrontendResource->getMainTable()],
             null
         )->joinLeft(
             ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()],
@@ -141,7 +152,7 @@ abstract class AbstractAction
 
         $this->_insertFromTable(
             $this->_defaultIndexerResource->getIdxTable(),
-            $this->_defaultIndexerResource->getTable('catalog_product_index_price')
+            $this->indexerFrontendResource->getMainTable()
         );
         return $this;
     }
@@ -460,7 +471,7 @@ abstract class AbstractAction
 
         if ($children) {
             $select = $this->_connection->select()->from(
-                $this->_defaultIndexerResource->getTable('catalog_product_index_price')
+                $this->indexerFrontendResource->getMainTable()
             )->where(
                 'entity_id IN(?)',
                 $children

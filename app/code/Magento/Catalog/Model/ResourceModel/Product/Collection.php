@@ -262,6 +262,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $metadataPool;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource
+     */
+    private $indexerFrontendResource;
+
+    /**
      * Collection constructor
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -286,6 +291,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param ProductLimitationFactory|null $productLimitationFactory
      * @param MetadataPool|null $metadataPool
+     * @param null|\Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource $indexerFrontendResource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -311,7 +317,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         GroupManagementInterface $groupManagement,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null
+        MetadataPool $metadataPool = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -328,6 +335,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         );
         $this->_productLimitationFilters = $productLimitationFactory->create();
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
+        $this->indexerFrontendResource = $indexerFrontendResource ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class);
         parent::__construct(
             $entityFactory,
             $logger,
@@ -1917,7 +1926,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'max_price',
                 'tier_price',
             ];
-            $tableName = ['price_index' => $this->getTable('catalog_product_index_price')];
+            $tableName = ['price_index' => $this->indexerFrontendResource->getMainTable()];
             if ($joinLeft) {
                 $select->joinLeft($tableName, $joinCond, $colls);
             } else {

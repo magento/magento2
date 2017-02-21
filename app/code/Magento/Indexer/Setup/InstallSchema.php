@@ -65,6 +65,14 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false],
                 'Hash of indexer config'
             )
+            ->addColumn(
+                'table_suffix',
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                255,
+                ['nullable' => false],
+                ['default' => ''],
+                'Suffix for indexer table used in the read operations'
+            )
             ->addIndex(
                 $installer->getIdxName('indexer_state', ['indexer_id']),
                 ['indexer_id']

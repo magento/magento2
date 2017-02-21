@@ -132,6 +132,7 @@
         <arguments>
             <argument name="catalogUrl" xsi:type="object">Magento\Catalog\Model\ResourceModel\Url\Proxy</argument>
             <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Entity\Product\Attribute\Design\Options\Container">
@@ -226,6 +227,7 @@
     <type name="Magento\Catalog\Model\Indexer\Product\Price\AbstractAction">
         <arguments>
             <argument name="defaultPriceIndexer" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice</argument>
+            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
         </arguments>
     </type>
     <type name="Magento\Eav\Model\Entity\Attribute\Set">
@@ -871,6 +873,7 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice">
         <arguments>
             <argument name="baseSelectProcessor" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor</argument>
+            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Price\CostStorage">
@@ -913,6 +916,18 @@
             <argument name="memoryTablesMinRows" xsi:type="array">
                 <item name="default" xsi:type="number">200</item>
             </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource" type="Magento\Indexer\Model\ResourceModel\FrontendResource">
+        <arguments>
+            <argument name="indexerId" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID</argument>
+            <argument name="indexerBaseTable" xsi:type="string">catalog_product_index_price</argument>
+            <argument name="idFieldName" xsi:type="string">entity_id</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\ResourceModel\Layer\Filter\Price">
+        <arguments>
+            <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
         </arguments>
     </type>
 </config>
