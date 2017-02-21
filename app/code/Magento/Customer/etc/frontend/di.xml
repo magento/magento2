@@ -55,6 +55,6 @@
         <plugin name="customer_account" type="Magento\Customer\Controller\Plugin\Account" />
     </type>
     <type name="Magento\Checkout\Block\Cart\Sidebar">
-        <plugin name="customer_cart" type="\Magento\Customer\Model\Cart\ConfigPlugin" />
+        <plugin name="customer_cart" type="Magento\Customer\Model\Cart\ConfigPlugin" />
     </type>
 </config>
