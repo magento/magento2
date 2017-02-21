@@ -87,7 +87,7 @@ class UpdateCommand implements CommandInterface
                 );
 
                 if ($response) {
-                    $result = $response->getStatus() === 200;
+                    $result = $response->getStatus() === 201;
                     if (!$result) {
                         $this->logger->warning(
                             sprintf(
