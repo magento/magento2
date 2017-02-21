@@ -147,7 +147,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="\Magento\SalesRule\Model\Rule\Customer">
+    <type name="Magento\SalesRule\Model\Rule\Customer">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="form_name" xsi:type="string">sales_rule_form</item>

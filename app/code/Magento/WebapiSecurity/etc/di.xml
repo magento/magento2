@@ -9,7 +9,7 @@
     <type name="Magento\Webapi\Model\Config\Converter">
         <plugin name="webapiResourceSecurity" type="Magento\WebapiSecurity\Model\Plugin\AnonymousResourceSecurity" />
     </type>
-    <type name="\Magento\Framework\App\Config\Value">
+    <type name="Magento\Framework\App\Config\Value">
         <plugin name="webapiResourceSecurityCacheInvalidate" type="Magento\WebapiSecurity\Model\Plugin\CacheInvalidator" />
     </type>
 
