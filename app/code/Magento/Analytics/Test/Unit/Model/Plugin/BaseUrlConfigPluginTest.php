@@ -3,12 +3,12 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Test\Unit\Model\Plugin\BaseUrlConfigPlugin;
+namespace Magento\Analytics\Test\Unit\Model\Plugin;
 
 use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
 use Magento\Analytics\Model\SubscriptionStatusProvider;
-use Magento\Framework\App\Config\Value;
+use Magento\Config\Model\Config\Backend\Baseurl;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -23,7 +23,7 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
     private $flagManagerMock;
 
     /**
-     * @var Value | \PHPUnit_Framework_MockObject_MockObject
+     * @var BaseUrl | \PHPUnit_Framework_MockObject_MockObject
      */
     private $configValueMock;
 
@@ -55,7 +55,7 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
         $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configValueMock = $this->getMockBuilder(Value::class)
+        $this->configValueMock = $this->getMockBuilder(Baseurl::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->subscriptionStatusProvider = $this->getMockBuilder(SubscriptionStatusProvider::class)

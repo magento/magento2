@@ -27,6 +27,19 @@ class BaseUrlConfigPlugin
     private $subscriptionStatusProvider;
 
     /**
+     * @var WriterInterface
+     */
+    private $configWriter;
+
+    /**
+     * Cron expression by next pattern:
+     * # Minute # Hour # Day of the Month # Month of the Year # Day of the Week.
+     *
+     * @var string
+     */
+    private $cronExpression = '0 * * * *';
+
+    /**
      * Config path for schedule setting of subscription handler.
      */
     const UPDATE_CRON_STRING_PATH = "crontab/default/jobs/analytics_update/schedule/cron_expr";
@@ -35,10 +48,6 @@ class BaseUrlConfigPlugin
      * Represents a flag code for analytics old base url.
      */
     const OLD_BASE_URL_FLAG_CODE = 'analytics_old_base_url';
-    /**
-     * @var WriterInterface
-     */
-    private $configWriter;
 
     /**
      * @param FlagManager $flagManager
@@ -56,46 +65,24 @@ class BaseUrlConfigPlugin
     }
 
     /**
-     * Invalidate WebApi cache if needed.
+     * Sets update analytics cron job if base url was changed.
      *
-     * @param \Magento\Framework\App\Config\Value $subject
-     * @param \Magento\Framework\App\Config\Value $result
-     * @return \Magento\Framework\App\Config\Value
+     * @param \Magento\Config\Model\Config\Backend\Baseurl $subject
+     * @param \Magento\Config\Model\Config\Backend\Baseurl $result
+     * @return \Magento\Config\Model\Config\Backend\Baseurl
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterAfterSave(
-        \Magento\Framework\App\Config\Value $subject,
-        \Magento\Framework\App\Config\Value $result
+        \Magento\Config\Model\Config\Backend\Baseurl $subject,
+        \Magento\Config\Model\Config\Backend\Baseurl $result
     ) {
         if ($result->isValueChanged()
             && $this->subscriptionStatusProvider->getStatus() === SubscriptionStatusProvider::ENABLED
         ) {
             $this->flagManager->saveFlag(static::OLD_BASE_URL_FLAG_CODE, $result->getOldValue());
-            $this->setCronSchedule();
+            $this->configWriter->save(self::UPDATE_CRON_STRING_PATH, $this->cronExpression);
         }
 
         return $result;
-    }
-
-    /**
-     * Set cron schedule setting into config for activation of update process.
-     *
-     * @return bool
-     */
-    private function setCronSchedule()
-    {
-        $cronExprArray = [
-            '0',                    # Minute
-            '*',                    # Hour
-            '*',                    # Day of the Month
-            '*',                    # Month of the Year
-            '*',                    # Day of the Week
-        ];
-
-        $cronExprString = join(' ', $cronExprArray);
-
-        $this->configWriter->save(self::UPDATE_CRON_STRING_PATH, $cronExprString);
-
-        return true;
     }
 }

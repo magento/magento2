@@ -60,16 +60,50 @@ class SubscriptionStatusProvider
      */
     public function getStatus()
     {
-        $status = static::DISABLED;
+        $checkboxState = $this->systemConfig->get('default/analytics/subscription/enabled');
+        return $this->resolveStatus($checkboxState);
+    }
 
-        if ($this->systemConfig->get('default/analytics/subscription/enabled')) {
+    /**
+     * Resolves subscription status depending on
+     * subscription config value (enabled, disabled).
+     *
+     * @param bool $isSubscriptionEnabled
+     *
+     * @return string
+     */
+    private function resolveStatus($isSubscriptionEnabled)
+    {
+        if (!$isSubscriptionEnabled) {
+            return static::DISABLED;
+        }
+
+        $status = static::PENDING;
+
+        if ($this->analyticsToken->isTokenExist()) {
             $status = static::ENABLED;
-
-            if (!$this->analyticsToken->isTokenExist()) {
-                $status = static::PENDING;
-            }
         }
 
         return $status;
+    }
+
+    /**
+     * Retrieve status for subscription that enabled in config.
+     *
+     * @return string
+     */
+    public function getStatusForEnabledSubscription()
+    {
+        return $this->resolveStatus(true);
+    }
+
+    /**
+     * Retrieve status for subscription that disabled in config.
+     *
+     * @return string
+     */
+    public function getStatusForDisabledSubscription()
+    {
+        return $this->resolveStatus(false);
     }
 }
