@@ -76,7 +76,7 @@ class Sidebar extends Block
      *
      * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Wishlist
      */
-    public function getSidebarWishListBlock()
+    public function getSidebarWishlistBlock()
     {
         return $this->blockFactory->create(
             \Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar\Wishlist::class,

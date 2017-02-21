@@ -267,9 +267,9 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
             );
         $this->assertCartSectionIsEmptyOnBackendOrderPage->processAssert($this->orderCreateIndex);
         $this->orderCreateIndex->getBackendOrderSidebarBlock()
-            ->getSidebarWishListBlock()->selectItemToAddToOrder($products[0], 1);
+            ->getSidebarWishlistBlock()->selectItemToAddToOrder($products[0], 1);
         $this->orderCreateIndex
-            ->getBackendOrderSidebarBlock()->getSidebarWishListBlock()->selectItemToAddToOrder($products[2], 1);
+            ->getBackendOrderSidebarBlock()->getSidebarWishlistBlock()->selectItemToAddToOrder($products[2], 1);
         $this->orderCreateIndex->getBackendOrderSidebarBlock()->updateChangesClick();
         $createBlock->waitOrderItemsGrid();
         $this->assertItemsOrderedSectionContainsProducts->processAssert($this->orderCreateIndex, $products);

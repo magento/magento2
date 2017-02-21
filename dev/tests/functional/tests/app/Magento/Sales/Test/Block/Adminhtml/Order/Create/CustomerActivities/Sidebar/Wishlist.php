@@ -147,7 +147,7 @@ class Wishlist extends Sidebar
      *
      * @return bool
      */
-    public function noItemsInWishListCheck()
+    public function noItemsInWishlistCheck()
     {
         return $this->_rootElement->find($this->noItemsMessage, Locator::SELECTOR_CSS)->isVisible() ? true : false;
     }

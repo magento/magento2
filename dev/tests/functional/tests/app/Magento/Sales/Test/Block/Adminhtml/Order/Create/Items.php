@@ -96,7 +96,7 @@ class Items extends Block
      *
      * @return string
      */
-    public function getNoItemsOrderedMessage()
+    public function getEmptyTextMessage()
     {
         return $this->_rootElement->find($this->emptyTextMessage, Locator::SELECTOR_CSS)->getText();
     }
