@@ -111,6 +111,18 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
     }
 
     /**
+     * Get currency symbol from price block on the product page.
+     *
+     * @return string
+     */
+    public function getCurrencySymbol()
+    {
+        $price = $this->getPrice('');
+        preg_match('`(.*?)\d`', $price, $matches);
+        return $matches[1];
+    }
+
+    /**
      * Get price excluding tax.
      *
      * @param string $currency
