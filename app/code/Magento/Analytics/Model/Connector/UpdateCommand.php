@@ -22,7 +22,7 @@ class UpdateCommand implements CommandInterface
     /**
      * @var string
      */
-    private $updateUpUrlPath = 'analytics/url/update';
+    private $updateUrlPath = 'analytics/url/update';
 
     /**
      * @var AnalyticsToken
@@ -81,7 +81,7 @@ class UpdateCommand implements CommandInterface
             if ($this->analyticsToken->isTokenExist()) {
                 $response = $this->httpClient->request(
                     ZendClient::PUT,
-                    $this->config->getConfigDataValue($this->updateUpUrlPath),
+                    $this->config->getConfigDataValue($this->updateUrlPath),
                     $this->getRequestJson(),
                     ['Content-Type: application/json']
                 );
@@ -91,7 +91,7 @@ class UpdateCommand implements CommandInterface
                     if (!$result) {
                         $this->logger->warning(
                             sprintf(
-                                'Subscription update for MBI service has been failed: %s',
+                                'Update of the subscription for MBI service has been failed: %s',
                                 !empty($response->getBody()) ? $response->getBody() : 'Response body is empty.'
                             )
                         );

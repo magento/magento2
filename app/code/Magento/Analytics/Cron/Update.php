@@ -66,8 +66,8 @@ class Update
      */
     public function execute()
     {
-        $signUpResult = $this->connector->execute('update');
-        if ($signUpResult === false) {
+        $updateResult = $this->connector->execute('update');
+        if ($updateResult === false) {
             return false;
         }
         $this->configWriter->delete(BaseUrlConfigPlugin::UPDATE_CRON_STRING_PATH);
