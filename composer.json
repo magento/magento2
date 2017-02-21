@@ -10,6 +10,7 @@
         "magento/module-eav": "100.2.*",
         "magento/module-search": "100.2.*",
         "magento/module-store": "100.2.*",
+        "magento/module-indexer": "100.2.*",
         "magento/framework": "100.2.*",
         "elasticsearch/elasticsearch": "~2.0"
     },
