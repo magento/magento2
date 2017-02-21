@@ -14,6 +14,7 @@ use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
 
 /**
  * Class Update
+ * Executes by cron schedule in case base url was changed
  */
 class Update
 {
@@ -33,6 +34,7 @@ class Update
      * @var ReinitableConfigInterface
      */
     private $reinitableConfig;
+
     /**
      * @var FlagManager
      */
