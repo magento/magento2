@@ -105,7 +105,7 @@ class Payment extends Block
             $paymentRadioButton->click();
         }
 
-        if ($paymentMethod == "purchaseorder") {
+        if (isset($payment['po_number'])) {
             $this->_rootElement->find($this->purchaseOrderNumber)->setValue($payment['po_number']);
         }
         if ($creditCard !== null && $fillCreditCardOn3rdParty === false) {
@@ -156,5 +156,20 @@ class Payment extends Block
     {
         $this->_rootElement->find($this->placeOrder)->click();
         $this->waitForElementNotVisible($this->waitElement);
+    }
+
+    /**
+     * Retrieve list of payment methods.
+     *
+     * @return array
+     */
+    public function getPaymentMethods()
+    {
+        $paymentMethodsArray = [];
+        $paymentMethods = $this->_rootElement->getElements($this->paymentMethodLabels);
+        foreach ($paymentMethods as $paymentMethod) {
+            $paymentMethodsArray[] = $paymentMethod->getText();
+        }
+        return $paymentMethodsArray;
     }
 }
