@@ -137,4 +137,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\Action\Full">
+        <arguments>
+            <argument name="memoryTablesMinRows" xsi:type="array">
+                <item name="bundle" xsi:type="number">136</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

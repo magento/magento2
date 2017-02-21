@@ -13,36 +13,12 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class Grouped extends DefaultPrice implements GroupedInterface
 {
     /**
-     * Reindex temporary (price result data) for all products
-     *
-     * @throws \Exception
-     * @return \Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped
+     * {@inheritdoc}
+     * @param null|array $entityIds
      */
-    public function reindexAll()
-    {
-        $this->tableStrategy->setUseIdxTable(true);
-        $this->beginTransaction();
-        try {
-            $this->_prepareGroupedProductPriceData();
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollBack();
-            throw $e;
-        }
-        return $this;
-    }
-
-    /**
-     * Reindex temporary (price result data) for defined product(s)
-     *
-     * @param int|array $entityIds
-     * @return \Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped
-     */
-    public function reindexEntity($entityIds)
+    protected function reindex($entityIds = null)
     {
         $this->_prepareGroupedProductPriceData($entityIds);
-
-        return $this;
     }
 
     /**

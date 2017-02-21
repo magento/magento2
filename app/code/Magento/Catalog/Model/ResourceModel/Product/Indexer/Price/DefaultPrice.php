@@ -44,7 +44,12 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     protected $_eventManager = null;
 
     /**
-     * Class constructor
+     * @var bool|null
+     */
+    private $hasEntity = null;
+
+    /**
+     * DefaultPrice constructor.
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
@@ -677,16 +682,19 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      */
     protected function hasEntity()
     {
-        $reader = $this->getConnection();
+        if ($this->hasEntity === null) {
+            $reader = $this->getConnection();
 
-        $select = $reader->select()->from(
-            [$this->getTable('catalog_product_entity')],
-            ['count(entity_id)']
-        )->where(
-            'type_id=?',
-            $this->getTypeId()
-        );
+            $select = $reader->select()->from(
+                [$this->getTable('catalog_product_entity')],
+                ['count(entity_id)']
+            )->where(
+                'type_id=?',
+                $this->getTypeId()
+            );
+            $this->hasEntity = (int)$reader->fetchOne($select) > 0;
+        }
 
-        return (int)$reader->fetchOne($select) > 0;
+        return $this->hasEntity;
     }
 }

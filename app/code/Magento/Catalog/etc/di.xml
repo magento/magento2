@@ -62,6 +62,8 @@
     <preference for="Magento\Catalog\Api\Data\PriceUpdateResultInterface" type="Magento\Catalog\Model\Product\Price\PriceUpdateResult" />
     <preference for="Magento\Catalog\Api\SpecialPriceInterface" type="Magento\Catalog\Model\ResourceModel\Product\Price\SpecialPrice" />
     <preference for="Magento\Catalog\Model\ProductIdLocatorInterface" type="Magento\Catalog\Model\ProductIdLocator" />
+    <preference for="Magento\Framework\Indexer\BatchProviderInterface" type="Magento\Framework\Indexer\BatchProvider" />
+    <preference for="Magento\Framework\Indexer\BatchSizeCalculatorInterface" type="Magento\Framework\Indexer\BatchSizeCalculator" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -906,4 +908,11 @@
         </arguments>
     </type>
     <preference for="Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface" type="Magento\Catalog\Pricing\Price\MinimalTierPriceCalculator" />
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\Action\Full">
+        <arguments>
+            <argument name="memoryTablesMinRows" xsi:type="array">
+                <item name="default" xsi:type="number">200</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
