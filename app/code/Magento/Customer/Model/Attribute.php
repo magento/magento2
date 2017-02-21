@@ -132,7 +132,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function afterSave()
     {
@@ -146,7 +146,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function afterDelete()
     {
