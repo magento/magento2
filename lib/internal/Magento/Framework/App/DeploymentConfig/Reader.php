@@ -8,6 +8,7 @@ namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
@@ -85,7 +86,8 @@ class Reader
      *
      * @param string $fileKey The file key (deprecated)
      * @return array
-     * @throws \Exception
+     * @throws FileSystemException If file can not be read
+     * @throws \Exception If file key is not correct
      * @see FileReader
      */
     public function load($fileKey = null)
