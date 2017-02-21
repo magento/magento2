@@ -36,5 +36,5 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setHasOptions(true);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
-$productRepositoryFactory = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepositoryFactory = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $productRepositoryFactory->save($product);

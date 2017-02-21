@@ -31,8 +31,9 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/SalesRule/_files/rule_free_shipping_by_product_weight.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Quote/_files/is_salable_product.php
      */
     public function testRuleByProductWeightWithFreeShipping()
     {
@@ -45,8 +46,9 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/SalesRule/_files/rule_free_shipping_by_product_weight.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Quote/_files/is_salable_product.php
      */
     public function testRuleByProductWeightWithoutFreeShipping()
     {
@@ -94,7 +96,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $cartItem = $cartItemFactory->create();
         $cartItem->setQuoteId($cartId);
         $cartItem->setQty($itemQty);
-        $cartItem->setSku('simple');
+        $cartItem->setSku('simple-99');
         $cartItem->setProductType(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
 
         $this->itemRepository->save($cartItem);
