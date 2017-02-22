@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Test\TestStep;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
@@ -21,21 +20,21 @@ class GetPaymentUpdateStep implements TestStepInterface
      *
      * @var OrderIndex
      */
-    protected $orderIndex;
+    private $orderIndex;
 
     /**
      * Order View Page.
      *
      * @var SalesOrderView
      */
-    protected $salesOrderView;
+    private $salesOrderView;
 
     /**
      * OrderInjectable fixture.
      *
      * @var OrderInjectable
      */
-    protected $order;
+    private $order;
 
     /**
      * @param OrderIndex $orderIndex
@@ -61,6 +60,6 @@ class GetPaymentUpdateStep implements TestStepInterface
     {
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        $this->salesOrderView->getPageActions()->getPaymentUpdate();
+        $this->salesOrderView->getPageActions()->paymentUpdate();
     }
 }

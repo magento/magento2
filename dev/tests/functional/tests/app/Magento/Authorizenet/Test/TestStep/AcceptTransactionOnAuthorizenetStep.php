@@ -5,7 +5,7 @@
  */
 namespace Magento\Authorizenet\Test\TestStep;
 
-use Magento\Authorizenet\Test\Fixture\SandboxCustomer;
+use Magento\Authorizenet\Test\Fixture\AuthorizenetSandboxCustomer;
 use Magento\Authorizenet\Test\Fixture\TransactionSearch;
 use Magento\Authorizenet\Test\Page\Sandbox\Main;
 use Magento\Mtf\Client\BrowserInterface;
@@ -23,7 +23,7 @@ class AcceptTransactionOnAuthorizenetStep implements TestStepInterface
     /**
      * Authorize.Net Sandbox customer fixture.
      *
-     * @var SandboxCustomer
+     * @var AuthorizenetSandboxCustomer
      */
     private $sandboxCustomer;
 
@@ -98,7 +98,7 @@ class AcceptTransactionOnAuthorizenetStep implements TestStepInterface
     private $transactionSearch;
 
     /**
-     * @param SandboxCustomer $sandboxCustomer
+     * @param AuthorizenetSandboxCustomer $sandboxCustomer
      * @param TransactionSearch $transactionSearch
      * @param Main $main
      * @param SalesOrderView $salesOrderView
@@ -110,7 +110,7 @@ class AcceptTransactionOnAuthorizenetStep implements TestStepInterface
      * @param string $orderId
      */
     public function __construct(
-        SandboxCustomer $sandboxCustomer,
+        AuthorizenetSandboxCustomer $sandboxCustomer,
         TransactionSearch $transactionSearch,
         Main $main,
         SalesOrderView $salesOrderView,

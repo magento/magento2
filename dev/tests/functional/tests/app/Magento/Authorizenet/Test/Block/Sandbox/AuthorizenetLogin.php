@@ -12,7 +12,7 @@ use Magento\Mtf\Fixture\FixtureInterface;
 /**
  * Login form.
  */
-class Login extends Form
+class AuthorizenetLogin extends Form
 {
     /**
      * Login button on Authorize.Net Sandbox.
