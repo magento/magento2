@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 
-use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;

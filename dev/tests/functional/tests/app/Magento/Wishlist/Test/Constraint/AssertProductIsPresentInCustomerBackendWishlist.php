@@ -25,31 +25,25 @@ class AssertProductIsPresentInCustomerBackendWishlist extends AbstractConstraint
      * @param CustomerIndex $customerIndex
      * @param Customer $customer
      * @param CustomerIndexEdit $customerIndexEdit
-     * @param InjectableFixture|null $product
-     * @param array|null $products
+     * @param InjectableFixture $product
      * @return void
      */
     public function processAssert(
         CustomerIndex $customerIndex,
         Customer $customer,
         CustomerIndexEdit $customerIndexEdit,
-        InjectableFixture $product = null,
-        array $products = null
+        InjectableFixture $product
     ) {
-        if ($product !== null) {
-            $products = [$product];
-        }
         $customerIndex->open();
         $customerIndex->getCustomerGridBlock()->searchAndOpen(['email' => $customer->getEmail()]);
         $customerIndexEdit->getCustomerForm()->openTab('wishlist');
         /** @var \Magento\Wishlist\Test\Block\Adminhtml\Customer\Edit\Tab\Wishlist\Grid $wishlistGrid */
         $wishlistGrid = $customerIndexEdit->getCustomerForm()->getTab('wishlist')->getSearchGridBlock();
-        foreach ($products as $product) {
-            \PHPUnit_Framework_Assert::assertTrue(
-                $wishlistGrid->isRowVisible(['product_name' => $product->getName()]),
-                $product->getName() . " is not visible in customer wishlist on backend."
-            );
-        }
+
+        \PHPUnit_Framework_Assert::assertTrue(
+            $wishlistGrid->isRowVisible(['product_name' => $product->getName()]),
+            $product->getName() . " is not visible in customer wishlist on backend."
+        );
     }
 
     /**

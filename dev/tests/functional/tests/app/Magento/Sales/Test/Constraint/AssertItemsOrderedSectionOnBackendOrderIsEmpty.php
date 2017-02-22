@@ -17,7 +17,7 @@ class AssertItemsOrderedSectionOnBackendOrderIsEmpty extends AbstractConstraint
     /**
      * "No ordered items" message on Create Order page on backend.
      */
-    const SUCCESS_MESSAGE = 'No ordered items';
+    const TEXT_MESSAGE = 'No ordered items';
 
     /**
      * Assert that Items Ordered section on Create Order page on backend is empty.
@@ -29,7 +29,7 @@ class AssertItemsOrderedSectionOnBackendOrderIsEmpty extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             $orderCreateIndex->getCreateBlock()->getItemsBlock()->getEmptyTextMessage(),
-            self::SUCCESS_MESSAGE,
+            self::TEXT_MESSAGE,
             'Items Ordered section on Create Order page on backend is not empty.'
         );
     }

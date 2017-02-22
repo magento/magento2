@@ -30,7 +30,7 @@ class AssertItemsOrderedSectionContainsProducts extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             sort($expectedItemNames),
             sort($itemsNames),
-            "Items Ordered section on Create Order page on backend doesn't contain products."
+            "Items Ordered section on Create Order page on backend doesn't contain correct products."
         );
     }
 
@@ -41,6 +41,6 @@ class AssertItemsOrderedSectionContainsProducts extends AbstractConstraint
      */
     public function toString()
     {
-        return "Items Ordered section on Create Order page on backend contains products.";
+        return "Items Ordered section on Create Order page on backend contains correct products.";
     }
 }
