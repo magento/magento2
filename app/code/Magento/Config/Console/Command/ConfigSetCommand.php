@@ -34,30 +34,38 @@ class ConfigSetCommand extends Command
     /**#@-*/
 
     /**
+     * The factory for config:set processors.
+     *
      * @var ConfigSetProcessorFactory
      */
     private $configSetProcessorFactory;
 
     /**
+     * Scope validator.
+     *
      * @var ValidatorInterface
      */
     private $validator;
 
     /**
+     * Scope manager.
+     *
      * @var ScopeInterface
      */
     private $scope;
 
     /**
+     * The factory for path validator.
+     *
      * @var PathValidatorFactory
      */
     private $pathValidatorFactory;
 
     /**
-     * @param ConfigSetProcessorFactory $configSetProcessorFactory
-     * @param ValidatorInterface $validator
-     * @param ScopeInterface $scope
-     * @param PathValidatorFactory $pathValidatorFactory
+     * @param ConfigSetProcessorFactory $configSetProcessorFactory The factory for config:set processors
+     * @param ValidatorInterface $validator Scope validator
+     * @param ScopeInterface $scope Scope manager
+     * @param PathValidatorFactory $pathValidatorFactory The factory for path validator
      */
     public function __construct(
         ConfigSetProcessorFactory $configSetProcessorFactory,

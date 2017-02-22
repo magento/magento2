@@ -31,8 +31,8 @@ class PathValidator
      * Validates the config path by config structure schema.
      *
      * @param string $path The config path
-     * @return bool
-     * @throws ValidatorException If provided path can not be validated
+     * @return bool The result of validation
+     * @throws ValidatorException If provided path is not valid
      */
     public function validate($path)
     {

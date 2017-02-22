@@ -3,12 +3,11 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * System configuration structure
- */
 namespace Magento\Config\Model\Config;
 
+/**
+ * System configuration structure.
+ */
 class Structure implements \Magento\Config\Model\Config\Structure\SearchInterface
 {
     /**
@@ -275,8 +274,8 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     /**
      * Iteration that collects config field paths recursively from config schema.
      *
-     * @param array $elements
-     * @return array
+     * @param array $elements The elements to be parsed
+     * @return array An array of config path to config structure path map
      */
     private function getFieldsRecursively(array $elements = [])
     {
