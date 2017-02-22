@@ -9,10 +9,10 @@ namespace Magento\Catalog\Test\TestCase\Category;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Util\Command\Cli\Indexer;
 use Magento\Mtf\Util\Command\Cli\Cron;
+use Magento\Store\Test\Fixture\Store;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
- * Test Creation for UpdateCategoryEntityFlatData
- *
  * Test Flow:
  * Preconditions:
  * 1. Create category.
@@ -34,6 +34,13 @@ use Magento\Mtf\Util\Command\Cli\Cron;
  */
 class UpdateCategoryEntityFlatDataTest extends UpdateCategoryEntityTest
 {
+    /**
+     * Factory for Test Steps.
+     *
+     * @var TestStepFactory
+     */
+    private $stepFactory;
+
     /**
      * Perform bin/magento commands for reindex indexers.
      *
@@ -60,12 +67,14 @@ class UpdateCategoryEntityFlatDataTest extends UpdateCategoryEntityTest
      *
      * @param Cron $cron
      * @param Indexer $indexer
+     * @param TestStepFactory $stepFactory
      * @return void
      */
-    public function __prepare(Cron $cron, Indexer $indexer)
+    public function __prepare(Cron $cron, Indexer $indexer, TestStepFactory $stepFactory)
     {
         $this->cron = $cron;
         $this->indexer = $indexer;
+        $this->stepFactory = $stepFactory;
     }
 
     /**
@@ -73,6 +82,8 @@ class UpdateCategoryEntityFlatDataTest extends UpdateCategoryEntityTest
      *
      * @param Category $category
      * @param Category $initialCategory
+     * @param Store|null $firstStore
+     * @param Store|null $secondStore
      * @param array|null $indexersMode
      * @param string|null $configData
      * @return array
@@ -80,27 +91,25 @@ class UpdateCategoryEntityFlatDataTest extends UpdateCategoryEntityTest
     public function test(
         Category $category,
         Category $initialCategory,
+        Store $firstStore = null,
+        Store $secondStore = null,
         $indexersMode = null,
         $configData = null
     ) {
         $this->configData = $configData;
 
         //Preconditions
-        $firstStore = $this->fixtureFactory->createByCode('store', ['dataset' => 'custom']);
-        $secondStore = $this->fixtureFactory->createByCode('store', ['dataset' => 'custom']);
         $firstStore->persist();
         $secondStore->persist();
         $this->cron->run();
         $this->cron->run();
 
-        $this->objectManager->create(
+        $this->stepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'flushCache' => true]
         )->run();
 
-        if ($indexersMode !== null) {
-            $this->indexer->setMode($indexersMode);
-        }
+        $this->indexer->setMode($indexersMode);
         $this->indexer->reindex();
 
         return parent::test($category, $initialCategory);
@@ -114,7 +123,7 @@ class UpdateCategoryEntityFlatDataTest extends UpdateCategoryEntityTest
      */
     public function tearDown()
     {
-        $this->objectManager->create(
+        $this->stepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true, 'flushCache' => true]
         )->run();
