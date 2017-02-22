@@ -44,8 +44,8 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
         $defaultConfig = DirectoryList::getDefaultConfig();
 
         $this->assertArrayHasKey(DirectoryList::GENERATED, $defaultConfig);
-        $this->assertArrayHasKey(DirectoryList::DI, $defaultConfig);
-        $this->assertArrayHasKey(DirectoryList::GENERATION, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::GENERATED_METADATA, $defaultConfig);
+        $this->assertArrayHasKey(DirectoryList::GENERATED_CODE, $defaultConfig);
         $this->assertArrayHasKey(DirectoryList::ROOT, $defaultConfig);
         $this->assertArrayHasKey(DirectoryList::APP, $defaultConfig);
         $this->assertArrayHasKey(DirectoryList::CONFIG, $defaultConfig);

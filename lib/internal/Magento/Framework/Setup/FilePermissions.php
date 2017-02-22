@@ -10,6 +10,9 @@ use Magento\Framework\Backup\Filesystem\Iterator\Filter;
 use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 use Magento\Framework\Filesystem;
 
+/**
+ * Checks permissions to files and folders.
+ */
 class FilePermissions
 {
     /**
@@ -143,8 +146,8 @@ class FilePermissions
             \RecursiveIteratorIterator::CHILD_FIRST
         );
         $noWritableFilesFolders = [
-            $this->directoryList->getPath(DirectoryList::GENERATION) . '/',
-            $this->directoryList->getPath(DirectoryList::DI) . '/',
+            $this->directoryList->getPath(DirectoryList::GENERATED_CODE) . '/',
+            $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/',
         ];
 
         $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);

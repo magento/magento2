@@ -190,4 +190,43 @@
             <argument name="placeholder" xsi:type="object">Magento\Config\Model\Placeholder\Environment</argument>
         </arguments>
     </type>
+    <virtualType name="configShowSourceAggregated" type="Magento\Framework\App\Config\ConfigSourceAggregated">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="dynamic" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\RuntimeConfigSource</item>
+                    <item name="sortOrder" xsi:type="string">100</item>
+                </item>
+                <item name="initial" xsi:type="array">
+                    <item name="source" xsi:type="object">systemConfigInitialDataProvider</item>
+                    <item name="sortOrder" xsi:type="string">1000</item>
+                </item>
+                <item name="env" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</item>
+                    <item name="sortOrder" xsi:type="string">2000</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Config\Console\Command\ConfigShowCommand">
+        <arguments>
+            <argument name="configSource" xsi:type="object">configShowSourceAggregated</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="configSetCommand" xsi:type="object">Magento\Config\Console\Command\ConfigSetCommand</item>
+                <item name="configShowCommand" xsi:type="object">Magento\Config\Console\Command\ConfigShowCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Console\Command\ConfigSet\ConfigSetProcessorFactory">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Config\Console\Command\ConfigSet\DefaultProcessor</item>
+                <item name="lock" xsi:type="string">Magento\Config\Console\Command\ConfigSet\LockProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -118,6 +118,102 @@ return [
                 'name' => 'Magento_Sales',
                 'path' => 'Test/Unit/Setup/SerializedDataConverterTest.php'
             ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'Flag.php'
+            ]
+        ]
+    ],
+    'ArrayObject' => [
+        'replacement' => 'Custom class, extended from ArrayObject with overwritten serialize/unserialize methods',
+        'exclude' => [
+            [
+                'type' => 'module',
+                'name' => 'Magento_Theme',
+                'path' => 'Model/Indexer/Design/Config.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Ui',
+                'path' => 'Model/Manager.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Ui',
+                'path' => 'Test/Unit/Model/ManagerTest.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Backend',
+                'path' => 'Model/Menu.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_CatalogSearch',
+                'path' => 'Model/Indexer/Fulltext.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_CatalogSearch',
+                'path' => 'Test/Unit/Model/Indexer/FulltextTest.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_CatalogSearch',
+                'path' => 'Model/Indexer/Fulltext.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'Test/Unit/FlagTest.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'Validator/Test/Unit/Constraint/PropertyTest.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'Indexer/Test/Unit/BatchTest.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'View/Element/UiComponent/ArrayObjectFactory.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'View/Element/UiComponent/Config/Provider/Component/Definition.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'Indexer/Action/Base.php'
+            ]
+        ]
+    ],
+    'Magento\Framework\View\Element\UiComponent\ArrayObjectFactory' => [
+        'replacement' => 'Factory that creates custom class, extended from ArrayObject with overwritten '
+            . 'serialize/unserialize methods',
+        'exclude' => [
+            [
+                'type' => 'module',
+                'name' => 'Magento_Ui',
+                'path' => 'Model/Manager.php'
+            ],
+            [
+                'type' => 'module',
+                'name' => 'Magento_Ui',
+                'path' => 'Test/Unit/Model/ManagerTest.php'
+            ],
+            [
+                'type' => 'library',
+                'name' => 'magento/framework',
+                'path' => 'View/Element/UiComponent/Config/Provider/Component/Definition.php'
+            ]
         ]
     ]
 ];

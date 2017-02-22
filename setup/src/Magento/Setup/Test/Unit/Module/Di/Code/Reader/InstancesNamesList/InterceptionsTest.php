@@ -39,6 +39,9 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
      */
     private $logMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->logMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Log\Log::class)

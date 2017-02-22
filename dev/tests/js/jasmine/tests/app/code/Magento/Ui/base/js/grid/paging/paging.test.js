@@ -4,7 +4,6 @@
  */
 
 /*eslint max-nested-callbacks: 0*/
-
 define([
     'Magento_Ui/js/grid/paging/paging'
 ], function (Paging) {
@@ -37,12 +36,10 @@ define([
         });
 
         describe('onPagesChange method', function () {
-            it('pages amount became less than current', function () {
-                paging.current = 4;
-                expect(paging.current).toBe(4);
-                paging.pageSize = 3;
+            it('Check call "onPagesChange" method', function () {
+                paging.updateCursor = jasmine.createSpy();
                 paging.onPagesChange();
-                expect(paging.current).toBe(3);
+                expect(paging.updateCursor).toHaveBeenCalled();
             });
         });
 

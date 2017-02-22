@@ -78,8 +78,10 @@ class GeneratedFiles
             //TODO: Till here
 
             $cachePath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::CACHE));
-            $generationPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::GENERATION));
-            $diPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::DI));
+            $generationPath = $this->write->getRelativePath(
+                $this->directoryList->getPath(DirectoryList::GENERATED_CODE)
+            );
+            $diPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::GENERATED_METADATA));
 
             // Clean generated/code dir
             if ($this->write->isDirectory($generationPath)) {
