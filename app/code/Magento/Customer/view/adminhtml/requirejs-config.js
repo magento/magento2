@@ -5,7 +5,7 @@
 
 var config = {
     paths: {
-        'customer/template': "Magento_Customer/templates"
+        'customer/template': 'Magento_Customer/templates'
     },
     map: {
         '*': {
@@ -13,5 +13,5 @@ var config = {
             dataItemDeleteButton:   'Magento_Customer/edit/tab/js/addresses',
             observableInputs:       'Magento_Customer/edit/tab/js/addresses'
         }
-    } 
+    }
 };
