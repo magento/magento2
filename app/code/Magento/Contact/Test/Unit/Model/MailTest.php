@@ -4,7 +4,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Contact\Test\Integration\Model;
+namespace Magento\Contact\Test\Unit\Model;
 
 use Magento\Contact\Model\ConfigInterface;
 use Magento\Contact\Model\Mail;

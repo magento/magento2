@@ -129,8 +129,8 @@ class PostTest extends \PHPUnit_Framework_TestCase
 
         $this->controller = new \Magento\Contact\Controller\Index\Post(
             $context,
-            $this->mailMock,
             $this->configMock,
+            $this->mailMock,
             $this->dataPersistorMock
         );
     }
