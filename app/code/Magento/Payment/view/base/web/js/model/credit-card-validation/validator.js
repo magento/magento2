@@ -19,7 +19,7 @@
     } else {
         factory(jQuery);
     }
-}(function ($, cvvValidator, creditCardNumberValidator, expirationDateValidator, monthValidator, creditCardData) {
+}(function ($, cvvValidator, creditCardNumberValidator, yearValidator, monthValidator, creditCardData) {
     'use strict';
 
     $.each({
@@ -60,8 +60,8 @@
         'validate-card-date': [
 
             /**
-             * Validate credit card number based on mod 10
-             * @param {*} date - month
+             * Validate credit card expiration month
+             * @param {String} date - month
              * @return {Boolean}
              */
             function (date) {
@@ -72,8 +72,8 @@
         'validate-card-cvv': [
 
             /**
-             * Validate credit card number based on mod 10
-             * @param {*} cvv - month
+             * Validate cvv
+             * @param {String} cvv - month
              * @return {Boolean}
              */
             function (cvv) {
@@ -86,12 +86,12 @@
         'validate-card-year': [
 
             /**
-             * Validate credit card number based on mod 10
-             * @param {*} date - month
+             * Validate credit card expiration year
+             * @param {String} date - year
              * @return {Boolean}
              */
             function (date) {
-                return monthValidator(date).isValid;
+                return yearValidator(date).isValid;
             },
             $.mage.__('Incorrect credit card expiration year.')
         ]
