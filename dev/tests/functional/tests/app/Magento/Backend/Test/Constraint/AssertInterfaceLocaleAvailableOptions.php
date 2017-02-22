@@ -5,7 +5,6 @@
  */
 namespace Magento\Backend\Test\Constraint;
 
-use Magento\Backend\Test\Page\Adminhtml\SystemAccount;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Util\Command\Locales;
 
@@ -15,14 +14,15 @@ use Magento\Mtf\Util\Command\Locales;
 class AssertInterfaceLocaleAvailableOptions extends AbstractConstraint
 {
     /**
-     * @param Locales $locales
-     * @param SystemAccount $systemAccount
+     * Assert that Interface Locale field has correct options depends on magento mode.
+     *
+     * @param Locales $locales utility for work with locales
+     * @param array $dropdownLocales array of interface locales
      */
     public function processAssert(
         Locales $locales,
-        SystemAccount $systemAccount
+        $dropdownLocales = []
     ) {
-        $dropdownLocales = $systemAccount->getForm()->getInterfaceLocales();
         if ($_ENV['mage_mode'] === 'production') {
             \PHPUnit_Framework_Assert::assertEquals(
                 $locales->getList(Locales::TYPE_DEPLOYED),
