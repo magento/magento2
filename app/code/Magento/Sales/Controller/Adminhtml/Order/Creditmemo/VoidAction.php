@@ -7,7 +7,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action;
 
-class Void extends \Magento\Backend\App\Action
+class VoidAction extends Action
 {
     /**
      * Authorization level of a basic admin session
