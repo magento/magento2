@@ -186,4 +186,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertAdvancedPriceAbsentOnProductForm">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
 </config>
