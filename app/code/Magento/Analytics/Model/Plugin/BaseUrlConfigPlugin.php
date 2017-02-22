@@ -76,13 +76,26 @@ class BaseUrlConfigPlugin
         \Magento\Config\Model\Config\Backend\Baseurl $subject,
         \Magento\Config\Model\Config\Backend\Baseurl $result
     ) {
-        if ($result->isValueChanged()
-            && $this->subscriptionStatusProvider->getStatus() === SubscriptionStatusProvider::ENABLED
-        ) {
+        if (!$result->isValueChanged()) {
+            return $result;
+        }
+
+        if ($this->isPluginApplicable($result)) {
             $this->flagManager->saveFlag(static::OLD_BASE_URL_FLAG_CODE, $result->getOldValue());
             $this->configWriter->save(self::UPDATE_CRON_STRING_PATH, $this->cronExpression);
         }
 
         return $result;
+    }
+
+    /**
+     * @param \Magento\Config\Model\Config\Backend\Baseurl $result
+     *
+     * @return bool
+     */
+    private function isPluginApplicable(\Magento\Config\Model\Config\Backend\Baseurl $result)
+    {
+        return $result->getData('path') === \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL
+            && $this->subscriptionStatusProvider->getStatus() === SubscriptionStatusProvider::ENABLED;
     }
 }

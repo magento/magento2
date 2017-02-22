@@ -11,6 +11,7 @@ use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Config\Model\Config\Backend\Baseurl;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\Store;
 
 /**
  * Class BaseUrlConfigPluginTest
@@ -80,23 +81,44 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $saveConfigInvokeMatcher
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $oldValueInvokeMatcher
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $saveFlagInvokeMatcher
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $configValueGetPathMatcher
      *
      * @return void
-     * @dataProvider afterSaveDataProvider
+     * @dataProvider pluginDataProvider
      */
-    public function testAfterAfterSave(
+    public function testPluginForAfterSave(
         array $testData,
         \PHPUnit_Framework_MockObject_Matcher_InvokedCount $saveConfigInvokeMatcher,
         \PHPUnit_Framework_MockObject_Matcher_InvokedCount $oldValueInvokeMatcher,
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $saveFlagInvokeMatcher
+        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $saveFlagInvokeMatcher,
+        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $configValueGetPathMatcher
     ) {
         $this->configValueMock->expects($this->once())
             ->method('isValueChanged')
             ->willReturn($testData['isValueChanged']);
+
+        $this->configValueMock->expects($configValueGetPathMatcher)
+            ->method('getData')
+            ->with('path')
+            ->willReturn($testData['path']);
         $this->subscriptionStatusProvider->expects($this->any())->method('getStatus')
             ->willReturn($testData['subscriptionStatus']);
-        $this->stepSaveOldUrl($oldValueInvokeMatcher, $saveFlagInvokeMatcher);
-        $this->stepSetupCronJob($saveConfigInvokeMatcher);
+
+
+        $oldUrl = 'mage.dev';
+        $this->configValueMock->expects($oldValueInvokeMatcher)
+            ->method('getOldValue')
+            ->willReturn($oldUrl);
+        $this->flagManagerMock->expects($saveFlagInvokeMatcher)
+            ->method('saveFlag')
+            ->with(BaseUrlConfigPlugin::OLD_BASE_URL_FLAG_CODE, $oldUrl);
+
+        $this->configWriterMock->expects($saveConfigInvokeMatcher)->method('save')
+            ->with(
+                BaseUrlConfigPlugin::UPDATE_CRON_STRING_PATH,
+                '0 * * * *'
+            );
+
 
         $this->assertEquals(
             $this->configValueMock,
@@ -105,82 +127,54 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
-     */
-    private function stepSaveOldUrl(
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $oldValueInvokeMatcher,
-        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $saveFlagInvokeMatcher
-    ) {
-        $oldUrl = 'mage.dev';
-        $this->configValueMock->expects($oldValueInvokeMatcher)
-            ->method('getOldValue')
-            ->willReturn($oldUrl);
-        $this->flagManagerMock->expects($saveFlagInvokeMatcher)
-            ->method('saveFlag')
-            ->with(BaseUrlConfigPlugin::OLD_BASE_URL_FLAG_CODE, $oldUrl);
-    }
-
-    /**
-     * @return void
-     */
-    private function stepSetupCronJob(\PHPUnit_Framework_MockObject_Matcher_InvokedCount $saveConfigInvokeMatcher)
-    {
-        $cronExprArray = [
-            '0',                    # Minute
-            '*',                    # Hour
-            '*',                    # Day of the Month
-            '*',                    # Month of the Year
-            '*',                    # Day of the Week
-        ];
-        $cronExprString = join(' ', $cronExprArray);
-        $this->configWriterMock->expects($saveConfigInvokeMatcher)->method('save')
-            ->with(
-                BaseUrlConfigPlugin::UPDATE_CRON_STRING_PATH,
-                $cronExprString
-            );
-    }
-
-    /**
      * @return array
      */
-    public function afterSaveDataProvider()
+    public function pluginDataProvider()
     {
         return [
-            'positive scenario' => [
+            'setup_subscription_update_cron_job' => [
                 'testData' => [
                     'isValueChanged' => true,
-                    'subscriptionStatus' => SubscriptionStatusProvider::ENABLED
+                    'subscriptionStatus' => SubscriptionStatusProvider::ENABLED,
+                    'path' => Store::XML_PATH_SECURE_BASE_URL
                 ],
                 'saveConfigInvokeMatcher' => $this->once(),
                 'oldValueInvokeMatcher' => $this->once(),
                 'saveFlagInvokeMatcher' => $this->once(),
+                'configValueGetPathMatcher' => $this->once(),
             ],
             'base_url_not_changed' => [
                 'testData' => [
                     'isValueChanged' => false,
-                    'subscriptionStatus' => SubscriptionStatusProvider::ENABLED
+                    'subscriptionStatus' => SubscriptionStatusProvider::ENABLED,
+                    'path' => Store::XML_PATH_SECURE_BASE_URL
                 ],
                 'saveConfigInvokeMatcher' => $this->never(),
                 'oldValueInvokeMatcher' => $this->never(),
                 'saveFlagInvokeMatcher' => $this->never(),
+                'configValueGetPathMatcher' => $this->never(),
             ],
             'analytics_disabled' => [
                 'testData' => [
                     'isValueChanged' => true,
-                    'subscriptionStatus' => SubscriptionStatusProvider::DISABLED
+                    'subscriptionStatus' => SubscriptionStatusProvider::DISABLED,
+                    'path' => Store::XML_PATH_SECURE_BASE_URL
                 ],
                 'saveConfigInvokeMatcher' => $this->never(),
                 'oldValueInvokeMatcher' => $this->never(),
                 'saveFlagInvokeMatcher' => $this->never(),
+                'configValueGetPathMatcher' => $this->once(),
             ],
             'analytics_pending' => [
                 'testData' => [
                     'isValueChanged' => true,
-                    'subscriptionStatus' => SubscriptionStatusProvider::PENDING
+                    'subscriptionStatus' => SubscriptionStatusProvider::PENDING,
+                    'path' => Store::XML_PATH_SECURE_BASE_URL
                 ],
                 'saveConfigInvokeMatcher' => $this->never(),
                 'oldValueInvokeMatcher' => $this->never(),
                 'saveFlagInvokeMatcher' => $this->never(),
+                'configValueGetPathMatcher' => $this->once(),
             ]
         ];
     }
