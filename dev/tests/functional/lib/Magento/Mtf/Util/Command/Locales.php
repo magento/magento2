@@ -10,6 +10,13 @@ use Magento\Mtf\Util\Protocol\CurlTransport;
 
 class Locales
 {
+    /**#@+
+     * Constants for locales fetching type.
+     */
+    const TYPE_ALL = 'all';
+    const TYPE_DEPLOYED = 'deployed';
+    /**#@-*/
+
     /**
      * Url to locales.php.
      */
@@ -23,26 +30,22 @@ class Locales
     private $transport;
 
     /**
-     * @param CurlTransport $transport
+     * @param CurlTransport $transport Curl transport protocol
      */
     public function __construct(CurlTransport $transport)
     {
         $this->transport = $transport;
     }
 
-    public function getAll()
+    /**
+     * Return array of locales depends on fetching type.
+     *
+     * @param string $type locales fetching type
+     * @return array of locale codes, for example: ['en_US', 'fr_FR']
+     */
+    public function getList($type = self::TYPE_ALL)
     {
-        return $this->getList('all');
-    }
-
-    public function getDeployed()
-    {
-        return $this->getList('deployed');
-    }
-
-    private function getList($type = 'all')
-    {
-        $url = $_ENV['app_frontend_url'] . self::URL . '?type' = $type;
+        $url = $_ENV['app_frontend_url'] . self::URL . '?type=' . $type;
         $curl = $this->transport;
         $curl->write($url, [], CurlInterface::GET);
         $result = $curl->read();

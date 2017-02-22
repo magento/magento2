@@ -24,15 +24,16 @@ class Codes implements AvailableLocalesInterface
     private $fileSystem;
 
     /**
-     * Factory for creating objects that implements \Magento\Framework\View\Design\ThemeInterface
+     * Factory for creating objects that implements \Magento\Framework\View\Design\ThemeInterface.
      *
      * @var FlyweightFactory
      */
     private $flyweightFactory;
 
     /**
-     * @param FlyweightFactory $flyweightFactory
-     * @param Filesystem $fileSystem
+     * @param FlyweightFactory $flyweightFactory factory for creating objects
+     *        that implements \Magento\Framework\View\Design\ThemeInterface
+     * @param Filesystem $fileSystem works with file system
      */
     public function __construct(
         FlyweightFactory $flyweightFactory,

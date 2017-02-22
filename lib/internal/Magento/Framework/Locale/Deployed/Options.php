@@ -30,6 +30,8 @@ class Options implements OptionInterface
     private $availableLocales;
 
     /**
+     * Operates with magento design settings.
+     *
      * @var DesignInterface
      */
     private $design;
@@ -42,10 +44,10 @@ class Options implements OptionInterface
     private $localeLists;
 
     /**
-     * @param ListsInterface $localeLists
-     * @param State $state
-     * @param AvailableLocalesInterface $availableLocales
-     * @param DesignInterface $design
+     * @param ListsInterface $localeLists locales list
+     * @param State $state application state class
+     * @param AvailableLocalesInterface $availableLocales operates with available locales
+     * @param DesignInterface $design operates with magento design settings
      */
     public function __construct(
         ListsInterface $localeLists,

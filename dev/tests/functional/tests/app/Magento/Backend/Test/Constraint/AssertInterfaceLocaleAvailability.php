@@ -5,8 +5,8 @@
  */
 namespace Magento\Backend\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\Adminhtml\SystemAccount;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Util\Command\Locales;
 
 class AssertInterfaceLocaleAvailability extends AbstractConstraint
@@ -19,12 +19,16 @@ class AssertInterfaceLocaleAvailability extends AbstractConstraint
         Locales $locales,
         SystemAccount $systemAccount
     ) {
-        $dropdownLocales = $systemAccount->getForm()->getInterfaceLocaleOptions();
-
+        $dropdownLocales = $systemAccount->getForm()->getInterfaceLocales();
         if ($_ENV['mage_mode'] === 'production') {
-            $deployedLocales = $locales->getDeployed();
+            \PHPUnit_Framework_Assert::assertEquals(
+                $locales->getList(Locales::TYPE_DEPLOYED),
+                $dropdownLocales
+            );
         } else {
-            $allLocales = $locales->getAll();
+            \PHPUnit_Framework_Assert::assertEmpty(
+                array_diff($dropdownLocales, $locales->getList(Locales::TYPE_ALL))
+            );
         }
     }
 

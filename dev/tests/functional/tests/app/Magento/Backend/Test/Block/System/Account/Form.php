@@ -21,16 +21,15 @@ class Form extends Block
      */
     private $interfaceLocaleSelect = 'select[name=interface_locale]';
 
-
     /**
-     * @return array of locales
+     * @return array of locale codes for example ['en_US', 'de_DE']
      */
-    public function getInterfaceLocaleOptions()
+    public function getInterfaceLocales()
     {
         $locales = [];
         $selectElement = $this->_rootElement->find($this->interfaceLocaleSelect);
         foreach ($selectElement->getElements('option') as $option) {
-            $locales[$option->getValue()] = $option->getText();
+            $locales[] = $option->getValue();
         }
 
         return $locales;

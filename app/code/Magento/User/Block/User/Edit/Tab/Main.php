@@ -31,7 +31,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_LocaleLists;
 
     /**
-     * Operates with deployed locales
+     * Operates with deployed locales.
      *
      * @var OptionInterface
      */
@@ -44,7 +44,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param array $data
-     * @param OptionInterface $deployedLocales
+     * @param OptionInterface $deployedLocales Operates with deployed locales.
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -58,7 +58,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_authSession = $authSession;
         $this->_LocaleLists = $localeLists;
         $this->deployedLocales = $deployedLocales
-            ?: ObjectManager::getInstance()->create(OptionInterface::class);
+            ?: ObjectManager::getInstance()->get(OptionInterface::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
