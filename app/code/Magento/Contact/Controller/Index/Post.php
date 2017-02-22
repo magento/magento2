@@ -34,14 +34,14 @@ class Post extends \Magento\Contact\Controller\Index
 
     /**
      * @param Context $context
-     * @param MailInterface $mail
      * @param ConfigInterface $contactsConfig
+     * @param MailInterface $mail
      * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
         Context $context,
-        MailInterface $mail,
         ConfigInterface $contactsConfig,
+        MailInterface $mail,
         DataPersistorInterface $dataPersistor
     ) {
         parent::__construct($context, $contactsConfig);

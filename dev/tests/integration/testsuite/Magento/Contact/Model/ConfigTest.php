@@ -4,9 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Contact\Test\Integration\Model;
+namespace Magento\Contact\Model;
 
-use Magento\Contact\Model\ConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
