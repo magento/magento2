@@ -101,24 +101,27 @@ class CurlTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    private function getTestData()
+    public function getTestData()
     {
         return [
-            'version' => '1.1',
-            'body'=> '{"name": "value"}',
-            'url' => 'http://www.mystore.com',
-            'headers' => ['Content-Type: application/json'],
-            'method' => \Magento\Framework\HTTP\ZendClient::POST,
+            [
+                'data' => [
+                    'version' => '1.1',
+                    'body'=> '{"name": "value"}',
+                    'url' => 'http://www.mystore.com',
+                    'headers' => ['Content-Type: application/json'],
+                    'method' => \Magento\Framework\HTTP\ZendClient::POST,
+                ]
+            ]
         ];
     }
 
     /**
      * @return void
+     * @dataProvider getTestData
      */
-    public function testRequestSuccess()
+    public function testRequestSuccess(array $data)
     {
-        $data = $this->getTestData();
-
         $responseString = 'This is response.';
 
         $this->curlMock->expects($this->once())
@@ -156,11 +159,10 @@ class CurlTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @dataProvider getTestData
      */
-    public function testRequestError()
+    public function testRequestError(array $data)
     {
-        $data = $this->getTestData();
-
         $this->curlMock->expects($this->once())
             ->method('write')
             ->with(
