@@ -3044,6 +3044,16 @@ class InstallSchema implements InstallSchemaInterface
             ->createTable($table);
 
         /**
+         * Create table 'catalog_product_index_price_replica'
+         */
+        $installer->getConnection()->createTable(
+            $installer->getConnection()->createTableByDdl(
+                $installer->getTable('catalog_product_index_price'),
+                $installer->getTable('catalog_product_index_price_replica')
+            )
+        );
+
+        /**
          * Create table 'catalog_product_index_tier_price'
          */
         $table = $installer->getConnection()

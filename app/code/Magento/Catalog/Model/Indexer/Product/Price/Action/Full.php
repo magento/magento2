@@ -138,7 +138,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
                         // Sync data from temp table to index table
                         $this->_insertFromTable(
                             $this->_defaultIndexerResource->getIdxTable(),
-                            $this->_defaultIndexerResource->getTable('catalog_product_index_price')
+                            $this->_defaultIndexerResource->getMainTable()
                         );
                     }
                 }
@@ -159,7 +159,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     private function emptyPriceIndexTable()
     {
         $select = $this->_connection->select()->from(
-            ['index_price' => $this->_defaultIndexerResource->getTable('catalog_product_index_price')],
+            ['index_price' => $this->_defaultIndexerResource->getMainTable()],
             null
         )->joinLeft(
             ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()],

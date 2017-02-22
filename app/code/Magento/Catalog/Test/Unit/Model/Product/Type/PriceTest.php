@@ -59,6 +59,11 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $websiteMock;
 
+    /**
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
+     */
+    private $idxFrontendResourceMock;
+
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -110,14 +115,18 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             $this->getMock(\Magento\Customer\Api\GroupManagementInterface::class, [], [], '', false);
         $this->groupManagementMock->expects($this->any())->method('getAllCustomersGroup')
             ->will($this->returnValue($group));
-
+        $this->idxFrontendResourceMock =
+            $this->getMockBuilder(\Magento\Indexer\Model\ResourceModel\FrontendResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Model\Product\Type\Price::class,
             [
                 'tierPriceFactory' => $this->tpFactory,
                 'config' => $this->scopeConfigMock,
                 'storeManager' => $storeMangerMock,
-                'groupManagement' => $this->groupManagementMock
+                'groupManagement' => $this->groupManagementMock,
+                'indexerFrontendResource' => $this->idxFrontendResourceMock
             ]
         );
     }
