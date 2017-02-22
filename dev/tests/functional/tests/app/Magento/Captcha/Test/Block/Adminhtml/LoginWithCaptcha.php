@@ -7,8 +7,8 @@
 namespace Magento\Captcha\Test\Block\Adminhtml;
 
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Backend\Test\Block\Admin\Login;
+use Magento\Mtf\Client\ElementInterface;
 
 /**
  * Login form for backend user.
@@ -34,9 +34,9 @@ class LoginWithCaptcha extends Login
      *
      * @return ElementInterface
      */
-    public function getCaptcha()
+    public function isVisibleCaptcha()
     {
-        return $this->_rootElement->find($this->captchaImage, Locator::SELECTOR_CSS);
+        return $this->_rootElement->find($this->captchaImage, Locator::SELECTOR_CSS)->isVisible();
     }
 
     /**
@@ -44,8 +44,8 @@ class LoginWithCaptcha extends Login
      *
      * @return ElementInterface
      */
-    public function getCaptchaReloadButton()
+    public function isVisibleCaptchaReloadButton()
     {
-        return $this->_rootElement->find($this->captchaReload, Locator::SELECTOR_CSS);
+        return $this->_rootElement->find($this->captchaReload, Locator::SELECTOR_CSS)->isVisible();
     }
 }
