@@ -5,7 +5,8 @@
  */
 
 if (isset($_GET['type']) && $_GET['type'] == 'deployed') {
-    $directory = __DIR__ . '/../../../../pub/static/adminhtml/Magento/backend';
+    $themePath = isset($_GET['theme_path']) ? $_GET['theme_path'] : 'adminhtml/Magento/backend';
+    $directory = __DIR__ . '/../../../../pub/static/' . $themePath;
     $locales = array_diff(scandir($directory), ['..', '.']);
 } else {
     require_once __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php';

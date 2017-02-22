@@ -6,10 +6,10 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Backend\Test\TestCase\AccountSettingsPageTest" summary="">
-        <variation name="AvailabilityOfInterfaceLocales" summary="" ticketId="">
+    <testCase name="Magento\Backend\Test\TestCase\AccountSettingsPageTest" summary="Check that interface locale dropdown has correct options">
+        <variation name="CorrectOptionsOfInterfaceLocales" summary="Check that interface locale dropdown has correct options" ticketId="MAGETWO-64920">
             <data name="tag" xsi:type="string">severity:S1</data>
-            <constraint name="Magento\Backend\Test\Constraint\AssertInterfaceLocaleAvailability" />
+            <constraint name="Magento\Backend\Test\Constraint\AssertInterfaceLocaleAvailableOptions" />
         </variation>
     </testCase>
 </config>

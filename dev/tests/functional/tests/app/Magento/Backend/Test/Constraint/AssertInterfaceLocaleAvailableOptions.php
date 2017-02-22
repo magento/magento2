@@ -9,7 +9,10 @@ use Magento\Backend\Test\Page\Adminhtml\SystemAccount;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Util\Command\Locales;
 
-class AssertInterfaceLocaleAvailability extends AbstractConstraint
+/**
+ * Assert that Interface Locale field has correct options.
+ */
+class AssertInterfaceLocaleAvailableOptions extends AbstractConstraint
 {
     /**
      * @param Locales $locales

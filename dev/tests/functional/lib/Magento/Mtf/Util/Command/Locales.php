@@ -8,6 +8,9 @@ namespace Magento\Mtf\Util\Command;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 
+/**
+ * Returns array of locales depends on fetching type.
+ */
 class Locales
 {
     /**#@+
@@ -38,7 +41,7 @@ class Locales
     }
 
     /**
-     * Return array of locales depends on fetching type.
+     * Returns array of locales depends on fetching type.
      *
      * @param string $type locales fetching type
      * @return array of locale codes, for example: ['en_US', 'fr_FR']

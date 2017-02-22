@@ -8,6 +8,11 @@ namespace Magento\Backend\Test\TestCase;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Backend\Test\Page\Adminhtml\SystemAccount;
 
+/**
+ * Verify that Interface Locales has correct options on Account Settings page.
+ *
+ * @ZephyrId MAGETWO-64920
+ */
 class AccountSettingsPageTest extends Injectable
 {
     /* tags */
