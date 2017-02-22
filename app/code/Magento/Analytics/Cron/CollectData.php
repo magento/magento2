@@ -34,7 +34,6 @@ class CollectData
         ExportDataHandler $exportDataHandler,
         SubscriptionStatusProvider $subscriptionStatus
     ) {
-
         $this->exportDataHandler = $exportDataHandler;
         $this->subscriptionStatus = $subscriptionStatus;
     }
