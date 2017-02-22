@@ -42,7 +42,7 @@ abstract class Index extends \Magento\Framework\App\Action\Action
 
     /**
      * @param Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ConfigInterface $contactsConfig
      */
     public function __construct(
         Context $context,

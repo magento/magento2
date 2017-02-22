@@ -5,7 +5,6 @@
  */
 namespace Magento\Contact\Model;
 
-use Magento\Contact\Model\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
@@ -28,7 +27,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function isEnabled()
     {
@@ -39,7 +38,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function emailTemplate()
     {
@@ -50,7 +49,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function emailSender()
     {
@@ -61,7 +60,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function emailRecipient()
     {

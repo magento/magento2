@@ -14,8 +14,6 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
-use Magento\Framework\Mail\Template\TransportBuilder;
-use Magento\Framework\Translate\Inline\StateInterface;
 
 class Post extends \Magento\Contact\Controller\Index
 {
@@ -59,7 +57,7 @@ class Post extends \Magento\Contact\Controller\Index
      */
     public function execute()
     {
-        if (! $this->isPostRequest()) {
+        if (!$this->isPostRequest()) {
             return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
         try {
