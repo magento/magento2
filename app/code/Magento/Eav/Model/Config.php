@@ -5,6 +5,7 @@
  */
 namespace Magento\Eav\Model;
 
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
@@ -48,9 +49,20 @@ class Config
      *
      * array ($objectId => $object)
      *
-     * @var array
+     * @var \Magento\Eav\Model\Entity\Type[]
      */
     protected $_objects;
+
+    /**
+     * Initialized attributes
+     *
+     * array ($entityTypeCode =>
+     *          ($attributeCode => $object)
+     *       )
+     *
+     * @var AbstractAttribute[][]
+     */
+    private $attributes;
 
     /**
      * References between codes and identifiers
@@ -145,6 +157,7 @@ class Config
         $this->_entityTypeData = null;
         $this->_attributeData = null;
         $this->_objects = null;
+        $this->attributes = null;
         $this->_references = null;
         $this->_attributeCodes = null;
         $this->_cache->clean(
@@ -168,6 +181,17 @@ class Config
     }
 
     /**
+     * Get attributes by entity type code
+     *
+     * @param   string $entityTypeCode
+     * @return  AbstractAttribute[]
+     */
+    private function loadAttributes($entityTypeCode)
+    {
+        return isset($this->attributes[$entityTypeCode]) ? $this->attributes[$entityTypeCode] : [];
+    }
+
+    /**
      * Associate object with identifier
      *
      * @param   mixed $obj
@@ -178,6 +202,20 @@ class Config
     protected function _save($obj, $id)
     {
         $this->_objects[$id] = $obj;
+        return $this;
+    }
+
+    /**
+     * Associate object with identifier
+     *
+     * @param AbstractAttribute $attribute
+     * @param string $entityTypeCode
+     * @param string $attributeCode
+     * @return $this
+     */
+    private function saveAttribute(AbstractAttribute $attribute, $entityTypeCode, $attributeCode)
+    {
+        $this->attributes[$entityTypeCode][$attributeCode] = $attribute;
         return $this;
     }
 
@@ -377,7 +415,7 @@ class Config
         $entityType = $this->getEntityType($entityType);
         $entityTypeCode = $entityType->getEntityTypeCode();
 
-        if (isset($this->_attributeData[$entityTypeCode])) {
+        if (is_array($this->_attributeData) && isset($this->_attributeData[$entityTypeCode])) {
             return $this;
         }
         $cacheKey = self::ATTRIBUTES_CACHE_ID . $entityTypeCode;
@@ -400,6 +438,7 @@ class Config
             $entityType
         )->getData();
 
+        $this->_attributeData[$entityTypeCode] = [];
         foreach ($attributes as $attribute) {
             if (empty($attribute['attribute_model'])) {
                 $attribute['attribute_model'] = $entityType->getAttributeModel();
@@ -426,11 +465,36 @@ class Config
     }
 
     /**
+     * Get attributes by entity type
+     *
+     * @param string $entityType
+     * @return AbstractAttribute[]
+     */
+    public function getAttributes($entityType)
+    {
+        $this->_initAttributes($entityType);
+
+        $entityTypeCode = $this->getEntityType($entityType)->getEntityTypeCode();
+
+        $attributes = $this->loadAttributes($entityTypeCode);
+        if (!$attributes) {
+            $attributeCodes = $this->getEntityAttributeCodes($entityTypeCode);
+            foreach ($attributeCodes as $code) {
+                $attribute = $this->createAttributeByAttributeCode($entityType, $code);
+                $this->_addAttributeReference($code, $code, $entityTypeCode);
+                $this->saveAttribute($attribute, $entityTypeCode, $code);
+            }
+            $attributes = $this->loadAttributes($entityTypeCode);
+        }
+        return $attributes;
+    }
+
+    /**
      * Get attribute by code for entity type
      *
      * @param   mixed $entityType
      * @param   mixed $code
-     * @return  \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @return  AbstractAttribute
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttribute($entityType, $code)
@@ -448,26 +512,13 @@ class Config
                 $code = $attributeCode;
             }
         }
-        $attributeKey = $this->_getAttributeKey($entityTypeCode, $code);
 
-        $attribute = $this->_load($attributeKey);
+        $attributes = $this->loadAttributes($entityTypeCode);
+        $attribute = $attributes && isset($attributes[$code]) ? $attributes[$code] : null;
         if (!$attribute) {
-            // TODO: refactor wrong method usage in: addAttributeToSelect, joinAttribute
-            $entityType = $this->getEntityType($entityType);
-            /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-            $attribute = $this->_universalFactory->create($entityType->getAttributeModel());
-            $attribute->setAttributeCode($code);
-            $entity = $entityType->getEntity();
-            if ($entity && in_array($attribute->getAttributeCode(), $entity->getDefaultAttributes())) {
-                $attribute->setBackendType(
-                    \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::TYPE_STATIC
-                )->setIsGlobal(
-                    1
-                );
-            }
-            $attribute->setEntityType($entityType)->setEntityTypeId($entityType->getId());
+            $attribute = $this->createAttributeByAttributeCode($entityType, $code);
             $this->_addAttributeReference($code, $code, $entityTypeCode);
-            $this->_save($attribute, $attributeKey);
+            $this->saveAttribute($attribute, $entityTypeCode, $code);
         }
         \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
         return $attribute;
@@ -541,15 +592,16 @@ class Config
      *
      * @param string $entityType
      * @param array $attributeData
-     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @return AbstractAttribute
      */
     protected function _createAttribute($entityType, $attributeData)
     {
         $entityType = $this->getEntityType($entityType);
         $entityTypeCode = $entityType->getEntityTypeCode();
 
-        $attributeKey = $this->_getAttributeKey($entityTypeCode, $attributeData['attribute_code']);
-        $attribute = $this->_load($attributeKey);
+        $code = $attributeData['attribute_code'];
+        $attributes = $this->loadAttributes($entityTypeCode);
+        $attribute = $attributes && isset($attributes[$code]) ? $attributes[$code] : null;
         if ($attribute) {
             $existsFullAttribute = $attribute->hasIsRequired();
             $fullAttributeData = array_key_exists('is_required', $attributeData);
@@ -564,15 +616,14 @@ class Config
         } else {
             $model = $entityType->getAttributeModel();
         }
-        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        /** @var AbstractAttribute $attribute */
         $attribute = $this->_universalFactory->create($model)->setData($attributeData);
         $this->_addAttributeReference(
             $attributeData['attribute_id'],
-            $attributeData['attribute_code'],
+            $code,
             $entityTypeCode
         );
-        $attributeKey = $this->_getAttributeKey($entityTypeCode, $attributeData['attribute_code']);
-        $this->_save($attribute, $attributeKey);
+        $this->saveAttribute($attribute, $entityTypeCode, $code);
 
         return $attribute;
     }
@@ -616,5 +667,30 @@ class Config
         }
 
         return $this;
+    }
+
+    /**
+     * Create attribute by attribute code
+     *
+     * @param string $entityType
+     * @param string $attributeCode
+     * @return AbstractAttribute
+     */
+    private function createAttributeByAttributeCode($entityType, $attributeCode)
+    {
+        $entityType = $this->getEntityType($entityType);
+        /** @var AbstractAttribute $attribute */
+        $attribute = $this->_universalFactory->create($entityType->getAttributeModel());
+        $attribute->setAttributeCode($attributeCode);
+        $entity = $entityType->getEntity();
+        if ($entity && in_array($attribute->getAttributeCode(), $entity->getDefaultAttributes())) {
+            $attribute->setBackendType(
+                AbstractAttribute::TYPE_STATIC
+            )->setIsGlobal(
+                1
+            );
+        }
+        $attribute->setEntityType($entityType)->setEntityTypeId($entityType->getId());
+        return $attribute;
     }
 }

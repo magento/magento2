@@ -5,83 +5,44 @@
  */
 namespace Magento\Eav\Model\ResourceModel;
 
-use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\ResourceConnection as AppResource;
-use Magento\Framework\Model\Entity\ScopeResolver;
-use Magento\Framework\Model\Entity\ScopeInterface;
-use Magento\Framework\EntityManager\Operation\AttributeInterface;
-use Magento\Eav\Model\Entity\AttributeCache;
-use Psr\Log\LoggerInterface;
-
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-class ReadHandler implements AttributeInterface
+class ReadHandler implements \Magento\Framework\EntityManager\Operation\AttributeInterface
 {
     /**
-     * @var AttributeCache
-     */
-    private $attributeCache;
-
-    /**
-     * @var AttributeRepository
-     */
-    protected $attributeRepository;
-
-    /**
-     * @var MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
     /**
-     * @var AppResource
-     */
-    protected $appResource;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
-     * @var ScopeResolver
+     * @var \Magento\Framework\Model\Entity\ScopeResolver
      */
     protected $scopeResolver;
 
     /**
-     * @var LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
+
+    /** @var \Magento\Eav\Model\Config */
+    private $config;
 
     /**
      * ReadHandler constructor.
      *
-     * @param AttributeRepository $attributeRepository
-     * @param MetadataPool $metadataPool
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param AppResource $appResource
-     * @param ScopeResolver $scopeResolver
-     * @param AttributeCache $attributeCache
-     * @param LoggerInterface $logger
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param \Magento\Framework\Model\Entity\ScopeResolver $scopeResolver
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Eav\Model\Config $config
      */
     public function __construct(
-        AttributeRepository $attributeRepository,
-        MetadataPool $metadataPool,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        AppResource $appResource,
-        ScopeResolver $scopeResolver,
-        AttributeCache $attributeCache,
-        LoggerInterface $logger
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
+        \Magento\Framework\Model\Entity\ScopeResolver $scopeResolver,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Eav\Model\Config $config
     ) {
-        $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->appResource = $appResource;
         $this->scopeResolver = $scopeResolver;
-        $this->attributeCache = $attributeCache;
         $this->logger = $logger;
+        $this->config = $config;
     }
 
     /**
@@ -91,26 +52,16 @@ class ReadHandler implements AttributeInterface
      */
     protected function getAttributes($entityType)
     {
-
-        $attributes = $this->attributeCache->getAttributes($entityType);
-        if ($attributes) {
-            return $attributes;
-        }
         $metadata = $this->metadataPool->getMetadata($entityType);
-        $searchResult = $this->attributeRepository->getList(
-            $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->create()
-        );
-        $attributes = $searchResult->getItems();
-        $this->attributeCache->saveAttributes($entityType, $attributes);
+        $attributes = $this->config->getAttributes($metadata->getEavEntityType());
         return $attributes;
     }
 
     /**
-     * @param ScopeInterface $scope
+     * @param \Magento\Framework\Model\Entity\ScopeInterface $scope
      * @return array
      */
-    protected function getContextVariables(ScopeInterface $scope)
+    protected function getContextVariables(\Magento\Framework\Model\Entity\ScopeInterface $scope)
     {
         $data[] = $scope->getValue();
         if ($scope->getFallback()) {
