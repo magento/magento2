@@ -20,14 +20,9 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     /**
      * HTTP scheme
      * used to compare against the filename and select the proper DriverPool adapter
+     * @var string
      */
-    const HTTP_SCHEME   = 'http://';
-
-    /**
-     * HTTPS scheme
-     * used to compare against the filename and select the proper DriverPool adapter
-     */
-    const HTTPS_SCHEME  = 'https://';
+    private $httpScheme = 'http://';
 
     /**
      * Temp directory.
@@ -160,7 +155,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         if (preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
             $url = str_replace($matches[0], '', $fileName);
 
-            if ($matches[0] === self::HTTP_SCHEME) {
+            if ($matches[0] === $this->httpScheme) {
                 $read = $this->_readFactory->create($url, DriverPool::HTTP);
             } else {
                 $read = $this->_readFactory->create($url, DriverPool::HTTPS);
