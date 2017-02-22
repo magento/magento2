@@ -23,12 +23,12 @@ class AssertCaptchaFieldOnBackend extends AbstractConstraint
     public function processAssert(AdminAuthLoginWithCaptcha $adminAuthLogin)
     {
         \PHPUnit_Framework_Assert::assertTrue(
-            $adminAuthLogin->getLoginBlockWithCaptcha()->getCaptcha()->isVisible(),
+            $adminAuthLogin->getLoginBlockWithCaptcha()->isVisibleCaptcha(),
             'Captcha image is not present on backend login page.'
         );
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $adminAuthLogin->getLoginBlockWithCaptcha()->getCaptchaReloadButton()->isVisible(),
+            $adminAuthLogin->getLoginBlockWithCaptcha()->isVisibleCaptchaReloadButton(),
             'Captcha reload button is not present on backend login page.'
         );
     }
