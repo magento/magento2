@@ -25,7 +25,6 @@
         <customers>200000</customers> <!-- Number of customers to generate -->
 
         <catalog_price_rules>20</catalog_price_rules> <!-- Number of catalog price rules -->
-        <catalog_target_rules>5</catalog_target_rules> <!-- Number of catalog target rules -->
         <cart_price_rules>20</cart_price_rules> <!-- Number of cart price rules -->
         <cart_price_rules_floor>2</cart_price_rules_floor>
 
