@@ -6,11 +6,12 @@
  */
 -->
 <mapping strict="1">
-    <wrapper>order[account]</wrapper>
     <fields>
-        <group_id>
-            <input>select</input>
-        </group_id>
-        <email />
+        <login_id>
+            <selector>[name=MerchantLogin]</selector>
+        </login_id>
+        <password>
+            <selector>[name=Password]</selector>
+        </password>
     </fields>
 </mapping>
