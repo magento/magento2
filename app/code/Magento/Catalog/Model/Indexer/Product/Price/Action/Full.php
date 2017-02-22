@@ -40,6 +40,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
+     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $indexerFrontendResource
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param \Magento\Framework\Indexer\BatchSizeCalculatorInterface|null $batchSizeCalculator
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
@@ -55,6 +56,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory $indexerPriceFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         \Magento\Framework\Indexer\BatchSizeCalculatorInterface $batchSizeCalculator = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
@@ -79,7 +81,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             $dateTime,
             $catalogProductType,
             $indexerPriceFactory,
-            $defaultIndexerResource
+            $defaultIndexerResource,
+            $indexerFrontendResource
         );
     }
 

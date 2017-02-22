@@ -139,7 +139,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      */
     public function setTableSuffix($tableSuffix)
     {
-        return ($this->setData('table_suffix', $tableSuffix));
+        return $this->setData('table_suffix', $tableSuffix);
     }
 
     /**
