@@ -39,17 +39,19 @@ class Indexer extends Cli
     }
 
     /**
-     * Run set mode.
+     * Run set mode. Example of indexers array:
+     * [
+     *      [0] => ['indexer' => 'category_flat_data', 'mode' => 'schedule'],
+     *      [1] => ['indexer' => 'catalogrule_product', 'mode' => 'realtime']
+     * ]
      *
      * @param array $indexers
      * @return void
      */
-    public function setMode(array $indexers = [])
+    public function setMode(array $indexers)
     {
-        if (!empty($indexers)) {
-            foreach ($indexers as $indexer) {
-                parent::execute(Indexer::PARAM_SET_MODE . ' ' . $indexer['mode'] . ' ' . $indexer['indexer']);
-            }
+        foreach ($indexers as $indexer) {
+            parent::execute(Indexer::PARAM_SET_MODE . ' ' . $indexer['mode'] . ' ' . $indexer['indexer']);
         }
     }
 }
