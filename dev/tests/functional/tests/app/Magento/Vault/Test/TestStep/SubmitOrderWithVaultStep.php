@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sales\Test\TestStep;
+namespace Magento\Vault\Test\TestStep;
 
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
@@ -12,12 +12,11 @@ use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
- * Submit Order step.
+ * Submit Order with vault step.
  */
-class SubmitOrderStep implements TestStepInterface
+class SubmitOrderWithVaultStep implements TestStepInterface
 {
     /**
      * Sales order create index page.
@@ -62,20 +61,13 @@ class SubmitOrderStep implements TestStepInterface
     private $products;
 
     /**
-     * Fixture OrderInjectable.
-     *
-     * @var OrderInjectable
-     */
-    private $order;
-
-    /**
      * @param OrderCreateIndex $orderCreateIndex
      * @param SalesOrderView $salesOrderView
      * @param FixtureFactory $fixtureFactory
      * @param Customer $customer
      * @param \Magento\Mtf\Fixture\FixtureInterface[] $products
+     * @param OrderCreateIndex $orderCreateIndex
      * @param Address|null $billingAddress
-     * @param OrderInjectable|null $order
      */
     public function __construct(
         OrderCreateIndex $orderCreateIndex,
@@ -83,8 +75,7 @@ class SubmitOrderStep implements TestStepInterface
         FixtureFactory $fixtureFactory,
         Customer $customer,
         array $products,
-        Address $billingAddress = null,
-        OrderInjectable $order = null
+        Address $billingAddress = null
     ) {
         $this->orderCreateIndex = $orderCreateIndex;
         $this->salesOrderView = $salesOrderView;
@@ -92,7 +83,6 @@ class SubmitOrderStep implements TestStepInterface
         $this->customer = $customer;
         $this->billingAddress = $billingAddress;
         $this->products = $products;
-        $this->order = $order;
     }
 
     /**
@@ -107,14 +97,13 @@ class SubmitOrderStep implements TestStepInterface
         $orderId = trim($this->salesOrderView->getTitleBlock()->getTitle(), '#');
         $data = [
             'id' => $orderId,
-            'customer_id' => ['customer' => $this->customer->getData()],
+            'customer_id' => ['customer' => $this->customer],
             'entity_id' => ['products' => $this->products],
             'billing_address_id' => ['billingAddress' => $this->billingAddress],
         ];
-        $orderData = $this->order !== null ? $this->order->getData() : [];
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
-            ['data' => array_merge($data, $orderData)]
+            ['data' => $data]
         );
 
         return ['orderId' => $orderId, 'order' => $order];

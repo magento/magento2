@@ -53,25 +53,36 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
      */
     private $creditCard;
 
+
+    /**
+     * Fixture OrderInjectable.
+     *
+     * @var OrderInjectable
+     */
+    private $order;
+
     /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param FixtureFactory $fixtureFactory
      * @param CreditCard $creditCard
      * @param array $payment
      * @param array $products
+     * @param OrderInjectable|null $order
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         FixtureFactory $fixtureFactory,
         CreditCard $creditCard,
         array $payment,
-        array $products
+        array $products,
+        OrderInjectable $order = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->fixtureFactory = $fixtureFactory;
         $this->creditCard = $creditCard;
         $this->payment = $payment;
         $this->products = $products;
+        $this->order = $order;
     }
 
     /**
@@ -90,15 +101,15 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
             $this->checkoutOnepage->getHostedProBlock()->fillPaymentData($this->creditCard);
             $attempts++;
         }
-        /** @var OrderInjectable $order */
+        $data = [
+            'entity_id' => ['products' => $this->products]
+        ];
+        $orderData = $this->order !== null ? $this->order->getData() : [];
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
-            [
-                'data' => [
-                    'entity_id' => ['products' => $this->products]
-                ]
-            ]
+            ['data' => array_merge($data, $orderData)]
         );
+
         return ['order' => $order];
     }
 }

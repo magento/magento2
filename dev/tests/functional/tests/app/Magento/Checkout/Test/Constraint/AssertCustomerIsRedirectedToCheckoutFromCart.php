@@ -75,7 +75,7 @@ class AssertCustomerIsRedirectedToCheckoutFromCart extends AbstractConstraint
         }
 
         //Assert that Order Grand Total is correct on order page in backend.
-        $assertOrderGrandTotal->processAssert($salesOrderView, $orderIndex, $this->orderId, $prices);
+        $assertOrderGrandTotal->processAssert($salesOrderView, $orderIndex, $prices, $this->orderId);
     }
 
     /**

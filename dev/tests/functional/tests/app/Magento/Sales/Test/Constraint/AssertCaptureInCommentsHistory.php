@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -25,16 +26,17 @@ class AssertCaptureInCommentsHistory extends AbstractConstraint
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
+     * @param OrderInjectable $order
      * @param string $orderId
-     * @param array $capturedPrices
      * @return void
      */
     public function processAssert(
         SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
-        $orderId,
-        array $capturedPrices
+        OrderInjectable $order,
+        $orderId
     ) {
+        $capturedPrices = $order->getPrice()['captured_prices'];
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
