@@ -175,6 +175,17 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
                 'oldValueInvokeMatcher' => $this->never(),
                 'saveFlagInvokeMatcher' => $this->never(),
                 'configValueGetPathMatcher' => $this->once(),
+            ],
+            'unsecure_url_changed' => [
+                'testData' => [
+                    'isValueChanged' => true,
+                    'subscriptionStatus' => SubscriptionStatusProvider::PENDING,
+                    'path' => Store::XML_PATH_UNSECURE_BASE_URL
+                ],
+                'saveConfigInvokeMatcher' => $this->never(),
+                'oldValueInvokeMatcher' => $this->never(),
+                'saveFlagInvokeMatcher' => $this->never(),
+                'configValueGetPathMatcher' => $this->once(),
             ]
         ];
     }
