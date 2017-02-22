@@ -216,11 +216,10 @@ foreach ($oldOptions as $option) {
 $product->setOptions($options);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryFactory */
-$productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $productRepository->save($product);
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
     [2]
 );
-$productRepositoryFactory->get('simple', false, null, true);
