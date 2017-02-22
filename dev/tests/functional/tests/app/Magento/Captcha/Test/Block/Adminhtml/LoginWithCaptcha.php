@@ -8,7 +8,6 @@ namespace Magento\Captcha\Test\Block\Adminhtml;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Admin\Login;
-use Magento\Mtf\Client\ElementInterface;
 
 /**
  * Login form for backend user.
@@ -30,9 +29,9 @@ class LoginWithCaptcha extends Login
     private $captchaReload = '#captcha-reload';
 
     /**
-     * Get captcha element.
+     * Return captcha element visibility.
      *
-     * @return ElementInterface
+     * @return bool
      */
     public function isVisibleCaptcha()
     {
@@ -40,9 +39,9 @@ class LoginWithCaptcha extends Login
     }
 
     /**
-     * Get captcha reload button element.
+     * Return captcha reload button element visibility.
      *
-     * @return ElementInterface
+     * @return bool
      */
     public function isVisibleCaptchaReloadButton()
     {
