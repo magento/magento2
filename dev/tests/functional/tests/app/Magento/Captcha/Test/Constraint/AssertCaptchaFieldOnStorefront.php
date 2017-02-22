@@ -23,12 +23,12 @@ class AssertCaptchaFieldOnStorefront extends AbstractConstraint
     public function processAssert(CustomerAccountLogin $loginPage)
     {
         \PHPUnit_Framework_Assert::assertTrue(
-            $loginPage->getLoginBlockWithCaptcha()->getCaptcha()->isVisible(),
+            $loginPage->getLoginBlockWithCaptcha()->isVisibleCaptcha(),
             'Captcha image is not present on storefront login page.'
         );
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $loginPage->getLoginBlockWithCaptcha()->getCaptchaReloadButton()->isVisible(),
+            $loginPage->getLoginBlockWithCaptcha()->isVisibleCaptchaReloadButton(),
             'Captcha reload button is not present on storefront login page.'
         );
     }
