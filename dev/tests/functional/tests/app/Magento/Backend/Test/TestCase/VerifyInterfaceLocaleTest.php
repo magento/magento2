@@ -64,13 +64,15 @@ class VerifyInterfaceLocaleTest extends Injectable
         $this->systemAccountPage->open();
         $userForm = $this->systemAccountPage->getForm();
         $assertInterfaceLocaleAvailableOptions->processAssert(
-            $locales, $userForm->getInterfaceLocales()
+            $locales,
+            $userForm->getInterfaceLocales()
         );
 
         $this->userEditPage->open();
         $userForm = $this->userEditPage->getUserForm();
         $assertInterfaceLocaleAvailableOptions->processAssert(
-            $locales, $userForm->getInterfaceLocales()
+            $locales,
+            $userForm->getInterfaceLocales()
         );
     }
 }

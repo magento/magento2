@@ -120,7 +120,7 @@ class Options implements OptionInterface
         $theme = $this->design->getDesignTheme();
         $availableLocales = $this->availableLocales->getList($theme->getCode(), $theme->getArea());
 
-        return array_filter($locales, function($localeData) use ($availableLocales) {
+        return array_filter($locales, function ($localeData) use ($availableLocales) {
             return in_array($localeData['value'], $availableLocales);
         });
     }
