@@ -44,6 +44,8 @@
         <order_simple_product_count_to>2</order_simple_product_count_to>
         <orders>150000</orders> <!-- Orders count -->
 
+        <tax_rates_file>tax_rates.csv</tax_rates_file> <!-- Tax rates file in fixtures directory-->
+
         <configs> <!-- Config variables and values for change -->
             <config>
                 <path>admin/security/use_form_key</path>
@@ -61,35 +63,35 @@
         <indexers> <!-- Indexer mode value (true - Update by Schedule, false - Update on Save) -->
             <indexer>
                 <id>catalog_category_product</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>catalog_product_category</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>catalog_product_price</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>catalog_product_attribute</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>cataloginventory_stock</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>catalogrule_rule</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>catalogrule_product</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>catalogsearch_fulltext</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
         </indexers>
         <xi:include href="../../config/searchTermsLarge.xml" />
