@@ -162,7 +162,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                         $this->attributeHelper->getStoreWebsiteId($storeId)
                     );
                     if (!$stockItemDo->getProductId()) {
-                        $inventoryData[] = $productId;
+                        $inventoryData['product_id'] = $productId;
                     }
 
                     $stockItemId = $stockItemDo->getId();
