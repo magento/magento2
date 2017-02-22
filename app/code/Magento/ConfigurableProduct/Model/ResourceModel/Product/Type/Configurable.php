@@ -2,7 +2,7 @@
 /**
  * Configurable product type resource model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type;

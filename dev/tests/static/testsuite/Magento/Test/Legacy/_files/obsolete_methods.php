@@ -2,7 +2,7 @@
 /**
  * Obsolete methods
  * Format: array(<method_name = ''>[, <class_scope> = ''[, <replacement>[, <is_deprecated>]]])
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
