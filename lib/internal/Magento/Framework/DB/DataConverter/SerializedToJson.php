@@ -42,9 +42,19 @@ class SerializedToJson implements DataConverterInterface
      *
      * @param string $value
      * @return string
+     * @throws DataConversionException
      */
     public function convert($value)
     {
-        return $this->json->serialize($this->serialize->unserialize($value));
+        try {
+            $value = $this->serialize->unserialize($value);
+        } catch (\Throwable $throwable) {
+            throw new DataConversionException($throwable->getMessage());
+        }
+        $value = $this->json->serialize($value);
+        if (json_last_error()) {
+            throw new DataConversionException(json_last_error_msg());
+        }
+        return $value;
     }
 }

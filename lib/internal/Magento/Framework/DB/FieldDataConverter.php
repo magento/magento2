@@ -7,10 +7,12 @@ namespace Magento\Framework\DB;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
 use Magento\Framework\DB\Select\QueryModifierInterface;
-use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\SerializationException;
+use Magento\Setup\Exception;
 
 /**
  * Convert field data from one representation to another
@@ -57,6 +59,7 @@ class FieldDataConverter
      * @param string $identifier
      * @param string $field
      * @param QueryModifierInterface|null $queryModifier
+     * @throws Exception
      * @return void
      */
     public function convert(
@@ -76,9 +79,27 @@ class FieldDataConverter
         foreach ($iterator as $selectByRange) {
             $rows = $connection->fetchAll($selectByRange);
             foreach ($rows as $row) {
-                $bind = [$field => $this->dataConverter->convert($row[$field])];
-                $where = [$identifier . ' = ?' => (int) $row[$identifier]];
-                $connection->update($table, $bind, $where);
+                try {
+                    $bind = [$field => $this->dataConverter->convert($row[$field])];
+                    $where = [$identifier . ' = ?' => (int) $row[$identifier]];
+                    $connection->update($table, $bind, $where);
+                } catch (DataConversionException $e) {
+                    throw new Exception(
+                        sprintf(
+                            "Error converting field `%s` in table `%s` where `%s`=%s using %s."
+                            . PHP_EOL
+                            . "Fix data or replace with valid value."
+                            . PHP_EOL
+                            . "Failure reason: '%s'",
+                            $field,
+                            $table,
+                            $identifier,
+                            $row[$identifier],
+                            get_class($this->dataConverter),
+                            $e->getMessage()
+                        )
+                    );
+                }
             }
         }
     }

@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\DataConverter;
+use Magento\Framework\Exception\SerializationException;
 
 /**
  * Convert from one format to another
@@ -15,6 +16,8 @@ interface DataConverterInterface
      *
      * @param string $value
      * @return string
+     *
+     * @throws SerializationException
      */
     public function convert($value);
 }
