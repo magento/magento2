@@ -53,7 +53,6 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
      */
     private $creditCard;
 
-
     /**
      * Fixture OrderInjectable.
      *

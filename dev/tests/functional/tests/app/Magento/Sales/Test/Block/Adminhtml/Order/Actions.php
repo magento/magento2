@@ -12,6 +12,8 @@ use Magento\Ui\Test\Block\Adminhtml\Modal;
 
 /**
  * Order actions block.
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Actions extends Block
 {

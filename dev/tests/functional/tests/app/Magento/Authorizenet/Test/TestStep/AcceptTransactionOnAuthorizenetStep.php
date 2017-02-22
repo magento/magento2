@@ -108,6 +108,8 @@ class AcceptTransactionOnAuthorizenetStep implements TestStepInterface
      * @param BrowserInterface $browser
      * @param array $orderBeforeAccept
      * @param string $orderId
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         AuthorizenetSandboxCustomer $sandboxCustomer,
