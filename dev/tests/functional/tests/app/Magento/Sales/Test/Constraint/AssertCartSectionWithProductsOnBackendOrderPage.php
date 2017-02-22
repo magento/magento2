@@ -31,7 +31,7 @@ class AssertCartSectionWithProductsOnBackendOrderPage extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             sort($expectedItemNames),
             sort($itemsNames),
-            "Customer's Shopping Cart section on Order Create backend page is empty."
+            "Customer's Shopping Cart section on Order Create backend page doesn't contain correct products."
         );
     }
 
@@ -42,6 +42,6 @@ class AssertCartSectionWithProductsOnBackendOrderPage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Customer's Shopping Cart section on Order Create backend page contains products.";
+        return "Customer's Shopping Cart section on Order Create backend page contains correct products.";
     }
 }

@@ -6,9 +6,6 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 
-use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\InjectableFixture;
@@ -47,6 +44,13 @@ class Wishlist extends Sidebar
      * @var string
      */
     protected $addToOrderGrouped = '//tr[td[contains(.,"%s")]]//a[contains(@class, "icon-configure")]';
+
+    /**
+     * Locator for customer activities block.
+     *
+     * @var string
+     */
+    protected $customerActivities = '.customer-current-activity';
 
     /**
      * No items in wishlist message locator.
@@ -93,6 +97,21 @@ class Wishlist extends Sidebar
     }
 
     /**
+     * Get customer activities block.
+     *
+     * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities
+     */
+    public function getCustomerActivitiesBlock()
+    {
+        return $this->blockFactory->create(
+            \Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities::class,
+            [
+                'element' => $this->browser->find($this->customerActivities, Locator::SELECTOR_CSS)
+            ]
+        );
+    }
+
+    /**
      * Select wish list in Wish list dropdown.
      *
      * @param string $name
@@ -112,9 +131,8 @@ class Wishlist extends Sidebar
      */
     public function selectItemToAddToOrder(InjectableFixture $product, $qty)
     {
-        if ($product instanceof GroupedProduct || $product instanceof ConfigurableProduct
-            || $product instanceof BundleProduct
-        ) {
+        $productCheckoutData = $product->getData('checkout_data');
+        if (isset($productCheckoutData['options'])) {
             $this->_rootElement->find(
                 sprintf($this->addToOrderGrouped, $product->getName()),
                 Locator::SELECTOR_XPATH
@@ -129,17 +147,8 @@ class Wishlist extends Sidebar
             $checkBox->click();
             $this->_rootElement->click();
             $checkBox->setValue('Yes');
+            $this->getCustomerActivitiesBlock()->updateChanges();
         }
-    }
-
-    /**
-     * Get items from backend order wishlist section.
-     *
-     * @return array
-     */
-    public function getItemsNamesFromWishlist()
-    {
-        return $this->_rootElement->find($this->item, Locator::SELECTOR_CSS);
     }
 
     /**
@@ -147,7 +156,7 @@ class Wishlist extends Sidebar
      *
      * @return bool
      */
-    public function noItemsInWishlistCheck()
+    public function isSectionEmpty()
     {
         return $this->_rootElement->find($this->noItemsMessage, Locator::SELECTOR_CSS)->isVisible() ? true : false;
     }

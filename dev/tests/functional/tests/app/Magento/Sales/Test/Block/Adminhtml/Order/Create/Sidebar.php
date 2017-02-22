@@ -16,13 +16,6 @@ use Magento\Mtf\Fixture\InjectableFixture;
 class Sidebar extends Block
 {
     /**
-     * Locator for Wish List section in sidebar on Create Order page on backend.
-     *
-     * @var string
-     */
-    protected $orderSidebarWishList = '#order-sidebar_wishlist';
-
-    /**
      * Locator for cart section in sidebar on Create Order page on backend.
      *
      * @var string
@@ -70,19 +63,6 @@ class Sidebar extends Block
      * @var string
      */
     protected $addToOrder = '//input[contains(@name,"[add_cart_item]")]';
-
-    /**
-     * Get backend order sidebar Wish List block.
-     *
-     * @return \Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Wishlist
-     */
-    public function getSidebarWishlistBlock()
-    {
-        return $this->blockFactory->create(
-            \Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar\Wishlist::class,
-            ['element' => $this->_rootElement->find($this->orderSidebarWishList, Locator::SELECTOR_CSS)]
-        );
-    }
 
     /**
      * Update changes button click.
