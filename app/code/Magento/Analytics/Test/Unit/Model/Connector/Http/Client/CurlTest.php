@@ -174,12 +174,20 @@ class CurlTest extends \PHPUnit_Framework_TestCase
             );
         $this->curlMock->expects($this->once())
             ->method('read');
-        $this->curlMock->expects($this->any())
+        $this->curlMock->expects($this->atLeastOnce())
             ->method('getErrno')
             ->willReturn(1);
+        $this->curlMock->expects($this->atLeastOnce())
+            ->method('getError')
+            ->willReturn('CURL error.');
 
         $this->loggerMock->expects($this->once())
-            ->method('critical');
+            ->method('critical')
+            ->with(
+                new \Exception(
+                    'MBI service CURL connection error #1: CURL error.'
+                )
+            );
 
         $this->assertFalse(
             $this->subject->request(
