@@ -10,7 +10,6 @@ use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnStorefront;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Mtf\Fixture\FixtureFactory;
 
@@ -44,13 +43,6 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
     private $assertCaptcha;
 
     /**
-     * CmsIndex page.
-     *
-     * @var CmsIndex
-     */
-    private $cmsIndex;
-
-    /**
      * CustomerAccountLogin page.
      *
      * @var CustomerAccountLogin
@@ -74,7 +66,6 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
     /**
      * Injection data.
      *
-     * @param CmsIndex $cmsIndex
      * @param TestStepFactory $stepFactory
      * @param AssertCaptchaFieldOnStorefront $assertCaptcha
      * @param CustomerAccountLogin $customerAccountLogin
@@ -82,7 +73,6 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
      * @return void
      */
     public function __inject(
-        CmsIndex $cmsIndex,
         TestStepFactory $stepFactory,
         AssertCaptchaFieldOnStorefront $assertCaptcha,
         CustomerAccountLogin $customerAccountLogin,
@@ -90,7 +80,6 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
     ) {
         $this->stepFactory = $stepFactory;
         $this->assertCaptcha = $assertCaptcha;
-        $this->cmsIndex = $cmsIndex;
         $this->customerAccountLogin = $customerAccountLogin;
         $this->fixtureFactory = $fixtureFactory;
     }
@@ -125,9 +114,7 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
 
         $customer = $this->fixtureFactory->createByCode('customer', ['data' => $customerData]);
 
-        $this->cmsIndex->open();
-        $this->cmsIndex->getLinksBlock()->openLink('Sign In');
-        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
+        $this->customerAccountLogin->open();
         $this->assertCaptcha->processAssert($this->customerAccountLogin);
         $this->customerAccountLogin->getLoginBlockWithCaptcha()->getCaptchaReloadButton()->click();
         $this->customerAccountLogin->getLoginBlockWithCaptcha()->login($customer);

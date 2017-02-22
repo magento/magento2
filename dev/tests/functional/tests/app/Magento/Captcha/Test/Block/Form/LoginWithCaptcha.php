@@ -8,7 +8,7 @@ namespace Magento\Captcha\Test\Block\Form;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Customer\Test\Block\Form\Login;
-use Magento\Ui\Component\Form\Element\ElementInterface;
+use Magento\Mtf\Client\ElementInterface;
 
 /**
  * Form for storefront login with captcha.
@@ -30,13 +30,23 @@ class LoginWithCaptcha extends Login
     private $captchaReload = '.captcha-reload';
 
     /**
-     * Get captcha element.
+     * Get captcha element visibility.
      *
-     * @return ElementInterface
+     * @return bool
      */
-    public function getCaptcha()
+    public function isVisibleCaptcha()
     {
-        return $this->_rootElement->find($this->captchaImage, Locator::SELECTOR_CSS);
+        return $this->_rootElement->find($this->captchaImage, Locator::SELECTOR_CSS)->isVisible();
+    }
+
+    /**
+     * Get captcha reload button element visibility.
+     *
+     * @return bool
+     */
+    public function isVisibleCaptchaReloadButton()
+    {
+        return $this->_rootElement->find($this->captchaReload, Locator::SELECTOR_CSS)->isVisible();
     }
 
     /**
