@@ -369,4 +369,9 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\Attribute">
+        <arguments>
+            <argument name="attributeMetadataCache" xsi:type="object">Magento\Customer\Model\Metadata\AttributeMetadataCache\Proxy</argument>
+        </arguments>
+    </type>
 </config>
