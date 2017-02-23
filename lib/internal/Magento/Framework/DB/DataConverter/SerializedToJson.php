@@ -47,7 +47,15 @@ class SerializedToJson implements DataConverterInterface
     public function convert($value)
     {
         try {
-            $value = $this->serialize->unserialize($value);
+            if (PHP_MAJOR_VERSION >= 7) {
+                $value = $this->serialize->unserialize($value);
+            } else {
+                set_error_handler(function ($errorNumber, $errorString) {
+                    throw new DataConversionException($errorString);
+                });
+                $value = $this->serialize->unserialize($value);
+                restore_error_handler();
+            }
         } catch (\Throwable $throwable) {
             throw new DataConversionException($throwable->getMessage());
         }

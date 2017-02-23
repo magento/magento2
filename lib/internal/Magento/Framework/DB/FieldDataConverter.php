@@ -11,7 +11,6 @@ use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
 use Magento\Framework\DB\Select\QueryModifierInterface;
-use Magento\Framework\Exception\SerializationException;
 use Magento\Setup\Exception;
 
 /**

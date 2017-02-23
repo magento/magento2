@@ -5,7 +5,7 @@
  */
 
 /**
- * Create an admin user with corrupted serialized data for `extra` field
+ * Create an admin user with broken_admin username
  */
 
 /** @var $model \Magento\User\Model\User */
