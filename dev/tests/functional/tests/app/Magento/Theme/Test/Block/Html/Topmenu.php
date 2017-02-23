@@ -62,7 +62,7 @@ class Topmenu extends Block
         }
         $category[0]->click();
     }
-
+    
     /**
      * Hover on category from top menu by name.
      *

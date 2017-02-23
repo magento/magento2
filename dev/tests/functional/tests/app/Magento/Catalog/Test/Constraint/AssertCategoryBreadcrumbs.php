@@ -34,29 +34,46 @@ class AssertCategoryBreadcrumbs extends AbstractConstraint
      * @param BrowserInterface $browser
      * @param Category $category
      * @param CatalogCategoryView $catalogCategoryView
+     * @param Category|null $bottomChildCategory
+     * @param Category|null $parentCategory
+     * @param string|null $breadcrumbsSubCategory
      * @return void
      */
     public function processAssert(
         BrowserInterface $browser,
         Category $category,
-        CatalogCategoryView $catalogCategoryView
+        CatalogCategoryView $catalogCategoryView,
+        Category $bottomChildCategory = null,
+        Category $parentCategory = null,
+        $breadcrumbsSubCategory = ''
     ) {
         $this->browser = $browser;
+
+        if ($bottomChildCategory !== null) {
+            $category = $bottomChildCategory;
+        }
         $this->openCategory($category);
 
-        $breadcrumbs = $this->getBreadcrumbs($category);
+        $breadcrumbs = $this->getBreadcrumbs($category, $parentCategory);
         \PHPUnit_Framework_Assert::assertNotEmpty(
             $breadcrumbs,
             'No breadcrumbs on category \''. $category->getName() . '\' page.'
         );
         $pageBreadcrumbs = $catalogCategoryView->getBreadcrumbs()->getText();
-        \PHPUnit_Framework_Assert::assertEquals(
-            $breadcrumbs,
-            $pageBreadcrumbs,
-            'Wrong breadcrumbs of category page.'
-            . "\nExpected: " . $breadcrumbs
-            . "\nActual: " . $pageBreadcrumbs
-        );
+        if ($breadcrumbsSubCategory !== '') {
+            \PHPUnit_Framework_Assert::assertTrue(
+                (bool) strpos($breadcrumbs, str_replace(self::HOME_PAGE . ' ', '', $pageBreadcrumbs)),
+                'Wrong breadcrumbs of category page.'
+            );
+        } else {
+            \PHPUnit_Framework_Assert::assertEquals(
+                $breadcrumbs,
+                $pageBreadcrumbs,
+                'Wrong breadcrumbs of category page.'
+                . "\nExpected: " . $breadcrumbs
+                . "\nActual: " . $pageBreadcrumbs
+            );
+        }
     }
 
     /**
@@ -88,9 +105,10 @@ class AssertCategoryBreadcrumbs extends AbstractConstraint
      * Prepare and return category breadcrumbs.
      *
      * @param Category $category
+     * @param Category|null $parentCategory
      * @return string
      */
-    protected function getBreadcrumbs(Category $category)
+    protected function getBreadcrumbs(Category $category, Category $parentCategory = null)
     {
         $breadcrumbs = [];
 
@@ -101,6 +119,9 @@ class AssertCategoryBreadcrumbs extends AbstractConstraint
             if ($category !== null && 1 == $category->getParentId()) {
                 $category = null;
             }
+        }
+        if ($parentCategory !== null) {
+            $breadcrumbs[] = $parentCategory->getName();
         }
         $breadcrumbs[] = self::HOME_PAGE;
 

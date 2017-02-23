@@ -65,7 +65,7 @@ class Tree extends Block
      *
      * @var string
      */
-    protected $categoryInTree = '//*[@class="x-tree-node-ct"]/li/div/a/span[contains(text(), "%s")]/..';
+    protected $categoryInTree = '//ul//li//span[contains(text(), "%s")]';
 
     /**
      * Get backend abstract block.

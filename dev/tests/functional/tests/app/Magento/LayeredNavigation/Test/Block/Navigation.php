@@ -8,6 +8,7 @@ namespace Magento\LayeredNavigation\Test\Block;
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Catalog layered navigation view block.
@@ -50,6 +51,20 @@ class Navigation extends Block
     protected $expandFilterButton = '[data]';
 
     /**
+     * Locator for category name.
+     *
+     * @var string
+     */
+    protected $categoryName = './/li[@class="item"]//a[contains(text(),"%s")]';
+
+    /**
+     * Locator for element with product quantity.
+     *
+     * @var string
+     */
+    protected $productQty = '/following-sibling::span[contains(text(), "%s")]';
+
+    /**
      * Remove all applied filters.
      *
      * @return void
@@ -78,7 +93,7 @@ class Navigation extends Block
     }
 
     /**
-     * Apply Layerd Navigation filter.
+     * Apply Layered Navigation filter.
      *
      * @param string $filter
      * @param string $linkPattern
@@ -103,5 +118,20 @@ class Navigation extends Block
             }
         }
         throw new \Exception("Can't find {$filter} filter link by pattern: {$linkPattern}");
+    }
+
+    /**
+     * Check that category with product quantity can be displayed on layered navigation.
+     *
+     * @param Category $category
+     * @param int $qty
+     * @return bool
+     */
+    public function isCategoryVisible(Category $category, $qty)
+    {
+        return $this->_rootElement->find(
+            sprintf($this->categoryName, $category->getName()) . sprintf($this->productQty, $qty),
+            Locator::SELECTOR_XPATH
+        )->isVisible() ? true : false;
     }
 }

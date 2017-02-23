@@ -24,7 +24,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Verify created category
  *
  * @group Category_Management
- * @ZephyrId MAGETWO-27319
+ * @ZephyrId MAGETWO-27319, MAGETWO-21202
  */
 class MoveCategoryEntityTest extends Injectable
 {
@@ -66,13 +66,21 @@ class MoveCategoryEntityTest extends Injectable
      *
      * @param Category $childCategory
      * @param Category $parentCategory
+     * @param array|null $moveLevel
      * @return array
      */
-    public function test(Category $childCategory, Category $parentCategory)
+    public function test(Category $childCategory, Category $parentCategory, array $moveLevel = null)
     {
         // Preconditions:
         $parentCategory->persist();
         $childCategory->persist();
+        $bottomChildCategory = $childCategory;
+
+        if ($moveLevel !== null) {
+            for ($nestingIterator = 1; $nestingIterator < $moveLevel['child']; $nestingIterator++) {
+                $childCategory = $childCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
+            }
+        }
 
         // Steps:
         $this->catalogCategoryIndex->open();
@@ -86,7 +94,8 @@ class MoveCategoryEntityTest extends Injectable
         return [
             'category' => $childCategory,
             'parentCategory' => $parentCategory,
-            'childCategory' => $childCategory
+            'childCategory' => $childCategory,
+            'bottomChildCategory' => $bottomChildCategory,
         ];
     }
 }
