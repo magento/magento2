@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Eav\Test\Unit\Model\ResourceMode;
+namespace Magento\Eav\Test\Unit\Model\ResourceModel;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
