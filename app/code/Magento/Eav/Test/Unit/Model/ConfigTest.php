@@ -180,7 +180,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValueMap($factoryCalls));
 
-        $this->config->getAttribute($entityType, 'attribute_code_1');
+        $this->assertEquals($entityAttributeMock, $this->config->getAttribute($entityType, 'attribute_code_1'));
     }
 
     /**
@@ -305,7 +305,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValueMap($factoryCalls));
 
-        $this->config->getAttributes($entityType);
+        $this->assertEquals(['attribute_code_1' => $entityAttributeMock], $this->config->getAttributes($entityType));
     }
 
     public function testClear()
