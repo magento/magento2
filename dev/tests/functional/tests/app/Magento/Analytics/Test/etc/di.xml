@@ -18,4 +18,34 @@
             <argument name="severity" xsi:type="string">S1</argument>
         </arguments>
     </type>
+    <type name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsRestored">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Test\Constraint\AssertAcceptSubscriptionPopup">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Test\Constraint\AssertDeclineSubscriptionPopup">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Analytics\Test\Constraint\AssertSkipSubscriptionPopup">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
 </config>
