@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Contact\Test\Block\Form;
+
+use Magento\Mtf\Block\Form;
+
+/**
+ * Message block on "Contact Us" page.
+ */
+class Messages extends Form
+{
+    /**
+     * Message selector.
+     *
+     * @var string
+     */
+    private $message = '[data-bind*="message.text"]';
+
+    /**
+     * Get message which is present on the "Contact Us" page.
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        $this->waitForElementVisible($this->message);
+
+        return $this->_rootElement->find($this->message)->getText();
+    }
+}
