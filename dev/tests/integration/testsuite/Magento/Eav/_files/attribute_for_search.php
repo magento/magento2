@@ -6,9 +6,15 @@
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$entityTypeId = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)
-    ->loadByCode('order')
-    ->getId();
+$entityType = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)
+    ->loadByCode('order');
+$data = $entityType->getData();
+$data['entity_type_code'] = 'test';
+unset($data['entity_type_id']);
+$testEntityType = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)
+    ->setData($data)
+    ->save();
+$entityTypeId = $testEntityType->getId();
 
 $attributeData = [
     [
