@@ -106,6 +106,10 @@ class StockStateProvider implements StockStateProviderInterface
     {
         $result = $this->objectFactory->create();
         $result->setHasError(false);
+        
+        $product = $this->productFactory->create();
+        $product->load($stockItem->getProductId());
+        $stockItem->setProduct($product);
 
         $qty = $this->getNumber($qty);
 
