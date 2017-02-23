@@ -10,7 +10,6 @@ use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Client\BrowserInterface;
 
 /**
  * Assert that products added to wishlist is present on Customers account on backend in Customer Activities - Wishlist.
@@ -21,19 +20,17 @@ class AssertProductsIsPresentInCustomerBackendWishlist extends AbstractConstrain
      * Assert that products added to wishlist is present
      * on Customers account on backend in Customer Activities - Wishlist.
      *
-     * @param BrowserInterface $browser
      * @param Customer $customer
      * @param CustomerIndexEdit $customerIndexEdit
      * @param array $products
      * @return void
      */
     public function processAssert(
-        BrowserInterface $browser,
         Customer $customer,
         CustomerIndexEdit $customerIndexEdit,
         array $products
     ) {
-        $browser->open($_ENV['app_backend_url'] . 'customer/index/edit/id/' . $customer->getId());
+        $customerIndexEdit->open(['id' => $customer->getId()]);
         $customerIndexEdit->getCustomerForm()->openTab('wishlist');
         $wishlistGrid = $customerIndexEdit->getCustomerForm()->getTab('wishlist')->getSearchGridBlock();
         foreach ($products as $product) {

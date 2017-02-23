@@ -10,7 +10,6 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Customer\Test\Page\Adminhtml\CheckoutIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Mtf\Client\BrowserInterface;
 
 /**
  * Assert that product is present in grid on customer's shopping cart on backend.
@@ -20,7 +19,6 @@ class AssertProductInCustomerShoppingCartOnBackendGrid extends AbstractConstrain
     /**
      * Assert that product is present in grid on customer's shopping cart on backend.
      *
-     * @param BrowserInterface $browser
      * @param CustomerIndexEdit $customerIndexEdit
      * @param CheckoutIndex $checkoutIndex
      * @param Customer $customer
@@ -28,13 +26,12 @@ class AssertProductInCustomerShoppingCartOnBackendGrid extends AbstractConstrain
      * @return void
      */
     public function processAssert(
-        BrowserInterface $browser,
         CustomerIndexEdit $customerIndexEdit,
         CheckoutIndex $checkoutIndex,
         Customer $customer,
         array $productsInCart
     ) {
-        $browser->open($_ENV['app_backend_url'] . 'customer/index/edit/id/' . $customer->getId());
+        $customerIndexEdit->open(['id' => $customer->getId()]);
         $customerIndexEdit->getPageActionsBlock()->manageShoppingCart();
         foreach ($productsInCart as $product) {
             \PHPUnit_Framework_Assert::assertEquals(
