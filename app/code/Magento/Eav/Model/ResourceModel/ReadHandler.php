@@ -46,6 +46,8 @@ class ReadHandler implements \Magento\Framework\EntityManager\Operation\Attribut
     }
 
     /**
+     * Get attribute of given entity type
+     *
      * @param string $entityType
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @throws \Exception
@@ -53,7 +55,8 @@ class ReadHandler implements \Magento\Framework\EntityManager\Operation\Attribut
     protected function getAttributes($entityType)
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
-        $attributes = $this->config->getAttributes($metadata->getEavEntityType());
+        $eavEntityType = $metadata->getEavEntityType();
+        $attributes = (null === $eavEntityType) ? [] : $this->config->getAttributes($eavEntityType);
         return $attributes;
     }
 
