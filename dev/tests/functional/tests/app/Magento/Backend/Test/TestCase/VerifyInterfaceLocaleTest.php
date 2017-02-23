@@ -14,6 +14,13 @@ use Magento\User\Test\Page\Adminhtml\UserEdit;
 /**
  * Verify that Interface Locales has correct options on Account Settings and User Edit pages.
  *
+ * Steps:
+ * 1. Log in to backend.
+ * 2. Navigate to "Account Setting" page.
+ * 3. Perform interface locales asserts depends on magento mode.
+ * 4. Navigate to "User Edit Page".
+ * 5. Perform interface locales asserts depends on magento mode.
+ *
  * @ZephyrId MAGETWO-64920, MAGETWO-64921
  */
 class VerifyInterfaceLocaleTest extends Injectable

@@ -13,6 +13,9 @@ use Magento\Mtf\Util\Command\Locales;
  */
 class AssertInterfaceLocaleAvailableOptions extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'middle';
+    /* end tags */
     /**
      * Assert that Interface Locale field has correct options depends on magento mode.
      *
