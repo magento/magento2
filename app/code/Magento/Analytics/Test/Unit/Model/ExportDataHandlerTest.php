@@ -126,7 +126,7 @@ class ExportDataHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $isArchiveSourceDirectory
+     * @param bool $isArchiveSourceDirectory
      * @dataProvider prepareExportDataDataProvider
      */
     public function testPrepareExportData($isArchiveSourceDirectory)
