@@ -123,7 +123,7 @@ class LinkProviderTest extends \PHPUnit_Framework_TestCase
         );
         $this->linkInterfaceMock->expects($this->once())
             ->method('setInitializationVector')
-            ->with($fileInitializationVector);
+            ->with(base64_encode($fileInitializationVector));
         $this->assertEquals($this->linkInterfaceMock, $this->linkProvider->get());
     }
 

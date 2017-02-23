@@ -61,7 +61,7 @@ class LinkProvider implements LinkProviderInterface
                 UrlInterface::URL_TYPE_MEDIA
             ) . $fileInfo->getPath()
         );
-        $link->setInitializationVector($fileInfo->getInitializationVector());
+        $link->setInitializationVector(base64_encode($fileInfo->getInitializationVector()));
         return $link;
     }
 }
