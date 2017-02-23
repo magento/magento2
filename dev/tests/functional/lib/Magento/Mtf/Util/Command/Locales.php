@@ -13,12 +13,15 @@ use Magento\Mtf\Util\Protocol\CurlTransport;
  */
 class Locales
 {
-    /**#@+
-     * Constants for locales fetching type.
+    /**
+     * Type key for fetching all configuration locales.
      */
     const TYPE_ALL = 'all';
+
+    /**
+     * Type key for fetching locales that have deployed static content.
+     */
     const TYPE_DEPLOYED = 'deployed';
-    /**#@-*/
 
     /**
      * Url to locales.php.
