@@ -21,7 +21,6 @@ use Magento\Sales\Test\Constraint\AssertItemsOrderedSectionOnBackendOrderIsEmpty
 use Magento\Sales\Test\Constraint\AssertCartSectionWithProductsOnBackendOrderPage;
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\Client\BrowserInterface;
 
 /**
  * Preconditions:
@@ -88,13 +87,6 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
      * @var CustomerIndexEdit
      */
     protected $customerIndexEdit;
-
-    /**
-     * Browser instance.
-     *
-     * @var BrowserInterface
-     */
-    protected $browser;
 
     /**
      * Store fixture.
@@ -165,19 +157,16 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
      * @param AssertItemsOrderedSectionOnBackendOrderIsEmpty $assertItemsOrderedSectionOnBackendOrderIsEmpty
      * @param AssertCartSectionWithProductsOnBackendOrderPage $assertCartSectionWithProductsOnBackendOrderPage
      * @param AssertProductsIsPresentInCustomerBackendWishlist $assertProductsIsPresentInCustomerBackendWishlist
-     * @param BrowserInterface $browser
      * @return void
      */
     public function __prepare(
         AssertItemsOrderedSectionOnBackendOrderIsEmpty $assertItemsOrderedSectionOnBackendOrderIsEmpty,
         AssertCartSectionWithProductsOnBackendOrderPage $assertCartSectionWithProductsOnBackendOrderPage,
-        AssertProductsIsPresentInCustomerBackendWishlist $assertProductsIsPresentInCustomerBackendWishlist,
-        BrowserInterface $browser
+        AssertProductsIsPresentInCustomerBackendWishlist $assertProductsIsPresentInCustomerBackendWishlist
     ) {
         $this->assertItemsOrderedSectionOnBackendOrderIsEmpty = $assertItemsOrderedSectionOnBackendOrderIsEmpty;
         $this->assertCartSectionWithProductsOnBackendOrderPage = $assertCartSectionWithProductsOnBackendOrderPage;
         $this->assertProductsIsPresentInCustomerBackendWishlist = $assertProductsIsPresentInCustomerBackendWishlist;
-        $this->browser = $browser;
     }
 
     /**
@@ -270,7 +259,6 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
         $this->assertItemsOrderedSectionContainsProducts->processAssert($this->orderCreateIndex, [$products[1]]);
         $this->assertProductsIsPresentInCustomerBackendWishlist
             ->processAssert(
-                $this->browser,
                 $customer,
                 $this->customerIndexEdit,
                 [$products[0], $products[2]]
@@ -283,7 +271,6 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
         $this->assertItemsOrderedSectionContainsProducts->processAssert($this->orderCreateIndex, $products);
         $this->assertProductsIsPresentInCustomerBackendWishlist
             ->processAssert(
-                $this->browser,
                 $customer,
                 $this->customerIndexEdit,
                 [$products[0], $products[2]]
@@ -296,7 +283,6 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
         $this->assertItemsOrderedSectionOnBackendOrderIsEmpty->processAssert($this->orderCreateIndex);
         $this->assertProductsIsPresentInCustomerBackendWishlist
             ->processAssert(
-                $this->browser,
                 $customer,
                 $this->customerIndexEdit,
                 [$products[0], $products[2]]
@@ -313,7 +299,6 @@ class CreateOrderFromEditCustomerPageTest extends Injectable
         );
         $this->assertProductsIsPresentInCustomerBackendWishlist
             ->processAssert(
-                $this->browser,
                 $customer,
                 $this->customerIndexEdit,
                 [$products[0], $products[2]]
