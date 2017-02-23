@@ -58,6 +58,8 @@ class Cryptographer
             } catch (\Exception $e) {
                 throw new LocalizedException(__('Input data must be string or convertible into string.'));
             }
+        } elseif (!$source) {
+            throw new LocalizedException(__('Input data must be non-empty string.'));
         }
         if (!$this->validateCipherMethod($this->cipherMethod)) {
             throw new LocalizedException(__('Not valid cipher method.'));
@@ -81,11 +83,13 @@ class Cryptographer
     /**
      * Return key for encryption.
      *
+     * Random initial value for key used in case of empty token value to prevent a vulnerability with a predicted key.
+     *
      * @return string
      */
     private function getKey()
     {
-        return hash('sha256', $this->analyticsToken->getToken());
+        return hash('sha256', $this->analyticsToken->getToken() ?: openssl_random_pseudo_bytes(256));
     }
 
     /**

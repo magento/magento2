@@ -43,30 +43,10 @@ class FileInfo
     }
 
     /**
-     * @param string $path
-     * @return $this
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getInitializationVector()
     {
         return $this->initializationVector;
-    }
-
-    /**
-     * @param string $initializationVector
-     * @return $this
-     */
-    public function setInitializationVector($initializationVector)
-    {
-        $this->initializationVector = $initializationVector;
-        return $this;
     }
 }

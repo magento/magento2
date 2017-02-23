@@ -120,7 +120,7 @@ class ExportDataHandler
      *
      * @return string
      */
-    public function getTmpFilesDirRelativePath()
+    private function getTmpFilesDirRelativePath()
     {
         return $this->subdirectoryPath . 'tmp/';
     }
@@ -130,7 +130,7 @@ class ExportDataHandler
      *
      * @return string
      */
-    public function getArchiveRelativePath()
+    private function getArchiveRelativePath()
     {
         return $this->subdirectoryPath . $this->archiveName;
     }

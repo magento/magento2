@@ -101,9 +101,12 @@ class FileRecorder
      */
     private function registerFile(EncodedContext $encodedContext, $fileRelativePath)
     {
-        $newFileInfo = $this->fileInfoFactory->create();
-        $newFileInfo->setInitializationVector($encodedContext->getInitializationVector())
-            ->setPath($fileRelativePath);
+        $newFileInfo = $this->fileInfoFactory->create(
+            [
+                'path' => $fileRelativePath,
+                'initializationVector' => $encodedContext->getInitializationVector(),
+            ]
+        );
         $this->fileInfoManager->save($newFileInfo);
 
         return true;
