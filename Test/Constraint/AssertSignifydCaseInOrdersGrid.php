@@ -6,7 +6,7 @@
 
 namespace Magento\Signifyd\Test\Constraint;
 
-use Magento\Signifyd\Test\Page\Adminhtml\OrderView;
+use Magento\Signifyd\Test\Page\Adminhtml\OrdersGrid;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -19,14 +19,14 @@ class AssertSignifydCaseInOrdersGrid extends AbstractConstraint
      *
      * @param string $orderId
      * @param string $status
-     * @param OrderView $orderView
+     * @param OrdersGrid $ordersGrid
      * @param array $signifydData
      * @return void
      */
     public function processAssert(
         $orderId,
         $status,
-        OrderView $orderView,
+        OrdersGrid $ordersGrid,
         array $signifydData
     ) {
         $filter = [
@@ -37,11 +37,11 @@ class AssertSignifydCaseInOrdersGrid extends AbstractConstraint
 
         $errorMessage = implode(', ', $filter);
 
-        $orderView->open();
+        $ordersGrid->open();
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $orderView->getSalesOrderGrid()->isRowVisible(array_filter($filter)),
-            'Order with following data \'' . $errorMessage . '\' is absent in Orders grid.'
+            $ordersGrid->getSignifydOrdersGrid()->isRowVisible(array_filter($filter)),
+            'Order with following data \'' . $errorMessage . '\' is absent in orders grid.'
         );
     }
 

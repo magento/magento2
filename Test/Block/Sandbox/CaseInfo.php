@@ -73,7 +73,7 @@ class CaseInfo extends Block
      *
      * @var string
      */
-    private $cardHolder = '[data-dropdown="peopleLinks0"] span';
+    private $cardHolder = '[data-dropdown="peopleLinks0"]';
 
     /**
      * Css selector of displayed billing address.

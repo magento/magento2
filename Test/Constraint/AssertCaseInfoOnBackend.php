@@ -5,7 +5,7 @@
  */
 namespace Magento\Signifyd\Test\Constraint;
 
-use Magento\Signifyd\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -16,7 +16,7 @@ class AssertCaseInfoOnBackend extends AbstractConstraint
     /**
      * Customized order view page.
      *
-     * @var OrderView
+     * @var SalesOrderView
      */
     private $orderView;
 
@@ -37,15 +37,15 @@ class AssertCaseInfoOnBackend extends AbstractConstraint
     /**
      * Assert that Signifyd Case information is correct on backend.
      *
-     * @param OrderView $orderView
+     * @param SalesOrderView $orderView
      * @param string $orderId
      * @param array $signifydData
      * @return void
      */
     public function processAssert(
-        OrderView $orderView,
+        SalesOrderView $orderView,
         $orderId,
-        $signifydData
+        array $signifydData
     ) {
         $this->orderView = $orderView;
         $this->orderView->open(['order_id' => $orderId]);

@@ -5,19 +5,18 @@
  */
 namespace Magento\Signifyd\Test\TestStep;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Sales\Test\TestStep\OpenOrderStep;
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect as AssertOrderStatus;
 use Magento\Signifyd\Test\Constraint\AssertSignifydCaseInOrdersGrid as AssertOrdersGrid;
 use Magento\Signifyd\Test\Constraint\AssertCaseInfoOnBackend;
-use Magento\Signifyd\Test\Page\Adminhtml\OrderView;
+use Magento\Signifyd\Test\Page\Adminhtml\OrdersGrid;
 
 /**
  * Open order grid step.
  */
-class OpenOrderGridStep extends OpenOrderStep
+class OpenOrderGridStep implements TestStepInterface
 {
     /**
      * Magento order status assertion.
@@ -48,6 +47,14 @@ class OpenOrderGridStep extends OpenOrderStep
     private $orderStatus;
 
     /**
+     * Magento order id.
+     *
+     * @var int
+     */
+    private $orderId;
+
+
+    /**
      * Order View Page.
      *
      * @var SalesOrderView
@@ -55,11 +62,11 @@ class OpenOrderGridStep extends OpenOrderStep
     private $salesOrderView;
 
     /**
-     * Customized order view page.
+     * Orders grid page.
      *
-     * @var OrderView
+     * @var OrdersGrid
      */
-    private $orderView;
+    private $ordersGrid;
 
     /**
      * Array of Signifyd config data.
@@ -70,10 +77,10 @@ class OpenOrderGridStep extends OpenOrderStep
 
     /**
      * @param string $status
-     * @param OrderInjectable $order
+     * @param int $orderId
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
-     * @param OrderView $orderView
+     * @param OrdersGrid $ordersGrid
      * @param AssertOrderStatus $assertOrderStatus
      * @param AssertCaseInfoOnBackend $assertCaseInfo
      * @param AssertOrdersGrid $assertOrdersGrid
@@ -81,24 +88,23 @@ class OpenOrderGridStep extends OpenOrderStep
      */
     public function __construct(
         $status,
-        OrderInjectable $order,
+        $orderId,
         OrderIndex $orderIndex,
         SalesOrderView $salesOrderView,
-        OrderView $orderView,
+        OrdersGrid $ordersGrid,
         AssertOrderStatus $assertOrderStatus,
         AssertCaseInfoOnBackend $assertCaseInfo,
         AssertOrdersGrid $assertOrdersGrid,
         array $signifydData
     ) {
         $this->orderStatus = $status;
+        $this->orderId = $orderId;
+        $this->orderIndex = $orderIndex;
+        $this->salesOrderView = $salesOrderView;
+        $this->ordersGrid = $ordersGrid;
         $this->assertOrderStatus = $assertOrderStatus;
         $this->assertCaseInfo = $assertCaseInfo;
         $this->assertOrdersGrid = $assertOrdersGrid;
-        $this->salesOrderView = $salesOrderView;
-        $this->orderView = $orderView;
-        $this->orderIndex = $orderIndex;
-
-        parent::__construct($order, $this->orderIndex);
         $this->signifydData = $signifydData;
     }
 
@@ -109,11 +115,24 @@ class OpenOrderGridStep extends OpenOrderStep
      */
     public function run()
     {
-        parent::run();
-
         $this->checkOrdersGrid();
         $this->checkOrderStatus();
         $this->checkCaseInfo();
+    }
+
+    /**
+     * Run assert to check Signifyd Case Disposition status in orders grid.
+     *
+     * @return void
+     */
+    private function checkOrdersGrid()
+    {
+        $this->assertOrdersGrid->processAssert(
+            $this->orderId,
+            $this->orderStatus,
+            $this->ordersGrid,
+            $this->signifydData
+        );
     }
 
     /**
@@ -125,7 +144,7 @@ class OpenOrderGridStep extends OpenOrderStep
     {
         $this->assertOrderStatus->processAssert(
             $this->orderStatus,
-            $this->order->getId(),
+            $this->orderId,
             $this->orderIndex,
             $this->salesOrderView
         );
@@ -139,23 +158,8 @@ class OpenOrderGridStep extends OpenOrderStep
     private function checkCaseInfo()
     {
         $this->assertCaseInfo->processAssert(
-            $this->orderView,
-            $this->order->getId(),
-            $this->signifydData
-        );
-    }
-
-    /**
-     * Run assert to check Signifyd Case Disposition status in orders grid.
-     *
-     * @return void
-     */
-    private function checkOrdersGrid()
-    {
-        $this->assertOrdersGrid->processAssert(
-            $this->order->getId(),
-            $this->orderStatus,
-            $this->orderView,
+            $this->salesOrderView,
+            $this->orderId,
             $this->signifydData
         );
     }
