@@ -418,16 +418,9 @@ class Config
         if (is_array($this->_attributeData) && isset($this->_attributeData[$entityTypeCode])) {
             return $this;
         }
-        $cacheKey = self::ATTRIBUTES_CACHE_ID . $entityTypeCode;
-        if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
-            $attributes = $this->serializer->unserialize($attributes);
-            if ($attributes) {
-                foreach ($attributes as $attribute) {
-                    $this->_createAttribute($entityType, $attribute);
-                    $this->_attributeData[$entityTypeCode][$attribute['attribute_code']] = $attribute;
-                }
-                return $this;
-            }
+
+        if ($this->initAttributesFromCache($entityType)) {
+            return $this;
         }
 
         \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, ['group' => 'EAV', 'method' => __METHOD__]);
@@ -452,7 +445,7 @@ class Config
         if ($this->isCacheEnabled()) {
             $this->_cache->save(
                 $this->serializer->serialize($this->_attributeData[$entityTypeCode]),
-                $cacheKey,
+                self::ATTRIBUTES_CACHE_ID . $entityTypeCode,
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,
                     \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
@@ -692,5 +685,28 @@ class Config
         }
         $attribute->setEntityType($entityType)->setEntityTypeId($entityType->getId());
         return $attribute;
+    }
+
+    /**
+     * Initialize attributes from cache for given entity type
+     *
+     * @param Type $entityType
+     * @return bool
+     */
+    private function initAttributesFromCache(Type $entityType)
+    {
+        $entityTypeCode = $entityType->getEntityTypeCode();
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . $entityTypeCode;
+        if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
+            $attributes = $this->serializer->unserialize($attributes);
+            if ($attributes) {
+                foreach ($attributes as $attribute) {
+                    $this->_createAttribute($entityType, $attribute);
+                    $this->_attributeData[$entityTypeCode][$attribute['attribute_code']] = $attribute;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }
