@@ -54,8 +54,7 @@ class Company extends AbstractWidget
         Options $options,
         AddressMetadataInterface $addressMetadata,
         array $data = []
-    )
-    {
+    ) {
         $this->options = $options;
         parent::__construct($context, $addressHelper, $customerMetadata, $data);
         $this->addressMetadata = $addressMetadata;

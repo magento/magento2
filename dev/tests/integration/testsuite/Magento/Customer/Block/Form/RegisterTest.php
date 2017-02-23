@@ -27,7 +27,6 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('title="Company"', $block->toHtml());
     }
 
-
     /**
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
@@ -42,7 +41,6 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertContains('title="Phone&#x20;Number"', $block->toHtml());
     }
-
 
     /**
      * @magentoAppIsolation enabled
