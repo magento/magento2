@@ -510,9 +510,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
                 $cb = $callback;
                 array_unshift($params, $item);
             }
-            //@codingStandardsIgnoreStart
             $results[$id] = call_user_func_array($cb, $params);
-            //@codingStandardsIgnoreEnd
         }
         return $results;
     }
