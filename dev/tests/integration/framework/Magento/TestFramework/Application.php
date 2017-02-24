@@ -636,7 +636,7 @@ class Application
             DirectoryList::VAR_DIR => [$path => $var],
             DirectoryList::MEDIA => [$path => "{$this->installDir}/pub/media"],
             DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub/static"],
-            DirectoryList::GENERATION => [$path => "{$generated}/code"],
+            DirectoryList::GENERATED_CODE => [$path => "{$generated}/code"],
             DirectoryList::CACHE => [$path => "{$var}/cache"],
             DirectoryList::LOG => [$path => "{$var}/log"],
             DirectoryList::SESSION => [$path => "{$var}/session"],

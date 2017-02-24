@@ -27,10 +27,10 @@ class Report extends ReportsIndexController
         $this->_eventManager->dispatch('on_view_report', ['report' => 'search']);
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('Magento_Reports::report_search')
+        $resultPage->setActiveMenu('Magento_Search::report_search_term')
             ->addBreadcrumb(__('Reports'), __('Reports'))
             ->addBreadcrumb(__('Search Terms'), __('Search Terms'));
-        $resultPage->getConfig()->getTitle()->set(__('Search Terms Report'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Search Terms Report'));
         return $resultPage;
     }
 }

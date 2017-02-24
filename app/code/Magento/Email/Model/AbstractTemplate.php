@@ -352,7 +352,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $result = $processor->filter($this->getTemplateText());
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
-            throw new \LogicException(__($e->getMessage()), $e);
+            throw new \LogicException(__($e->getMessage()), $e->getCode(), $e);
         }
         if ($isDesignApplied) {
             $this->cancelDesignConfig();

@@ -18,7 +18,8 @@
     },
     "suggest": {
         "magento/module-translation": "100.2.*",
-        "magento/module-theme-sample-data": "Sample Data version:100.2.*"
+        "magento/module-theme-sample-data": "Sample Data version:100.2.*",
+        "magento/module-deploy": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",
