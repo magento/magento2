@@ -23,7 +23,6 @@
         <source name="store">
             <attribute name="store_id"/>
             <attribute name="code"/>
-            <attribute name="website_id"/>
             <attribute name="group_id"/>
             <attribute name="name"/>
             <attribute name="is_active"/>

@@ -45,7 +45,7 @@ class EncodedContextTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertSame($content, $encodedContext->getContent());
-        $this->assertSame($initializationVector?:'', $encodedContext->getInitializationVector());
+        $this->assertSame($initializationVector ?: '', $encodedContext->getInitializationVector());
     }
 
     /**

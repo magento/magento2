@@ -207,4 +207,20 @@ class CryptographerTest extends \PHPUnit_Framework_TestCase
 
         $cryptographer->encode($source);
     }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testEncodeTokenNotValid()
+    {
+        $source = 'Some string';
+
+        $this->analyticsTokenMock
+            ->expects($this->once())
+            ->method('getToken')
+            ->with()
+            ->willReturn(null);
+
+        $this->cryptographer->encode($source);
+    }
 }

@@ -96,7 +96,7 @@ class FileRecorder
      * Register encoded file.
      *
      * @param EncodedContext $encodedContext
-     * @param $fileRelativePath
+     * @param string $fileRelativePath
      * @return bool
      */
     private function registerFile(EncodedContext $encodedContext, $fileRelativePath)

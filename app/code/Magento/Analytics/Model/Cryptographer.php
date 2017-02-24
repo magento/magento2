@@ -83,13 +83,16 @@ class Cryptographer
     /**
      * Return key for encryption.
      *
-     * Random initial value for key used in case of empty token value to prevent a vulnerability with a predicted key.
-     *
      * @return string
+     * @throws LocalizedException
      */
     private function getKey()
     {
-        return hash('sha256', $this->analyticsToken->getToken() ?: openssl_random_pseudo_bytes(256));
+        $token = $this->analyticsToken->getToken();
+        if (!$token) {
+            throw new LocalizedException(__('Encryption key can\'t be empty.'));
+        }
+        return hash('sha256', $token);
     }
 
     /**
