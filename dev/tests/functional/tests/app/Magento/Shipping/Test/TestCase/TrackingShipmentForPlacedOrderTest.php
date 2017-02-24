@@ -29,7 +29,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 15. Perform all asserts.
  *
  * @group Shipping
- * @ZephyrId MAGETWO-58158
+ * @ZephyrId MAGETWO-65163, MAGETWO-58158
  */
 class TrackingShipmentForPlacedOrderTest extends Scenario
 {
