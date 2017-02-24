@@ -29,6 +29,7 @@ class CollectData
 
     /**
      * @param ExportDataHandler $exportDataHandler
+     * @param SubscriptionStatusProvider $subscriptionStatus
      */
     public function __construct(
         ExportDataHandler $exportDataHandler,

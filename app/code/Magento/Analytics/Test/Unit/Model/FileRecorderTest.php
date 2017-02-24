@@ -192,7 +192,6 @@ class FileRecorderTest extends \PHPUnit_Framework_TestCase
                 );
         }
 
-
         $this->assertTrue($this->fileRecorder->recordNewFile($this->encodedContextMock));
     }
 

@@ -29,7 +29,6 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $analyticsTokenMock;
 
-
     /**
      * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -93,8 +92,6 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecuteSuccess()
     {
         $url = "old.localhost.com";
-        $newurl = "new.localhost.com";
-        $updateUrl = "update.localhost.com";
         $configVal = "Config val";
         $token = "Secret token!";
         $requestJson = sprintf('{"url":"%s","new-url":"%s","access-token":"%s"}', $url, $configVal, $token);
@@ -110,7 +107,6 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getFlagData')
             ->with(BaseUrlConfigPlugin::OLD_BASE_URL_FLAG_CODE)
             ->willReturn($url);
-
 
         $this->analyticsTokenMock->expects($this->once())
             ->method('getToken')

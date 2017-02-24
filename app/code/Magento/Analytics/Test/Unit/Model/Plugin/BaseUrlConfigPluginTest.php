@@ -104,7 +104,6 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
         $this->subscriptionStatusProvider->expects($this->any())->method('getStatus')
             ->willReturn($testData['subscriptionStatus']);
 
-
         $oldUrl = 'mage.dev';
         $this->configValueMock->expects($oldValueInvokeMatcher)
             ->method('getOldValue')
@@ -118,8 +117,7 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
                 BaseUrlConfigPlugin::UPDATE_CRON_STRING_PATH,
                 '0 * * * *'
             );
-
-
+        
         $this->assertEquals(
             $this->configValueMock,
             $this->plugin->afterAfterSave($this->configValueMock, $this->configValueMock)
