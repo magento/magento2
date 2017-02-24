@@ -19,4 +19,9 @@ class BasicInjection
     {
         $this->_object = $object;
     }
+
+    public function getBasicDependency()
+    {
+        return $this->_object;
+    }
 }

@@ -38,6 +38,13 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     protected $globalArguments;
 
     /**
+     * Object creation stack
+     *
+     * @var array
+     */
+    protected $creationStack = [];
+
+    /**
      * @param \Magento\Framework\ObjectManager\ConfigInterface $config
      * @param ObjectManagerInterface $objectManager
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
@@ -51,7 +58,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     ) {
         $this->config = $config;
         $this->objectManager = $objectManager;
-        $this->definitions = $definitions ?: new \Magento\Framework\ObjectManager\Definition\Runtime();
+        $this->definitions = $definitions ?: $this->getDefinitions();
         $this->globalArguments = $globalArguments;
     }
 
@@ -77,6 +84,17 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     public function setArguments($arguments)
     {
         $this->globalArguments = $arguments;
+    }
+
+    /**
+     * @return \Magento\Framework\ObjectManager\DefinitionInterface
+     */
+    public function getDefinitions()
+    {
+        if ($this->definitions === null) {
+            $this->definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
+        }
+        return $this->definitions;
     }
 
     /**
@@ -176,5 +194,45 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
                 }
             }
         }
+    }
+
+    /**
+     * Resolve constructor arguments
+     *
+     * @param string $requestedType
+     * @param array $parameters
+     * @param array $arguments
+     *
+     * @return array
+     *
+     * @throws \UnexpectedValueException
+     * @throws \BadMethodCallException
+     */
+    protected function resolveArgumentsInRuntime($requestedType, array $parameters, array $arguments = [])
+    {
+        $resolvedArguments = [];
+        foreach ($parameters as $parameter) {
+            list($paramName, $paramType, $paramRequired, $paramDefault) = $parameter;
+            $argument = null;
+            if (!empty($arguments) && (isset($arguments[$paramName]) || array_key_exists($paramName, $arguments))) {
+                $argument = $arguments[$paramName];
+            } elseif ($paramRequired) {
+                if ($paramType) {
+                    $argument = ['instance' => $paramType];
+                } else {
+                    $this->creationStack = [];
+                    throw new \BadMethodCallException(
+                        'Missing required argument $' . $paramName . ' of ' . $requestedType . '.'
+                    );
+                }
+            } else {
+                $argument = $paramDefault;
+            }
+
+            $this->resolveArgument($argument, $paramType, $paramDefault, $paramName, $requestedType);
+
+            $resolvedArguments[] = $argument;
+        }
+        return $resolvedArguments;
     }
 }

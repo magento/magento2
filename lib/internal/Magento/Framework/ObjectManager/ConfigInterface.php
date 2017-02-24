@@ -29,7 +29,7 @@ interface ConfigInterface
      * Retrieve list of arguments per type
      *
      * @param string $type
-     * @return array
+     * @return array|null
      */
     public function getArguments($type);
 

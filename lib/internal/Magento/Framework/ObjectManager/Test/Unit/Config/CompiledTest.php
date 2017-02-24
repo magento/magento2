@@ -5,87 +5,90 @@
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
-use Magento\Framework\ObjectManager\Config\Compiled as CompiledConfig;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\ObjectManager\Config\Compiled;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 
 class CompiledTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ObjectManagerHelper
+     * @var ObjectManager
      */
-    private $objectManagerHelper;
+    private $objectManager;
+
+    /**
+     * @var \Magento\Framework\ObjectManager\Config\Compiled
+     */
+    private $compiled;
 
     protected function setUp()
     {
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-    }
+        $this->objectManager = new ObjectManager($this);
 
-    /**
-     * @param array $initialData
-     * @param array $configuration
-     * @param array $expectedArguments
-     * @param array $expectedVirtualTypes
-     * @param array $expectedPreferences
-     *
-     * @dataProvider extendDataProvider
-     */
-    public function testExtend(
-        array $initialData,
-        array $configuration,
-        array $expectedArguments,
-        array $expectedVirtualTypes,
-        array $expectedPreferences
-    ) {
-        /** @var CompiledConfig $compiledConfig */
-        $compiledConfig = $this->objectManagerHelper->getObject(CompiledConfig::class, ['data' => $initialData]);
-        $compiledConfig->extend($configuration);
-
-        foreach ($expectedArguments as $type => $arguments) {
-            $this->assertEquals($arguments, $compiledConfig->getArguments($type));
-        }
-
-        $this->assertEquals($expectedVirtualTypes, $compiledConfig->getVirtualTypes());
-        $this->assertEquals($expectedPreferences, $compiledConfig->getPreferences());
-    }
-
-    /**
-     * @return array
-     */
-    public function extendDataProvider()
-    {
-        return [
-            [
-                'initialData' => [
-                    'arguments' => [
-                        'type1' => serialize(['argument1_1' => 'argumentValue1_1', 'argument1_2' => 'argumentValue1_2'])
-                    ],
-                    'instanceTypes' => [
-                        'instanceType1' => 'instanceTypeValue1', 'instanceType2' => 'instanceTypeValue2'
-                    ],
-                    'preferences' => ['preference1' => 'preferenceValue1', 'preference2' => 'preferenceValue2']
-                ],
-                'configuration' => [
-                    'arguments' => [
-                        'type1' => serialize(['argument1_1' => 'newArgumentValue1_1']),
-                        'type2' => serialize(['argument2_1' => 'newArgumentValue2_1'])
-                    ],
-                    'instanceTypes' => [
-                        'instanceType2' => 'newInstanceTypeValue2', 'instanceType3' => 'newInstanceTypeValue3'
-                    ],
-                    'preferences' => ['preference1' => 'newPreferenceValue1']
-                ],
-                'expectedArguments' => [
-                    'type1' => ['argument1_1' => 'newArgumentValue1_1'],
-                    'type2' => ['argument2_1' => 'newArgumentValue2_1']
-                ],
-                'expectedVirtualTypes' => [
-                    'instanceType1' => 'instanceTypeValue1', 'instanceType2' => 'newInstanceTypeValue2',
-                    'instanceType3' => 'newInstanceTypeValue3'
-                ],
-                'expectedPreferences' => [
-                    'preference1' => 'newPreferenceValue1', 'preference2' => 'preferenceValue2'
-                ]
+        $initialData = [
+            'arguments' => [
+                'type1' => 'initial serialized configuration for type1',
+                'class_with_no_arguments_serialized' => null,
+                'class_with_arguments_serialized' => 'serialized arguments',
+                'class_with_arguments_unserialized' => ['unserialized', 'arguments'],
+                'class_with_no_arguments_unserialized' => [],
+            ],
+            'instanceTypes' => [
+                'instanceType1' => 'instanceTypeValue1',
+                'instanceType2' => 'instanceTypeValue2'
+            ],
+            'preferences' => [
+                'preference1' => 'preferenceValue1',
+                'preference2' => 'preferenceValue2'
             ]
         ];
+
+        $this->compiled = $this->objectManager->getObject(
+            Compiled::class,
+            [
+                'data' => $initialData,
+            ]
+        );
+    }
+
+    public function testExtend()
+    {
+
+        $configuration = [
+            'arguments' => [
+                'type1' => 'serialized configuration for type1',
+                'type2' => 'serialized configuration for type2'
+            ],
+            'instanceTypes' => [
+                'instanceType2' => 'newInstanceTypeValue2',
+                'instanceType3' => 'newInstanceTypeValue3'
+            ],
+            'preferences' => [
+                'preference1' => 'newPreferenceValue1'
+            ]
+        ];
+        $expectedArguments = [
+            'type1' => [
+                'argument1_1' => 'newArgumentValue1_1'
+            ],
+            'type2' => [
+                'argument2_1' => 'newArgumentValue2_1'
+            ]
+        ];
+        $expectedVirtualTypes = [
+            'instanceType1' => 'instanceTypeValue1',
+            'instanceType2' => 'newInstanceTypeValue2',
+            'instanceType3' => 'newInstanceTypeValue3'
+        ];
+        $expectedPreferences = [
+            'preference1' => 'newPreferenceValue1',
+            'preference2' => 'preferenceValue2'
+        ];
+
+        $this->compiled->extend($configuration);
+        foreach ($expectedArguments as $type => $arguments) {
+            $this->assertEquals($arguments, $this->compiled->getArguments($type));
+        }
+        $this->assertEquals($expectedVirtualTypes, $this->compiled->getVirtualTypes());
+        $this->assertEquals($expectedPreferences, $this->compiled->getPreferences());
     }
 }
