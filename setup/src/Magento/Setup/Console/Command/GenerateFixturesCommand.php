@@ -105,18 +105,7 @@ class GenerateFixturesCommand extends Command
                 $output->writeln('<info> done in ' . gmdate('H:i:s', $resultTime) . '</info>');
             }
 
-            $viewConfig = $fixtureModel->getObjectManager()->create(CollectionInterface::class);
-
-            /* @var ResourceConnection $resource */
-            $resource = $fixtureModel->getObjectManager()->get(ResourceConnection::class);
-
-            foreach ($viewConfig as $view) {
-                /* @var \Magento\Framework\Mview\ViewInterface $view */
-                $changeLogTableName = $resource->getTableName($view->getChangelog()->getName());
-                if ($resource->getConnection()->isTableExists($changeLogTableName)) {
-                    $resource->getConnection()->truncateTable($changeLogTableName);
-                }
-            }
+            $this->clearChangelog();
 
             foreach ($indexerListIds as $indexerId) {
                 /** @var $indexer \Magento\Indexer\Model\Indexer */
@@ -136,6 +125,27 @@ class GenerateFixturesCommand extends Command
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+        }
+    }
+
+    /**
+     * Clear changelog after generation
+     *
+     * @return void
+     */
+    private function clearChangelog()
+    {
+        $viewConfig = $this->fixtureModel->getObjectManager()->create(CollectionInterface::class);
+
+        /* @var ResourceConnection $resource */
+        $resource = $this->fixtureModel->getObjectManager()->get(ResourceConnection::class);
+
+        foreach ($viewConfig as $view) {
+            /* @var \Magento\Framework\Mview\ViewInterface $view */
+            $changeLogTableName = $resource->getTableName($view->getChangelog()->getName());
+            if ($resource->getConnection()->isTableExists($changeLogTableName)) {
+                $resource->getConnection()->truncateTable($changeLogTableName);
+            }
         }
     }
 }

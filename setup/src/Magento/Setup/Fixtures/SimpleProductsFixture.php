@@ -145,7 +145,7 @@ class SimpleProductsFixture extends Fixture
     public function introduceParamLabels()
     {
         return [
-            'simple_products' => 'Quick Simple products'
+            'simple_products' => 'Simple products'
         ];
     }
 
