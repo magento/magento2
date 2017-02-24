@@ -157,6 +157,11 @@
             <argument name="perPageValues" xsi:type="string">9,15,30</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ProductIdLocator">
+        <arguments>
+            <argument name="idsLimit" xsi:type="number">1000</argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\Config\Source\ListPerPage">
         <arguments>
             <argument name="options" xsi:type="string">5,10,15,20,25</argument>
