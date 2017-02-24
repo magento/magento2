@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sid
 use Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 
 /**
  * Wish List items block on backend.
@@ -132,7 +133,7 @@ class Wishlist extends Sidebar
     public function selectItemToAddToOrder(InjectableFixture $product, $qty)
     {
         $productCheckoutData = $product->getData('checkout_data');
-        if (isset($productCheckoutData['options'])) {
+        if (isset($productCheckoutData['options']) && !$product instanceof DownloadableProduct) {
             $this->_rootElement->find(
                 sprintf($this->addToOrderGrouped, $product->getName()),
                 Locator::SELECTOR_XPATH
