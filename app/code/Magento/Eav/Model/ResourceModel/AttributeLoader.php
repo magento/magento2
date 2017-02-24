@@ -36,16 +36,12 @@ class AttributeLoader
     private $searchCriteriaBuilder;
 
     /**
-     * @var AttributeCache
-     */
-    private $attributeCache;
-
-    /**
      * AttributeLoader constructor.
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AttributeCache $attributeCache
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         AttributeRepository $attributeRepository,
@@ -56,23 +52,17 @@ class AttributeLoader
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->attributeCache = $attributeCache;
     }
 
     /**
      * Get attributes list from attribute set
      *
      * @param string $entityType
-     * @param int $attributeSetId
-     * @return \Magento\Eav\Api\Data\AttributeInterface[]|\object[]
+     * @param int|null $attributeSetId
+     * @return \Magento\Eav\Api\Data\AttributeInterface[]
      */
     public function getAttributes($entityType, $attributeSetId = null)
     {
-        $suffix =  self::ATTRIBUTE_SET_ID . '-' . ($attributeSetId ?: 'all');
-        if ($attributes = $this->attributeCache->getAttributes($entityType, $suffix)) {
-            return $attributes;
-        }
-
         $metadata = $this->metadataPool->getMetadata($entityType);
 
         if ($attributeSetId === null) {
@@ -87,11 +77,6 @@ class AttributeLoader
         );
         $attributes = $searchResult->getItems();
 
-        $this->attributeCache->saveAttributes(
-            $entityType,
-            $attributes,
-            $suffix
-        );
         return $attributes;
     }
 }
