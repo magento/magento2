@@ -116,7 +116,7 @@ class FieldDataConverter
     private function isValidJsonValue($value)
     {
         if (in_array($value, ['null', 'false', '0', '""', '[]'])
-            || (json_decode($value) !== null && !json_last_error())
+            || (json_decode($value) !== null && json_last_error() === JSON_ERROR_NONE)
         ) {
             return true;
         }
