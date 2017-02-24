@@ -57,7 +57,8 @@ class ReadHandlerTest extends \Magento\TestFramework\Indexer\TestCase
     {
         $this->assertEquals(
             [],
-            $this->getAttributesMethod->invoke($this->readHandler, 'unknown'));
+            $this->getAttributesMethod->invoke($this->readHandler, 'unknown')
+        );
     }
 
     public function testGetAttributes()
