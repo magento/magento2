@@ -6,13 +6,16 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Signifyd\Test\TestCase\CreateSignifydGuaranteeAndCancelOrderTest" summary="One page checkout with Braintree payment method.">
-        <variation name="CreateSignifydGuaranteeAndCancelOrderWithBraintreeVariation1" summary="Registered Checkout within Braintree Credit Card from Storefront with Signifyd" ticketId="MAGETWO-62120,MAGETWO-63221">
+    <testCase name="Magento\Signifyd\Test\TestCase\CreateSignifydGuaranteeAndCancelOrderTest"
+              summary="One Page Checkout with Signifyd and cancel order.">
+        <variation name="CreateSignifydGuaranteeAndCancelOrderWithBraintreeVariation1"
+                   summary="Registered Checkout within Braintree and Signifyd approved guarantee disposition."
+                   ticketId="MAGETWO-62120,MAGETWO-63221">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="customer/dataset" xsi:type="string">signifyd_approve_us_customer</data>
-            <data name="billingAddress/dataset" xsi:type="string">signifyd_approve_us_shipping_address</data>
             <data name="shippingAddress/dataset" xsi:type="string">signifyd_approve_us_shipping_address</data>
+            <data name="signifydAddress/dataset" xsi:type="string">signifyd_approve_us_shipping_address</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree</data>
@@ -22,7 +25,7 @@
             <data name="configData" xsi:type="string">braintree,signifyd</data>
             <data name="signifydAccount/dataset" xsi:type="string">sandbox_default</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="signifydData/team" xsi:type="string">Magento</data>
+            <data name="signifydData/team" xsi:type="string">autotest</data>
             <data name="signifydData/caseStatus" xsi:type="string">Open</data>
             <data name="signifydData/reviewDisposition" xsi:type="string">Good</data>
             <data name="signifydData/guaranteeDisposition" xsi:type="string">Approved</data>
@@ -30,11 +33,11 @@
             <data name="signifydData/avsResponse" xsi:type="string">Full match (Y)</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory" />
             <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCanceled" />
             <constraint name="Magento\Sales\Test\Constraint\AssertCancelInCommentsHistory" />
+            <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory" />
             <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydGuaranteeCancelInCommentsHistory" />
         </variation>
     </testCase>

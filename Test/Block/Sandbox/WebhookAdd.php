@@ -67,7 +67,7 @@ class WebhookAdd extends Form
      * @param array $signifydData
      * @return void
      */
-    public function createWebhooks($signifydData)
+    public function createWebhooks(array $signifydData)
     {
         foreach ($this->webhookEventOptionsMap as $webhookEventCode => $webhookEventName) {
             $this->setEvent($webhookEventCode);

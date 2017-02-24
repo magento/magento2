@@ -76,6 +76,13 @@ class OpenOrderGridStep implements TestStepInterface
     private $signifydData;
 
     /**
+     * Orders Page.
+     *
+     * @var OrderIndex
+     */
+    private $orderIndex;
+
+    /**
      * @param string $status
      * @param int $orderId
      * @param OrderIndex $orderIndex

@@ -5,10 +5,12 @@
  */
 namespace Magento\Signifyd\Test\TestStep;
 
-use Magento\Customer\Test\Fixture\Address;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
+use Magento\Sales\Test\TestStep\CancelOrderStep;
 use Magento\Signifyd\Test\Constraint\AssertCaseInfoOnSignifydConsole;
+use Magento\Signifyd\Test\Fixture\SignifydAddress;
 use Magento\Signifyd\Test\Page\Sandbox\SignifydCases;
 
 /**
@@ -17,6 +19,34 @@ use Magento\Signifyd\Test\Page\Sandbox\SignifydCases;
 class SignifydObserveCaseStep implements TestStepInterface
 {
     /**
+     * Case information on Signifyd console assertion.
+     *
+     * @var AssertCaseInfoOnSignifydConsole
+     */
+    private $assertCaseInfo;
+
+    /**
+     * Cancel order on backend step.
+     *
+     * @var CancelOrderStep
+     */
+    private $cancelOrderStep;
+
+    /**
+     * Orders View Page.
+     *
+     * @var SalesOrderView
+     */
+    private $salesOrderView;
+
+    /**
+     * Orders Page.
+     *
+     * @var OrderIndex
+     */
+    private $orderIndex;
+
+    /**
      * Signifyd cases page.
      *
      * @var SignifydCases
@@ -24,18 +54,11 @@ class SignifydObserveCaseStep implements TestStepInterface
     private $signifydCases;
 
     /**
-     * Customer fixture.
-     *
-     * @var Customer
-     */
-    private $customer;
-
-    /**
      * Billing address fixture.
      *
-     * @var Address
+     * @var SignifydAddress
      */
-    private $billingAddress;
+    private $signifydAddress;
 
     /**
      * Prices list.
@@ -45,13 +68,6 @@ class SignifydObserveCaseStep implements TestStepInterface
     private $prices;
 
     /**
-     * Order id.
-     *
-     * @var string
-     */
-    private $orderId;
-
-    /**
      * Array of Signifyd config data.
      *
      * @var array
@@ -59,58 +75,62 @@ class SignifydObserveCaseStep implements TestStepInterface
     private $signifydData;
 
     /**
-     * Case information on Signifyd console assertion.
+     * Order id.
      *
-     * @var AssertCaseInfoOnSignifydConsole
+     * @var string
      */
-    private $assertCaseInfoOnSignifydConsole;
+    private $orderId;
 
     /**
-     * @param SignifydCases $signifydCases
-     * @param Customer $customer
-     * @param Address $billingAddress
-     * @param array $prices
-     * @param string $orderId
-     * @param array $signifydData
      * @param AssertCaseInfoOnSignifydConsole $assertCaseInfoOnSignifydConsole
+     * @param CancelOrderStep $cancelOrderStep
+     * @param OrderIndex $orderIndex
+     * @param SalesOrderView $salesOrderView
+     * @param SignifydCases $signifydCases
+     * @param SignifydAddress $signifydAddress
+     * @param array $prices
+     * @param array $signifydData
+     * @param string $orderId
      */
     public function __construct(
+        AssertCaseInfoOnSignifydConsole $assertCaseInfoOnSignifydConsole,
+        CancelOrderStep $cancelOrderStep,
+        OrderIndex $orderIndex,
+        SalesOrderView $salesOrderView,
         SignifydCases $signifydCases,
-        Customer $customer,
-        Address $billingAddress,
+        SignifydAddress $signifydAddress,
         array $prices,
-        $orderId,
         array $signifydData,
-        AssertCaseInfoOnSignifydConsole $assertCaseInfoOnSignifydConsole
+        $orderId
     ) {
+        $this->assertCaseInfo = $assertCaseInfoOnSignifydConsole;
+        $this->cancelOrderStep = $cancelOrderStep;
+        $this->orderIndex = $orderIndex;
+        $this->salesOrderView = $salesOrderView;
         $this->signifydCases = $signifydCases;
-        $this->customer = $customer;
-        $this->billingAddress = $billingAddress;
+        $this->signifydAddress = $signifydAddress;
         $this->prices = $prices;
-        $this->orderId = $orderId;
-        $this->assertCaseInfoOnSignifydConsole = $assertCaseInfoOnSignifydConsole;
         $this->signifydData = $signifydData;
+        $this->orderId = $orderId;
     }
 
     /**
-     * Run step flow
-     *
-     * @return void
+     * @inheritdoc
      */
     public function run()
     {
         $this->signifydCases->open();
         $this->signifydCases->getCaseSearchBlock()
-            ->searchCaseByCustomerName($this->getCustomerFullName($this->customer));
+            ->searchCaseByCustomerName($this->signifydAddress->getFirstname());
         $this->signifydCases->getCaseSearchBlock()->selectCase();
         $this->signifydCases->getCaseInfoBlock()->flagCaseAsGood();
 
-        $this->assertCaseInfoOnSignifydConsole->processAssert(
+        $this->assertCaseInfo->processAssert(
             $this->signifydCases,
-            $this->billingAddress,
+            $this->signifydAddress,
             $this->prices,
             $this->orderId,
-            $this->getCustomerFullName($this->customer),
+            $this->getCustomerFullName($this->signifydAddress),
             $this->signifydData
         );
     }
@@ -118,11 +138,30 @@ class SignifydObserveCaseStep implements TestStepInterface
     /**
      * Gets customer full name.
      *
-     * @param Customer $customer
+     * @param SignifydAddress $billingAddress
      * @return string
      */
-    private function getCustomerFullName(Customer $customer)
+    private function getCustomerFullName(SignifydAddress $billingAddress)
     {
-        return sprintf('%s %s', $customer->getFirstname(), $customer->getLastname());
+        return sprintf('%s %s', $billingAddress->getFirstname(), $billingAddress->getLastname());
+    }
+
+    /**
+     * Cancel order on backend.
+     *
+     * Signifyd needs this cleanup for guarantee decline. If we had have many cases
+     * with approved guarantees, and same order id, Signifyd will not create
+     * guarantee approve status for new cases.
+     *
+     * @return void
+     */
+    public function cleanup()
+    {
+        $this->orderIndex->open();
+        $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->orderId]);
+
+        if ($this->salesOrderView->getOrderInfoBlock()->getOrderStatus() !== 'Canceled') {
+            $this->cancelOrderStep->run();
+        }
     }
 }

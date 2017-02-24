@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Signifyd\Test\Constraint;
 
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
@@ -11,7 +10,8 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that comment about created Signifyd Case exists in Comments History section on order page in Admin.
+ * Assert that comment about created Signifyd Case
+ * exists in Comments History section on order page in Admin.
  */
 class AssertSignifydCaseInCommentsHistory extends AbstractConstraint
 {
@@ -21,8 +21,6 @@ class AssertSignifydCaseInCommentsHistory extends AbstractConstraint
     const CASE_CREATED_PATTERN = '/Signifyd Case (\d)+ has been created for order\./';
 
     /**
-     * Assert that comment about Signifyd Case exists in Comments History section on order page in Admin.
-     *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
      * @param string $orderId
@@ -49,9 +47,7 @@ class AssertSignifydCaseInCommentsHistory extends AbstractConstraint
     }
 
     /**
-     * Returns string representation of successful assertion.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function toString()
     {

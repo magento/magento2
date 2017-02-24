@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Customer\Test\Repository\Address">
         <dataset name="signifyd_approve_us_shipping_address">
-            <field name="firstname" xsi:type="string">John</field>
+            <field name="firstname" xsi:type="string">John%signifyd_isolation%</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="company" xsi:type="string">Magento</field>
             <field name="city" xsi:type="string">Culver City</field>

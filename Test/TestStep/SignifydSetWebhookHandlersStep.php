@@ -40,9 +40,7 @@ class SignifydSetWebhookHandlersStep implements TestStepInterface
     }
 
     /**
-     * Run step flow
-     *
-     * @return void
+     * @inheritdoc
      */
     public function run()
     {

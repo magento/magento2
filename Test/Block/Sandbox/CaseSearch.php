@@ -6,7 +6,6 @@
 namespace Magento\Signifyd\Test\Block\Sandbox;
 
 use Magento\Mtf\Block\Form;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Side block with case search and cases list.
@@ -28,11 +27,11 @@ class CaseSearch extends Form
     private $submitButton = '[type=submit]';
 
     /**
-     * XPath selector of first searched element in list.
+     * Css selector of searched element in cases list.
      *
      * @var string
      */
-    private $selectCaseLink = '//ul//li[contains(@class, "app-sidebar-item")][1]//a';
+    private $selectCaseLink = 'ul[case-list=cases] li[case-list-case=case] a';
 
     /**
      * Fill search input with customer name and submit.
@@ -53,9 +52,8 @@ class CaseSearch extends Form
      */
     public function selectCase()
     {
-        $this->_rootElement->find($this->selectCaseLink, Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement->find($this->selectCaseLink)->click();
     }
-
 
     /**
      * Waiting of case page loading.

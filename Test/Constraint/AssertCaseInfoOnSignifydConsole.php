@@ -5,8 +5,8 @@
  */
 namespace Magento\Signifyd\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Signifyd\Test\Fixture\SignifydAddress;
 use Magento\Signifyd\Test\Page\Sandbox\SignifydCases;
 
 /**
@@ -23,7 +23,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
 
     /**
      * @param SignifydCases $signifydCases
-     * @param Address $billingAddress
+     * @param SignifydAddress $billingAddress
      * @param array $prices
      * @param string $orderId
      * @param string $customerFullName
@@ -32,11 +32,11 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
      */
     public function processAssert(
         SignifydCases $signifydCases,
-        Address $billingAddress,
+        SignifydAddress $billingAddress,
         array $prices,
         $orderId,
         $customerFullName,
-        $signifydData
+        array $signifydData
     ) {
         $this->signifydCases = $signifydCases;
 
@@ -50,7 +50,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
     }
 
     /**
-     * Checks that guarantee disposition matches.
+     * Checks guarantee disposition is correct.
      *
      * @param string $guaranteeDisposition
      * @return void
@@ -65,7 +65,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
     }
 
     /**
-     * Checks that CVV response matches.
+     * Checks CVV response is correct.
      *
      * @param string $cvvResponse
      * @return void
@@ -80,7 +80,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
     }
 
     /**
-     * Checks that AVS response matches.
+     * Checks AVS response is correct.
      *
      * @param string $avsResponse
      * @return void
@@ -95,7 +95,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
     }
 
     /**
-     * Checks that order id matches.
+     * Checks order id is correct.
      *
      * @param string $orderId
      * @return void
@@ -110,7 +110,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
     }
 
     /**
-     * Checks that order amount matches.
+     * Checks order amount is correct.
      *
      * @param string $amount
      * @return void
@@ -125,7 +125,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
     }
 
     /**
-     * Checks that card holder matches.
+     * Checks card holder is correct.
      *
      * @param string $customerFullName
      * @return void
@@ -140,12 +140,12 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
     }
 
     /**
-     * Checks that billing address matches.
+     * Checks billing address is correct.
      *
-     * @param Address $billingAddress
+     * @param SignifydAddress $billingAddress
      * @return void
      */
-    private function checkBillingAddress(Address $billingAddress)
+    private function checkBillingAddress(SignifydAddress $billingAddress)
     {
         \PHPUnit_Framework_Assert::assertContains(
             $billingAddress->getStreet(),
@@ -155,9 +155,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function toString()
     {

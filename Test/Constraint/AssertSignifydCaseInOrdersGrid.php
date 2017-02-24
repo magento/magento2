@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Signifyd\Test\Constraint;
 
 use Magento\Signifyd\Test\Page\Adminhtml\OrdersGrid;
@@ -15,8 +14,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertSignifydCaseInOrdersGrid extends AbstractConstraint
 {
     /**
-     * Assert that order with fixture data is present in Sales -> Orders Grid.
-     *
      * @param string $orderId
      * @param string $status
      * @param OrdersGrid $ordersGrid
@@ -46,9 +43,7 @@ class AssertSignifydCaseInOrdersGrid extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function toString()
     {

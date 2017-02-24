@@ -10,7 +10,8 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
- * Class AssertSignifydGuaranteeCancelInCommentsHistory
+ * Assert that comment about created Signifyd Case guarantee
+ * has been cancelled exists in Comments History section on order page in Admin.
  */
 class AssertSignifydGuaranteeCancelInCommentsHistory extends AbstractConstraint
 {
@@ -47,9 +48,7 @@ class AssertSignifydGuaranteeCancelInCommentsHistory extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object.
-     *
-     * @return string
+     * @inheritdoc
      */
     public function toString()
     {
