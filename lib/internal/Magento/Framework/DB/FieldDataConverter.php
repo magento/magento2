@@ -78,6 +78,10 @@ class FieldDataConverter
         foreach ($iterator as $selectByRange) {
             $rows = $connection->fetchAll($selectByRange);
             foreach ($rows as $row) {
+                if ($this->isValidJsonValue($row[$field])) {
+                    // skip valid JSON values (for data rows that have been already converter)
+                    continue;
+                }
                 try {
                     $bind = [$field => $this->dataConverter->convert($row[$field])];
                     $where = [$identifier . ' = ?' => (int) $row[$identifier]];
@@ -101,5 +105,21 @@ class FieldDataConverter
                 }
             }
         }
+    }
+
+    /**
+     * Is a valid JSON serialized value
+     *
+     * @param string $value
+     * @return bool
+     */
+    private function isValidJsonValue($value)
+    {
+        if (in_array($value, ['null', 'false', '0', '""', '[]'])
+            || (json_decode($value) !== null && !json_last_error())
+        ) {
+            return true;
+        }
+        return false;
     }
 }
