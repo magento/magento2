@@ -2,7 +2,7 @@
 /**
  * Mysql PDO DB adapter
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -341,6 +341,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Creates a PDO object and connects to the database.
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @return void
      * @throws \Zend_Db_Adapter_Exception
      */
@@ -371,6 +374,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             list($this->_config['host'], $this->_config['port']) = explode(':', $this->_config['host']);
         }
 
+        if (!isset($this->_config['driver_options'][\PDO::MYSQL_ATTR_MULTI_STATEMENTS])) {
+            $this->_config['driver_options'][\PDO::MYSQL_ATTR_MULTI_STATEMENTS] = false;
+        }
+
         $this->logger->startTimer();
         parent::_connect();
         $this->logger->logStats(LoggerInterface::TYPE_CONNECT, '');
@@ -387,7 +394,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         if (!$this->_connectionFlagsSet) {
             $this->_connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
-            $this->_connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+            if (isset($this->_config['use_buffered_query']) && $this->_config['use_buffered_query'] === false) {
+                $this->_connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
+            } else {
+                $this->_connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+            }
             $this->_connectionFlagsSet = true;
         }
     }
@@ -562,6 +573,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
      * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @deprecated
      */
     public function multiQuery($sql, $bind = [])
     {
@@ -728,6 +740,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+
+     * @deprecated
      */
     protected function _splitMultiQuery($sql)
     {
@@ -1377,7 +1391,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function select()
     {
-//        return new Select($this);
         return $this->selectFactory->create($this);
     }
 
@@ -1870,6 +1883,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $field = $this->quoteIdentifier($k);
                 if ($v instanceof \Zend_Db_Expr) {
                     $value = $v->__toString();
+                } elseif ($v instanceof \Zend\Db\Sql\Expression) {
+                    $value = $v->getExpression();
                 } elseif (is_string($v)) {
                     $value = sprintf('VALUES(%s)', $this->quoteIdentifier($v));
                 } elseif (is_numeric($v)) {

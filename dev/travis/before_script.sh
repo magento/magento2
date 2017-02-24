@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright © 2016 Magento. All rights reserved.
+# Copyright © 2013-2017 Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
 set -e
@@ -12,9 +12,13 @@ case $TEST_SUITE in
         cd dev/tests/integration
 
         test_set_list=$(find testsuite/* -maxdepth 1 -mindepth 1 -type d | sort)
-        test_set_size=$(($(printf "$test_set_list" | wc -l)/INTEGRATION_SETS))
+        test_set_count=$(printf "$test_set_list" | wc -l)
+        test_set_size[1]=$(printf "%.0f" $(echo "$test_set_count*0.12" | bc))  #12%
+        test_set_size[2]=$(printf "%.0f" $(echo "$test_set_count*0.32" | bc))  #32%
+        test_set_size[3]=$((test_set_count-test_set_size[1]-test_set_size[2])) #56%
+        echo "Total = ${test_set_count}; Batch #1 = ${test_set_size[1]}; Batch #2 = ${test_set_size[2]}; Batch #3 = ${test_set_size[3]};";
 
-        echo "==> preparing integration testsuite on index $INTEGRATION_INDEX with set size of $test_set_size"
+        echo "==> preparing integration testsuite on index $INTEGRATION_INDEX with set size of ${test_set_size[$INTEGRATION_INDEX]}"
         cp phpunit.xml.dist phpunit.xml
 
         # remove memory usage tests if from any set other than the first
@@ -24,20 +28,23 @@ case $TEST_SUITE in
         fi
 
         # divide test sets up by indexed testsuites
-        i=0; j=1
+        i=0; j=1; dirIndex=1; testIndex=1;
         for test_set in $test_set_list; do
             test_xml[j]+="            <directory suffix=\"Test.php\">$test_set</directory>\n"
 
             if [[ $j -eq $INTEGRATION_INDEX ]]; then
-                echo "  + including $test_set"
+                echo "$dirIndex: Batch #$j($testIndex of ${test_set_size[$j]}): + including $test_set"
             else
-                echo "  - excluding $test_set"
+                echo "$dirIndex: Batch #$j($testIndex of ${test_set_size[$j]}): + excluding $test_set"
             fi
 
+            testIndex=$((testIndex+1))
+            dirIndex=$((dirIndex+1))
             i=$((i+1))
-            if [ $i -eq $test_set_size ] && [ $j -lt $INTEGRATION_SETS ]; then
+            if [ $i -eq ${test_set_size[$j]} ] && [ $j -lt $INTEGRATION_SETS ]; then
                 j=$((j+1))
                 i=0
+                testIndex=1
             fi
         done
 

@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Customer\Test\TestCase\MassAssignCustomerGroupTest" summary="Mass Assign Customer's Group to Customers" ticketId="MAGETWO-27892">
-        <variation name="MassAssignCustomerGroupTestVariation1">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+        <variation name="MassAssignCustomerGroupTestVariation1" summary="Customer is created and mass action for changing customer group to created group is applied">
+            <data name="customers" xsi:type="array">
+                <item name="0" xsi:type="string">default</item>
+            </data>
             <data name="customerGroup/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertMassActionSuccessUpdateMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerGroupInGrid" />
+        </variation>
+        <variation name="MassAssignCustomerGroupTestVariation2" summary="Two customers are created and mass actions for changing customer group to 'Retail' is applied" ticketId="MAGETWO-19456">
+            <data name="customers" xsi:type="array">
+                <item name="0" xsi:type="string">default</item>
+                <item name="1" xsi:type="string">customer_US</item>
+            </data>
+            <data name="customerGroup/dataset" xsi:type="string">Retailer</data>
+            <constraint name="Magento\Customer\Test\Constraint\AssertMassActionSuccessUpdateMessage" />
         </variation>
     </testCase>
 </config>

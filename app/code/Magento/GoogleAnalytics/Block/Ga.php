@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,8 +80,13 @@ class Ga extends \Magento\Framework\View\Element\Template
             $optPageURL = ", '" . $this->escapeHtmlAttr($pageName, false) . "'";
         }
 
+        $anonymizeIp = "";
+        if ($this->_googleAnalyticsData->isAnonymizedIpActive()) {
+          $anonymizeIp = "\nga('set', 'anonymizeIp', true);";
+        }
+
         return "\nga('create', '" . $this->escapeHtmlAttr($accountId, false)
-            . ", 'auto');\nga('send', 'pageview'{$optPageURL});\n";
+           . ", 'auto');{$anonymizeIp}\nga('send', 'pageview'{$optPageURL});\n";
     }
 
     /**
@@ -105,6 +110,7 @@ class Ga extends \Magento\Framework\View\Element\Template
         $result = [];
 
         $result[] = "ga('require', 'ec', 'ec.js');";
+
         foreach ($collection as $order) {
             if ($order->getIsVirtual()) {
                 $address = $order->getBillingAddress();

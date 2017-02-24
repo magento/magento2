@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">analytics_subscription_form.analytics_subscription_form_data_source</item>
+            <item name="deps" xsi:type="string">analytics_subscription_form.analytics_subscription_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Analytics Subscription</item>
+        <item name="config" xsi:type="array">
+            <item name="dataScope" xsi:type="string">data</item>
+            <item name="namespace" xsi:type="string">analytics_subscription_form</item>
+            <item name="ajaxSaveType" xsi:type="string">simple</item>
+            <item name="ajaxSave" xsi:type="string">true</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+
+    <dataSource name="analytics_subscription_form_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\Analytics\Ui\DataProvider\DummyDataProvider</argument>
+            <argument name="name" xsi:type="string">analytics_subscription_form_data_source</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="submit_url" xsi:type="url" path="analytics/subscription/activate"/>
+                    <item name="postpone_url" xsi:type="url" path="analytics/subscription/postpone"/>
+                    <item name="clientConfig" xsi:type="array">
+                        <item name="validateBeforeSave" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+
+    <modal name="analytics_subscription_modal">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Analytics/js/modal/modal-component</item>
+                <item name="onCancel" xsi:type="string">actionCancel</item>
+                <item name="state" xsi:type="boolean">true</item>
+                <item name="options" xsi:type="array">
+                    <item name="title" xsi:type="string" translate="true">Subscription Confirmation</item>
+                    <item name="type" xsi:type="string">popup</item>
+                    <item name="responsive" xsi:type="boolean">true</item>
+                    <item name="innerScroll" xsi:type="boolean">true</item>
+                    <item name="autoOpen" xsi:type="boolean">true</item>
+                    <item name="buttons" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="text" xsi:type="string" translate="true">Cancel</item>
+                            <item name="class" xsi:type="string">action-secondary</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">${ $.name }</item>
+                                    <item name="actionName" xsi:type="string">actionCancel</item>
+                                </item>
+                            </item>
+                        </item>
+                        <item name="1" xsi:type="array">
+                            <item name="text" xsi:type="string" translate="true">Ok</item>
+                            <item name="class" xsi:type="string">action-primary</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">${ $.parentName }</item>
+                                    <item name="actionName" xsi:type="string">save</item>
+                                </item>
+                                <item name="1" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">${ $.name }</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+
+        <fieldset name="analytics_subscription_fieldset">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string"/>
+                </item>
+            </argument>
+
+            <field name="analytics_subscription_checkbox">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="additionalClasses" xsi:type="string">admin__field-wide</item>
+                        <item name="description" xsi:type="string" translate="true">I agree with sending my system
+                            configuration and transaction data to Magento Analytics.
+                        </item>
+                        <item name="formElement" xsi:type="string">checkbox</item>
+                        <item name="dataScope" xsi:type="string">analytics_subscription_checkbox</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">1</item>
+                            <item name="false" xsi:type="string">0</item>
+                        </item>
+                        <item name="value" xsi:type="string">1</item>
+                    </item>
+                </argument>
+            </field>
+        </fieldset>
+    </modal>
+</form>

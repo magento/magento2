@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -235,7 +235,7 @@ class SimpleProductsFixture extends Fixture
      */
     protected function getAttributes()
     {
-        $attributeSets = $this->fixtureModel->getValue('attribute_sets', null);
+        $attributeSets = $this->getAttributeSets();
         $attributes = [];
 
         if ($attributeSets !== null && array_key_exists('attribute_set', $attributeSets)) {
@@ -336,5 +336,15 @@ class SimpleProductsFixture extends Fixture
                 ? $searchTerms['search_term'] : [$searchTerms['search_term']];
         }
         return $searchTerms;
+    }
+
+    /**
+     * Get attribute sets.
+     *
+     * @return array|null
+     */
+    private function getAttributeSets()
+    {
+        return $this->fixtureModel->getValue('attribute_sets', null);
     }
 }

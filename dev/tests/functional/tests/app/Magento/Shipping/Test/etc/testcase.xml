@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
+    <scenario name="CityBasedShippingRateTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddresses" />
+        <step name="fillShippingAddresses" module="Magento_Shipping" />
+    </scenario>
+</config>

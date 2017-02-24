@@ -1,32 +1,74 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab;
 
-use Magento\Mtf\Block\Block;
+use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\CommentsHistoryBlock;
+use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\PaymentInfoBlock;
 
 /**
  * Order information tab block.
  */
-class Info extends Block
+class Info extends Tab
 {
     /**
-     * Order status selector
+     * Order status selector.
      *
      * @var string
      */
     protected $orderStatus = '#order_status';
 
     /**
-     * Get order status from info block
+     * Selector for 'Payment Information' block.
+     *
+     * @var string
+     */
+    private $paymentInfoBlockSelector = '.order-payment-method';
+
+    /**
+     * Selector for Comments history block.
+     *
+     * @var string
+     */
+    private $commentsHistoryBlockSelector = '#order_history_block';
+
+    /**
+     * Get order status from info block.
      *
      * @return array|string
      */
     public function getOrderStatus()
     {
         return $this->_rootElement->find($this->orderStatus)->getText();
+    }
+
+    /**
+     * Returns Payment Information block.
+     *
+     * @return PaymentInfoBlock
+     */
+    public function getPaymentInfoBlock()
+    {
+        return $this->blockFactory->create(
+            PaymentInfoBlock::class,
+            ['element' => $this->_rootElement->find($this->paymentInfoBlockSelector)]
+        );
+    }
+
+    /**
+     * Returns Comments history block.
+     *
+     * @return CommentsHistoryBlock
+     */
+    public function getCommentsHistoryBlock()
+    {
+        return $this->blockFactory->create(
+            CommentsHistoryBlock::class,
+            ['element' => $this->_rootElement->find($this->commentsHistoryBlockSelector)]
+        );
     }
 }

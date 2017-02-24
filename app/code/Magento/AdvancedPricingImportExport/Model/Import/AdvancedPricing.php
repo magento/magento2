@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import;
@@ -33,6 +33,14 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     const COL_TIER_PRICE = 'tier_price';
 
+    const COL_TIER_PRICE_PERCENTAGE_VALUE = 'percentage_value';
+
+    const COL_TIER_PRICE_TYPE = 'tier_price_value_type';
+
+    const TIER_PRICE_TYPE_FIXED = 'Fixed';
+
+    const TIER_PRICE_TYPE_PERCENT = 'Discount';
+
     const TABLE_TIER_PRICE = 'catalog_product_entity_tier_price';
 
     const DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE = '0';
@@ -46,7 +54,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     const VALIDATOR_TEAR_PRICE = 'validator_tear_price';
 
     /**
-     * Validation failure message template definitions
+     * Validation failure message template definitions.
      *
      * @var array
      */
@@ -57,6 +65,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_QTY => 'Tier Price data price or quantity value is invalid',
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_SITE => 'Tier Price data website is invalid',
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_GROUP => 'Tier Price customer group is invalid',
+        ValidatorInterface::ERROR_INVALID_TIER_PRICE_TYPE => 'Value for \'tier_price_value_type\' ' .
+            'attribute contains incorrect value, acceptable values are Fixed, Discount',
         ValidatorInterface::ERROR_TIER_DATA_INCOMPLETE => 'Tier Price data is incomplete',
         ValidatorInterface::ERROR_INVALID_ATTRIBUTE_DECIMAL =>
             'Value for \'%s\' attribute contains incorrect value, acceptable values are in decimal format',
@@ -70,7 +80,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $needColumnCheck = true;
 
     /**
-     * Valid column names
+     * Valid column names.
      *
      * @array
      */
@@ -80,6 +90,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         self::COL_TIER_PRICE_CUSTOMER_GROUP,
         self::COL_TIER_PRICE_QTY,
         self::COL_TIER_PRICE,
+        self::COL_TIER_PRICE_TYPE
     ];
 
     /**
@@ -379,7 +390,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                             $rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP]
                         ),
                         'qty' => $rowData[self::COL_TIER_PRICE_QTY],
-                        'value' => $rowData[self::COL_TIER_PRICE],
+                        'value' => $rowData[self::COL_TIER_PRICE_TYPE] === self::TIER_PRICE_TYPE_FIXED
+                            ? $rowData[self::COL_TIER_PRICE] : 0,
+                        'percentage_value' => $rowData[self::COL_TIER_PRICE_TYPE] === self::TIER_PRICE_TYPE_PERCENT
+                            ? $rowData[self::COL_TIER_PRICE] : null,
                         'website_id' => $this->getWebsiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
                     ];
                 }
@@ -429,7 +443,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 }
             }
             if ($priceIn) {
-                $this->_connection->insertOnDuplicate($tableName, $priceIn, ['value']);
+                $this->_connection->insertOnDuplicate($tableName, $priceIn, ['value', 'percentage_value']);
             }
         }
         return $this;
@@ -542,19 +556,24 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function processCountExistingPrices($prices, $table)
     {
+        $oldSkus = $this->retrieveOldSkus();
+        $existProductIds = array_intersect_key($oldSkus, $prices);
+        if (!count($existProductIds)) {
+            return $this;
+        }
+
         $tableName = $this->_resourceFactory->create()->getTable($table);
         $productEntityLinkField = $this->getProductEntityLinkField();
         $existingPrices = $this->_connection->fetchAssoc(
             $this->_connection->select()->from(
                 $tableName,
                 ['value_id', $productEntityLinkField, 'all_groups', 'customer_group_id']
-            )
+            )->where($productEntityLinkField . ' IN (?)', $existProductIds)
         );
-        $oldSkus = $this->retrieveOldSkus();
         foreach ($existingPrices as $existingPrice) {
-            foreach ($oldSkus as $sku => $productId) {
-                if ($existingPrice[$productEntityLinkField] == $productId && isset($prices[$sku])) {
-                    $this->incrementCounterUpdated($prices[$sku], $existingPrice);
+            foreach ($prices as $sku => $skuPrices) {
+                if (isset($oldSkus[$sku]) && $existingPrice[$productEntityLinkField] == $oldSkus[$sku]) {
+                    $this->incrementCounterUpdated($skuPrices, $existingPrice);
                 }
             }
         }

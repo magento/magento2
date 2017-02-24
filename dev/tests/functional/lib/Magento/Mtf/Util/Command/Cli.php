@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Mtf\Util\Command;
 
 use Magento\Mtf\Util\Protocol\CurlInterface;
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
@@ -28,7 +27,6 @@ class Cli
     private $transport;
 
     /**
-     * @constructor
      * @param CurlTransport $transport
      */
     public function __construct(CurlTransport $transport)
@@ -61,6 +59,6 @@ class Cli
     private function prepareUrl($command, array $options)
     {
         $command .= ' ' . implode(' ', $options);
-        return $_ENV['app_frontend_url'] . Cli::URL . '?command=' . urlencode($command);
+        return $_ENV['app_frontend_url'] . self::URL . '?command=' . urlencode($command);
     }
 }

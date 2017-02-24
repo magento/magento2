@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,6 +11,7 @@
             <block class="Magento\Customer\Block\Account\Link" name="my-account-link">
                 <arguments>
                     <argument name="label" xsi:type="string" translate="true">My Account</argument>
+                    <argument name="sortOrder" xsi:type="number">110</argument>
                 </arguments>
             </block>
             <block class="Magento\Customer\Block\Account\RegisterLink" name="register-link">

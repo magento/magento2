@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -179,7 +179,6 @@
                             <item name="dataScope" xsi:type="string">min_sale_qty</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
-                                <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
                             <item name="sortOrder" xsi:type="string">0</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@
 
 ?>
 <fieldset class="fieldset">
-    <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Layout Updates') ?></span></legend>
+    <legend class="legend"><span><?php echo $block->escapeHtml(__('Layout Updates')); ?></span></legend>
     <br />
     <div class="widget-layout-updates">
         <div id="page_group_container"></div>

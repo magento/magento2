@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,6 +61,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getPaths')
             ->willReturn(['configKeyOne' => 'config.php', 'configKeyTwo' => 'env.php']);
+        $this->configFilePool
+            ->expects($this->any())
+            ->method('getInitialFilePools')
+            ->willReturn([]);
     }
 
     public function testGetFile()
@@ -103,6 +107,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $configFilePool = $this->getMock(\Magento\Framework\Config\File\ConfigFilePool::class, [], [], '', false);
         $configFilePool->expects($this->any())->method('getPaths')->willReturn([$file]);
         $configFilePool->expects($this->any())->method('getPath')->willReturn($file);
+        $configFilePool->expects($this->any())->method('getInitialFilePools')->willReturn([]);
         $object = new Reader($this->dirList, $this->driverPool, $configFilePool, $file);
         $this->assertSame($expected, $object->load($file));
     }
@@ -130,6 +135,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getPath')
             ->will($this->returnValueMap($files));
+        $configFilePool->expects($this->any())
+            ->method('getInitialFilePools')
+            ->willReturn([]);
         $configFilePool
             ->expects($this->any())
             ->method('getPaths')
@@ -150,6 +158,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getPath')
             ->will($this->returnValueMap($files));
+        $configFilePool->expects($this->any())
+            ->method('getInitialFilePools')
+            ->willReturn([]);
         $configFilePool
             ->expects($this->any())
             ->method('getPaths')
