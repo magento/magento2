@@ -61,3 +61,12 @@ $productLink->setSku($product->getSku())
 $newLinks[] = $productLink;
 $product->setProductLinks($newLinks);
 $product->save();
+
+/** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
+$categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
+
+$categoryLinkManagement->assignProductToCategories(
+    $product->getSku(),
+    [2]
+);
