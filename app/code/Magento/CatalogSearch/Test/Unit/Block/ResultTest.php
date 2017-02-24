@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Block;
@@ -37,21 +37,21 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $this->layerMock = $this->getMock('Magento\Catalog\Model\Layer\Search', [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->layerMock = $this->getMock(\Magento\Catalog\Model\Layer\Search::class, [], [], '', false);
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
-        $layerResolver = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Resolver')
+        $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
             ->getMock();
         $layerResolver->expects($this->any())
             ->method($this->anything())
             ->will($this->returnValue($this->layerMock));
-        $this->dataMock = $this->getMock('Magento\CatalogSearch\Helper\Data', [], [], '', false);
-        $this->queryMock = $this->getMockBuilder('Magento\Search\Model\Query')
+        $this->dataMock = $this->getMock(\Magento\CatalogSearch\Helper\Data::class, [], [], '', false);
+        $this->queryMock = $this->getMockBuilder(\Magento\Search\Model\Query::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->queryFactoryMock = $this->getMockBuilder('Magento\Search\Model\QueryFactory')
+        $this->queryFactoryMock = $this->getMockBuilder(\Magento\Search\Model\QueryFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
@@ -85,7 +85,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($isMinQueryLength)
         );
         if ($isMinQueryLength) {
-            $queryMock = $this->getMock('Magento\Search\Model\Query', [], [], '', false);
+            $queryMock = $this->getMock(\Magento\Search\Model\Query::class, [], [], '', false);
             $queryMock->expects($this->once())->method('getMinQueryLength')->will($this->returnValue('5'));
 
             $this->queryFactoryMock->expects($this->once())->method('get')->will($this->returnValue($queryMock));

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -103,7 +103,7 @@ class CategoryRepositoryTest extends WebapiAbstract
     public function testDelete()
     {
         /** @var \Magento\UrlRewrite\Model\Storage\DbStorage $storage */
-        $storage = Bootstrap::getObjectManager()->get('Magento\UrlRewrite\Model\Storage\DbStorage');
+        $storage = Bootstrap::getObjectManager()->get(\Magento\UrlRewrite\Model\Storage\DbStorage::class);
         $categoryId = $this->modelId;
         $data = [
             UrlRewrite::ENTITY_ID => $categoryId,
@@ -169,7 +169,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         $result = $this->updateCategory($categoryId, $categoryData);
         $this->assertEquals($categoryId, $result['id']);
         /** @var \Magento\Catalog\Model\Category $model */
-        $model = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Category');
+        $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
         $category = $model->load($categoryId);
         $this->assertFalse((bool)$category->getIsActive(), 'Category "is_active" must equal to false');
         $this->assertEquals("Update Category Test", $category->getName());

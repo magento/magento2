@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\ValidateEmailOnCheckoutTest" summary="Email validation for Guest on checkout flow" ticketId="MAGETWO-42543">
+        <variation name="ValidateEmailOnCheckoutTestVariation1">
+            <data name="customer/data/email" xsi:type="string">johndoe</data>
+            <data name="customer/data/firstname" xsi:type="string">John</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertEmailErrorValidationMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertEmailToolTips" />
+        </variation>
+        <variation name="ValidateEmailOnCheckoutTestVariation2">
+            <data name="customer/data/email" xsi:type="string">johndoe#example.com</data>
+            <data name="customer/data/firstname" xsi:type="string">John</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertEmailErrorValidationMessage" />
+        </variation>
+        <variation name="ValidateEmailOnCheckoutTestVariation3">
+            <data name="customer/data/email" xsi:type="string">johndoe@example.c</data>
+            <data name="customer/data/firstname" xsi:type="string">John</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertEmailErrorValidationMessage" />
+        </variation>
+    </testCase>
+</config>

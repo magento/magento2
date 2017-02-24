@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Helper\Session;
@@ -37,12 +37,12 @@ class CurrentCustomerAddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->currentCustomerMock = $this->getMockBuilder('Magento\Customer\Helper\Session\CurrentCustomer')
+        $this->currentCustomerMock = $this->getMockBuilder(\Magento\Customer\Helper\Session\CurrentCustomer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerAccountManagementMock = $this->getMockBuilder('Magento\Customer\Api\AccountManagementInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerAccountManagementMock = $this->getMockBuilder(
+            \Magento\Customer\Api\AccountManagementInterface::class
+        )->disableOriginalConstructor()->getMock();
 
         $this->currentCustomerAddress = new \Magento\Customer\Helper\Session\CurrentCustomerAddress(
             $this->currentCustomerMock,

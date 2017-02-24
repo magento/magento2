@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
@@ -21,7 +21,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $config = $this->getMockBuilder(
-            'Magento\Framework\View\Layout\PageType\Config'
+            \Magento\Framework\View\Layout\PageType\Config::class
         )->setMethods(
             ['getPageTypes']
         )->disableOriginalConstructor()->getMock();
@@ -36,7 +36,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $config->expects($this->any())->method('getPageTypes')->will($this->returnValue($pageTypeValues));
 
         $this->_block = new \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout(
-            $objectManager->get('Magento\Framework\View\Element\Template\Context'),
+            $objectManager->get(\Magento\Framework\View\Element\Template\Context::class),
             $config,
             [
                 'name' => 'page_type',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -523,6 +523,16 @@ class Eav extends AbstractModifier
     }
 
     /**
+     * Check is product already new or we trying to create one
+     *
+     * @return bool
+     */
+    private function isProductExists()
+    {
+        return (bool) $this->locator->getProduct()->getId();
+    }
+
+    /**
      * Initial meta setup
      *
      * @param ProductAttributeInterface $attribute
@@ -531,6 +541,7 @@ class Eav extends AbstractModifier
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @api
      */
     public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
@@ -543,7 +554,7 @@ class Eav extends AbstractModifier
             'visible' => $attribute->getIsVisible(),
             'required' => $attribute->getIsRequired(),
             'notice' => $attribute->getNote(),
-            'default' => $attribute->getDefaultValue(),
+            'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
             'label' => $attribute->getDefaultFrontendLabel(),
             'code' => $attribute->getAttributeCode(),
             'source' => $groupCode,
@@ -743,7 +754,10 @@ class Eav extends AbstractModifier
         $meta['arguments']['data']['config']['wysiwyg'] = true;
         $meta['arguments']['data']['config']['wysiwygConfigData'] = [
             'add_variables' => false,
-            'add_widgets' => false
+            'add_widgets' => false,
+            'add_directives' => true,
+            'use_container' => true,
+            'container_class' => 'hor-scroll',
         ];
 
         return $meta;

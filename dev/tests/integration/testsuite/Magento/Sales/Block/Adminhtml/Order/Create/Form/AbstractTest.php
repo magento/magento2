@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,8 @@ use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
 
 /**
  * Class AbstractTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,36 +29,36 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
-        $objectManager->get('Magento\Framework\View\DesignInterface')->setDefaultDesignTheme();
+        $objectManager->get(\Magento\Framework\View\DesignInterface::class)->setDefaultDesignTheme();
         $arguments = [
-            $objectManager->get('Magento\Backend\Block\Template\Context'),
-            $objectManager->get('Magento\Backend\Model\Session\Quote'),
-            $objectManager->get('Magento\Sales\Model\AdminOrder\Create'),
-            $objectManager->get('Magento\Framework\Pricing\PriceCurrencyInterface'),
-            $objectManager->get('Magento\Framework\Data\FormFactory'),
-            $objectManager->get('Magento\Framework\Reflection\DataObjectProcessor')
+            $objectManager->get(\Magento\Backend\Block\Template\Context::class),
+            $objectManager->get(\Magento\Backend\Model\Session\Quote::class),
+            $objectManager->get(\Magento\Sales\Model\AdminOrder\Create::class),
+            $objectManager->get(\Magento\Framework\Pricing\PriceCurrencyInterface::class),
+            $objectManager->get(\Magento\Framework\Data\FormFactory::class),
+            $objectManager->get(\Magento\Framework\Reflection\DataObjectProcessor::class)
         ];
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm */
         $block = $this->getMockForAbstractClass(
-            'Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm',
+            \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm::class,
             $arguments
         );
-        $block->setLayout($objectManager->create('Magento\Framework\View\Layout'));
+        $block->setLayout($objectManager->create(\Magento\Framework\View\Layout::class));
 
         $method = new \ReflectionMethod(
-            'Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm',
+            \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm::class,
             '_addAttributesToForm'
         );
         $method->setAccessible(true);
 
         /** @var $formFactory \Magento\Framework\Data\FormFactory */
-        $formFactory = $objectManager->get('Magento\Framework\Data\FormFactory');
+        $formFactory = $objectManager->get(\Magento\Framework\Data\FormFactory::class);
         $form = $formFactory->create();
         $fieldset = $form->addFieldset('test_fieldset', []);
         /** @var \Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory $attributeMetadataFactory */
         $attributeMetadataFactory =
-            $objectManager->create('Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory');
+            $objectManager->create(\Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory::class);
         $dateAttribute = $attributeMetadataFactory->create()->setAttributeCode('date')
             ->setBackendType('datetime')
             ->setFrontendInput('date')

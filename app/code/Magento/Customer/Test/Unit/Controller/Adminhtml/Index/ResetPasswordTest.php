@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Unit test for \Magento\Customer\Controller\Adminhtml\Index controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ResetPasswordTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,12 +94,12 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->_request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->_response = $this->getMockBuilder(
-            'Magento\Framework\App\Response\Http'
+            \Magento\Framework\App\Response\Http::class
         )->disableOriginalConstructor()->setMethods(
             ['setRedirect', 'getHeader', '__wakeup']
         )->getMock();
@@ -113,42 +115,43 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_objectManager = $this->getMockBuilder(
-            'Magento\Framework\App\ObjectManager'
+            \Magento\Framework\App\ObjectManager::class
         )->disableOriginalConstructor()->setMethods(
             ['get', 'create']
         )->getMock();
         $frontControllerMock = $this->getMockBuilder(
-            'Magento\Framework\App\FrontController'
+            \Magento\Framework\App\FrontController::class
         )->disableOriginalConstructor()->getMock();
 
-        $actionFlagMock = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
+        $actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->_session = $this->getMockBuilder(
-            'Magento\Backend\Model\Session'
+            \Magento\Backend\Model\Session::class
         )->disableOriginalConstructor()->setMethods(
             ['setIsUrlNotice', '__wakeup']
         )->getMock();
         $this->_session->expects($this->any())->method('setIsUrlNotice');
 
         $this->_helper = $this->getMockBuilder(
-            'Magento\Backend\Helper\Data'
+            \Magento\Backend\Helper\Data::class
         )->disableOriginalConstructor()->setMethods(
             ['getUrl']
         )->getMock();
 
         $this->messageManager = $this->getMockBuilder(
-            'Magento\Framework\Message\Manager'
+            \Magento\Framework\Message\Manager::class
         )->disableOriginalConstructor()->setMethods(
-            ['addSuccess', 'addMessage', 'addException']
+            ['addSuccess', 'addMessage', 'addException', 'addErrorMessage']
         )->getMock();
 
-        $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(
+            \Magento\Backend\Model\View\Result\RedirectFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -169,12 +172,11 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             'getEventManager',
             'getRequest',
             'getResponse',
-            'getTitle',
             'getView',
             'getResultRedirectFactory'
         ];
         $contextMock = $this->getMockBuilder(
-            '\Magento\Backend\App\Action\Context'
+            \Magento\Backend\App\Action\Context::class
         )->disableOriginalConstructor()->setMethods(
             $contextArgs
         )->getMock();
@@ -186,9 +188,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getHelper')->willReturn($this->_helper);
         $contextMock->expects($this->any())->method('getSession')->willReturn($this->_session);
         $contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManager);
-        $titleMock =  $this->getMockBuilder('\Magento\Framework\App\Action\Title')->getMock();
-        $contextMock->expects($this->any())->method('getTitle')->willReturn($titleMock);
-        $viewMock =  $this->getMockBuilder('\Magento\Framework\App\ViewInterface')->getMock();
+        $viewMock =  $this->getMockBuilder(\Magento\Framework\App\ViewInterface::class)->getMock();
         $viewMock->expects($this->any())->method('loadLayout')->willReturnSelf();
         $contextMock->expects($this->any())->method('getView')->willReturn($viewMock);
         $contextMock->expects($this->any())
@@ -196,11 +196,11 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultRedirectFactoryMock);
 
         $this->_customerAccountManagementMock = $this->getMockBuilder(
-            'Magento\Customer\Api\AccountManagementInterface'
+            \Magento\Customer\Api\AccountManagementInterface::class
         )->getMock();
 
         $this->_customerRepositoryMock = $this->getMockBuilder(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         )->getMock();
 
         $args = [
@@ -211,7 +211,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_testedObject = $helperObjectManager->getObject(
-            'Magento\Customer\Controller\Adminhtml\Index\ResetPassword',
+            \Magento\Customer\Controller\Adminhtml\Index\ResetPassword::class,
             $args
         );
     }
@@ -235,7 +235,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($redirectLink));
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+             \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_testedObject->execute()
         );
     }
@@ -289,7 +289,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($redirectLink));
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+             \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_testedObject->execute()
         );
     }
@@ -328,6 +328,56 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())
             ->method('addMessage')
             ->with($error);
+
+        $this->_testedObject->execute();
+    }
+
+    public function testResetPasswordActionSecurityException()
+    {
+        $securityText = 'Security violation.';
+        $exception = new \Magento\Framework\Exception\SecurityViolationException(__($securityText));
+        $customerId = 1;
+        $email = 'some@example.com';
+        $websiteId = 1;
+
+        $this->_request->expects(
+            $this->once()
+        )->method(
+            'getParam'
+        )->with(
+            $this->equalTo('customer_id'),
+            $this->equalTo(0)
+        )->will(
+            $this->returnValue($customerId)
+        );
+        $customer = $this->getMockForAbstractClass(
+            \Magento\Customer\Api\Data\CustomerInterface::class,
+            ['getId', 'getEmail', 'getWebsiteId']
+        );
+        $customer->expects($this->once())->method('getEmail')->will($this->returnValue($email));
+        $customer->expects($this->once())->method('getWebsiteId')->will($this->returnValue($websiteId));
+        $this->_customerRepositoryMock->expects(
+            $this->once()
+        )->method(
+            'getById'
+        )->with(
+            $customerId
+        )->will(
+            $this->returnValue($customer)
+        );
+        $this->_customerAccountManagementMock->expects(
+            $this->once()
+        )->method(
+            'initiatePasswordReset'
+        )->willThrowException($exception);
+
+        $this->messageManager->expects(
+            $this->once()
+        )->method(
+            'addErrorMessage'
+        )->with(
+            $this->equalTo($exception->getMessage())
+        );
 
         $this->_testedObject->execute();
     }
@@ -421,7 +471,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         );
 
         $customer = $this->getMockForAbstractClass(
-            '\Magento\Customer\Api\Data\CustomerInterface',
+            \Magento\Customer\Api\Data\CustomerInterface::class,
             ['getId', 'getEmail', 'getWebsiteId']
         );
 
@@ -478,7 +528,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+             \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_testedObject->execute()
         );
     }

@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class VoidTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -18,12 +21,12 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $order \Magento\Sales\Model\Order */
-        $order = $objectManager->create('Magento\Sales\Model\Order');
+        $order = $objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $payment = $order->getPayment();
 
         $gatewayMock = $this->getMock(
-            'Magento\Paypal\Model\Payflow\Service\Gateway',
+            \Magento\Paypal\Model\Payflow\Service\Gateway::class,
             [],
             [],
             '',
@@ -31,14 +34,14 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         );
 
         $configMock = $this->getMock(
-            'Magento\Paypal\Model\PayflowConfig',
+            \Magento\Paypal\Model\PayflowConfig::class,
             [],
             [],
             '',
             false
         );
         $configFactoryMock = $this->getMock(
-            'Magento\Payment\Model\Method\ConfigInterfaceFactory',
+            \Magento\Payment\Model\Method\ConfigInterfaceFactory::class,
             ['create'],
             [],
             '',
@@ -61,22 +64,22 @@ class VoidTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Paypal\Model\Payflowpro|\PHPUnit_Framework_MockObject_MockObject $instance */
         $instance = $this->getMock(
-            'Magento\Paypal\Model\Payflowpro',
+            \Magento\Paypal\Model\Payflowpro::class,
             ['setStore'],
             [
-                $objectManager->get('Magento\Framework\Model\Context'),
-                $objectManager->get('Magento\Framework\Registry'),
-                $objectManager->get('Magento\Framework\Api\ExtensionAttributesFactory'),
-                $objectManager->get('Magento\Framework\Api\AttributeValueFactory'),
-                $objectManager->get('Magento\Payment\Helper\Data'),
-                $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
-                $objectManager->get('Magento\Payment\Model\Method\Logger'),
-                $objectManager->get('Magento\Framework\Module\ModuleListInterface'),
-                $objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface'),
-                $objectManager->get('Magento\Store\Model\StoreManagerInterface'),
+                $objectManager->get(\Magento\Framework\Model\Context::class),
+                $objectManager->get(\Magento\Framework\Registry::class),
+                $objectManager->get(\Magento\Framework\Api\ExtensionAttributesFactory::class),
+                $objectManager->get(\Magento\Framework\Api\AttributeValueFactory::class),
+                $objectManager->get(\Magento\Payment\Helper\Data::class),
+                $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                $objectManager->get(\Magento\Payment\Model\Method\Logger::class),
+                $objectManager->get(\Magento\Framework\Module\ModuleListInterface::class),
+                $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class),
+                $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class),
                 $configFactoryMock,
                 $gatewayMock,
-                $objectManager->get('Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface'),
+                $objectManager->get(\Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface::class),
                 null,
                 null,
                 []
@@ -106,7 +109,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         $payment->void(new \Magento\Framework\DataObject());
         $order->save();
 
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $this->assertFalse($order->canVoidPayment());
     }

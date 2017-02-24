@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
-$salesRule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\SalesRule\Model\Rule');
+$salesRule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\SalesRule\Model\Rule::class);
 $salesRule->setData(
     [
         'name' => '50% Off on Large Orders',
@@ -18,14 +18,14 @@ $salesRule->setData(
         'stop_rules_processing' => 1,
         'website_ids' => [
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                \Magento\Store\Model\StoreManagerInterface::class
             )->getWebsite()->getId()
         ]
     ]
 );
 
 $salesRule->getConditions()->loadArray([
-    'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Combine',
+    'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
     'attribute' => null,
     'operator' => null,
     'value' => '1',
@@ -34,7 +34,7 @@ $salesRule->getConditions()->loadArray([
     'conditions' =>
         [
                 [
-                    'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product\\Found',
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                     'attribute' => null,
                     'operator' => null,
                     'value' => '1',
@@ -43,7 +43,7 @@ $salesRule->getConditions()->loadArray([
                     'conditions' =>
                         [
                                 [
-                                    'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product',
+                                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                                     'attribute' => 'category_ids',
                                     'operator' => '==',
                                     'value' => '2',
@@ -52,37 +52,37 @@ $salesRule->getConditions()->loadArray([
                         ],
                 ],
                 [
-                    'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                     'attribute' => 'payment_method',
                     'operator' => '==',
                     'value' => 'braintree_paypal'
                 ],
                 [
-                    'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                     'attribute' => 'shipping_method',
                     'operator' => '==',
                     'value' => 'fedex_FEDEX_2_DAY'
                 ],
                 [
-                    'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                     'attribute' => 'postcode',
                     'operator' => '==',
                     'value' => '78000'
                 ],
                 [
-                    'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                     'attribute' => 'region',
                     'operator' => '==',
                     'value' => 'HD'
                 ],
                 [
-                    'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                     'attribute' => 'region_id',
                     'operator' => '==',
                     'value' => '56'
                 ],
                 [
-                    'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                     'attribute' => 'country_id',
                     'operator' => '==',
                     'value' => 'US'
@@ -93,7 +93,7 @@ $salesRule->getConditions()->loadArray([
 $salesRule->save();
 
 /** @var Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 
 $registry->unregister('_fixture/Magento_SalesRule_Group_Multiple_Categories');
 $registry->register('_fixture/Magento_SalesRule_Group_Multiple_Categories', $salesRule);

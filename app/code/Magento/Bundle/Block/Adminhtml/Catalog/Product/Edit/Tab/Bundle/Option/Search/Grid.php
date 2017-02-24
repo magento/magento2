@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search;
@@ -138,7 +138,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('ID'),
                 'index' => 'entity_id',
-                'renderer' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox',
+                'renderer' => \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox::class,
                 'type' => 'skip-list'
             ]
         );

@@ -2,7 +2,7 @@
 /**
  * Helper class for generating OAuth related credentials
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Authentication;
@@ -37,7 +37,7 @@ class OauthHelper
         $integration = self::_createIntegration('all');
         $objectManager = Bootstrap::getObjectManager();
         /** @var $oauthService \Magento\Integration\Api\OauthServiceInterface */
-        $oauthService = $objectManager->get('Magento\Integration\Api\OauthServiceInterface');
+        $oauthService = $objectManager->get(\Magento\Integration\Api\OauthServiceInterface::class);
         $consumer = $oauthService->loadConsumer($integration->getConsumerId());
         $url = TESTS_BASE_URL;
         $consumer->setCallbackUrl($url);
@@ -46,7 +46,7 @@ class OauthHelper
             $consumer->setCreatedAt($date);
         }
         $consumer->save();
-        $token = $objectManager->create('Magento\Integration\Model\Oauth\Token');
+        $token = $objectManager->create(\Magento\Integration\Model\Oauth\Token::class);
         $verifier = $token->createVerifierToken($consumer->getId())->getVerifier();
 
         return [
@@ -112,7 +112,7 @@ class OauthHelper
             $integration = $integrationModel === null ? self::_createIntegration($resources) : $integrationModel;
             $objectManager = Bootstrap::getObjectManager();
             /** @var \Magento\Integration\Api\OauthServiceInterface $oauthService */
-            $oauthService = $objectManager->get('Magento\Integration\Api\OauthServiceInterface');
+            $oauthService = $objectManager->get(\Magento\Integration\Api\OauthServiceInterface::class);
             $oauthService->createAccessToken($integration->getConsumerId());
             $accessToken = $oauthService->getAccessToken($integration->getConsumerId());
             if (!$accessToken) {
@@ -176,7 +176,7 @@ class OauthHelper
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var $integrationService \Magento\Integration\Api\IntegrationServiceInterface */
-        $integrationService = $objectManager->get('Magento\Integration\Api\IntegrationServiceInterface');
+        $integrationService = $objectManager->get(\Magento\Integration\Api\IntegrationServiceInterface::class);
 
         $params = ['name' => 'Integration' . microtime()];
 

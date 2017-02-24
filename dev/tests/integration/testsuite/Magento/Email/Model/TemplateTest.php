@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model;
@@ -42,35 +42,35 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected function mockModel($filesystem = null)
     {
         if (!$filesystem) {
-            $filesystem = $this->objectManager->create('Magento\Framework\Filesystem');
+            $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         }
 
         $this->mail = $this->getMock(
-            'Zend_Mail',
+            \Zend_Mail::class,
             ['send', 'addTo', 'addBcc', 'setReturnPath', 'setReplyTo'],
             ['utf-8']
         );
 
-        $this->model = $this->getMockBuilder('Magento\Email\Model\Template')
+        $this->model = $this->getMockBuilder(\Magento\Email\Model\Template::class)
             ->setMethods(['_getMail'])
             ->setConstructorArgs([
-                $this->objectManager->get('Magento\Framework\Model\Context'),
-                $this->objectManager->get('Magento\Framework\View\DesignInterface'),
-                $this->objectManager->get('Magento\Framework\Registry'),
-                $this->objectManager->get('Magento\Store\Model\App\Emulation'),
-                $this->objectManager->get('Magento\Store\Model\StoreManager'),
-                $this->objectManager->create('Magento\Framework\View\Asset\Repository'),
+                $this->objectManager->get(\Magento\Framework\Model\Context::class),
+                $this->objectManager->get(\Magento\Framework\View\DesignInterface::class),
+                $this->objectManager->get(\Magento\Framework\Registry::class),
+                $this->objectManager->get(\Magento\Store\Model\App\Emulation::class),
+                $this->objectManager->get(\Magento\Store\Model\StoreManager::class),
+                $this->objectManager->create(\Magento\Framework\View\Asset\Repository::class),
                 $filesystem,
-                $this->objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
-                $this->objectManager->get('Magento\Email\Model\Template\Config'),
-                $this->objectManager->get('Magento\Email\Model\TemplateFactory'),
-                $this->objectManager->get('Magento\Framework\Filter\FilterManager'),
-                $this->objectManager->get('Magento\Framework\UrlInterface'),
-                $this->objectManager->get('Magento\Email\Model\Template\FilterFactory'),
+                $this->objectManager->create(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                $this->objectManager->get(\Magento\Email\Model\Template\Config::class),
+                $this->objectManager->get(\Magento\Email\Model\TemplateFactory::class),
+                $this->objectManager->get(\Magento\Framework\Filter\FilterManager::class),
+                $this->objectManager->get(\Magento\Framework\UrlInterface::class),
+                $this->objectManager->get(\Magento\Email\Model\Template\FilterFactory::class),
             ])
             ->getMock();
 
-        $this->objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
+        $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
 
         $this->model->expects($this->any())->method('_getMail')->will($this->returnCallback([$this, 'getMail']));
         $this->model->setSenderName('sender')->setSenderEmail('sender@example.com')->setTemplateSubject('Subject');
@@ -92,11 +92,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $filter = $this->model->getTemplateFilter();
         $this->assertSame($filter, $this->model->getTemplateFilter());
         $this->assertEquals(
-            $this->objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId(),
+            $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId(),
             $filter->getStoreId()
         );
 
-        $filter = $this->objectManager->create('Magento\Email\Model\Template\Filter');
+        $filter = $this->objectManager->create(\Magento\Email\Model\Template\Filter::class);
         $this->model->setTemplateFilter($filter);
         $this->assertSame($filter, $this->model->getTemplateFilter());
     }
@@ -118,14 +118,14 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetProcessedTemplate()
     {
         $this->mockModel();
-        $this->objectManager->get('Magento\Framework\App\AreaList')
+        $this->objectManager->get(\Magento\Framework\App\AreaList::class)
             ->getArea(Area::AREA_FRONTEND)
             ->load();
 
-        $expectedViewUrl = 'static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
+        $expectedViewUrl = '/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
         $this->model->setDesignConfig([
             'area' => 'frontend',
-            'store' => $this->objectManager->get('Magento\Store\Model\StoreManagerInterface')
+            'store' => $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
                 ->getStore('fixturestore')
                 ->getId(),
         ]);
@@ -251,7 +251,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         // Allows for testing of templates overridden in backend
         if ($storeConfigPath) {
-            $template = $this->objectManager->create('Magento\Email\Model\Template');
+            $template = $this->objectManager->create(\Magento\Email\Model\Template::class);
             $templateData = [
                 'template_code' => 'some_unique_code',
                 'template_type' => $templateType,
@@ -261,7 +261,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             $template->save();
 
             // Store the ID of the newly created template in the system config so that this template will be loaded
-            $this->objectManager->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+            $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
                 ->setValue($storeConfigPath, $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
         }
 
@@ -363,7 +363,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             $this->mockModel();
             $this->setUpThemeFallback($area);
 
-            $template = $this->objectManager->create('Magento\Email\Model\Template');
+            $template = $this->objectManager->create(\Magento\Email\Model\Template::class);
             $template->setData($templateForDatabase);
             $template->save();
             $templateId = $template->getId();
@@ -372,7 +372,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         } else {
             // <!--@styles @--> parsing only via the loadDefault method. Since email template files won't contain
             // @styles comments by default, it is necessary to mock an object to return testable contents
-            $themeDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+            $themeDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
                 ->disableOriginalConstructor()
                 ->setMethods([
                     'readFile',
@@ -383,7 +383,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 ->method('readFile')
                 ->will($this->returnValue('<!--@styles p { color: #111; } @--> {{var template_styles}}'));
 
-            $filesystem = $this->getMockBuilder('\Magento\Framework\Filesystem')
+            $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['getDirectoryRead'])
                 ->getMock();
@@ -461,11 +461,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected function setUpAdminThemeFallback()
     {
         $themes = [BackendFrontNameResolver::AREA_CODE => 'Vendor_EmailTest/custom_theme'];
-        $design = $this->objectManager->create('Magento\Theme\Model\View\Design', ['themes' => $themes]);
-        $this->objectManager->addSharedInstance($design, 'Magento\Theme\Model\View\Design');
+        $design = $this->objectManager->create(\Magento\Theme\Model\View\Design::class, ['themes' => $themes]);
+        $this->objectManager->addSharedInstance($design, \Magento\Theme\Model\View\Design::class);
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
         $registration = $this->objectManager->get(
-            'Magento\Theme\Model\Theme\Registration'
+            \Magento\Theme\Model\Theme\Registration::class
         );
         $registration->register();
 
@@ -476,7 +476,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         Bootstrap::getInstance()->loadArea(BackendFrontNameResolver::AREA_CODE);
 
         /** @var \Magento\Store\Model\Store $adminStore */
-        $adminStore = $this->objectManager->create('Magento\Store\Model\Store')
+        $adminStore = $this->objectManager->create(\Magento\Store\Model\Store::class)
             ->load(Store::ADMIN_CODE);
 
         $this->model->setDesignConfig([
@@ -495,7 +495,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
         $registration = $this->objectManager->get(
-            'Magento\Theme\Model\Theme\Registration'
+            \Magento\Theme\Model\Theme\Registration::class
         );
         $registration->register();
 
@@ -503,13 +503,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         // inline CSS files get loaded properly from both areas.
         Bootstrap::getInstance()->loadArea($area);
 
-        $collection = $this->objectManager->create('Magento\Theme\Model\ResourceModel\Theme\Collection');
+        $collection = $this->objectManager->create(\Magento\Theme\Model\ResourceModel\Theme\Collection::class);
 
         // Hard-coding theme as we want to test the fallback structure to ensure that the parent/grandparent themes of
         // Vendor_EmailTest/custom_theme will be checked for CSS files
         $themeId = $collection->getThemeByFullPath('frontend/Vendor_EmailTest/custom_theme')->getId();
 
-        $this->objectManager->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+        $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->setValue(
                 DesignInterface::XML_PATH_THEME_ID,
                 $themeId,
@@ -519,7 +519,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $this->model->setDesignConfig([
             'area' => 'frontend',
-            'store' => $this->objectManager->get('Magento\Store\Model\StoreManagerInterface')
+            'store' => $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
                 ->getStore('fixturestore')
                 ->getId(),
         ]);
@@ -533,11 +533,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Design\ThemeInterface'
+            \Magento\Framework\View\Design\ThemeInterface::class
         );
         $theme->load('Magento/luma', 'theme_path');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Config\MutableScopeConfigInterface'
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         )->setValue(
             \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
             $theme->getId(),
@@ -554,11 +554,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Design\ThemeInterface'
+            \Magento\Framework\View\Design\ThemeInterface::class
         );
         $theme->load('Magento/blank', 'theme_path');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Config\MutableScopeConfigInterface'
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         )->setValue(
             \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
             $theme->getId(),
@@ -574,24 +574,29 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetProcessedTemplateSubject()
     {
         $this->mockModel();
-        $this->objectManager->get('Magento\Framework\App\AreaList')
+        $this->objectManager->get(\Magento\Framework\App\AreaList::class)
             ->getArea(Area::AREA_FRONTEND)
             ->load();
 
-        $expectedViewUrl = 'static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
         $this->model->setTemplateSubject('{{view url="Magento_Theme::favicon.ico"}}');
         $this->model->setDesignConfig([
             'area' => 'frontend',
-            'store' => $this->objectManager->get('Magento\Store\Model\StoreManagerInterface')
+            'store' => $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
                 ->getStore('fixturestore')
                 ->getId(),
         ]);
 
         $this->setNotDefaultThemeForFixtureStore();
-        $this->assertStringEndsNotWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
+        $this->assertStringMatchesFormat(
+            '%s/frontend/Magento/luma/en_US/Magento_Theme/favicon.ico',
+            $this->model->getProcessedTemplateSubject([])
+        );
 
         $this->setDefaultThemeForFixtureStore();
-        $this->assertStringEndsWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
+        $this->assertStringMatchesFormat(
+            '%s/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico',
+            $this->model->getProcessedTemplateSubject([])
+        );
     }
 
     /**
@@ -600,12 +605,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultEmailLogo()
     {
         $this->mockModel();
-        $this->objectManager->get('Magento\Framework\App\AreaList')
+        $this->objectManager->get(\Magento\Framework\App\AreaList::class)
             ->getArea(Area::AREA_FRONTEND)
             ->load();
 
         $this->assertStringEndsWith(
-            'static/frontend/Magento/luma/en_US/Magento_Email/logo_email.png',
+            '/frontend/Magento/luma/en_US/Magento_Email/logo_email.png',
             $this->model->getDefaultEmailLogo()
         );
     }
@@ -618,13 +623,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testSetDesignConfigException($config)
     {
         $this->mockModel();
-        $model = $this->objectManager->create('Magento\Email\Model\Template');
+        $model = $this->objectManager->create(\Magento\Email\Model\Template::class);
         $model->setDesignConfig($config);
     }
 
     public function setDesignConfigExceptionDataProvider()
     {
-        $storeId = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
+        $storeId = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)
             ->getStore()
             ->getId();
 

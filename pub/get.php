@@ -2,7 +2,7 @@
 /**
  * Public media files entry point
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -74,7 +74,7 @@ if (empty($mediaDirectory)) {
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
 /** @var \Magento\MediaStorage\App\Media $app */
 $app = $bootstrap->createApplication(
-    'Magento\MediaStorage\App\Media',
+    \Magento\MediaStorage\App\Media::class,
     [
         'mediaDirectory' => $mediaDirectory,
         'configCacheFile' => $configCacheFile,

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -98,13 +98,17 @@
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/website</item>
                     <item name="source" xsi:type="string">customer</item>
+                    <item name="imports" xsi:type="array">
+                        <item name="customerId" xsi:type="string">${ $.provider }:data.customer.entity_id</item>
+                    </item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                     <item name="tooltip" xsi:type="array">
                         <item name="link" xsi:type="string">http://docs.magento.com/m2/ce/user_guide/configuration/scope.html</item>
-                        <item name="description" xsi:type="string" translate="true">If your Magento site has multiple views, you can set the scope to apply to a specific view.</item>
+                        <item name="description" xsi:type="string" translate="true">If your Magento installation has multiple websites, you can edit the scope to associate the customer with a specific site.</item>
                     </item>
                 </item>
             </argument>
@@ -256,6 +260,10 @@
                     <item name="label" xsi:type="string" translate="true">Send Welcome Email From</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">customer</item>
+                    <item name="imports" xsi:type="array">
+                        <item name="value" xsi:type="string">${ $.provider }:data.customer.store_id</item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -369,9 +377,13 @@
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/country</item>
                     <item name="source" xsi:type="string">address</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="imports" xsi:type="array">
+                        <item name="default" xsi:type="string">${ $.provider }:data.customer.website_id</item>
                     </item>
                 </item>
             </argument>

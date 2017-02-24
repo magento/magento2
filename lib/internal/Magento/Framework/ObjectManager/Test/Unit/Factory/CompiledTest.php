@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,11 +36,11 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->setMethods([])
             ->getMock();
 
-        $this->config = $this->getMockBuilder('Magento\Framework\ObjectManager\ConfigInterface')
+        $this->config = $this->getMockBuilder(\Magento\Framework\ObjectManager\ConfigInterface::class)
             ->setMethods([])
             ->getMock();
 
@@ -54,9 +54,10 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
         $expectedConfig = $this->getSimpleConfig();
 
         $requestedType = 'requestedType';
-        $type = 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting';
-        $sharedType = 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencySharedTesting';
-        $nonSharedType = 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencyTesting';
+        $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting::class;
+        $sharedType =
+            \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencySharedTesting::class;
+        $nonSharedType = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencyTesting::class;
 
         $this->config->expects($this->any())
             ->method('getArguments')
@@ -87,7 +88,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
         $result = $this->factory->create($requestedType, []);
 
         $this->assertInstanceOf(
-            'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting',
+            \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting::class,
             $result
         );
         $this->assertInstanceOf($sharedType, $result->getSharedDependency());
@@ -102,10 +103,11 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     {
         $expectedConfig = $this->getSimpleNestedConfig();
 
-        $type = 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting';
+        $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting::class;
         $requestedType = 'requestedType';
-        $sharedType = 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencySharedTesting';
-        $nonSharedType = 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencyTesting';
+        $sharedType =
+            \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencySharedTesting::class;
+        $nonSharedType = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencyTesting::class;
 
         $this->config->expects($this->any())
             ->method('getArguments')
@@ -137,7 +139,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
         $result = $this->factory->create($requestedType, []);
 
         $this->assertInstanceOf(
-            'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting',
+            \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting::class,
             $result
         );
         $this->assertInstanceOf($sharedType, $result->getSharedDependency());
@@ -170,10 +172,11 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'nonSharedDependency' => [
-                '_ins_' => 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencyTesting',
+                '_ins_' => \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencyTesting::class,
             ],
             'sharedDependency' => [
-                '_i_' => 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencySharedTesting',
+                '_i_' =>
+                    \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencySharedTesting::class,
             ],
             'value' => [
                 '_v_' => 'value',
@@ -200,10 +203,11 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'nonSharedDependency' => [
-                '_ins_' => 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencyTesting',
+                '_ins_' => \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencyTesting::class,
             ],
             'sharedDependency' => [
-                '_i_' => 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencySharedTesting',
+                '_i_' =>
+                    \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencySharedTesting::class,
             ],
             'value' => [
                 '_v_' => 'value',
@@ -212,13 +216,13 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                 '_vac_' => [
                     'array_value' => 'value',
                     'array_configured_instance' => [
-                        '_i_' => 'Magento\Framework\ObjectManager\Test\Unit'
+                        '_i_' => \Magento\Framework\ObjectManager\Test\Unit::class
                             . '\Factory\Fixture\Compiled\DependencySharedTesting',
                     ],
                     'array_configured_array' => [
                         'array_array_value' => 'value',
                         'array_array_configured_instance' => [
-                            '_ins_' => 'Magento\Framework\ObjectManager'
+                            '_ins_' => \Magento\Framework\ObjectManager::class
                                 . '\Test\Unit\Factory\Fixture\Compiled\DependencyTesting',
                         ],
                     ],

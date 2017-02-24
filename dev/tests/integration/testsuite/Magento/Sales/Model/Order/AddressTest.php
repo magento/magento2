@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
@@ -14,7 +14,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order\Address');
+        $this->_model = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order\Address::class);
     }
 
     /**
@@ -25,7 +25,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testSave()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $order = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+        $order = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $this->_model->setOrder($order);
         $this->_model->setEmail('co@co.co');

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -8,7 +8,16 @@
 //  _____________________________________________
 
 @message-system__background-color: @color-lazy-sun;
-@message-system-short-message__padding-vertical: 1.8rem;
+@message-system__border-color: @color-gray82;
+@message-system__border-width: .1rem;
+@message-system__color: @color-gray20;
+@message-system-short__padding-vertical: 1.5rem;
+@message-system-short-wrapper__height: 5rem;
+
+//  Triangle marker
+@message-system-triangle__height: .5rem;
+@message-system-triangle__padding-right: 3rem;
+@message-system-triangle__width: .8rem;
 
 //
 //  Message system
@@ -17,34 +26,124 @@
 .message-system-inner {
     &:extend(.abs-clearfix all);
     background: @message-system__background-color;
+    border: solid @message-system__border-color;
+    border-width: 0 @message-system__border-width @message-system__border-width;
+    position: relative;
 
-    .message-system-list {
-        float: left;
-        width: 75%;
-    }
-}
-
-.message-system-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.message-system-short {
-    overflow: hidden;
-    text-align: right;
-
-    .message-system-short-label {
-        display: inline-block;
-        padding: @message-system-short-message__padding-vertical .3rem @message-system-short-message__padding-vertical 1rem;
+    .message-error {
+        background: none;
     }
 
     .message {
-        display: inline-block;
-        padding: @message-system-short-message__padding-vertical 2rem @message-system-short-message__padding-vertical 3.3rem;
+        background: none;
+        margin: 0 0 -3px;
+        overflow: hidden;
+        padding: @message-system-short__padding-vertical 0 @message-system-short__padding-vertical 3.3rem;
 
         &:before {
             left: .3rem;
         }
+    }
+
+    .action-menu-item {
+        &.action-close-wrapper {
+            width: 3.5rem;
+        }
+
+        .action-close {
+            float: right;
+        }
+
+        float: right;
+        padding: @message-system-short__padding-vertical 0 0;
+        vertical-align: top;
+    }
+}
+
+.message-system-list {
+    border-bottom: 1px solid @message-system__border-color;
+    border-top: 1px solid @message-system__border-color;
+    list-style: none;
+    margin: 0 0 1.5rem;
+
+    li {
+        + li {
+            border-top: 1px dashed @message-system__border-color;
+        }
+    }
+}
+
+.message-system-short {
+    min-height: @message-system-short-wrapper__height;
+
+    .action-close-wrapper {
+        display: none;
+    }
+}
+
+.message-system-short-wrapper {
+    overflow: hidden;
+    padding: 0 1.5rem 0 @indent__l;
+}
+
+.message-system-collapsible {
+    background: @message-system__background-color;
+    border: @message-system__border-width solid @message-system__border-color;
+    border-top: 0;
+    display: none;
+    left: -1px;
+    padding: 0 @indent__l @message-system-short__padding-vertical;
+    position: absolute;
+    right: -1px;
+    top: 100%;
+    z-index: @z-index-5 - 2;
+
+    ._active & {
+        display: block;
+    }
+}
+
+.message-system-action-dropdown {
+    .lib-button-reset();
+    float: right;
+    margin: @message-system-short__padding-vertical 0;
+    position: relative;
+
+    .action-toggle-triangle (
+        @_dropdown__padding-right: @message-system-triangle__padding-right;
+        @_triangle__height: @message-system-triangle__height;
+        @_triangle__width: @message-system-triangle__width;
+        @_triangle__color: @message-system__color;
+        @_triangle__hover__color: darken(@message-system__color, 10%);
+        @_triangle__right: (@message-system-triangle__padding-right / 2) - (@message-system-triangle__width/ 2);
+    );
+}
+
+.message-system-summary {
+    text-align: right;
+
+    .action__message-log {
+        border-right: 1px solid @message-system__border-color;
+        display: inline-block;
+        margin: 0 .2rem 0 @indent__xs;
+        padding-right: @indent__xs;
+
+        &:last-child {
+            border-right: 0;
+            margin: 0;
+            padding: 0;
+        }
+    }
+}
+
+.notices-wrapper {
+    .admin__data-grid-loading-mask {
+        display: none;
+        min-height: @message-system-short-wrapper__height + @message-system__border-width;
+        z-index: @z-index-5 - 1;
+    }
+
+    .admin__data-grid-outer-wrap {
+        min-height: 0;
     }
 }

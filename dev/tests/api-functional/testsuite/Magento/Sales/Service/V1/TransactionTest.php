@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,11 +49,11 @@ class TransactionTest extends WebapiAbstract
     public function testTransactionGet()
     {
         /** @var Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         /**
          * @var $transactionRepository \Magento\Sales\Model\Order\Payment\Transaction\Repository
          */
-        $transactionRepository = 'Magento\Sales\Model\Order\Payment\Transaction\Repository';
+        $transactionRepository = \Magento\Sales\Model\Order\Payment\Transaction\Repository::class;
         $transactionRepository = $this->objectManager->create($transactionRepository);
         $order->loadByIncrementId('100000006');
 
@@ -88,16 +88,16 @@ class TransactionTest extends WebapiAbstract
 
     /**
      * Tests list of order transactions
-     * @dataProvider filtersDataProvider
+     * @magentoApiDataFixture Magento/Sales/_files/transactions_list.php
      */
-    public function testTransactionList($filters)
+    public function testTransactionList()
     {
         /** @var Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         /**
          * @var $transactionRepository \Magento\Sales\Model\Order\Payment\Transaction\Repository
          */
-        $transactionRepository = 'Magento\Sales\Model\Order\Payment\Transaction\Repository';
+        $transactionRepository = \Magento\Sales\Model\Order\Payment\Transaction\Repository::class;
         $transactionRepository = $this->objectManager->create($transactionRepository);
         $order->loadByIncrementId('100000006');
 
@@ -112,10 +112,40 @@ class TransactionTest extends WebapiAbstract
 
         /** @var $searchCriteriaBuilder  \Magento\Framework\Api\SearchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
+        /** @var $filterBuilder  \Magento\Framework\Api\FilterBuilder */
+        $filterBuilder = $this->objectManager->create(
+            \Magento\Framework\Api\FilterBuilder::class
+        );
+        /** @var \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder */
+        $sortOrderBuilder = $this->objectManager->create(
+            \Magento\Framework\Api\SortOrderBuilder::class
+        );
+        $filter1 = $filterBuilder->setField('txn_id')
+            ->setValue('%trx_auth%')
+            ->setConditionType('like')
+            ->create();
+        $filter2 = $filterBuilder->setField('txn_id')
+            ->setValue('trx_capture')
+            ->setConditionType('eq')
+            ->create();
+        $filter3 = $filterBuilder->setField('parent_txn_id')
+            ->setValue(null)
+            ->setConditionType('null')
+            ->create();
+        $filter4 = $filterBuilder->setField('is_closed')
+            ->setValue(0)
+            ->setConditionType('eq')
+            ->create();
+        $sortOrder = $sortOrderBuilder->setField('parent_id')
+            ->setDirection('ASC')
+            ->create();
 
-        $searchCriteriaBuilder->addFilters($filters);
+        $searchCriteriaBuilder->addFilters([$filter1, $filter2]);
+        $searchCriteriaBuilder->addFilters([$filter3, $filter4]);
+        $searchCriteriaBuilder->addSortOrder($sortOrder);
+
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
         $requestData = ['searchCriteria' => $searchData];
@@ -132,14 +162,12 @@ class TransactionTest extends WebapiAbstract
             ],
         ];
         $result = $this->_webApiCall($serviceInfo, $requestData);
-
         $this->assertArrayHasKey('items', $result);
 
         $transactionData = $this->getPreparedTransactionData($transaction);
         $childTransactionData = $this->getPreparedTransactionData($childTransaction);
         $transactionData['child_transactions'][] = $childTransactionData;
         $expectedData = [$transactionData, $childTransactionData];
-
         $this->assertEquals($expectedData, $result['items']);
         $this->assertArrayHasKey('search_criteria', $result);
         $this->assertEquals($searchData, $result['search_criteria']);
@@ -168,7 +196,7 @@ class TransactionTest extends WebapiAbstract
                 'order_id' => (int)$transaction->getOrderId(),
                 'payment_id' => (int)$transaction->getPaymentId(),
                 'txn_id' => $transaction->getTxnId(),
-                'parent_txn_id' => ($transaction->getParentTxnId() ? (string)$transaction->getParentTxnId() : ''),
+                'parent_txn_id' => ($transaction->getParentTxnId() ? (string)$transaction->getParentTxnId() : null),
                 'txn_type' => $transaction->getTxnType(),
                 'is_closed' => (int)$transaction->getIsClosed(),
                 'additional_information' => ['data'],
@@ -181,13 +209,14 @@ class TransactionTest extends WebapiAbstract
     }
 
     /**
+     * @deprecated
      * @return array
      */
     public function filtersDataProvider()
     {
         /** @var $filterBuilder  \Magento\Framework\Api\FilterBuilder */
         $filterBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         );
 
         return [

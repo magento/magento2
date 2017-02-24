@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Cart\SalesModel;
@@ -34,9 +34,9 @@ class Factory
     {
         $arguments = ['salesModel' => $salesModel];
         if ($salesModel instanceof \Magento\Quote\Model\Quote) {
-            return $this->_objectManager->create('Magento\Payment\Model\Cart\SalesModel\Quote', $arguments);
+            return $this->_objectManager->create(\Magento\Payment\Model\Cart\SalesModel\Quote::class, $arguments);
         } elseif ($salesModel instanceof \Magento\Sales\Model\Order) {
-            return $this->_objectManager->create('Magento\Payment\Model\Cart\SalesModel\Order', $arguments);
+            return $this->_objectManager->create(\Magento\Payment\Model\Cart\SalesModel\Order::class, $arguments);
         }
         throw new \InvalidArgumentException('Sales model has bad type!');
     }

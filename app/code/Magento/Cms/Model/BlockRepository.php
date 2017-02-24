@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -8,7 +8,7 @@ namespace Magento\Cms\Model;
 use Magento\Cms\Api\Data;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -64,6 +64,11 @@ class BlockRepository implements BlockRepositoryInterface
     private $storeManager;
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
      * @param ResourceBlock $resource
      * @param BlockFactory $blockFactory
      * @param Data\BlockInterfaceFactory $dataBlockFactory
@@ -72,6 +77,7 @@ class BlockRepository implements BlockRepositoryInterface
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
+     * @param CollectionProcessorInterface $collectionProcessor
      */
     public function __construct(
         ResourceBlock $resource,
@@ -81,7 +87,8 @@ class BlockRepository implements BlockRepositoryInterface
         Data\BlockSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->resource = $resource;
         $this->blockFactory = $blockFactory;
@@ -91,6 +98,7 @@ class BlockRepository implements BlockRepositoryInterface
         $this->dataBlockFactory = $dataBlockFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -135,36 +143,15 @@ class BlockRepository implements BlockRepositoryInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
-     * @return \Magento\Cms\Model\ResourceModel\Block\Collection
+     * @return \Magento\Cms\Api\Data\BlockSearchResultsInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
-        $searchResults = $this->searchResultsFactory->create();
-        $searchResults->setSearchCriteria($criteria);
-
+        /** @var \Magento\Cms\Model\ResourceModel\Block\Collection $collection */
         $collection = $this->blockCollectionFactory->create();
-        foreach ($criteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'store_id') {
-                    $collection->addStoreFilter($filter->getValue(), false);
-                    continue;
-                }
-                $condition = $filter->getConditionType() ?: 'eq';
-                $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
-        }
-        $searchResults->setTotalCount($collection->getSize());
-        $sortOrders = $criteria->getSortOrders();
-        if ($sortOrders) {
-            foreach ($sortOrders as $sortOrder) {
-                $collection->addOrder(
-                    $sortOrder->getField(),
-                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
-                );
-            }
-        }
-        $collection->setCurPage($criteria->getCurrentPage());
-        $collection->setPageSize($criteria->getPageSize());
+
+        $this->collectionProcessor->process($criteria, $collection);
+
         $blocks = [];
         /** @var Block $blockModel */
         foreach ($collection as $blockModel) {
@@ -172,14 +159,19 @@ class BlockRepository implements BlockRepositoryInterface
             $this->dataObjectHelper->populateWithArray(
                 $blockData,
                 $blockModel->getData(),
-                'Magento\Cms\Api\Data\BlockInterface'
+                \Magento\Cms\Api\Data\BlockInterface::class
             );
             $blocks[] = $this->dataObjectProcessor->buildOutputDataArray(
                 $blockData,
-                'Magento\Cms\Api\Data\BlockInterface'
+                \Magento\Cms\Api\Data\BlockInterface::class
             );
         }
+
+        /** @var Data\BlockSearchResultsInterface $searchResults */
+        $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($criteria);
         $searchResults->setItems($blocks);
+        $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
 
@@ -211,5 +203,21 @@ class BlockRepository implements BlockRepositoryInterface
     public function deleteById($blockId)
     {
         return $this->delete($this->getById($blockId));
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor'
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

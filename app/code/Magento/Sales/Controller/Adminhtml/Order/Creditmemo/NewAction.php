@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
@@ -62,7 +62,7 @@ class NewAction extends \Magento\Backend\App\Action
         $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
         $creditmemo = $this->creditmemoLoader->load();
         if ($creditmemo) {
-            if ($comment = $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true)) {
+            if ($comment = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getCommentText(true)) {
                 $creditmemo->setCommentText($comment);
             }
             $resultPage = $this->resultPageFactory->create();

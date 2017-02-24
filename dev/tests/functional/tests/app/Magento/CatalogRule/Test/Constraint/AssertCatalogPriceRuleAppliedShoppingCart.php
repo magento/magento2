@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,15 +36,15 @@ class AssertCatalogPriceRuleAppliedShoppingCart extends AbstractConstraint
     ) {
         if ($customer !== null) {
             $this->objectManager->create(
-                '\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+                \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
                 ['customer' => $customer]
             )->run();
         } else {
-            $this->objectManager->create('\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
+            $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
         }
 
         $this->objectManager->create(
-            '\Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => $products]
         )->run();
         $checkoutCartPage->open();

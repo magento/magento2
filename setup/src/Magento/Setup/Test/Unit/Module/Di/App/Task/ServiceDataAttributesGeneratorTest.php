@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,16 +31,16 @@ class ServiceDataAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configurationScannerMock = $this->getMockBuilder(
-            'Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner'
+            \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner::class
         )->disableOriginalConstructor()
             ->getMock();
         $this->serviceDataAttributesScannerMock = $this->getMockBuilder(
-            'Magento\Setup\Module\Di\Code\Scanner\ServiceDataAttributesScanner'
+            \Magento\Setup\Module\Di\Code\Scanner\ServiceDataAttributesScanner::class
         )->disableOriginalConstructor()
             ->getMock();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Setup\Module\Di\App\Task\Operation\ServiceDataAttributesGenerator',
+            \Magento\Setup\Module\Di\App\Task\Operation\ServiceDataAttributesGenerator::class,
             [
                 'serviceDataAttributesScanner' => $this->serviceDataAttributesScannerMock,
                 'configurationScanner' => $this->configurationScannerMock,

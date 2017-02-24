@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,14 +21,14 @@ return [
             [
                 'table' => 'table',
                 'field' => 'collection',
-                'to' => 'Magento\Customer\Model\ResourceModel\Attribute\Collection',
+                'to' => \Magento\Customer\Model\ResourceModel\Attribute\Collection::class,
                 'from' => ['`collection` = ?' => 'customer/attribute_collection'],
             ],
         ],
         'where' => ['flag = 1'],
         'aliases_map' => [
             \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_RESOURCE => [
-                'customer/attribute_collection' => 'Magento\Customer\Model\ResourceModel\Attribute\Collection',
+                'customer/attribute_collection' => \Magento\Customer\Model\ResourceModel\Attribute\Collection::class,
             ],
         ],
     ]

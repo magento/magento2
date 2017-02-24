@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -21,7 +21,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->registry = $objectManager->get('Magento\Framework\Registry');
+        $this->registry = $objectManager->get(\Magento\Framework\Registry::class);
     }
 
     protected function tearDown()
@@ -76,7 +76,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         return $objectManager->create(
-            'Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi'
+            \Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi::class
         );
     }
 
@@ -87,7 +87,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $integration Integration */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $integration = $objectManager->create('Magento\Integration\Model\Integration');
+        $integration = $objectManager->create(\Magento\Integration\Model\Integration::class);
         return $integration->load('Fixture Integration', 'name');
     }
 }

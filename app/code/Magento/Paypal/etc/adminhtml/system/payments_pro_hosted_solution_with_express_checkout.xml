@@ -1,15 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
-    <group id="payments_pro_hosted_solution_with_express_checkout" translate="labelcomment" extends="payment_all_paypal/payments_pro_hosted_solution_without_bml" sortOrder="30">
-        <label>Website Payments Pro Hosted Solution (Includes Express Checkout)</label>
-        <fieldset_css>pp-general-uk</fieldset_css>
-        <more_url>https://cms.paypal.com/cms_content/GB/en_GB/files/developer/HostedSolution.pdf</more_url>
+    <group id="payments_pro_hosted_solution_with_express_checkout" translate="label comment" extends="payment_all_paypal/payments_pro_hosted_solution_without_bml" sortOrder="30">
+        <label>Website Payments Pro Hosted Solution</label>
         <attribute type="paypal_ec_separate">0</attribute>
         <group id="pphs_required_settings">
             <group id="pphs_required_settings_pphs" translate="label">

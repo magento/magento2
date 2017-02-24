@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 /**
  * Unit test for shipment factory class.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,10 +38,10 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $objectManager = new ObjectManager($this);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->converter = $this->getMock(
-            'Magento\Sales\Model\Convert\Order',
+            \Magento\Sales\Model\Convert\Order::class,
             ['toShipment', 'itemToShipmentItem'],
             [],
             '',
@@ -50,7 +49,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $convertOrderFactory = $this->getMock(
-            'Magento\Sales\Model\Convert\OrderFactory',
+            \Magento\Sales\Model\Convert\OrderFactory::class,
             ['create'],
             [],
             '',
@@ -61,7 +60,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->converter);
 
         $this->trackFactory = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment\TrackFactory',
+            \Magento\Sales\Model\Order\Shipment\TrackFactory::class,
             ['create'],
             [],
             '',
@@ -69,7 +68,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->subject = $objectManager->getObject(
-            'Magento\Sales\Model\Order\ShipmentFactory',
+            \Magento\Sales\Model\Order\ShipmentFactory::class,
             [
                 'convertOrderFactory' => $convertOrderFactory,
                 'trackFactory' => $this->trackFactory
@@ -85,7 +84,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate($tracks)
     {
         $orderItem = $this->getMock(
-            'Magento\Sales\Model\Order\Item',
+            \Magento\Sales\Model\Order\Item::class,
             ['getId', 'getQtyOrdered'],
             [],
             '',
@@ -99,7 +98,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(5);
 
         $shipmentItem = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment\Item',
+            \Magento\Sales\Model\Order\Shipment\Item::class,
             ['setQty'],
             [],
             '',
@@ -110,7 +109,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
             ->with(5);
 
         $order = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             ['getAllItems'],
             [],
             '',
@@ -121,7 +120,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$orderItem]);
 
         $shipment = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             ['addItem', 'setTotalQty', 'addTrack'],
             [],
             '',
@@ -146,7 +145,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
 
         if ($tracks) {
             $shipmentTrack = $this->getMock(
-                'Magento\Sales\Model\Order\Shipment\Track',
+                \Magento\Sales\Model\Order\Shipment\Track::class,
                 ['addData'],
                 [],
                 '',
@@ -164,7 +163,7 @@ class ShipmentFactoryTest extends \PHPUnit_Framework_TestCase
                     ->method('addTrack');
 
                 $this->setExpectedException(
-                    'Magento\Framework\Exception\LocalizedException'
+                    \Magento\Framework\Exception\LocalizedException::class
                 );
             } else {
                 $shipmentTrack->expects($this->once())

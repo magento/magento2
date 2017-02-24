@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Advanced\Request;
@@ -48,34 +48,34 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->config = $this->getMockBuilder('Magento\Framework\Search\Request\Config')
+        $this->config = $this->getMockBuilder(\Magento\Framework\Search\Request\Config::class)
             ->setMethods(['get'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
-        $this->requestMapper = $this->getMockBuilder('Magento\Framework\Search\Request\Mapper')
+        $this->requestMapper = $this->getMockBuilder(\Magento\Framework\Search\Request\Mapper::class)
             ->setMethods(['getRootQuery', 'getBuckets'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->request = $this->getMockBuilder('Magento\Framework\Search\Request')
+        $this->request = $this->getMockBuilder(\Magento\Framework\Search\Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->binder = $this->getMockBuilder('Magento\Framework\Search\Request\Binder')
+        $this->binder = $this->getMockBuilder(\Magento\Framework\Search\Request\Binder::class)
             ->setMethods(['bind'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cleaner = $this->getMockBuilder('Magento\Framework\Search\Request\Cleaner')
+        $this->cleaner = $this->getMockBuilder(\Magento\Framework\Search\Request\Cleaner::class)
             ->setMethods(['clean'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->requestBuilder = $helper->getObject(
-            'Magento\CatalogSearch\Model\Advanced\Request\Builder',
+            \Magento\CatalogSearch\Model\Advanced\Request\Builder::class,
             [
                 'config' => $this->config,
                 'objectManager' => $this->objectManager,
@@ -210,6 +210,6 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($requestName))
             ->willReturn($data);
         $result = $this->requestBuilder->create();
-        $this->assertInstanceOf('\Magento\Framework\Search\Request', $result);
+        $this->assertInstanceOf(\Magento\Framework\Search\Request::class, $result);
     }
 }

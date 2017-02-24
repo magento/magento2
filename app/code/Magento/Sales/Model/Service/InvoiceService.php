@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Service;
@@ -143,8 +143,10 @@ class InvoiceService implements InvoiceManagementInterface
                 $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
             } elseif (isset($qtys[$orderItem->getId()])) {
                 $qty = (double) $qtys[$orderItem->getId()];
-            } else {
+            } elseif (empty($qtys)) {
                 $qty = $orderItem->getQtyToInvoice();
+            } else {
+                $qty = 0;
             }
             $totalQty += $qty;
             $this->setInvoiceItemQuantity($item, $qty);

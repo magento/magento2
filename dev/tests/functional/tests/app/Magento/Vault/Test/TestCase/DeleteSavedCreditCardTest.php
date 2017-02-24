@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\TestCase;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Vault\Test\Constraint\AssertCreditCardNotPresentOnCheckout;
@@ -23,22 +24,40 @@ use Magento\Vault\Test\Constraint\AssertCreditCardNotPresentOnCheckout;
  * 6. Go to One page Checkout
  * 7. Perform assertions.
  *
- * @group Vault_(CS)
+ * @group Vault
  * @ZephyrId MAGETWO-54059, MAGETWO-54072, MAGETWO-54068, MAGETWO-54015, MAGETWO-54011
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeleteSavedCreditCardTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
+    const SEVERITY = 'S1';
     /* end tags */
+
+    /**
+     * Page for one page checkout.
+     *
+     * @var CheckoutOnepage
+     */
+    private $checkoutOnepage;
+
+    /**
+     * Injection data.
+     *
+     * @param CheckoutOnepage $checkoutOnepage
+     * @return void
+     */
+    public function __inject(CheckoutOnepage $checkoutOnepage)
+    {
+        $this->checkoutOnepage = $checkoutOnepage;
+    }
 
     /**
      * Runs delete saved credit card test.
      *
      * @param AssertCreditCardNotPresentOnCheckout $assertCreditCardNotPresentOnCheckout
-     * @param CheckoutOnepage $checkoutOnepage
      * @param $products
      * @param $configData
      * @param $customer
@@ -47,10 +66,10 @@ class DeleteSavedCreditCardTest extends Injectable
      * @param $shipping
      * @param array $payments
      * @param $creditCardSave
+     * @return void
      */
     public function test(
         AssertCreditCardNotPresentOnCheckout $assertCreditCardNotPresentOnCheckout,
-        CheckoutOnepage $checkoutOnepage,
         $products,
         $configData,
         $customer,
@@ -69,41 +88,43 @@ class DeleteSavedCreditCardTest extends Injectable
         foreach ($payments as $key => $payment) {
             $this->addToCart($products);
             $this->proceedToCheckout();
-            if($key < 1) { // if this is the first order to be placed
+            if ($key < 1) { // if this is the first order to be placed
                 $this->selectCheckoutMethod($checkoutMethod, $customer);
                 $this->fillShippingAddress($shippingAddress);
             }
             $this->fillShippingMethod($shipping);
             if ($key >= 2) { // if this order will be placed via stored credit card
-                $this->useSavedCreditCard($payment);
+                $this->useSavedCreditCard($payment['vault']);
             } else {
-                $this->selectPaymentMethod($payment, $payment['creditCardClass'], $payment['creditCard']);
+                $this->selectPaymentMethod($payment, $payment['creditCard']);
                 $this->saveCreditCard($payment, $creditCardSave);
             }
             $this->placeOrder();
         }
-        // Delete credit cards from My Account and verify they are not available on checkout
+        // Delete credit cards from Stored Payment Methods and verify they are not available on checkout
         $paymentsCount = count($payments);
-        for($i = 2; $i < $paymentsCount; $i++) {
+        for ($i = 2; $i < $paymentsCount; $i++) {
             $deletedCard = $this->deleteCreditCardFromMyAccount(
                 $customer,
-                $payments[$i]['creditCard'],
-                $payments[$i]['creditCardClass']
+                $payments[$i]['creditCard']
             );
             $this->addToCart($products);
             $this->proceedToCheckout();
             $this->fillShippingMethod($shipping);
             $assertCreditCardNotPresentOnCheckout->processAssert(
-                $checkoutOnepage,
+                $this->checkoutOnepage,
                 $deletedCard['deletedCreditCard']
             );
         }
     }
 
     /**
+     * Setup configuration step.
+     *
      * @param $configData
+     * @return void
      */
-    protected function setupConfiguration($configData)
+    private function setupConfiguration($configData)
     {
         $setupConfigurationStep = ObjectManager::getInstance()->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
@@ -114,7 +135,7 @@ class DeleteSavedCreditCardTest extends Injectable
     }
 
     /**
-     * Create products
+     * Create products step.
      *
      * @param string $productList
      * @return array
@@ -131,6 +152,8 @@ class DeleteSavedCreditCardTest extends Injectable
     }
 
     /**
+     * Add to cart step.
+     *
      * @param array $products
      * @return void
      */
@@ -144,6 +167,8 @@ class DeleteSavedCreditCardTest extends Injectable
     }
 
     /**
+     * Proceed to checkout step.
+     *
      * @return void
      */
     protected function proceedToCheckout()
@@ -155,7 +180,10 @@ class DeleteSavedCreditCardTest extends Injectable
     }
 
     /**
+     * Create customer step.
+     *
      * @param array $customer
+     * @return Customer
      */
     protected function createCustomer(array $customer)
     {
@@ -168,8 +196,11 @@ class DeleteSavedCreditCardTest extends Injectable
     }
 
     /**
+     * Select Checkout method step.
+     *
      * @param $checkoutMethod
      * @param $customer
+     * @return void
      */
     protected function selectCheckoutMethod($checkoutMethod, $customer)
     {
@@ -184,7 +215,10 @@ class DeleteSavedCreditCardTest extends Injectable
     }
 
     /**
+     * Fill shipping address step.
+     *
      * @param array $shippingAddress
+     * @return void
      */
     protected function fillShippingAddress(array $shippingAddress)
     {
@@ -196,9 +230,10 @@ class DeleteSavedCreditCardTest extends Injectable
     }
 
     /**
-     * Add products to cart
+     * Add products to cart.
      *
      * @param array $shipping
+     * @return void
      */
     protected function fillShippingMethod(array $shipping)
     {
@@ -210,17 +245,18 @@ class DeleteSavedCreditCardTest extends Injectable
     }
 
     /**
+     * Select payment method step.
+     *
      * @param array $payment
-     * @param $creditCardClass
      * @param array $creditCard
+     * @return void
      */
-    protected function selectPaymentMethod(array $payment, $creditCardClass, array $creditCard)
+    protected function selectPaymentMethod(array $payment, array $creditCard)
     {
         $selectPaymentMethodStep = ObjectManager::getInstance()->create(
             \Magento\Checkout\Test\TestStep\SelectPaymentMethodStep::class,
             [
                 'payment' => $payment,
-                'creditCardClass' => $creditCardClass,
                 'creditCard' => $creditCard,
             ]
         );
@@ -232,6 +268,7 @@ class DeleteSavedCreditCardTest extends Injectable
      *
      * @param $payment
      * @param $creditCardSave
+     * @return void
      */
     protected function saveCreditCard($payment, $creditCardSave)
     {
@@ -244,8 +281,10 @@ class DeleteSavedCreditCardTest extends Injectable
         );
         $saveCreditCardStep->run();
     }
-    
+
     /**
+     * Fill billing information step.
+     *
      * @return void
      */
     protected function fillBillingInformation()
@@ -255,8 +294,10 @@ class DeleteSavedCreditCardTest extends Injectable
         );
         $fillBillingInformationStep->run();
     }
-    
+
     /**
+     * Place order step.
+     *
      * @return void
      */
     protected function placeOrder()
@@ -268,30 +309,34 @@ class DeleteSavedCreditCardTest extends Injectable
     }
 
     /**
+     * Use saved credit card step.
+     *
      * @param $payment
+     * @return void
      */
     protected function useSavedCreditCard($payment)
     {
         $useSavedCreditCardStep = ObjectManager::getInstance()->create(
-            \Magento\Vault\Test\TestStep\UseSavedCreditCardStep::class,
-            ['payment' => $payment]
+            \Magento\Vault\Test\TestStep\UseSavedPaymentMethodStep::class,
+            ['vault' => $payment]
         );
         $useSavedCreditCardStep->run();
     }
 
     /**
+     * Delete credit card from My Account step.
+     *
      * @param $customer
      * @param $creditCard
-     * @param $creditCardClass
+     * @return array
      */
-    protected function deleteCreditCardFromMyAccount($customer, $creditCard, $creditCardClass)
+    protected function deleteCreditCardFromMyAccount($customer, $creditCard)
     {
         $deleteCreditCardFromMyAccountStep = ObjectManager::getInstance()->create(
             \Magento\Vault\Test\TestStep\DeleteCreditCardFromMyAccountStep::class,
             [
                 'customer' => $customer,
-                'creditCard' => $creditCard,
-                'creditCardClass' => $creditCardClass
+                'creditCard' => $creditCard
             ]
         );
         $deletedCard = $deleteCreditCardFromMyAccountStep->run();

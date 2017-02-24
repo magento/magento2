@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,13 +46,13 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
+        $this->cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
         $this->cookieMetadataFactory = $this->getMockBuilder(
-            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+            \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionManager = $this->getMock('Magento\Framework\Session\SessionManagerInterface');
+        $this->sessionManager = $this->getMock(\Magento\Framework\Session\SessionManagerInterface::class);
         $this->formKey = new FormKey(
             $this->cookieManagerMock,
             $this->cookieMetadataFactory,
@@ -79,7 +79,7 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
         $formKeyValue = 'form_key';
         /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $metadata */
         $metadata = $this->getMockBuilder(
-            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata'
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -101,7 +101,7 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
         $cookieDomain = 'example.com';
         /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $metadata */
         $metadata = $this->getMockBuilder(
-            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata'
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
         )
             ->disableOriginalConstructor()
             ->getMock();

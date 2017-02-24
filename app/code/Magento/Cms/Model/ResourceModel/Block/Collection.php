@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\ResourceModel\Block;
@@ -39,8 +39,9 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\Block', 'Magento\Cms\Model\ResourceModel\Block');
+        $this->_init(\Magento\Cms\Model\Block::class, \Magento\Cms\Model\ResourceModel\Block::class);
         $this->_map['fields']['store'] = 'store_table.store_id';
+        $this->_map['fields']['block_id'] = 'main_table.block_id';
     }
 
     /**

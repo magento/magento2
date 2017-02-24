@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -284,7 +284,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function _construct()
     {
-        $this->_init('Magento\Customer\Model\ResourceModel\Customer');
+        $this->_init(\Magento\Customer\Model\ResourceModel\Customer::class);
     }
 
     /**
@@ -304,7 +304,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $this->dataObjectHelper->populateWithArray(
             $customerDataObject,
             $customerData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $customerDataObject->setAddresses($addressesData)
             ->setId($this->getId());
@@ -321,7 +321,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         $customerDataAttributes = $this->dataObjectProcessor->buildOutputDataArray(
             $customer,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
 
         foreach ($customerDataAttributes as $attributeCode => $attributeData) {

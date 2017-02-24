@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
@@ -47,7 +47,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
     {
         $this->_generationDirectory = rtrim(self::GENERATION_DIRECTORY, '/') . '/';
 
-        $this->_filesystemDriverMock = $this->getMock('Magento\Framework\Filesystem\Driver\File');
+        $this->_filesystemDriverMock = $this->getMock(\Magento\Framework\Filesystem\Driver\File::class);
 
         $this->_object = new \Magento\Framework\Code\Generator\Io(
             $this->_filesystemDriverMock,
@@ -98,7 +98,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
         } else {
             $exceptionMessage = 'Some error renaming file';
             $renameMockEvent = $this->throwException(new FileSystemException(new Phrase($exceptionMessage)));
-            $this->setExpectedException('\Magento\Framework\Exception\FileSystemException', $exceptionMessage);
+            $this->setExpectedException(\Magento\Framework\Exception\FileSystemException::class, $exceptionMessage);
         }
 
         $this->_filesystemDriverMock->expects($this->once())

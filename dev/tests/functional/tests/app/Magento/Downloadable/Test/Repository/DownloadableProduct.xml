@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -30,7 +30,9 @@
             </field>
             <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="checkout_data" xsi:type="array">
                 <item name="dataset" xsi:type="string">downloadable_default</item>
@@ -54,7 +56,9 @@
             <field name="status" xsi:type="string">Yes</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="downloadable_links" xsi:type="array">
                 <item name="dataset" xsi:type="string">with_two_separately_links</item>
@@ -81,7 +85,9 @@
             <field name="status" xsi:type="string">Yes</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="downloadable_links" xsi:type="array">
                 <item name="dataset" xsi:type="string">with_two_separately_links</item>
@@ -112,7 +118,9 @@
             </field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="downloadable_links" xsi:type="array">
                 <item name="dataset" xsi:type="string">with_two_separately_links</item>
@@ -142,7 +150,9 @@
             </field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="downloadable_links" xsi:type="array">
                 <item name="dataset" xsi:type="string">with_two_separately_links</item>
@@ -176,10 +186,41 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="checkout_data" xsi:type="array">
                 <item name="dataset" xsi:type="string">downloadable_one_dollar_product_with_no_separated_link</item>
+            </field>
+        </dataset>
+
+        <dataset name="with_two_separately_links_buy_all">
+            <field name="name" xsi:type="string">Downloadable product %isolation%</field>
+            <field name="sku" xsi:type="string">downloadable_product_%isolation%</field>
+            <field name="url_key" xsi:type="string">downloadable-product-%isolation%</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">20</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">1</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="status" xsi:type="string">Yes</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
+            </field>
+            <field name="downloadable_links" xsi:type="array">
+                <item name="dataset" xsi:type="string">with_two_separately_links</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">downloadable_with_two_separately_links</item>
             </field>
         </dataset>
     </repository>

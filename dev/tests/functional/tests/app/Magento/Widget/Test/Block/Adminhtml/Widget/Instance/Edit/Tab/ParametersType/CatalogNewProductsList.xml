@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="1">
+    <fields>
+        <display_type>
+            <selector>.control [name="parameters[display_type]"]</selector>
+            <input>select</input>
+        </display_type>
+        <show_pager>
+            <selector>.control [name="parameters[show_pager]"]</selector>
+            <input>select</input>
+        </show_pager>
+        <products_count>
+            <selector>.control [name="parameters[products_count]"]</selector>
+        </products_count>
+    </fields>
+</mapping>

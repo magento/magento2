@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Block\Adminhtml;
@@ -34,22 +34,22 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->itemFactoryMock = $this->getMockBuilder('Magento\Backend\Block\Widget\Button\ItemFactory')
+        $this->itemFactoryMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Button\ItemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->buttonMock = $this->getMockBuilder('Magento\Backend\Block\Widget\Button\Item')
+        $this->buttonMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Button\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->itemFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->buttonMock);
         $this->buttonList = $this->objectManager->getObject(
-            'Magento\Backend\Block\Widget\Button\ButtonList',
+            \Magento\Backend\Block\Widget\Button\ButtonList::class,
             [ 'itemFactory' => $this->itemFactoryMock]
         );
         $this->urlBuilderMock = $this->getMockForAbstractClass(
-            'Magento\Framework\UrlInterface',
+            \Magento\Framework\UrlInterface::class,
             [],
             '',
             false,
@@ -58,13 +58,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ['getUrl']
         );
         $this->context = $this->objectManager->getObject(
-            'Magento\Backend\Block\Template\Context',
+            \Magento\Backend\Block\Template\Context::class,
             [
                 'urlBuilder' => $this->urlBuilderMock
             ]
         );
         $this->template = $this->objectManager->getObject(
-            'Magento\Email\Block\Adminhtml\Template',
+            \Magento\Email\Block\Adminhtml\Template::class,
             [
                 'context' => $this->context,
                 'buttonList' => $this->buttonList

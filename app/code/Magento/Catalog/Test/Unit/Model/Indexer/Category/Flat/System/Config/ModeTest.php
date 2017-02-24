@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat\System\Config;
@@ -34,21 +34,21 @@ class ModeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->configMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->indexerStateMock = $this->getMock(
-            'Magento\Indexer\Model\Indexer\State',
+            \Magento\Indexer\Model\Indexer\State::class,
             ['loadByIndexer', 'setStatus', 'save', '__wakeup'],
             [],
             '',
             false
         );
-        $this->indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', [], [], '', false);
+        $this->indexerRegistry = $this->getMock(\Magento\Framework\Indexer\IndexerRegistry::class, [], [], '', false);
 
-        $this->flatIndexer = $this->getMock('Magento\Framework\Indexer\IndexerInterface');
+        $this->flatIndexer = $this->getMock(\Magento\Framework\Indexer\IndexerInterface::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\Catalog\Model\Indexer\Category\Flat\System\Config\Mode',
+            \Magento\Catalog\Model\Indexer\Category\Flat\System\Config\Mode::class,
             [
                 'config' => $this->configMock,
                 'indexerState' => $this->indexerStateMock,

@@ -2,7 +2,7 @@
 /**
  * Class constructor validator. Validates arguments sequence
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Validator;
@@ -233,6 +233,6 @@ class ArgumentSequence implements ValidatorInterface
      */
     protected function _isContextType($type)
     {
-        return is_subclass_of($type, '\Magento\Framework\ObjectManager\ContextInterface');
+        return is_subclass_of($type, \Magento\Framework\ObjectManager\ContextInterface::class);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model\System\Config\Backend;
@@ -20,9 +20,9 @@ class TtlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\Config\ScopeConfigInterface');
+            ->create(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\PageCache\Model\System\Config\Backend\Ttl');
+            ->create(\Magento\PageCache\Model\System\Config\Backend\Ttl::class);
     }
 
     /**
@@ -52,7 +52,7 @@ class TtlTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSaveWithException($value, $path)
     {
-        $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
         $this->_prepareData($value, $path);
     }
 

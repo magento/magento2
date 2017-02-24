@@ -2,7 +2,7 @@
 /**
  * Form Element File Data Model
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Metadata\Form;
@@ -404,7 +404,7 @@ class File extends AbstractData
     {
         if ($this->fileProcessorFactory === null) {
             $this->fileProcessorFactory = ObjectManager::getInstance()
-                ->get('Magento\Customer\Model\FileProcessorFactory');
+                ->get(\Magento\Customer\Model\FileProcessorFactory::class);
         }
         return $this->fileProcessorFactory;
     }

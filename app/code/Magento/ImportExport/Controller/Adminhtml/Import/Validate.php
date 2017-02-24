@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
@@ -43,7 +43,7 @@ class Validate extends ImportResultController
             try {
                 $source = ImportAdapter::findAdapterFor(
                     $import->uploadSource(),
-                    $this->_objectManager->create('Magento\Framework\Filesystem')
+                    $this->_objectManager->create(\Magento\Framework\Filesystem::class)
                         ->getDirectoryWrite(DirectoryList::ROOT),
                     $data[$import::FIELD_FIELD_SEPARATOR]
                 );

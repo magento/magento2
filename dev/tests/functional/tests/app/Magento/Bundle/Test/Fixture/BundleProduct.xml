@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -90,7 +90,7 @@
         <field name="affect_bundle_product_selection" />
         <field name="stock_data" group="advanced-inventory" />
         <field name="category_id" group="product-details" />
-        <field name="website_ids" group="websites" />
+        <field name="website_ids" group="websites" source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
         <field name="cross_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\UpSellProducts" />
         <field name="up_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\CrossSellProducts" />
         <field name="related_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />

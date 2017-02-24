@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\ResourceModel\Layout\Update;
@@ -59,7 +59,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Widget\Model\Layout\Update', 'Magento\Widget\Model\ResourceModel\Layout\Update');
+        $this->_init(
+            \Magento\Widget\Model\Layout\Update::class,
+            \Magento\Widget\Model\ResourceModel\Layout\Update::class
+        );
     }
 
     /**

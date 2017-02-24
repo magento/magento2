@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Controller\Adminhtml\Tax;
@@ -43,7 +43,7 @@ class IgnoreTaxNotification extends \Magento\Tax\Controller\Adminhtml\Tax
         if ($section) {
             try {
                 $path = 'tax/notification/ignore_' . $section;
-                $this->_objectManager->get('Magento\Config\Model\ResourceModel\Config')
+                $this->_objectManager->get(\Magento\Config\Model\ResourceModel\Config::class)
                     ->saveConfig($path, 1, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());

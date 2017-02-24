@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,17 +42,17 @@ class TokenUserContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->request = $this->getMockBuilder('Magento\Framework\Webapi\Request')
+        $this->request = $this->getMockBuilder(\Magento\Framework\Webapi\Request::class)
             ->disableOriginalConstructor()
             ->setMethods(['getHeader'])
             ->getMock();
 
-        $this->tokenFactory = $this->getMockBuilder('Magento\Integration\Model\Oauth\TokenFactory')
+        $this->tokenFactory = $this->getMockBuilder(\Magento\Integration\Model\Oauth\TokenFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->integrationService = $this->getMockBuilder('Magento\Integration\Api\IntegrationServiceInterface')
+        $this->integrationService = $this->getMockBuilder(\Magento\Integration\Api\IntegrationServiceInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -69,7 +69,7 @@ class TokenUserContextTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->tokenUserContext = $this->objectManager->getObject(
-            'Magento\Webapi\Model\Authorization\TokenUserContext',
+            \Magento\Webapi\Model\Authorization\TokenUserContext::class,
             [
                 'request' => $this->request,
                 'tokenFactory' => $this->tokenFactory,
@@ -117,7 +117,7 @@ class TokenUserContextTest extends \PHPUnit_Framework_TestCase
             ->with('Authorization')
             ->will($this->returnValue("Bearer {$bearerToken}"));
 
-        $token = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
+        $token = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadByToken', 'getId', '__wakeup'])
             ->getMock();
@@ -145,7 +145,7 @@ class TokenUserContextTest extends \PHPUnit_Framework_TestCase
             ->with('Authorization')
             ->will($this->returnValue("Bearer {$bearerToken}"));
 
-        $token = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
+        $token = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadByToken', 'getId', 'getRevoked', '__wakeup'])
             ->getMock();
@@ -179,7 +179,7 @@ class TokenUserContextTest extends \PHPUnit_Framework_TestCase
             ->with('Authorization')
             ->will($this->returnValue("Bearer {$bearerToken}"));
 
-        $token = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
+        $token = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadByToken', 'getId', 'getUserType', 'getCustomerId', 'getAdminId', '__wakeup'])
             ->getMock();
@@ -197,7 +197,7 @@ class TokenUserContextTest extends \PHPUnit_Framework_TestCase
             ->method('getUserType')
             ->will($this->returnValue($userType));
 
-        $integration = $this->getMockBuilder('Magento\Integration\Model\Integration')
+        $integration = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', '__wakeup'])
             ->getMock();

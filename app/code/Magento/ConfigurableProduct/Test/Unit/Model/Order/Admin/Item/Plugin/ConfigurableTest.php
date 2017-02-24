@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Order\Admin\Item\Plugin;
@@ -40,7 +40,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->itemMock = $this->getMock(
-            'Magento\Sales\Model\Order\Item',
+            \Magento\Sales\Model\Order\Item::class,
             ['getProductType', 'getProductOptions', '__wakeup'],
             [],
             '',
@@ -50,14 +50,14 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             return 'Expected';
         };
         $this->productFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\ProductFactory',
+            \Magento\Catalog\Model\ProductFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->subjectMock = $this->getMock('Magento\Sales\Model\Order\Admin\Item', [], [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Sales\Model\Order\Admin\Item::class, [], [], '', false);
         $this->configurable = new \Magento\ConfigurableProduct\Model\Order\Admin\Item\Plugin\Configurable(
             $this->productFactoryMock
         );

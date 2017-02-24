@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -717,16 +717,17 @@ class AccountManagement implements AccountManagementInterface
         }
         try {
             foreach ($customerAddresses as $address) {
-                 if ($address->getId()) {
+                if ($address->getId()) {
                     $newAddress = clone $address;
                     $newAddress->setId(null);
                     $newAddress->setCustomerId($customer->getId());
                     $this->addressRepository->save($newAddress);
-                 } else {
+                } else {
                     $address->setCustomerId($customer->getId());
                     $this->addressRepository->save($address);
                 }
             }
+            $this->customerRegistry->remove($customer->getId());
         } catch (InputException $e) {
             $this->customerRepository->delete($customer);
             throw $e;
@@ -1286,7 +1287,7 @@ class AccountManagement implements AccountManagementInterface
         // object passed for events
         $mergedCustomerData = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerData = $this->dataProcessor
-            ->buildOutputDataArray($customer, '\Magento\Customer\Api\Data\CustomerInterface');
+            ->buildOutputDataArray($customer, \Magento\Customer\Api\Data\CustomerInterface::class);
         $mergedCustomerData->addData($customerData);
         $mergedCustomerData->setData('name', $this->customerViewHelper->getCustomerName($customer));
         return $mergedCustomerData;

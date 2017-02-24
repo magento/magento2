@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 //Create customer
-$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
+$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Customer\Model\Customer::class
+);
 $customer->setWebsiteId(
     0
 )->setEntityId(
@@ -34,7 +36,9 @@ $customer->isObjectNew(true);
 $customer->save();
 
 // Create and set addresses
-$addressFirst = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Address');
+$addressFirst = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Customer\Model\Address::class
+);
 $addressFirst->addData(
     [
         'entity_id' => 1,
@@ -52,7 +56,9 @@ $addressFirst->isObjectNew(true);
 $customer->addAddress($addressFirst);
 $customer->setDefaultBilling($addressFirst->getId());
 
-$addressSecond = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Address');
+$addressSecond = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Customer\Model\Address::class
+);
 $addressSecond->addData(
     [
         'entity_id' => 2,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Request;
@@ -38,9 +38,9 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->url = $this->getMock('Magento\Framework\UrlInterface', [], [], '', false);
-        $this->mathRandom = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
-        $this->transparent = $this->getMock('Magento\Paypal\Model\Payflow\Transparent', [], [], '', false);
+        $this->url = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
+        $this->mathRandom = $this->getMock(\Magento\Framework\Math\Random::class, [], [], '', false);
+        $this->transparent = $this->getMock(\Magento\Paypal\Model\Payflow\Transparent::class, [], [], '', false);
 
         $this->model = new SecureToken(
             $this->url,
@@ -61,7 +61,7 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
             ->method('fillCustomerContacts');
         $this->transparent->expects($this->once())
             ->method('getConfig')
-            ->willReturn($this->getMock('Magento\Paypal\Model\PayflowConfig', [], [], '', false));
+            ->willReturn($this->getMock(\Magento\Paypal\Model\PayflowConfig::class, [], [], '', false));
         $this->transparent->expects($this->once())
             ->method('postRequest')
             ->willReturn(new DataObject());
@@ -73,7 +73,7 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
         $this->url->expects($this->exactly(3))
             ->method('getUrl');
 
-        $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quote = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
 
         $this->model->requestToken($quote);
 

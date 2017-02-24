@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model\ResourceModel\Layout;
@@ -55,12 +55,12 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function _getResource(\Magento\Framework\DB\Select $select)
     {
-        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $connection = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
         $connection->expects($this->once())->method('select')->will($this->returnValue($select));
         $connection->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
 
         $resource = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -83,7 +83,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 
     public function testAddUpdatedDaysBeforeFilter()
     {
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $select->expects($this->any())->method('where')->with(self::TEST_WHERE_CONDITION);
 
         $collection = $this->_getCollection($select);

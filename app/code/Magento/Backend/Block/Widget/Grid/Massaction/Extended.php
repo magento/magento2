@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
@@ -66,7 +66,7 @@ class Extended extends \Magento\Backend\Block\Widget
     public function _construct()
     {
         parent::_construct();
-        $this->setErrorText($this->escapeJsQuote(__('Please select items.')));
+        $this->setErrorText($this->escapeHtml(__('Please select items.')));
     }
 
     /**
@@ -88,7 +88,7 @@ class Extended extends \Magento\Backend\Block\Widget
     public function addItem($itemId, array $item)
     {
         $this->_items[$itemId] = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Grid\Massaction\Item'
+            \Magento\Backend\Block\Widget\Grid\Massaction\Item::class
         )->setData(
             $item
         )->setMassaction(

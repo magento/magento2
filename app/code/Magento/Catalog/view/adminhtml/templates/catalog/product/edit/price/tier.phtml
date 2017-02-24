@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -58,12 +58,12 @@ var tierPriceRowTemplate = '<tr>'
     + '<td class="col-websites"<?php if (!$_showWebsite): ?> style="display:none"<?php endif; ?>>'
     + '<select class="<?php /* @escapeNotVerified */ echo $_htmlClass ?> required-entry" name="<?php /* @escapeNotVerified */ echo $_htmlName ?>[<%- data.index %>][website_id]" id="tier_price_row_<%- data.index %>_website">'
     <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
-    + '<option value="<?php /* @escapeNotVerified */ echo $_websiteId ?>"><?php /* @escapeNotVerified */ echo $block->escapeJsQuote($block->escapeHtml($_info['name'])) ?><?php if (!empty($_info['currency'])): ?> [<?php echo $block->escapeHtml($_info['currency']) ?>]<?php endif; ?></option>'
+    + '<option value="<?php /* @escapeNotVerified */ echo $_websiteId ?>"><?php echo $block->escapeJs($_info['name']) ?><?php if (!empty($_info['currency'])): ?> [<?php echo $block->escapeHtml($_info['currency']) ?>]<?php endif; ?></option>'
     <?php endforeach ?>
     + '</select></td>'
     + '<td class="col-customer-group"><select class="<?php /* @escapeNotVerified */ echo $_htmlClass ?> custgroup required-entry" name="<?php /* @escapeNotVerified */ echo $_htmlName ?>[<%- data.index %>][cust_group]" id="tier_price_row_<%- data.index %>_cust_group">'
     <?php foreach ($block->getCustomerGroups() as $_groupId => $_groupName): ?>
-    + '<option value="<?php /* @escapeNotVerified */ echo $_groupId ?>"><?php /* @escapeNotVerified */ echo $block->escapeJsQuote($block->escapeHtml($_groupName)) ?></option>'
+    + '<option value="<?php /* @escapeNotVerified */ echo $_groupId ?>"><?php echo $block->escapeJs($_groupName) ?></option>'
     <?php endforeach ?>
     + '</select></td>'
     + '<td class="col-qty">'

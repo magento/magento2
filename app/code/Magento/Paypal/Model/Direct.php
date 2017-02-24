@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
@@ -23,7 +23,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Payment\Info';
+    protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
     /**
      * Availability option

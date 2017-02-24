@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<config>
+<config xmlns:xi="http://www.w3.org/2001/XInclude">
     <profile>
         <websites>3</websites> <!-- Number of websites to generate -->
         <store_groups>3</store_groups> <!--Number of stores-->
@@ -68,5 +68,8 @@
                 <set_scheduled>true</set_scheduled>
             </indexer>
         </indexers>
+        <xi:include href="../../config/searchTerms.xml" />
+        <xi:include href="../../config/searchConfig.xml" />
+        <xi:include href="../../config/attributeSets.xml" />
     </profile>
 </config>

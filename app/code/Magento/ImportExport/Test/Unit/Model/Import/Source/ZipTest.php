@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->directory = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\Write')
+        $this->directory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Write::class)
             ->disableOriginalConstructor()
             ->setMethods(['getRelativePath'])
             ->getMock();
@@ -66,7 +66,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $this->zip = $this->getMockBuilder(
-                '\Magento\ImportExport\Model\Import\Source\Zip'
+                \Magento\ImportExport\Model\Import\Source\Zip::class
             )
                 ->setConstructorArgs(
                     [
@@ -78,7 +78,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
                 ->getMock();
 
             $reflectedClass = new \ReflectionClass(
-                '\Magento\ImportExport\Model\Import\Source\Zip'
+                \Magento\ImportExport\Model\Import\Source\Zip::class
             );
             $constructor = $reflectedClass->getConstructor();
             $constructor->invoke(

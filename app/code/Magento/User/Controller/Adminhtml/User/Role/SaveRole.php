@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
@@ -80,7 +80,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
 
         $isAll = $this->getRequest()->getParam('all');
         if ($isAll) {
-            $resource = [$this->_objectManager->get('Magento\Framework\Acl\RootResource')->getId()];
+            $resource = [$this->_objectManager->get(\Magento\Framework\Acl\RootResource::class)->getId()];
         }
 
         $role = $this->_initRole('role_id');

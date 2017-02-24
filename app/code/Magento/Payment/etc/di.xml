@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Payment\Api\Data\PaymentMethodInterface" type="Magento\Payment\Model\PaymentMethod"/>
+    <preference for="Magento\Payment\Api\PaymentMethodListInterface" type="Magento\Payment\Model\PaymentMethodList"/>
     <preference for="Magento\Payment\Gateway\Validator\ResultInterface" type="Magento\Payment\Gateway\Validator\Result"/>
     <preference for="Magento\Payment\Gateway\ConfigFactoryInterface" type="Magento\Payment\Gateway\Config\ConfigFactory" />
     <preference for="Magento\Payment\Gateway\Command\CommandManagerPoolInterface" type="Magento\Payment\Gateway\Command\CommandManagerPool" />

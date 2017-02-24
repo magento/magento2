@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -250,8 +250,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Type'),
                 'type' => 'select',
                 'index' => 'type',
-                'filter' => 'Magento\Review\Block\Adminhtml\Grid\Filter\Type',
-                'renderer' => 'Magento\Review\Block\Adminhtml\Grid\Renderer\Type'
+                'filter' => \Magento\Review\Block\Adminhtml\Grid\Filter\Type::class,
+                'renderer' => \Magento\Review\Block\Adminhtml\Grid\Renderer\Type::class
             ]
         );
 

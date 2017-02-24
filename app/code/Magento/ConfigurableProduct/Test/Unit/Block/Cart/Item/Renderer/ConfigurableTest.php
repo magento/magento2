@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Cart\Item\Renderer;
@@ -29,24 +29,24 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_configManager = $this->getMock('Magento\Framework\View\ConfigInterface', [], [], '', false);
+        $this->_configManager = $this->getMock(\Magento\Framework\View\ConfigInterface::class, [], [], '', false);
         $this->_imageHelper = $this->getMock(
-            'Magento\Catalog\Helper\Image',
+            \Magento\Catalog\Helper\Image::class,
             ['init', 'resize', '__toString'],
             [],
             '',
             false
         );
-        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->productConfigMock = $this->getMock(
-            'Magento\Catalog\Helper\Product\Configuration',
+            \Magento\Catalog\Helper\Product\Configuration::class,
             [],
             [],
             '',
             false
         );
         $this->_renderer = $objectManagerHelper->getObject(
-            'Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable',
+            \Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable::class,
             [
                 'viewConfig' => $this->_configManager,
                 'imageHelper' => $this->_imageHelper,
@@ -133,12 +133,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         /** Initialized parent product */
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $parentProduct */
-        $parentProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $parentProduct = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
 
         /** Initialize child product */
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $childProduct */
         $childProduct = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getThumbnail', '__wakeup'],
             [],
             '',
@@ -149,10 +149,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         /** Mock methods which return parent and child products */
         /** @var \Magento\Quote\Model\Quote\Item\Option|\PHPUnit_Framework_MockObject_MockObject $itemOption */
-        $itemOption = $this->getMock('Magento\Quote\Model\Quote\Item\Option', [], [], '', false);
+        $itemOption = $this->getMock(\Magento\Quote\Model\Quote\Item\Option::class, [], [], '', false);
         $itemOption->expects($this->any())->method('getProduct')->will($this->returnValue($childProduct));
         /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
-        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $item = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($parentProduct));
         $item->expects(
             $this->any()
@@ -170,7 +170,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionList()
     {
-        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $itemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
         $this->_renderer->setItem($itemMock);
         $this->productConfigMock->expects($this->once())->method('getOptions')->with($itemMock);
         $this->_renderer->getOptionList();
@@ -179,9 +179,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities()
     {
         $productTags = ['catalog_product_1'];
-        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $product->expects($this->exactly(2))->method('getIdentities')->will($this->returnValue($productTags));
-        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $item = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
         $item->expects($this->exactly(2))->method('getProduct')->will($this->returnValue($product));
         $this->_renderer->setItem($item);
         $this->assertEquals(array_merge($productTags, $productTags), $this->_renderer->getIdentities());

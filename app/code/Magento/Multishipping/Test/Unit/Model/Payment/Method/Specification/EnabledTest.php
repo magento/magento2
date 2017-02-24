@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Test\Unit\Model\Payment\Method\Specification;
@@ -26,7 +26,7 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentConfigMock = $this->getMock('\Magento\Payment\Model\Config', [], [], '', false);
+        $this->paymentConfigMock = $this->getMock(\Magento\Payment\Model\Config::class, [], [], '', false);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
@@ -51,7 +51,7 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
         );
 
         $configSpecification = $this->objectManager->getObject(
-            'Magento\Multishipping\Model\Payment\Method\Specification\Enabled',
+            \Magento\Multishipping\Model\Payment\Method\Specification\Enabled::class,
             ['paymentConfig' => $this->paymentConfigMock]
         );
 

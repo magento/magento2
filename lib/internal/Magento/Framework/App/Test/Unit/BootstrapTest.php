@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,9 @@ use \Magento\Framework\App\MaintenanceMode;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BootstrapTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -63,33 +66,45 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->dirs = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', ['getPath'], [], '', false);
-        $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', ['isOn'], [], '', false);
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->objectManagerFactory = $this->getMock(
+            \Magento\Framework\App\ObjectManagerFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->dirs = $this->getMock(
+            \Magento\Framework\App\Filesystem\DirectoryList::class,
+            ['getPath'],
+            [],
+            '',
+            false
+        );
+        $this->maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, ['isOn'], [], '', false);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
 
-        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
+        $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
 
         $mapObjectManager = [
-            ['Magento\Framework\App\Filesystem\DirectoryList', $this->dirs],
-            ['Magento\Framework\App\MaintenanceMode', $this->maintenanceMode],
-            ['Magento\Framework\Filesystem', $filesystem],
-            ['Magento\Framework\App\DeploymentConfig', $this->deploymentConfig],
+            [\Magento\Framework\App\Filesystem\DirectoryList::class, $this->dirs],
+            [\Magento\Framework\App\MaintenanceMode::class, $this->maintenanceMode],
+            [\Magento\Framework\Filesystem::class, $filesystem],
+            [\Magento\Framework\App\DeploymentConfig::class, $this->deploymentConfig],
             ['Psr\Log\LoggerInterface', $this->logger],
         ];
 
         $this->objectManager->expects($this->any())->method('get')
             ->will(($this->returnValueMap($mapObjectManager)));
 
-        $this->configDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
+        $this->configDir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
 
         $filesystem->expects($this->any())->method('getDirectoryRead')
             ->will(($this->returnValue($this->configDir)));
 
-        $this->application = $this->getMockForAbstractClass('Magento\Framework\AppInterface');
+        $this->application = $this->getMockForAbstractClass(\Magento\Framework\AppInterface::class);
 
         $this->objectManager->expects($this->any())->method('create')
             ->will(($this->returnValue($this->application)));
@@ -97,7 +112,8 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerFactory->expects($this->any())->method('create')
             ->will(($this->returnValue($this->objectManager)));
 
-        $this->bootstrapMock = $this->getMock('Magento\Framework\App\Bootstrap',
+        $this->bootstrapMock = $this->getMock(
+            \Magento\Framework\App\Bootstrap::class,
             ['assertMaintenance', 'assertInstalled', 'getIsExpected', 'isInstalled', 'terminate'],
             [$this->objectManagerFactory, '', ['value1', 'value2']]
         );
@@ -106,7 +122,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     public function testCreateObjectManagerFactory()
     {
         $result = Bootstrap::createObjectManagerFactory('test', []);
-        $this->assertInstanceOf('Magento\Framework\App\ObjectManagerFactory', $result);
+        $this->assertInstanceOf(\Magento\Framework\App\ObjectManagerFactory::class, $result);
     }
 
     public function testCreateFilesystemDirectoryList()
@@ -116,18 +132,18 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             [Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [DirectoryList::APP => ['path' => '/custom/path']]]
         );
         /** @var \Magento\Framework\App\Filesystem\DirectoryList $result */
-        $this->assertInstanceOf('Magento\Framework\App\Filesystem\DirectoryList', $result);
+        $this->assertInstanceOf(\Magento\Framework\App\Filesystem\DirectoryList::class, $result);
         $this->assertEquals('/custom/path', $result->getPath(DirectoryList::APP));
     }
 
     public function testCreateFilesystemDriverPool()
     {
-        $driverClass = get_class($this->getMockForAbstractClass('Magento\Framework\Filesystem\DriverInterface'));
+        $driverClass = get_class($this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class));
         $result = Bootstrap::createFilesystemDriverPool(
             [Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS => ['custom' => $driverClass]]
         );
         /** @var \Magento\Framework\Filesystem\DriverPool $result */
-        $this->assertInstanceOf('Magento\Framework\Filesystem\DriverPool', $result);
+        $this->assertInstanceOf(\Magento\Framework\Filesystem\DriverPool::class, $result);
         $this->assertInstanceof($driverClass, $result->getDriver('custom'));
     }
 
@@ -195,7 +211,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     public function testRunNoErrors()
     {
-        $responseMock = $this->getMockForAbstractClass('\Magento\Framework\App\ResponseInterface');
+        $responseMock = $this->getMockForAbstractClass(\Magento\Framework\App\ResponseInterface::class);
         $this->bootstrapMock->expects($this->once())->method('assertMaintenance')->will($this->returnValue(null));
         $this->bootstrapMock->expects($this->once())->method('assertInstalled')->will($this->returnValue(null));
         $this->application->expects($this->once())->method('launch')->willReturn($responseMock);

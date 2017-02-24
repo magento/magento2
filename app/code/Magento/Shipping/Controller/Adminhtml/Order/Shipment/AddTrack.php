@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
@@ -59,7 +59,7 @@ class AddTrack extends \Magento\Backend\App\Action
             $shipment = $this->shipmentLoader->load();
             if ($shipment) {
                 $track = $this->_objectManager->create(
-                    'Magento\Sales\Model\Order\Shipment\Track'
+                    \Magento\Sales\Model\Order\Shipment\Track::class
                 )->setNumber(
                     $number
                 )->setCarrierCode(
@@ -84,7 +84,7 @@ class AddTrack extends \Magento\Backend\App\Action
             $response = ['error' => true, 'message' => __('Cannot add tracking number.')];
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($response);
+            $response = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($response);
             $this->getResponse()->representJson($response);
         } else {
             $this->getResponse()->setBody($response);

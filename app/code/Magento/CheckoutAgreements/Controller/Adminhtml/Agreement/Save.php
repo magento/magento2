@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml\Agreement;
@@ -15,7 +15,7 @@ class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
     {
         $postData = $this->getRequest()->getPostValue();
         if ($postData) {
-            $model = $this->_objectManager->get('Magento\CheckoutAgreements\Model\Agreement');
+            $model = $this->_objectManager->get(\Magento\CheckoutAgreements\Model\Agreement::class);
             $model->setData($postData);
 
             try {
@@ -36,7 +36,7 @@ class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
                 $this->messageManager->addError(__('Something went wrong while saving this condition.'));
             }
 
-            $this->_objectManager->get('Magento\Backend\Model\Session')->setAgreementData($postData);
+            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setAgreementData($postData);
             $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\ResourceConnection;
@@ -25,28 +25,28 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManager->getObject(
-            'Magento\Framework\App\ResourceConnection\ConnectionFactory',
+            \Magento\Framework\App\ResourceConnection\ConnectionFactory::class,
             ['objectManager' => $this->objectManagerMock]
         );
     }
 
     public function testCreate()
     {
-        $cacheAdapterMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\DdlCache')
+        $cacheAdapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\DdlCache::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $loggerMock = $this->getMockBuilder('Magento\Framework\DB\LoggerInterface')
+        $loggerMock = $this->getMockBuilder(\Magento\Framework\DB\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterClass = 'Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface';
+        $adapterClass = \Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface::class;
         $connectionAdapterMock = $this->getMockBuilder($adapterClass)
             ->disableOriginalConstructor()
             ->getMock();
-        $connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $connectionMock->expects($this->once())
@@ -59,14 +59,14 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($connectionMock));
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface')
+            ->with(\Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface::class)
             ->will($this->returnValue($connectionAdapterMock));
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap(
                 [
-                    ['Magento\Framework\DB\LoggerInterface', $loggerMock],
-                    ['Magento\Framework\DB\Adapter\DdlCache', $cacheAdapterMock],
+                    [\Magento\Framework\DB\LoggerInterface::class, $loggerMock],
+                    [\Magento\Framework\DB\Adapter\DdlCache::class, $cacheAdapterMock],
                 ]
             ));
         $this->assertSame($connectionMock, $this->model->create(['active' => true]));

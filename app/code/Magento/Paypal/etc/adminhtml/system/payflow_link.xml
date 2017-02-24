@@ -1,18 +1,21 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <group id="payflow_link" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
-        <label>Payflow Link (Includes Express Checkout)</label>
+        <label>Payflow Link</label>
         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-        <fieldset_css>pp-method-payflow</fieldset_css>
-        <comment>Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site.</comment>
+        <fieldset_css>paypal-other-section</fieldset_css>
+        <comment><![CDATA[Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site. (<u>Includes Express Checkout</u>)]]></comment>
         <attribute type="activity_path">payment/payflow_link/active</attribute>
-        <more_url>https://www.paypal.com/webapps/mpp/referral/paypal-payflow-link?partner_id=NB9WWHYEMVUMS</more_url>
+        <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+            <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-link.html</comment>
+            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+        </group>
         <group id="payflow_link_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
             <label>Required PayPal Settings</label>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>

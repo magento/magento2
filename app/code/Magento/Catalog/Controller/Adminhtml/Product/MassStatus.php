@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -12,6 +12,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
@@ -62,7 +65,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
     public function _validateMassStatus(array $productIds, $status)
     {
         if ($status == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
-            if (!$this->_objectManager->create('Magento\Catalog\Model\Product')->isProductsHasSku($productIds)) {
+            if (!$this->_objectManager->create(\Magento\Catalog\Model\Product::class)->isProductsHasSku($productIds)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Please make sure to define SKU values for all processed products.')
                 );
@@ -81,10 +84,15 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
         $productIds = $collection->getAllIds();
         $storeId = (int) $this->getRequest()->getParam('store', 0);
         $status = (int) $this->getRequest()->getParam('status');
+        $filters = (array)$this->getRequest()->getParam('filters', []);
+
+        if (isset($filters['store_id'])) {
+            $storeId = (int)$filters['store_id'];
+        }
 
         try {
             $this->_validateMassStatus($productIds, $status);
-            $this->_objectManager->get('Magento\Catalog\Model\Product\Action')
+            $this->_objectManager->get(\Magento\Catalog\Model\Product\Action::class)
                 ->updateAttributes($productIds, ['status' => $status], $storeId);
             $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
             $this->_productPriceIndexerProcessor->reindexList($productIds);

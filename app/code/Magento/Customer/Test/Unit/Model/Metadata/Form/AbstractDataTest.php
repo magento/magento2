@@ -2,11 +2,14 @@
 /**
  * test Magento\Customer\Model\Metadata\Form\AbstractData
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AbstractDataTest extends \PHPUnit_Framework_TestCase
 {
     const MODEL = 'MODEL';
@@ -38,13 +41,13 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_localeMock = $this->getMockBuilder(
-            'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
         )->disableOriginalConstructor()->getMock();
         $this->_localeResolverMock = $this->getMockBuilder(
-            'Magento\Framework\Locale\ResolverInterface'
+            \Magento\Framework\Locale\ResolverInterface::class
         )->disableOriginalConstructor()->getMock();
-        $this->_loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
-        $this->_attributeMock = $this->getMock('Magento\Customer\Api\Data\AttributeMetadataInterface');
+        $this->_loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
+        $this->_attributeMock = $this->getMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
         $this->_value = 'VALUE';
         $this->_entityTypeCode = 'ENTITY_TYPE_CODE';
         $this->_isAjax = false;
@@ -201,7 +204,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateInputRule($value, $label, $inputValidation, $expectedOutput)
     {
-        $validationRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
+        $validationRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
@@ -319,7 +322,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     public function getRequestValueDataProvider()
     {
         $expectedValue = 'EXPECTED_VALUE';
-        $requestMockOne = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')->getMock();
+        $requestMockOne = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
         $requestMockOne->expects(
             $this->any()
         )->method(
@@ -330,7 +333,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($expectedValue)
         );
 
-        $requestMockTwo = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')->getMock();
+        $requestMockTwo = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
         $requestMockTwo->expects(
             $this->at(0)
         )->method(
@@ -351,7 +354,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         );
 
         $requestMockThree = $this->getMockBuilder(
-            '\Magento\Framework\App\Request\Http'
+            \Magento\Framework\App\Request\Http::class
         )->disableOriginalConstructor()->getMock();
         $requestMockThree->expects(
             $this->once()

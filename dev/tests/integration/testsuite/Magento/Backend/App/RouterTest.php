@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,15 +24,15 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create('Magento\Backend\App\Router');
+        $this->model = $this->objectManager->create(\Magento\Backend\App\Router::class);
     }
 
     public function testRouterCanProcessRequestsWithProperPathInfo()
     {
-        $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $request->expects($this->once())->method('getPathInfo')->will($this->returnValue('backend/admin/dashboard'));
 
-        $this->assertInstanceOf('Magento\Backend\Controller\Adminhtml\Dashboard', $this->model->match($request));
+        $this->assertInstanceOf(\Magento\Backend\Controller\Adminhtml\Dashboard::class, $this->model->match($request));
     }
 
     /**
@@ -49,7 +50,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function getControllerClassNameDataProvider()
     {
         return [
-            ['Magento_Module', 'controller', 'Magento\Module\Controller\Adminhtml\Controller'],
+            ['Magento_TestModule', 'controller', \Magento\TestModule\Controller\Adminhtml\Controller::class],
         ];
     }
 
@@ -68,13 +69,13 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         ];
 
         $routeConfig = $this->getMock(
-            'Magento\Framework\App\Route\Config',
+            \Magento\Framework\App\Route\Config::class,
             ['_getRoutes'],
             [
-                'reader' => $this->objectManager->get('Magento\Framework\App\Route\Config\Reader'),
-                'cache' => $this->objectManager->get('Magento\Framework\Config\CacheInterface'),
-                'configScope' => $this->objectManager->get('Magento\Framework\Config\ScopeInterface'),
-                'areaList' => $this->objectManager->get('Magento\Framework\App\AreaList'),
+                'reader' => $this->objectManager->get(\Magento\Framework\App\Route\Config\Reader::class),
+                'cache' => $this->objectManager->get(\Magento\Framework\Config\CacheInterface::class),
+                'configScope' => $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class),
+                'areaList' => $this->objectManager->get(\Magento\Framework\App\AreaList::class),
                 'cacheId' => 'RoutesConfig'
             ]
         );
@@ -82,16 +83,16 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routeConfig->expects($this->any())->method('_getRoutes')->will($this->returnValue($routers));
 
         $defaultRouter = $this->objectManager->create(
-            'Magento\Backend\App\Router',
+            \Magento\Backend\App\Router::class,
             ['routeConfig' => $routeConfig]
         );
 
         /** @var $request \Magento\TestFramework\Request */
-        $request = $this->objectManager->get('Magento\TestFramework\Request');
+        $request = $this->objectManager->get(\Magento\TestFramework\Request::class);
 
         $request->setPathInfo('backend/testfixture/test_controller');
         $controller = $defaultRouter->match($request);
-        $this->assertInstanceOf('Magento\TestFixture\Controller\Adminhtml\Noroute', $controller);
+        $this->assertInstanceOf(\Magento\TestFixture\Controller\Adminhtml\Noroute::class, $controller);
         $this->assertEquals('noroute', $request->getActionName());
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,9 +34,9 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
     public function getParentsDataProvider()
     {
         return [
-            ['Magento\Test\Di\DiInterface', []],
-            ['Magento\Test\Di\DiParent', [null, 'Magento\Test\Di\DiInterface']],
-            ['Magento\Test\Di\Child', ['Magento\Test\Di\DiParent', 'Magento\Test\Di\ChildInterface']]
+            [\Magento\Test\Di\DiInterface::class, []],
+            [\Magento\Test\Di\DiParent::class, [null, \Magento\Test\Di\DiInterface::class]],
+            [\Magento\Test\Di\Child::class, [\Magento\Test\Di\DiParent::class, \Magento\Test\Di\ChildInterface::class]]
         ];
     }
 
@@ -52,11 +52,11 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
     public function nonExistentGeneratorsDataProvider()
     {
         return [
-            ['Magento\Test\Module\Model\Item\Factory'],
-            ['Magento\Test\Module\Model\Item\Proxy'],
-            ['Magento\Test\Module\Model\Item\Interceptor'],
-            ['Magento\Test\Module\Model\Item\Mapper'],
-            ['Magento\Test\Module\Model\Item\SearchResults']
+            [\Magento\Test\Module\Model\Item\Factory::class],
+            [\Magento\Test\Module\Model\Item\Proxy::class],
+            [\Magento\Test\Module\Model\Item\Interceptor::class],
+            [\Magento\Test\Module\Model\Item\Mapper::class],
+            [\Magento\Test\Module\Model\Item\SearchResults::class]
         ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Tax;
@@ -31,14 +31,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             [],
             [],
             '',
             false
         );
         $this->appResourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -50,7 +50,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->appResourceMock->expects($this->any())->method('getTableName')->willReturnArgument(0);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->taxItem = $objectManager->getObject(
-            'Magento\Sales\Model\ResourceModel\Order\Tax\Item',
+            \Magento\Sales\Model\ResourceModel\Order\Tax\Item::class,
             [
                 'resource' => $this->appResourceMock
             ]
@@ -72,7 +72,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $select = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             [],
             [],
             '',

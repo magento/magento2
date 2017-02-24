@@ -2,7 +2,7 @@
 /**
  * Scan source code for references to classes and see if they indeed exist
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity;
@@ -169,6 +169,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         $badClasses = [];
         $badUsages = [];
         foreach ($classes as $class) {
+            $class = trim($class, '\\');
             try {
                 if (strrchr($class, '\\') === false and !Classes::isVirtual($class)) {
                     $badUsages[] = $class;
@@ -188,7 +189,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 }
                 self::$_existingClasses[$class] = 1;
             } catch (\PHPUnit_Framework_AssertionFailedError $e) {
-                $badClasses[] = $class;
+                $badClasses[] = '\\' . $class;
             }
         }
         if ($badClasses) {

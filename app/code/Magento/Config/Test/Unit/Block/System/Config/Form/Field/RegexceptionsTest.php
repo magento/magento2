@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,16 +51,16 @@ class RegexceptionsTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->labelFactoryMock = $this->getMockBuilder('Magento\Framework\View\Design\Theme\LabelFactory')
+        $this->labelFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\LabelFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->labelMock = $this->getMockBuilder('Magento\Framework\View\Design\Theme\Label')
+        $this->labelMock = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Label::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->elementFactoryMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\Factory')
+        $this->elementFactoryMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\Factory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->elementMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\AbstractElement')
+        $this->elementMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\AbstractElement::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 ['setForm', 'setName', 'setHtmlId', 'setValues', 'getName', 'getHtmlId', 'getValues', 'getElementHtml']
@@ -74,7 +74,10 @@ class RegexceptionsTest extends \PHPUnit_Framework_TestCase
                 'element' => $this->elementMock
             ],
         ];
-        $this->object = $objectManager->getObject('Magento\Config\Block\System\Config\Form\Field\Regexceptions', $data);
+        $this->object = $objectManager->getObject(
+            \Magento\Config\Block\System\Config\Form\Field\Regexceptions::class,
+            $data
+        );
     }
 
     public function testRenderCellTemplateValueColumn()

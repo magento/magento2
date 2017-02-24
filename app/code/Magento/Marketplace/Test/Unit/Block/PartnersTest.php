@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,7 +46,7 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
      */
     public function getPartnersBlockMock($methods = null)
     {
-        return $this->getMock('Magento\Marketplace\Block\Partners', $methods, [], '', false);
+        return $this->getMock(\Magento\Marketplace\Block\Partners::class, $methods, [], '', false);
     }
 
     /**
@@ -56,6 +56,6 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
      */
     public function getPartnersModelMock($methods)
     {
-        return $this->getMock('Magento\Marketplace\Model\Partners', $methods, [], '', false);
+        return $this->getMock(\Magento\Marketplace\Model\Partners::class, $methods, [], '', false);
     }
 }

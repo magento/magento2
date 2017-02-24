@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block;
@@ -25,11 +25,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
 
         /** @var $block \Magento\UrlRewrite\Block\Edit */
-        $block = $layout->createBlock('Magento\UrlRewrite\Block\Edit', '', ['data' => $blockAttributes]);
+        $block = $layout->createBlock(\Magento\UrlRewrite\Block\Edit::class, '', ['data' => $blockAttributes]);
 
         $this->_checkSelector($block, $expected);
         $this->_checkButtons($block, $expected);
@@ -51,7 +51,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         if ($expected['selector']) {
             $this->assertInstanceOf(
-                'Magento\UrlRewrite\Block\Selector',
+                \Magento\UrlRewrite\Block\Selector::class,
                 $selectorBlock,
                 'Child block with entity selector is invalid'
             );
@@ -76,7 +76,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         if ($expected['form']) {
             $this->assertInstanceOf(
-                'Magento\UrlRewrite\Block\Edit\Form',
+                \Magento\UrlRewrite\Block\Edit\Form::class,
                 $formBlock,
                 'Child block with form is invalid'
             );
@@ -140,11 +140,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $urlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $urlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\UrlRewrite\Model\UrlRewrite'
+            \Magento\UrlRewrite\Model\UrlRewrite::class
         );
         /** @var $existingUrlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $existingUrlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\UrlRewrite\Model\UrlRewrite',
+            \Magento\UrlRewrite\Model\UrlRewrite::class,
             ['data' => ['url_rewrite_id' => 1]]
         );
 

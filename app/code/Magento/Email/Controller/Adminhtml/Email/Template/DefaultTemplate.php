@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
@@ -51,14 +51,16 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
             $template->setData('orig_template_code', $templateId);
             $template->setData('template_variables', \Zend_Json::encode($template->getVariablesOptionArray(true)));
 
-            $templateBlock = $this->_view->getLayout()->createBlock('Magento\Email\Block\Adminhtml\Template\Edit');
+            $templateBlock = $this->_view->getLayout()->createBlock(
+                \Magento\Email\Block\Adminhtml\Template\Edit::class
+            );
             $template->setData('orig_template_currently_used_for', $templateBlock->getCurrentlyUsedForPaths(false));
 
             $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($template->getData())
+                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($template->getData())
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
     }
 }

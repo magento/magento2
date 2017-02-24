@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Option;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Catalog product options collection
@@ -49,6 +50,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @param MetadataPool $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -59,10 +61,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $optionValueCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        MetadataPool $metadataPool = null
     ) {
         $this->_optionValueCollectionFactory = $optionValueCollectionFactory;
         $this->_storeManager = $storeManager;
+        $this->metadataPool = $metadataPool ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -73,7 +78,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Product\Option', 'Magento\Catalog\Model\ResourceModel\Product\Option');
+        $this->_init(
+            \Magento\Catalog\Model\Product\Option::class,
+            \Magento\Catalog\Model\ResourceModel\Product\Option::class
+        );
     }
 
     /**
@@ -245,7 +253,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             ['cpe' => $this->getTable('catalog_product_entity')],
             sprintf(
                 'cpe.%s = main_table.product_id',
-                $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
+                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
             ),
             []
         );
@@ -316,25 +324,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * @return \Magento\Framework\EntityManager\MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
-        }
-        return $this->metadataPool;
-    }
-
-    /**
      * @return JoinProcessorInterface
      */
     private function getJoinProcessor()
     {
         if (null === $this->joinProcessor) {
             $this->joinProcessor = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface');
+                ->get(\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class);
         }
         return $this->joinProcessor;
     }

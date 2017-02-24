@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->model = $this->objectManagerHelper->getObject(
-            '\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price'
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price::class
         );
     }
 
@@ -29,22 +29,22 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     {
         $finalPrice = 10;
         $qty = 1;
-        $configurableProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $configurableProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCustomOption', 'getPriceInfo', 'setFinalPrice', '__wakeUp'])
             ->getMock();
-        $customOption = $this->getMockBuilder('Magento\Catalog\Model\Product\Configuration\Item\Option')
+        $customOption = $this->getMockBuilder(\Magento\Catalog\Model\Product\Configuration\Item\Option::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])
             ->getMock();
-        $priceInfo = $this->getMockBuilder('Magento\Framework\Pricing\PriceInfo\Base')
+        $priceInfo = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfo\Base::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPrice'])
             ->getMock();
-        $price = $this->getMockBuilder('Magento\Framework\Pricing\Price\PriceInterface')
+        $price = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $amount = $this->getMockBuilder('Magento\Framework\Pricing\Amount\AmountInterface')
+        $amount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\AmountInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

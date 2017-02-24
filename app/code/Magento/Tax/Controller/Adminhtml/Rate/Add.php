@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
@@ -19,14 +19,14 @@ class Add extends \Magento\Tax\Controller\Adminhtml\Rate
     {
         $this->_coreRegistry->register(
             RegistryConstants::CURRENT_TAX_RATE_FORM_DATA,
-            $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true)
+            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getFormData(true)
         );
 
         $resultPage = $this->initResultPage();
         $layout = $resultPage->getLayout();
-        $toolbarSaveBlock = $layout->createBlock('Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save')
+        $toolbarSaveBlock = $layout->createBlock(\Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save::class)
             ->assign('header', __('Add New Tax Rate'))
-            ->assign('form', $layout->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form'));
+            ->assign('form', $layout->createBlock(\Magento\Tax\Block\Adminhtml\Rate\Form::class, 'tax_rate_form'));
 
         $resultPage->addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'), $this->getUrl('tax/rate'))
             ->addBreadcrumb(__('New Tax Rate'), __('New Tax Rate'))

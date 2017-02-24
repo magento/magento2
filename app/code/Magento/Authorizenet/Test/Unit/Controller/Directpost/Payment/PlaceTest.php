@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Controller\Directpost\Payment;
@@ -102,60 +102,60 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->directpostSessionMock = $this
-            ->getMockBuilder('Magento\Authorizenet\Model\Directpost\Session')
+            ->getMockBuilder(\Magento\Authorizenet\Model\Directpost\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->quoteMock = $this
-            ->getMockBuilder('Magento\Quote\Model\Quote')
+            ->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->checkoutSessionMock = $this
-            ->getMockBuilder('Magento\Checkout\Model\Session')
+            ->getMockBuilder(\Magento\Checkout\Model\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
             ->will($this->returnValue($this->quoteMock));
         $this->objectManagerMock = $this
-            ->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+            ->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([
-                ['Magento\Authorizenet\Model\Directpost\Session', $this->directpostSessionMock],
-                ['Magento\Checkout\Model\Session', $this->checkoutSessionMock],
+                [\Magento\Authorizenet\Model\Directpost\Session::class, $this->directpostSessionMock],
+                [\Magento\Checkout\Model\Session::class, $this->checkoutSessionMock],
             ]);
         $this->coreRegistryMock = $this
-            ->getMockBuilder('Magento\Framework\Registry')
+            ->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataFactoryMock = $this
-            ->getMockBuilder('Magento\Authorizenet\Helper\DataFactory')
+            ->getMockBuilder(\Magento\Authorizenet\Helper\DataFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->cartManagementMock = $this
-            ->getMockBuilder('Magento\Quote\Api\CartManagementInterface')
+            ->getMockBuilder(\Magento\Quote\Api\CartManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->onepageCheckout = $this
-            ->getMockBuilder('Magento\Checkout\Model\Type\Onepage')
+            ->getMockBuilder(\Magento\Checkout\Model\Type\Onepage::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->jsonHelperMock = $this
-            ->getMockBuilder('Magento\Framework\Json\Helper\Data')
+            ->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->requestMock = $this
-            ->getMockBuilder('Magento\Framework\App\RequestInterface')
+            ->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMockForAbstractClass();
         $this->responseMock = $this
-            ->getMockBuilder('Magento\Framework\App\Response\Http')
+            ->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->objectManager = new ObjectManager($this);
         $this->placeOrderController = $this->objectManager->getObject(
-            'Magento\Authorizenet\Controller\Directpost\Payment\Place',
+            \Magento\Authorizenet\Controller\Directpost\Payment\Place::class,
             [
                 'request' => $this->requestMock,
                 'response' => $this->responseMock,
@@ -280,7 +280,10 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
     {
         $objectFailed = new \Magento\Framework\DataObject();
         $objectFailed->setData('error', true);
-        $objectFailed->setData('error_messages', __('Unable to place order. Please try again later.'));
+        $objectFailed->setData(
+            'error_messages',
+            __('An error occurred on the server. Please try to place the order again.')
+        );
 
         return [
             [

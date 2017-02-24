@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel;
@@ -88,32 +88,32 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
+        $this->resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->orderMock = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
         $this->orderItemMock = $this->getMock(
-            'Magento\Sales\Model\Order\Item',
+            \Magento\Sales\Model\Order\Item::class,
             ['getQuoteParentItemId', 'setTotalItemCount', 'getChildrenItems'],
             [],
             '',
             false
         );
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->storeGroupMock = $this->getMock(
-            'Magento\Store\Model\Group',
+            \Magento\Store\Model\Group::class,
             ['getName', 'getDefaultStoreId'],
             [],
             '',
             false
         );
         $this->websiteMock = $this->getMock(
-            'Magento\Store\Model\Website',
+            \Magento\Store\Model\Website::class,
             ['getName'],
             [],
             '',
             false
         );
         $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             [
                 'describeTable',
                 'insert',
@@ -129,35 +129,35 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->salesSequenceManagerMock = $this->getMock(
-            'Magento\SalesSequence\Model\Manager',
+            \Magento\SalesSequence\Model\Manager::class,
             [],
             [],
             '',
             false
         );
-        $this->salesSequenceMock = $this->getMock('Magento\SalesSequence\Model\Sequence', [], [], '', false);
+        $this->salesSequenceMock = $this->getMock(\Magento\SalesSequence\Model\Sequence::class, [], [], '', false);
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
             [],
             [],
             '',
             false
         );
         $this->relationCompositeMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite',
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite::class,
             [],
             [],
             '',
             false
         );
         $this->objectRelationProcessorMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor',
+            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class,
             [],
             [],
             '',
             false
         );
-        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $contextMock->expects($this->once())
             ->method('getObjectRelationProcessor')
@@ -165,7 +165,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $this->resource = $objectManager->getObject(
-            'Magento\Sales\Model\ResourceModel\Order',
+            \Magento\Sales\Model\ResourceModel\Order::class,
             [
                 'context' => $contextMock,
                 'sequenceManager' => $this->salesSequenceManagerMock,

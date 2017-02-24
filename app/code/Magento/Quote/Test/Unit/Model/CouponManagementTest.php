@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,10 +40,10 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->quoteMock = $this->getMock(
-            '\Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             [
                 'getItemsCount',
                 'setCouponCode',
@@ -58,7 +58,7 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->quoteAddressMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             [
                 'setCollectShippingRates',
                 '__wakeup'
@@ -76,7 +76,7 @@ class CouponManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 11;
         $couponCode = 'test_coupon_code';
 
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', ['getCouponCode', '__wakeup'], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, ['getCouponCode', '__wakeup'], [], '', false);
         $quoteMock->expects($this->any())->method('getCouponCode')->will($this->returnValue($couponCode));
 
         $this->quoteRepositoryMock->expects($this->once())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -114,7 +114,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
         if (!$this->skipPage($type) && !$this->isMessagesAllowed($type, $entity)) {
             return '';
         }
-        return $this->_layoutFactory->create()->createBlock('Magento\GiftMessage\Block\Message\Inline')
+        return $this->_layoutFactory->create()->createBlock(\Magento\GiftMessage\Block\Message\Inline::class)
             ->setId('giftmessage_form_' . $this->_nextId++)
             ->setDontDisplayContainer($dontDisplayContainer)
             ->setEntity($entity)

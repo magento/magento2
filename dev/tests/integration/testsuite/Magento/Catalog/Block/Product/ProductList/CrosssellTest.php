@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product\ProductList;
@@ -19,16 +19,16 @@ class CrosssellTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
         $firstProduct = $productRepository->get('simple');
         $product = $productRepository->get('simple_with_cross');
 
-        $objectManager->get('Magento\Framework\Registry')->register('product', $product);
+        $objectManager->get(\Magento\Framework\Registry::class)->register('product', $product);
         /** @var $block \Magento\Catalog\Block\Product\ProductList\Crosssell */
-        $block = $objectManager->get('Magento\Framework\View\LayoutInterface')
-            ->createBlock('Magento\Catalog\Block\Product\ProductList\Crosssell');
-        $block->setLayout($objectManager->get('Magento\Framework\View\LayoutInterface'));
+        $block = $objectManager->get(\Magento\Framework\View\LayoutInterface::class)
+            ->createBlock(\Magento\Catalog\Block\Product\ProductList\Crosssell::class);
+        $block->setLayout($objectManager->get(\Magento\Framework\View\LayoutInterface::class));
         $block->setTemplate('Magento_Catalog::product/list/items.phtml');
         $block->setType('crosssell');
         $block->setItemCount(1);
@@ -39,7 +39,7 @@ class CrosssellTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('product\/' . $firstProduct->getId() . '\/', $html);
         /* part of url */
         $this->assertInstanceOf(
-            'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,
             $block->getItems()
         );
     }

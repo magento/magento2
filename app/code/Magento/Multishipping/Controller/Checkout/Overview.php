@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Controller\Checkout;
@@ -41,7 +41,7 @@ class Overview extends \Magento\Multishipping\Controller\Checkout
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*/billing');
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $this->messageManager->addException($e, __('We cannot open the overview page.'));
             $this->_redirect('*/*/billing');
         }

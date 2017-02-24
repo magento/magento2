@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Observer;
@@ -17,14 +17,13 @@ class CatalogAttributeSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $checkSalesRulesAvailability;
 
-
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->initMocks();
 
         $this->model = $helper->getObject(
-            'Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver',
+            \Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver::class,
             [
                 'checkSalesRulesAvailability' => $this->checkSalesRulesAvailability
             ]
@@ -34,7 +33,7 @@ class CatalogAttributeSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
     protected function initMocks()
     {
         $this->checkSalesRulesAvailability = $this->getMock(
-            'Magento\SalesRule\Observer\CheckSalesRulesAvailability',
+            \Magento\SalesRule\Observer\CheckSalesRulesAvailability::class,
             [],
             [],
             '',
@@ -45,10 +44,10 @@ class CatalogAttributeSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
     public function testCatalogAttributeSaveAfter()
     {
         $attributeCode = 'attributeCode';
-        $observer = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
-        $event = $this->getMock('Magento\Framework\Event', ['getAttribute', '__wakeup'], [], '', false);
+        $observer = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
+        $event = $this->getMock(\Magento\Framework\Event::class, ['getAttribute', '__wakeup'], [], '', false);
         $attribute = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['dataHasChangedFor', 'getIsUsedForPromoRules', 'getAttributeCode', '__wakeup'],
             [],
             '',

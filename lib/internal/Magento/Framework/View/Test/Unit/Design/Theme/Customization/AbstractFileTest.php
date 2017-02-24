@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,23 +36,23 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_customizationPath = $this->getMock(
-            'Magento\Framework\View\Design\Theme\Customization\Path',
+            \Magento\Framework\View\Design\Theme\Customization\Path::class,
             [],
             [],
             '',
             false
         );
         $this->_fileFactory = $this->getMock(
-            'Magento\Framework\View\Design\Theme\FileFactory',
+            \Magento\Framework\View\Design\Theme\FileFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->_filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
 
         $this->_modelBuilder = $this->getMockBuilder(
-            'Magento\Framework\View\Design\Theme\Customization\AbstractFile'
+            \Magento\Framework\View\Design\Theme\Customization\AbstractFile::class
         )->setMethods(
             ['getType', 'getContentType']
         )->setConstructorArgs(
@@ -75,7 +75,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $model = $this->_modelBuilder->getMock();
-        $file = $this->getMock('Magento\Theme\Model\Theme\File', [], [], '', false);
+        $file = $this->getMock(\Magento\Theme\Model\Theme\File::class, [], [], '', false);
         $file->expects($this->once())->method('setCustomizationService')->with($model);
         $this->_fileFactory->expects($this->once())->method('create')->will($this->returnValue($file));
         /** @var $model \Magento\Framework\View\Design\Theme\Customization\AbstractFile */
@@ -88,8 +88,8 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     public function testGetFullPath()
     {
         $model = $this->_modelBuilder->getMock();
-        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $file = $this->getMock('Magento\Theme\Model\Theme\File', [], [], '', false);
+        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
+        $file = $this->getMock(\Magento\Theme\Model\Theme\File::class, [], [], '', false);
 
         $file->expects($this->any())->method('getTheme')->will($this->returnValue($theme));
         $file->expects($this->once())->method('getData')->with('file_path')->will($this->returnValue('file.path'));
@@ -122,12 +122,12 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
 
         $files = [];
         foreach ($existedFiles as $fileData) {
-            $file = $this->getMock('Magento\Theme\Model\Theme\File', ['__wakeup', 'save'], [], '', false);
+            $file = $this->getMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'save'], [], '', false);
             $file->setData($fileData);
             $files[] = $file;
         }
         $customization = $this->getMock(
-            'Magento\Framework\View\Design\Theme\Customization',
+            \Magento\Framework\View\Design\Theme\Customization::class,
             [],
             [],
             '',
@@ -143,11 +143,11 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($files)
         );
 
-        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
+        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
         $theme->expects($this->any())->method('getCustomization')->will($this->returnValue($customization));
 
         $file = $this->getMock(
-            'Magento\Theme\Model\Theme\File',
+            \Magento\Theme\Model\Theme\File::class,
             ['__wakeup', 'getTheme', 'save'],
             [],
             '',
@@ -211,7 +211,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     {
         $model = $this->_modelBuilder->setMethods(['getFullPath', 'getType', 'getContentType'])->getMock();
 
-        $file = $this->getMock('Magento\Theme\Model\Theme\File', ['__wakeup'], [], '', false);
+        $file = $this->getMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup'], [], '', false);
         $file->setData(
             [
                 'file_type' => 'js',
@@ -224,7 +224,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
         $model->expects($this->once())->method('getFullPath')->with($file)->will($this->returnValue('test_path'));
 
         $directoryMock = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Write',
+            \Magento\Framework\Filesystem\Directory\Write::class,
             ['writeFile', 'delete', 'getRelativePath'],
             [],
             '',
@@ -254,7 +254,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $model = $this->_modelBuilder->setMethods(['getFullPath', 'getType', 'getContentType'])->getMock();
-        $file = $this->getMock('Magento\Theme\Model\Theme\File', ['__wakeup'], [], '', false);
+        $file = $this->getMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup'], [], '', false);
         $file->setData(
             [
                 'file_type' => 'js',
@@ -265,7 +265,7 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $directoryMock = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Write',
+            \Magento\Framework\Filesystem\Directory\Write::class,
             ['touch', 'delete', 'getRelativePath'],
             [],
             '',

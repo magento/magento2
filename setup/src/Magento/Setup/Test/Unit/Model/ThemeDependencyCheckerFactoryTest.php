@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,9 +27,15 @@ class ThemeDependencyCheckerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $this->objectManagerProvider = $this->getMock(
+            \Magento\Setup\Model\ObjectManagerProvider::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->objectManager = $this->getMockForAbstractClass(
-            'Magento\Framework\ObjectManagerInterface',
+            \Magento\Framework\ObjectManagerInterface::class,
             [],
             '',
             false
@@ -41,7 +47,7 @@ class ThemeDependencyCheckerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
         $this->objectManager->expects($this->once())
             ->method('get')
-            ->with('Magento\Theme\Model\Theme\ThemeDependencyChecker');
+            ->with(\Magento\Theme\Model\Theme\ThemeDependencyChecker::class);
         $this->themeDependencyCheckerFactory = new ThemeDependencyCheckerFactory($this->objectManagerProvider);
         $this->themeDependencyCheckerFactory->create();
     }

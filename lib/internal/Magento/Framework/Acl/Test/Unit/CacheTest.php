@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl\Test\Unit;
@@ -27,7 +27,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cacheConfig = $this->getMock('Magento\Framework\Config\CacheInterface');
+        $this->cacheConfig = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
         $this->cacheKey = 'test_key';
 
         $this->model = new Cache($this->cacheConfig, $this->cacheKey);
@@ -98,7 +98,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $acl = $this->getMockBuilder('Magento\Framework\Acl')->disableOriginalConstructor()->getMock();
+        $acl = $this->getMockBuilder(\Magento\Framework\Acl::class)->disableOriginalConstructor()->getMock();
 
         $this->cacheConfig->expects($this->once())->method('save')->with(serialize($acl), $this->cacheKey);
         $this->model->save($acl);

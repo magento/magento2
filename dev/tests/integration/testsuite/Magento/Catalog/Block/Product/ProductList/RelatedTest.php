@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product\ProductList;
@@ -19,25 +19,25 @@ class RelatedTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
         $product = $productRepository->get('simple');
         $productWithCross = $productRepository->get('simple_with_cross');
-        $objectManager->get('Magento\Framework\Registry')->register('product', $productWithCross);
+        $objectManager->get(\Magento\Framework\Registry::class)->register('product', $productWithCross);
 
         /** @var $block \Magento\Catalog\Block\Product\ProductList\Related */
-        $block = $objectManager->get('Magento\Framework\View\LayoutInterface')
-            ->createBlock('Magento\Catalog\Block\Product\ProductList\Related');
+        $block = $objectManager->get(\Magento\Framework\View\LayoutInterface::class)
+            ->createBlock(\Magento\Catalog\Block\Product\ProductList\Related::class);
 
-        $block->setLayout($objectManager->get('Magento\Framework\View\LayoutInterface'));
+        $block->setLayout($objectManager->get(\Magento\Framework\View\LayoutInterface::class));
         $block->setTemplate('Magento_Catalog::product/list/items.phtml');
         $block->setType('related');
-        $block->addChild('addto', '\Magento\Catalog\Block\Product\ProductList\Item\Container');
+        $block->addChild('addto', \Magento\Catalog\Block\Product\ProductList\Item\Container::class);
         $block->getChildBlock(
             'addto'
         )->addChild(
             'compare',
-            '\Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare',
+            \Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare::class,
             ['template' => 'Magento_Catalog::product/list/addto/compare.phtml']
         );
 
@@ -48,7 +48,7 @@ class RelatedTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('"product":"' . $product->getId() .'"', $html);
         /* part of url */
         $this->assertInstanceOf(
-            'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,
             $block->getItems()
         );
     }

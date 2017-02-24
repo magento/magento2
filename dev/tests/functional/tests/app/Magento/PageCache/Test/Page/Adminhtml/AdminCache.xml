@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -12,5 +12,7 @@
         <block name="additionalBlock" class="Magento\PageCache\Test\Block\Cache\Additional" locator="div.additional-cache-management" strategy="css selector"/>
         <block name="gridBlock" class="Magento\PageCache\Test\Block\Cache\Grid" locator="div#cache_grid" strategy="css selector"/>
         <block name="modalBlock" class="Magento\Ui\Test\Block\Adminhtml\Modal" locator="._show[data-role=modal]" strategy="css selector"/>
+        <block name="systemMessageDialog" class="Magento\AdminNotification\Test\Block\System\Messages" locator='.ui-popup-message .modal-inner-wrap' strategy="css selector" />
+        <block name="systemMessageBlock" class="Magento\AdminNotification\Test\Block\System\Messages\System" locator="#system_messages" strategy="css selector" />
     </page>
 </config>

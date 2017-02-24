@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@
 
 namespace Magento\Cms\Controller;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -19,20 +22,21 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete('MAGETWO-3393');
         $this->_model = new \Magento\Cms\Controller\Router(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\ActionFactory'),
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                \Magento\Framework\App\ActionFactory::class),
             new \Magento\Framework\Event\ManagerInterfaceStub(
-                $this->getMockForAbstractClass('Magento\Framework\Event\InvokerInterface'),
-                $this->getMock('Magento\Framework\Event\Config', [], [], '', false),
-                $this->getMock('Magento\Framework\EventFactory', [], [], '', false),
-                $this->getMock('Magento\Framework\Event\ObserverFactory', [], [], '', false)
+                $this->getMockForAbstractClass(\Magento\Framework\Event\InvokerInterface::class),
+                $this->getMock(\Magento\Framework\Event\Config::class, [], [], '', false),
+                $this->getMock(\Magento\Framework\EventFactory::class, [], [], '', false),
+                $this->getMock(\Magento\Framework\Event\ObserverFactory::class, [], [], '', false)
             ),
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\UrlInterface'),
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Model\PageFactory'),
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\UrlInterface::class),
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Cms\Model\PageFactory::class),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                \Magento\Store\Model\StoreManagerInterface::class
             ),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                \Magento\Store\Model\StoreManagerInterface::class
             )
         );
     }
@@ -44,11 +48,11 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete('MAGETWO-3393');
         $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\RequestInterface');
+            ->create(\Magento\Framework\App\RequestInterface::class);
         //Open Node
         $request->setPathInfo('parent_node');
         $controller = $this->_model->match($request);
-        $this->assertInstanceOf('Magento\Framework\App\Action\Redirect', $controller);
+        $this->assertInstanceOf(\Magento\Framework\App\Action\Redirect::class, $controller);
     }
 }
 /**

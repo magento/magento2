@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -81,7 +81,7 @@
         <field name="affected_attribute_set" group="null" />
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
         <field name="configurable_attributes_data" is_required="0" group="variations" source="Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct\ConfigurableAttributesData" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\ConfigurableAttributesData" />
-        <field name="website_ids" group="websites" />
+        <field name="website_ids" group="websites" source="Magento\Catalog\Test\Fixture\Product\WebsiteIds" />
         <field name="checkout_data" group="null" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\CheckoutData" />
         <field name="up_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
         <field name="cross_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />

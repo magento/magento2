@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
@@ -14,7 +14,7 @@ class LoadOptions extends \Magento\Backend\App\Action
      * @var \Magento\Widget\Helper\Conditions
      */
     private $conditionsHelper;
-    
+
     /**
      * Ajax responder for loading plugin options form
      *
@@ -50,7 +50,7 @@ class LoadOptions extends \Magento\Backend\App\Action
             );
         }
     }
-    
+
     /**
      * @return \Magento\Widget\Helper\Conditions
      * @deprecated

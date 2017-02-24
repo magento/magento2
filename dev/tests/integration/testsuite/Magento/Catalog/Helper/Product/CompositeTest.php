@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,8 +27,8 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helper = Bootstrap::getObjectManager()->get('Magento\Catalog\Helper\Product\Composite');
-        $this->registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+        $this->helper = Bootstrap::getObjectManager()->get(\Magento\Catalog\Helper\Product\Composite::class);
+        $this->registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
     }
 
     protected function tearDown()
@@ -46,7 +46,9 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
     public function testRenderConfigureResult()
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = Bootstrap::getObjectManager()->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('simple');
 

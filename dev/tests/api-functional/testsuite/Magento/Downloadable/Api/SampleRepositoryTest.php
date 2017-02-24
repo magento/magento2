@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Api;
@@ -80,10 +80,12 @@ class SampleRepositoryTest extends WebapiAbstract
     protected function getTargetProduct($isScopeGlobal = false)
     {
         if ($isScopeGlobal) {
-            $product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\ProductFactory')
+            $product = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\ProductFactory::class)
                 ->create()->setStoreId(0)->load(1);
         } else {
-            $product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\ProductFactory')->create()->load(1);
+            $product = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\ProductFactory::class)
+                ->create()
+                ->load(1);
         }
 
         return $product;

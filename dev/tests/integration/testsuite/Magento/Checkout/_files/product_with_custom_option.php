@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 require __DIR__ . '/../../Checkout/_files/simple_product.php';
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->load(1);
 
 /** @var $product \Magento\Catalog\Model\Product */
@@ -35,7 +35,7 @@ $oldOptions = [
 $customOptions = [];
 
 /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
-$customOptionFactory = $objectManager->create('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+$customOptionFactory = $objectManager->create(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
 
 foreach ($oldOptions as $option) {
     /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $customOption */
@@ -48,7 +48,7 @@ foreach ($oldOptions as $option) {
 $product->setOptions($customOptions)->save();
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->load(1);
 $optionId = $product->getOptions()[0]->getOptionId();
 

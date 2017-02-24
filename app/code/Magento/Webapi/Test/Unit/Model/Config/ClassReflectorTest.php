@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Config;
@@ -22,7 +22,7 @@ class ClassReflectorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_typeProcessor = $this->getMock(
-            '\Magento\Framework\Reflection\TypeProcessor',
+            \Magento\Framework\Reflection\TypeProcessor::class,
             ['process'],
             [],
             '',
@@ -41,7 +41,7 @@ class ClassReflectorTest extends \PHPUnit_Framework_TestCase
     public function testReflectClassMethods()
     {
         $data = $this->_classReflector->reflectClassMethods(
-            '\\Magento\\Webapi\\Test\\Unit\\Model\\Config\\TestServiceForClassReflector',
+            \Magento\Webapi\Test\Unit\Model\Config\TestServiceForClassReflector::class,
             ['generateRandomString' => ['method' => 'generateRandomString']]
         );
         $this->assertEquals(['generateRandomString' => $this->_getSampleReflectionData()], $data);
@@ -50,7 +50,7 @@ class ClassReflectorTest extends \PHPUnit_Framework_TestCase
     public function testExtractMethodData()
     {
         $classReflection = new \Zend\Code\Reflection\ClassReflection(
-            '\\Magento\\Webapi\\Test\\Unit\\Model\\Config\\TestServiceForClassReflector'
+            \Magento\Webapi\Test\Unit\Model\Config\TestServiceForClassReflector::class
         );
         /** @var $methodReflection \Zend\Code\Reflection\MethodReflection */
         $methodReflection = $classReflection->getMethods()[0];

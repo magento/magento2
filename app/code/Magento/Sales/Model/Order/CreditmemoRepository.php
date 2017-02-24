@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo as Resource;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory as SearchResultFactory;
@@ -37,16 +38,23 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
      */
     protected $registry = [];
 
+    /** @var  CollectionProcessorInterface */
+    private $collectionProcessor;
+
     /**
+     * CreditmemoRepository constructor.
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
+     * @param CollectionProcessorInterface|null $collectionProcessor
      */
     public function __construct(
         Metadata $metadata,
-        SearchResultFactory $searchResultFactory
+        SearchResultFactory $searchResultFactory,
+        CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -91,17 +99,10 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
-        /** @var \Magento\Sales\Api\Data\CreditmemoSearchResultInterface $searchResult */
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection $searchResult */
         $searchResult = $this->searchResultFactory->create();
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
-        }
+        $this->collectionProcessor->process($searchCriteria, $searchResult);
         $searchResult->setSearchCriteria($searchCriteria);
-        $searchResult->setCurPage($searchCriteria->getCurrentPage());
-        $searchResult->setPageSize($searchCriteria->getPageSize());
         return $searchResult;
     }
 
@@ -139,5 +140,21 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
             throw new CouldNotSaveException(__('Could not save credit memo'), $e);
         }
         return $this->registry[$entity->getEntityId()];
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Observer;
@@ -44,34 +44,34 @@ class CustomerLoggedInTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->observerMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCustomerAddress', 'getData'
             ])
             ->getMock();
 
-        $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'setDefaultTaxBillingAddress', 'setDefaultTaxShippingAddress', 'setWebsiteId'
             ])
             ->getMock();
 
-        $this->moduleManagerMock = $this->getMockBuilder('Magento\Framework\Module\Manager')
+        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cacheConfigMock = $this->getMockBuilder('Magento\PageCache\Model\Config')
+        $this->cacheConfigMock = $this->getMockBuilder(\Magento\PageCache\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->weeeHelperMock = $this->getMockBuilder('Magento\Weee\Helper\Data')
+        $this->weeeHelperMock = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->session = $this->objectManager->getObject(
-            'Magento\Weee\Observer\CustomerLoggedIn',
+            \Magento\Weee\Observer\CustomerLoggedIn::class,
             [
                 'customerSession' => $this->customerSessionMock,
                 'weeeHelper' => $this->weeeHelperMock,
@@ -96,7 +96,7 @@ class CustomerLoggedInTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->willReturn(true);
 
-        $customerMock = $this->getMockBuilder('Magento\Customer\Model\Data\Customer')
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -105,7 +105,7 @@ class CustomerLoggedInTest extends \PHPUnit_Framework_TestCase
             ->with('customer')
             ->willReturn($customerMock);
 
-        $address = $this->objectManager->getObject('Magento\Customer\Model\Data\Address');
+        $address = $this->objectManager->getObject(\Magento\Customer\Model\Data\Address::class);
         $address->setIsDefaultShipping(true);
         $address->setIsDefaultBilling(true);
         $address->setCountryId(1);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,8 +29,8 @@ class MaintenanceDisableCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
-        $this->ipValidator = $this->getMock('Magento\Setup\Validator\IpValidator', [], [], '', false);
+        $this->maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, [], [], '', false);
+        $this->ipValidator = $this->getMock(\Magento\Setup\Validator\IpValidator::class, [], [], '', false);
         $this->command = new MaintenanceDisableCommand($this->maintenanceMode, $this->ipValidator);
     }
 
@@ -80,6 +80,38 @@ class MaintenanceDisableCommandTest extends \PHPUnit_Framework_TestCase
                 ['--ip' => ['127.0']],
                 ['Invalid IP 127.0'],
                 'Invalid IP 127.0' . PHP_EOL
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider isSetAddressInfoDataProvider
+     * @param array $ip
+     * @param bool $expected
+     */
+    public function testIsSetAddressInfo($ip, $expected)
+    {
+        $this->maintenanceMode
+            ->expects($this->any())
+            ->method('getAddressInfo')
+            ->willReturn($ip);
+
+        $this->assertEquals($expected, $this->command->isSetAddressInfo());
+    }
+
+    /**
+     * return array
+     */
+    public function isSetAddressInfoDataProvider()
+    {
+        return [
+            [
+                'ip' => ['127.0.0.1', '127.0.0.2'],
+                'expected' => true
+            ],
+            [
+                'ip' => [],
+                'expected' => false
             ],
         ];
     }

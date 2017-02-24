@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config;
@@ -26,7 +26,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -40,11 +40,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected function initResultPage()
     {
-        $this->resultPage = $this->getMockBuilder('Magento\Backend\Model\View\Result\Page')
+        $this->resultPage = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resultPageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+        $resultPageFactory = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultPageFactory->expects($this->any())
@@ -55,7 +55,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $pageTitle = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $pageTitle = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
         $pageTitle->expects($this->once())
@@ -63,7 +63,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->with(__('Design Configuration'))
             ->willReturnSelf();
 
-        $pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+        $pageConfig = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $pageConfig->expects($this->once())

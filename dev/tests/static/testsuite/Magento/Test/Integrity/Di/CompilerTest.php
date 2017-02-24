@@ -2,7 +2,7 @@
 /**
  * Compiler test. Check compilation of DI definitions and code generation
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Di;
@@ -69,8 +69,8 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $basePath = str_replace('\\', '/', $basePath);
 
         $directoryList = new DirectoryList($basePath);
-        $this->_generationDir = $directoryList->getPath(DirectoryList::GENERATION);
-        $this->_compilationDir = $directoryList->getPath(DirectoryList::DI);
+        $this->_generationDir = $directoryList->getPath(DirectoryList::GENERATED_CODE);
+        $this->_compilationDir = $directoryList->getPath(DirectoryList::GENERATED_METADATA);
 
         $this->_command = 'php ' . $basePath . '/bin/magento setup:di:compile';
 
@@ -301,15 +301,15 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $generator = new \Magento\Framework\Code\Generator(
             $generatorIo,
             [
-                Factory::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
-                Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
-                Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
-                Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
-                SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
+                Factory::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Factory::class,
+                Repository::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Repository::class,
+                Converter::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Converter::class,
+                Mapper::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\Mapper::class,
+                SearchResults::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\SearchResults::class,
                 ExtensionAttributesInterfaceGenerator::ENTITY_TYPE =>
-                    'Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator',
+                    \Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator::class,
                 ExtensionAttributesGenerator::ENTITY_TYPE =>
-                    'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator'
+                    \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator::class
             ]
         );
         $generationAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);

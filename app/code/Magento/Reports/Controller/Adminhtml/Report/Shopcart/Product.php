@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
@@ -21,7 +21,7 @@ class Product extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
             __('Products Report'),
             __('Products Report')
         )->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Shopcart\Product')
+            $this->_view->getLayout()->createBlock(\Magento\Reports\Block\Adminhtml\Shopcart\Product::class)
         );
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Products in Carts'));
         $this->_view->renderLayout();

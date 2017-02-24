@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -31,11 +31,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $sessionManager \Magento\Framework\Session\SessionManager */
-        $sessionManager = $this->_objectManager->create('Magento\Framework\Session\SessionManager');
+        $sessionManager = $this->_objectManager->create(\Magento\Framework\Session\SessionManager::class);
         if ($sessionManager->isSessionExists()) {
             $sessionManager->writeClose();
         }
-        $this->deploymentConfigMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
 
         $this->deploymentConfigMock->expects($this->at(0))
             ->method('get')
@@ -47,11 +47,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->_cacheLimiter));
 
         $this->_model = $this->_objectManager->create(
-            'Magento\Framework\Session\Config',
+            \Magento\Framework\Session\Config::class,
             ['deploymentConfig' => $this->deploymentConfigMock]
         );
         $this->defaultSavePath = $this->_objectManager
-            ->get('Magento\Framework\Filesystem\DirectoryList')
+            ->get(\Magento\Framework\Filesystem\DirectoryList::class)
             ->getPath(DirectoryList::SESSION);
     }
 
@@ -62,7 +62,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         );
         $path = ini_get('session.save_path') ?:
             $filesystem->getDirectoryRead(DirectoryList::SESSION)->getAbsolutePath();
@@ -286,7 +286,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($given));
 
         $this->_model = $this->_objectManager->create(
-            'Magento\Framework\Session\Config',
+            \Magento\Framework\Session\Config::class,
             ['deploymentConfig' => $this->deploymentConfigMock]
         );
         $this->assertEquals($expected, $this->_model->getOption('save_path'));

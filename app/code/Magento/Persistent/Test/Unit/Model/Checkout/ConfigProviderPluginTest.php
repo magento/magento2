@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Model\Checkout;
@@ -44,18 +44,18 @@ class ConfigProviderPluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->persistentHelperMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
-        $this->persistentSessionMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
-        $this->checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
+        $this->persistentHelperMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
+        $this->persistentSessionMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
+        $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
         $this->maskFactoryMock = $this->getMock(
-            'Magento\Quote\Model\QuoteIdMaskFactory',
+            \Magento\Quote\Model\QuoteIdMaskFactory::class,
             ['create', '__wakeup'],
             [],
             '',
             false
         );
-        $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->subjectMock = $this->getMock('\Magento\Checkout\Model\DefaultConfigProvider', [], [], '', false);
+        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Checkout\Model\DefaultConfigProvider::class, [], [], '', false);
 
         $this->plugin = new \Magento\Persistent\Model\Checkout\ConfigProviderPlugin(
             $this->persistentHelperMock,
@@ -108,14 +108,14 @@ class ConfigProviderPluginTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
 
         $quoteMaskMock = $this->getMock(
-            'Magento\Quote\Model\QuoteIdMask',
+            \Magento\Quote\Model\QuoteIdMask::class,
             ['load', 'getMaskedId'],
             [],
             '',
             false
         );
         $this->maskFactoryMock->expects($this->once())->method('create')->willReturn($quoteMaskMock);
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
 
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $quoteMaskMock->expects($this->once())->method('load')->willReturnSelf();

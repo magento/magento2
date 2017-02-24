@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Reflection;
@@ -77,7 +77,7 @@ class TypeProcessor
     {
         if ($this->nameFinder === null) {
             $this->nameFinder = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Framework\Reflection\NameFinder');
+                ->get(\Magento\Framework\Reflection\NameFinder::class);
         }
         return $this->nameFinder;
     }
@@ -192,7 +192,7 @@ class TypeProcessor
             $this->_types[$typeName]['documentation'] = $docBlock ? $this->getDescription($docBlock) : '';
             /** @var MethodReflection $methodReflection */
             foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $methodReflection) {
-                if ($methodReflection->class === "Magento\Framework\Model\AbstractModel") {
+                if ($methodReflection->class === \Magento\Framework\Model\AbstractModel::class) {
                     continue;
                 }
                 $this->_processMethod($methodReflection, $typeName);

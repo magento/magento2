@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
@@ -33,7 +33,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $entityTypeModel = $this->getMock(
-            'Magento\CatalogImportExport\Model\Import\Product\Type\Simple',
+            \Magento\CatalogImportExport\Model\Import\Product\Type\Simple::class,
             ['retrieveAttributeFromCache'],
             [],
             '',
@@ -41,7 +41,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         );
         $entityTypeModel->expects($this->any())->method('retrieveAttributeFromCache')->willReturn([]);
         $this->context = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Product',
+            \Magento\CatalogImportExport\Model\Import\Product::class,
             ['retrieveProductTypeByName', 'retrieveMessageTemplate'],
             [],
             '',
@@ -51,14 +51,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('retrieveMessageTemplate')->willReturn('error message');
 
         $this->validatorOne = $this->getMock(
-            'Magento\CatalogImportExport\Model\Import\Product\Validator\Media',
+            \Magento\CatalogImportExport\Model\Import\Product\Validator\Media::class,
             [],
             [],
             '',
             false
         );
         $this->validatorTwo = $this->getMock(
-            'Magento\CatalogImportExport\Model\Import\Product\Validator\Website',
+            \Magento\CatalogImportExport\Model\Import\Product\Validator\Website::class,
             [],
             [],
             '',
@@ -68,7 +68,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validators = [$this->validatorOne, $this->validatorTwo];
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->validator = $this->objectManagerHelper->getObject(
-            'Magento\CatalogImportExport\Model\Import\Product\Validator',
+            \Magento\CatalogImportExport\Model\Import\Product\Validator::class,
             ['validators' => $this->validators]
         );
         $this->validator->init($this->context);

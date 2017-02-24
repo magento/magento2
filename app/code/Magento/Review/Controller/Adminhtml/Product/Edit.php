@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
@@ -20,7 +20,7 @@ class Edit extends ProductController
         $resultPage->setActiveMenu('Magento_Review::catalog_reviews_ratings_reviews_all');
         $resultPage->getConfig()->getTitle()->prepend(__('Customer Reviews'));
         $resultPage->getConfig()->getTitle()->prepend(__('Edit Review'));
-        $resultPage->addContent($resultPage->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Edit'));
+        $resultPage->addContent($resultPage->getLayout()->createBlock(\Magento\Review\Block\Adminhtml\Edit::class));
         return $resultPage;
     }
 }

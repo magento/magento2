@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SomeModule\Model;
@@ -21,6 +21,6 @@ class Test
      */
     public function testModel(\Magento\SomeModule\ModelFactory $factory, array $data = [])
     {
-        $factory->create('Magento\SomeModule\Model\BlockFactory', ['data' => $data]);
+        $factory->create(\Magento\SomeModule\Model\BlockFactory::class, ['data' => $data]);
     }
 }

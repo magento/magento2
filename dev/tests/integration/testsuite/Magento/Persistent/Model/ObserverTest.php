@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -58,27 +58,27 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
+        $this->_customerSession = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
 
         $this->_customerViewHelper = $this->_objectManager->create(
-            'Magento\Customer\Helper\View'
+            \Magento\Customer\Helper\View::class
         );
         $this->_escaper = $this->_objectManager->create(
-            'Magento\Framework\Escaper'
+            \Magento\Framework\Escaper::class
         );
 
         $this->customerRepository = $this->_objectManager->create(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
 
         $this->_checkoutSession = $this->getMockBuilder(
-            'Magento\Checkout\Model\Session'
+            \Magento\Checkout\Model\Session::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
 
-        $this->_persistentSessionHelper = $this->_objectManager->create('Magento\Persistent\Helper\Session');
+        $this->_persistentSessionHelper = $this->_objectManager->create(\Magento\Persistent\Helper\Session::class);
 
         $this->_observer = $this->_objectManager->create(
-            'Magento\Persistent\Model\Observer',
+            \Magento\Persistent\Model\Observer::class,
             [
                 'escaper' => $this->_escaper,
                 'customerViewHelper' => $this->_customerViewHelper,
@@ -102,7 +102,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $httpContext = new \Magento\Framework\App\Http\Context();
         $httpContext->setValue(Context::CONTEXT_AUTH, 1, 1);
         $block = $this->_objectManager->create(
-            'Magento\Sales\Block\Reorder\Sidebar',
+            \Magento\Sales\Block\Reorder\Sidebar::class,
             [
                 'httpContext' => $httpContext
             ]

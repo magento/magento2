@@ -2,7 +2,7 @@
 /**
  * Google AdWords Validator Factory
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  * @SuppressWarnings(PHPMD.LongVariable)
  */
@@ -41,13 +41,13 @@ class Factory
         );
         /** @var \Magento\Framework\Validator\Builder $builder */
         $builder = $this->_validatorBuilderFactory->create(
-            'Magento\Framework\Validator\Builder',
+            \Magento\Framework\Validator\Builder::class,
             [
                 'constraints' => [
                     [
                         'alias' => 'Regex',
                         'type' => '',
-                        'class' => 'Magento\Framework\Validator\Regex',
+                        'class' => \Magento\Framework\Validator\Regex::class,
                         'options' => [
                             'arguments' => ['pattern' => '/^[0-9a-f]{6}$/i'],
                             'methods' => [
@@ -77,13 +77,13 @@ class Factory
         $message = __('Conversion Id value is not valid "%1". Conversion Id should be an integer.', $currentId);
         /** @var \Magento\Framework\Validator\Builder $builder */
         $builder = $this->_validatorBuilderFactory->create(
-            'Magento\Framework\Validator\Builder',
+            \Magento\Framework\Validator\Builder::class,
             [
                 'constraints' => [
                     [
                         'alias' => 'Int',
                         'type' => '',
-                        'class' => 'Magento\Framework\Validator\IntUtils',
+                        'class' => \Magento\Framework\Validator\IntUtils::class,
                         'options' => [
                             'methods' => [
                                 [

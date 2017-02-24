@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
@@ -398,7 +398,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'data' => $this->data
             ]
         );
-        $reflection = new \ReflectionClass('\Magento\CatalogImportExport\Model\Import\Product');
+        $reflection = new \ReflectionClass(\Magento\CatalogImportExport\Model\Import\Product::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->importProduct, $metadataPoolMock);
@@ -410,7 +410,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     protected function _objectConstructor()
     {
         $this->optionFactory = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Product\OptionFactory',
+            \Magento\CatalogImportExport\Model\Import\Product\OptionFactory::class,
             ['create'],
             [],
             '',
@@ -1278,6 +1278,43 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $importProduct->expects($this->once())->method('getOptionEntity')->willReturn($option);
 
         $importProduct->validateRow($rowData, $rowNum);
+    }
+
+    /**
+     * @dataProvider getImagesFromRowDataProvider
+     */
+    public function testGetImagesFromRow($rowData, $expectedResult)
+    {
+        $this->assertEquals(
+            $this->importProduct->getImagesFromRow($rowData),
+            $expectedResult
+        );
+    }
+
+    public function getImagesFromRowDataProvider()
+    {
+        return [
+            [
+                [],
+                [[], []]
+            ],
+            [
+                [
+                    'image' => 'image3.jpg',
+                    '_media_image' => 'image1.jpg,image2.png',
+                    '_media_image_label' => 'label1,label2'
+                ],
+                [
+                    [
+                        'image' => ['image3.jpg'],
+                        '_media_image' => ['image1.jpg', 'image2.png']
+                    ],
+                    [
+                        '_media_image' => ['label1', 'label2']
+                    ],
+                ]
+            ]
+        ];
     }
 
     public function validateRowValidateNewProductTypeAddRowErrorCallDataProvider()

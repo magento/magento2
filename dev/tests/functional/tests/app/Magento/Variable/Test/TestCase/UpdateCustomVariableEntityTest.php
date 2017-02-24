@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,14 +29,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 8. Save Custom variable using correspond saveActions.
  * 9. Perform all assertions.
  *
- * @group Variables_(PS)
+ * @group Variables
  * @ZephyrId MAGETWO-26104
  */
 class UpdateCustomVariableEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
     /* end tags */
 
     /**
@@ -115,12 +114,12 @@ class UpdateCustomVariableEntityTest extends Injectable
     public function tearDown()
     {
         if ($this->store !== null) {
-            $storeIndex = $this->objectManager->create('Magento\Backend\Test\Page\Adminhtml\StoreIndex');
+            $storeIndex = $this->objectManager->create(\Magento\Backend\Test\Page\Adminhtml\StoreIndex::class);
             $storeIndex->open();
             $storeIndex->getStoreGrid()->searchAndOpen(['store_title' => $this->store->getName()]);
-            $storeNew = $this->objectManager->create('Magento\Backend\Test\Page\Adminhtml\StoreNew');
+            $storeNew = $this->objectManager->create(\Magento\Backend\Test\Page\Adminhtml\StoreNew::class);
             $storeNew->getFormPageActions()->delete();
-            $storeDelete = $this->objectManager->create('Magento\Backend\Test\Page\Adminhtml\StoreDelete');
+            $storeDelete = $this->objectManager->create(\Magento\Backend\Test\Page\Adminhtml\StoreDelete::class);
             $storeDelete->getStoreForm()->fillForm(['create_backup' => 'No']);
             $storeDelete->getFormPageActions()->delete();
         }

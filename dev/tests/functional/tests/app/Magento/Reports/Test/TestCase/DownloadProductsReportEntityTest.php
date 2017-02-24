@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,14 +25,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 2. Go to Reports > Products > Downloads.
  * 3. Perform all assertions.
  *
- * @group Reports_(MX)
+ * @group Reports
  * @ZephyrId MAGETWO-28823
  */
 class DownloadProductsReportEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -85,7 +84,10 @@ class DownloadProductsReportEntityTest extends Injectable
     {
         // Preconditions
         $order->persist();
-        $invoice = $this->objectManager->create('Magento\Sales\Test\TestStep\CreateInvoiceStep', ['order' => $order]);
+        $invoice = $this->objectManager->create(
+            \Magento\Sales\Test\TestStep\CreateInvoiceStep::class,
+            ['order' => $order]
+        );
         $invoice->run();
         $this->openDownloadableLink($order, (int)$downloads);
     }
@@ -100,7 +102,7 @@ class DownloadProductsReportEntityTest extends Injectable
     protected function openDownloadableLink(OrderInjectable $order, $downloads)
     {
         $customerLogin = $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $order->getDataFieldConfig('customer_id')['source']->getCustomer()]
         );
         $customerLogin->run();

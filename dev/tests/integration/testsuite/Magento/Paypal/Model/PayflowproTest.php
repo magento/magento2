@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,11 +31,11 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $httpClientFactoryMock = $this->getMockBuilder('Magento\Framework\HTTP\ZendClientFactory')
+        $httpClientFactoryMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_httpClientMock = $this->getMockBuilder('Magento\Framework\HTTP\ZendClient')->setMethods([])
+        $this->_httpClientMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClient::class)->setMethods([])
             ->disableOriginalConstructor()->getMock();
         $this->_httpClientMock->expects($this->any())->method('setUri')->will($this->returnSelf());
         $this->_httpClientMock->expects($this->any())->method('setConfig')->will($this->returnSelf());
@@ -48,21 +48,21 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->_httpClientMock));
 
         $mathRandomMock = $this->getMock(
-            'Magento\Framework\Math\Random',
+            \Magento\Framework\Math\Random::class,
             [],
             [],
             '',
             false
         );
         $loggerMock = $this->getMock(
-            'Magento\Payment\Model\Method\Logger',
+            \Magento\Payment\Model\Method\Logger::class,
             [],
             [],
             '',
             false
         );
         $this->gatewayMock =$this->_objectManager->create(
-            'Magento\Paypal\Model\Payflow\Service\Gateway',
+            \Magento\Paypal\Model\Payflow\Service\Gateway::class,
             [
                 'httpClientFactory' => $httpClientFactoryMock,
                 'mathRandom' => $mathRandomMock,
@@ -70,7 +70,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->_model = $this->_objectManager->create(
-            'Magento\Paypal\Model\Payflowpro',
+            \Magento\Paypal\Model\Payflowpro::class,
             ['gateway' => $this->gatewayMock]
         );
     }
@@ -81,7 +81,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     public function testReviewPaymentNullResponce()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->_objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
 
         $this->_httpClientMock->expects($this->any())->method('request')

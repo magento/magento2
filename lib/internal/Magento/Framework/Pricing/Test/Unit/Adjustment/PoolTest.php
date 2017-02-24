@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
@@ -25,7 +25,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var Factory|\PHPUnit_Framework_MockObject_MockObject $adjustmentFactory */
-        $adjustmentFactory = $this->getMockBuilder('Magento\Framework\Pricing\Adjustment\Factory')
+        $adjustmentFactory = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\Factory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Form;
@@ -35,7 +35,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\View\Element\Template\Context | \PHPUnit_Framework_MockObject_MockObject $context */
         $context = $this->getMock(
-            'Magento\Framework\View\Element\Template\Context',
+            \Magento\Framework\View\Element\Template\Context::class,
             [],
             [],
             '',
@@ -48,7 +48,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->block = $objectManager->getObject(
-            '\Magento\Customer\Block\Form\Edit',
+            \Magento\Customer\Block\Form\Edit::class,
             ['context' => $context]
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Framework\Data;
@@ -27,14 +27,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->moduleFirst = $this->getMock(
-            'Magento\Setup\Module\Dependency\Report\Framework\Data\Module',
+            \Magento\Setup\Module\Dependency\Report\Framework\Data\Module::class,
             [],
             [],
             '',
             false
         );
         $this->moduleSecond = $this->getMock(
-            'Magento\Setup\Module\Dependency\Report\Framework\Data\Module',
+            \Magento\Setup\Module\Dependency\Report\Framework\Data\Module::class,
             [],
             [],
             '',
@@ -43,7 +43,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManager($this);
         $this->config = $objectManagerHelper->getObject(
-            'Magento\Setup\Module\Dependency\Report\Framework\Data\Config',
+            \Magento\Setup\Module\Dependency\Report\Framework\Data\Config::class,
             ['modules' => [$this->moduleFirst, $this->moduleSecond]]
         );
     }

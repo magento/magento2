@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery;
@@ -27,16 +27,23 @@ class ReadHandler extends AbstractHandler
             $mediaGalleryReadHandler->getAttribute()
         );
 
-        if (!empty($mediaCollection)) {
-            $ids = $this->collectVideoEntriesIds($mediaCollection);
-            $videoDataCollection = $this->loadVideoDataById($ids, $product->getStoreId());
-            $mediaEntriesDataCollection = $this->addVideoDataToMediaEntries($mediaCollection, $videoDataCollection);
-
-            $product->setData(
-                $mediaGalleryReadHandler->getAttribute()->getAttributeCode(),
-                $mediaEntriesDataCollection
-            );
+        if (empty($mediaCollection)) {
+            return $product;
         }
+
+        $ids = $this->collectVideoEntriesIds($mediaCollection);
+
+        if (empty($ids)) {
+            return $product;
+        }
+
+        $videoDataCollection = $this->loadVideoDataById($ids, $product->getStoreId());
+        $mediaEntriesDataCollection = $this->addVideoDataToMediaEntries($mediaCollection, $videoDataCollection);
+
+        $product->setData(
+            $mediaGalleryReadHandler->getAttribute()->getAttributeCode(),
+            $mediaEntriesDataCollection
+        );
 
         return $product;
     }
@@ -49,7 +56,9 @@ class ReadHandler extends AbstractHandler
     {
         $ids = [];
         foreach ($mediaCollection as $item) {
-            if ($item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE) {
+            if ($item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE
+                && !array_key_exists('video_url', $item)
+            ) {
                 $ids[] = $item['value_id'];
             }
         }

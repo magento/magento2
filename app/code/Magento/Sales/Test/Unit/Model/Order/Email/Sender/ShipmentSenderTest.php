@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
@@ -29,7 +29,7 @@ class ShipmentSenderTest extends AbstractSenderTest
         $this->stepMockSetup();
 
         $this->shipmentResourceMock = $this->getMock(
-            '\Magento\Sales\Model\ResourceModel\Order\Shipment',
+            \Magento\Sales\Model\ResourceModel\Order\Shipment::class,
             ['saveAttribute'],
             [],
             '',
@@ -37,7 +37,7 @@ class ShipmentSenderTest extends AbstractSenderTest
         );
 
         $this->shipmentMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             [
                 'getStore', '__wakeup', 'getOrder',
                 'setSendEmail', 'setEmailSent', 'getCustomerNoteNotify',
@@ -55,7 +55,7 @@ class ShipmentSenderTest extends AbstractSenderTest
             ->will($this->returnValue($this->orderMock));
 
         $this->identityContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\ShipmentIdentity',
+            \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::class,
             ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
             [],
             '',
@@ -104,7 +104,7 @@ class ShipmentSenderTest extends AbstractSenderTest
 
         if (!$configValue || $forceSyncMode) {
             $addressMock = $this->getMock(
-                'Magento\Sales\Model\Order\Address',
+                \Magento\Sales\Model\Order\Address::class,
                 [],
                 [],
                 '',
@@ -181,7 +181,10 @@ class ShipmentSenderTest extends AbstractSenderTest
                 );
             }
         } else {
-            $this->shipmentResourceMock->expects($this->once())
+            $this->shipmentResourceMock->expects($this->at(0))
+                ->method('saveAttribute')
+                ->with($this->shipmentMock, 'email_sent');
+            $this->shipmentResourceMock->expects($this->at(1))
                 ->method('saveAttribute')
                 ->with($this->shipmentMock, 'send_email');
 
@@ -227,7 +230,7 @@ class ShipmentSenderTest extends AbstractSenderTest
             ->with('sales_email/general/async_sending')
             ->willReturn(false);
 
-        $addressMock = $this->getMock('Magento\Sales\Model\Order\Address', [], [], '', false);
+        $addressMock = $this->getMock(\Magento\Sales\Model\Order\Address::class, [], [], '', false);
 
         $this->addressRenderer->expects($this->exactly($formatCallCount))
             ->method('format')

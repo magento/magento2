@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Controller\Adminhtml\Widget;
@@ -111,7 +111,7 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
         $errorMessage = 'Some error';
 
         /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject $jsonDataHelperMock */
-        $jsonDataHelperMock = $this->getMockBuilder('Magento\Framework\Json\Helper\Data')
+        $jsonDataHelperMock = $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $jsonDataHelperMock->expects($this->once())
@@ -124,7 +124,7 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new LocalizedException(__($errorMessage)));
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\Json\Helper\Data')
+            ->with(\Magento\Framework\Json\Helper\Data::class)
             ->willReturn($jsonDataHelperMock);
         $this->responseMock->expects($this->once())
             ->method('representJson')
@@ -164,7 +164,7 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject $jsonDataHelperMock */
-        $jsonDataHelperMock = $this->getMockBuilder('Magento\Framework\Json\Helper\Data')
+        $jsonDataHelperMock = $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $jsonDataHelperMock->expects($this->once())
@@ -180,7 +180,7 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($widgetJsonParams);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\Json\Helper\Data')
+            ->with(\Magento\Framework\Json\Helper\Data::class)
             ->willReturn($jsonDataHelperMock);
 
         /** @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject $blockMock */

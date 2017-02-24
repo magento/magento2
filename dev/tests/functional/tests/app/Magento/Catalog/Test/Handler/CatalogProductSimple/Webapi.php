@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -96,18 +96,47 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         $this->convertData();
 
         /** @var CatalogProductSimple $fixture */
-        $url = $_ENV['app_frontend_url'] . 'rest/default/V1/products';
+        $url = $_ENV['app_frontend_url'] . 'rest/all/V1/products';
         $this->webapiTransport->write($url, $this->fields, CurlInterface::POST);
         $encodedResponse = $this->webapiTransport->read();
         $response = json_decode($encodedResponse, true);
         $this->webapiTransport->close();
 
         if (!isset($response['id'])) {
-            $this->eventManager->dispatchEvent(['curl_failed'], [$response]);
+            $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
             throw new \Exception("Product creation by webapi handler was not successful! Response: {$encodedResponse}");
         }
 
+        $this->updateProduct($fixture);
         return $this->parseResponse($response);
+    }
+
+    /**
+     * Update product info per website.
+     *
+     * @param FixtureInterface $fixture
+     * @return void
+     * @throws \Exception
+     */
+    private function updateProduct(FixtureInterface $fixture)
+    {
+        if (isset($fixture->getData()['website_data'])) {
+            $websiteData = $fixture->getData()['website_data'];
+            foreach ($fixture->getDataFieldConfig('website_ids')['source']->getStores() as $key => $store) {
+                $url = $_ENV['app_frontend_url'] . 'rest/' . $store->getCode() . '/V1/products/' . $fixture->getSku();
+                $this->webapiTransport->write($url, ['product' => $websiteData[$key]], CurlInterface::PUT);
+                $encodedResponse = $this->webapiTransport->read();
+                $response = json_decode($encodedResponse, true);
+                $this->webapiTransport->close();
+
+                if (!isset($response['id'])) {
+                    $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
+                    throw new \Exception(
+                        "Product update by webapi handler was not successful! Response: {$encodedResponse}"
+                    );
+                }
+            }
+        }
     }
 
     /**
@@ -236,8 +265,16 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
                 $priceInfo['customer_group_id'] = $priceInfo['cust_group'];
                 unset($priceInfo['cust_group']);
 
-                $priceInfo['value'] = $priceInfo['price'];
-                unset($priceInfo['price']);
+                if (isset($priceInfo['price'])) {
+                    $priceInfo['value'] = $priceInfo['price'];
+                    unset($priceInfo['price']);
+                }
+                unset($priceInfo['value_type']);
+
+                if (isset($priceInfo['percentage_value'])) {
+                    $priceInfo['extension_attributes']['percentage_value'] = $priceInfo['percentage_value'];
+                    unset($priceInfo['percentage_value']);
+                }
 
                 $priceInfo['qty'] = $priceInfo['price_qty'];
                 unset($priceInfo['price_qty']);

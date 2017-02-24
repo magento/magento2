@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\ResourceModel\Option;
@@ -31,7 +31,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Bundle\Model\Option', 'Magento\Bundle\Model\ResourceModel\Option');
+        $this->_init(\Magento\Bundle\Model\Option::class, \Magento\Bundle\Model\ResourceModel\Option::class);
     }
 
     /**

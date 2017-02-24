@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component;
@@ -30,32 +30,32 @@ class FilterFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->context = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ContextInterface',
+            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
             [],
             '',
             false
         );
         $this->componentFactory = $this->getMock(
-            'Magento\Framework\View\Element\UiComponentFactory',
+            \Magento\Framework\View\Element\UiComponentFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->attributeMetadata = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AttributeMetadataInterface',
+            \Magento\Customer\Api\Data\AttributeMetadataInterface::class,
             [],
             '',
             false
         );
         $this->filter = $this->getMockForAbstractClass(
-            'Magento\Ui\Component\Listing\Columns\ColumnInterface',
+            \Magento\Ui\Component\Listing\Columns\ColumnInterface::class,
             [],
             '',
             false
         );
         $this->attributeOption = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\OptionInterface',
+            \Magento\Customer\Api\Data\OptionInterface::class,
             [],
             '',
             false

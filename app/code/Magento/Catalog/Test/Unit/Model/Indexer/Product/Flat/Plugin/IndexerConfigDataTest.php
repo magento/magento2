@@ -1,39 +1,51 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Plugin;
 
+use Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData as IndexerConfigDataPlugin;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Catalog\Model\Indexer\Product\Flat\State as ProductFlatIndexerState;
+use Magento\Indexer\Model\Config\Data as ConfigData;
+
 class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData
+     * @var IndexerConfigDataPlugin
      */
-    protected $model;
+    private $plugin;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerHelper
      */
-    protected $_stateMock;
+    private $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var ProductFlatIndexerState|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $subjectMock;
+    private $indexerStateMock;
+
+    /**
+     * @var ConfigData|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectMock;
 
     protected function setUp()
     {
-        $this->_stateMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Flat\State',
-            ['isFlatEnabled'],
-            [],
-            '',
-            false
-        );
-        $this->subjectMock = $this->getMock('Magento\Indexer\Model\Config\Data', [], [], '', false);
+        $this->indexerStateMock = $this->getMockBuilder(ProductFlatIndexerState::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->subjectMock = $this->getMockBuilder(ConfigData::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData($this->_stateMock);
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->plugin = $this->objectManagerHelper->getObject(
+            IndexerConfigDataPlugin::class,
+            ['state' => $this->indexerStateMock]
+        );
     }
 
     /**
@@ -42,32 +54,36 @@ class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
      * @param mixed $default
      * @param array $inputData
      * @param array $outputData
-     * @dataProvider aroundGetDataProvider
+     *
+     * @dataProvider afterGetDataProvider
      */
-    public function testAroundGet($isFlat, $path, $default, $inputData, $outputData)
+    public function testAfterGet($isFlat, $path, $default, $inputData, $outputData)
     {
-        $closureMock = function () use ($inputData) {
-            return $inputData;
-        };
-        $this->_stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue($isFlat));
+        $this->indexerStateMock->expects(static::once())
+            ->method('isFlatEnabled')
+            ->willReturn($isFlat);
 
-        $this->assertEquals($outputData, $this->model->aroundGet($this->subjectMock, $closureMock, $path, $default));
+        $this->assertEquals($outputData, $this->plugin->afterGet($this->subjectMock, $inputData, $path, $default));
     }
 
-    public function aroundGetDataProvider()
+    /**
+     * @return array
+     */
+    public function afterGetDataProvider()
     {
         $flatIndexerData = [
             'indexer_id' => 'catalog_product_flat',
             'action' => '\Action\Class',
             'title' => 'Title',
-            'description' => 'Description',
+            'description' => 'Description'
         ];
         $otherIndexerData = [
             'indexer_id' => 'other_indexer',
             'action' => '\Action\Class',
             'title' => 'Title',
-            'description' => 'Description',
+            'description' => 'Description'
         ];
+
         return [
             // flat is enabled, nothing is being changed
             [

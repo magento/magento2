@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productIds = range(10, 12, 1);
 foreach ($productIds as $productId) {
     /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
-    $stockItem = $objectManager->create('Magento\CatalogInventory\Model\Stock\Item');
+    $stockItem = $objectManager->create(\Magento\CatalogInventory\Model\Stock\Item::class);
     $stockItem->load($productId, 'product_id');
 
     if (!$stockItem->getProductId()) {
@@ -25,7 +25,7 @@ foreach ($productIds as $productId) {
 }
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
     ->setId(3)
     ->setAttributeSetId(4)
@@ -160,13 +160,13 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
             ]
         ]
     );
-$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 if ($product->getBundleOptionsData()) {
     $options = [];
     foreach ($product->getBundleOptionsData() as $key => $optionData) {
         if (!(bool)$optionData['delete']) {
-            $option = $objectManager->create('Magento\Bundle\Api\Data\OptionInterfaceFactory')
+            $option = $objectManager->create(\Magento\Bundle\Api\Data\OptionInterfaceFactory::class)
                 ->create(['data' => $optionData]);
             $option->setSku($product->getSku());
             $option->setOptionId(null);
@@ -176,7 +176,7 @@ if ($product->getBundleOptionsData()) {
             if (!empty($bundleLinks[$key])) {
                 foreach ($bundleLinks[$key] as $linkData) {
                     if (!(bool)$linkData['delete']) {
-                        $link = $objectManager->create('Magento\Bundle\Api\Data\LinkInterfaceFactory')
+                        $link = $objectManager->create(\Magento\Bundle\Api\Data\LinkInterfaceFactory::class)
                             ->create(['data' => $linkData]);
                         $linkProduct = $productRepository->getById($linkData['product_id']);
                         $link->setSku($linkProduct->getSku());

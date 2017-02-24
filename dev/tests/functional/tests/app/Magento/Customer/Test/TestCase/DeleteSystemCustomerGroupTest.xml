@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Customer\Test\TestCase\DeleteSystemCustomerGroup" summary="Delete system customer group" ticketId="MAGETWO-53576">
+    <testCase name="Magento\Customer\Test\TestCase\DeleteSystemCustomerGroupTest" summary="Delete system customer group" ticketId="MAGETWO-53576">
         <variation name="DeleteSystemCustomerGroup1" summary="Checks that NOT LOGGED IN Customer Group cannot be deleted">
             <data name="customerGroup/dataset" xsi:type="string">NOT_LOGGED_IN</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertNoDeleteForSystemCustomerGroup" />

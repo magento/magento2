@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,26 +22,26 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+        $this->fixtureModelMock = $this->getMock(\Magento\Setup\Fixtures\FixtureModel::class, [], [], '', false);
 
         $this->model = new CustomersFixture($this->fixtureModelMock);
     }
 
     public function testExecute()
     {
-        $importMock = $this->getMock('\Magento\ImportExport\Model\Import', [], [], '', false);
+        $importMock = $this->getMock(\Magento\ImportExport\Model\Import::class, [], [], '', false);
 
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $storeMock->expects($this->once())
             ->method('getCode')
             ->will($this->returnValue('store_code'));
 
-        $websiteMock = $this->getMock('\Magento\Store\Model\Website', [], [], '', false);
+        $websiteMock = $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
         $websiteMock->expects($this->once())
             ->method('getCode')
             ->will($this->returnValue('website_code'));
 
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $storeManagerMock->expects($this->once())
             ->method('getDefaultStoreView')
             ->will($this->returnValue($storeMock));
@@ -51,7 +51,7 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
 
         $valueMap = [
             [
-                'Magento\ImportExport\Model\Import',
+                \Magento\ImportExport\Model\Import::class,
                 [
                     'data' => [
                         'entity' => 'customer_composite',
@@ -61,10 +61,10 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
                 ],
                 $importMock
             ],
-            ['Magento\Store\Model\StoreManager', [], $storeManagerMock]
+            [\Magento\Store\Model\StoreManager::class, [], $storeManagerMock]
         ];
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValueMap($valueMap));
@@ -83,14 +83,14 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
-        $importMock = $this->getMock('\Magento\ImportExport\Model\Import', [], [], '', false);
+        $importMock = $this->getMock(\Magento\ImportExport\Model\Import::class, [], [], '', false);
         $importMock->expects($this->never())->method('validateSource');
         $importMock->expects($this->never())->method('importSource');
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
         $objectManagerMock->expects($this->never())
             ->method('create')
-            ->with($this->equalTo('Magento\ImportExport\Model\Import'))
+            ->with($this->equalTo(\Magento\ImportExport\Model\Import::class))
             ->willReturn($importMock);
 
         $this->fixtureModelMock

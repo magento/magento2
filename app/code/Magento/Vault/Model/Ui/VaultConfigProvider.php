@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Ui;
@@ -8,9 +8,8 @@ namespace Magento\Vault\Model\Ui;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Payment\Helper\Data;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Vault\Model\VaultPaymentInterface;
+use Magento\Vault\Api\PaymentMethodListInterface;
 
 class VaultConfigProvider implements ConfigProviderInterface
 {
@@ -32,9 +31,9 @@ class VaultConfigProvider implements ConfigProviderInterface
     private $session;
 
     /**
-     * @var Data
+     * @var PaymentMethodListInterface
      */
-    private $paymentDataHelper;
+    private $vaultPaymentList;
 
     /**
      * VaultConfigProvider constructor.
@@ -57,9 +56,9 @@ class VaultConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $availableMethods = [];
-        $vaultPayments = $this->getVaultPaymentMethodList();
-        $customerId = $this->session->getCustomerId();
         $storeId = $this->storeManager->getStore()->getId();
+        $vaultPayments = $this->getVaultPaymentList()->getActiveList($storeId);
+        $customerId = $this->session->getCustomerId();
 
         foreach ($vaultPayments as $method) {
             $availableMethods[$method->getCode()] = [
@@ -73,36 +72,15 @@ class VaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Get list of active Vault payment methods
-     * @return array
-     */
-    private function getVaultPaymentMethodList()
-    {
-        $availableMethods = [];
-        $storeId = $this->storeManager->getStore()->getId();
-
-        $paymentMethods = $this->getPaymentDataHelper()->getStoreMethods($storeId);
-        foreach ($paymentMethods as $method) {
-            /** VaultPaymentInterface $method */
-            if (!$method instanceof VaultPaymentInterface) {
-                continue;
-            }
-            $availableMethods[] = $method;
-        }
-
-        return $availableMethods;
-    }
-
-    /**
-     * Get payment data helper instance
-     * @return Data
+     * Get vault payment list instance
+     * @return PaymentMethodListInterface
      * @deprecated
      */
-    private function getPaymentDataHelper()
+    private function getVaultPaymentList()
     {
-        if ($this->paymentDataHelper === null) {
-            $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
+        if ($this->vaultPaymentList === null) {
+            $this->vaultPaymentList = ObjectManager::getInstance()->get(PaymentMethodListInterface::class);
         }
-        return $this->paymentDataHelper;
+        return $this->vaultPaymentList;
     }
 }

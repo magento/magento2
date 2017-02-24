@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -151,7 +151,7 @@ class Options extends Section
     protected function getSearchGridBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Search\Grid',
+            \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Search\Grid::class,
             ['element' => $this->browser->find($this->importGrid)]
         );
     }
@@ -167,7 +167,7 @@ class Options extends Section
     {
         $element = $element ?: $this->_rootElement;
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Row',
+            \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Row::class,
             ['element' => $element->find(sprintf($this->dynamicDataRow, ++$index))]
         );
     }

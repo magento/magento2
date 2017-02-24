@@ -2,9 +2,10 @@
 /**
  * Test object manager
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\TestFramework;
 
 class ObjectManager extends \Magento\Framework\App\ObjectManager
@@ -14,20 +15,23 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
      *
      * @var array
      */
-    protected $_classesToDestruct = ['Magento\Framework\View\Layout', 'Magento\Framework\Registry'];
+    protected $_classesToDestruct = [
+        \Magento\Framework\View\Layout::class,
+        \Magento\Framework\Registry::class
+    ];
 
     /**
      * @var array
      */
     protected $persistedInstances = [
-        'Magento\Framework\App\ResourceConnection',
-        'Magento\Framework\Config\Scope',
-        'Magento\Framework\ObjectManager\RelationsInterface',
-        'Magento\Framework\ObjectManager\ConfigInterface',
-        'Magento\Framework\Interception\DefinitionInterface',
-        'Magento\Framework\ObjectManager\DefinitionInterface',
-        'Magento\Framework\Session\Config',
-        'Magento\Framework\ObjectManager\Config\Mapper\Dom',
+        \Magento\Framework\App\ResourceConnection::class,
+        \Magento\Framework\Config\Scope::class,
+        \Magento\Framework\ObjectManager\RelationsInterface::class,
+        \Magento\Framework\ObjectManager\ConfigInterface::class,
+        \Magento\Framework\Interception\DefinitionInterface::class,
+        \Magento\Framework\ObjectManager\DefinitionInterface::class,
+        \Magento\Framework\Session\Config::class,
+        \Magento\Framework\ObjectManager\Config\Mapper\Dom::class,
     ];
 
     /**
@@ -45,8 +49,8 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
 
         \Magento\Framework\App\Config\Base::destroy();
         $sharedInstances = [
-            'Magento\Framework\ObjectManagerInterface' => $this,
-            'Magento\Framework\App\ObjectManager' => $this,
+            \Magento\Framework\ObjectManagerInterface::class => $this,
+            \Magento\Framework\App\ObjectManager::class => $this,
         ];
         foreach ($this->persistedInstances as $persistedClass) {
             if (isset($this->_sharedInstances[$persistedClass])) {

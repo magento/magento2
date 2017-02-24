@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Reader;
@@ -24,7 +24,7 @@ class UiComponent implements Layout\ReaderInterface
      *
      * @var array
      */
-    protected $attributes = ['group', 'component'];
+    protected $attributes = ['group', 'component', 'acl', 'condition'];
 
     /**
      * @var Layout\ScheduledStructure\Helper

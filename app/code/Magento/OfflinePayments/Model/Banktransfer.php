@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Model;
@@ -26,14 +26,14 @@ class Banktransfer extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @var string
      */
-    protected $_formBlockType = 'Magento\OfflinePayments\Block\Form\Banktransfer';
+    protected $_formBlockType = \Magento\OfflinePayments\Block\Form\Banktransfer::class;
 
     /**
      * Instructions block path
      *
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Payment\Block\Info\Instructions';
+    protected $_infoBlockType = \Magento\Payment\Block\Info\Instructions::class;
 
     /**
      * Availability option

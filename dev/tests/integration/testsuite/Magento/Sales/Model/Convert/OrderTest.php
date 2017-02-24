@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Convert\Order');
+        $this->_model = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Convert\Order::class);
     }
 
     /**
@@ -27,7 +27,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     public function testConvertToCreditmemo()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $order = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+        $order = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         //MAGETWO-45612 fix
         $order->setBaseShippingAmount(5);

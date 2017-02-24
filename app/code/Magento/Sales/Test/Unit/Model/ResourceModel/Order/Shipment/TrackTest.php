@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Shipment;
@@ -34,6 +34,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Shipment\Track\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validatorMock;
+
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -45,35 +46,35 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->trackModelMock = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment\Track',
+            \Magento\Sales\Model\Order\Shipment\Track::class,
             [],
             [],
             '',
             false
         );
         $this->appResourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
             false
         );
         $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             [],
             [],
             '',
             false
         );
         $this->validatorMock = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment\Track\Validator',
+            \Magento\Sales\Model\Order\Shipment\Track\Validator::class,
             [],
             [],
             '',
             false
         );
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot',
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
             [],
             [],
             '',
@@ -93,20 +94,20 @@ class TrackTest extends \PHPUnit_Framework_TestCase
         $this->trackModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
 
         $relationProcessorMock = $this->getMock(
-            '\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor',
+            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class,
             [],
             [],
             '',
             false
         );
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->appResourceMock);
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->trackResource = $objectManager->getObject(
-            'Magento\Sales\Model\ResourceModel\Order\Shipment\Track',
+            \Magento\Sales\Model\ResourceModel\Order\Shipment\Track::class,
             [
                 'context' => $contextMock,
                 'validator' => $this->validatorMock,

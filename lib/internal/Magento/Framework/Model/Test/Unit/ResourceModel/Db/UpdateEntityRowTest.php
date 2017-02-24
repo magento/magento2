@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db;
@@ -22,11 +22,11 @@ class UpdateEntityRowTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->metadataPoolMock = $this->getMockBuilder('\Magento\Framework\EntityManager\MetadataPool')
+        $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $objectManager->getObject(
-            'Magento\Framework\Model\ResourceModel\Db\UpdateEntityRow',
+            \Magento\Framework\Model\ResourceModel\Db\UpdateEntityRow::class,
             ['metadataPool' => $this->metadataPoolMock]
         );
     }
@@ -50,10 +50,10 @@ class UpdateEntityRowTest extends \PHPUnit_Framework_TestCase
         $output['test_column_name'] = 'test_column_name';
         $expectedResult = true;
 
-        $entityMetadataMock = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
+        $entityMetadataMock = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $connectionMock->expects($this->once())

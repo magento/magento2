@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page\Relation\Store;
@@ -28,11 +28,11 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
+        $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourcePage = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page')
+        $this->resourcePage = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -51,7 +51,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('lookupStoreIds')
             ->willReturn([$storeId]);
 
-        $page = $this->getMockBuilder('Magento\Cms\Model\Page')
+        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -64,12 +64,12 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $result = $this->model->execute($page);
-        $this->assertInstanceOf('Magento\Cms\Model\Page', $result);
+        $this->assertInstanceOf(\Magento\Cms\Model\Page::class, $result);
     }
 
     public function testExecuteWithNoId()
     {
-        $page = $this->getMockBuilder('Magento\Cms\Model\Page')
+        $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -78,6 +78,6 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         $result = $this->model->execute($page);
-        $this->assertInstanceOf('Magento\Cms\Model\Page', $result);
+        $this->assertInstanceOf(\Magento\Cms\Model\Page::class, $result);
     }
 }

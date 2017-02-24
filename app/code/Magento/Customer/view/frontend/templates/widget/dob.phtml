@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-/**
-USAGE:
+/** @var \Magento\Customer\Block\Widget\Dob $block */
 
-Simple:
-
+/*
 <?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
    ->setDate($block->getCustomer()->getDob())
    ->toHtml() ?>
@@ -23,24 +21,19 @@ For checkout/onepage/billing.phtml:
    ->setFieldNameFormat('billing[%s]')
    ->toHtml() ?>
 
-NOTE: Regarding styles - if we leave it this way, we'll move it to boxes.css
-      Alternatively we could calculate widths automatically using block input parameters.
+NOTE: Regarding styles - if we leave it this way, we'll move it to boxes.css. Alternatively we could calculate widths
+automatically using block input parameters.
 */
 
-/**
- * @see \Magento\Customer\Block\Widget\Dob
- */
-?>
-<?php
 $fieldCssClass = 'field date field-' . $block->getHtmlId();
 $fieldCssClass .= $block->isRequired() ? ' required' : '';
 ?>
-<div class="<?php /* @escapeNotVerified */ echo $fieldCssClass; ?>">
-    <label class="label" for="<?php echo $block->getHtmlId()?>"><span><?php /* @escapeNotVerified */ echo $block->getLabel() ?></span></label>
+<div class="<?php echo $block->escapeHtmlAttr($fieldCssClass); ?>">
+    <label class="label" for="<?php echo $block->escapeHtmlAttr($block->getHtmlId()) ?>"><span><?php echo $block->escapeHtml($block->getLabel()) ?></span></label>
     <div class="control customer-dob">
         <?php echo $block->getFieldHtml(); ?>
         <?php if ($_message = $block->getAdditionalDescription()) : ?>
-            <div class="note"><?php /* @escapeNotVerified */ echo $_message; ?></div>
+            <div class="note"><?php echo $block->escapeHtml($_message); ?></div>
         <?php endif; ?>
     </div>
 </div>

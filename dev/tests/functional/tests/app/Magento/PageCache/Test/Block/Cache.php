@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -89,7 +89,7 @@ class Cache extends Block
     protected function getMessagesBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Messages',
+            \Magento\Backend\Test\Block\Messages::class,
             ['element' => $this->_rootElement->find($this->messagesSelector, Locator::SELECTOR_XPATH)]
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,26 +38,26 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->configFactory = $this->getMockBuilder('Magento\Framework\View\PageLayout\ConfigFactory')
+        $this->configFactory = $this->getMockBuilder(\Magento\Framework\View\PageLayout\ConfigFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->fileCollector = $this->getMockBuilder('Magento\Framework\View\PageLayout\File\Collector\Aggregated')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileCollector = $this->getMockBuilder(
+            \Magento\Framework\View\PageLayout\File\Collector\Aggregated::class
+        )->disableOriginalConstructor()->getMock();
 
-        $this->themeCollection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Collection')
+        $this->themeCollection = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->themeCollection->expects($this->once())
             ->method('setItemObjectClass')
-            ->with('Magento\Theme\Model\Theme\Data')
+            ->with(\Magento\Theme\Model\Theme\Data::class)
             ->willReturnSelf();
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->builder = $helper->getObject(
-            'Magento\Theme\Model\PageLayout\Config\Builder',
+            \Magento\Theme\Model\PageLayout\Config\Builder::class,
             [
                 'configFactory' => $this->configFactory,
                 'fileCollector' => $this->fileCollector,
@@ -76,10 +76,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $files1 = ['content layouts_1.xml', 'content layouts_2.xml'];
         $files2 = ['content layouts_3.xml', 'content layouts_4.xml'];
 
-        $theme1 = $this->getMockBuilder('Magento\Theme\Model\Theme\Data')
+        $theme1 = $this->getMockBuilder(\Magento\Theme\Model\Theme\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $theme2 = $this->getMockBuilder('Magento\Theme\Model\Theme\Data')
+        $theme2 = $this->getMockBuilder(\Magento\Theme\Model\Theme\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -96,7 +96,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $config = $this->getMockBuilder('Magento\Framework\View\PageLayout\Config')
+        $config = $this->getMockBuilder(\Magento\Framework\View\PageLayout\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 

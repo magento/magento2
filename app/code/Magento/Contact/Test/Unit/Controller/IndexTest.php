@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,13 +25,13 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_scopeConfig = $this->getMockForAbstractClass(
-            '\Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             ['isSetFlag'],
             '',
             false
         );
         $context = $this->getMock(
-            '\Magento\Framework\App\Action\Context',
+            \Magento\Framework\App\Action\Context::class,
             ['getRequest', 'getResponse'],
             [],
             '',
@@ -42,7 +42,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('getRequest')
             ->will(
                 $this->returnValue(
-                    $this->getMockForAbstractClass('\Magento\Framework\App\RequestInterface', [], '', false)
+                    $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false)
                 )
             );
 
@@ -50,16 +50,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('getResponse')
             ->will(
                 $this->returnValue(
-                    $this->getMockForAbstractClass('\Magento\Framework\App\ResponseInterface', [], '', false)
+                    $this->getMockForAbstractClass(\Magento\Framework\App\ResponseInterface::class, [], '', false)
                 )
             );
 
         $this->_controller = new \Magento\Contact\Test\Unit\Controller\Stub\IndexStub(
             $context,
-            $this->getMock('\Magento\Framework\Mail\Template\TransportBuilder', [], [], '', false),
-            $this->getMockForAbstractClass('\Magento\Framework\Translate\Inline\StateInterface', [], '', false),
+            $this->getMock(\Magento\Framework\Mail\Template\TransportBuilder::class, [], [], '', false),
+            $this->getMockForAbstractClass(\Magento\Framework\Translate\Inline\StateInterface::class, [], '', false),
             $this->_scopeConfig,
-            $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface', [], '', false)
+            $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class, [], '', false)
         );
     }
 
@@ -79,7 +79,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
         $this->_controller->dispatch(
-            $this->getMockForAbstractClass('\Magento\Framework\App\RequestInterface', [], '', false)
+            $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false)
         );
     }
 }

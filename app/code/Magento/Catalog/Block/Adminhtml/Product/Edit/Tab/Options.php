@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,15 +27,15 @@ class Options extends Widget
     {
         $this->addChild(
             'add_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Add New Option'), 'class' => 'add', 'id' => 'add_new_defined_option']
         );
 
-        $this->addChild('options_box', 'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option');
+        $this->addChild('options_box', \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option::class);
 
         $this->addChild(
             'import_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Import Options'), 'class' => 'add', 'id' => 'import_new_defined_option']
         );
 

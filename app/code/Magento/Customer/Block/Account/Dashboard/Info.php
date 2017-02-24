@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Account\Dashboard;
@@ -122,7 +122,9 @@ class Info extends \Magento\Framework\View\Element\Template
      */
     public function isNewsletterEnabled()
     {
-        return $this->getLayout()->getBlockSingleton('Magento\Customer\Block\Form\Register')->isNewsletterEnabled();
+        return $this->getLayout()
+            ->getBlockSingleton(\Magento\Customer\Block\Form\Register::class)
+            ->isNewsletterEnabled();
     }
 
     /**

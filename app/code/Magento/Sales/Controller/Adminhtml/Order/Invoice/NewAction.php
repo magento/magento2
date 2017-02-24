@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
@@ -80,7 +80,7 @@ class NewAction extends \Magento\Backend\App\Action
 
         try {
             /** @var \Magento\Sales\Model\Order $order */
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+            $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
             if (!$order->getId()) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('The order no longer exists.'));
             }
@@ -99,7 +99,7 @@ class NewAction extends \Magento\Backend\App\Action
             }
             $this->registry->register('current_invoice', $invoice);
 
-            $comment = $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
+            $comment = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getCommentText(true);
             if ($comment) {
                 $invoice->setCommentText($comment);
             }

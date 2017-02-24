@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
@@ -224,7 +224,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             $addressData,
-            '\Magento\Customer\Api\Data\AddressInterface'
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
         $addressDataObject->setRegion($regionDataObject);
 

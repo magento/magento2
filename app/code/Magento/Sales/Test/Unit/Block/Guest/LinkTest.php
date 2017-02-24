@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Guest;
@@ -14,8 +14,8 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $context = $objectManagerHelper->getObject('Magento\Framework\View\Element\Template\Context');
-        $httpContext = $this->getMockBuilder('\Magento\Framework\App\Http\Context')
+        $context = $objectManagerHelper->getObject(\Magento\Framework\View\Element\Template\Context::class);
+        $httpContext = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
@@ -25,7 +25,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Sales\Block\Guest\Link $link */
         $link = $objectManagerHelper->getObject(
-            'Magento\Sales\Block\Guest\Link',
+            \Magento\Sales\Block\Guest\Link::class,
             [
                 'context' => $context,
                 'httpContext' => $httpContext,

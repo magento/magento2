@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\ResourceModel;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\CallbackPool;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Abstract resource model
@@ -14,7 +16,12 @@ use Magento\Framework\Model\CallbackPool;
 abstract class AbstractResource
 {
     /**
-     * Main constructor
+     * @var Json
+     */
+    protected $serializer;
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
@@ -116,7 +123,7 @@ abstract class AbstractResource
         if (empty($value) && $unsetEmpty) {
             $object->unsetData($field);
         } else {
-            $object->setData($field, serialize($value ?: $defaultValue));
+            $object->setData($field, $this->getSerializer()->serialize($value ?: $defaultValue));
         }
 
         return $this;
@@ -132,13 +139,7 @@ abstract class AbstractResource
      */
     protected function _unserializeField(DataObject $object, $field, $defaultValue = null)
     {
-        $value = $object->getData($field);
-
-        if ($value) {
-            $unserializedValue = @unserialize($value);
-            $value = $unserializedValue !== false || $value === 'b:0;' ? $unserializedValue : $value;
-        }
-
+        $value = $this->getSerializer()->unserialize($object->getData($field));
         if (empty($value)) {
             $object->setData($field, $defaultValue);
         } else {
@@ -187,7 +188,7 @@ abstract class AbstractResource
         $type = strtolower($type);
         if ($type == 'decimal' || $type == 'numeric' || $type == 'float') {
             $value = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Framework\Locale\FormatInterface'
+                \Magento\Framework\Locale\FormatInterface::class
             )->getNumber(
                 $value
             );
@@ -227,5 +228,19 @@ abstract class AbstractResource
             $columns = empty($fieldsetColumns) ? '*' : [$object->getIdFieldName()];
         }
         return $columns;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return Json
+     * @deprecated
+     */
+    protected function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = ObjectManager::getInstance()->get(Json::class);
+        }
+        return $this->serializer;
     }
 }

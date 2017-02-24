@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sitemap\Test\TestCase\DeleteSitemapEntityTest" summary="Delete Sitemap Entity" ticketId="MAGETWO-23296">
         <variation name="DeleteSitemapEntityTestVariation1">
+            <data name="tag" xsi:type="string">severity:S2</data>
             <data name="sitemap/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessDeleteMessage" />
             <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapNotInGrid" />

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Controller\Adminhtml\Rule;
@@ -18,7 +18,7 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rule
         $taxRuleId = $this->getRequest()->getParam('rule');
         $this->_coreRegistry->register('tax_rule_id', $taxRuleId);
         /** @var \Magento\Backend\Model\Session $backendSession */
-        $backendSession = $this->_objectManager->get('Magento\Backend\Model\Session');
+        $backendSession = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
         if ($taxRuleId) {
             try {
                 $taxRule = $this->ruleService->get($taxRuleId);

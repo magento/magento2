@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model\ResourceModel;
@@ -36,17 +36,19 @@ class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
         $pageCount = 3;
 
         /** @var $callbackMock \PHPUnit_Framework_MockObject_MockObject */
-        $callbackMock = $this->getMock('stdClass', ['callback']);
+        $callbackMock = $this->getMock(\stdClass::class, ['callback']);
 
-        $fetchStrategy = $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
+        $fetchStrategy = $this->getMockForAbstractClass(
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
+        );
 
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
 
-        $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $entityFactory = $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false);
+        $logger = $this->getMock(\Psr\Log\LoggerInterface::class);
 
         /** @var $collectionMock AbstractDb|\PHPUnit_Framework_MockObject_MockObject */
-        $collectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+        $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->setConstructorArgs([$entityFactory, $logger, $fetchStrategy])
             ->setMethods(['clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber', 'getSelect'])
             ->getMockForAbstractClass();

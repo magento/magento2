@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\File;
@@ -23,7 +23,7 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->validator = new \Magento\Downloadable\Model\File\ContentValidator();
 
-        $this->fileContentMock = $this->getMock('\Magento\Downloadable\Api\Data\File\ContentInterface');
+        $this->fileContentMock = $this->getMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
     }
 
     public function testIsValid()

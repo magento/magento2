@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Model;
@@ -24,12 +24,12 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Payment\Block\Transparent\Info';
+    protected $_formBlockType = \Magento\Payment\Block\Transparent\Info::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Payment\Block\Info';
+    protected $_infoBlockType = \Magento\Payment\Block\Info::class;
 
     /**
      * Payment Method feature

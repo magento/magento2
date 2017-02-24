@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
@@ -21,12 +21,12 @@ class InterceptionCacheTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->configMock = $this->getMockBuilder('Magento\Framework\Interception\Config\Config')
+        $this->configMock = $this->getMockBuilder(\Magento\Framework\Interception\Config\Config::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->interceptionsListMock = $this->getMockBuilder(
-            'Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions'
+            \Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions::class
         )
             ->setMethods([])
             ->disableOriginalConstructor()

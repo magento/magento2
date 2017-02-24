@@ -2,7 +2,7 @@
 /**
  * Test SOAP server model.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Soap;
@@ -36,11 +36,11 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_storeManagerMock = $this->getMockBuilder(
-            'Magento\Store\Model\StoreManager'
+            \Magento\Store\Model\StoreManager::class
         )->disableOriginalConstructor()->getMock();
 
         $this->_storeMock = $this->getMockBuilder(
-            'Magento\Store\Model\Store'
+            \Magento\Store\Model\Store::class
         )->disableOriginalConstructor()->getMock();
         $this->_storeMock->expects(
             $this->any()
@@ -59,27 +59,27 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_storeMock)
         );
 
-        $areaListMock = $this->getMock('Magento\Framework\App\AreaList', [], [], '', false);
-        $configScopeMock = $this->getMock('Magento\Framework\Config\ScopeInterface');
+        $areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
         $areaListMock->expects($this->any())->method('getFrontName')->will($this->returnValue('soap'));
 
         $this->_requestMock = $this->getMockBuilder(
-            'Magento\Framework\Webapi\Request'
+            \Magento\Framework\Webapi\Request::class
         )->disableOriginalConstructor()->getMock();
 
         $this->_soapServerFactory = $this->getMockBuilder(
-            'Magento\Webapi\Model\Soap\ServerFactory'
+            \Magento\Webapi\Model\Soap\ServerFactory::class
         )->disableOriginalConstructor()->getMock();
 
         $this->_typeProcessor = $this->getMock(
-            'Magento\Framework\Reflection\TypeProcessor',
+            \Magento\Framework\Reflection\TypeProcessor::class,
             [],
             [],
             '',
             false
         );
-        $this->wsdlGenerator = $this->getMock('Magento\Webapi\Model\Soap\Wsdl\Generator', [], [], '', false);
-        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->wsdlGenerator = $this->getMock(\Magento\Webapi\Model\Soap\Wsdl\Generator::class, [], [], '', false);
+        $this->_scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         /** Init SUT. */
         $this->_soapServer = new \Magento\Webapi\Model\Soap\Server(

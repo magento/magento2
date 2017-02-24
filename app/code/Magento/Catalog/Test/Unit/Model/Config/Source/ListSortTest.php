@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Config\Source;
@@ -21,13 +21,12 @@ class ListSortTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->catalogConfig = $this->getMockBuilder('Magento\Catalog\Model\Config')->
-            disableOriginalConstructor()->
-            getMock();
+        $this->catalogConfig = $this->getMockBuilder(\Magento\Catalog\Model\Config::class)
+            ->disableOriginalConstructor()->getMock();
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            'Magento\Catalog\Model\Config\Source\ListSort',
+            \Magento\Catalog\Model\Config\Source\ListSort::class,
             ['catalogConfig' => $this->catalogConfig]
         );
     }

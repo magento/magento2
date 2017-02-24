@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Model\ResourceModel\Mview\View\State;
@@ -14,16 +14,16 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $entityFactoryMock = $this->getMock('Magento\Framework\Data\Collection\EntityFactoryInterface');
-        $loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $fetchStrategyMock = $this->getMock('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
-        $managerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
-        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $selectRendererMock = $this->getMock('Magento\Framework\DB\Select\SelectRenderer', [], [], '', false);
-        $resourceMock = $this->getMock('Magento\Framework\Flag\FlagResource', [], [], '', false);
+        $entityFactoryMock = $this->getMock(\Magento\Framework\Data\Collection\EntityFactoryInterface::class);
+        $loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $fetchStrategyMock = $this->getMock(\Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class);
+        $managerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
+        $selectRendererMock = $this->getMock(\Magento\Framework\DB\Select\SelectRenderer::class, [], [], '', false);
+        $resourceMock = $this->getMock(\Magento\Framework\Flag\FlagResource::class, [], [], '', false);
         $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $selectMock = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             ['getPart', 'setPart', 'from', 'columns'],
             [$connectionMock, $selectRendererMock]
         );
@@ -39,15 +39,15 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection',
+            \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection::class,
             $this->model
         );
         $this->assertEquals(
-            'Magento\Indexer\Model\Mview\View\State',
+            \Magento\Indexer\Model\Mview\View\State::class,
             $this->model->getModelName()
         );
         $this->assertEquals(
-            'Magento\Indexer\Model\ResourceModel\Mview\View\State',
+            \Magento\Indexer\Model\ResourceModel\Mview\View\State::class,
             $this->model->getResourceModelName()
         );
     }

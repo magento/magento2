@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -94,7 +94,7 @@ class CronCommand extends Command
             }
         }
         /** @var \Magento\Framework\App\Cron $cronObserver */
-        $cronObserver = $objectManager->create('Magento\Framework\App\Cron', ['parameters' => $params]);
+        $cronObserver = $objectManager->create(\Magento\Framework\App\Cron::class, ['parameters' => $params]);
         $cronObserver->launch();
         $output->writeln('<info>' . 'Ran jobs by schedule.' . '</info>');
     }

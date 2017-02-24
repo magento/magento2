@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,13 +33,13 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->visibilityMock = $this->getMock('Magento\Catalog\Model\Product\Visibility', [], [], '', false);
-        $this->catalogConfigMock = $this->getMock('\Magento\Catalog\Model\Config', [], [], '', false);
+        $this->visibilityMock = $this->getMock(\Magento\Catalog\Model\Product\Visibility::class, [], [], '', false);
+        $this->catalogConfigMock = $this->getMock(\Magento\Catalog\Model\Config::class, [], [], '', false);
 
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->model = $objectManager->getObject(
-            'Magento\Catalog\Model\Layer\Search\CollectionFilter',
+            \Magento\Catalog\Model\Layer\Search\CollectionFilter::class,
             [
                 'catalogConfig' => $this->catalogConfigMock,
                 'storeManager' => $this->storeManagerMock,
@@ -55,7 +55,7 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
     public function testFilter()
     {
         $collectionMock = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Product\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
                 'addAttributeToSelect', 'setStore', 'addMinimalPrice', 'addFinalPrice',
                 'addTaxPercents', 'addStoreFilter', 'addUrlRewrite', 'setVisibility'
@@ -64,7 +64,7 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $categoryMock = $this->getMock('\Magento\Catalog\Model\Category', [], [], '', false);
+        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
 
         $this->catalogConfigMock->expects($this->once())->method('getProductAttributes');
         $this->visibilityMock->expects($this->once())->method('getVisibleInSearchIds');

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model;
@@ -42,22 +42,22 @@ class DesignConfigRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->configStorage = $this->getMock('Magento\Theme\Model\Design\Config\Storage', [], [], '', false);
+        $this->configStorage = $this->getMock(\Magento\Theme\Model\Design\Config\Storage::class, [], [], '', false);
         $this->reinitableConfig = $this->getMockForAbstractClass(
-            'Magento\Framework\App\Config\ReinitableConfigInterface',
+            \Magento\Framework\App\Config\ReinitableConfigInterface::class,
             [],
             '',
             false
         );
-        $this->indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', [], [], '', false);
+        $this->indexerRegistry = $this->getMock(\Magento\Framework\Indexer\IndexerRegistry::class, [], [], '', false);
         $this->designConfig = $this->getMockForAbstractClass(
-            'Magento\Theme\Api\Data\DesignConfigInterface',
+            \Magento\Theme\Api\Data\DesignConfigInterface::class,
             [],
             '',
             false
         );
         $this->designExtension = $this->getMockForAbstractClass(
-            'Magento\Theme\Api\Data\DesignConfigExtensionInterface',
+            \Magento\Theme\Api\Data\DesignConfigExtensionInterface::class,
             [],
             '',
             false,
@@ -66,13 +66,13 @@ class DesignConfigRepositoryTest extends \PHPUnit_Framework_TestCase
             ['getDesignConfigData']
         );
         $this->designConfigData = $this->getMockForAbstractClass(
-            'Magento\Theme\Api\Data\DesignConfigDataInterface',
+            \Magento\Theme\Api\Data\DesignConfigDataInterface::class,
             [],
             '',
             false
         );
         $this->indexer = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\IndexerInterface',
+            \Magento\Framework\Indexer\IndexerInterface::class,
             [],
             '',
             false

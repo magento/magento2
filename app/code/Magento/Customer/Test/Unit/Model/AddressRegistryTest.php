@@ -2,7 +2,7 @@
 /**
  * Unit test for converter \Magento\Customer\Model\AddressRegistry
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
@@ -21,7 +21,7 @@ class AddressRegistryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->addressFactory = $this->getMockBuilder('\Magento\Customer\Model\AddressFactory')
+        $this->addressFactory = $this->getMockBuilder(\Magento\Customer\Model\AddressFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -31,7 +31,7 @@ class AddressRegistryTest extends \PHPUnit_Framework_TestCase
     public function testRetrieve()
     {
         $addressId = 1;
-        $address = $this->getMockBuilder('\Magento\Customer\Model\Address')
+        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getId', '__wakeup'])
             ->getMock();
@@ -57,7 +57,7 @@ class AddressRegistryTest extends \PHPUnit_Framework_TestCase
     public function testRetrieveException()
     {
         $addressId = 1;
-        $address = $this->getMockBuilder('\Magento\Customer\Model\Address')
+        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->setMethods(['load', 'getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -77,7 +77,7 @@ class AddressRegistryTest extends \PHPUnit_Framework_TestCase
     public function testRemove()
     {
         $addressId = 1;
-        $address = $this->getMockBuilder('\Magento\Customer\Model\Address')
+        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getId', '__wakeup'])
             ->getMock();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
@@ -49,29 +49,29 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
-        $this->messageManager = $this->getMockForAbstractClass('Magento\Framework\Message\ManagerInterface');
-        $this->messageCollection = $this->getMock('Magento\Framework\Message\Collection', [], [], '', false);
-        $this->message = $this->getMockForAbstractClass('Magento\Framework\Message\MessageInterface');
-        $this->cmsPage = $this->getMock('Magento\Cms\Model\Page', [], [], '', false);
+        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
+        $this->messageManager = $this->getMockForAbstractClass(\Magento\Framework\Message\ManagerInterface::class);
+        $this->messageCollection = $this->getMock(\Magento\Framework\Message\Collection::class, [], [], '', false);
+        $this->message = $this->getMockForAbstractClass(\Magento\Framework\Message\MessageInterface::class);
+        $this->cmsPage = $this->getMock(\Magento\Cms\Model\Page::class, [], [], '', false);
         $this->context = $helper->getObject(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             [
                 'request' => $this->request,
                 'messageManager' => $this->messageManager
             ]
         );
         $this->dataProcessor = $this->getMock(
-            'Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor',
+            \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor::class,
             [],
             [],
             '',
             false
         );
-        $this->pageRepository = $this->getMockForAbstractClass('Magento\Cms\Api\PageRepositoryInterface');
-        $this->resultJson = $this->getMock('Magento\Framework\Controller\Result\Json', [], [], '', false);
+        $this->pageRepository = $this->getMockForAbstractClass(\Magento\Cms\Api\PageRepositoryInterface::class);
+        $this->resultJson = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
         $this->jsonFactory = $this->getMock(
-            'Magento\Framework\Controller\Result\JsonFactory',
+            \Magento\Framework\Controller\Result\JsonFactory::class,
             ['create'],
             [],
             '',

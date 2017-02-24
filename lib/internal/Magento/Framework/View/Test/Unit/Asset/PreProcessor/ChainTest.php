@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
+        $this->asset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
         $this->asset->expects($this->once())->method('getContentType')->will($this->returnValue('assetType'));
         $this->object = new Chain($this->asset, 'origContent', 'origType', 'origPath');
     }

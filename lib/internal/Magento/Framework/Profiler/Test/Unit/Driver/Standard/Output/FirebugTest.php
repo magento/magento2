@@ -2,7 +2,7 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard\Output\Firebug
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard\Output;
@@ -27,15 +27,15 @@ class FirebugTest extends \PHPUnit_Framework_TestCase
     public function testGetAndSetRequest()
     {
         $this->assertInstanceOf('Zend_Controller_Request_Abstract', $this->_output->getRequest());
-        $request = $this->getMock('Zend_Controller_Request_Abstract');
+        $request = $this->getMock(\Zend_Controller_Request_Abstract::class);
         $this->_output->setRequest($request);
         $this->assertSame($request, $this->_output->getRequest());
     }
 
     public function testGetAndSetResponse()
     {
-        $this->assertInstanceOf('Zend\Http\PhpEnvironment\Response', $this->_output->getResponse());
-        $response = $this->getMock('Magento\Framework\App\Response\Http', null, [], '', false);
+        $this->assertInstanceOf(\Zend\Http\PhpEnvironment\Response::class, $this->_output->getResponse());
+        $response = $this->getMock(\Magento\Framework\App\Response\Http::class, null, [], '', false);
         $this->_output->setResponse($response);
         $this->assertSame($response, $this->_output->getResponse());
     }

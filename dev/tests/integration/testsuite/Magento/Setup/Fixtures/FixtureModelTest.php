@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,6 +27,14 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
 
     public static function setUpBeforeClass()
     {
+        $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getDbInstance();
+        if (!$db->isDbDumpExists()) {
+            throw new \LogicException('DB dump does not exist.');
+        }
+        $db->restoreFromDbDump();
+
         self::$_generatorWorkingDir = realpath(__DIR__ . '/../../../../../../../setup/src/Magento/Setup/Fixtures');
         copy(
             self::$_generatorWorkingDir . '/tax_rates.csv',
@@ -41,8 +49,10 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
 
     public function testTest()
     {
-        $reindexCommand = Bootstrap::getObjectManager()->get('Magento\Indexer\Console\Command\IndexerReindexCommand');
-        $parser = Bootstrap::getObjectManager()->get('Magento\Framework\Xml\Parser');
+        $reindexCommand = Bootstrap::getObjectManager()->get(
+            \Magento\Indexer\Console\Command\IndexerReindexCommand::class
+        );
+        $parser = Bootstrap::getObjectManager()->get(\Magento\Framework\Xml\Parser::class);
         $itfApplication = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()->getApplication();
         $model = new FixtureModel($reindexCommand, $parser, $itfApplication->getInitParams());
         $model->loadConfig(__DIR__ . '/_files/small.xml');
@@ -62,46 +72,12 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
             self::$_generatorWorkingDir . '/tax_rates.csv'
         );
         /** @var $appCache \Magento\Framework\App\Cache */
-        $appCache = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache');
+        $appCache = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache::class);
         $appCache->clean(
             [
                 \Magento\Eav\Model\Cache\Type::CACHE_TAG,
                 \Magento\Eav\Model\Entity\Attribute::CACHE_TAG,
             ]
         );
-    }
-
-    /**
-     * Apply fixture file
-     *
-     * @param string $fixtureFilename
-     */
-    public function applyFixture($fixtureFilename)
-    {
-        require $fixtureFilename;
-    }
-
-    /**
-     * Get object manager
-     *
-     * @return \Magento\Framework\ObjectManagerInterface
-     */
-    public function getObjectManager()
-    {
-        if (!$this->_objectManager) {
-            $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        }
-        return $this->_objectManager;
-    }
-
-    /**
-     * Reset object manager
-     *
-     * @return \Magento\Framework\ObjectManagerInterface
-     */
-    public function resetObjectManager()
-    {
-        $this->_objectManager = null;
-        return $this;
     }
 }

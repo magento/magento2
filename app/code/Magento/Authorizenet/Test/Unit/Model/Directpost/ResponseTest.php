@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Model\Directpost;
@@ -18,7 +18,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->responseModel = $objectManager->getObject('Magento\Authorizenet\Model\Directpost\Response');
+        $this->responseModel = $objectManager->getObject(\Magento\Authorizenet\Model\Directpost\Response::class);
     }
 
     /**

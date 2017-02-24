@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
@@ -113,7 +113,7 @@ class History extends \Magento\Framework\View\Element\Template
         parent::_prepareLayout();
         if ($this->getOrders()) {
             $pager = $this->getLayout()->createBlock(
-                'Magento\Theme\Block\Html\Pager',
+                \Magento\Theme\Block\Html\Pager::class,
                 'sales.order.history.pager'
             )->setCollection(
                 $this->getOrders()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml;
@@ -27,7 +27,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionAndNew()
     {
         $this->getRequest()->setPostValue(['back' => 'new']);
-        $repository = $this->_objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get('simple');
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/new/'));
@@ -43,7 +43,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     public function testSaveActionAndDuplicate()
     {
         $this->getRequest()->setPostValue(['back' => 'duplicate']);
-        $repository = $this->_objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get('simple');
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/'));
@@ -100,7 +100,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
      */
     public function testEditAction()
     {
-        $repository = $this->_objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $repository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get('simple');
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $body = $this->getResponse()->getBody();

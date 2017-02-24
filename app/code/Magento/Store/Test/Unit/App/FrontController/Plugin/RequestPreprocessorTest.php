@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\App\FrontController\Plugin;
@@ -54,17 +54,17 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $this->_requestMock = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->_storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $this->closureMock = function () {
             return 'Expected';
         };
-        $this->_storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->_urlMock = $this->getMock('\Magento\Framework\Url', [], [], '', false);
-        $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->subjectMock = $this->getMock('Magento\Framework\App\FrontController', [], [], '', false);
+        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
+        $this->_urlMock = $this->getMock(\Magento\Framework\Url::class, [], [], '', false);
+        $this->_scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->subjectMock = $this->getMock(\Magento\Framework\App\FrontController::class, [], [], '', false);
 
-        $this->baseUrlChecker = $this->getMock('Magento\Store\Model\BaseUrlChecker', [], [], '', false);
+        $this->baseUrlChecker = $this->getMock(\Magento\Store\Model\BaseUrlChecker::class, [], [], '', false);
         $this->baseUrlChecker->expects($this->any())
             ->method('execute')
             ->willReturn(true);
@@ -73,7 +73,7 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
             $this->_storeManagerMock,
             $this->_urlMock,
             $this->_scopeConfigMock,
-            $this->getMock('\Magento\Framework\App\ResponseFactory', [], [], '', false)
+            $this->getMock(\Magento\Framework\App\ResponseFactory::class, [], [], '', false)
         );
 
         $modelProperty = (new \ReflectionClass(get_class($this->_model)))

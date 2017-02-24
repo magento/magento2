@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -16,7 +16,7 @@ class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/products/';
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -53,7 +53,7 @@ class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
             ]
         );
         /** @var \Magento\Catalog\Model\ProductLink\Management $linkManagement */
-        $linkManagement = $this->objectManager->create('Magento\Catalog\Api\ProductLinkManagementInterface');
+        $linkManagement = $this->objectManager->create(\Magento\Catalog\Api\ProductLinkManagementInterface::class);
         $linkedProducts = $linkManagement->getLinkedItemsByType($productSku, $linkType);
         $this->assertCount(1, $linkedProducts);
         /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $product */
@@ -95,7 +95,7 @@ class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
         );
 
         /** @var \Magento\Catalog\Model\ProductLink\Management $linkManagement */
-        $linkManagement = $this->objectManager->get('Magento\Catalog\Api\ProductLinkManagementInterface');
+        $linkManagement = $this->objectManager->get(\Magento\Catalog\Api\ProductLinkManagementInterface::class);
         $actual = $linkManagement->getLinkedItemsByType($productSku, $linkType);
         $this->assertCount(1, $actual, 'Invalid actual linked products count');
         $this->assertEquals(1000, $actual[0]->getPosition(), 'Product position is not updated');

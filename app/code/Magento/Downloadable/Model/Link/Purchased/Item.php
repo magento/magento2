@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Link\Purchased;
@@ -66,7 +66,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item');
+        $this->_init(\Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item::class);
         parent::_construct();
     }
 

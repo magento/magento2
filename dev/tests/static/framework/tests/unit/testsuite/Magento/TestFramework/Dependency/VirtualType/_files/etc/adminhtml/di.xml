@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="ExternalVirtualType">
+        <arguments>
+            <argument name="argument2" xsi:type="object">Magento\External\Virtual</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Internal\Some\Class">
+        <arguments>
+            <argument name="argument1" xsi:type="object">Magento\ExternalModule4\Some\Argument4</argument>
+        </arguments>
+    </type>
+    <type name="MyVirtualType">
+        <arguments>
+            <argument name="argument1" xsi:type="object">Magento\External2\Class2</argument>
+        </arguments>
+    </type>
+    <virtualType name="MyVirtualType2" type="ExternalVirtualType">
+        <arguments>
+            <argument name="argument1" xsi:type="object">Magento\External2\Class2</argument>
+        </arguments>
+    </virtualType>
+</config>

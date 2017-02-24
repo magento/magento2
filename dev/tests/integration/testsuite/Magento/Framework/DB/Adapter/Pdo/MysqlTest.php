@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@
 namespace Magento\Framework\DB\Adapter\Pdo;
 
 use Magento\Framework\App\ResourceConnection;
+use Zend_Db_Statement_Exception;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,6 +33,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         restore_error_handler();
     }
 
+
     /**
      * Test lost connection re-initializing
      *
@@ -51,7 +53,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             // Sleep for time greater than wait_timeout and try to perform query
             sleep($minWaitTimeout + 1);
             $result = $this->_executeQuery('SELECT 1');
-            $this->assertInstanceOf('Magento\Framework\DB\Statement\Pdo\Mysql', $result);
+            $this->assertInstanceOf(\Magento\Framework\DB\Statement\Pdo\Mysql::class, $result);
             // Restore wait_timeout
             $this->_setWaitTimeout($defaultWaitTimeout);
             $this->assertEquals(
@@ -125,9 +127,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     protected function _getConnection()
     {
         if (is_null($this->_connection)) {
-            /** @var $coreResource \Magento\Framework\App\ResourceConnection */
+            /** @var $coreResource ResourceConnection */
             $coreResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Framework\App\ResourceConnection');
+                ->get(ResourceConnection::class);
             $this->_connection = $coreResource->getConnection();
         }
         return $this->_connection;

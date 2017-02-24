@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query;
@@ -27,23 +27,23 @@ class QueryContainerTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->matchContainerFactory = $this->getMockBuilder(
-            'Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory'
+            \Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestQuery = $this->getMockBuilder('Magento\Framework\Search\Request\QueryInterface')
+        $this->requestQuery = $this->getMockBuilder(\Magento\Framework\Search\Request\QueryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->queryContainer = $helper->getObject(
-            'Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer',
+            \Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer::class,
             [
                 'matchContainerFactory' => $this->matchContainerFactory,
             ]

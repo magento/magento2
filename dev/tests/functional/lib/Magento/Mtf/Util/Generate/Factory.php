@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,13 +37,13 @@ class Factory extends AbstractGenerate
      */
     public function launch()
     {
-        $this->objectManager->create('Magento\Mtf\Util\Generate\Factory\Block')->launch();
-        $this->objectManager->create('Magento\Mtf\Util\Generate\Factory\Fixture')->launch();
-        $this->objectManager->create('Magento\Mtf\Util\Generate\Factory\Handler')->launch();
-        $this->objectManager->create('Magento\Mtf\Util\Generate\Factory\Page')->launch();
-        $this->objectManager->create('Magento\Mtf\Util\Generate\Factory\Repository')->launch();
+        $this->objectManager->create(\Magento\Mtf\Util\Generate\Factory\Block::class)->launch();
+        $this->objectManager->create(\Magento\Mtf\Util\Generate\Factory\Fixture::class)->launch();
+        $this->objectManager->create(\Magento\Mtf\Util\Generate\Factory\Handler::class)->launch();
+        $this->objectManager->create(\Magento\Mtf\Util\Generate\Factory\Page::class)->launch();
+        $this->objectManager->create(\Magento\Mtf\Util\Generate\Factory\Repository::class)->launch();
 
-        return $this->objectManager->get('Magento\Framework\App\ResponseInterface');
+        return $this->objectManager->get(\Magento\Framework\App\ResponseInterface::class);
     }
 
     /**

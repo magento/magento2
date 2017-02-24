@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
@@ -16,7 +16,7 @@ class UploadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
     public function execute()
     {
         /** @var $serviceModel \Magento\Theme\Model\Uploader\Service */
-        $serviceModel = $this->_objectManager->get('Magento\Theme\Model\Uploader\Service');
+        $serviceModel = $this->_objectManager->get(\Magento\Theme\Model\Uploader\Service::class);
         try {
             $cssFileContent = $serviceModel->uploadCssFile('css_file_uploader');
             $result = ['error' => false, 'content' => $cssFileContent['content']];
@@ -24,10 +24,10 @@ class UploadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $result = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => __('We can\'t upload the CSS file right now.')];
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
         );
     }
 }

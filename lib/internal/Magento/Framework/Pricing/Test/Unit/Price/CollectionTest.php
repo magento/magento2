@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -56,9 +56,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->saleableItemMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
-        $this->priceMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\Price\PriceInterface');
-        $this->factoryMock = $this->getMock('Magento\Framework\Pricing\Price\Factory', [], [], '', false);
+        $this->saleableItemMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
+        $this->priceMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $this->factoryMock = $this->getMock(\Magento\Framework\Pricing\Price\Factory::class, [], [], '', false);
 
         $this->collection = new Collection(
             $this->saleableItemMock,

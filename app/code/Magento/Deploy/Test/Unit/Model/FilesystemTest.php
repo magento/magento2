@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Model;
@@ -148,7 +148,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $usedLocales = array_unique(
             array_merge($storeLocales, $adminUserInterfaceLocales)
         );
-        $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy '
+        $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
             . implode(' ', $usedLocales);
         $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
         $this->shellMock->expects($this->at(0))

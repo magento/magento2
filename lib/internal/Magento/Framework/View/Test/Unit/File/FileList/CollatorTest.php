@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,7 +53,7 @@ class CollatorTest extends \PHPUnit_Framework_TestCase
     {
         $theme = null;
         if ($themeFullPath !== null) {
-            $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+            $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
             $theme->expects($this->any())->method('getFullPath')->will($this->returnValue($themeFullPath));
         }
         return new \Magento\Framework\View\File($filename, $module, $theme);

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -68,6 +68,7 @@ define(
                      */
                     onReady: function (checkout) {
                         braintree.checkout = checkout;
+                        braintree.onReady();
                     },
 
                     /**
@@ -198,6 +199,7 @@ define(
                     onReady: function (checkout) {
                         braintree.checkout = checkout;
                         this.additionalData['device_data'] = checkout.deviceData;
+                        braintree.onReady();
                     }
                 };
 

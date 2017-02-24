@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
@@ -647,12 +647,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     public function toHtml()
     {
         $this->_eventManager->dispatch('view_block_abstract_to_html_before', ['block' => $this]);
-        if ($this->_scopeConfig->getValue(
-            'advanced/modules_disable_output/' . $this->getModuleName(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )) {
-            return '';
-        }
+        $this->getModuleName();
 
         $html = $this->_loadCache();
         if ($html === false) {
@@ -669,6 +664,18 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             }
         }
         $html = $this->_afterToHtml($html);
+
+        /** @var \Magento\Framework\DataObject */
+        $transportObject = new \Magento\Framework\DataObject(
+            [
+                'html' => $html,
+            ]
+        );
+        $this->_eventManager->dispatch('view_block_abstract_to_html_after', [
+            'block' => $this,
+            'transport' => $transportObject
+        ]);
+        $html = $transportObject->getHtml();
 
         return $html;
     }
@@ -865,7 +872,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
-     * Escape html entities
+     * Escape HTML entities
      *
      * @param string|array $data
      * @param array|null $allowedTags
@@ -874,6 +881,40 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     public function escapeHtml($data, $allowedTags = null)
     {
         return $this->_escaper->escapeHtml($data, $allowedTags);
+    }
+
+    /**
+     * Escape string for the JavaScript context
+     *
+     * @param string $string
+     * @return string
+     */
+    public function escapeJs($string)
+    {
+        return $this->_escaper->escapeJs($string);
+    }
+
+    /**
+     * Escape a string for the HTML attribute context
+     *
+     * @param string $string
+     * @param boolean $escapeSingleQuote
+     * @return string
+     */
+    public function escapeHtmlAttr($string, $escapeSingleQuote = true)
+    {
+        return $this->_escaper->escapeHtmlAttr($string, $escapeSingleQuote);
+    }
+
+    /**
+     * Escape string for the CSS context
+     *
+     * @param string $string
+     * @return string
+     */
+    public function escapeCss($string)
+    {
+        return $this->_escaper->escapeCss($string);
     }
 
     /**
@@ -893,14 +934,14 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
-     * Escape html entities in url
+     * Escape URL
      *
-     * @param string $data
+     * @param string $string
      * @return string
      */
-    public function escapeUrl($data)
+    public function escapeUrl($string)
     {
-        return $this->_escaper->escapeUrl($data);
+        return $this->_escaper->escapeUrl($string);
     }
 
     /**
@@ -908,6 +949,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $data
      * @return string
+     * @deprecated
      */
     public function escapeXssInUrl($data)
     {
@@ -922,6 +964,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param  string $data
      * @param  bool $addSlashes
      * @return string
+     * @deprecated
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -934,6 +977,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|array $data
      * @param string $quote
      * @return string|array
+     * @deprecated
      */
     public function escapeJsQuote($data, $quote = '\'')
     {

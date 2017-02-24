@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,17 +32,17 @@ class CanUseForCurrencyTest extends \PHPUnit_Framework_TestCase
     public function testIsApplicable($expectation)
     {
         $paymentMethod = $this->getMockBuilder(
-            '\Magento\Payment\Model\MethodInterface'
+            \Magento\Payment\Model\MethodInterface::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $paymentMethod->expects($this->once())->method('canUseForCurrency')->with(
             self::EXPECTED_CURRENCY_CODE
         )->will($this->returnValue($expectation));
 
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')->disableOriginalConstructor()->setMethods(
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
         $store = $this->getMockBuilder(
-            'Magento\Store\Model\Store'
+            \Magento\Store\Model\Store::class
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $store->expects($this->once())->method('getBaseCurrencyCode')->will(
             $this->returnValue(self::EXPECTED_CURRENCY_CODE)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,20 +19,20 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $reindexCommandMock = $this->getMock(
-            '\Magento\Indexer\Console\Command\IndexerReindexCommand',
+            \Magento\Indexer\Console\Command\IndexerReindexCommand::class,
             [],
             [],
             '',
             false
         );
-        $fileParserMock = $this->getMock('\Magento\Framework\Xml\Parser', [], [], '', false);
+        $fileParserMock = $this->getMock(\Magento\Framework\Xml\Parser::class, [], [], '', false);
 
         $this->model = new FixtureModel($reindexCommandMock, $fileParserMock);
     }
 
     public function testReindex()
     {
-        $outputMock = $this->getMock('\Symfony\Component\Console\Output\OutputInterface', [], [], '', false);
+        $outputMock = $this->getMock(\Symfony\Component\Console\Output\OutputInterface::class, [], [], '', false);
         $this->model->reindex($outputMock);
     }
 
@@ -48,18 +48,26 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase
     public function testLoadConfig()
     {
         $reindexCommandMock = $this->getMock(
-            '\Magento\Indexer\Console\Command\IndexerReindexCommand',
+            \Magento\Indexer\Console\Command\IndexerReindexCommand::class,
             [],
             [],
             '',
             false
         );
 
-        $fileParserMock = $this->getMock('\Magento\Framework\Xml\Parser', ['load', 'xmlToArray'], [], '', false);
-        $fileParserMock->expects($this->once())->method('xmlToArray')->willReturn(
+        $fileParserMock = $this->getMock(\Magento\Framework\Xml\Parser::class, ['getDom', 'xmlToArray'], [], '', false);
+        $fileParserMock->expects($this->exactly(2))->method('xmlToArray')->willReturn(
             ['config' => [ 'profile' => ['some_key' => 'some_value']]]
         );
-        $fileParserMock->expects($this->once())->method('load')->with('config.file')->willReturn($fileParserMock);
+
+        $domMock = $this->getMock(\DOMDocument::class, ['load', 'xinclude'], [], '', false);
+        $domMock->expects($this->once())->method('load')->with('config.file')->willReturn(
+            $fileParserMock->xmlToArray()
+        );
+        $domMock->expects($this->once())->method('xinclude');
+
+        $fileParserMock->expects($this->exactly(2))->method('getDom')->willReturn($domMock);
+
         $this->model = new FixtureModel($reindexCommandMock, $fileParserMock);
         $this->model->loadConfig('config.file');
         $this->assertSame('some_value', $this->model->getValue('some_key'));

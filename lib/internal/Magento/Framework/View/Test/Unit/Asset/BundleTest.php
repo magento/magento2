@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,13 +38,13 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundleConfigMock = $this->getMockBuilder('Magento\Framework\View\Asset\Bundle\ConfigInterface')
+        $this->bundleConfigMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Bundle\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+        $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -68,15 +68,15 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->withConsecutive(
                 ['onefile.js'],
                 ['onefile.js'],
-                ['/js/bundle/bundle0.js']
+                ['path-to-theme/js/bundle/bundle0.js']
             )
             ->willReturnOnConsecutiveCalls(
                 'onefile.min.js',
                 'onefile.min.js',
-                '/js/bundle/bundle0.min.js'
+                'path-to-theme/js/bundle/bundle0.min.js'
             );
 
-        $contextMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
+        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock
@@ -91,8 +91,12 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getLocale')
             ->willReturn('locale');
+        $contextMock
+            ->expects($this->any())
+            ->method('getPath')
+            ->willReturn('path-to-theme');
 
-        $assetMock = $this->getMockBuilder('Magento\Framework\View\Asset\LocalInterface')
+        $assetMock = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
             ->setMethods(['getContentType', 'getContext'])
             ->getMockForAbstractClass();
         $assetMock
@@ -108,12 +112,16 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->method('getFilePath')
             ->willReturn('onefile.js');
 
-        $writeMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $writeMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMockForAbstractClass();
         $writeMock
             ->expects($this->once())
+            ->method('delete')
+            ->with('path-to-theme' . DIRECTORY_SEPARATOR . \Magento\Framework\View\Asset\Bundle\Manager::BUNDLE_JS_DIR);
+        $writeMock
+            ->expects($this->once())
             ->method('writeFile')
-            ->with('/js/bundle/bundle0.min.js', $this->stringContains('onefile.min.js'));
+            ->with('path-to-theme/js/bundle/bundle0.min.js', $this->stringContains('onefile.min.js'));
 
         $this->filesystemMock
             ->expects($this->any())

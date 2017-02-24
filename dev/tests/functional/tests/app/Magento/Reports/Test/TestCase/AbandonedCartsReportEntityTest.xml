@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -10,13 +10,14 @@
         <variation name="AbandonedCartsReportEntityTestVariation1">
             <data name="description" xsi:type="string">add product to cart as registered user and check product in Report</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <constraint name="Magento\Reports\Test\Constraint\AssertAbandonedCartCustomerInfoResult" />
         </variation>
         <variation name="AbandonedCartsReportEntityTestVariation2">
             <data name="description" xsi:type="string">add two products to cart as registered user and check product in Report</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductSimple::product_100_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
+            <data name="products/1" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <constraint name="Magento\Reports\Test\Constraint\AssertAbandonedCartCustomerInfoResult" />
         </variation>
     </testCase>

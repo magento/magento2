@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Wysiwyg\Files;
@@ -15,11 +15,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->view = $this->getMock('\Magento\Framework\App\ViewInterface', [], [], '', false);
+        $this->view = $this->getMock(\Magento\Framework\App\ViewInterface::class, [], [], '', false);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->controller = $helper->getObject(
-            'Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\Index',
+            \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\Index::class,
             [
                 'view' => $this->view,
             ]

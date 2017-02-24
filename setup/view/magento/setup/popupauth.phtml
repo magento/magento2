@@ -1,107 +1,105 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
 
-<script type="text/ng-template" id="authDialog">
-    <div class="modals-wrapper">
-        <aside class="modal-popup modal-connect-signin _show" data-role="modal">
-            <div class="modal-inner-wrap">
-                <header class="modal-header">
-                    <button ng-click="closeThisDialog()" class="action-close" data-role="closeBtn" type="button">
-                        <span>Close</span>
-                    </button>
-                </header>
-                <div class="modal-content" data-role="content">
-                    <div class="sync-login-wrap">
-                        <div class="login-header">
-                            <img class="logo-img"
-                                 src="<?php echo $this->basePath();?>/pub/images//magento-logo.svg" alt="Magento"/>
-                            <span>Marketplace</span>
-                        </div>
-                        <div class="messages">
-                            <div ng-show="saveAuthJson.result.success === false && saveAuthJson.result !== undefined"
-                                 class="message message-error error">
+<div class="modals-wrapper">
+    <aside class="modal-popup modal-connect-signin _show" data-role="modal">
+        <div class="modal-inner-wrap">
+            <header class="modal-header">
+                <button ng-click="closeThisDialog()" class="action-close" data-role="closeBtn" type="button">
+                    <span>Close</span>
+                </button>
+            </header>
+            <div class="modal-content" data-role="content">
+                <div class="sync-login-wrap">
+                    <div class="login-header">
+                        <img class="logo-img"
+                             src="<?php echo $this->basePath();?>/pub/images//magento-logo.svg" alt="Magento"/>
+                        <span>Marketplace</span>
+                    </div>
+                    <div class="messages">
+                        <div ng-show="saveAuthJson.result.success === false && saveAuthJson.result !== undefined"
+                             class="message message-error error">
                             <span class="message-text">
                                 {{saveAuthJson.result.message}}
                             </span>
-                            </div>
                         </div>
+                    </div>
 
-                        <form
-                            name="auth"
-                            role="form"
-                            >
-                            <fieldset class="fieldset">
-                                <legend ng-show="errors==false" class="legend">
-                                    <span>To upgrade or install purchases, enter your access keys</span>
-                                </legend>
-                                <br/>
-                                <h4>Need to find your keys?</h4>
-                                <ol class="sync-login-steps">
-                                    <li>Go to your
-                                        <a href="https://marketplace.magento.com"
-                                           target="_blank">Magento Marketplace account page</a>.</li>
-                                    <li>On the "Access keys" page, copy your public and private keys.</li>
-                                    <li>Enter keys below:</li>
-                                </ol>
-                                <div class="row form-row">
-                                    <div class="col-m-12">
-                                        <label for="username" class="form-label required">Public Access Key</label>
-                                    </div>
-                                    <div class="col-m-12">
-                                        <input id="username"
-                                               class="form-el-input"
-                                               type="text"
-                                               name="username"
-                                               ng-model="user.username"
-                                               ng-maxlength="40"
-                                               ng-class="{ 'invalid' : (auth.username.$error.required
+                    <form
+                        name="auth"
+                        role="form"
+                    >
+                        <fieldset class="fieldset">
+                            <legend ng-show="errors==false" class="legend">
+                                <span>To upgrade or install purchases, enter your access keys</span>
+                            </legend>
+                            <br/>
+                            <h4>Need to find your keys?</h4>
+                            <ol class="sync-login-steps">
+                                <li>Go to your
+                                    <a href="https://marketplace.magento.com"
+                                       target="_blank">Magento Marketplace account page</a>.</li>
+                                <li>On the "Access keys" page, copy your public and private keys.</li>
+                                <li>Enter keys below:</li>
+                            </ol>
+                            <div class="row form-row">
+                                <div class="col-m-12">
+                                    <label for="username" class="form-label required">Public Access Key</label>
+                                </div>
+                                <div class="col-m-12">
+                                    <input id="username"
+                                           class="form-el-input"
+                                           type="text"
+                                           name="username"
+                                           ng-model="user.username"
+                                           ng-maxlength="40"
+                                           ng-class="{ 'invalid' : (auth.username.$error.required
                                                && !auth.username.$pristine)
                                                || (auth.username.$error.required && user.submitted) }"
-                                               autofocus
-                                               required
-                                            >
-                                        <div class="error-container">
-                                            This is a required field.
-                                        </div>
+                                           autofocus
+                                           required
+                                    >
+                                    <div class="error-container">
+                                        This is a required field.
                                     </div>
                                 </div>
-                                <div class="row form-row">
-                                    <div class="col-m-12">
-                                        <label for="token" class="form-label required">Private Access Key</label>
-                                    </div>
-                                    <div class="col-m-12">
-                                        <input id="password"
-                                               class="form-el-input"
-                                               type="password"
-                                               name="password"
-                                               ng-model="user.password"
-                                               ng-maxlength="40"
-                                               ng-class="{ 'invalid' : (auth.password.$error.required
+                            </div>
+                            <div class="row form-row">
+                                <div class="col-m-12">
+                                    <label for="token" class="form-label required">Private Access Key</label>
+                                </div>
+                                <div class="col-m-12">
+                                    <input id="password"
+                                           class="form-el-input"
+                                           type="password"
+                                           name="password"
+                                           ng-model="user.password"
+                                           ng-maxlength="40"
+                                           ng-class="{ 'invalid' : (auth.password.$error.required
                                                && !auth.password.$pristine)
                                                || (auth.password.$error.required && user.submitted) }"
-                                               required
-                                            >
-                                        <div class="error-container">
-                                            This is a required field.
-                                        </div>
+                                           required
+                                    >
+                                    <div class="error-container">
+                                        This is a required field.
                                     </div>
                                 </div>
-                                <div class="form-actions">
-                                    <div class="actions">
-                                        <button ng-click="saveAuthJson()" class="btn btn-large btn-prime">
-                                            <span>Sign in</span>
-                                        </button>
-                                    </div>
+                            </div>
+                            <div class="form-actions">
+                                <div class="actions">
+                                    <button ng-click="saveAuthJson()" class="btn btn-large btn-prime">
+                                        <span>Sign in</span>
+                                    </button>
                                 </div>
-                            </fieldset>
-                        </form>
-                    </div>
+                            </div>
+                        </fieldset>
+                    </form>
                 </div>
             </div>
-        </aside>
-    </div>
-</script>
+        </div>
+    </aside>
+</div>
