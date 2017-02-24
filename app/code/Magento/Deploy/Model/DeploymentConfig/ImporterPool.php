@@ -3,16 +3,17 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\DeploymentConfig;
+namespace Magento\Deploy\Model\DeploymentConfig;
 
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Phrase;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 
 /**
  * Pool of all deployment configuration importers.
  */
-class ConfigImporterPool
+class ImporterPool
 {
     /**
      * List of sections and their importers.

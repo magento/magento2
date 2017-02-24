@@ -6,29 +6,17 @@
 namespace Magento\Deploy\Test\Unit\Console\Command\App;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
-use Magento\Framework\App\DeploymentConfig\ConfigHashManager;
-use Magento\Framework\App\DeploymentConfig\ConfigImporterPool;
-use Magento\Framework\App\DeploymentConfig;
+use Magento\Deploy\Model\DeploymentConfig\Importer;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 
 class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ConfigHashManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Importer|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $configHashManagerMock;
-
-    /**
-     * @var ConfigImporterPool|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $configImporterPoolMock;
-
-    /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfigMock;
+    private $importerMock;
 
     /**
      * @var CommandTester
@@ -40,101 +28,40 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->configHashManagerMock = $this->getMockBuilder(ConfigHashManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configImporterPoolMock = $this->getMockBuilder(ConfigImporterPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+        $this->importerMock = $this->getMockBuilder(Importer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $configImportCommand = new ConfigImportCommand(
-            $this->configHashManagerMock,
-            $this->configImporterPoolMock,
-            $this->deploymentConfigMock
+            $this->importerMock
         );
 
         $this->commandTester = new CommandTester($configImportCommand);
     }
 
     /**
-     * @param array $importers
-     * @param bool $isHashValid
-     * @return void
-     * @dataProvider executeNothingImportDataProvider
-     */
-    public function testExecuteNothingImport($importers, $isHashValid)
-    {
-        $this->commandTester->execute([]);
-        $this->configImporterPoolMock->expects($this->once())
-            ->method('getImporters')
-            ->willReturn($importers);
-        $this->configHashManagerMock->expects($this->any())
-            ->method('isHashValid')
-            ->willReturn($isHashValid);
-
-        $this->assertSame(Cli::RETURN_SUCCESS, $this->commandTester->execute([]));
-        $this->assertContains('Start import:', $this->commandTester->getDisplay());
-        $this->assertContains('Nothing to import', $this->commandTester->getDisplay());
-    }
-
-    /**
-     * @return array
-     */
-    public function executeNothingImportDataProvider()
-    {
-        return [
-            [
-                'importers' => [],
-                'isHashValid' => true,
-            ],
-            [
-                'importers' => [],
-                'isHashValid' => false,
-            ],
-            [
-                'importers' => ['test' => 'test'],
-                'isHashValid' => true,
-            ],
-        ];
-    }
-
-    /**
      * @return void
      */
-    public function testExecuteWithImport()
+    public function testExecute()
     {
-        $section = 'testSection';
-        $data = ['someField' => 'some data'];
-        $messages = ['First message', 'Second message'];
-
-        /** @var ImporterInterface|\PHPUnit_Framework_MockObject_MockObject $importerMock */
-        $importerMock = $this->getMockBuilder(ImporterInterface::class)
-            ->getMockForAbstractClass();
-        $importerMock->expects($this->once())
+        $this->importerMock->expects($this->once())
             ->method('import')
-            ->with($data)
-            ->willReturn($messages);
-
-        $this->commandTester->execute([]);
-        $this->configImporterPoolMock->expects($this->once())
-            ->method('getImporters')
-            ->willReturn([$section => $importerMock]);
-        $this->configHashManagerMock->expects($this->once())
-            ->method('isHashValid')
-            ->willReturn(false);
-        $this->configHashManagerMock->expects($this->once())
-            ->method('generateHash');
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('getConfigData')
-            ->with($section)
-            ->willReturn($data);
+            ->willReturn(['Import in progress']);
 
         $this->assertSame(Cli::RETURN_SUCCESS, $this->commandTester->execute([]));
-        $this->assertContains('Start import:', $this->commandTester->getDisplay());
-        $this->assertContains('First message', $this->commandTester->getDisplay());
-        $this->assertContains('Second message', $this->commandTester->getDisplay());
+        $this->assertContains('Import in progress', $this->commandTester->getDisplay());
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteWithException()
+    {
+        $this->importerMock->expects($this->once())
+            ->method('import')
+            ->willThrowException(new LocalizedException(__('Some error')));
+
+        $this->assertSame(Cli::RETURN_FAILURE, $this->commandTester->execute([]));
+        $this->assertContains('Some error', $this->commandTester->getDisplay());
     }
 }

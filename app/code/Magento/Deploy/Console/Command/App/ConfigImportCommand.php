@@ -5,14 +5,12 @@
  */
 namespace Magento\Deploy\Console\Command\App;
 
+use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\DeploymentConfig\ConfigHashManager;
-use Magento\Framework\App\DeploymentConfig\ConfigImporterPool;
-use Magento\Framework\App\DeploymentConfig\ImporterInterface;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
+use Magento\Deploy\Model\DeploymentConfig\Importer;
 
 /**
  * Imports data from deployment configuration files to the DB.
@@ -25,39 +23,16 @@ class ConfigImportCommand extends Command
     const COMMAND_NAME = 'app:config:import';
 
     /**
-     * The manager of deployment configuration hash.
-     *
-     * @var ConfigHashManager
+     * @var Importer
      */
-    private $configHashManager;
+    private $importer;
 
     /**
-     * Pool of all deployment configuration importers.
-     *
-     * @var ConfigImporterPool
+     * @param Importer $importer
      */
-    private $configImporterPool;
-
-    /**
-     * Application deployment configuration.
-     *
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * @param ConfigHashManager $configHashManager the manager of deployment configuration hash
-     * @param ConfigImporterPool $configImporterPool the pool of all deployment configuration importers
-     * @param DeploymentConfig $deploymentConfig the application deployment configuration
-     */
-    public function __construct(
-        ConfigHashManager $configHashManager,
-        ConfigImporterPool $configImporterPool,
-        DeploymentConfig $deploymentConfig
-    ) {
-        $this->configHashManager = $configHashManager;
-        $this->configImporterPool = $configImporterPool;
-        $this->deploymentConfig = $deploymentConfig;
+    public function __construct(Importer $importer)
+    {
+        $this->importer = $importer;
 
         parent::__construct();
     }
@@ -80,25 +55,9 @@ class ConfigImportCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $output->writeln('<info>Start import:</info>');
-
-            $importers = $this->configImporterPool->getImporters();
-
-            if (!$importers || $this->configHashManager->isHashValid()) {
-                $output->writeln('<info>Nothing to import</info>');
-            } else {
-                /**
-                 * @var string $namespace
-                 * @var ImporterInterface $importer
-                 */
-                foreach ($importers as $namespace => $importer) {
-                    $messages = $importer->import($this->deploymentConfig->getConfigData($namespace));
-                    $output->writeln($messages);
-                }
-
-                $this->configHashManager->generateHash();
-            }
-        } catch (\Exception $e) {
+            $messages = $this->importer->import();
+            $output->writeln($messages);
+        } catch (LocalizedException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 
             return Cli::RETURN_FAILURE;

@@ -3,16 +3,16 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Test\Unit\DeploymentConfig;
+namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
-use Magento\Framework\App\DeploymentConfig\ConfigImporterPool;
+use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 class ConfigImporterPoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ConfigImporterPool
+     * @var ImporterPool
      */
     private $configImporterPool;
 
@@ -47,7 +47,7 @@ class ConfigImporterPoolTest extends \PHPUnit_Framework_TestCase
                 ['Magento\Importer\SomeSection', $this->importerMock],
                 ['Magento\Importer\WrongSection', $this->wrongImporter],
             ]);
-        $this->configImporterPool = new ConfigImporterPool(
+        $this->configImporterPool = new ImporterPool(
             $this->objectManagerMock,
             ['someSection' => 'Magento\Importer\SomeSection']
         );
@@ -71,7 +71,7 @@ class ConfigImporterPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetImportersWithException()
     {
-        $this->configImporterPool = new ConfigImporterPool(
+        $this->configImporterPool = new ImporterPool(
             $this->objectManagerMock,
             ['wrongSection' => 'Magento\Importer\WrongSection']
         );

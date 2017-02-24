@@ -3,24 +3,24 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Test\Unit\DeploymentConfig\Plugin;
+namespace Magento\Deploy\Test\Unit\Model\Plugin;
 
-use Magento\Framework\App\DeploymentConfig\Plugin\ConfigHashValidator;
-use Magento\Framework\App\DeploymentConfig\ConfigHashManager;
+use Magento\Deploy\Model\Plugin\ConfigValidator;
+use Magento\Deploy\Model\DeploymentConfig\Validator;
 use Magento\Framework\App\FrontController;
 use Magento\Framework\App\RequestInterface;
 
-class ConfigHashValidatorTest extends \PHPUnit_Framework_TestCase
+class ConfigValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ConfigHashValidator
+     * @var ConfigValidator
      */
-    private $configHashValidator;
+    private $configValidatorPlugin;
 
     /**
-     * @var ConfigHashManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $configHashManagerMock;
+    private $configValidatorMock;
 
     /**
      * @var FrontController|\PHPUnit_Framework_MockObject_MockObject
@@ -37,7 +37,7 @@ class ConfigHashValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->configHashManagerMock = $this->getMockBuilder(ConfigHashManager::class)
+        $this->configValidatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->frontControllerMock = $this->getMockBuilder(FrontController::class)
@@ -46,7 +46,7 @@ class ConfigHashValidatorTest extends \PHPUnit_Framework_TestCase
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
 
-        $this->configHashValidator = new ConfigHashValidator($this->configHashManagerMock);
+        $this->configValidatorPlugin = new ConfigValidator($this->configValidatorMock);
     }
 
     /**
@@ -54,10 +54,10 @@ class ConfigHashValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeDispatchWithoutException()
     {
-        $this->configHashManagerMock->expects($this->once())
-            ->method('isHashValid')
+        $this->configValidatorMock->expects($this->once())
+            ->method('isValid')
             ->willReturn(true);
-        $this->configHashValidator->beforeDispatch($this->frontControllerMock, $this->requestMock);
+        $this->configValidatorPlugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
     }
 
     /**
@@ -69,9 +69,9 @@ class ConfigHashValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeDispatchWithException()
     {
-        $this->configHashManagerMock->expects($this->once())
-            ->method('isHashValid')
+        $this->configValidatorMock->expects($this->once())
+            ->method('isValid')
             ->willReturn(false);
-        $this->configHashValidator->beforeDispatch($this->frontControllerMock, $this->requestMock);
+        $this->configValidatorPlugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
     }
 }

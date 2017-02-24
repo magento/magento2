@@ -12,7 +12,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\DeploymentConfig\ConfigHashManager;
+use Magento\Deploy\Model\DeploymentConfig\HashUpdater;
 
 /**
  * Test command for dump application state
@@ -40,9 +40,9 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     private $source;
 
     /**
-     * @var ConfigHashManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var HashUpdater|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $configHashManagerMock;
+    private $configHashUpdaterMock;
 
     /**
      * @var ApplicationDumpCommand
@@ -51,7 +51,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->configHashManagerMock = $this->getMockBuilder(ConfigHashManager::class)
+        $this->configHashUpdaterMock = $this->getMockBuilder(HashUpdater::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->input = $this->getMockBuilder(InputInterface::class)
@@ -68,7 +68,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         $this->command = new ApplicationDumpCommand(
             $this->writer,
             [['namespace' => 'system', 'source' => $this->source]],
-            $this->configHashManagerMock
+            $this->configHashUpdaterMock
         );
     }
 
@@ -78,8 +78,8 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             'system' => ['systemDATA']
         ];
         $data = [ConfigFilePool::APP_CONFIG => $dump];
-        $this->configHashManagerMock->expects($this->once())
-            ->method('generateHash');
+        $this->configHashUpdaterMock->expects($this->once())
+            ->method('update');
         $this->source
             ->expects($this->once())
             ->method('get')

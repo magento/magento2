@@ -3,47 +3,47 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\DeploymentConfig\Plugin;
+namespace Magento\Deploy\Model\Plugin;
 
-use Magento\Framework\App\DeploymentConfig\ConfigHashManager;
+use Magento\Deploy\Model\DeploymentConfig\Validator as DeploymentConfigValidator;
 use Magento\Framework\App\FrontController;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
 /**
- * Checks that deployment configuration hash is valid.
- * If hash is not valid throws LocalizedException.
+ * Checks that config data form deployment configuration files was not changed.
+ * If config data was changed throws LocalizedException.
  */
-class ConfigHashValidator
+class ConfigValidator
 {
     /**
-     * The manager of deployment configuration hash.
+     * Configuration data validator.
      *
-     * @var ConfigHashManager
+     * @var DeploymentConfigValidator
      */
-    private $configHashManager;
+    private $configValidator;
 
     /**
-     * @param ConfigHashManager $configHashManager the manager of deployment configuration hash
+     * @param DeploymentConfigValidator $configValidator the configuration data validator
      */
-    public function __construct(ConfigHashManager $configHashManager)
+    public function __construct(DeploymentConfigValidator $configValidator)
     {
-        $this->configHashManager = $configHashManager;
+        $this->configValidator = $configValidator;
     }
 
     /**
-     * Performs check that deployment configuration hash is valid.
+     * Performs check that config data from deployment configuration files is valid.
      *
      * @param FrontController $subject the object of controller is wrapped by this plugin
      * @param RequestInterface $request the object that contains request params
      * @return void
-     * @throws LocalizedException is thrown if deployment configuration hash is not valid
+     * @throws LocalizedException is thrown if config data from deployment configuration files is not valid
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeDispatch(FrontController $subject, RequestInterface $request)
     {
-        if (!$this->configHashManager->isHashValid()) {
+        if (!$this->configValidator->isValid()) {
             throw new LocalizedException(
                 new Phrase(
                     'A change in configuration has been detected.'

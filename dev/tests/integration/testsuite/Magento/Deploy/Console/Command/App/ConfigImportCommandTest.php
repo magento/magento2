@@ -12,10 +12,10 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\DeploymentConfig\ConfigImporterPool;
+use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand\IntegrationTestImporter;
-use Magento\Framework\App\DeploymentConfig\ConfigHashManager;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -56,7 +56,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->objectManager->configure([
-            ConfigImporterPool::class => [
+            ImporterPool::class => [
                 'arguments' => [
                     'importers' => [
                         'integrationTestImporter' => IntegrationTestImporter::class
@@ -87,19 +87,19 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteNothingImport()
     {
-        $this->assertArrayNotHasKey(ConfigHashManager::CONFIG_KEY, $this->contentEnvFile);
+        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->contentEnvFile);
         $command = $this->objectManager->create(ConfigImportCommand::class);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
         $this->assertContains('Start import', $commandTester->getDisplay());
         $this->assertContains('Nothing to import', $commandTester->getDisplay());
-        $this->assertArrayNotHasKey(ConfigHashManager::CONFIG_KEY, $this->getEnvFileContent());
+        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->getEnvFileContent());
     }
 
     public function testExecuteWithImport()
     {
-        $this->assertArrayNotHasKey(ConfigHashManager::CONFIG_KEY, $this->contentEnvFile);
+        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->contentEnvFile);
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->getFileName(),
             file_get_contents(__DIR__ . '/../../../_files/_config.local.php')
@@ -110,7 +110,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
         $this->assertContains('Start import', $commandTester->getDisplay());
         $this->assertContains('Integration test data is imported!', $commandTester->getDisplay());
-        $this->assertArrayHasKey(ConfigHashManager::CONFIG_KEY, $this->getEnvFileContent());
+        $this->assertArrayHasKey(Hash::CONFIG_KEY, $this->getEnvFileContent());
     }
 
     /**
