@@ -7,27 +7,34 @@
 namespace Magento\Contact\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Captcha\Test\Page\ContactUs;
+use Magento\Contact\Test\Page\ContactIndex;
 
 /**
  * Assert that success message is present on "Contact Us" page.
  */
 class AssertContactUsSuccessMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE =
-        "Thanks for contacting us with your comments and questions. We'll respond to you very soon.";
+    /**
+     * Success sent comment message(the first part).
+     */
+    const SUCCESS_MESSAGE_PART_1 = "Thanks for contacting us with your comments and questions. ";
+
+    /**
+     * Success sent comment message(the second part).
+     */
+    const SUCCESS_MESSAGE_PART_2 = "We'll respond to you very soon.";
 
     /**
      * Assert that success message is present on "Contact Us" page.
      *
-     * @param ContactUs $contactUsPage
+     * @param ContactIndex $contactIndex
      * @return void
      */
-    public function processAssert(ContactUs $contactUsPage)
+    public function processAssert(ContactIndex $contactIndex)
     {
         \PHPUnit_Framework_Assert::assertEquals(
-            self::SUCCESS_MESSAGE,
-            $contactUsPage->getMessagesBlock()->getMessage(),
+            self::SUCCESS_MESSAGE_PART_1 . self::SUCCESS_MESSAGE_PART_2,
+            $contactIndex->getMessagesBlock()->getMessage(),
             'Wrong message is displayed.'
         );
     }

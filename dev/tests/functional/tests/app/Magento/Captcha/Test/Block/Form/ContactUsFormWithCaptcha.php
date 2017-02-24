@@ -8,8 +8,6 @@ namespace Magento\Captcha\Test\Block\Form;
 
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Client\ElementInterface;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Form for "Contact Us" page with captcha.
@@ -68,14 +66,12 @@ class ContactUsFormWithCaptcha extends Form
     }
 
     /**
-     * Send comment.
+     * Click submit button.
      *
-     * @param FixtureInterface $fixture
      * @return void
      */
-    public function sendComment(FixtureInterface $fixture)
+    public function sendComment()
     {
-        $this->fill($fixture);
         $this->_rootElement->find($this->submit, Locator::SELECTOR_CSS)->click();
     }
 }

@@ -10,11 +10,11 @@ use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnContactUsForm;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Captcha\Test\Page\ContactUs;
+use Magento\Contact\Test\Page\ContactIndex;
 
 /**
  * Preconditions:
- * 1. Enable CAPTCHA for customer.
+ * 1. Enable captcha for customer.
  *
  * Test Flow:
  * 1. Open contact us page.
@@ -33,18 +33,18 @@ class CaptchaOnContactUsTest extends Injectable
     private $stepFactory;
 
     /**
-     * Assert Captcha.
+     * Assert captcha on "Contact Us" page.
      *
      * @var AssertCaptchaFieldOnContactUsForm
      */
     private $assertCaptcha;
 
     /**
-     * ContactUs page.
+     * ContactIndex page.
      *
-     * @var ContactUs
+     * @var ContactIndex
      */
-    private $contactUs;
+    private $contactIndex;
 
     /**
      * Configuration setting.
@@ -58,17 +58,17 @@ class CaptchaOnContactUsTest extends Injectable
      *
      * @param TestStepFactory $stepFactory
      * @param AssertCaptchaFieldOnContactUsForm $assertCaptcha
-     * @param ContactUs $contactUs
+     * @param ContactIndex $contactIndex
      * @return void
      */
     public function __inject(
         TestStepFactory $stepFactory,
         AssertCaptchaFieldOnContactUsForm $assertCaptcha,
-        ContactUs $contactUs
+        ContactIndex $contactIndex
     ) {
         $this->stepFactory = $stepFactory;
         $this->assertCaptcha = $assertCaptcha;
-        $this->contactUs = $contactUs;
+        $this->contactIndex = $contactIndex;
     }
 
     /**
@@ -90,10 +90,11 @@ class CaptchaOnContactUsTest extends Injectable
             ['configData' => $this->configData]
         )->run();
 
-        $this->contactUs->open();
-        $this->assertCaptcha->processAssertRegisterForm($this->contactUs);
-        $this->contactUs->getFormWithCaptcha()->reloadCaptcha();
-        $this->contactUs->getFormWithCaptcha()->sendComment($customer);
+        $this->contactIndex->open();
+        $this->assertCaptcha->processAssertRegisterForm($this->contactIndex);
+        $this->contactIndex->getFormWithCaptcha()->fill($customer);
+        $this->contactIndex->getFormWithCaptcha()->reloadCaptcha();
+        $this->contactIndex->getFormWithCaptcha()->sendComment();
     }
 
     /**

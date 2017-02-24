@@ -6,12 +6,12 @@
 
 namespace Magento\Contact\Test\Block\Form;
 
-use Magento\Mtf\Block\Form;
+use Magento\Mtf\Block\Block;
 
 /**
  * Message block on "Contact Us" page.
  */
-class Messages extends Form
+class Messages extends Block
 {
     /**
      * Message selector.
