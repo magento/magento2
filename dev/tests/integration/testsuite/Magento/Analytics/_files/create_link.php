@@ -10,7 +10,6 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
  */
 $fileInfoManager = $objectManager->create(\Magento\Analytics\Model\FileInfoManager::class);
 
-
 /**
  * @var $fileInfo \Magento\Analytics\Model\FileInfo
  */
