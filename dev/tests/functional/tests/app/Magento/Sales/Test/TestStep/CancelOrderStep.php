@@ -11,7 +11,7 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
- * Click cancel from order on backend.
+ * Click cancel from order in Admin.
  */
 class CancelOrderStep implements TestStepInterface
 {
