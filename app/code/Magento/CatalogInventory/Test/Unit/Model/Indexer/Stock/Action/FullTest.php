@@ -26,13 +26,13 @@ class FullTest extends \PHPUnit_Framework_TestCase
 
         $exceptionMessage = 'exception message';
 
-        $connectionMock->expects($this->once())
-            ->method('delete')
-            ->will($this->throwException(new \Exception($exceptionMessage)));
-
         $resourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($connectionMock));
+
+        $resourceMock->expects($this->any())
+            ->method('getTableName')
+            ->will($this->throwException(new \Exception($exceptionMessage)));
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManager->getObject(

@@ -15,19 +15,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
     /**
-     * Reindex temporary (price result data) for defined product(s)
-     *
-     * @param int|array $entityIds
-     * @return $this
-     */
-    public function reindexEntity($entityIds)
-    {
-        $this->_updateIndex($entityIds);
-
-        return $this;
-    }
-
-    /**
      * Retrieve table name for temporary bundle option stock index
      *
      * @return string

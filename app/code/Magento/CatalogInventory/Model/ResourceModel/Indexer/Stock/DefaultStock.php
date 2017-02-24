@@ -221,11 +221,22 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     protected function _prepareIndexTable($entityIds = null)
     {
         $connection = $this->getConnection();
-        $select = $this->_getStockStatusSelect($entityIds);
+        $select = $this->_getStockStatusSelect($entityIds, true);
         $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds);
         $query = $select->insertFromSelect($this->getIdxTable());
         $connection->query($query);
 
+        return $this;
+    }
+
+    /**
+     * @param array $entityIds
+     * @return $this
+     */
+    public function reindexBatch(array $entityIds)
+    {
+        $this->tableStrategy->setUseIdxTable(false);
+        $this->_prepareIndexTable($entityIds);
         return $this;
     }
 
