@@ -65,7 +65,7 @@ class Post extends \Magento\Contact\Controller\Index
                 ->setTemplateVars(['data' => $postObject])
                 ->setFrom($this->scopeConfig->getValue(self::XML_PATH_EMAIL_SENDER, $storeScope))
                 ->addTo($this->scopeConfig->getValue(self::XML_PATH_EMAIL_RECIPIENT, $storeScope))
-                ->setReplyTo($post['email'])
+                ->setReplyTo($post['email'], $post['name'])
                 ->getTransport();
 
             $transport->sendMessage();
