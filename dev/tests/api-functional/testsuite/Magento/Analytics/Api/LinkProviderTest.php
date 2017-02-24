@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Api;
 
 use Magento\Framework\UrlInterface;
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -47,15 +48,28 @@ class LinkProviderTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'resourcePath' => static::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME,
+                'service' => static::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Get',
+                'operation' => static::SERVICE_NAME . 'Get',
             ],
         ];
+        if (!$this->isTestBaseUrlSecure()) {
+            try {
+                $this->_webApiCall($serviceInfo);
+            } catch (\Exception $e) {
+                $this->assertEquals(
+                    '{"message":"Operation allowed only in HTTPS"}',
+                    $e->getMessage()
+                );
+                return;
+            }
+            $this->fail("Exception 'Operation allowed only in HTTPS' should be thrown");
+        }
+
         $response = $this->_webApiCall($serviceInfo);
         $this->assertEquals(2, count($response));
         $this->assertEquals(base64_encode($fileInfo->getInitializationVector()), $response['initialization_vector']);
@@ -65,5 +79,13 @@ class LinkProviderTest extends WebapiAbstract
             ) . $fileInfo->getPath(),
             $response['url']
         );
+    }
+
+    /**
+     * @return bool
+     */
+    private function isTestBaseUrlSecure()
+    {
+        return strpos('https://', TESTS_BASE_URL) !== false;
     }
 }
