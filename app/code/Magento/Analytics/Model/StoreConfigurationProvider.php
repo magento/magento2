@@ -77,22 +77,23 @@ class StoreConfigurationProvider
 
     /**
      * Creates report from config for scope type and scope id.
+     *
      * @param string $scope
-     * @param int $scope_id
+     * @param int $scopeId
      * @return array
      */
-    private function generateReportForScope($scope, $scope_id)
+    private function generateReportForScope($scope, $scopeId)
     {
         $report = [];
         foreach ($this->configPaths as $configPath) {
             $report[] = [
                 "config_path" => $configPath,
                 "scope" => $scope,
-                "scope_id" => $scope_id,
+                "scope_id" => $scopeId,
                 "value" => $this->scopeConfig->getValue(
                     $configPath,
                     $scope,
-                    $scope_id
+                    $scopeId
                 )
             ];
         }

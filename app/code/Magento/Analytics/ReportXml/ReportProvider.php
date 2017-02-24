@@ -32,8 +32,10 @@ class ReportProvider
 
     /**
      * ReportProvider constructor.
+     *
      * @param QueryFactory $queryFactory
      * @param ConnectionFactory $connectionFactory
+     * @param IteratorFactory $iteratorFactory
      */
     public function __construct(
         QueryFactory $queryFactory,

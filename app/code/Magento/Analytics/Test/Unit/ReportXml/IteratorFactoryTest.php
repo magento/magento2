@@ -17,6 +17,7 @@ class IteratorFactoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManagerMock;
+
     /**
      * @var \IteratorIterator|\PHPUnit_Framework_MockObject_MockObject
      */
