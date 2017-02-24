@@ -99,11 +99,16 @@ class Full extends AbstractAction
             /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer $indexer */
             foreach ($this->_getTypeIndexers() as $indexer) {
                 $connection = $indexer->getConnection();
+
+                $memoryTableMinRows = isset($this->memoryTablesMinRows[$indexer->getTypeId()])
+                    ? $this->memoryTablesMinRows[$indexer->getTypeId()]
+                    : $this->memoryTablesMinRows['default'];
+
                 $batches = $this->batchProvider->getBatches(
                     $connection,
                     $entityMetadata->getEntityTable(),
                     $entityMetadata->getIdentifierField(),
-                    $this->batchSizeCalculator->estimateBatchSize($connection, 200)
+                    $this->batchSizeCalculator->estimateBatchSize($connection, $memoryTableMinRows)
                 );
 
                 foreach ($batches as $batch) {

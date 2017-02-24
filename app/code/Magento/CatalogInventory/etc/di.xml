@@ -86,4 +86,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\Action\Full">
+        <arguments>
+            <argument name="memoryTablesMinRows" xsi:type="array">
+                <item name="default" xsi:type="number">200</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
