@@ -9,7 +9,7 @@ use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\ObjectManagerInterface;
 
-class ConfigImporterPoolTest extends \PHPUnit_Framework_TestCase
+class ImporterPoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ImporterPool
