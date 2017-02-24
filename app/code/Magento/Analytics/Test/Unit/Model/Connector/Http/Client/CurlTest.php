@@ -5,6 +5,8 @@
  */
 namespace Magento\Analytics\Test\Unit\Model\Connector\Http\Client;
 
+use Magento\Framework\HTTP\Adapter\CurlFactory;
+
 /**
  * A unit test for testing of the CURL HTTP client.
  */
@@ -31,7 +33,7 @@ class CurlTest extends \PHPUnit_Framework_TestCase
     private $responseMock;
 
     /**
-     * @var \Magento\Framework\HTTP\Adapter\CurlFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CurlFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $curlFactoryMock;
 
@@ -68,11 +70,10 @@ class CurlTest extends \PHPUnit_Framework_TestCase
         ->disableOriginalConstructor()
         ->getMock();
 
-        $this->curlFactoryMock = $this->getMockBuilder(
-            \Magento\Framework\HTTP\Adapter\CurlFactory::class
-        )
-        ->disableOriginalConstructor()
-        ->getMock();
+        $this->curlFactoryMock = $this->getMockBuilder(CurlFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->curlFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->curlMock);
