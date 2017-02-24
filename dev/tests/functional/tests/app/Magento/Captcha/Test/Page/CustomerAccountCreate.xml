@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
-    <page name="CustomerAccountCreate">
+    <page name="CustomerAccountCreate" mca="customer/account/create">
         <block name="registerFormWithCaptcha" class="Magento\Captcha\Test\Block\Form\RegisterFormWithCaptcha" locator="#form-validate[novalidate='novalidate']" strategy="css selector"/>
     </page>
 </config>

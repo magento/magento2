@@ -8,7 +8,6 @@ namespace Magento\Captcha\Test\Block\Form;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Customer\Test\Block\Form\Register;
-use Magento\Mtf\Client\ElementInterface;
 
 /**
  * Form for storefront register customer with captcha.
@@ -50,12 +49,12 @@ class RegisterFormWithCaptcha extends Register
     }
 
     /**
-     * Get captcha reload button element.
+     * Click on captcha reload button.
      *
-     * @return ElementInterface
+     * @return void
      */
-    public function getCaptchaReloadButton()
+    public function reloadCaptcha()
     {
-        return $this->_rootElement->find($this->captchaReload, Locator::SELECTOR_CSS);
+        $this->_rootElement->find($this->captchaReload, Locator::SELECTOR_CSS)->click();
     }
 }

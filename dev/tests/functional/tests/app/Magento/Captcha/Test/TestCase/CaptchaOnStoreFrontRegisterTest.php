@@ -11,11 +11,10 @@ use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnRegisterForm;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
-use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Preconditions:
- * 1. Enable CAPTCHA for customer.
+ * 1. Enable captcha for customer.
  *
  * Test Flow:
  * 1. Open storefront account register form.
@@ -34,7 +33,7 @@ class CaptchaOnStoreFrontRegisterTest extends Injectable
     private $stepFactory;
 
     /**
-     * Assert Captcha.
+     * Assert captcha on storefront account register page.
      *
      * @var AssertCaptchaFieldOnRegisterForm
      */
@@ -46,13 +45,6 @@ class CaptchaOnStoreFrontRegisterTest extends Injectable
      * @var CustomerAccountCreate
      */
     private $customerAccountCreate;
-
-    /**
-     * Fixture factory.
-     *
-     * @var FixtureFactory
-     */
-    private $fixtureFactory;
 
     /**
      * Configuration setting.
@@ -67,26 +59,23 @@ class CaptchaOnStoreFrontRegisterTest extends Injectable
      * @param TestStepFactory $stepFactory
      * @param AssertCaptchaFieldOnRegisterForm $assertCaptcha
      * @param CustomerAccountCreate $customerAccount
-     * @param FixtureFactory $fixtureFactory
      * @return void
      */
     public function __inject(
         TestStepFactory $stepFactory,
         AssertCaptchaFieldOnRegisterForm $assertCaptcha,
-        CustomerAccountCreate $customerAccount,
-        FixtureFactory $fixtureFactory
+        CustomerAccountCreate $customerAccount
     ) {
         $this->stepFactory = $stepFactory;
         $this->assertCaptcha = $assertCaptcha;
         $this->customerAccountCreate = $customerAccount;
-        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
      * Test creation for customer register with captcha on storefront.
      *
      * @param Customer $customer
-     * @param null|string $configData
+     * @param string $configData
      * @return void
      */
     public function test(
@@ -103,7 +92,7 @@ class CaptchaOnStoreFrontRegisterTest extends Injectable
 
         $this->customerAccountCreate->open();
         $this->assertCaptcha->processAssertRegisterForm($this->customerAccountCreate);
-        $this->customerAccountCreate->getRegisterFormWithCaptcha()->getCaptchaReloadButton()->click();
+        $this->customerAccountCreate->getRegisterFormWithCaptcha()->reloadCaptcha();
         $this->customerAccountCreate->getRegisterFormWithCaptcha()->registerCustomer($customer);
     }
 
