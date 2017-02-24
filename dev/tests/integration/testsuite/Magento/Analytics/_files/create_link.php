@@ -14,9 +14,9 @@ $fileInfoManager = $objectManager->create(\Magento\Analytics\Model\FileInfoManag
 /**
  * @var $fileInfo \Magento\Analytics\Model\FileInfo
  */
-$fileInfo = $objectManager->create(\Magento\Analytics\Model\FileInfo::class);
-
-$fileInfo->setPath('analytics/jsldjsfdkldf/data.tgz');
-$fileInfo->setInitializationVector("binaryDataisdodssds8iui");
+$fileInfo = $objectManager->create(
+    \Magento\Analytics\Model\FileInfo::class,
+    ['path' => 'analytics/jsldjsfdkldf/data.tgz', 'initializationVector' => 'binaryDataisdodssds8iui']
+);
 
 $fileInfoManager->save($fileInfo);

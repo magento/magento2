@@ -58,7 +58,7 @@ class LinkProviderTest extends WebapiAbstract
         ];
         $response = $this->_webApiCall($serviceInfo);
         $this->assertEquals(2, count($response));
-        $this->assertEquals($fileInfo->getInitializationVector(), base64_encode($response['initialization_vector']));
+        $this->assertEquals(base64_encode($fileInfo->getInitializationVector()), $response['initialization_vector']);
         $this->assertEquals(
             $storeManager->getStore()->getBaseUrl(
                 UrlInterface::URL_TYPE_MEDIA
