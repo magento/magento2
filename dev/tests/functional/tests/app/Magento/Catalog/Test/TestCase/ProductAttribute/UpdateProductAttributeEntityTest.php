@@ -29,7 +29,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Perform all assertions
  *
  * @group Product_Attributes
- * @ZephyrId MAGETWO-23459
+ * @ZephyrId MAGETWO-23459, MAGETWO-12941
  */
 class UpdateProductAttributeEntityTest extends Injectable
 {
