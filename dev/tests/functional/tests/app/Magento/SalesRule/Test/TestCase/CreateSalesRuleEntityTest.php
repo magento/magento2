@@ -6,6 +6,7 @@
 
 namespace Magento\SalesRule\Test\TestCase;
 
+use Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\ManageCouponCode;
 use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteEdit;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
@@ -107,7 +108,8 @@ class CreateSalesRuleEntityTest extends Injectable
         CatalogProductSimple $productForSalesRule1,
         CatalogProductSimple $productForSalesRule2 = null,
         Customer $customer = null,
-        $conditionEntity = null
+        $conditionEntity = null,
+        SalesRule $salesRuleEdit = null
     ) {
         $replace = null;
         $this->salesRuleName = $salesRule->getName();
@@ -127,7 +129,22 @@ class CreateSalesRuleEntityTest extends Injectable
         // Steps
         $this->promoQuoteNew->open();
         $this->promoQuoteNew->getSalesRuleForm()->fill($salesRule, null, $replace);
-        $this->promoQuoteNew->getFormPageActions()->save();
+
+        if ($salesRule->getCouponType() == "Auto") {
+            $this->promoQuoteNew->getFormPageActions()->saveAndContinue();
+            $form = $this->promoQuoteEdit->getSalesRuleForm();
+            $form->openSection('manage_coupon_code');
+            /** @var ManageCouponCode $section */
+            $section = $form->getSection('manage_coupon_code');
+            $section->fill($salesRuleEdit);
+            $section->generateCouponCodes();
+            $couponCode = $section->getGeneratedCouponCode();
+            $this->promoQuoteEdit->getFormPageActions()->save();
+
+            return ["couponCode" => $couponCode];
+        } else {
+            $this->promoQuoteNew->getFormPageActions()->save();
+        }
     }
 
     /**
