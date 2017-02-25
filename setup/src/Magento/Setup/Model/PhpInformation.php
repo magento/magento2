@@ -45,7 +45,9 @@ class PhpInformation
     public function getCurrent()
     {
         if (!$this->current) {
-            $this->current = array_map('strtolower', get_loaded_extensions());
+            $this->current = array_map(function ($ext) {
+                return str_replace(' ', '-', strtolower($ext));
+            }, get_loaded_extensions());
         }
         return $this->current;
     }
