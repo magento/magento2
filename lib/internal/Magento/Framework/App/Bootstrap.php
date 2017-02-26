@@ -135,7 +135,7 @@ class Bootstrap
     {
         $dirList = self::createFilesystemDirectoryList($rootDir, $initParams);
         $autoloadWrapper = AutoloaderRegistry::getAutoloader();
-        Populator::populateMappings($autoloadWrapper, $dirList, new ComponentRegistrar());
+        Populator::populateMappings($autoloadWrapper, $dirList);
     }
 
     /**
