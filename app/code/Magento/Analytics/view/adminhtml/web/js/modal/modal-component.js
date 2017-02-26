@@ -64,7 +64,10 @@ define([
         },
 
         /**
-         * Additional information appeared after subscription delcine.
+         * Additional information appeared after subscription decline.
+         *
+         * @param {String} title
+         * @param {String} message
          */
         actionDeclineAlert: function (title, message) {
             alert({
