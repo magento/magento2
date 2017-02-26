@@ -189,101 +189,27 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Run the PSR2 code sniffs on the code
+     * Retrieves full list of codebase paths without any files/folders filtered out
      *
-     * @TODO: combine with testCodeStyle
-     * @return void
+     * @return array
      */
-    public function testCodeStylePsr2()
+    private function getFullWhitelist()
     {
-        $reportFile = self::$reportDir . '/phpcs_psr2_report.txt';
-        $wrapper = new Wrapper();
-        $codeSniffer = new CodeSniffer('PSR2', $reportFile, $wrapper);
-        if (!$codeSniffer->canRun()) {
-            $this->markTestSkipped('PHP Code Sniffer is not installed.');
-        }
-        if (version_compare($wrapper->version(), '1.4.7') === -1) {
-            $this->markTestSkipped('PHP Code Sniffer Build Too Old.');
-        }
-
-        $result = $codeSniffer->run(self::getWhitelist());
-
-        $output = "";
-        if (file_exists($reportFile)) {
-            $output = file_get_contents($reportFile);
-        }
-        $this->assertEquals(
-            0,
-            $result,
-            "PHP Code Sniffer has found {$result} error(s): " . PHP_EOL . $output
-        );
+        return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
     }
 
-    /**
-     * Run the magento specific coding standards on the code
-     *
-     * @return void
-     */
-    public function testCodeStyle()
+    public function testNoViolationsDetectedByPhpCodeSniffer()
     {
         $reportFile = self::$reportDir . '/phpcs_report.txt';
-        $wrapper = new Wrapper();
-        $codeSniffer = new CodeSniffer(realpath(__DIR__ . '/_files/phpcs'), $reportFile, $wrapper);
-        if (!$codeSniffer->canRun()) {
-            $this->markTestSkipped('PHP Code Sniffer is not installed.');
-        }
-        $codeSniffer->setExtensions(['php', 'phtml']);
-        $result = $codeSniffer->run(self::getWhitelist(['php', 'phtml']));
-
-        $output = "";
-        if (file_exists($reportFile)) {
-            $output = file_get_contents($reportFile);
-        }
-
+        $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
         $this->assertEquals(
             0,
-            $result,
-            "PHP Code Sniffer has found {$result} error(s): " . PHP_EOL . $output
+            $result = $codeSniffer->run($this->getFullWhitelist()),
+            "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . file_get_contents($reportFile)
         );
     }
 
-    /**
-     * Run the annotations sniffs on the code
-     *
-     * @return void
-     * @todo Combine with normal code style at some point.
-     */
-    public function testAnnotationStandard()
-    {
-        $reportFile = self::$reportDir . '/phpcs_annotations_report.txt';
-        $wrapper = new Wrapper();
-        $codeSniffer = new CodeSniffer(
-            realpath(__DIR__ . '/../../../../framework/Magento/ruleset.xml'),
-            $reportFile,
-            $wrapper
-        );
-        if (!$codeSniffer->canRun()) {
-            $this->markTestSkipped('PHP Code Sniffer is not installed.');
-        }
-
-        $result = $codeSniffer->run(self::getWhitelist(['php']));
-        $output = "";
-        if (file_exists($reportFile)) {
-            $output = file_get_contents($reportFile);
-        }
-        $this->assertEquals(
-            0,
-            $result,
-            "PHP Code Sniffer has found {$result} error(s): " . PHP_EOL . $output
-        );
-    }
-
-    /**
-     * Run mess detector on code
-     *
-     * @return void
-     */
-    public function testCodeMess()
+    public function testNoViolationsDetectedByPhpMessDetector()
     {
         $reportFile = self::$reportDir . '/phpmd_report.txt';
         $codeMessDetector = new CodeMessDetector(realpath(__DIR__ . '/_files/phpmd/ruleset.xml'), $reportFile);
@@ -312,12 +238,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * Run copy paste detector on code
-     *
-     * @return void
-     */
-    public function testCopyPaste()
+    public function testNoViolationsDetectedByPhpCopyPasteDetector()
     {
         $reportFile = self::$reportDir . '/phpcpd_report.xml';
         $copyPasteDetector = new CopyPasteDetector($reportFile);
