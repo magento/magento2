@@ -13,6 +13,9 @@ use Zend\Stdlib\ParametersInterface;
 use Zend\Uri\UriFactory;
 use Zend\Uri\UriInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class Request extends \Zend\Http\PhpEnvironment\Request
 {
     /**#@+
@@ -415,15 +418,15 @@ class Request extends \Zend\Http\PhpEnvironment\Request
             return true;
         }
       
-        return $this->initialRequestSecure($this->SslOffloadHeader());
+        return $this->initialRequestSecure($this->getSslOffloadHeader());
     }
 
-    /***
+    /**
      * Get value of SSL offload http header from configuration - defaults to X-Forwarded-Proto
      *
      * @return string
      */
-    private function SslOffloadHeader()
+    private function getSslOffloadHeader()
     {
         // Lets read from db only one time okay.
         if ($this->sslOffloadHeader === null) {

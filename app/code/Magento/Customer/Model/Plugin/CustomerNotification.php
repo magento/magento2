@@ -37,11 +37,10 @@ class CustomerNotification
     private $state;
 
     /**
-     * CustomerNotification constructor.
-     * 
      * @param Session $session
      * @param NotificationStorage $notificationStorage
      * @param State $state
+     * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         Session $session,

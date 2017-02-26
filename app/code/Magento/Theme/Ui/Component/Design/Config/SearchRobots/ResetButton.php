@@ -54,6 +54,7 @@ class ResetButton extends Field
     /**
      * Add js listener to reset button
      *
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function prepare()

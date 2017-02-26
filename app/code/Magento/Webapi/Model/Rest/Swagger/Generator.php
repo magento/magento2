@@ -28,6 +28,7 @@ use \Magento\Framework\Api\SimpleDataObjectConverter;
  * compliant with {@link https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md Swagger specification}
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Generator extends AbstractSchemaGenerator
 {

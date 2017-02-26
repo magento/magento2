@@ -21,6 +21,7 @@ class Delete extends AbstractAction
      * @var BookmarkRepositoryInterface
      */
     protected $bookmarkRepository;
+
     /**
      * @var BookmarkManagementInterface
      */

@@ -21,8 +21,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 /**
-* Set custom error handler
-*/
+ * Set custom error handler
+ */
 function setCustomErrorHandler()
 {
     set_error_handler(
