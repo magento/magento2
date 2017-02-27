@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -40,8 +41,11 @@ class UpgradeData implements UpgradeDataInterface
      * @param CategorySetupFactory $categorySetupFactory
      * @param EavSetupFactory $eavSetupFactory
      */
-    public function __construct(CategorySetupFactory $categorySetupFactory, EavSetupFactory $eavSetupFactory)
-    {
+    public function __construct(
+        CategorySetupFactory $categorySetupFactory,
+        EavSetupFactory $eavSetupFactory,
+        AttributeRepository $attributeRepository
+    ) {
         $this->categorySetupFactory = $categorySetupFactory;
         $this->eavSetupFactory = $eavSetupFactory;
     }
@@ -360,7 +364,34 @@ class UpgradeData implements UpgradeDataInterface
             $this->changePriceAttributeDefaultScope($categorySetup);
         }
 
+        if (version_compare($context->getVersion(), '2.1.5') < 0) {
+            $this->dissallowUsingHtmlForProductName($setup);
+        }
+
         $setup->endSetup();
+    }
+
+    /**
+     * Set to 'No' 'Is Allowed Html on Store Front' option on product name attribute, because product name
+     * is multi entity field (used in order, quote) and cannot be conditionally escaped in all places
+     *
+     * @param ModuleDataSetupInterface $categorySetup
+     * @return void
+     */
+    private function dissallowUsingHtmlForProductName(ModuleDataSetupInterface $setup)
+    {
+        /** @var CategorySetup $categorySetup */
+        $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+        $attribute = $categorySetup->getAttribute($entityTypeId, 'name');
+
+        $setup->getConnection()
+            ->update(
+                $setup->getTable('catalog_eav_attribute'),
+                ['is_html_allowed_on_front' => 0],
+                $setup->getConnection()->quoteInto('attribute_id = ?', $attribute['attribute_id'])
+            );
+
     }
 
     /**
