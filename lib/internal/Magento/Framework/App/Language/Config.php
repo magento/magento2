@@ -141,4 +141,14 @@ class Config
     {
         return $this->_data['use'];
     }
+    
+    /**
+     * Set sort order
+     *
+     * @param string|int $value
+     */
+    public function setSortOrder($value)
+    {
+        $this->_data['sort_order'] = $value;
+    }
 }
