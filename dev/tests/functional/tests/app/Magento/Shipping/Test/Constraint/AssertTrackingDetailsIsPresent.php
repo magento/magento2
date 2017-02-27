@@ -63,11 +63,15 @@ class AssertTrackingDetailsIsPresent extends AbstractConstraint
 
         $body = $browser->find($this->mainContainer)->getText();
         foreach ($resultTrackingData as $value) {
-            \PHPUnit_Framework_Assert::assertContains($value, $body, 'The "' . $value . '" is not present in popup.');
+            \PHPUnit_Framework_Assert::assertContains(
+                $value,
+                $body,
+                'The "' . $value . '" is not present in Shipping Tracking popup.'
+            );
         }
-
-        $browser->find($selector)->click();
+        $popupWindow = $browser->getCurrentWindow();
         $browser->selectWindow($mainWindow);
+        $browser->closeWindow($popupWindow);
     }
 
     /**

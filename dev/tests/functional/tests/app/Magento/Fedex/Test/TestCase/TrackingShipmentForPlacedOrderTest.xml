@@ -13,8 +13,8 @@
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="shipping/shipping_service" xsi:type="string">Federal Express</data>
-            <data name="shipping/shipping_method" xsi:type="string">Ground</data>
-            <data name="cart/data/shipping_method" xsi:type="string">Ground</data>
+            <data name="shipping/shipping_method" xsi:type="string">Smart Post</data>
+            <data name="cart/data/shipping_method" xsi:type="string">Smart Post</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo, fedex, shipping_origin_US_CA</data>
             <data name="trackingData" xsi:type="array">
@@ -23,11 +23,7 @@
                 <item name="tracking_number" xsi:type="string">449044304137821</item>
             </data>
             <data name="resultTrackingData" xsi:type="array">
-                <item name="status" xsi:type="string">Shipment information sent to FedEx</item>
                 <item name="number" xsi:type="string">449044304137821</item>
-                <item name="service_type" xsi:type="string">FedEx Home Delivery</item>
-                <item name="events/date" xsi:type="string">Dec 30, 2013</item>
-                <item name="events/time" xsi:type="string">6:24 PM</item>
             </data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Shipping\Test\Constraint\AssertTrackingDetailsIsPresent" />
