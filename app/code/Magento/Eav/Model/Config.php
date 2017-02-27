@@ -512,7 +512,7 @@ class Config
         }
 
         $attributes = $this->loadAttributes($entityTypeCode);
-        $attribute = $attributes && isset($attributes[$code]) ? $attributes[$code] : null;
+        $attribute = isset($attributes[$code]) ? $attributes[$code] : null;
         if (!$attribute) {
             $attribute = $this->createAttributeByAttributeCode($entityType, $code);
             $this->_addAttributeReference($code, $code, $entityTypeCode);
@@ -614,7 +614,7 @@ class Config
 
         $code = $attributeData['attribute_code'];
         $attributes = $this->loadAttributes($entityTypeCode);
-        $attribute = $attributes && isset($attributes[$code]) ? $attributes[$code] : null;
+        $attribute = isset($attributes[$code]) ? $attributes[$code] : null;
         if ($attribute) {
             $existsFullAttribute = $attribute->hasIsRequired();
             $fullAttributeData = array_key_exists('is_required', $attributeData);
