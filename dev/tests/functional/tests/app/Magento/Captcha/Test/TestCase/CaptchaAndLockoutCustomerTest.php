@@ -134,12 +134,10 @@ class CaptchaAndLockoutCustomerTest extends Injectable
         $this->customerAccountLogin->open();
 
         // Fill incorrect password $attempts times.
-        $this->customerLogin($incorrectCustomer,
-            $this->customerAccountLogin->getLoginBlock(), $attempts);
+        $this->customerLogin($incorrectCustomer, $this->customerAccountLogin->getLoginBlock(), $attempts);
 
         // Fill correct captcha and incorrect password $attempts times.
-        $this->customerLogin($incorrectCustomer,
-            $this->customerAccountLogin->getLoginBlockWithCaptcha(), $attempts);
+        $this->customerLogin($incorrectCustomer, $this->customerAccountLogin->getLoginBlockWithCaptcha(), $attempts);
 
         // Log in customer with correct captcha and correct password.
         $customer = $this->fixtureFactory->createByCode('customer', ['data' => $correctData]);
