@@ -107,6 +107,11 @@ class Config
     protected $_universalFactory;
 
     /**
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
+     */
+    private $attributeProto = [];
+
+    /**
      * @var SerializerInterface
      */
     private $serializer;
@@ -518,6 +523,21 @@ class Config
     }
 
     /**
+     * Create attribute from prototype
+     *
+     * @param string $model
+     * @return Entity\Attribute\AbstractAttribute
+     */
+    private function createAttribute($model)
+    {
+        if (!isset($this->attributeProto[$model])) {
+            /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+            $this->attributeProto[$model] = $this->_universalFactory->create($model);
+        }
+        return clone $this->attributeProto[$model];
+    }
+
+    /**
      * Get codes of all entity type attributes
      *
      * @param  mixed $entityType
@@ -610,7 +630,7 @@ class Config
             $model = $entityType->getAttributeModel();
         }
         /** @var AbstractAttribute $attribute */
-        $attribute = $this->_universalFactory->create($model)->setData($attributeData);
+        $attribute = $this->createAttribute($model)->setData($attributeData);
         $this->_addAttributeReference(
             $attributeData['attribute_id'],
             $code,
@@ -673,7 +693,7 @@ class Config
     {
         $entityType = $this->getEntityType($entityType);
         /** @var AbstractAttribute $attribute */
-        $attribute = $this->_universalFactory->create($entityType->getAttributeModel());
+        $attribute = $this->createAttribute($entityType->getAttributeModel());
         $attribute->setAttributeCode($attributeCode);
         $entity = $entityType->getEntity();
         if ($entity && in_array($attribute->getAttributeCode(), $entity->getDefaultAttributes())) {
