@@ -39,9 +39,9 @@ class Importer
     /**
      * Hash updater of config data.
      *
-     * @var HashUpdater
+     * @var Hash
      */
-    private $configHashUpdater;
+    private $configHash;
 
     /**
      * Logger.
@@ -54,20 +54,20 @@ class Importer
      * @param Validator $configValidator the manager of deployment configuration hash
      * @param ImporterPool $configImporterPool the pool of all deployment configuration importers
      * @param DeploymentConfig $deploymentConfig the application deployment configuration
-     * @param HashUpdater $configHashUpdater the hash updater of config data
+     * @param Hash $configHash the hash updater of config data
      * @param Logger $logger the logger
      */
     public function __construct(
         Validator $configValidator,
         ImporterPool $configImporterPool,
         DeploymentConfig $deploymentConfig,
-        HashUpdater $configHashUpdater,
+        Hash $configHash,
         Logger $logger
     ) {
         $this->configValidator = $configValidator;
         $this->configImporterPool = $configImporterPool;
         $this->deploymentConfig = $deploymentConfig;
-        $this->configHashUpdater = $configHashUpdater;
+        $this->configHash = $configHash;
         $this->logger = $logger;
     }
 
@@ -98,7 +98,7 @@ class Importer
                     );
                 }
 
-                $this->configHashUpdater->update();
+                $this->configHash->regenerate();
             }
         } catch (LocalizedException $exception) {
             $this->logger->error($exception);

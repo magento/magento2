@@ -36,29 +36,50 @@ class Hash
     private $writer;
 
     /**
+     * Hash generator.
+     *
+     * @var Hash\Generator
+     */
+    private $configHashGenerator;
+
+    /**
+     * Config data collector.
+     *
+     * @var DataCollector
+     */
+    private $dataConfigCollector;
+
+    /**
      * @param DeploymentConfig $deploymentConfig the application deployment configuration
      * @param Writer $writer the configuration writer that writes to files
+     * @param Hash\Generator $configHashGenerator the hash generator
+     * @param DataCollector $dataConfigCollector the config data collector
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
-        Writer $writer
+        Writer $writer,
+        Hash\Generator $configHashGenerator,
+        DataCollector $dataConfigCollector
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->writer = $writer;
+        $this->configHashGenerator = $configHashGenerator;
+        $this->dataConfigCollector = $dataConfigCollector;
     }
 
     /**
-     * Saves a deployment configuration hash to storage.
+     * Updates hash in the storage.
      *
-     * @param array|string $hash the deployment configuration data from files
      * @return void
      * @throws LocalizedException
      */
-    public function save($hash)
+    public function regenerate()
     {
         try {
+            $config = $this->dataConfigCollector->getConfig();
+            $hash = $this->configHashGenerator->generate($config);
             $this->writer->saveConfig([ConfigFilePool::APP_ENV => [self::CONFIG_KEY => $hash]]);
-        } catch (FileSystemException $exception) {
+        } catch (LocalizedException $exception) {
             throw new LocalizedException(__('Hash has not been saved'), $exception);
         }
     }

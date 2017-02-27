@@ -12,7 +12,7 @@ use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Deploy\Model\DeploymentConfig\HashUpdater;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -31,26 +31,26 @@ class ApplicationDumpCommand extends Command
     private $sources;
 
     /**
-     * @var HashUpdater
+     * @var Hash
      */
-    private $configHashUpdater;
+    private $configHash;
 
     /**
      * ApplicationDumpCommand constructor.
      *
      * @param Writer $writer
      * @param array $sources
-     * @param HashUpdater $configHashUpdater
+     * @param Hash $configHash
      */
     public function __construct(
         Writer $writer,
         array $sources,
-        HashUpdater $configHashUpdater = null
+        Hash $configHash = null
     ) {
         parent::__construct();
         $this->writer = $writer;
         $this->sources = $sources;
-        $this->configHashUpdater = $configHashUpdater ?: ObjectManager::getInstance()->get(HashUpdater::class);
+        $this->configHash = $configHash ?: ObjectManager::getInstance()->get(Hash::class);
     }
 
     /**
@@ -98,7 +98,7 @@ class ApplicationDumpCommand extends Command
         }
 
         // Generate and save new hash of deployment configuration.
-        $this->configHashUpdater->update();
+        $this->configHash->regenerate();
 
         $output->writeln('<info>Done.</info>');
         return Cli::RETURN_SUCCESS;
