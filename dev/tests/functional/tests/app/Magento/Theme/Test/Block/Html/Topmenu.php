@@ -10,8 +10,7 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Topmenu
- * Class top menu navigation block
+ * Class top menu navigation block.
  */
 class Topmenu extends Block
 {
@@ -44,7 +43,7 @@ class Topmenu extends Block
     protected $navigationMenuItems = "/li";
 
     /**
-     * Select category from top menu by name and click on it
+     * Select category from top menu by name and click on it.
      *
      * @param string $categoryName
      * @return void
@@ -84,7 +83,7 @@ class Topmenu extends Block
     }
 
     /**
-     * Check is visible category in top menu by name
+     * Check is visible category in top menu by name.
      *
      * @param string $categoryName
      * @return bool
@@ -95,7 +94,7 @@ class Topmenu extends Block
     }
 
     /**
-     * Wait for load top menu
+     * Wait for load top menu.
      *
      * @param string $categoryName
      * @return array
@@ -120,7 +119,7 @@ class Topmenu extends Block
     }
 
     /**
-     * Check menu items count
+     * Check menu items count.
      *
      * @param int $number
      * @return bool
