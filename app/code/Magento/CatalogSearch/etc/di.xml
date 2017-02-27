@@ -69,6 +69,7 @@
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Attribute">
         <plugin name="catalogsearchFulltextIndexerAttribute" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute"/>
+        <plugin name="catalogsearchAttributeSearchWeightCache" type="\Magento\CatalogSearch\Model\Attribute\SearchWeight"/>
     </type>
     <type name="Magento\Framework\Search\EntityMetadata" />
     <virtualType name="Magento\Framework\Search\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">

@@ -61,6 +61,13 @@ class AddProductsToTheCartStep implements TestStepInterface
     private $fixtureFactory;
 
     /**
+     * Selector for element wait
+     *
+     * @var string
+     */
+    private $loadingSelector = '.loading-mask';
+
+    /**
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $checkoutCart
      * @param CmsIndex $cmsIndex
@@ -96,6 +103,7 @@ class AddProductsToTheCartStep implements TestStepInterface
 
         foreach ($this->products as $product) {
             $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+            $this->catalogProductView->getViewBlock()->waitForElementNotVisible($this->loadingSelector);
             $this->catalogProductView->getViewBlock()->addToCart($product);
             $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
         }

@@ -48,7 +48,8 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     {
         /** @var Category $category */
         $category = $observer->getEvent()->getCategory();
-        if ($category->getUrlKey() !== false) {
+        $useDefaultAttribute = !$category->isObjectNew() && !empty($category->getData('use_default')['url_key']);
+        if ($category->getUrlKey() !== false && !$useDefaultAttribute) {
             $resultUrlKey = $this->categoryUrlPathGenerator->getUrlKey($category);
             if (empty($resultUrlKey)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid URL key'));

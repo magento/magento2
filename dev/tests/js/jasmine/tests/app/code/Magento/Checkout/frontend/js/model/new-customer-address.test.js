@@ -11,11 +11,12 @@ define([
     describe('Magento_Checkout/js/model/new-customer-address', function () {
         var newCustomerAddress;
 
-        window.checkoutConfig = {
-            defaultCountryId: 'US'
-        };
-
         beforeEach(function () {
+
+            window.checkoutConfig = {
+                defaultCountryId: 'US'
+            };
+
             newCustomerAddress = NewCustomerAddress;
         });
 
