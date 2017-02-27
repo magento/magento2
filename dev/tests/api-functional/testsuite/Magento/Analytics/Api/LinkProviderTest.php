@@ -68,17 +68,20 @@ class LinkProviderTest extends WebapiAbstract
                 return;
             }
             $this->fail("Exception 'Operation allowed only in HTTPS' should be thrown");
+        } else {
+            $response = $this->_webApiCall($serviceInfo);
+            $this->assertEquals(2, count($response));
+            $this->assertEquals(
+                base64_encode($fileInfo->getInitializationVector()),
+                $response['initialization_vector']
+            );
+            $this->assertEquals(
+                $storeManager->getStore()->getBaseUrl(
+                    UrlInterface::URL_TYPE_MEDIA
+                ) . $fileInfo->getPath(),
+                $response['url']
+            );
         }
-
-        $response = $this->_webApiCall($serviceInfo);
-        $this->assertEquals(2, count($response));
-        $this->assertEquals(base64_encode($fileInfo->getInitializationVector()), $response['initialization_vector']);
-        $this->assertEquals(
-            $storeManager->getStore()->getBaseUrl(
-                UrlInterface::URL_TYPE_MEDIA
-            ) . $fileInfo->getPath(),
-            $response['url']
-        );
     }
 
     /**
