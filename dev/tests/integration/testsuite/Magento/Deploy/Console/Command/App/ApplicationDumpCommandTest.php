@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\DeploymentConfig\ConfigHashManager;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -62,7 +62,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $this->assertArrayNotHasKey(ConfigHashManager::CONFIG_KEY, $this->contentEnvFile);
+        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->contentEnvFile);
         $this->objectManager->configure([
             \Magento\Config\Model\Config\Export\ExcludeList::class => [
                 'arguments' => [
@@ -94,7 +94,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->validateSystemSection($config);
         $this->validateThemesSection($config);
-        $this->assertArrayHasKey(ConfigHashManager::CONFIG_KEY, $this->getEnvFileContent());
+        $this->assertArrayHasKey(Hash::CONFIG_KEY, $this->getEnvFileContent());
     }
 
     /**

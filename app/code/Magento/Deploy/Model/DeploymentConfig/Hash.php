@@ -79,7 +79,7 @@ class Hash
             $config = $this->dataConfigCollector->getConfig();
             $hash = $this->configHashGenerator->generate($config);
             $this->writer->saveConfig([ConfigFilePool::APP_ENV => [self::CONFIG_KEY => $hash]]);
-        } catch (LocalizedException $exception) {
+        } catch (FileSystemException $exception) {
             throw new LocalizedException(__('Hash has not been saved'), $exception);
         }
     }
