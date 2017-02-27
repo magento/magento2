@@ -7,6 +7,7 @@
 namespace Magento\Captcha\Test\TestCase;
 
 use Magento\Customer\Test\Block\Form\Login;
+use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Customer\Test\Fixture\Customer;
@@ -54,7 +55,7 @@ class CaptchaAndLockoutCustomerTest extends Injectable
     private $customerAccountLogin;
 
     /**
-     * Customer Edit page
+     * CustomerIndexEdit page.
      *
      * @var CustomerIndexEdit
      */
@@ -119,23 +120,46 @@ class CaptchaAndLockoutCustomerTest extends Injectable
         $correctData['group_id'] = [
             'customerGroup' => $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()
         ];
-        $incorrectData = $correctData;
-        $incorrectData['password'] = $incorrectPassword;
 
-        $customer = $this->fixtureFactory->createByCode('customer', ['data' => $incorrectData]);
+        $newData = $customer->getData();
+        $newData['captcha'] = $captcha;
+        $newData['group_id'] = [
+            'customerGroup' => $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()
+        ];
+        $newData['password'] = $incorrectPassword;
+
+        $incorrectCustomer = $this->fixtureFactory->createByCode('customer', ['data' => $newData]);
 
         // Steps
         $this->customerAccountLogin->open();
 
-        // Fill incorrect password 3 or more times.
-        $this->customerLogin($customer, $this->customerAccountLogin->getLoginBlock(), $attempts);
+        // Fill incorrect password $attempts times.
+        $this->customerLogin($incorrectCustomer,
+            $this->customerAccountLogin->getLoginBlock(), $attempts);
 
-        // Fill correct captcha and incorrect password 3 or more times.
-        $this->customerLogin($customer, $this->customerAccountLogin->getLoginBlockWithCaptcha(), $attempts);
+        // Fill correct captcha and incorrect password $attempts times.
+        $this->customerLogin($incorrectCustomer,
+            $this->customerAccountLogin->getLoginBlockWithCaptcha(), $attempts);
 
         // Log in customer with correct captcha and correct password.
         $customer = $this->fixtureFactory->createByCode('customer', ['data' => $correctData]);
         $this->customerLogin($customer, $this->customerAccountLogin->getLoginBlockWithCaptcha(), 1);
+    }
+
+    /**
+     * Log in customer $attempts times.
+     *
+     * @param FixtureInterface $customer
+     * @param Login $loginForm
+     * @param int $attempts
+     * @return void
+     */
+    private function customerLogin(FixtureInterface $customer, Login $loginForm, $attempts)
+    {
+        for ($i = 0; $i < $attempts; $i++) {
+            $loginForm->fill($customer);
+            $loginForm->submit();
+        }
     }
 
     /**
@@ -149,21 +173,5 @@ class CaptchaAndLockoutCustomerTest extends Injectable
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true]
         )->run();
-    }
-
-    /**
-     * Log in customer $attempts times.
-     *
-     * @param Customer $customer
-     * @param Login $loginForm
-     * @param int $attempts
-     * @return void
-     */
-    private function customerLogin(Customer $customer, Login $loginForm, $attempts)
-    {
-        for ($i = 0; $i < $attempts; $i++) {
-            $loginForm->fill($customer);
-            $loginForm->submit();
-        }
     }
 }

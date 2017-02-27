@@ -173,7 +173,7 @@ class CustomerForm extends FormTabs
 
 
     /**
-     * Return personal information.
+     * Get personal information.
      *
      * @param string $title
      * @return string
