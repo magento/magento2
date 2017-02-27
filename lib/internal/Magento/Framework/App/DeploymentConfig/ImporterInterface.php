@@ -17,8 +17,8 @@ interface ImporterInterface
      *
      * @param array $data Data that should be imported
      * @return string[] The array of messages that generated during importing
-     * @throws InvalidTransitionException In case of any exceptions
-     * during importing. All changed during importing data is rolled back
+     * @throws InvalidTransitionException In case of errors during importing (e.g., cannot save some data).
+     * All changed during importing data is rolled back
      */
     public function import(array $data);
 }
