@@ -91,7 +91,7 @@ class FieldDataConverter
                         sprintf(
                             "Error converting field `%s` in table `%s` where `%s`=%s using %s."
                             . PHP_EOL
-                            . "Fix data or replace with valid value."
+                            . "Fix data or replace with a valid value."
                             . PHP_EOL
                             . "Failure reason: '%s'",
                             $field,

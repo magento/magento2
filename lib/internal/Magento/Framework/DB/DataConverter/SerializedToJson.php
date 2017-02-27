@@ -46,6 +46,18 @@ class SerializedToJson implements DataConverterInterface
      */
     public function convert($value)
     {
+        return $this->encodeJson($this->unserializeValue($value));
+    }
+
+    /**
+     * Unserialize value
+     *
+     * @param string $value
+     * @return  mixed
+     * @throws DataConversionException
+     */
+    protected function unserializeValue($value)
+    {
         try {
             if (PHP_MAJOR_VERSION >= 7) {
                 $value = $this->serialize->unserialize($value);
@@ -59,6 +71,18 @@ class SerializedToJson implements DataConverterInterface
         } catch (\Throwable $throwable) {
             throw new DataConversionException($throwable->getMessage());
         }
+        return $value;
+    }
+
+    /**
+     * Ecode value with json encoder
+     *
+     * @param string $value
+     * @return bool|string
+     * @throws DataConversionException
+     */
+    protected function encodeJson($value)
+    {
         $value = $this->json->serialize($value);
         if (json_last_error()) {
             throw new DataConversionException(json_last_error_msg());
