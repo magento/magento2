@@ -47,4 +47,25 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
         }
         return parent::validate($object);
     }
+
+    /**
+     * After Load Attribute Process
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     */
+    public function afterLoad($object)
+    {
+        $attributeCode = $this->getAttribute()->getAttributeCode();
+        $data = $object->getData($attributeCode);
+        if ($data) {
+            if (!is_array($data)) {
+                $object->setData($attributeCode, explode(',', $data));
+            } else {
+                $object->setData($attributeCode, $data);
+            }
+        }
+
+        return parent::afterLoad($object);
+    }
 }
