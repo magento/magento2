@@ -15,9 +15,8 @@ use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
 /**
  * Imports data from deployment configuration files to the DB.
  *
- * We have configuration files that are shared between environments, but sometime we need read
- * some configurations only from the DB (e.g., themes, scopes and etc). This command check changes of specific sections
- * (which are defined in di.xml) in configuration files, and import them if are needed.
+ * We have configuration files that are shared between environments, but some of the configurations are read only
+ * from DB (e.g., themes, scopes and etc). This command is used to import such configurations from the file to DB.
  */
 class ConfigImportCommand extends Command
 {
