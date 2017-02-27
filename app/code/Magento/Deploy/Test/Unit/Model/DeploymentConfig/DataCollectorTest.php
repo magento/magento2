@@ -41,6 +41,9 @@ class DataCollectorTest extends \PHPUnit_Framework_TestCase
         $this->dataCollector = new DataCollector($this->configImporterPoolMock, $this->deploymentConfigMock);
     }
 
+    /**
+     * @return void
+     */
     public function testGetConfig()
     {
         $sections = ['first', 'second'];

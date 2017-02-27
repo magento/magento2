@@ -21,7 +21,7 @@ class ImporterPool
      * Sections are defined with importers in di.xml
      * E.g.
      * ```xml
-     * <type name="Magento\Framework\App\DeploymentConfig\ConfigImporterPool">
+     * <type name="Magento\Deploy\Model\DeploymentConfig\ImporterPool">
      *     <arguments>
      *          <argument name="importers" xsi:type="array">
      *               <item name="scopes" xsi:type="string">Magento\Store\Model\StoreImporter</item>

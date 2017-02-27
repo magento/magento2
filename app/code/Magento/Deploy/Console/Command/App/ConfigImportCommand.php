@@ -10,7 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
-use Magento\Deploy\Model\DeploymentConfig\Importer;
+use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
 
 /**
  * Imports data from deployment configuration files to the DB.
@@ -55,8 +55,7 @@ class ConfigImportCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $messages = $this->importer->import();
-            $output->writeln($messages);
+            $this->importer->import($output);
         } catch (LocalizedException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 

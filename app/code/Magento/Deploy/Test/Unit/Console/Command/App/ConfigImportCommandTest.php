@@ -6,7 +6,7 @@
 namespace Magento\Deploy\Test\Unit\Console\Command\App;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
-use Magento\Deploy\Model\DeploymentConfig\Importer;
+use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -45,11 +45,9 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $this->importerMock->expects($this->once())
-            ->method('import')
-            ->willReturn(['Import in progress']);
+            ->method('import');
 
         $this->assertSame(Cli::RETURN_SUCCESS, $this->commandTester->execute([]));
-        $this->assertContains('Import in progress', $this->commandTester->getDisplay());
     }
 
     /**

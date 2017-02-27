@@ -3,12 +3,16 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Deploy\Model\DeploymentConfig;
+namespace Magento\Deploy\Console\Command\App\ConfigImport;
 
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface as Logger;
+use Magento\Deploy\Model\DeploymentConfig\Validator;
+use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Runs importing of config data from deployment configuration files.
@@ -74,28 +78,27 @@ class Importer
     /**
      * Runs importing of config data from deployment configuration files.
      *
-     * @return array
+     * @param OutputInterface $output the CLI output
+     * @return void
      * @throws LocalizedException
      */
-    public function import()
+    public function import(OutputInterface $output)
     {
-        $messages = ['Start import:'];
+        $output->writeln('<info>Start import:</info>');
 
         try {
             $importers = $this->configImporterPool->getImporters();
 
             if (!$importers || $this->configValidator->isValid()) {
-                $messages[] = 'Nothing to import';
+                $output->writeln('<info>Nothing to import</info>');
             } else {
                 /**
                  * @var string $namespace
                  * @var ImporterInterface $importer
                  */
                 foreach ($importers as $namespace => $importer) {
-                    $messages = array_merge(
-                        $messages,
-                        $importer->import($this->deploymentConfig->getConfigData($namespace))
-                    );
+                    $messages = $importer->import($this->deploymentConfig->getConfigData($namespace));
+                    $output->writeln($messages);
                 }
 
                 $this->configHash->regenerate();
@@ -104,7 +107,5 @@ class Importer
             $this->logger->error($exception);
             throw new LocalizedException(__('Import is failed'), $exception);
         }
-
-        return $messages;
     }
 }
