@@ -21,11 +21,6 @@ class AttributeLoaderTest extends \Magento\TestFramework\Indexer\TestCase
      */
     private $attributeLoader;
 
-    /**
-     * @var \ReflectionMethod
-     */
-    private $getAttributesMethod;
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
