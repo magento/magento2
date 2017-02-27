@@ -146,6 +146,7 @@ class Config
      * Set sort order
      *
      * @param string|int $value
+     * @return void
      */
     public function setSortOrder($value)
     {
