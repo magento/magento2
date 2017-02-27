@@ -115,7 +115,6 @@ class UpdateCategoryEntityFlatDataTest extends UpdateCategoryEntityTest
         return parent::test($category, $initialCategory);
     }
 
-
     /**
      * Set default configuration.
      *
