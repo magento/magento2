@@ -8,6 +8,7 @@ namespace Magento\Signifyd\Model\CaseServices;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\Signifyd\Api\CaseManagementInterface;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
+use Magento\Signifyd\Model\OrderStateService;
 use Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
@@ -46,6 +47,11 @@ class CreationService implements CaseCreationServiceInterface
     private $orderGridUpdater;
 
     /**
+     * @var OrderStateService
+     */
+    private $orderStateService;
+
+    /**
      * CreationService constructor.
      *
      * @param CaseManagementInterface $caseManagement
@@ -53,19 +59,22 @@ class CreationService implements CaseCreationServiceInterface
      * @param LoggerInterface $logger
      * @param CaseRepositoryInterface $caseRepository
      * @param OrderGridUpdater $orderGridUpdater
+     * @param OrderStateService $orderStateService
      */
     public function __construct(
         CaseManagementInterface $caseManagement,
         Gateway $signifydGateway,
         LoggerInterface $logger,
         CaseRepositoryInterface $caseRepository,
-        OrderGridUpdater $orderGridUpdater
+        OrderGridUpdater $orderGridUpdater,
+        OrderStateService $orderStateService
     ) {
         $this->caseManagement = $caseManagement;
         $this->signifydGateway = $signifydGateway;
         $this->logger = $logger;
         $this->caseRepository = $caseRepository;
         $this->orderGridUpdater = $orderGridUpdater;
+        $this->orderStateService = $orderStateService;
     }
 
     /**
@@ -85,6 +94,7 @@ class CreationService implements CaseCreationServiceInterface
 
         $case->setCaseId($caseId);
         $this->caseRepository->save($case);
+        $this->orderStateService->updateByCase($case);
 
         return true;
     }
