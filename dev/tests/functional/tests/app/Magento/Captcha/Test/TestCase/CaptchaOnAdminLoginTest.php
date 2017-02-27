@@ -39,7 +39,7 @@ class CaptchaOnAdminLoginTest extends Injectable
     /**
      * Assert Captcha.
      *
-     * @var string
+     * @var AssertCaptchaFieldOnBackend
      */
     private $assertCaptcha;
 

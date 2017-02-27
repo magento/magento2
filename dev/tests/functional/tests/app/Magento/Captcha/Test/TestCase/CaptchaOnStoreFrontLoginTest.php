@@ -38,7 +38,7 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
     /**
      * Assert Captcha.
      *
-     * @var string
+     * @var AssertCaptchaFieldOnStorefront
      */
     private $assertCaptcha;
 
@@ -116,7 +116,7 @@ class CaptchaOnStoreFrontLoginTest extends Injectable
 
         $this->customerAccountLogin->open();
         $this->assertCaptcha->processAssert($this->customerAccountLogin);
-        $this->customerAccountLogin->getLoginBlockWithCaptcha()->getCaptchaReloadButton()->click();
+        $this->customerAccountLogin->getLoginBlockWithCaptcha()->clickReloadCaptchaButton();
         $this->customerAccountLogin->getLoginBlockWithCaptcha()->login($customer);
     }
 
