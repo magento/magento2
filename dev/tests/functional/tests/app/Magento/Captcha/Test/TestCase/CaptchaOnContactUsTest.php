@@ -9,8 +9,8 @@ namespace Magento\Captcha\Test\TestCase;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Captcha\Test\Constraint\AssertCaptchaFieldOnContactUsForm;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Contact\Test\Page\ContactIndex;
+use Magento\Contact\Test\Fixture\Comment;
 
 /**
  * Preconditions:
@@ -74,12 +74,12 @@ class CaptchaOnContactUsTest extends Injectable
     /**
      * Test creation for send comment using the contact us form with captcha.
      *
-     * @param Customer $customer
+     * @param Comment $comment
      * @param null|string $configData
      * @return void
      */
     public function test(
-        Customer $customer,
+        Comment $comment,
         $configData
     ) {
         $this->configData = $configData;
@@ -92,7 +92,7 @@ class CaptchaOnContactUsTest extends Injectable
 
         $this->contactIndex->open();
         $this->assertCaptcha->processAssertRegisterForm($this->contactIndex);
-        $this->contactIndex->getFormWithCaptcha()->fill($customer);
+        $this->contactIndex->getFormWithCaptcha()->fill($comment);
         $this->contactIndex->getFormWithCaptcha()->reloadCaptcha();
         $this->contactIndex->getFormWithCaptcha()->sendComment();
     }

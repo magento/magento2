@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Contact\Test\Block\Form;
+namespace Magento\Contact\Test\Block;
 
 use Magento\Mtf\Block\Block;
 

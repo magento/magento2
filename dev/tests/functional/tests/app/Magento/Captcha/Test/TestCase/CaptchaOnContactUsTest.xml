@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Captcha\Test\TestCase\CaptchaOnContactUsTest" summary="Check CAPTCHA on Contact Us Page" ticketId="MAGETWO-43609">
         <variation name="CaptchaOnContactUsTestVariation1">
-            <data name="customer/dataset" xsi:type="string">contact_us_form_with_captcha</data>
+            <data name="comment/dataset" xsi:type="string">comment_with_captcha</data>
             <data name="configData" xsi:type="string">captcha_storefront_contact_us</data>
             <constraint name="Magento\Contact\Test\Constraint\AssertContactUsSuccessMessage"/>
         </variation>
