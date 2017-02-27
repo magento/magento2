@@ -55,14 +55,14 @@ class Navigation extends Block
      *
      * @var string
      */
-    protected $categoryName = './/li[@class="item"]//a[contains(text(),"%s")]';
+    private $categoryName = './/li[@class="item"]//a[contains(text(),"%s")]';
 
     /**
      * Locator for element with product quantity.
      *
      * @var string
      */
-    protected $productQty = '/following-sibling::span[contains(text(), "%s")]';
+    private $productQty = '/following-sibling::span[contains(text(), "%s")]';
 
     /**
      * Remove all applied filters.

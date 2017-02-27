@@ -16,11 +16,16 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertCategoryNavigationMenu extends AbstractConstraint
 {
     /**
-     * Array for category tree.
+     * Default category name.
+     */
+    const DEFAULT_CATEGORY_NAME = 'Default Category';
+
+    /**
+     * List of nested categories names.
      *
      * @var array
      */
-    private $categoryTree = [];
+    private $nestedCategoriesList = [];
 
     /**
      * Assert that relations of categories in navigation menu are correct.
@@ -37,25 +42,24 @@ class AssertCategoryNavigationMenu extends AbstractConstraint
         Category $childCategory,
         Category $parentCategory
     ) {
-
         do {
             $name = $bottomChildCategory->getName();
             if ($name !== $childCategory->getName()) {
-                $this->categoryTree[] = $name;
+                $this->nestedCategoriesList[] = $name;
                 $bottomChildCategory = $bottomChildCategory->getDataFieldConfig('parent_id')['source']
                     ->getParentCategory();
             } else {
-                $this->categoryTree[] = $childCategory->getName();
+                $this->nestedCategoriesList[] = $childCategory->getName();
                 break;
             }
         } while ($name);
 
-        if ($parentCategory->getName() !== 'Default Category') {
-            $this->categoryTree[] = $parentCategory->getName();
+        if ($parentCategory->getName() !== self::DEFAULT_CATEGORY_NAME) {
+            $this->nestedCategoriesList[] = $parentCategory->getName();
         }
         $cmsIndex->open();
 
-        foreach (array_reverse($this->categoryTree) as $category) {
+        foreach (array_reverse($this->nestedCategoriesList) as $category) {
             $cmsIndex->getTopMenu()->hoverCategoryByName($category);
             \PHPUnit_Framework_Assert::assertTrue(
                 $cmsIndex->getTopMenu()->isCategoryVisible($category),
@@ -71,6 +75,6 @@ class AssertCategoryNavigationMenu extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Topmenu contains correct tree of categories';
+        return 'Topmenu contains correct tree of categories.';
     }
 }

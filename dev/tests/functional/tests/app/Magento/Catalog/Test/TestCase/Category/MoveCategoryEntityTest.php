@@ -66,17 +66,17 @@ class MoveCategoryEntityTest extends Injectable
      *
      * @param Category $childCategory
      * @param Category $parentCategory
-     * @param array|null $moveLevel
+     * @param array $moveLevel
      * @return array
      */
-    public function test(Category $childCategory, Category $parentCategory, array $moveLevel = null)
+    public function test(Category $childCategory, Category $parentCategory, array $moveLevel = [])
     {
         // Preconditions:
         $parentCategory->persist();
         $childCategory->persist();
         $bottomChildCategory = $childCategory;
 
-        if ($moveLevel !== null) {
+        if (!empty($moveLevel)) {
             for ($nestingIterator = 1; $nestingIterator < $moveLevel['child']; $nestingIterator++) {
                 $childCategory = $childCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
             }

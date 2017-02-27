@@ -7,7 +7,6 @@
 namespace Magento\LayeredNavigation\Test\Constraint;
 
 use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
@@ -22,7 +21,7 @@ class AssertCategoryLayeredNavigation extends AbstractConstraint
      *
      * @var BrowserInterface
      */
-    protected $browser;
+    private $browser;
 
     /**
      * Assert that category is present in layered navigation and product is visible in product grid.
@@ -63,7 +62,7 @@ class AssertCategoryLayeredNavigation extends AbstractConstraint
      * @param Category $category
      * @return void
      */
-    protected function openCategory(Category $category)
+    private function openCategory(Category $category)
     {
         $categoryUrlKey = [];
 
