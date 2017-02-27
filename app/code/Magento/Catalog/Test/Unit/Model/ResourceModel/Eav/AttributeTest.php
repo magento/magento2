@@ -113,10 +113,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->will($this->returnValue($dbAdapterMock));
 
-        $attributeCacheMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AttributeCache::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
@@ -126,8 +122,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                     'indexerEavProcessor' => $this->_eavProcessor,
                     'resource' => $this->resourceMock,
                     'data' => ['id' => 1],
-                    'eavConfig' => $this->eavConfigMock,
-                    'attributeCache' => $attributeCacheMock
+                    'eavConfig' => $this->eavConfigMock
                 ]
         );
     }
@@ -152,28 +147,12 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->_model->afterSave();
     }
 
-    public function testAfterSaveEavCache()
-    {
-        $this->eavConfigMock
-            ->expects($this->once())
-            ->method('clear');
-        $this->_model->afterSave();
-    }
-
     public function testIndexerAfterDeleteAttribute()
     {
         $this->_processor->expects($this->once())->method('markIndexerAsInvalid');
         $this->_model->setOrigData('id', 2);
         $this->_model->setOrigData('used_in_product_listing', 1);
         $this->_model->afterDeleteCommit();
-    }
-
-    public function testAfterDeleteEavCache()
-    {
-        $this->eavConfigMock
-            ->expects($this->once())
-            ->method('clear');
-        $this->_model->afterDelete();
     }
 
     public function testGetScopeGlobal()

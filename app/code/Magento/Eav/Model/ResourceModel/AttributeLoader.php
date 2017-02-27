@@ -6,14 +6,11 @@
 namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
-use Magento\Eav\Model\Entity\AttributeCache;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
- * Сlass responsible for loading and caching of attributes related to the given attribute set.
- *
- * Can be used to improve performance of services that mostly read attribute data.
+ * Loads attributes by attribute set
  */
 class AttributeLoader
 {
@@ -36,18 +33,17 @@ class AttributeLoader
     private $searchCriteriaBuilder;
 
     /**
-     * AttributeLoader constructor.
+     * Constructor
+     *
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param AttributeCache $attributeCache
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        AttributeCache $attributeCache
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;

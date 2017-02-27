@@ -37,7 +37,6 @@ class AttributeLoader implements AttributeLoaderInterface
      * Constructor
      *
      * @param Config $config
-     * @param AttributeCache $cache
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(

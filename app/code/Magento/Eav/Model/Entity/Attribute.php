@@ -304,7 +304,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     public function afterSave()
     {
         $this->_getResource()->saveInSetIncluding($this);
-        $this->getAttributeCache()->clear();
         return parent::afterSave();
     }
 
@@ -313,21 +312,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function afterDelete()
     {
-        $this->getAttributeCache()->clear();
         return parent::afterDelete();
-    }
-
-    /**
-     * Attribute cache
-     *
-     * @return AttributeCache
-     */
-    private function getAttributeCache()
-    {
-        if (!$this->attributeCache) {
-            $this->attributeCache = ObjectManager::getInstance()->get(AttributeCache::class);
-        }
-        return $this->attributeCache;
     }
 
     /**
