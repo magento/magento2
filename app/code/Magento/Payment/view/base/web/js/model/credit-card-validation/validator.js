@@ -49,6 +49,7 @@
 
             /**
              * Validate credit card number based on mod 10
+             *
              * @param {*} number - credit card number
              * @return {Boolean}
              */
@@ -61,6 +62,7 @@
 
             /**
              * Validate credit card expiration month
+             *
              * @param {String} date - month
              * @return {Boolean}
              */
@@ -73,7 +75,8 @@
 
             /**
              * Validate cvv
-             * @param {String} cvv - month
+             *
+             * @param {String} cvv - card verification value
              * @return {Boolean}
              */
             function (cvv) {
@@ -87,6 +90,7 @@
 
             /**
              * Validate credit card expiration year
+             *
              * @param {String} date - year
              * @return {Boolean}
              */
