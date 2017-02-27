@@ -49,6 +49,7 @@ class Customer extends DataSource
         $this->fixtureFactory = $fixtureFactory;
         $this->params = $params;
         $this->fixtureData = $data;
+        $this->data = $data;
     }
 
     /**
@@ -71,8 +72,8 @@ class Customer extends DataSource
                 $customer->persist();
             }
             $this->customer = $customer;
+            $this->data = $customer->getData();
         }
-        $this->data = $customer->getData();
 
         return parent::getData($key);
     }
