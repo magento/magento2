@@ -935,4 +935,11 @@
             <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Full">
+        <arguments>
+            <argument name="memoryTablesMinRows" xsi:type="array">
+                <item name="default" xsi:type="number">341</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

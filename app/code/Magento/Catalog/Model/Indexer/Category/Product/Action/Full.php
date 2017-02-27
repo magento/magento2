@@ -8,27 +8,32 @@ namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\App\ResourceConnection;
 
+/**
+ * Class Full reindex action
+ *
+ * @package Magento\Catalog\Model\Indexer\Category\Product\Action
+ */
 class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
     /**
      * @var \Magento\Framework\Indexer\BatchSizeCalculatorInterface
      */
-    protected $batchSizeCalculator;
+    private $batchSizeCalculator;
 
     /**
      * @var \Magento\Framework\Indexer\BatchProviderInterface
      */
-    protected $batchProvider;
+    private $batchProvider;
+
+    /**
+     * @var int
+     */
+    private $memoryTablesMinRows;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
-
-    /**
-     * @var int
-     */
-    protected $memoryTablesMinRows;
 
     /**
      * @param ResourceConnection $resource
@@ -46,8 +51,15 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         QueryGenerator $queryGenerator = null,
         \Magento\Framework\Indexer\BatchSizeCalculatorInterface $batchSizeCalculator = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        array $memoryTablesMinRows = []
     ) {
+        parent::__construct(
+            $resource,
+            $storeManager,
+            $config,
+            $queryGenerator
+        );
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->batchSizeCalculator = $batchSizeCalculator ?: $objectManager->get(
             \Magento\Framework\Indexer\BatchSizeCalculatorInterface::class
@@ -58,13 +70,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->metadataPool = $metadataPool ?: $objectManager->get(
             \Magento\Framework\EntityManager\MetadataPool::class
         );
-        $this->memoryTablesMinRows = 200;
-        parent::__construct(
-            $resource,
-            $storeManager,
-            $config,
-            $queryGenerator
-        );
+        $this->memoryTablesMinRows = $memoryTablesMinRows;
     }
 
     /**
@@ -130,13 +136,14 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $select = $this->connection->select()->from($this->getMainTmpTable());
 
         $queries = $this->prepareSelectsByRange($select, 'category_id');
+        $columns = array_keys($this->connection->describeTable($this->getMainTable()));
 
         foreach ($queries as $query) {
             $this->connection->query(
                 $this->connection->insertFromSelect(
                     $query,
                     $this->getMainTable(),
-                    ['category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'],
+                    $columns,
                     \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );
@@ -162,7 +169,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected function reindexRootCategory(\Magento\Store\Model\Store $store)
     {
         if ($this->isIndexRootCategoryNeeded()) {
-            $this->reindexByCategories($this->getAllProducts($store), 'cp.entity_id IN (?)');
+            $this->reindexCategoriesBySelect($this->getAllProducts($store), 'cp.entity_id IN (?)');
         }
     }
 
@@ -174,7 +181,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function reindexAnchorCategories(\Magento\Store\Model\Store $store)
     {
-        $this->reindexByCategories($this->getAnchorCategoriesSelect($store), 'ccp.product_id IN (?)');
+        $this->reindexCategoriesBySelect($this->getAnchorCategoriesSelect($store), 'ccp.product_id IN (?)');
     }
 
     /**
@@ -185,35 +192,37 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function reindexNonAnchorCategories(\Magento\Store\Model\Store $store)
     {
-        $this->reindexByCategories($this->getNonAnchorCategoriesSelect($store), 'ccp.product_id IN (?)');
+        $this->reindexCategoriesBySelect($this->getNonAnchorCategoriesSelect($store), 'ccp.product_id IN (?)');
     }
 
     /**
+     * Reindex categories using given SQL select and condition.
+     *
      * @param \Magento\Framework\DB\Select $resultSelect
      * @param string $whereCondition
      * @return void
      */
-    private function reindexByCategories(\Magento\Framework\DB\Select $resultSelect, $whereCondition)
+    private function reindexCategoriesBySelect(\Magento\Framework\DB\Select $resultSelect, $whereCondition)
     {
         $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $connection = $this->connection;
+        $columns = array_keys($this->connection->describeTable($this->getMainTmpTable()));
         $batches = $this->batchProvider->getBatches(
-            $connection,
+            $this->connection,
             $entityMetadata->getEntityTable(),
             $entityMetadata->getIdentifierField(),
-            $this->batchSizeCalculator->estimateBatchSize($connection, $this->memoryTablesMinRows)
+            $this->batchSizeCalculator->estimateBatchSize($this->connection, $this->memoryTablesMinRows['default'])
         );
         foreach ($batches as $batch) {
-            $select = $connection->select();
+            $select = $this->connection->select();
             $select->distinct(true);
             $select->from(['e' => $entityMetadata->getEntityTable()], $entityMetadata->getIdentifierField());
-            $entityIds = $this->batchProvider->getBatchIds($connection, $select, $batch);
+            $entityIds = $this->batchProvider->getBatchIds($this->connection, $select, $batch);
             $resultSelect->where($whereCondition, $entityIds);
             $this->connection->query(
                 $this->connection->insertFromSelect(
                     $resultSelect,
                     $this->getMainTmpTable(),
-                    ['category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'],
+                    $columns,
                     \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );
