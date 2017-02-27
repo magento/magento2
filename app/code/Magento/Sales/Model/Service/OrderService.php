@@ -210,7 +210,7 @@ class OrderService implements OrderManagementInterface
      * @param string $comment
      * @param bool $isCustomerNotified
      * @param bool $shouldProtectState
-     * @return \Magento\Sales\Model\Order
+     * @return \Magento\Sales\Model\Service\OrderService
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setState(
