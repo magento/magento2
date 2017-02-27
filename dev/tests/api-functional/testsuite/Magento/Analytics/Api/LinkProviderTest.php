@@ -5,8 +5,10 @@
  */
 namespace Magento\Analytics\Api;
 
+use Magento\Analytics\Model\FileInfoManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -38,11 +40,11 @@ class LinkProviderTest extends WebapiAbstract
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /**
-         * @var $fileInfoManager \Magento\Analytics\Model\FileInfoManager
+         * @var $fileInfoManager FileInfoManager
          */
-        $fileInfoManager = $objectManager->create(\Magento\Analytics\Model\FileInfoManager::class);
+        $fileInfoManager = $objectManager->create(FileInfoManager::class);
 
-        $storeManager = $objectManager->create(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeManager = $objectManager->create(StoreManagerInterface::class);
 
         $fileInfo = $fileInfoManager->load();
 
@@ -53,7 +55,7 @@ class LinkProviderTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => static::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
+                'serviceVersion' => static::SERVICE_VERSION,
                 'operation' => static::SERVICE_NAME . 'Get',
             ],
         ];
