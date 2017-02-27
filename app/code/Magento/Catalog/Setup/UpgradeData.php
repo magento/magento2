@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -41,11 +40,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param CategorySetupFactory $categorySetupFactory
      * @param EavSetupFactory $eavSetupFactory
      */
-    public function __construct(
-        CategorySetupFactory $categorySetupFactory,
-        EavSetupFactory $eavSetupFactory,
-        AttributeRepository $attributeRepository
-    ) {
+    public function __construct(CategorySetupFactory $categorySetupFactory, EavSetupFactory $eavSetupFactory) {
         $this->categorySetupFactory = $categorySetupFactory;
         $this->eavSetupFactory = $eavSetupFactory;
     }
