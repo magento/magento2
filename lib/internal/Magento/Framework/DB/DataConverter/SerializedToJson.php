@@ -46,14 +46,33 @@ class SerializedToJson implements DataConverterInterface
      */
     public function convert($value)
     {
+        if ($this->isValidJsonValue($value)) {
+            return $value;
+        }
         return $this->encodeJson($this->unserializeValue($value));
+    }
+
+    /**
+     * Is a valid JSON serialized value
+     *
+     * @param string $value
+     * @return bool
+     */
+    protected function isValidJsonValue($value)
+    {
+        if (in_array($value, ['null', 'false', '0', '""', '[]'])
+            || (json_decode($value) !== null && json_last_error() === JSON_ERROR_NONE)
+        ) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Unserialize value
      *
      * @param string $value
-     * @return  mixed
+     * @return mixed
      * @throws DataConversionException
      */
     protected function unserializeValue($value)
@@ -75,10 +94,10 @@ class SerializedToJson implements DataConverterInterface
     }
 
     /**
-     * Ecode value with json encoder
+     * Encode value with json encoder
      *
      * @param string $value
-     * @return bool|string
+     * @return string
      * @throws DataConversionException
      */
     protected function encodeJson($value)

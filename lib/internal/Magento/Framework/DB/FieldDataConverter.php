@@ -11,7 +11,6 @@ use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
 use Magento\Framework\DB\Select\QueryModifierInterface;
-use Magento\Setup\Exception;
 
 /**
  * Convert field data from one representation to another
@@ -58,7 +57,7 @@ class FieldDataConverter
      * @param string $identifier
      * @param string $field
      * @param QueryModifierInterface|null $queryModifier
-     * @throws Exception
+     * @throws FieldDataConversionException
      * @return void
      */
     public function convert(
@@ -78,22 +77,19 @@ class FieldDataConverter
         foreach ($iterator as $selectByRange) {
             $rows = $connection->fetchAll($selectByRange);
             foreach ($rows as $row) {
-                if ($this->isValidJsonValue($row[$field])) {
-                    // skip valid JSON values (for data rows that have been already converter)
-                    continue;
-                }
                 try {
-                    $bind = [$field => $this->dataConverter->convert($row[$field])];
+                    $convertedValue = $this->dataConverter->convert($row[$field]);
+                    if ($row[$field] === $convertedValue) {
+                        // skip for data rows that have been already converted
+                        continue;
+                    }
+                    $bind = [$field => $convertedValue];
                     $where = [$identifier . ' = ?' => (int) $row[$identifier]];
                     $connection->update($table, $bind, $where);
                 } catch (DataConversionException $e) {
-                    throw new Exception(
+                    throw new \Magento\Framework\DB\FieldDataConversionException(
                         sprintf(
-                            "Error converting field `%s` in table `%s` where `%s`=%s using %s."
-                            . PHP_EOL
-                            . "Fix data or replace with a valid value."
-                            . PHP_EOL
-                            . "Failure reason: '%s'",
+                            \Magento\Framework\DB\FieldDataConversionException::MESSAGE_PATTERN,
                             $field,
                             $table,
                             $identifier,
@@ -105,21 +101,5 @@ class FieldDataConverter
                 }
             }
         }
-    }
-
-    /**
-     * Is a valid JSON serialized value
-     *
-     * @param string $value
-     * @return bool
-     */
-    private function isValidJsonValue($value)
-    {
-        if (in_array($value, ['null', 'false', '0', '""', '[]'])
-            || (json_decode($value) !== null && json_last_error() === JSON_ERROR_NONE)
-        ) {
-            return true;
-        }
-        return false;
     }
 }

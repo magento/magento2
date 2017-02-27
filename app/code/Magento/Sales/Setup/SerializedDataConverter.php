@@ -24,7 +24,10 @@ class SerializedDataConverter extends SerializedToJson
      */
     public function convert($value)
     {
-        $valueUnserialized = parent::unserializeValue($value);
+        if ($this->isValidJsonValue($value)) {
+            return $value;
+        }
+        $valueUnserialized = $this->unserializeValue($value);
         if (isset($valueUnserialized['options'])) {
             foreach ($valueUnserialized['options'] as $key => $option) {
                 if ($option['option_type'] === 'file') {
@@ -37,6 +40,6 @@ class SerializedDataConverter extends SerializedToJson
                     $valueUnserialized['bundle_selection_attributes']
             );
         }
-        return parent::encodeJson($valueUnserialized);
+        return $this->encodeJson($valueUnserialized);
     }
 }
