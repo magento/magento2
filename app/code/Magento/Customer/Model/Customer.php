@@ -1076,7 +1076,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
         $indexer = $this->indexerRegistry->get(self::CUSTOMER_GRID_INDEXER_ID);
-        $indexer->reindexRow($this->getId());
+        if (!$indexer->isScheduled()) {
+            $indexer->reindexRow($this->getId());
+        }
     }
 
     /**

@@ -14,7 +14,7 @@ class CatalogPriceRulesFixture extends Fixture
     /**
      * @var int
      */
-    protected $priority = 80;
+    protected $priority = 90;
 
     /**
      * {@inheritdoc}
