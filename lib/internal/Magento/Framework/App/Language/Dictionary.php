@@ -140,9 +140,10 @@ class Dictionary
                 'language'          => $languageConfig,
                 'key'               => $packKey,
             ];
-            foreach ($languageConfig->getUses() as $reuse) {
+            foreach ($languageConfig->getUses() as $index => $reuse) {
                 if (isset($this->packList[$reuse['vendor']][$reuse['package']])) {
                     $parentLanguageConfig = $this->packList[$reuse['vendor']][$reuse['package']];
+                    $parentLanguageConfig->setSortOrder($index);
                     $this->collectInheritedPacks($parentLanguageConfig, $result, $level + 1, $visitedPacks);
                 }
             }
