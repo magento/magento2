@@ -9,6 +9,7 @@ use Magento\Analytics\Model\FileInfoManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -27,9 +28,12 @@ class LinkProviderTest extends WebapiAbstract
      */
     protected $objectManager;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     /**
@@ -37,7 +41,7 @@ class LinkProviderTest extends WebapiAbstract
      */
     public function testGetAll()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         /**
          * @var $fileInfoManager FileInfoManager
