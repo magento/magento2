@@ -5,7 +5,6 @@
  */
 namespace Magento\Signifyd\Test\Unit\Model;
 
-use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
@@ -27,6 +26,11 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
      * @var string
      */
     private static $message = 'Case is created.';
+
+    /**
+     * @var string
+     */
+    private static $status = 'On Hold';
 
     /**
      * @var CommentsHistoryUpdater
@@ -84,6 +88,10 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
             ->method('getOrderId')
             ->willReturn(self::$orderId);
 
+        $this->historyEntity->expects(self::any())
+            ->method('setStatus')
+            ->with('')
+            ->willReturnSelf();
         $this->historyEntity->expects(self::once())
             ->method('save')
             ->willThrowException(new \Exception('Cannot save comment message.'));
@@ -102,11 +110,15 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
             ->method('getOrderId')
             ->willReturn(self::$orderId);
 
+        $this->historyEntity->expects(self::any())
+            ->method('setStatus')
+            ->with(self::$status)
+            ->willReturnSelf();
         $this->historyEntity->expects(self::once())
             ->method('save')
             ->willReturnSelf();
 
-        $this->updater->addComment($this->caseEntity, __(self::$message));
+        $this->updater->addComment($this->caseEntity, __(self::$message), self::$status);
     }
 
     /**

@@ -6,7 +6,6 @@
 namespace Magento\Signifyd\Model\CaseServices;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;

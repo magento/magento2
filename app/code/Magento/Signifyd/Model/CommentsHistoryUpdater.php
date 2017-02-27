@@ -35,10 +35,10 @@ class CommentsHistoryUpdater
      *
      * @param CaseInterface $case
      * @param Phrase $message
+     * @param string $status
      * @return void
-     * @throws \Exception
      */
-    public function addComment(CaseInterface $case, Phrase $message)
+    public function addComment(CaseInterface $case, Phrase $message, $status = '')
     {
         if (!$message->getText()) {
             return;
@@ -49,6 +49,7 @@ class CommentsHistoryUpdater
         $history->setParentId($case->getOrderId())
             ->setComment($message)
             ->setEntityName('order')
+            ->setStatus($status)
             ->save();
     }
 }
