@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
+namespace Magento\Deploy\Test\Unit\Console\Command\App\ConfigImport;
 
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
