@@ -147,12 +147,28 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->_model->afterSave();
     }
 
+    public function testAfterSaveEavCache()
+    {
+        $this->eavConfigMock
+            ->expects($this->once())
+            ->method('clear');
+        $this->_model->afterSave();
+    }
+
     public function testIndexerAfterDeleteAttribute()
     {
         $this->_processor->expects($this->once())->method('markIndexerAsInvalid');
         $this->_model->setOrigData('id', 2);
         $this->_model->setOrigData('used_in_product_listing', 1);
         $this->_model->afterDeleteCommit();
+    }
+
+    public function testAfterDeleteEavCache()
+    {
+        $this->eavConfigMock
+            ->expects($this->once())
+            ->method('clear');
+        $this->_model->afterDelete();
     }
 
     public function testGetScopeGlobal()
