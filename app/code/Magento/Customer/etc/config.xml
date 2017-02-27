@@ -51,6 +51,9 @@
                 <suffix_options />
                 <dob_show />
                 <gender_show />
+                <telephone_show>req</telephone_show>
+                <company_show>opt</company_show>
+                <fax_show/>
             </address>
             <startup>
                 <redirect_dashboard>1</redirect_dashboard>
@@ -65,7 +68,7 @@
 {{depend street4}}{{var street4}}{{/depend}}
 {{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}
 {{var country}}
-T: {{var telephone}}
+{{depend telephone}}T: {{var telephone}}{{/depend}}
 {{depend fax}}F: {{var fax}}{{/depend}}
 {{depend vat_id}}VAT: {{var vat_id}}{{/depend}}</text>
                 <oneline>{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}, {{var street}}, {{var city}}, {{var region}} {{var postcode}}, {{var country}}</oneline>
