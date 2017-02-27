@@ -6,8 +6,14 @@
  */
 namespace Magento\Contact\Controller\Index;
 
-use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Contact\Model\ConfigInterface;
+use Magento\Contact\Model\MailInterface;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
 
 class Post extends \Magento\Contact\Controller\Index
 {
@@ -17,74 +23,59 @@ class Post extends \Magento\Contact\Controller\Index
     private $dataPersistor;
 
     /**
+     * @var Context
+     */
+    private $context;
+
+    /**
+     * @var MailInterface
+     */
+    private $mail;
+
+    /**
+     * @param Context $context
+     * @param ConfigInterface $contactsConfig
+     * @param MailInterface $mail
+     * @param DataPersistorInterface $dataPersistor
+     */
+    public function __construct(
+        Context $context,
+        ConfigInterface $contactsConfig,
+        MailInterface $mail,
+        DataPersistorInterface $dataPersistor
+    ) {
+        parent::__construct($context, $contactsConfig);
+        $this->context = $context;
+        $this->mail = $mail;
+        $this->dataPersistor = $dataPersistor;
+    }
+
+    /**
      * Post user question
      *
-     * @return void
-     * @throws \Exception
+     * @return Redirect
      */
     public function execute()
     {
-        $post = $this->getRequest()->getPostValue();
-        if (!$post) {
-            $this->_redirect('*/*/');
-            return;
+        if (!$this->isPostRequest()) {
+            return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
-
-        $this->inlineTranslation->suspend();
         try {
-            $postObject = new \Magento\Framework\DataObject();
-            $postObject->setData($post);
-
-            $error = false;
-
-            if (!\Zend_Validate::is(trim($post['name']), 'NotEmpty')) {
-                $error = true;
-            }
-            if (!\Zend_Validate::is(trim($post['comment']), 'NotEmpty')) {
-                $error = true;
-            }
-            if (!\Zend_Validate::is(trim($post['email']), 'EmailAddress')) {
-                $error = true;
-            }
-            if (\Zend_Validate::is(trim($post['hideit']), 'NotEmpty')) {
-                $error = true;
-            }
-            if ($error) {
-                throw new \Exception();
-            }
-
-            $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
-            $transport = $this->_transportBuilder
-                ->setTemplateIdentifier($this->scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, $storeScope))
-                ->setTemplateOptions(
-                    [
-                        'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                        'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-                    ]
-                )
-                ->setTemplateVars(['data' => $postObject])
-                ->setFrom($this->scopeConfig->getValue(self::XML_PATH_EMAIL_SENDER, $storeScope))
-                ->addTo($this->scopeConfig->getValue(self::XML_PATH_EMAIL_RECIPIENT, $storeScope))
-                ->setReplyTo($post['email'])
-                ->getTransport();
-
-            $transport->sendMessage();
-            $this->inlineTranslation->resume();
+            $this->sendEmail($this->validatedParams());
             $this->messageManager->addSuccess(
                 __('Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.')
             );
             $this->getDataPersistor()->clear('contact_us');
-            $this->_redirect('contact/index');
-            return;
+        } catch (LocalizedException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->getDataPersistor()->set('contact_us', $this->getRequest()->getParams());
         } catch (\Exception $e) {
-            $this->inlineTranslation->resume();
-            $this->messageManager->addError(
+            $this->messageManager->addErrorMessage(
                 __('We can\'t process your request right now. Sorry, that\'s all we know.')
             );
-            $this->getDataPersistor()->set('contact_us', $post);
-            $this->_redirect('contact/index');
-            return;
+            $this->getDataPersistor()->set('contact_us', $this->getRequest()->getParams());
         }
+        return $this->resultRedirectFactory->create()->setPath('contact/index');
     }
 
     /**
@@ -100,5 +91,47 @@ class Post extends \Magento\Contact\Controller\Index
         }
 
         return $this->dataPersistor;
+    }
+
+    /**
+     * @param array $post Post data from contact form
+     * @return void
+     */
+    private function sendEmail($post)
+    {
+        $this->mail->send($post['email'], ['data' => new \Magento\Framework\DataObject($post)]);
+    }
+
+    /**
+     * @return bool
+     */
+    private function isPostRequest()
+    {
+        /** @var Request $request */
+        $request = $this->getRequest();
+        return !empty($request->getPostValue());
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    private function validatedParams()
+    {
+        $request = $this->getRequest();
+        if (trim($request->getParam('name')) === '') {
+            throw new LocalizedException(__('Name is missing'));
+        }
+        if (trim($request->getParam('comment')) === '') {
+            throw new LocalizedException(__('Comment is missing'));
+        }
+        if (false === \strpos($request->getParam('email'), '@')) {
+            throw new LocalizedException(__('Invalid email address'));
+        }
+        if (trim($request->getParam('hideit')) !== '') {
+            throw new \Exception();
+        }
+
+        return $request->getParams();
     }
 }
