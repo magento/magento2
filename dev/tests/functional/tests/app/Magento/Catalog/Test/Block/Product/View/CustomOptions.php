@@ -110,6 +110,27 @@ class CustomOptions extends Form
     protected $optionByName = '//*[label[contains(.,"%s")] or legend[contains(.,"%s")]]';
 
     /**
+     * Locator for custom option field.
+     *
+     * @var string
+     */
+    private $customOptionField = './/div[contains(@class, "field")';
+
+    /**
+     * Locator for required custom option title.
+     *
+     * @var string
+     */
+    private $requiredOption = 'and contains(@class, "required") and contains(.//span, "%s")]';
+
+    /**
+     * Locator for validation error message after option.
+     *
+     * @var string
+     */
+    private $validationErrorMessage = '//div[@class="mage-error"][contains(text(), "required field")]';
+
+    /**
      * Get product options
      *
      * @param FixtureInterface $product
@@ -164,6 +185,23 @@ class CustomOptions extends Form
         }
 
         return $customOptions;
+    }
+
+    /**
+     * Check that validation error message beside custom option is visible.
+     *
+     * @param string $customOptionTitle
+     * @return bool
+     */
+    public function validationErrorMessageIsVisible($customOptionTitle)
+    {
+        return $this->_rootElement
+            ->find(
+                sprintf(
+                    $this->customOptionField . $this->requiredOption . $this->validationErrorMessage, $customOptionTitle
+                ),
+                Locator::SELECTOR_XPATH
+            )->isVisible() ? true : false;
     }
 
     /**

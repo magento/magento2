@@ -22,6 +22,13 @@ class Messages extends Block
     protected $successMessage = '[data-ui-id$=message-success]';
 
     /**
+     * "This is a required field." validation error message.
+     *
+     * @var string
+     */
+    protected $validationErrorMessage = '//div[@class="mage-error"][contains(text(), "This is required field")]';
+
+    /**
      * Last success message selector.
      *
      * @var string
@@ -64,6 +71,18 @@ class Messages extends Block
     public function waitSuccessMessage()
     {
         return $this->waitForElementVisible($this->successMessage, Locator::SELECTOR_CSS);
+    }
+
+    /**
+     * Wait for success or JS validation error message.
+     *
+     * @return bool
+     */
+    public function waitMessage()
+    {
+        return $this->_rootElement->find($this->successMessage, Locator::SELECTOR_CSS)->isVisible() ?
+            $this->waitForElementVisible($this->successMessage, Locator::SELECTOR_CSS) :
+            $this->waitForElementVisible($this->validationErrorMessage, Locator::SELECTOR_XPATH);
     }
 
     /**
