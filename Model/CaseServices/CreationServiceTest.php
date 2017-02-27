@@ -9,7 +9,9 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Signifyd\Model\SignifydGateway\ApiClient;
@@ -184,6 +186,19 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
             $caseEntity->getGuaranteeDisposition(),
             'Signifyd guaranty status in sales_order_grid table does not match case entity guaranty status'
         );
+
+        /** @var OrderRepositoryInterface $orderRepository */
+        $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
+        $order = $orderRepository->get($caseEntity->getOrderId());
+        static::assertEquals(Order::STATE_HOLDED, $order->getState());
+
+        $histories = $order->getStatusHistories();
+        static::assertNotEmpty($histories);
+
+        /** @var OrderStatusHistoryInterface $orderHoldComment */
+        $orderHoldComment = array_pop($histories);
+        static::assertInstanceOf(OrderStatusHistoryInterface::class, $orderHoldComment);
+        static::assertEquals("Awaiting the Signifyd guarantee disposition.", $orderHoldComment->getComment());
     }
 
     /**
