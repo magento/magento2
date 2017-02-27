@@ -521,7 +521,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
                 function (Mock $output) {
                     $output->expects($this->once())
                         ->method('writeln')
-                        ->with('<error>The "test/test/test" path does not exists</error>');
+                        ->with('<error>The "test/test/test" path does not exist</error>');
                 },
                 'test/test/test',
                 'value',

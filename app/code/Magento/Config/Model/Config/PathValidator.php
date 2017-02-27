@@ -39,7 +39,7 @@ class PathValidator
         $allPaths = $this->structure->getFieldPaths();
 
         if (!array_key_exists($path, $allPaths)) {
-            throw new ValidatorException(__('The "%1" path does not exists', $path));
+            throw new ValidatorException(__('The "%1" path does not exist', $path));
         }
 
         return true;
