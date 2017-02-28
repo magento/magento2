@@ -50,7 +50,12 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    private $contentEnvFile = [];
+    private $envConfig;
+
+    /**
+     * @var array
+     */
+    private $config;
 
     protected function setUp()
     {
@@ -69,40 +74,46 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
 
-        $this->contentEnvFile = $this->getEnvFileContent();
+        $this->envConfig = $this->loadEnvConfig();
+        $this->config = $this->loadConfig();
     }
 
     public function tearDown()
     {
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->delete(
-            $this->getFileName()
+        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
+            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
+            "<?php\n return array();\n"
         );
+        /** @var DeploymentConfig\Writer $writer */
+        $writer = $this->objectManager->get(DeploymentConfig\Writer::class);
+        $writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
+
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
             "<?php\n return array();\n"
         );
-        $this->writer->saveConfig([ConfigFilePool::APP_ENV => $this->contentEnvFile]);
+        $this->writer->saveConfig([ConfigFilePool::APP_ENV => $this->envConfig]);
     }
 
     public function testExecuteNothingImport()
     {
-        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->contentEnvFile);
+        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->envConfig);
         $command = $this->objectManager->create(ConfigImportCommand::class);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
         $this->assertContains('Start import', $commandTester->getDisplay());
         $this->assertContains('Nothing to import', $commandTester->getDisplay());
-        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->getEnvFileContent());
+        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->loadEnvConfig());
     }
 
     public function testExecuteWithImport()
     {
-        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->contentEnvFile);
+        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->envConfig);
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->getFileName(),
-            file_get_contents(__DIR__ . '/../../../_files/_config.local.php')
+            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
+            file_get_contents(__DIR__ . '/../../../_files/config.php')
         );
         $command = $this->objectManager->create(ConfigImportCommand::class);
         $commandTester = new CommandTester($command);
@@ -110,30 +121,22 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
         $this->assertContains('Start import', $commandTester->getDisplay());
         $this->assertContains('Integration test data is imported!', $commandTester->getDisplay());
-        $this->assertArrayHasKey(Hash::CONFIG_KEY, $this->getEnvFileContent());
+        $this->assertArrayHasKey(Hash::CONFIG_KEY, $this->loadEnvConfig());
     }
 
     /**
      * @return array
      */
-    private function getEnvFileContent()
+    private function loadConfig()
     {
-        return $this->reader->loadConfigFile(
-            ConfigFilePool::APP_ENV,
-            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
-            true
-        );
+        return $this->reader->load(ConfigFilePool::APP_CONFIG);
     }
 
     /**
-     * @return string
+     * @return array
      */
-    private function getFileName()
+    private function loadEnvConfig()
     {
-        /** @var ConfigFilePool $configFilePool */
-        $configFilePool = $this->objectManager->get(ConfigFilePool::class);
-        $filePool = $configFilePool->getInitialFilePools();
-
-        return $filePool[ConfigFilePool::LOCAL][ConfigFilePool::APP_CONFIG];
+        return $this->reader->load(ConfigFilePool::APP_ENV);
     }
 }
