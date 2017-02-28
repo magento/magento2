@@ -38,7 +38,6 @@ class AttributeLoader
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         AttributeRepository $attributeRepository,
