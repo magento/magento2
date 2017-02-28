@@ -6,6 +6,7 @@
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
+/** @var \Magento\Eav\Model\Entity\Type $entityType */
 $entityType = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)
     ->loadByCode('order');
 $data = $entityType->getData();
@@ -17,6 +18,7 @@ $testEntityType = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)
     ->save();
 $entityTypeId = $testEntityType->getId();
 
+/** @var \Magento\Eav\Model\Entity\Attribute\Set $attributeSet */
 $attributeSet = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class);
 $attributeSet->setData([
     'attribute_set_name' => 'test_attribute_set',
@@ -26,6 +28,7 @@ $attributeSet->setData([
 $attributeSet->validate();
 $attributeSet->save();
 
+/** @var \Magento\Eav\Model\Entity\Attribute\Group $attributeGroup */
 $attributeGroup = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Group::class);
 $attributeGroup->setData(
     [
