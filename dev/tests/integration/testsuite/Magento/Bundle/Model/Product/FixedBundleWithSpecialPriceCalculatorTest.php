@@ -46,11 +46,6 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             'Failed to check maximal price on product'
         );
         $this->assertEquals($expectedResults['indexerMinimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
-
-        //This verification is skipped due to MAGETWO-64406, so in some cases 'indexerMaximumPrice' key was commented.
-        if (isset($expectedResults['indexerMaximumPrice'])) {
-            $this->assertEquals($expectedResults['indexerMaximumPrice'], $priceInfoFromIndexer->getMaxPrice());
-        }
     }
 
     /**
@@ -72,8 +67,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 110 * 0.5
                     'maximalPrice' => 55,
-                    'indexerMinimalPrice' => null,
-                    'indexerMaximumPrice' => null
+                    'indexerMinimalPrice' => null
                 ]
             ],
 
@@ -91,8 +85,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 1 * 20) + 100
                     'maximalPrice' => 165,
-                    'indexerMinimalPrice' => 130,
-                    //'indexerMaximumPrice' => 230
+                    'indexerMinimalPrice' => 130
                 ]
             ],
 
@@ -110,8 +103,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 110 * 0.2 + 110 * 1)
                     'maximalPrice' => 121,
-                    'indexerMinimalPrice' => 132,
-                    //'indexerMaximumPrice' => 242
+                    'indexerMinimalPrice' => 132
                 ]
             ],
 
@@ -129,8 +121,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 1 * 20 + 110 * 1)
                     'maximalPrice' => 120,
-                    'indexerMinimalPrice' => 130,
-                    //'indexerMaximumPrice' => 240
+                    'indexerMinimalPrice' => 130
                 ]
             ],
 
@@ -148,8 +139,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 110 * 0.2) + 100
                     'maximalPrice' => 166,
-                    'indexerMinimalPrice' => 132,
-                    //'indexerMaximumPrice' => 232
+                    'indexerMinimalPrice' => 132
                 ]
             ],
 
@@ -167,8 +157,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 2 * 20) + 100
                     'maximalPrice' => 175,
-                    'indexerMinimalPrice' => 150,
-                    //'indexerMaximumPrice' => 250
+                    'indexerMinimalPrice' => 150
                 ]
             ],
 
@@ -186,8 +175,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 2 * 110 * 0.2 + 1 * 110)
                     'maximalPrice' => 132,
-                    'indexerMinimalPrice' => 154,
-                    //'indexerMaximumPrice' => 264
+                    'indexerMinimalPrice' => 154
                 ]
             ],
 
@@ -205,8 +193,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 2 * 20 + 1 * 110)
                     'maximalPrice' => 130,
-                    'indexerMinimalPrice' => 150,
-                    //'indexerMaximumPrice' => 260
+                    'indexerMinimalPrice' => 150
                 ]
             ],
 
@@ -224,8 +211,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 2 * 0.2 * 110) + 100
                     'maximalPrice' => 177,
-                    'indexerMinimalPrice' => 154,
-                    //'indexerMaximumPrice' => 254
+                    'indexerMinimalPrice' => 154
                 ]
             ],
 
@@ -243,8 +229,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 3 * 10 + 1 * 40) + 100
                     'maximalPrice' => 190,
-                    'indexerMinimalPrice' => 140,
-                    //'indexerMaximumPrice' => 280
+                    'indexerMinimalPrice' => 140
                 ]
             ],
 
@@ -262,8 +247,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 3 * 110 * 0.1 + 1 * 110 * 0.4 + 110 * 1)
                     'maximalPrice' => 148.5,
-                    'indexerMinimalPrice' => 143,
-                    //'indexerMaximumPrice' => 297
+                    'indexerMinimalPrice' => 143
                 ]
             ],
 
@@ -281,8 +265,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 3 * 10 + 1 * 40 + 1 * 110)
                     'maximalPrice' => 145,
-                    'indexerMinimalPrice' => 140,
-                    //'indexerMaximumPrice' => 290
+                    'indexerMinimalPrice' => 140
                 ]
             ],
 
@@ -300,8 +283,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 3 * 110 * 0.1 + 1 * 110 * 0.4) + 100
                     'maximalPrice' => 193.5,
-                    'indexerMinimalPrice' => 143,
-                    //'indexerMaximumPrice' => 287
+                    'indexerMinimalPrice' => 143
                 ]
             ],
 
@@ -319,8 +301,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 1 * 40 + 3 * 15) + 100
                     'maximalPrice' => 197.5,
-                    'indexerMinimalPrice' => 150,
-                    //'indexerMaximumPrice' => 295
+                    'indexerMinimalPrice' => 150
                 ]
             ],
 
@@ -338,8 +319,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 1 * 110 * 0.4 + 3 * 110 * 0.15 + 110 * 1)
                     'maximalPrice' => 156.75,
-                    'indexerMinimalPrice' => 154,
-                    //'indexerMaximumPrice' => 313.5
+                    'indexerMinimalPrice' => 154
                 ]
             ],
 
@@ -357,8 +337,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 1 * 40 + 3 * 15 + 1 * 110)
                     'maximalPrice' => 152.5,
-                    'indexerMinimalPrice' => 150,
-                    //'indexerMaximumPrice' => 305
+                    'indexerMinimalPrice' => 150
                 ]
             ],
 
@@ -376,8 +355,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 1 * 110 * 0.4 + 3 * 110 * 0.15) + 100
                     'maximalPrice' => 201.75,
-                    'indexerMinimalPrice' => 154,
-                    //'indexerMaximumPrice' => 303.5
+                    'indexerMinimalPrice' => 154
                 ]
             ],
 
@@ -395,8 +373,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 3 * 15) + 100
                     'maximalPrice' => 177.5,
-                    'indexerMinimalPrice' => 150,
-                    //'indexerMaximumPrice' => 255
+                    'indexerMinimalPrice' => 150
                 ]
             ],
 
@@ -414,8 +391,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 3 * 110 * 0.15 + 1 * 110)
                     'maximalPrice' => 134.75,
-                    'indexerMinimalPrice' => 154,
-                    //'indexerMaximumPrice' => 269.5
+                    'indexerMinimalPrice' => 154
                 ]
             ],
 
@@ -433,8 +409,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 3 * 15 + 110 * 1)
                     'maximalPrice' => 132.5,
-                    'indexerMinimalPrice' => 150,
-                    //'indexerMaximumPrice' => 265
+                    'indexerMinimalPrice' => 150
                 ]
             ],
 
@@ -452,8 +427,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 3 * 110 * 0.15) + 100
                     'maximalPrice' => 179.75,
-                    'indexerMinimalPrice' => 154,
-                    //'indexerMaximumPrice' => 259.5
+                    'indexerMinimalPrice' => 154
                 ]
             ],
 
@@ -471,8 +445,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 3 * 15 + 1 * 20 + 3 * 10) + 100
                     'maximalPrice' => 202.5,
-                    'indexerMinimalPrice' => 170,
-                    //'indexerMaximumPrice' => 305
+                    'indexerMinimalPrice' => 170
                 ]
             ],
 
@@ -490,8 +463,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 3 * 110 * 0.15 + 1 * 110 * 0.2 + 3 * 110 * 0.1 + 110 * 1)
                     'maximalPrice' => 162.25,
-                    'indexerMinimalPrice' => 176,
-                    //'indexerMaximumPrice' => 324.5
+                    'indexerMinimalPrice' => 176
                 ]
             ],
 
@@ -510,7 +482,6 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                     // 0.5 * (110 + 3 * 15 + 1 * 20 + 3 * 10 + 1 * 110)
                     'maximalPrice' => 157.5,
                     'indexerMinimalPrice' => 170,
-                    //'indexerMaximumPrice' => 315
                 ]
             ],
 
@@ -528,8 +499,7 @@ class FixedBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
 
                     // 0.5 * (110 + 3 * 110 * 0.15 + 1 * 110 * 0.2 + 3 * 110 * 0.1) + 100
                     'maximalPrice' => 207.25,
-                    'indexerMinimalPrice' => 176,
-                    //'indexerMaximumPrice' => 314.5
+                    'indexerMinimalPrice' => 176
                 ]
             ],
         ];

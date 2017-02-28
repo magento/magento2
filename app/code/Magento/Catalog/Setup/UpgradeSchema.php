@@ -60,7 +60,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->recreateCatalogCategoryProductIndexTmpTable($setup);
         }
 
-        if (version_compare($context->getVersion(), '2.1.5', '<')) {
+        if (version_compare($context->getVersion(), '2.2.0', '<')) {
             $this->addProductPriceIndexReplicaTable($setup);
         }
         $setup->endSetup();
