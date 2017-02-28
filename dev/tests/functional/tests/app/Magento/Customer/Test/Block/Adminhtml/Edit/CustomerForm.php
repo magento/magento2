@@ -7,6 +7,7 @@
 namespace Magento\Customer\Test\Block\Adminhtml\Edit;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Customer\Test\Fixture\Address;
@@ -50,6 +51,13 @@ class CustomerForm extends FormTabs
      * @var string
      */
     protected $tabReadiness = '.admin__page-nav-item._active._loading';
+
+    /**
+     * Personal information xpath selector.
+     *
+     * @var string
+     */
+    protected $information = './/th[contains(text(), "%s")]/following-sibling::td[1]';
 
     /**
      * Fill Customer forms on tabs by customer, addresses data.
@@ -161,5 +169,17 @@ class CustomerForm extends FormTabs
             $jsErrors = array_merge($jsErrors, $tab->getJsErrors());
         }
         return $jsErrors;
+    }
+
+
+    /**
+     * Get personal information.
+     *
+     * @param string $title
+     * @return string
+     */
+    public function getPersonalInformation($title)
+    {
+        return $this->_rootElement->find(sprintf($this->information, $title), Locator::SELECTOR_XPATH)->getText();
     }
 }
