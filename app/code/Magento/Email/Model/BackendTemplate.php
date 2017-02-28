@@ -53,7 +53,8 @@ class BackendTemplate extends Template
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
         \Magento\Config\Model\Config\Structure $structure,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->structure = $structure;
         parent::__construct(
@@ -70,7 +71,8 @@ class BackendTemplate extends Template
             $filterManager,
             $urlModel,
             $filterFactory,
-            $data
+            $data,
+            $serializer
         );
     }
 

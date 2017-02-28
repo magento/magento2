@@ -43,6 +43,9 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerBackup;
 
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    private $serilizerMock;
+
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -70,9 +73,15 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
 
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
+        $this->serilizerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
+
         $this->model = $helper->getObject(
             \Magento\Email\Model\BackendTemplate::class,
-            ['scopeConfig' => $this->scopeConfigMock, 'structure' => $this->structureMock]
+            [
+                'scopeConfig' => $this->scopeConfigMock,
+                'structure' => $this->structureMock,
+                'serializer' => $this->serilizerMock
+            ]
         );
     }
 
