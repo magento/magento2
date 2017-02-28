@@ -44,6 +44,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInCustomerBackendWishlist" />
         </variation>
         <variation name="AddProductToWishlistEntityTestVariation7">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />

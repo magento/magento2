@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\ProductTypeSwitchingOnUpdateTest" summary="Product Type Switching on Editing" ticketId="MAGETWO-29633">
         <variation name="ProductTypeSwitchingOnUpdateTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="productOrigin" xsi:type="string">catalogProductSimple::default</data>
             <data name="product" xsi:type="string">configurableProduct::default</data>
             <data name="actionName" xsi:type="string">-</data>
@@ -48,6 +49,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnUpdateTestVariation6">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="productOrigin" xsi:type="string">catalogProductVirtual::default</data>
             <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
             <data name="actionName" xsi:type="string">-</data>
@@ -60,6 +62,7 @@
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately" />
         </variation>
         <variation name="ProductTypeSwitchingOnUpdateTestVariation7">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productOrigin" xsi:type="string">catalogProductVirtual::default</data>
             <data name="product" xsi:type="string">downloadableProduct::default</data>
             <data name="actionName" xsi:type="string">-</data>
@@ -71,6 +74,7 @@
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData" />
         </variation>
         <variation name="ProductTypeSwitchingOnUpdateTestVariation8">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productOrigin" xsi:type="string">downloadableProduct::default</data>
             <data name="product" xsi:type="string">catalogProductSimple::default</data>
             <data name="actionName" xsi:type="string">-</data>
@@ -78,6 +82,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnUpdateTestVariation9">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productOrigin" xsi:type="string">downloadableProduct::default</data>
             <data name="product" xsi:type="string">configurableProduct::not_virtual_for_type_switching</data>
             <data name="actionName" xsi:type="string">-</data>
@@ -97,6 +102,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="ProductTypeSwitchingOnUpdateTestVariation11">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productOrigin" xsi:type="string">catalogProductSimple::default</data>
             <data name="product" xsi:type="string">downloadableProduct::default</data>
             <data name="actionName" xsi:type="string">-</data>
