@@ -68,8 +68,11 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
         $searchCriteria = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('addFilter')
-            ->with($this->attributeLoader::ATTRIBUTE_SET_ID, $attributeSetId, $expectedCondition)
-            ->willReturnSelf();
+            ->with(
+                \Magento\Eav\Model\ResourceModel\AttributeLoader::ATTRIBUTE_SET_ID,
+                $attributeSetId,
+                $expectedCondition
+            )->willReturnSelf();
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')
             ->willReturn($searchCriteria);
