@@ -13,7 +13,12 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\Filesystem;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -26,10 +31,29 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $reader;
 
+    /**
+     * @var DeploymentConfig\Writer
+     */
+    private $writer;
+
+    /**
+     * @var ConfigFilePool
+     */
+    private $configFilePool;
+
+    /**
+     * @var array
+     */
+    private $contentEnvFile = [];
+
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->reader = $this->objectManager->get(DeploymentConfig\Reader::class);
+        $this->writer = $this->objectManager->get(DeploymentConfig\Writer::class);
+        $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
+
+        $this->contentEnvFile = $this->getEnvFileContent();
     }
 
     /**
@@ -38,6 +62,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
+        $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->contentEnvFile);
         $this->objectManager->configure([
             \Magento\Config\Model\Config\Export\ExcludeList::class => [
                 'arguments' => [
@@ -69,6 +94,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->validateSystemSection($config);
         $this->validateThemesSection($config);
+        $this->assertArrayHasKey(Hash::CONFIG_KEY, $this->getEnvFileContent());
     }
 
     /**
@@ -153,6 +179,13 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
         /** @var DeploymentConfig $deploymentConfig */
         $deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
         $deploymentConfig->resetData();
+
+        $filesystem = $this->objectManager->get(Filesystem::class);
+        $filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
+            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
+            "<?php\n return array();\n"
+        );
+        $this->writer->saveConfig([ConfigFilePool::APP_ENV => $this->contentEnvFile]);
     }
 
     /**
@@ -160,10 +193,20 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function getFileName()
     {
-        /** @var ConfigFilePool $configFilePool */
-        $configFilePool = $this->objectManager->get(ConfigFilePool::class);
-        $filePool = $configFilePool->getInitialFilePools();
+        $filePool = $this->configFilePool->getInitialFilePools();
 
         return $filePool[ConfigFilePool::LOCAL][ConfigFilePool::APP_CONFIG];
+    }
+
+    /**
+     * @return array
+     */
+    private function getEnvFileContent()
+    {
+        return $this->reader->loadConfigFile(
+            ConfigFilePool::APP_ENV,
+            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
+            true
+        );
     }
 }
