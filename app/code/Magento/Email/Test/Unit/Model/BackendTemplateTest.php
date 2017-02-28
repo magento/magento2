@@ -43,7 +43,9 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerBackup;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $serilizerMock;
 
     protected function setUp()
