@@ -1334,7 +1334,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 array_merge($this->getNewSkuFieldsForSelect(), $this->getOldSkuFieldsForSelect())
             )->where(
                 'sku IN (?)',
-                array_keys($entityRowsIn)
+                $this->_connection->quote(array_keys($entityRowsIn))
             );
             $newProducts = $this->_connection->fetchAll($select);
             foreach ($newProducts as $data) {
