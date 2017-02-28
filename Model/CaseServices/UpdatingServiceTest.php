@@ -9,6 +9,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
@@ -47,6 +48,7 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Checks case updating flow and messages in order comments history.
+     * Also checks that order is unholded when case guarantee disposition is APPROVED.
      *
      * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
      * @magentoDataFixture Magento/Signifyd/_files/case.php
@@ -97,6 +99,7 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($caseEntity->getOrderId());
+        static::assertEquals(Order::STATE_PROCESSING, $order->getState());
         $histories = $order->getStatusHistories();
         static::assertNotEmpty($histories);
 
@@ -104,6 +107,63 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $caseCreationComment = array_pop($histories);
         static::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
         static::assertEquals("Signifyd Case $caseId has been created for order.", $caseCreationComment->getComment());
+    }
+
+    /**
+     * Checks that order is holded when case guarantee disposition is DECLINED.
+     *
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
+     * @magentoDataFixture Magento/Signifyd/_files/approved_case.php
+     */
+    public function testOrderStateAfterDeclinedGuaranteeDisposition()
+    {
+        $caseId = 123;
+        $data = [
+            'caseId' => $caseId,
+            'orderId' => '100000001',
+            'guaranteeDisposition' => CaseInterface::GUARANTEE_DECLINED
+        ];
+
+        /** @var CaseRepositoryInterface $caseRepository */
+        $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
+        $caseEntity = $caseRepository->getByCaseId($caseId);
+
+        $this->service->update($caseEntity, $data);
+
+        /** @var OrderRepositoryInterface $orderRepository */
+        $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
+        $order = $orderRepository->get($caseEntity->getOrderId());
+
+        static::assertEquals(Order::STATE_HOLDED, $order->getState());
+    }
+
+    /**
+     * Checks that order doesn't become holded
+     * when previous case guarantee disposition was DECLINED
+     * and webhook without guarantee disposition was received.
+     *
+     * @covers \Magento\Signifyd\Model\CaseServices\UpdatingService::update
+     * @magentoDataFixture Magento/Signifyd/_files/declined_case.php
+     */
+    public function testOrderStateAfterWebhookWithoutGuaranteeDisposition()
+    {
+        $caseId = 123;
+        $data = [
+            'caseId' => $caseId,
+            'orderId' => '100000001'
+        ];
+
+        /** @var CaseRepositoryInterface $caseRepository */
+        $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
+        $caseEntity = $caseRepository->getByCaseId($caseId);
+
+        $this->service->update($caseEntity, $data);
+
+        /** @var OrderRepositoryInterface $orderRepository */
+        $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
+        $order = $orderRepository->get($caseEntity->getOrderId());
+
+        static::assertEquals(Order::STATE_PROCESSING, $order->getState());
     }
 
     /**
