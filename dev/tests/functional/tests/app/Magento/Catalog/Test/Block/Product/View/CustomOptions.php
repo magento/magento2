@@ -195,13 +195,10 @@ class CustomOptions extends Form
      */
     public function validationErrorMessageIsVisible($customOptionTitle)
     {
-        return $this->_rootElement
-            ->find(
-                sprintf(
-                    $this->customOptionField . $this->requiredOption . $this->validationErrorMessage, $customOptionTitle
-                ),
-                Locator::SELECTOR_XPATH
-            )->isVisible() ? true : false;
+        $optionSelector = $this->customOptionField . $this->requiredOption . $this->validationErrorMessage;
+        $title = sprintf($optionSelector, $customOptionTitle);
+
+        return $this->_rootElement->find($title, Locator::SELECTOR_XPATH)->isVisible();
     }
 
     /**

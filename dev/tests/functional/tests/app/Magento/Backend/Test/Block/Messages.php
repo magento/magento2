@@ -22,11 +22,11 @@ class Messages extends Block
     protected $successMessage = '[data-ui-id$=message-success]';
 
     /**
-     * "This is a required field." validation error message.
+     * Selector for "This is a required field." validation error message.
      *
      * @var string
      */
-    protected $validationErrorMessage = '//div[@class="mage-error"][contains(text(), "This is required field")]';
+    private $validationErrorMessage = '//div[@class="mage-error"][contains(text(), "This is required field")]';
 
     /**
      * Last success message selector.
