@@ -1644,7 +1644,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 return $this;
             }
             if ($this->isEnabledFlat()) {
-                $this->getSelect()->order("cat_index_position {$dir}");
+                $this->getSelect()->order("cat_index.position {$dir}");
             }
             // optimize if using cat index
             $filters = $this->_productLimitationFilters;
@@ -1997,7 +1997,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getSelect()->join(
                 ['cat_index' => $this->getTable('catalog_category_product_index')],
                 $joinCond,
-                ['cat_index_position' => 'position']
+                ['cat_index.position' => 'position']
             );
         }
 
@@ -2037,7 +2037,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getSelect()->join(
                 ['cat_pro' => $this->getTable('catalog_category_product')],
                 $joinCond,
-                ['cat_index_position' => 'position']
+                ['cat_index.position' => 'position']
             );
         }
         $this->_joinFields['position'] = ['table' => 'cat_pro', 'field' => 'position'];
