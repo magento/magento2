@@ -5,7 +5,6 @@
  */
 namespace Magento\Eav\Model\ResourceModel;
 
-use Magento\Eav\Model\Config;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\AttributeInterface;
 use Magento\Framework\Model\Entity\ScopeInterface;
@@ -29,7 +28,7 @@ class ReadHandler implements AttributeInterface
      */
     private $logger;
 
-    /** @var Config */
+    /** @var \Magento\Eav\Model\Config */
     private $config;
 
     /**
@@ -38,13 +37,13 @@ class ReadHandler implements AttributeInterface
      * @param MetadataPool $metadataPool
      * @param ScopeResolver $scopeResolver
      * @param LoggerInterface $logger
-     * @param Config $config
+     * @param \Magento\Eav\Model\Config $config
      */
     public function __construct(
         MetadataPool $metadataPool,
         ScopeResolver $scopeResolver,
         LoggerInterface $logger,
-        Config $config
+        \Magento\Eav\Model\Config $config
     ) {
         $this->metadataPool = $metadataPool;
         $this->scopeResolver = $scopeResolver;
