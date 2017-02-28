@@ -11,6 +11,7 @@ use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorInterface;
+use Magento\Signifyd\Model\OrderStateService;
 use Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater;
 
 /**
@@ -39,23 +40,31 @@ class UpdatingService implements UpdatingServiceInterface
     private $orderGridUpdater;
 
     /**
+     * @var OrderStateService
+     */
+    private $orderStateService;
+
+    /**
      * UpdatingService constructor.
      *
      * @param GeneratorInterface $messageGenerator
      * @param CaseRepositoryInterface $caseRepository
      * @param CommentsHistoryUpdater $commentsHistoryUpdater
      * @param \Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater $orderGridUpdater
+     * @param OrderStateService $orderStateService
      */
     public function __construct(
         GeneratorInterface $messageGenerator,
         CaseRepositoryInterface $caseRepository,
         CommentsHistoryUpdater $commentsHistoryUpdater,
-        OrderGridUpdater $orderGridUpdater
+        OrderGridUpdater $orderGridUpdater,
+        OrderStateService $orderStateService
     ) {
         $this->messageGenerator = $messageGenerator;
         $this->caseRepository = $caseRepository;
         $this->commentsHistoryUpdater = $commentsHistoryUpdater;
         $this->orderGridUpdater = $orderGridUpdater;
+        $this->orderStateService = $orderStateService;
     }
 
     /**
@@ -74,11 +83,15 @@ class UpdatingService implements UpdatingServiceInterface
         }
 
         try {
+            $previousDisposition = $case->getGuaranteeDisposition();
             $this->setCaseData($case, $data);
             $orderHistoryComment = $this->messageGenerator->generate($data);
-            $this->caseRepository->save($case);
+            $case = $this->caseRepository->save($case);
             $this->orderGridUpdater->update($case->getOrderId());
             $this->commentsHistoryUpdater->addComment($case, $orderHistoryComment);
+            if ($case->getGuaranteeDisposition() !== $previousDisposition) {
+                $this->orderStateService->updateByCase($case);
+            }
         } catch (\Exception $e) {
             throw new LocalizedException(__('Cannot update Case entity.'), $e);
         }
