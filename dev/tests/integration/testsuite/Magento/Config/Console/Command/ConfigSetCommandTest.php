@@ -9,7 +9,7 @@ use Magento\Config\Model\Config\PathValidator;
 use Magento\Config\Model\Config\PathValidatorFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\DeploymentConfig\FileReader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -62,7 +62,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $scopeConfig;
 
     /**
-     * @var Reader
+     * @var FileReader
      */
     private $reader;
 
@@ -93,7 +93,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $this->reader = $this->objectManager->get(Reader::class);
+        $this->reader = $this->objectManager->get(FileReader::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
         $this->arrayManager = $this->objectManager->get(ArrayManager::class);
@@ -126,12 +126,12 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
+            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
             "<?php\n return array();\n"
         );
         /** @var Writer $writer */
         $writer = $this->objectManager->get(Writer::class);
-        $writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
+        $writer->saveConfig([ConfigFilePool::APP_ENV => $this->config]);
     }
 
     /**
@@ -139,11 +139,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function loadConfig()
     {
-        return $this->reader->loadConfigFile(
-            ConfigFilePool::APP_CONFIG,
-            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
-            true
-        );
+        return $this->reader->load(ConfigFilePool::APP_ENV);
     }
 
     /**
