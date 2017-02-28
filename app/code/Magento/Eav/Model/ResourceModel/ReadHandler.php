@@ -5,39 +5,46 @@
  */
 namespace Magento\Eav\Model\ResourceModel;
 
-class ReadHandler implements \Magento\Framework\EntityManager\Operation\AttributeInterface
+use Magento\Eav\Model\Config;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\Operation\AttributeInterface;
+use Magento\Framework\Model\Entity\ScopeInterface;
+use Magento\Framework\Model\Entity\ScopeResolver;
+use Psr\Log\LoggerInterface;
+
+class ReadHandler implements AttributeInterface
 {
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var MetadataPool
      */
     protected $metadataPool;
 
     /**
-     * @var \Magento\Framework\Model\Entity\ScopeResolver
+     * @var ScopeResolver
      */
     protected $scopeResolver;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
-    /** @var \Magento\Eav\Model\Config */
+    /** @var Config */
     private $config;
 
     /**
      * ReadHandler constructor.
      *
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param \Magento\Framework\Model\Entity\ScopeResolver $scopeResolver
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Eav\Model\Config $config
+     * @param MetadataPool $metadataPool
+     * @param ScopeResolver $scopeResolver
+     * @param LoggerInterface $logger
+     * @param Config $config
      */
     public function __construct(
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        \Magento\Framework\Model\Entity\ScopeResolver $scopeResolver,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Eav\Model\Config $config
+        MetadataPool $metadataPool,
+        ScopeResolver $scopeResolver,
+        LoggerInterface $logger,
+        Config $config
     ) {
         $this->metadataPool = $metadataPool;
         $this->scopeResolver = $scopeResolver;
@@ -54,21 +61,17 @@ class ReadHandler implements \Magento\Framework\EntityManager\Operation\Attribut
      */
     protected function getAttributes($entityType)
     {
-        try {
-            $metadata = $this->metadataPool->getMetadata($entityType);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $metadata = $this->metadataPool->getMetadata($entityType);
         $eavEntityType = $metadata->getEavEntityType();
         $attributes = (null === $eavEntityType) ? [] : $this->config->getAttributes($eavEntityType);
         return $attributes;
     }
 
     /**
-     * @param \Magento\Framework\Model\Entity\ScopeInterface $scope
+     * @param ScopeInterface $scope
      * @return array
      */
-    protected function getContextVariables(\Magento\Framework\Model\Entity\ScopeInterface $scope)
+    protected function getContextVariables(ScopeInterface $scope)
     {
         $data[] = $scope->getValue();
         if ($scope->getFallback()) {
