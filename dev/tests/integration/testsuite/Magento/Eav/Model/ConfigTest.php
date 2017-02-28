@@ -64,7 +64,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $attributeCodes[] = $attribute->getAttributeCode();
         }
         $this->assertEquals($expectedAttributeCodes, $attributeCodes);
-        $attributes2= $this->config->getAttributes($entityType);
+        $attributes2 = $this->config->getAttributes($entityType);
         $this->assertEquals($attributes1, $attributes2);
     }
 
@@ -78,7 +78,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $attribute1->getIsRequired());
         $this->assertEquals(1, $attribute1->getIsUserDefined());
         $this->assertEquals(0, $attribute1->getIsUnique());
-        $attribute2= $this->config->getAttribute($entityType, 'attribute_for_search_1');
+        $attribute2 = $this->config->getAttribute($entityType, 'attribute_for_search_1');
         $this->assertEquals($attribute1, $attribute2);
     }
 }
