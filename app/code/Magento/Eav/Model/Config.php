@@ -201,13 +201,12 @@ class Config
      *
      * @param   mixed $obj
      * @param   mixed $id
-     * @return $this
+     * @return void
      * @codeCoverageIgnore
      */
     protected function _save($obj, $id)
     {
         $this->_objects[$id] = $obj;
-        return $this;
     }
 
     /**
@@ -216,12 +215,11 @@ class Config
      * @param AbstractAttribute $attribute
      * @param string $entityTypeCode
      * @param string $attributeCode
-     * @return $this
+     * @return void
      */
     private function saveAttribute(AbstractAttribute $attribute, $entityTypeCode, $attributeCode)
     {
         $this->attributes[$entityTypeCode][$attributeCode] = $attribute;
-        return $this;
     }
 
     /**
@@ -523,7 +521,7 @@ class Config
     }
 
     /**
-     * Create attribute from prototype
+     * Create attribute
      *
      * @param string $model
      * @return Entity\Attribute\AbstractAttribute
@@ -692,7 +690,6 @@ class Config
     private function createAttributeByAttributeCode($entityType, $attributeCode)
     {
         $entityType = $this->getEntityType($entityType);
-        /** @var AbstractAttribute $attribute */
         $attribute = $this->createAttribute($entityType->getAttributeModel());
         $attribute->setAttributeCode($attributeCode);
         $entity = $entityType->getEntity();
