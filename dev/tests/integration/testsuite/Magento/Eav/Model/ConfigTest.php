@@ -5,6 +5,7 @@
  */
 namespace Magento\Eav\Model;
 
+use Magento\Framework\DataObject;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 
@@ -19,7 +20,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @var Config
      */
     private $config;
-    
+
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -43,6 +44,33 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $entityAttributeCodes2 = $this->config->getEntityAttributeCodes($entityType);
+        $this->assertEquals($entityAttributeCodes1, $entityAttributeCodes2);
+    }
+
+    public function testGetEntityAttributeCodesWithObject()
+    {
+        $entityType = 'test';
+        /** @var \Magento\Eav\Model\Entity\Type $testEntityType */
+        $testEntityType = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Entity\Type::class)
+            ->loadByCode('test');
+        $attributeSetId = $testEntityType->getDefaultAttributeSetId();
+        CacheCleaner::cleanAll();
+        $object = new DataObject(
+            [
+                'attribute_set_id' => $attributeSetId,
+                'store_id' => 0
+            ]
+        );
+        $entityAttributeCodes1 = $this->config->getEntityAttributeCodes($entityType, $object);
+        $this->assertEquals(
+            [
+                'attribute_for_search_1',
+                'attribute_for_search_2',
+            ],
+            $entityAttributeCodes1
+        );
+
+        $entityAttributeCodes2 = $this->config->getEntityAttributeCodes($entityType, $object);
         $this->assertEquals($entityAttributeCodes1, $entityAttributeCodes2);
     }
 
