@@ -48,7 +48,6 @@ class Table
     // Used for back compatibility, when query param can't use statement options
     const TYPE_VARBINARY = 'varbinary';
 
-
     /**
      * Default and maximal TEXT and BLOB columns sizes we can support for different DB systems.
      */
