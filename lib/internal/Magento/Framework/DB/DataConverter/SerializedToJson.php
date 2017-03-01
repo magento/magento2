@@ -84,9 +84,10 @@ class SerializedToJson implements DataConverterInterface
                 throw new DataConversionException($errorString, $errorNumber);
             });
             $value = $this->serialize->unserialize($value);
-            restore_error_handler();
         } catch (\Throwable $throwable) {
             throw new DataConversionException($throwable->getMessage());
+        } finally {
+            restore_error_handler();
         }
         return $value;
     }
