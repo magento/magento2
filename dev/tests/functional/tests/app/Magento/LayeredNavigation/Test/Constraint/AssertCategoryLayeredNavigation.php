@@ -28,26 +28,26 @@ class AssertCategoryLayeredNavigation extends AbstractConstraint
      *
      * @param CatalogCategoryView $catalogCategoryView
      * @param Category $category
-     * @param Category $bottomChildCategory
+     * @param Category $newCategory
      * @param BrowserInterface $browser
      * @return void
      */
     public function processAssert(
         CatalogCategoryView $catalogCategoryView,
         Category $category,
-        Category $bottomChildCategory,
+        Category $newCategory,
         BrowserInterface $browser
     ) {
         $this->browser = $browser;
         $this->openCategory($category);
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $catalogCategoryView->getLayeredNavigationBlock()->isCategoryVisible($bottomChildCategory, 1),
-            'Category ' . $bottomChildCategory->getName() . ' is absent in Layered Navigation.'
+            $catalogCategoryView->getLayeredNavigationBlock()->isCategoryVisible($newCategory->getName(), 1),
+            'Category ' . $newCategory->getName() . ' is absent in Layered Navigation.'
         );
 
         $productsOnCategoryPage = $catalogCategoryView->getListProductBlock()->getProductNames();
-        $productsInCategory = $bottomChildCategory->getDataFieldConfig('category_products')['source']->getProducts();
+        $productsInCategory = $newCategory->getDataFieldConfig('category_products')['source']->getProducts();
         foreach ($productsInCategory as $product) {
             \PHPUnit_Framework_Assert::assertTrue(
                 in_array($product->getName(), $productsOnCategoryPage),

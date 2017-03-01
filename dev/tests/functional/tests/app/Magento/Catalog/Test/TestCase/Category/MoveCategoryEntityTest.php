@@ -9,6 +9,7 @@ namespace Magento\Catalog\Test\TestCase\Category;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -66,20 +67,41 @@ class MoveCategoryEntityTest extends Injectable
      *
      * @param Category $childCategory
      * @param Category $parentCategory
-     * @param array $moveLevel
+     * @param FixtureFactory $fixtureFactory
+     * @param string|null $moveLevel
      * @return array
      */
-    public function test(Category $childCategory, Category $parentCategory, array $moveLevel = [])
-    {
+    public function test(
+        Category $childCategory,
+        Category $parentCategory,
+        FixtureFactory $fixtureFactory,
+        $moveLevel = null
+    ) {
         // Preconditions:
         $parentCategory->persist();
         $childCategory->persist();
-        $bottomChildCategory = $childCategory;
+        $movedCategory = $childCategory;
 
         if (!empty($moveLevel)) {
-            for ($nestingIterator = 1; $nestingIterator < $moveLevel['child']; $nestingIterator++) {
+            for ($nestingIterator = 1; $nestingIterator < $moveLevel; $nestingIterator++) {
                 $childCategory = $childCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
             }
+        }
+
+        while ($movedCategory->getName() != $childCategory->getName()) {
+            $bottomChildCategory[] = $movedCategory->getData();
+            $movedCategory = $movedCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
+        }
+        $bottomChildCategory[] = $movedCategory->getData();
+
+        $newCategory = $parentCategory;
+        for ($i = count($bottomChildCategory) - 1; $i >= 0; $i--) {
+            unset($bottomChildCategory[$i]['parent_id']);
+            $bottomChildCategory[$i]['parent_id']['source'] = $newCategory;
+            $newCategory = $fixtureFactory->createByCode(
+                'category',
+                ['data' => $bottomChildCategory[$i]]
+            );
         }
 
         // Steps:
@@ -95,7 +117,7 @@ class MoveCategoryEntityTest extends Injectable
             'category' => $childCategory,
             'parentCategory' => $parentCategory,
             'childCategory' => $childCategory,
-            'bottomChildCategory' => $bottomChildCategory,
+            'newCategory' => $newCategory,
         ];
     }
 }

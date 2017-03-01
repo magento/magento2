@@ -21,50 +21,30 @@ class AssertCategoryNavigationMenu extends AbstractConstraint
     const DEFAULT_CATEGORY_NAME = 'Default Category';
 
     /**
-     * List of nested categories names.
-     *
-     * @var array
-     */
-    private $nestedCategoriesList = [];
-
-    /**
      * Assert that relations of categories in navigation menu are correct.
      *
      * @param CmsIndex $cmsIndex
-     * @param Category $bottomChildCategory
-     * @param Category $childCategory
-     * @param Category $parentCategory
+     * @param Category $newCategory
      * @return void
      */
     public function processAssert(
         CmsIndex $cmsIndex,
-        Category $bottomChildCategory,
-        Category $childCategory,
-        Category $parentCategory
+        Category $newCategory
     ) {
         do {
-            $name = $bottomChildCategory->getName();
-            if ($name !== $childCategory->getName()) {
-                $this->nestedCategoriesList[] = $name;
-                $bottomChildCategory = $bottomChildCategory->getDataFieldConfig('parent_id')['source']
-                    ->getParentCategory();
-            } else {
-                $this->nestedCategoriesList[] = $childCategory->getName();
-                break;
-            }
-        } while ($name);
+            $categoriesNames[] = $newCategory->getName();
+            $newCategory = $newCategory->getDataFieldConfig('parent_id')['source']
+                ->getParentCategory();
+        } while ($newCategory->getName() != self::DEFAULT_CATEGORY_NAME);
 
-        if ($parentCategory->getName() !== self::DEFAULT_CATEGORY_NAME) {
-            $this->nestedCategoriesList[] = $parentCategory->getName();
-        }
         $cmsIndex->open();
 
-        foreach (array_reverse($this->nestedCategoriesList) as $category) {
-            $cmsIndex->getTopMenu()->hoverCategoryByName($category);
+        foreach (array_reverse($categoriesNames) as $category) {
             \PHPUnit_Framework_Assert::assertTrue(
                 $cmsIndex->getTopMenu()->isCategoryVisible($category),
                 'Category ' . $category . ' is not visible in top menu.'
             );
+            $cmsIndex->getTopMenu()->hoverCategoryByName($category);
         }
     }
 
