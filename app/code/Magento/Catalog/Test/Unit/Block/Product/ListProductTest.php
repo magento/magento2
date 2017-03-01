@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
+use Magento\Catalog\Block\Product\Context;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\View\LayoutInterface;
+
 class ListProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -46,6 +50,21 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Url\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $urlHelperMock;
+
+    /**
+     * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $layout;
+
+    /**
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $context;
+
+    /**
+     * @var Render|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $renderer;
 
     protected function setUp()
     {
@@ -92,12 +111,32 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
 
         $this->urlHelperMock = $this->getMockBuilder('Magento\Framework\Url\Helper\Data')
             ->disableOriginalConstructor()->getMock();
+
+        $this->layout = $this->getMockBuilder(LayoutInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->renderer = $this->getMockBuilder(Render::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->context->expects($this->any())
+            ->method('getRegistry')
+            ->willReturn($this->registryMock);
+        $this->context->expects($this->any())
+            ->method('getCartHelper')
+            ->willReturn($this->cartHelperMock);
+        $this->context->expects($this->any())
+            ->method('getLayout')
+            ->willReturn($this->layout);
+
         $this->block = $objectManager->getObject(
             'Magento\Catalog\Block\Product\ListProduct',
             [
-                'registry' => $this->registryMock,
+                'context' => $this->context,
                 'layerResolver' => $layerResolver,
-                'cartHelper' => $this->cartHelperMock,
                 'postDataHelper' => $this->postDataHelperMock,
                 'urlHelper' => $this->urlHelperMock,
             ]
@@ -167,5 +206,19 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($uenc));
         $result = $this->block->getAddToCartPostParams($this->productMock);
         $this->assertEquals($expectedPostData, $result);
+    }
+
+    public function testSetIsProductListFlagOnGetProductPrice()
+    {
+        $this->renderer->expects($this->once())
+            ->method('setData')
+            ->with('is_product_list', true)
+            ->willReturnSelf();
+        $this->layout->expects($this->once())
+            ->method('getBlock')
+            ->with('product.price.render.default')
+            ->willReturn($this->renderer);
+
+        $this->block->getProductPrice($this->productMock);
     }
 }
