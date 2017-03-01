@@ -129,12 +129,10 @@ class ImporterPool
 
             $importerObj = $this->objectManager->get($importer['class']);
             if (!$importerObj instanceof ImporterInterface) {
-                throw new ConfigurationMismatchException(
-                    __(
-                        '%1: Instance of %2 is expected, got %3 instead',
-                        $section,
-                        ImporterInterface::class, get_class($importerObj
-                    )
+                throw new ConfigurationMismatchException(__(
+                    '%1: Instance of %2 is expected, got %3 instead',
+                    $section,
+                    ImporterInterface::class, get_class($importerObj)
                 ));
             }
             $result[$section] = $importerObj;
