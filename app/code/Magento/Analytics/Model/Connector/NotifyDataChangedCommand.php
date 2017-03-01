@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Store\Model\Store;
 
 /**
- * Command executes to notify MBI the reports data was collected
+ * Command notifies MBI about that data collection was finished.
  */
 class NotifyDataChangedCommand implements CommandInterface
 {
@@ -61,7 +61,7 @@ class NotifyDataChangedCommand implements CommandInterface
     }
 
     /**
-     * Notify MBI the reports data was collected
+     * Notify MBI about that data collection was finished
      * @return bool
      */
     public function execute()
