@@ -104,7 +104,7 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
 
             $items = $this->cart->getItems();
             $this->orderCreditMemoNew->getFormBlock()->fillProductData($refundData, $items);
-            if (count($refundData) !== count($items)) {
+            if (!empty($refundData) && count($refundData) !== count($items)) {
                 $this->orderCreditMemoNew->getFormBlock()->updateQty();
             }
 

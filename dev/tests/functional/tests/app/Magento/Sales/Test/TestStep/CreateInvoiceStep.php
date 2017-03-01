@@ -121,11 +121,13 @@ class CreateInvoiceStep implements TestStepInterface
         $invoicesData = $this->order->getInvoice() !== null ? $this->order->getInvoice() : ['invoiceData' => []];
         foreach ($invoicesData as $invoiceData) {
             $this->salesOrderView->getPageActions()->invoice();
-            $this->orderInvoiceNew->getFormBlock()->fillProductData(
-                $invoiceData,
-                $this->cart->getItems()
-            );
-            $this->orderInvoiceNew->getFormBlock()->updateQty();
+
+            $items = $this->cart->getItems();
+            $this->orderInvoiceNew->getFormBlock()->fillProductData($invoiceData, $items);
+            if (!empty($invoiceData) && count($invoiceData) !== count($items)) {
+                $this->orderInvoiceNew->getFormBlock()->updateQty();
+            }
+
             $this->orderInvoiceNew->getFormBlock()->fillFormData($invoiceData);
             $this->orderInvoiceNew->getFormBlock()->submit();
             $shipmentIds = $this->getShipmentIds();

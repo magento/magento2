@@ -54,7 +54,7 @@ class PaypalIframe extends Method
      *
      * @var string
      */
-    private $loader = '#lightBoxDiv';
+    protected $loader = '#lightBoxDiv';
 
     /**
      * Fill credit card data in PayPal iframe form.
@@ -72,6 +72,19 @@ class PaypalIframe extends Method
         $formBlock->fill($creditCard, $iframeRootElement);
         $iframeRootElement->find($this->payNowButton)->click();
 
+        $this->waitSubmitForm($iframeRootElement);
+
+        $this->browser->switchToFrame();
+    }
+
+    /**
+     * Wait form submit for that payment.
+     *
+     * @param ElementInterface $iframeRootElement
+     * @return void
+     */
+    protected function waitSubmitForm(ElementInterface $iframeRootElement)
+    {
         $loaderElement = $iframeRootElement->find($this->loader);
 
         $loaderElement->waitUntil(function () use ($loaderElement) {
@@ -81,8 +94,6 @@ class PaypalIframe extends Method
         $loaderElement->waitUntil(function () use ($loaderElement) {
             return !$loaderElement->isVisible() ? true : null;
         });
-
-        $this->browser->switchToFrame();
     }
 
     /**

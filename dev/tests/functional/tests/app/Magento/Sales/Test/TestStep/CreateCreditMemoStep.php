@@ -86,11 +86,13 @@ class CreateCreditMemoStep implements TestStepInterface
         $refundsData = $this->order->getRefund() !== null ? $this->order->getRefund() : ['refundData' => []];
         foreach ($refundsData as $refundData) {
             $this->salesOrderView->getPageActions()->orderCreditMemo();
-            $this->orderCreditMemoNew->getFormBlock()->fillProductData(
-                $refundData,
-                $this->cart->getItems()
-            );
-            $this->orderCreditMemoNew->getFormBlock()->updateQty();
+
+            $items = $this->cart->getItems();
+            $this->orderCreditMemoNew->getFormBlock()->fillProductData($refundData, $items);
+            if (!empty($refundData) && count($refundData) !== count($items)) {
+                $this->orderCreditMemoNew->getFormBlock()->updateQty();
+            }
+
             $this->orderCreditMemoNew->getFormBlock()->fillFormData($refundData);
             $this->orderCreditMemoNew->getFormBlock()->submit();
         }
