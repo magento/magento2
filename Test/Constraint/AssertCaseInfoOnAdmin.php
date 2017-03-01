@@ -9,9 +9,9 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that Order Case Entity is correct on order page in backend.
+ * Assert that Order Case Entity is correct on order page in Admin.
  */
-class AssertCaseInfoOnBackend extends AbstractConstraint
+class AssertCaseInfoOnAdmin extends AbstractConstraint
 {
     /**
      * Customized order view page.
@@ -35,7 +35,7 @@ class AssertCaseInfoOnBackend extends AbstractConstraint
     private $signifydData;
 
     /**
-     * Assert that Signifyd Case information is correct on backend.
+     * Assert that Signifyd Case information is correct in Admin.
      *
      * @param SalesOrderView $orderView
      * @param string $orderId
@@ -104,6 +104,6 @@ class AssertCaseInfoOnBackend extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Signifyd Case information is correct on backend.';
+        return 'Signifyd Case information is correct in Admin.';
     }
 }

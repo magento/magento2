@@ -10,7 +10,7 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect as AssertOrderStatus;
 use Magento\Signifyd\Test\Constraint\AssertSignifydCaseInOrdersGrid as AssertOrdersGrid;
-use Magento\Signifyd\Test\Constraint\AssertCaseInfoOnBackend;
+use Magento\Signifyd\Test\Constraint\AssertCaseInfoOnAdmin;
 use Magento\Signifyd\Test\Page\Adminhtml\OrdersGrid;
 
 /**
@@ -26,9 +26,9 @@ class OpenOrderGridStep implements TestStepInterface
     private $assertOrderStatus;
 
     /**
-     * Case information on Magento backend assertion.
+     * Case information on Magento Admin assertion.
      *
-     * @var AssertCaseInfoOnBackend
+     * @var AssertCaseInfoOnAdmin
      */
     private $assertCaseInfo;
 
@@ -52,7 +52,6 @@ class OpenOrderGridStep implements TestStepInterface
      * @var int
      */
     private $orderId;
-
 
     /**
      * Order View Page.
@@ -89,7 +88,7 @@ class OpenOrderGridStep implements TestStepInterface
      * @param SalesOrderView $salesOrderView
      * @param OrdersGrid $ordersGrid
      * @param AssertOrderStatus $assertOrderStatus
-     * @param AssertCaseInfoOnBackend $assertCaseInfo
+     * @param AssertCaseInfoOnAdmin $assertCaseInfo
      * @param AssertOrdersGrid $assertOrdersGrid
      * @param array $signifydData
      */
@@ -100,7 +99,7 @@ class OpenOrderGridStep implements TestStepInterface
         SalesOrderView $salesOrderView,
         OrdersGrid $ordersGrid,
         AssertOrderStatus $assertOrderStatus,
-        AssertCaseInfoOnBackend $assertCaseInfo,
+        AssertCaseInfoOnAdmin $assertCaseInfo,
         AssertOrdersGrid $assertOrdersGrid,
         array $signifydData
     ) {
@@ -158,7 +157,7 @@ class OpenOrderGridStep implements TestStepInterface
     }
 
     /**
-     * Run assert to check Signifyd Case information is correct on backend.
+     * Run assert to check Signifyd Case information is correct in Admin.
      *
      * @return void
      */

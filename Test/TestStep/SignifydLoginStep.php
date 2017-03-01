@@ -7,8 +7,8 @@ namespace Magento\Signifyd\Test\TestStep;
 
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Signifyd\Test\Fixture\SignifydAccount;
-use Magento\Signifyd\Test\Page\Sandbox\SignifydCases;
-use Magento\Signifyd\Test\Page\Sandbox\SignifydLogin;
+use Magento\Signifyd\Test\Page\SignifydConsole\SignifydCases;
+use Magento\Signifyd\Test\Page\SignifydConsole\SignifydLogin;
 
 /**
  * Login into Signifyd console step.
@@ -57,8 +57,11 @@ class SignifydLoginStep implements TestStepInterface
     public function run()
     {
         $this->signifydLogin->open();
-        $this->signifydLogin->getLoginBlock()->fill($this->signifydAccount);
-        $this->signifydLogin->getLoginBlock()->login();
+        
+        if ($this->signifydLogin->getLoginBlock()->isVisible()) {
+            $this->signifydLogin->getLoginBlock()->fill($this->signifydAccount);
+            $this->signifydLogin->getLoginBlock()->login();
+        }
 
         $this->signifydCases->getCaseSearchBlock()->waitForLoading();
     }

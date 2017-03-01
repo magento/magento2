@@ -41,10 +41,6 @@ class Firstname extends DataSource
      */
     private function generateIsolation($length = 10)
     {
-        return substr(
-            str_shuffle(
-                str_repeat("abcdefghijklmnopqrstuvwxyz", $length)),
-            0, $length
-        );
+        return substr(str_shuffle(str_repeat("abcdefghijklmnopqrstuvwxyz", $length)), 0, $length);
     }
 }

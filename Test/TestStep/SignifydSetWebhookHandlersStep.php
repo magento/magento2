@@ -6,7 +6,7 @@
 namespace Magento\Signifyd\Test\TestStep;
 
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Signifyd\Test\Page\Sandbox\SignifydNotifications;
+use Magento\Signifyd\Test\Page\SignifydConsole\SignifydNotifications;
 
 /**
  * Set webhook handlers in Signifyd console step.
@@ -45,7 +45,7 @@ class SignifydSetWebhookHandlersStep implements TestStepInterface
     public function run()
     {
         $this->signifydNotifications->open();
-        $this->signifydNotifications->getWebhookGridBlock()->cleanupByTeam($this->signifydData['team']);
-        $this->signifydNotifications->getWebhookAddBlock()->createWebhooks($this->signifydData);
+        $this->signifydNotifications->getWebhooksBlock()
+            ->create($this->signifydData['team']);
     }
 }

@@ -8,7 +8,7 @@ namespace Magento\Signifyd\Test\Block\Adminhtml\Order;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
- * Backend Data Grid for managing "Sales Order" entities.
+ * Admin Data Grid for managing "Sales Order" entities.
  */
 class Grid extends DataGrid
 {

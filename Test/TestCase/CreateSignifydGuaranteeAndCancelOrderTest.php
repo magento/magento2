@@ -6,6 +6,11 @@
 namespace Magento\Signifyd\Test\TestCase;
 
 use Magento\Mtf\TestCase\Scenario;
+use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
+use Magento\Sales\Test\TestStep\CancelOrderStep;
+use Magento\Signifyd\Test\Page\SignifydConsole\SignifydNotifications;
 
 /**
  * Preconditions:
@@ -51,12 +56,103 @@ class CreateSignifydGuaranteeAndCancelOrderTest extends Scenario
     /* end tags */
 
     /**
+     * Order page.
+     *
+     * @var OrderIndex
+     */
+    private $orderIndex;
+
+    /**
+     * Sales order view page.
+     *
+     * @var SalesOrderView
+     */
+    private $salesOrderView;
+
+    /**
+     * Cancel order test step.
+     *
+     * @var CancelOrderStep
+     */
+    private $cancelOrderStep;
+
+    /**
+     * Order fixture.
+     *
+     * @var OrderInjectable
+     */
+    private $orderInjectable;
+
+    /**
+     * Signifyd notifications page.
+     *
+     * @var SignifydNotifications
+     */
+    private $signifydNotifications;
+
+    /**
+     * Array of Signifyd config data.
+     *
+     * @var array
+     */
+    private $signifydData;
+
+    /**
+     * @param OrderIndex $orderIndex
+     * @param SalesOrderView $salesOrderView
+     * @param CancelOrderStep $cancelOrderStep
+     * @param OrderInjectable $orderInjectable
+     * @param SignifydNotifications $signifydNotifications
+     */
+    public function __inject(
+        OrderIndex $orderIndex,
+        SalesOrderView $salesOrderView,
+        CancelOrderStep $cancelOrderStep,
+        OrderInjectable $orderInjectable,
+        SignifydNotifications $signifydNotifications
+    ) {
+        $this->orderIndex = $orderIndex;
+        $this->salesOrderView = $salesOrderView;
+        $this->cancelOrderStep = $cancelOrderStep;
+        $this->orderInjectable = $orderInjectable;
+        $this->signifydNotifications = $signifydNotifications;
+    }
+
+    /**
      * Runs one page checkout test.
+     *
+     * @param array $signifydData
+     * @return void
+     */
+    public function test(array $signifydData)
+    {
+        $this->signifydData = $signifydData;
+
+        $this->executeScenario();
+    }
+
+    /**
+     * Tear down for scenario variations.
+     *
+     * Signifyd needs this cleanup for guarantee decline. If we had have many cases
+     * with approved guarantees, and same order id, Signifyd will not create
+     * guarantee approve status for new cases.
      *
      * @return void
      */
-    public function test()
+    public function tearDown()
     {
-        $this->executeScenario();
+        $this->orderIndex->open();
+        $this->orderIndex->getSalesOrderGrid()
+            ->searchAndOpen(['id' => $this->orderInjectable->getId()]);
+        if ($this->salesOrderView->getOrderInfoBlock()->getOrderStatus() !== 'Canceled') {
+            $this->cancelOrderStep->run();
+        }
+
+        if ($this->signifydData['cleanupWebhooks']) {
+            $this->signifydNotifications->open();
+            $this->signifydNotifications->getWebhooksBlock()
+                ->cleanup($this->signifydData['team']);
+        }
     }
 }

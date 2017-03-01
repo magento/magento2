@@ -7,7 +7,7 @@ namespace Magento\Signifyd\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Signifyd\Test\Fixture\SignifydAddress;
-use Magento\Signifyd\Test\Page\Sandbox\SignifydCases;
+use Magento\Signifyd\Test\Page\SignifydConsole\SignifydCases;
 
 /**
  * Assert that order information is correct on Signifyd case info page.

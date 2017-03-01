@@ -6,12 +6,9 @@
 namespace Magento\Signifyd\Test\TestStep;
 
 use Magento\Mtf\TestStep\TestStepInterface;
-use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Sales\Test\TestStep\CancelOrderStep;
 use Magento\Signifyd\Test\Constraint\AssertCaseInfoOnSignifydConsole;
 use Magento\Signifyd\Test\Fixture\SignifydAddress;
-use Magento\Signifyd\Test\Page\Sandbox\SignifydCases;
+use Magento\Signifyd\Test\Page\SignifydConsole\SignifydCases;
 
 /**
  * Observe case information in Signifyd console step.
@@ -24,27 +21,6 @@ class SignifydObserveCaseStep implements TestStepInterface
      * @var AssertCaseInfoOnSignifydConsole
      */
     private $assertCaseInfo;
-
-    /**
-     * Cancel order on backend step.
-     *
-     * @var CancelOrderStep
-     */
-    private $cancelOrderStep;
-
-    /**
-     * Orders View Page.
-     *
-     * @var SalesOrderView
-     */
-    private $salesOrderView;
-
-    /**
-     * Orders Page.
-     *
-     * @var OrderIndex
-     */
-    private $orderIndex;
 
     /**
      * Signifyd cases page.
@@ -83,9 +59,6 @@ class SignifydObserveCaseStep implements TestStepInterface
 
     /**
      * @param AssertCaseInfoOnSignifydConsole $assertCaseInfoOnSignifydConsole
-     * @param CancelOrderStep $cancelOrderStep
-     * @param OrderIndex $orderIndex
-     * @param SalesOrderView $salesOrderView
      * @param SignifydCases $signifydCases
      * @param SignifydAddress $signifydAddress
      * @param array $prices
@@ -94,9 +67,6 @@ class SignifydObserveCaseStep implements TestStepInterface
      */
     public function __construct(
         AssertCaseInfoOnSignifydConsole $assertCaseInfoOnSignifydConsole,
-        CancelOrderStep $cancelOrderStep,
-        OrderIndex $orderIndex,
-        SalesOrderView $salesOrderView,
         SignifydCases $signifydCases,
         SignifydAddress $signifydAddress,
         array $prices,
@@ -104,9 +74,6 @@ class SignifydObserveCaseStep implements TestStepInterface
         $orderId
     ) {
         $this->assertCaseInfo = $assertCaseInfoOnSignifydConsole;
-        $this->cancelOrderStep = $cancelOrderStep;
-        $this->orderIndex = $orderIndex;
-        $this->salesOrderView = $salesOrderView;
         $this->signifydCases = $signifydCases;
         $this->signifydAddress = $signifydAddress;
         $this->prices = $prices;
@@ -123,7 +90,7 @@ class SignifydObserveCaseStep implements TestStepInterface
         $this->signifydCases->getCaseSearchBlock()
             ->searchCaseByCustomerName($this->signifydAddress->getFirstname());
         $this->signifydCases->getCaseSearchBlock()->selectCase();
-        $this->signifydCases->getCaseInfoBlock()->flagCaseAsGood();
+        $this->signifydCases->getCaseInfoBlock()->flagCase($this->signifydData['caseFlag']);
 
         $this->assertCaseInfo->processAssert(
             $this->signifydCases,
@@ -144,24 +111,5 @@ class SignifydObserveCaseStep implements TestStepInterface
     private function getCustomerFullName(SignifydAddress $billingAddress)
     {
         return sprintf('%s %s', $billingAddress->getFirstname(), $billingAddress->getLastname());
-    }
-
-    /**
-     * Cancel order on backend.
-     *
-     * Signifyd needs this cleanup for guarantee decline. If we had have many cases
-     * with approved guarantees, and same order id, Signifyd will not create
-     * guarantee approve status for new cases.
-     *
-     * @return void
-     */
-    public function cleanup()
-    {
-        $this->orderIndex->open();
-        $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->orderId]);
-
-        if ($this->salesOrderView->getOrderInfoBlock()->getOrderStatus() !== 'Canceled') {
-            $this->cancelOrderStep->run();
-        }
     }
 }

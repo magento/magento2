@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Test\Block\Sandbox;
+namespace Magento\Signifyd\Test\Block\SignifydConsole;
 
 use Magento\Mtf\Block\Form;
 

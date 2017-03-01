@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Signifyd\Test\Block\Sandbox;
+namespace Magento\Signifyd\Test\Block\SignifydConsole;
 
 use Magento\Mtf\Block\Block;
 
@@ -18,6 +18,13 @@ class CaseInfo extends Block
      * @var string
      */
     private $flagCaseAsGoodButton = '[class*="flag-case-good"]';
+
+    /**
+     * Css selector of "Flag Case As Bad" button.
+     *
+     * @var string
+     */
+    private $flagCaseAsBadButton = '[class*="flag-case-bad"]';
 
     /**
      * Css selector of guarantee status.
@@ -83,13 +90,28 @@ class CaseInfo extends Block
     private $billingAddress = '[data-dropdown="streetLinks0"]';
 
     /**
-     * Flags case as good.
+     * Flags case as good or bad.
+     *
+     * @param string $flagType
+     * @return void
+     */
+    public function flagCase($flagType)
+    {
+        $flagSelector = ($flagType === 'Good')
+            ? $this->flagCaseAsGoodButton
+            : $this->flagCaseAsBadButton;
+
+        $this->_rootElement->find($flagSelector)->click();
+    }
+
+    /**
+     * Flags case as bad.
      *
      * @return void
      */
-    public function flagCaseAsGood()
+    public function flagCaseAsBad()
     {
-        $this->_rootElement->find($this->flagCaseAsGoodButton)->click();
+        $this->_rootElement->find($this->flagCaseAsBadButton)->click();
     }
 
     /**
