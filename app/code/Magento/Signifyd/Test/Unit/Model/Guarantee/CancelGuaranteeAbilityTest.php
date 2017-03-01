@@ -64,10 +64,6 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $case->expects($this->once())
-            ->method('isGuaranteeEligible')
-            ->willReturn(false);
-
-        $case->expects($this->once())
             ->method('getGuaranteeDisposition')
             ->willReturn(CaseEntity::GUARANTEE_APPROVED);
 
@@ -104,40 +100,6 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests case when GuaranteeEligible for Case is true or null
-     *
-     * @param mixed $guaranteeEligible
-     * @dataProvider isAvailableWithGuarantyIsEligibleDataProvider
-     */
-    public function testIsAvailableWithGuarantyIsEligible($guaranteeEligible)
-    {
-        $orderId = 123;
-
-        /** @var CaseInterface|\PHPUnit_Framework_MockObject_MockObject $case */
-        $case = $this->getMockBuilder(CaseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $case->expects($this->once())
-            ->method('isGuaranteeEligible')
-            ->willReturn($guaranteeEligible);
-
-        $this->caseManagement->expects($this->once())
-            ->method('getByOrderId')
-            ->with($orderId)
-            ->willReturn($case);
-
-        $this->assertFalse($this->cancelGuaranteeAbility->isAvailable($orderId));
-    }
-
-    public function isAvailableWithGuarantyIsEligibleDataProvider()
-    {
-        return [
-            [null], [true]
-        ];
-    }
-
-    /**
      * Tests case when Guarantee Disposition has Declined or Canceled states.
      *
      * @param string $guaranteeDisposition
@@ -151,10 +113,6 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
         $case = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $case->expects($this->once())
-            ->method('isGuaranteeEligible')
-            ->willReturn(false);
 
         $case->expects($this->once())
             ->method('getGuaranteeDisposition')
@@ -171,7 +129,7 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
     public function isAvailableWithCanceledGuaranteeDataProvider()
     {
         return [
-            [CaseEntity::GUARANTEE_DECLINED], [CaseEntity::GUARANTEE_CANCELED]
+            [CaseEntity::GUARANTEE_CANCELED]
         ];
     }
 
@@ -186,10 +144,6 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
         $case = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $case->expects($this->once())
-            ->method('isGuaranteeEligible')
-            ->willReturn(false);
 
         $case->expects($this->once())
             ->method('getGuaranteeDisposition')
