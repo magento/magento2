@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Importer
 {
     /**
-     * The manager of deployment configuration hash.
+     * The configuration data validator.
      *
      * @var Validator
      */

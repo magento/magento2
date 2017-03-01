@@ -9,6 +9,20 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Config data collector of specific sections which are defined in di.xml
+ *
+ * E.g.
+ * ```xml
+ * <type name="Magento\Deploy\Model\DeploymentConfig\ImporterPool">
+ *     <arguments>
+ *          <argument name="importers" xsi:type="array">
+ *               <item name="scopes" xsi:type="string">Magento\Store\Model\StoreImporter</item>
+ *          </argument>
+ *     </arguments>
+ * </type>
+ * ```
+ * In here we define section "scopes" and its importer Magento\Store\Model\StoreImporter.
+ * The data of this section will be collected then will be used in importing process from the shared configuration
+ * files to appropriate application sources.
  */
 class DataCollector
 {
@@ -38,6 +52,17 @@ class DataCollector
 
     /**
      * Retrieves configuration data of specific section from deployment configuration files.
+     *
+     * E.g.
+     * ```php
+     *  [
+     *      'scopes' => [...],
+     *      'system' => [...],
+     *      'themes' => [...],
+     *      ...
+     *  ]
+     * ```
+     * In this example key of the array is the section name, value of the array is configuration data of the section.
      *
      * @return array
      */

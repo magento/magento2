@@ -13,6 +13,8 @@ use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Saves and Retrieves deployment configuration hash.
+ *
+ * We need the hash of configuration data for its validation.
  */
 class Hash
 {
@@ -70,8 +72,10 @@ class Hash
     /**
      * Updates hash in the storage.
      *
+     * The hash is updated based on configuration data from shared configuration files.
+     *
      * @return void
-     * @throws LocalizedException
+     * @throws LocalizedException is thrown when import has failed
      */
     public function regenerate()
     {
