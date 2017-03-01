@@ -51,11 +51,7 @@ class CancelGuaranteeAbility
             return false;
         }
 
-        if ($case->isGuaranteeEligible() !== false) {
-            return false;
-        }
-
-        if (in_array($case->getGuaranteeDisposition(), [null, $case::GUARANTEE_DECLINED, $case::GUARANTEE_CANCELED])) {
+        if (in_array($case->getGuaranteeDisposition(), [null, $case::GUARANTEE_CANCELED])) {
             return false;
         }
 
