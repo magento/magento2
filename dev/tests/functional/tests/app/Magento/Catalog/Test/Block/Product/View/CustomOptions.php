@@ -188,12 +188,12 @@ class CustomOptions extends Form
     }
 
     /**
-     * Check that validation error message beside custom option is visible.
+     * Check option's validation message is visible or not.
      *
      * @param string $customOptionTitle
      * @return bool
      */
-    public function validationErrorMessageIsVisible($customOptionTitle)
+    public function isValidationErrorMessageVisible($customOptionTitle)
     {
         $optionSelector = $this->customOptionField . $this->requiredOption . $this->validationErrorMessage;
         $title = sprintf($optionSelector, $customOptionTitle);
