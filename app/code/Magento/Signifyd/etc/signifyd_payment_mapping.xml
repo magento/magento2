@@ -75,18 +75,6 @@
             <signifyd_code>PAYMENT_CARD</signifyd_code>
         </payment_method>
         <payment_method>
-            <magento_code>checkmo</magento_code>
-            <signifyd_code>CHECK</signifyd_code>
-        </payment_method>
-        <payment_method>
-            <magento_code>banktransfer</magento_code>
-            <signifyd_code>CHECK</signifyd_code>
-        </payment_method>
-        <payment_method>
-            <magento_code>cashondelivery</magento_code>
-            <signifyd_code>CASH</signifyd_code>
-        </payment_method>
-        <payment_method>
             <magento_code>free</magento_code>
             <signifyd_code>FREE</signifyd_code>
         </payment_method>

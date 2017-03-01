@@ -73,7 +73,7 @@ class PlaceOrder implements ObserverInterface
     }
 
     /**
-     * Creates signifyd case for single order
+     * Creates Signifyd case for single order with online payment method.
      *
      * @param OrderInterface $order
      * @return void
@@ -81,7 +81,7 @@ class PlaceOrder implements ObserverInterface
     private function createCaseForOrder($order)
     {
         $orderId = $order->getEntityId();
-        if (null === $orderId) {
+        if (null === $orderId || $order->getPayment()->getMethodInstance()->isOffline()) {
             return;
         }
 
