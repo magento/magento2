@@ -46,6 +46,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $categoryProductIndexerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $adapterMock;
 
     /**
@@ -65,13 +70,21 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
         $this->metadataPoolMock = $this->getMock(MetadataPool::class, [], [], '', false);
         $this->frontendResourceMock = $this->getMock(FrontendResource::class, [], [], '', false);
+        $this->categoryProductIndexerMock = $this->getMock(
+            FrontendResource::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->model = new Index(
             $this->resourceContextMock,
             $this->storeManagerMock,
             $this->metadataPoolMock,
             null,
-            $this->frontendResourceMock
+            $this->frontendResourceMock,
+            $this->categoryProductIndexerMock
         );
     }
 

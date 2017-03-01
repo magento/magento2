@@ -31,19 +31,27 @@ class Index extends AbstractDb
     private $indexerFrontendResource;
 
     /**
+     * @var FrontendResource
+     */
+    private $categoryProductIndexerFrontend;
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param MetadataPool $metadataPool
      * @param null $connectionName
-     * @param FrontendResource $indexerFrontendResource
+     * @param FrontendResource|null $indexerFrontendResource
+     * @param FrontendResource|null $categoryProductIndexerFrontend
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
         MetadataPool $metadataPool,
         $connectionName = null,
-        FrontendResource $indexerFrontendResource = null
+        FrontendResource $indexerFrontendResource = null,
+        FrontendResource $categoryProductIndexerFrontend = null
     ) {
         parent::__construct($context, $connectionName);
         $this->storeManager = $storeManager;
@@ -51,6 +59,10 @@ class Index extends AbstractDb
         $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
         );
+        $this->categoryProductIndexerFrontend = $categoryProductIndexerFrontend ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource::class
+        );
+
     }
 
     /**
@@ -119,7 +131,7 @@ class Index extends AbstractDb
         $connection = $this->getConnection();
 
         $select = $connection->select()->from(
-            [$this->getTable('catalog_category_product_index')],
+            [$this->categoryProductIndexerFrontend->getMainTable()],
             ['category_id', 'product_id', 'position', 'store_id']
         )->where(
             'store_id = ?',

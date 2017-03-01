@@ -35,6 +35,7 @@
     <type name="Magento\AdvancedSearch\Model\ResourceModel\Index">
         <arguments>
             <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
+            <argument name="categoryProductIndexerFrontend" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource</argument>
         </arguments>
     </type>
 </config>
