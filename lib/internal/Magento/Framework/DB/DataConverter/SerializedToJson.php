@@ -65,6 +65,8 @@ class SerializedToJson implements DataConverterInterface
         ) {
             return true;
         }
+        //JSON last error reset
+        json_encode([]);
         return false;
     }
 
