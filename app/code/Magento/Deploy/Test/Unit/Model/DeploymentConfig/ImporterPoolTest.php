@@ -44,12 +44,16 @@ class ImporterPoolTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([
-                ['Magento\Importer\SomeSection', $this->importerMock],
+                ['Magento\Importer\SomeImporter', $this->importerMock],
                 ['Magento\Importer\WrongSection', $this->wrongImporter],
             ]);
         $this->configImporterPool = new ImporterPool(
             $this->objectManagerMock,
-            ['someSection' => 'Magento\Importer\SomeSection']
+            [
+                'firstSection' => ['class' => 'Magento\Importer\SomeImporter', 'sortOrder' => 20],
+                'secondSection' => ['class' => 'Magento\Importer\SomeImporter'],
+                'thirdSection' => ['class' => 'Magento\Importer\SomeImporter', 'sortOrder' => 10]
+            ]
         );
     }
 
@@ -58,7 +62,11 @@ class ImporterPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetImporters()
     {
-        $expectedResult = ['someSection' => $this->importerMock];
+        $expectedResult = [
+            'secondSection' => $this->importerMock,
+            'thirdSection' => $this->importerMock,
+            'firstSection' => $this->importerMock,
+        ];
         $this->assertSame($expectedResult, $this->configImporterPool->getImporters());
     }
 
@@ -69,11 +77,26 @@ class ImporterPoolTest extends \PHPUnit_Framework_TestCase
      * @expectedExceptionMessage wrongSection: Instance of Magento\Framework\App\DeploymentConfig\ImporterInterface is expected, got stdClass instead
      * @codingStandardsIgnoreEnd
      */
-    public function testGetImportersWithException()
+    public function testGetImportersWrongImplementation()
     {
         $this->configImporterPool = new ImporterPool(
             $this->objectManagerMock,
-            ['wrongSection' => 'Magento\Importer\WrongSection']
+            ['wrongSection' => ['class' => 'Magento\Importer\WrongSection']]
+        );
+
+        $this->configImporterPool->getImporters();
+    }
+
+    /**
+     * @return void
+     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
+     * @expectedExceptionMessage Parameter "class" must be present.
+     */
+    public function testGetImportersEmptyParameterClass()
+    {
+        $this->configImporterPool = new ImporterPool(
+            $this->objectManagerMock,
+            ['wrongSection' => ['class' => '']]
         );
 
         $this->configImporterPool->getImporters();
@@ -84,6 +107,9 @@ class ImporterPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSections()
     {
-        $this->assertSame(['someSection'], $this->configImporterPool->getSections());
+        $this->assertSame(
+            ['firstSection', 'secondSection', 'thirdSection'],
+            $this->configImporterPool->getSections()
+        );
     }
 }

@@ -70,27 +70,33 @@ class Hash
     /**
      * Updates hash in the storage.
      *
+     * @param string $sectionName
      * @return void
-     * @throws LocalizedException
+     * @throws LocalizedException is thrown when hash is not saved in a storage
      */
-    public function regenerate()
+    public function regenerate($sectionName = null)
     {
         try {
-            $config = $this->dataConfigCollector->getConfig();
-            $hash = $this->configHashGenerator->generate($config);
-            $this->writer->saveConfig([ConfigFilePool::APP_ENV => [self::CONFIG_KEY => $hash]]);
+            $hashes = $this->get();
+            $configs = $this->dataConfigCollector->getConfig($sectionName ?: null);
+
+            foreach ($configs as $section => $config) {
+                $hashes[$section] = $this->configHashGenerator->generate($config);
+            }
+
+            $this->writer->saveConfig([ConfigFilePool::APP_ENV => [self::CONFIG_KEY => $hashes]]);
         } catch (FileSystemException $exception) {
-            throw new LocalizedException(__('Hash has not been saved'), $exception);
+            throw new LocalizedException(__('Hash has not been saved.'), $exception);
         }
     }
 
     /**
-     * Retrieves saved hash from storage.
+     * Retrieves saved hashes from storage.
      *
-     * @return string|null
+     * @return array
      */
     public function get()
     {
-        return $this->deploymentConfig->getConfigData(self::CONFIG_KEY);
+        return (array) ($this->deploymentConfig->getConfigData(self::CONFIG_KEY) ?: []);
     }
 }

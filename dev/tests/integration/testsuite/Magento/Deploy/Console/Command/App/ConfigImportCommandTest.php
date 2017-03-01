@@ -15,6 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand\IntegrationTestImporter;
+use Magento\Deploy\Console\Command\App\ConfigImportCommand\IntegrationTestSecondImporter;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 
 /**
@@ -64,7 +65,13 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             ImporterPool::class => [
                 'arguments' => [
                     'importers' => [
-                        'integrationTestImporter' => IntegrationTestImporter::class
+                        'integrationTestImporter' => [
+                            'class' => IntegrationTestImporter::class,
+                            'sortOrder' => 20
+                        ],
+                        'integrationTestSecondImporter' => [
+                            'class' => IntegrationTestSecondImporter::class,
+                        ]
                     ]
                 ]
             ]
@@ -103,8 +110,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
-        $this->assertContains('Start import', $commandTester->getDisplay());
-        $this->assertContains('Nothing to import', $commandTester->getDisplay());
+        $this->assertContains('Nothing to import.', $commandTester->getDisplay());
         $this->assertArrayNotHasKey(Hash::CONFIG_KEY, $this->loadEnvConfig());
     }
 
@@ -120,7 +126,10 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute([]);
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
         $this->assertContains('Start import', $commandTester->getDisplay());
-        $this->assertContains('Integration test data is imported!', $commandTester->getDisplay());
+        $this->assertContains(
+            "Integration second test data is imported!\nIntegration test data is imported!",
+            $commandTester->getDisplay()
+        );
         $this->assertArrayHasKey(Hash::CONFIG_KEY, $this->loadEnvConfig());
     }
 

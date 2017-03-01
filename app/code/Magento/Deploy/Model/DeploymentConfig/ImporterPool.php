@@ -6,7 +6,6 @@
 namespace Magento\Deploy\Model\DeploymentConfig;
 
 use Magento\Framework\Exception\ConfigurationMismatchException;
-use Magento\Framework\Phrase;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 
@@ -24,7 +23,14 @@ class ImporterPool
      * <type name="Magento\Deploy\Model\DeploymentConfig\ImporterPool">
      *     <arguments>
      *          <argument name="importers" xsi:type="array">
-     *               <item name="scopes" xsi:type="string">Magento\Store\Model\StoreImporter</item>
+     *               <item name="scopes" xsi:type="array">
+     *                   <item name="sortOrder" xsi:type="number">20</item>
+     *                   <item name="class" xsi:type="string">Magento\Store\Model\StoreImporter</item>
+     *               </item>
+     *               <item name="themes" xsi:type="array">
+     *                   <item name="sortOrder" xsi:type="number">10</item>
+     *                   <item name="class" xsi:type="string">Magento\Theme\Model\ThemeImporter</item>
+     *               </item>
      *          </argument>
      *     </arguments>
      * </type>
@@ -51,6 +57,13 @@ class ImporterPool
      * @var array
      */
     private $importers = [];
+
+    /**
+     * The same as $importers, sorted by sortOrder.
+     *
+     * @var array
+     */
+    private $sortedImporters;
 
     /**
      * Magento object manager.
@@ -88,7 +101,7 @@ class ImporterPool
     }
 
     /**
-     * Retrieves list of all sections with their importer instances.
+     * Retrieves list of all sections with their importer instances, sorted by sortOrder.
      *
      * E.g.
      * ```php
@@ -105,17 +118,61 @@ class ImporterPool
     {
         $result = [];
 
-        foreach ($this->importers as $section => $importer) {
-            $importerObj = $this->objectManager->get($importer);
+        if (null == $this->sortedImporters) {
+            $this->sortedImporters = $this->sort($this->importers);
+        }
+
+        foreach ($this->sortedImporters as $section => $importer) {
+            if (empty($importer['class'])) {
+                throw new ConfigurationMismatchException(__('Parameter "class" must be present.'));
+            }
+
+            $importerObj = $this->objectManager->get($importer['class']);
             if (!$importerObj instanceof ImporterInterface) {
-                throw new ConfigurationMismatchException(new Phrase(
-                    '%1: Instance of %2 is expected, got %3 instead',
-                    [$section, ImporterInterface::class, get_class($importerObj)]
+                throw new ConfigurationMismatchException(
+                    __(
+                        '%1: Instance of %2 is expected, got %3 instead',
+                        $section,
+                        ImporterInterface::class, get_class($importerObj
+                    )
                 ));
             }
             $result[$section] = $importerObj;
         }
 
         return $result;
+    }
+
+    /**
+     * Sorts importers according to sort order.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function sort(array $data)
+    {
+        uasort($data, function (array $a, array $b) {
+            $a['sortOrder'] = $this->getSortOrder($a);
+            $b['sortOrder'] = $this->getSortOrder($b);
+
+            if ($a['sortOrder'] == $b['sortOrder']) {
+                return 0;
+            }
+
+            return ($a['sortOrder'] < $b['sortOrder']) ? -1 : 1;
+        });
+
+        return $data;
+    }
+
+    /**
+     * Retrieves sort order from array.
+     *
+     * @param array $variable
+     * @return int
+     */
+    private function getSortOrder(array $variable)
+    {
+        return !empty($variable['sortOrder']) ? $variable['sortOrder'] : 0;
     }
 }

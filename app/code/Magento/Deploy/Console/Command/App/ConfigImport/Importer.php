@@ -84,28 +84,29 @@ class Importer
      */
     public function import(OutputInterface $output)
     {
-        $output->writeln('<info>Start import:</info>');
-
         try {
             $importers = $this->configImporterPool->getImporters();
-
             if (!$importers || $this->configValidator->isValid()) {
-                $output->writeln('<info>Nothing to import</info>');
+                $output->writeln('<info>Nothing to import.</info>');
+                return;
             } else {
-                /**
-                 * @var string $namespace
-                 * @var ImporterInterface $importer
-                 */
-                foreach ($importers as $namespace => $importer) {
-                    $messages = $importer->import($this->deploymentConfig->getConfigData($namespace));
-                    $output->writeln($messages);
-                }
+                $output->writeln('<info>Start import:</info>');
+            }
 
-                $this->configHash->regenerate();
+            /**
+             * @var string $section
+             * @var ImporterInterface $importer
+             */
+            foreach ($importers as $section => $importer) {
+                if (!$this->configValidator->isValid($section)) {
+                    $messages = $importer->import($this->deploymentConfig->getConfigData($section));
+                    $output->writeln($messages);
+                    $this->configHash->regenerate($section);
+                }
             }
         } catch (LocalizedException $exception) {
             $this->logger->error($exception);
-            throw new LocalizedException(__('Import is failed'), $exception);
+            throw new LocalizedException(__('Import is failed.'), $exception);
         }
     }
 }

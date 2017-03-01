@@ -67,17 +67,32 @@ class HashTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string|array|null $dataFromStorage
+     * @param array $expectedResult
      * @return void
+     * @dataProvider getDataProvider
      */
-    public function testGet()
+    public function testGet($dataFromStorage, $expectedResult)
     {
-        $result = 'some data';
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Hash::CONFIG_KEY)
-            ->willReturn($result);
+            ->willReturn($dataFromStorage);
 
-        $this->assertSame($result, $this->hash->get());
+        $this->assertSame($expectedResult, $this->hash->get());
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataProvider()
+    {
+        return [
+            [['section' => 'hash'], ['section' => 'hash']],
+            ['hash', ['hash']],
+            ['', []],
+            [null, []],
+        ];
     }
 
     /**
@@ -85,13 +100,16 @@ class HashTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegenerate()
     {
+        $section = 'section';
         $config = 'some config';
+        $fullConfig = ['section' => $config];
         $hash = 'some hash';
+        $hashes = [$section => $hash];
 
-        $this->generalRegenerateMocks($config, $hash);
+        $this->generalRegenerateMocks($fullConfig, $config, $hash);
         $this->writerMock->expects($this->once())
             ->method('saveConfig')
-            ->with([ConfigFilePool::APP_ENV => [Hash::CONFIG_KEY => $hash]]);
+            ->with([ConfigFilePool::APP_ENV => [Hash::CONFIG_KEY => $hashes]]);
 
         $this->hash->regenerate();
     }
@@ -103,28 +121,34 @@ class HashTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegenerateWithException()
     {
+        $section = 'section';
         $config = 'some config';
+        $fullConfig = ['section' => $config];
         $hash = 'some hash';
+        $hashes = [$section => $hash];
 
-        $this->generalRegenerateMocks($config, $hash);
+        $this->generalRegenerateMocks($fullConfig, $config, $hash, $section);
         $this->writerMock->expects($this->once())
             ->method('saveConfig')
-            ->with([ConfigFilePool::APP_ENV => [Hash::CONFIG_KEY => $hash]])
+            ->with([ConfigFilePool::APP_ENV => [Hash::CONFIG_KEY => $hashes]])
             ->willThrowException(new FileSystemException(__('Some error')));
 
-        $this->hash->regenerate();
+        $this->hash->regenerate($section);
     }
 
     /**
+     * @param array $fullConfig
      * @param string $config
      * @param string $hash
+     * @param string|null $sectionName
      * @return void
      */
-    private function generalRegenerateMocks($config, $hash)
+    private function generalRegenerateMocks($fullConfig, $config, $hash, $sectionName = null)
     {
         $this->dataConfigCollectorMock->expects($this->once())
             ->method('getConfig')
-            ->willReturn($config);
+            ->with($sectionName)
+            ->willReturn($fullConfig);
         $this->configHashGeneratorMock->expects($this->once())
             ->method('generate')
             ->with($config)

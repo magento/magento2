@@ -133,9 +133,14 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     public function testImportWithException()
     {
         $exception = new LocalizedException(__('Some error'));
-        $this->outputMock->expects($this->at(0))
-            ->method('writeln')
-            ->with('<info>Start import:</info>');
+        $this->outputMock->expects($this->never())
+            ->method('writeln');
+        $this->configHashMock->expects($this->never())
+            ->method('regenerate');
+        $this->configValidatorMock->expects($this->never())
+            ->method('isValid');
+        $this->deploymentConfigMock->expects($this->never())
+            ->method('getConfigData');
         $this->configImporterPoolMock->expects($this->once())
             ->method('getImporters')
             ->willThrowException($exception);
@@ -169,10 +174,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
 
         $this->outputMock->expects($this->at(0))
             ->method('writeln')
-            ->with('<info>Start import:</info>');
-        $this->outputMock->expects($this->at(1))
-            ->method('writeln')
-            ->with('<info>Nothing to import</info>');
+            ->with('<info>Nothing to import.</info>');
 
         $this->importer->import($this->outputMock);
     }

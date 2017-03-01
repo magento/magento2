@@ -37,15 +37,23 @@ class DataCollector
     }
 
     /**
-     * Retrieves configuration data of specific section from deployment configuration files.
+     * Retrieves configuration data of all specific sections from deployment configuration files.
+     * Or retrieves configuration data of specific sections by its name.
      *
-     * @return array
+     * @param string $sectionName the section name for retrieving its configuration data
+     * @return array is configurations data from deployment configuration files
      */
-    public function getConfig()
+    public function getConfig($sectionName = null)
     {
         $result = [];
 
-        foreach ($this->configImporterPool->getSections() as $section) {
+        if ($sectionName) {
+            $sections = [$sectionName];
+        } else {
+            $sections = $this->configImporterPool->getSections();
+        }
+
+        foreach ($sections as $section) {
             $data = $this->deploymentConfig->getConfigData($section);
             if ($data) {
                 $result[$section] = $data;
