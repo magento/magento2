@@ -252,8 +252,8 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     }
 
     /**
-     * Collects config field paths recursively from config schema.
-     * Returns an array map of fields specification.
+     * Collects config paths and their structure paths from configuration files.
+     * Returns the map of config paths and their structure paths.
      *
      * ```php
      *  [
@@ -272,7 +272,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     }
 
     /**
-     * Iteration that collects config field paths recursively from config schema.
+     * Iteration that collects config field paths recursively from config files.
      *
      * @param array $elements The elements to be parsed
      * @return array An array of config path to config structure path map
