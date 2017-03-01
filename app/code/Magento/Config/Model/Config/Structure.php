@@ -3,12 +3,11 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * System configuration structure
- */
 namespace Magento\Config\Model\Config;
 
+/**
+ * System configuration structure.
+ */
 class Structure implements \Magento\Config\Model\Config\Structure\SearchInterface
 {
     /**
@@ -249,6 +248,59 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
                 $result[] = $parentPath . '/' . $field['id'];
             }
         }
+        return $result;
+    }
+
+    /**
+     * Collects config field paths recursively from config schema.
+     * Returns an array map of fields specification.
+     *
+     * ```php
+     *  [
+     *      'test_config/test_config/test_config' => [
+     *          'test_structure/test_structure/test_structure'
+     *      ]
+     * ```
+     *
+     * @return array An array of config path to config structure path map
+     */
+    public function getFieldPaths()
+    {
+        $sections = !empty($this->_data['sections']) ? $this->_data['sections'] : [];
+
+        return $this->getFieldsRecursively($sections);
+    }
+
+    /**
+     * Iteration that collects config field paths recursively from config schema.
+     *
+     * @param array $elements The elements to be parsed
+     * @return array An array of config path to config structure path map
+     */
+    private function getFieldsRecursively(array $elements = [])
+    {
+        $result = [];
+
+        foreach ($elements as $element) {
+            if (isset($element['children'])) {
+                $result = array_replace_recursive(
+                    $result,
+                    $this->getFieldsRecursively($element['children'])
+                );
+            } else {
+                if ($element['_elementType'] === 'field' && isset($element['label'])) {
+                    $structurePath = (isset($element['path']) ? $element['path'] . '/' : '') . $element['id'];
+                    $configPath = isset($element['config_path']) ? $element['config_path'] : $structurePath;
+
+                    if (!isset($result[$configPath])) {
+                        $result[$configPath] = [];
+                    }
+
+                    $result[$configPath][] = $structurePath;
+                }
+            }
+        }
+
         return $result;
     }
 }
