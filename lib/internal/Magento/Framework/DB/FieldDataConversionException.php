@@ -8,7 +8,7 @@ namespace Magento\Framework\DB;
 /**
  * Class FieldDataConversionException
  */
-class FieldDataConversionException extends \Exception
+class FieldDataConversionException extends \Magento\Framework\Exception\LocalizedException
 {
     /**
      * Message pattern for corrupted data exception
