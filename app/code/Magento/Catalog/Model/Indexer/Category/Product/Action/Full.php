@@ -31,6 +31,11 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     private $memoryTablesMinRows;
 
     /**
+     * @var \Magento\Indexer\Model\Indexer\StateFactory
+     */
+    private $indexerStateFactory;
+
+    /**
      * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
@@ -43,6 +48,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param \Magento\Framework\Indexer\BatchSizeCalculatorInterface|null $batchSizeCalculator
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
+     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -52,6 +58,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         \Magento\Framework\Indexer\BatchSizeCalculatorInterface $batchSizeCalculator = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
         array $memoryTablesMinRows = []
     ) {
         parent::__construct(
@@ -69,6 +76,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         );
         $this->metadataPool = $metadataPool ?: $objectManager->get(
             \Magento\Framework\EntityManager\MetadataPool::class
+        );
+        $this->indexerStateFactory = $stateFactory ?: $objectManager->get(
+            \Magento\Indexer\Model\Indexer\StateFactory::class
         );
         $this->memoryTablesMinRows = $memoryTablesMinRows;
     }
@@ -228,4 +238,21 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             );
         }
     }
+
+    /**
+     * @inheritdoc
+     * @return string main table name based on the suffix stored in the 'indexer_state' table
+     */
+    public function getMainTable()
+    {
+        $table = parent::getMainTable();
+        $indexerState = $this->indexerStateFactory->create()->loadByIndexer(
+            \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
+        );
+        $destinationTableSuffix = ($indexerState->getTableSuffix() === '')
+            ? \Magento\Framework\Indexer\StateInterface::ADDITIONAL_TABLE_SUFFIX
+            : '';
+        return $table . $destinationTableSuffix;
+    }
+
 }
