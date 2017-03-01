@@ -26,7 +26,7 @@ use Magento\Mtf\Util\Command\Cli\Cache;
  * 4. Perform all asserts
  *
  * @group Shopping_Cart
- * @ZephyrId MAGETWO-25382, MAGETWO-42677
+ * @ZephyrId MAGETWO-25382, MAGETWO-42677, MAGETWO-45389
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddProductsToShoppingCartEntityTest extends Injectable
@@ -156,7 +156,10 @@ class AddProductsToShoppingCartEntityTest extends Injectable
         $this->addToCart($products);
 
         $cart['data']['items'] = ['products' => $products];
-        return ['cart' => $this->fixtureFactory->createByCode('cart', $cart)];
+        return [
+            'cart' => $this->fixtureFactory->createByCode('cart', $cart),
+            'products' => $products
+        ];
     }
 
     /**

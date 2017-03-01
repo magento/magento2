@@ -105,7 +105,7 @@ class AddProductsToTheCartStep implements TestStepInterface
             $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
             $this->catalogProductView->getViewBlock()->waitForElementNotVisible($this->loadingSelector);
             $this->catalogProductView->getViewBlock()->addToCart($product);
-            $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
+            $this->catalogProductView->getMessagesBlock()->waitMessage();
         }
         $cart['data']['items'] = ['products' => $this->products];
         return ['cart' => $this->fixtureFactory->createByCode('cart', $cart)];
