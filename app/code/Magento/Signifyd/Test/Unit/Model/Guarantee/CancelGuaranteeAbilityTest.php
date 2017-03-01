@@ -100,12 +100,9 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests case when Guarantee Disposition has Declined or Canceled states.
-     *
-     * @param string $guaranteeDisposition
-     * @dataProvider isAvailableWithCanceledGuaranteeDataProvider
+     * Tests case when Guarantee Disposition has Canceled states.
      */
-    public function testIsAvailableWithCanceledGuarantee($guaranteeDisposition)
+    public function testIsAvailableWithCanceledGuarantee()
     {
         $orderId = 123;
 
@@ -116,7 +113,7 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
 
         $case->expects($this->once())
             ->method('getGuaranteeDisposition')
-            ->willReturn($guaranteeDisposition);
+            ->willReturn(CaseEntity::GUARANTEE_CANCELED);
 
         $this->caseManagement->expects($this->once())
             ->method('getByOrderId')
@@ -124,13 +121,6 @@ class CancelGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
             ->willReturn($case);
 
         $this->assertFalse($this->cancelGuaranteeAbility->isAvailable($orderId));
-    }
-
-    public function isAvailableWithCanceledGuaranteeDataProvider()
-    {
-        return [
-            [CaseEntity::GUARANTEE_CANCELED]
-        ];
     }
 
     /**
