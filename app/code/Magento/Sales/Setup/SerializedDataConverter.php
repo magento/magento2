@@ -37,7 +37,7 @@ class SerializedDataConverter extends SerializedToJson
         }
         if (isset($valueUnserialized['bundle_selection_attributes'])) {
             $valueUnserialized['bundle_selection_attributes'] = parent::convert(
-                    $valueUnserialized['bundle_selection_attributes']
+                $valueUnserialized['bundle_selection_attributes']
             );
         }
         return $this->encodeJson($valueUnserialized);
