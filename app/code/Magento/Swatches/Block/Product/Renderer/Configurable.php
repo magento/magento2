@@ -365,22 +365,6 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
-     * Produce and return block's html output
-     *
-     * @codeCoverageIgnore
-     * @return string
-     */
-    public function toHtml()
-    {
-        $this->initIsProductHasSwatchAttribute();
-        $this->setTemplate(
-            $this->getRendererTemplate()
-        );
-
-        return parent::toHtml();
-    }
-
-    /**
      * Return HTML code
      *
      * @codeCoverageIgnore
@@ -388,7 +372,11 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function _toHtml()
     {
-        return $this->getHtmlOutput();
+        $this->initIsProductHasSwatchAttribute();
+        $this->setTemplate(
+            $this->getRendererTemplate()
+        );
+        return parent::_toHtml();
     }
 
     /**
@@ -402,6 +390,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * @deprecated
      * @codeCoverageIgnore
      * @return string
      */
