@@ -9,6 +9,11 @@ use Magento\Catalog\Block\Product\Context;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\View\LayoutInterface;
 
+/**
+ * Class ListProductTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ListProductTest extends \PHPUnit_Framework_TestCase
 {
     /**

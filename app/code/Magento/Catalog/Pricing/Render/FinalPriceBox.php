@@ -23,6 +23,7 @@ use Magento\Framework\Pricing\Render\RendererPool;
  *
  * @method bool getUseLinkForAsLowAs()
  * @method bool getDisplayMinimalPrice()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FinalPriceBox extends BasePriceBox
 {
