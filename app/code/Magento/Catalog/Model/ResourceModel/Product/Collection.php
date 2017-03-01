@@ -2037,7 +2037,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getSelect()->join(
                 ['cat_pro' => $this->getTable('catalog_category_product')],
                 $joinCond,
-                ['cat_index.position' => 'position']
+                ['cat_pro.position' => 'position']
             );
         }
         $this->_joinFields['position'] = ['table' => 'cat_pro', 'field' => 'position'];
