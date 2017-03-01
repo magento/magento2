@@ -17,6 +17,7 @@
             <argument name="commands" xsi:type="array">
                 <item name="signUp" xsi:type="string">Magento\Analytics\Model\Connector\SignUpCommand</item>
                 <item name="update" xsi:type="string">Magento\Analytics\Model\Connector\UpdateCommand</item>
+                <item name="notifyDataChanged" xsi:type="string">Magento\Analytics\Model\Connector\NotifyDataChangedCommand</item>
             </argument>
         </arguments>
     </type>
