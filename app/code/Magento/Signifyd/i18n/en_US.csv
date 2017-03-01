@@ -26,4 +26,18 @@
 "Sorry, we cannot cancel Guarantee for order.","Sorry, we cannot cancel Guarantee for order."
 "Not empty value for "%1" node is required.","Not empty value for "%1" node is required."
 "Only single entrance of "%1" node is required.","Only single entrance of "%1" node is required."
-"Awaiting the Signifyd guarantee disposition.","Awaiting the Signifyd guarantee disposition."
+"Signifyd automatically reviews your orders for fraud, telling you in seconds which orders to ship, and which to reject.
+                    We back our approvals with 100% chargeback protection, reimbursing you the full order amount plus fees should you ever receive a fraudulent chargeback.
+                    <p>Benefits:<ul>
+                    <li>Grow your business without fear of fraud</li>
+                    <li>Accept more orders and maximize your revenue</li>
+                    <li>Automate order review and shift fraud off your plate</li></ul></p>","Signifyd automatically reviews your orders for fraud, telling you in seconds which orders to ship, and which to reject.
+                    We back our approvals with 100% chargeback protection, reimbursing you the full order amount plus fees should you ever receive a fraudulent chargeback.
+                    <p>Benefits:<ul>
+                    <li>Grow your business without fear of fraud</li>
+                    <li>Accept more orders and maximize your revenue</li>
+                    <li>Automate order review and shift fraud off your plate</li></ul></p>"
+"<a href=""https://www.signifyd.com/resources/manual/magento-2/signifyd-on-magento-integration-guide/"" target=""_blank"">View our setup guide</a> for step-by-step instructions on how to integrate Signifyd with Magento.<br />For support contact <a href=""mailto:support@signifyd.com"">support@signifyd.com</a>","<a href=""https://www.signifyd.com/resources/manual/magento-2/signifyd-on-magento-integration-guide/"" target=""_blank"">View our setup guide</a> for step-by-step instructions on how to integrate Signifyd with Magento.<br />For support contact <a href=""mailto:support@signifyd.com"">support@signifyd.com</a>"
+"Your API key can be found on the <a href=""http://signifyd.com/settings"" target=""_blank"">settings page</a> in the Signifyd console","Your API key can be found on the <a href=""http://signifyd.com/settings"" target=""_blank"">settings page</a> in the Signifyd console"
+"Don’t change unless asked to do so.","Don’t change unless asked to do so."
+"Your webhook URL will be used to <a href=""https://app.signifyd.com/settings/notifications"" target=""_blank"">configure</a> a guarantee completed webhook in Signifyd. Webhooks are used to sync Signifyd`s guarantee decisions back to Magento.","Your webhook URL will be used to <a href=""https://app.signifyd.com/settings/notifications"" target=""_blank"">configure</a> a guarantee completed webhook in Signifyd. Webhooks are used to sync Signifyd`s guarantee decisions back to Magento."
