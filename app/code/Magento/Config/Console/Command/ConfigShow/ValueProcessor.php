@@ -86,14 +86,17 @@ class ValueProcessor
         $backendModel = $field && $field->hasBackendModel()
             ? $field->getBackendModel()
             : $this->configValueFactory->create();
+
+        if ($backendModel instanceof Encrypted) {
+            return  $value ? self::SAFE_PLACEHOLDER : null;
+        }
+
         $backendModel->setPath($path);
         $backendModel->setScope($scope);
         $backendModel->setScopeId($scopeCode);
         $backendModel->setValue($value);
         $backendModel->afterLoad();
 
-        return ($backendModel instanceof Encrypted) && !empty($backendModel->getValue())
-            ? self::SAFE_PLACEHOLDER
-            : $backendModel->getValue();
+        return $backendModel->getValue();
     }
 }
