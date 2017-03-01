@@ -63,7 +63,7 @@ class ValueProcessor
     }
 
     /**
-     * Processes value using backend model.
+     * Processes value to display using backend model.
      *
      * @param string $scope The scope of configuration. E.g. 'default', 'website' or 'store'
      * @param string $scopeCode The scope code of configuration

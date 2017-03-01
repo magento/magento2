@@ -144,7 +144,7 @@ class ConfigShowCommand extends Command
         try {
             $this->scope = $input->getOption(self::INPUT_OPTION_SCOPE);
             $this->scopeCode = $input->getOption(self::INPUT_OPTION_SCOPE_CODE);
-            $this->inputPath = trim($input->getArgument(self::INPUT_ARGUMENT_PATH), "/");
+            $this->inputPath = trim($input->getArgument(self::INPUT_ARGUMENT_PATH), '/');
 
             $this->scopeValidator->isValid($this->scope, $this->scopeCode);
             $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, $this->scopeCode);
