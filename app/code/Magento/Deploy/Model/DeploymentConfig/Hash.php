@@ -70,7 +70,10 @@ class Hash
     /**
      * Updates hash in the storage.
      *
-     * @param string $sectionName
+     * If the specific section name is set, then hash will be updated only for this section,
+     * in another case hash will be updated for all sections which defined in di.xml
+     *
+     * @param string $sectionName the specific section name
      * @return void
      * @throws LocalizedException is thrown when hash is not saved in a storage
      */

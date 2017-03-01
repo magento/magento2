@@ -80,7 +80,7 @@ class Importer
      *
      * @param OutputInterface $output the CLI output
      * @return void
-     * @throws LocalizedException
+     * @throws LocalizedException is thrown when import has failed
      */
     public function import(OutputInterface $output)
     {
