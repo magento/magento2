@@ -193,7 +193,7 @@ class CustomOptions extends Form
      * @param string $customOptionTitle
      * @return bool
      */
-    public function isValidationErrorMessageVisible($customOptionTitle)
+    public function isJsMessageVisible($customOptionTitle)
     {
         $optionSelector = $this->customOptionField . $this->requiredOption . $this->validationErrorMessage;
         $title = sprintf($optionSelector, $customOptionTitle);
