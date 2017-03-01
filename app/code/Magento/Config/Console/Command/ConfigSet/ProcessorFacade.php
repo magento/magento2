@@ -54,10 +54,13 @@ class ProcessorFacade
     }
 
     /**
+     * Processes config:set command.
+     *
      * @param string $path The configuration path in format group/section/field_name
      * @param string $value The configuration value
      * @param string $scope The configuration scope (default, website, or store)
      * @param string $scopeCode The scope code
+     * @param boolean $lock The lock flag
      * @return string Processor response message
      * @throws LocalizedException If validation or processor failed
      */
