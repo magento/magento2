@@ -339,7 +339,6 @@ class Create extends Block
         $this->getTemplateBlock()->waitLoader();
         $this->_rootElement->find($this->orderMethodsSelector)->click();
         $this->getBillingMethodBlock()->selectPaymentMethod($paymentCode, $creditCard);
-        $this->_rootElement->click();
         $this->getTemplateBlock()->waitLoader();
     }
 
