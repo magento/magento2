@@ -8,7 +8,10 @@ namespace Magento\Config\Console\Command\ConfigSet;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Config\Model\Config\PathValidator;
+use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Processor facade for config:set command.
@@ -62,7 +65,10 @@ class ProcessorFacade
      * @param string $scopeCode The scope code
      * @param boolean $lock The lock flag
      * @return string Processor response message
-     * @throws LocalizedException If validation or processor failed
+     * @throws LocalizedException If scope validation failed
+     * @throws ValidatorException If path validation failed
+     * @throws CouldNotSaveException If processing failed
+     * @throws ConfigurationMismatchException If processor can not be instantiated
      */
     public function process($path, $value, $scope, $scopeCode, $lock)
     {
