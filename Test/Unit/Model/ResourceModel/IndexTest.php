@@ -94,6 +94,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected $storeInterface;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $indexerFrontendMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $categoryProductIndexMock;
+
+    /**
      * Setup
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -209,6 +219,15 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->metadataPool->method('getIdentifierField')
             ->willReturn('entity_id');
 
+        $this->indexerFrontendMock = $this->getMockBuilder(\Magento\Indexer\Model\ResourceModel\FrontendResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->categoryProductIndexMock = $this->getMockBuilder(
+            \Magento\Indexer\Model\ResourceModel\FrontendResource::class
+        )->disableOriginalConstructor()
+            ->getMock();
+
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
             \Magento\Elasticsearch\Model\ResourceModel\Index::class,
@@ -219,7 +238,9 @@ class IndexTest extends \PHPUnit_Framework_TestCase
                 'productRepository' => $this->productRepository,
                 'categoryRepository' => $this->categoryRepository,
                 'eavConfig' => $this->eavConfig,
-                'connectionName' => 'default'
+                'connectionName' => 'default',
+                'indexerFrontendResource' => $this->indexerFrontendMock,
+                'categoryProductIndexerFrontend' => $this->categoryProductIndexMock,
             ]
         );
     }
@@ -311,13 +332,20 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $connection = $this->connection;
         $select = $this->select;
 
+        $this->categoryProductIndexMock->expects($this->once())
+            ->method('getMainTable')
+            ->willReturn('index_table_name');
+
         $connection->expects($this->any())
             ->method('select')
             ->willReturn($select);
 
         $select->expects($this->any())
             ->method('from')
-            ->willReturnSelf();
+            ->with(
+                ['index_table_name'],
+                ['category_id', 'product_id', 'position', 'store_id']
+            )->willReturnSelf();
 
         $select->expects($this->any())
             ->method('where')

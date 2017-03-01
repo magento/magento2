@@ -44,6 +44,8 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      * @param Config $eavConfig
      * @param null $connectionName
      * @param FrontendResource $indexerFrontendResource
+     * @param FrontendResource $categoryProductIndexerFrontend
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         Context $context,
@@ -53,12 +55,20 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         CategoryRepositoryInterface $categoryRepository,
         Config $eavConfig,
         $connectionName = null,
-        FrontendResource $indexerFrontendResource = null
+        FrontendResource $indexerFrontendResource = null,
+        FrontendResource $categoryProductIndexerFrontend = null
     ) {
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
         $this->eavConfig = $eavConfig;
-        parent::__construct($context, $storeManager, $metadataPool, $connectionName, $indexerFrontendResource);
+        parent::__construct(
+            $context,
+            $storeManager,
+            $metadataPool,
+            $connectionName,
+            $indexerFrontendResource,
+            $categoryProductIndexerFrontend
+        );
     }
 
     /**
