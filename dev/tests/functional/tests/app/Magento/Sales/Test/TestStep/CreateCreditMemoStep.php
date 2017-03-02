@@ -12,12 +12,15 @@ use Magento\Sales\Test\Page\Adminhtml\OrderCreditMemoNew;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\TestStep\Utils\CompareQtyTrait;
 
 /**
  * Create credit memo from order on backend.
  */
 class CreateCreditMemoStep implements TestStepInterface
 {
+    use CompareQtyTrait;
+
     /**
      * Orders Page.
      *
@@ -89,7 +92,7 @@ class CreateCreditMemoStep implements TestStepInterface
 
             $items = $this->cart->getItems();
             $this->orderCreditMemoNew->getFormBlock()->fillProductData($refundData, $items);
-            if (!empty($refundData) && count($refundData) !== count($items)) {
+            if ($this->compare($items, $refundData)) {
                 $this->orderCreditMemoNew->getFormBlock()->updateQty();
             }
 

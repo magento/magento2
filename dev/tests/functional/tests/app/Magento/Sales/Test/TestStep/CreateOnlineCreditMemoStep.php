@@ -13,12 +13,15 @@ use Magento\Sales\Test\Page\Adminhtml\OrderCreditMemoNew;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceView;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
+use Magento\Sales\Test\TestStep\Utils\CompareQtyTrait;
 
 /**
  * Create credit memo for order placed using online payment methods.
  */
 class CreateOnlineCreditMemoStep implements TestStepInterface
 {
+    use CompareQtyTrait;
+
     /**
      * Orders Page.
      *
@@ -104,7 +107,7 @@ class CreateOnlineCreditMemoStep implements TestStepInterface
 
             $items = $this->cart->getItems();
             $this->orderCreditMemoNew->getFormBlock()->fillProductData($refundData, $items);
-            if (!empty($refundData) && count($refundData) !== count($items)) {
+            if ($this->compare($items, $refundData)) {
                 $this->orderCreditMemoNew->getFormBlock()->updateQty();
             }
 
