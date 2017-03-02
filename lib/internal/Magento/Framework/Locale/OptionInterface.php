@@ -3,10 +3,10 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Locale\Deployed;
+namespace Magento\Framework\Locale;
 
 /**
- * Interface for classes that returning array of deployed locales.
+ * Interface for classes that return array of locales.
  */
 interface OptionInterface
 {
@@ -29,7 +29,7 @@ interface OptionInterface
      *
      * @return array
      */
-    public function getLocales();
+    public function getOptionLocales();
 
     /**
      * Get array of deployed locales with translation.
@@ -50,5 +50,5 @@ interface OptionInterface
      *
      * @return array
      */
-    public function getTranslatedLocales();
+    public function getTranslatedOptionLocales();
 }

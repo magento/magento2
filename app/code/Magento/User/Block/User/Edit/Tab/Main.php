@@ -9,7 +9,7 @@
 namespace Magento\User\Block\User\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Locale\Deployed\OptionInterface;
+use Magento\Framework\Locale\OptionInterface;
 
 /**
  * Cms page edit form main tab
@@ -152,7 +152,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'interface_locale',
                 'label' => __('Interface Locale'),
                 'title' => __('Interface Locale'),
-                'values' => $this->deployedLocales->getLocales(),
+                'values' => $this->deployedLocales->getOptionLocales(),
                 'class' => 'select'
             ]
         );
