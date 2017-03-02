@@ -69,13 +69,13 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getLocaleDataProvider
      * @param string $mode
      * @param array $locales
      * @param array $expectedLocales
      * @param array $deployedCodes
+     * @dataProvider getLocaleDataProvider
      */
-    public function testGetLocale($mode, $locales, $expectedLocales, $deployedCodes)
+    public function testGetOptionLocales($mode, $locales, $expectedLocales, $deployedCodes)
     {
         $this->localeListsMock->expects($this->once())
             ->method('getOptionLocales')
@@ -83,17 +83,17 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareGetLocales($mode, $deployedCodes);
 
-        $this->assertEquals($expectedLocales, array_values($this->model->getLocales()));
+        $this->assertEquals($expectedLocales, array_values($this->model->getOptionLocales()));
     }
 
     /**
-     * @dataProvider getLocaleDataProvider
      * @param string $mode
      * @param array $locales
      * @param array $expectedLocales
      * @param array $deployedCodes
+     * @dataProvider getLocaleDataProvider
      */
-    public function testGetTranslatedLocales($mode, $locales, $expectedLocales, $deployedCodes)
+    public function testGetTranslatedOptionLocales($mode, $locales, $expectedLocales, $deployedCodes)
     {
         $this->localeListsMock->expects($this->once())
             ->method('getTranslatedOptionLocales')
@@ -101,7 +101,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareGetLocales($mode, $deployedCodes);
 
-        $this->assertEquals($expectedLocales, array_values($this->model->getTranslatedLocales()));
+        $this->assertEquals($expectedLocales, array_values($this->model->getTranslatedOptionLocales()));
     }
 
     /**

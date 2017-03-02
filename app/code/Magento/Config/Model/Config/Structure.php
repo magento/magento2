@@ -252,15 +252,38 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     }
 
     /**
-     * Collects config field paths recursively from config schema.
-     * Returns an array map of fields specification.
+     * Collects config paths and their structure paths from configuration files.
+     * Returns the map of config paths and their structure paths.
+     *
+     * All paths are declared in module's system.xml.
+     *
+     * ```xml
+     * <section id="section_id">
+     *      <group id="group_id" ...>
+     *          <field id="field_one_id" ...>
+     *              <label>Field One</label>
+     *              ...
+     *          </field>
+     *          <field id="field_two_id" ...>
+     *              <label>Field Two</label>
+     *              <config_path>section/group/field</config_path>
+     *              ...
+     *          </field>
+     *      </group>
+     * </section>
+     * ```
+     * If <config_path> node does not exist, then config path duplicates structure path.
+     * The result of this example will be:
      *
      * ```php
-     *  [
-     *      'test_config/test_config/test_config' => [
-     *          'test_structure/test_structure/test_structure'
-     *      ]
-     * ```
+     * [
+     *  'section_id/group_id/field_one_id' => [
+     *      'section_id/group_id/field_one_id'
+     *  ],
+     * 'section/group/field' => [
+     *      'section_id/group_id/field_two_id'
+     * ]
+     *```
      *
      * @return array An array of config path to config structure path map
      */
@@ -272,7 +295,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     }
 
     /**
-     * Iteration that collects config field paths recursively from config schema.
+     * Iteration that collects config field paths recursively from config files.
      *
      * @param array $elements The elements to be parsed
      * @return array An array of config path to config structure path map
