@@ -24,18 +24,17 @@ class AssertCategoryNavigationMenu extends AbstractConstraint
      * Assert that relations of categories in navigation menu are correct.
      *
      * @param CmsIndex $cmsIndex
-     * @param Category $newCategory
+     * @param Category $category
      * @return void
      */
     public function processAssert(
         CmsIndex $cmsIndex,
-        Category $newCategory
+        Category $category
     ) {
         do {
-            $categoriesNames[] = $newCategory->getName();
-            $newCategory = $newCategory->getDataFieldConfig('parent_id')['source']
-                ->getParentCategory();
-        } while ($newCategory->getName() != self::DEFAULT_CATEGORY_NAME);
+            $categoriesNames[] = $category->getName();
+            $category = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
+        } while ($category->getName() != self::DEFAULT_CATEGORY_NAME);
 
         $cmsIndex->open();
 
@@ -49,7 +48,7 @@ class AssertCategoryNavigationMenu extends AbstractConstraint
     }
 
     /**
-     * Assert success message that relations of categories in navigation menu are correct.
+     * Returns a string representation of the object.
      *
      * @return string
      */

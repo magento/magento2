@@ -34,20 +34,15 @@ class AssertCategoryBreadcrumbs extends AbstractConstraint
      * @param BrowserInterface $browser
      * @param Category $category
      * @param CatalogCategoryView $catalogCategoryView
-     * @param Category|null $newCategory
      * @return void
      */
     public function processAssert(
         BrowserInterface $browser,
         Category $category,
-        CatalogCategoryView $catalogCategoryView,
-        Category $newCategory = null
+        CatalogCategoryView $catalogCategoryView
     ) {
         $this->browser = $browser;
 
-        if ($newCategory !== null) {
-            $category = $newCategory;
-        }
         $this->openCategory($category);
 
         $breadcrumbs = $this->getBreadcrumbs($category);

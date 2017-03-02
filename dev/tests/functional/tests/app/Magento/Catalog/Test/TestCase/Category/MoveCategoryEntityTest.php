@@ -48,18 +48,28 @@ class MoveCategoryEntityTest extends Injectable
     private $catalogCategoryEdit;
 
     /**
+     * Factory for fixtures.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
      * Inject page end prepare default category.
      *
      * @param CatalogCategoryIndex $catalogCategoryIndex
      * @param CatalogCategoryEdit $catalogCategoryEdit
+     * @param FixtureFactory $fixtureFactory
      * @return void
      */
     public function __inject(
         CatalogCategoryIndex $catalogCategoryIndex,
-        CatalogCategoryEdit $catalogCategoryEdit
+        CatalogCategoryEdit $catalogCategoryEdit,
+        FixtureFactory $fixtureFactory
     ) {
         $this->catalogCategoryIndex = $catalogCategoryIndex;
         $this->catalogCategoryEdit = $catalogCategoryEdit;
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
@@ -67,14 +77,12 @@ class MoveCategoryEntityTest extends Injectable
      *
      * @param Category $childCategory
      * @param Category $parentCategory
-     * @param FixtureFactory $fixtureFactory
-     * @param string|null $moveLevel
+     * @param int|null $moveLevel
      * @return array
      */
     public function test(
         Category $childCategory,
         Category $parentCategory,
-        FixtureFactory $fixtureFactory,
         $moveLevel = null
     ) {
         // Preconditions:
@@ -88,21 +96,7 @@ class MoveCategoryEntityTest extends Injectable
             }
         }
 
-        while ($movedCategory->getName() != $childCategory->getName()) {
-            $bottomChildCategory[] = $movedCategory->getData();
-            $movedCategory = $movedCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
-        }
-        $bottomChildCategory[] = $movedCategory->getData();
-
-        $newCategory = $parentCategory;
-        for ($i = count($bottomChildCategory) - 1; $i >= 0; $i--) {
-            unset($bottomChildCategory[$i]['parent_id']);
-            $bottomChildCategory[$i]['parent_id']['source'] = $newCategory;
-            $newCategory = $fixtureFactory->createByCode(
-                'category',
-                ['data' => $bottomChildCategory[$i]]
-            );
-        }
+        $newCategory = $this->getMovedCategoryTree($movedCategory, $parentCategory, $childCategory);
 
         // Steps:
         $this->catalogCategoryIndex->open();
@@ -113,11 +107,45 @@ class MoveCategoryEntityTest extends Injectable
         );
         $this->catalogCategoryEdit->getModalBlock()->acceptWarning();
 
+        if ($newCategory != null) {
+            $childCategory = $newCategory;
+        }
+
         return [
             'category' => $childCategory,
             'parentCategory' => $parentCategory,
             'childCategory' => $childCategory,
             'newCategory' => $newCategory,
         ];
+    }
+
+    /**
+     * Get moved category tree.
+     *
+     * @param Category $movedCategory
+     * @param Category $childCategory
+     * @param Category $parentCategory
+     * @return Category
+     */
+    public function getMovedCategoryTree(Category $movedCategory, Category $parentCategory, Category $childCategory)
+    {
+        $bottomChildCategory = [];
+        while ($movedCategory->getName() != $childCategory->getName()) {
+            $bottomChildCategory[] = $movedCategory->getData();
+            $movedCategory = $movedCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
+        }
+        $bottomChildCategory[] = $movedCategory->getData();
+
+        $newCategory = $parentCategory;
+        for ($i = count($bottomChildCategory) - 1; $i >= 0; $i--) {
+            unset($bottomChildCategory[$i]['parent_id']);
+            $bottomChildCategory[$i]['parent_id']['source'] = $newCategory;
+            $newCategory = $this->fixtureFactory->createByCode(
+                'category',
+                ['data' => $bottomChildCategory[$i]]
+            );
+        }
+
+        return $newCategory;
     }
 }

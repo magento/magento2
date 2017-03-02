@@ -18,7 +18,7 @@
             <data name="issue" xsi:type="string">MAGETWO-65147: Category is not present in Layered navigation block when anchor is on</data>
             <data name="childCategory/dataset" xsi:type="string">default_subcategory_with_anchored_parent</data>
             <data name="parentCategory/dataset" xsi:type="string">default</data>
-            <data name="moveLevel" xsi:type="string">2</data>
+            <data name="moveLevel" xsi:type="number">2</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryMovedMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryNavigationMenu" />
             <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertCategoryLayeredNavigation" />
@@ -29,7 +29,7 @@
             <data name="childCategory/dataset" xsi:type="string">default_subcategory_with_anchored_parent</data>
             <data name="childCategory/data/parent_id/dataset" xsi:type="string">default_anchor_subcategory_with_anchored_parent</data>
             <data name="parentCategory/dataset" xsi:type="string">default_category</data>
-            <data name="moveLevel" xsi:type="string">2</data>
+            <data name="moveLevel" xsi:type="number">2</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryMovedMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryNavigationMenu" />
             <constraint name="Magento\LayeredNavigation\Test\Constraint\AssertCategoryLayeredNavigation" />
