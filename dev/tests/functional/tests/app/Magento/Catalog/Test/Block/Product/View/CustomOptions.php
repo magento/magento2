@@ -328,7 +328,7 @@ class CustomOptions extends Form
      * @param int $firstOption
      * @return array
      */
-    protected function getSelectOptionsData(SimpleElement $element, $firstOption = 1)
+    public function getSelectOptionsData(SimpleElement $element, $firstOption = 1)
     {
         $listOptions = [];
 
