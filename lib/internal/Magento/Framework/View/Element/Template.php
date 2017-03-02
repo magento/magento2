@@ -259,7 +259,11 @@ class Template extends AbstractBlock
             $errorMessage = "Invalid template file: '{$templatePath}' in module: '{$this->getModuleName()}'"
                 . " block's name: '{$this->getNameInLayout()}'";
             if ($this->_appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
-                throw new \InvalidArgumentException($errorMessage);
+                throw new \Magento\Framework\Exception\ValidatorException(
+                    new \Magento\Framework\Phrase(
+                        $errorMessage
+                    )
+                );
             }
             $this->_logger->critical($errorMessage);
         }

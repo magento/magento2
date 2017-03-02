@@ -196,7 +196,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->willReturn(\Magento\Framework\App\State::MODE_DEVELOPER);
 
-        $this->setExpectedException('\InvalidArgumentException', $exception);
+        $this->setExpectedException('\Magento\Framework\Exception\ValidatorException', $exception);
         $this->block->fetchView($template);
     }
 
