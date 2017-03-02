@@ -14,7 +14,7 @@ class CartPriceRulesFixture extends Fixture
     /**
      * @var int
      */
-    protected $priority = 70;
+    protected $priority = 80;
 
     /**
      * @var float
