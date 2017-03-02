@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Asset;
@@ -21,18 +21,21 @@ class Minification
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
     /**
      * @var State
      */
     private $appState;
+
     /**
      * @var string
      */
     private $scope;
+
     /**
      * @var array
      */
-    private $excludes = [];
+    private $configCache = [];
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -54,12 +57,16 @@ class Minification
      */
     public function isEnabled($contentType)
     {
-        return
-            $this->appState->getMode() != State::MODE_DEVELOPER &&
-            (bool)$this->scopeConfig->isSetFlag(
-                sprintf(self::XML_PATH_MINIFICATION_ENABLED, $contentType),
-                $this->scope
-            );
+        if (!isset($this->configCache[self::XML_PATH_MINIFICATION_ENABLED][$contentType])) {
+            $this->configCache[self::XML_PATH_MINIFICATION_ENABLED][$contentType] =
+                $this->appState->getMode() != State::MODE_DEVELOPER &&
+                (bool)$this->scopeConfig->isSetFlag(
+                    sprintf(self::XML_PATH_MINIFICATION_ENABLED, $contentType),
+                    $this->scope
+                );
+        }
+
+        return $this->configCache[self::XML_PATH_MINIFICATION_ENABLED][$contentType];
     }
 
     /**
@@ -131,15 +138,15 @@ class Minification
      */
     public function getExcludes($contentType)
     {
-        if (!isset($this->excludes[$contentType])) {
-            $this->excludes[$contentType] = [];
+        if (!isset($this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType])) {
+            $this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType] = [];
             $key = sprintf(self::XML_PATH_MINIFICATION_EXCLUDES, $contentType);
             foreach (explode("\n", $this->scopeConfig->getValue($key, $this->scope)) as $exclude) {
                 if (trim($exclude) != '') {
-                    $this->excludes[$contentType][] = trim($exclude);
+                    $this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType][] = trim($exclude);
                 }
             };
         }
-        return $this->excludes[$contentType];
+        return $this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType];
     }
 }

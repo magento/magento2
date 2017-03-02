@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -38,7 +38,8 @@ define([
      * @returns {Object}
      */
     function collectData(items) {
-        var result = {};
+        var result = {},
+            name;
 
         items = Array.prototype.slice.call(items);
 
@@ -52,6 +53,11 @@ define([
                     if (item.checked) {
                         result[item.name] = item.value;
                     }
+                    break;
+
+                case 'select-multiple':
+                    name = item.name.substring(0, item.name.length - 2); //remove [] from the name ending
+                    result[name] = _.pluck(item.selectedOptions, 'value');
                     break;
 
                 default:
@@ -155,6 +161,7 @@ define([
             additionalInvalid: false,
             selectorPrefix: '.page-content',
             messagesClass: 'messages',
+            errorClass: '.admin__field._error',
             eventPrefix: '.${ $.index }',
             ajaxSave: false,
             ajaxSaveType: 'default',
@@ -252,7 +259,24 @@ define([
             if (!this.additionalInvalid && !this.source.get('params.invalid')) {
                 this.setAdditionalData(data)
                     .submit(redirect);
+            } else {
+                this.focusInvalid();
             }
+        },
+
+        /**
+         * Tries to set focus on first invalid form field.
+         *
+         * @returns {Object}
+         */
+        focusInvalid: function () {
+            var invalidField = _.find(this.delegate('checkInvalid'));
+
+            if (!_.isUndefined(invalidField) && _.isFunction(invalidField.focused)) {
+                invalidField.focused(true);
+            }
+
+            return this;
         },
 
         /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter\Php\Tokenizer;
@@ -110,7 +110,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     {
         $line = 110;
         return $this->objectManager->getObject(
-            'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token',
+            \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token::class,
             [
                 'name' => $name,
                 'value' => $value,

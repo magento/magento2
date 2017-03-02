@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
      */
     protected function _construct()
     {
-        $this->_init('Magento\Tax\Model\ResourceModel\Calculation\Rate\Title');
+        $this->_init(\Magento\Tax\Model\ResourceModel\Calculation\Rate\Title::class);
     }
 
     /**
@@ -61,6 +61,7 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements 
     {
         return $this->getData(self::KEY_VALUE_ID);
     }
+
     /**
      * Set store id
      *

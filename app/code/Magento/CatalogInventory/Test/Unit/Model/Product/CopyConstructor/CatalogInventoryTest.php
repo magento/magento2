@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Product\CopyConstructor;
@@ -40,14 +40,14 @@ class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productMock = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['__wakeup', 'getStore'],
             [],
             '',
             false
         );
         $store = $this->getMock(
-            '\Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             ['getWebsiteId', '__wakeup'],
             [],
             '',
@@ -57,7 +57,7 @@ class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->duplicateMock = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['setStockData', '__wakeup'],
             [],
             '',
@@ -65,7 +65,7 @@ class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->stockItemDoMock = $this->getMockForAbstractClass(
-            'Magento\CatalogInventory\Api\Data\StockItemInterface',
+            \Magento\CatalogInventory\Api\Data\StockItemInterface::class,
             [
                 'getItemId',
                 'getUseConfigEnableQtyInc',
@@ -76,13 +76,13 @@ class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->stockRegistry = $this->getMockForAbstractClass(
-            'Magento\CatalogInventory\Api\StockRegistryInterface',
+            \Magento\CatalogInventory\Api\StockRegistryInterface::class,
             ['getStockItem']
         );
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $this->objectManager->getObject(
-            'Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory',
+            \Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory::class,
             ['stockRegistry' => $this->stockRegistry]
         );
     }

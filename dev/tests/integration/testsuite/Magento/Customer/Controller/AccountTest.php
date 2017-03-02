@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,7 +24,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var \Magento\Customer\Model\Session $session */
         $session = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\Session');
+            ->get(\Magento\Customer\Model\Session::class);
         $session->loginById($customerId);
     }
 
@@ -71,9 +71,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Customer')->load(1);
+            ->create(\Magento\Customer\Model\Customer::class)->load(1);
 
-        $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
+        $token = Bootstrap::getObjectManager()->get(\Magento\Framework\Math\Random::class)
             ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
         $customer->save();
@@ -90,7 +90,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertRedirect($this->stringContains('customer/account/createpassword'));
 
         /** @var \Magento\Customer\Model\Session $customer */
-        $session = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
+        $session = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Session::class);
         $this->assertEquals($token, $session->getRpToken());
         $this->assertEquals($customer->getId(), $session->getRpCustomerId());
         $this->assertNotContains($token, $response->getHeader('Location')->getFieldValue());
@@ -103,15 +103,15 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Customer')->load(1);
+            ->create(\Magento\Customer\Model\Customer::class)->load(1);
 
-        $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
+        $token = Bootstrap::getObjectManager()->get(\Magento\Framework\Math\Random::class)
             ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
         $customer->save();
 
         /** @var \Magento\Customer\Model\Session $customer */
-        $session = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
+        $session = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Session::class);
         $session->setRpToken($token);
         $session->setRpCustomerId($customer->getId());
 
@@ -129,9 +129,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Customer')->load(1);
+            ->create(\Magento\Customer\Model\Customer::class)->load(1);
 
-        $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
+        $token = Bootstrap::getObjectManager()->get(\Magento\Framework\Math\Random::class)
             ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
         $customer->save();
@@ -154,7 +154,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Customer')->load(1);
+            ->create(\Magento\Customer\Model\Customer::class)->load(1);
 
         $this->getRequest()->setParam('key', 'abc');
         $this->getRequest()->setParam('id', $customer->getId());
@@ -171,7 +171,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableScopeConfig */
         $mutableScopeConfig = Bootstrap::getObjectManager()
-            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface');
+            ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
 
         $scopeValue = $mutableScopeConfig->getValue(
             'customer/create_account/confirm',
@@ -230,7 +230,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableScopeConfig */
         $mutableScopeConfig = Bootstrap::getObjectManager()
-            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface');
+            ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
 
         $scopeValue = $mutableScopeConfig->getValue(
             'customer/create_account/confirm',
@@ -272,8 +272,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertSessionMessages(
             $this->equalTo([
                 'You must confirm your account. Please check your email for the confirmation link or '
-                . '<a href="http://localhost/index.php/customer/account/confirmation/email/'
-                . $email . '/">click here</a> for a new link.'
+                    . '<a href="http://localhost/index.php/customer/account/confirmation/email/'
+                    . 'test2%40email.com/">click here</a> for a new link.'
             ]),
             MessageInterface::TYPE_SUCCESS
         );
@@ -459,7 +459,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
         $this->assertContains('<input type="checkbox" name="change_password" id="change-password" '
-            .'data-role="change-password" value="1" title="Change Password" class="checkbox" />', $body);
+            .'data-role="change-password" value="1" title="Change&#x20;Password" class="checkbox" />', $body);
     }
 
     /**
@@ -477,7 +477,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         // Verify the password check box is checked
         $this->assertContains(
             '<input type="checkbox" name="change_password" id="change-password" '
-            .'data-role="change-password" value="1" title="Change Password" checked="checked" class="checkbox" />',
+            . 'data-role="change-password" value="1" title="Change&#x20;Password" checked="checked" '
+            . 'class="checkbox" />',
             $body
         );
     }
@@ -491,7 +492,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface */
         $customerRepository = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Api\CustomerRepositoryInterface');
+            ->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customer = $customerRepository->getById(1);
         $this->assertEquals('John', $customer->getFirstname());
         $this->assertEquals('Smith', $customer->getLastname());
@@ -501,7 +502,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()
             ->setMethod('POST')
             ->setPostValue([
-                'form_key'  => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
+                'form_key'  => $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
                 'firstname' => 'John',
                 'lastname'  => 'Doe',
                 'email'     => 'johndoe@email.com',
@@ -532,7 +533,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         /** @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface */
         $customerRepository = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Api\CustomerRepositoryInterface');
+            ->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customer = $customerRepository->getById(1);
         $this->assertEquals('John', $customer->getFirstname());
         $this->assertEquals('Smith', $customer->getLastname());
@@ -542,7 +543,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()
             ->setMethod('POST')
             ->setPostValue([
-                'form_key'         => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
+                'form_key'         => $this->_objectManager->get(
+                    \Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
                 'firstname'        => 'John',
                 'lastname'         => 'Doe',
                 'email'            => 'johndoe@email.com',
@@ -576,7 +578,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()
             ->setMethod('POST')
             ->setPostValue([
-                'form_key'  => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
+                'form_key'  => $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
                 'firstname' => 'John',
                 'lastname'  => 'Doe',
                 'change_email'  => 1,
@@ -602,7 +604,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()
             ->setMethod('POST')
             ->setPostValue([
-                'form_key'         => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
+                'form_key'         => $this->_objectManager->get(
+                    \Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
                 'firstname'        => 'John',
                 'lastname'         => 'Doe',
                 'email'            => 'johndoe@email.com',
@@ -631,7 +634,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()
             ->setMethod('POST')
             ->setPostValue([
-                'form_key'         => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
+                'form_key'         => $this->_objectManager->get(
+                    \Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
                 'firstname'        => 'John',
                 'lastname'         => 'Doe',
                 'email'            => 'johndoe@email.com',

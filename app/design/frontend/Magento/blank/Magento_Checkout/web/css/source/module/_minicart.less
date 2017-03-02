@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -33,7 +33,7 @@
         }
 
         .subtotal {
-            margin: 0 @indent__s;
+            margin: 0 @indent__s @indent__s;
             text-align: right;
 
             .label {
@@ -123,6 +123,7 @@
             .lib-css(padding, 25px @minicart__padding-horizontal);
             right: 0;
             width: 320px;
+            z-index: 101;
 
             .block-title {
                 display: none;

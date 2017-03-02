@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model\Cron;
@@ -41,10 +41,8 @@ class JobStaticRegenerate extends AbstractJob
         $name,
         $params = []
     ) {
-        $this->cleanupFiles = $objectManagerProvider->get()->get('Magento\Framework\App\State\CleanupFiles');
-        $this->cache = $objectManagerProvider->get()->get('Magento\Framework\App\Cache');
-        $this->output = $output;
-        $this->status = $status;
+        $this->cleanupFiles = $objectManagerProvider->get()->get(\Magento\Framework\App\State\CleanupFiles::class);
+        $this->cache = $objectManagerProvider->get()->get(\Magento\Framework\App\Cache::class);
 
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
@@ -129,7 +127,7 @@ class JobStaticRegenerate extends AbstractJob
      */
     public function getFilesystem()
     {
-        return $this->objectManager->create('Magento\Deploy\Model\Filesystem');
+        return $this->objectManager->create(\Magento\Deploy\Model\Filesystem::class);
     }
 
     /**
@@ -140,7 +138,7 @@ class JobStaticRegenerate extends AbstractJob
     public function getModeObject()
     {
         return $this->objectManager->create(
-            'Magento\Deploy\Model\Mode',
+            \Magento\Deploy\Model\Mode::class,
             [
                 'input' => new \Symfony\Component\Console\Input\ArrayInput([]),
                 'output' => $this->output,

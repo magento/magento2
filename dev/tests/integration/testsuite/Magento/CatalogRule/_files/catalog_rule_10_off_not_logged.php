@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,9 @@
  */
 
 /** @var $banner \Magento\CatalogRule\Model\Rule */
-$catalogRule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\CatalogRule\Model\Rule');
+$catalogRule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\CatalogRule\Model\Rule::class
+);
 
 $catalogRule
     ->setIsActive(1)
@@ -27,5 +29,5 @@ $catalogRule
 
 /** @var \Magento\CatalogRule\Model\Indexer\IndexBuilder $indexBuilder */
 $indexBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\CatalogRule\Model\Indexer\IndexBuilder');
+    ->get(\Magento\CatalogRule\Model\Indexer\IndexBuilder::class);
 $indexBuilder->reindexFull();

@@ -2,7 +2,7 @@
 /**
  * Integration test for Magento\Framework\Session\Config\Validator\CookiePathValidator
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session\Config\Validator;
@@ -15,7 +15,7 @@ class CookiePathValidatorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $objectManager->create('Magento\Framework\Session\Config\Validator\CookiePathValidator');
+        $this->model = $objectManager->create(\Magento\Framework\Session\Config\Validator\CookiePathValidator::class);
     }
 
     public function testNoLeadingSlash()

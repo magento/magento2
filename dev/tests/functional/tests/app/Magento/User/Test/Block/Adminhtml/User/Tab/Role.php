@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,6 +21,7 @@ class Role extends Tab
      * @param array $fields
      * @param SimpleElement|null $element
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setFieldsData(array $fields, SimpleElement $element = null)
     {
@@ -35,7 +36,7 @@ class Role extends Tab
     public function getRoleGrid()
     {
         return $this->blockFactory->create(
-            'Magento\User\Test\Block\Adminhtml\User\Tab\Role\Grid',
+            \Magento\User\Test\Block\Adminhtml\User\Tab\Role\Grid::class,
             ['element' => $this->_rootElement->find('#permissionsUserRolesGrid')]
         );
     }

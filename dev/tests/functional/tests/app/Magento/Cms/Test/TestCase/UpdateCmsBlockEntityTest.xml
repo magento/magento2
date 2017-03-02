@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Cms\Test\TestCase\UpdateCmsBlockEntityTest" summary="Update CMS Block" ticketId="MAGETWO-25941">
         <variation name="UpdateCmsBlockEntityTestVariation1">
+            <data name="tag" xsi:type="string">severity:S1</data>
             <data name="cmsBlock/data/title" xsi:type="string">block_updated_%isolation%</data>
             <data name="cmsBlock/data/identifier" xsi:type="string">identifier_updated_%isolation%</data>
             <data name="cmsBlock/data/stores/dataset/option_0" xsi:type="string">all_store_views</data>
@@ -18,13 +19,13 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockOnCategoryPage" />
         </variation>
         <variation name="UpdateCmsBlockEntityTestVariation2">
+            <data name="tag" xsi:type="string">severity:S3</data>
             <data name="cmsBlock/data/title" xsi:type="string">block_updated_%isolation%</data>
             <data name="cmsBlock/data/identifier" xsi:type="string">identifier_updated_%isolation%</data>
             <data name="cmsBlock/data/stores/dataset/option_0" xsi:type="string">default</data>
             <data name="cmsBlock/data/is_active" xsi:type="string">No</data>
             <data name="cmsBlock/data/content" xsi:type="string">description_updated_%isolation%</data>
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockSuccessSaveMessage" />
-            <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockInGrid" />
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsBlockNotOnCategoryPage" />
         </variation>
     </testCase>

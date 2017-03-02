@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -173,29 +173,41 @@ class DataObjectHelper
             return $this;
         }
 
-        if (is_subclass_of($returnType, '\Magento\Framework\Api\ExtensibleDataInterface')) {
+        if (is_subclass_of($returnType, \Magento\Framework\Api\ExtensibleDataInterface::class)) {
             $object = $this->objectFactory->create($returnType, []);
             $this->populateWithArray($object, $value, $returnType);
-        } else if (is_subclass_of($returnType, '\Magento\Framework\Api\ExtensionAttributesInterface')) {
+        } else if (is_subclass_of($returnType, \Magento\Framework\Api\ExtensionAttributesInterface::class)) {
             foreach ($value as $extensionAttributeKey => $extensionAttributeValue) {
                 $extensionAttributeGetterMethodName
                     = 'get' . \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase(
                         $extensionAttributeKey
                     );
-                $extensionAttributeType = $this->methodsMapProcessor->getMethodReturnType(
+                $methodReturnType = $this->methodsMapProcessor->getMethodReturnType(
                     $returnType,
                     $extensionAttributeGetterMethodName
                 );
-                if ($this->typeProcessor->isArrayType($extensionAttributeType)) {
-                    $extensionAttributeType = $this->typeProcessor->getArrayItemType($extensionAttributeType);
-                }
-                if (!$this->typeProcessor->isTypeSimple($extensionAttributeType)) {
-                    $value[$extensionAttributeKey] = $this->objectFactory->create(
-                        $extensionAttributeType,
-                        ['data' => $extensionAttributeValue]
-                    );
-                } else {
+                $extensionAttributeType = $this->typeProcessor->isArrayType($methodReturnType)
+                    ? $this->typeProcessor->getArrayItemType($methodReturnType)
+                    : $methodReturnType;
+                if ($this->typeProcessor->isTypeSimple($extensionAttributeType)) {
                     $value[$extensionAttributeKey] = $extensionAttributeValue;
+                } else {
+                    if ($this->typeProcessor->isArrayType($methodReturnType)) {
+                        foreach ($extensionAttributeValue as $key => $extensionAttributeArrayValue) {
+                            $extensionAttribute = $this->objectFactory->create($extensionAttributeType, []);
+                            $this->populateWithArray(
+                                $extensionAttribute,
+                                $extensionAttributeArrayValue,
+                                $extensionAttributeType
+                            );
+                            $value[$extensionAttributeKey][$key] = $extensionAttribute;
+                        }
+                    } else {
+                        $value[$extensionAttributeKey] = $this->objectFactory->create(
+                            $extensionAttributeType,
+                            ['data' => $extensionAttributeValue]
+                        );
+                    }
                 }
             }
             $object = $this->extensionFactory->create(get_class($dataObject), ['data' => $value]);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Model\Report;
@@ -11,6 +11,8 @@ use DateTime;
 use Magento\Braintree\Model\Report\Row\TransactionMap;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Phrase;
+use Magento\Framework\Phrase\RendererInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -31,6 +33,16 @@ class TransactionMapTest extends \PHPUnit_Framework_TestCase
     private $attributeValueFactoryMock;
 
     /**
+     * @var RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $defaultRenderer;
+
+    /**
+     * @var RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $rendererMock;
+
+    /**
      * Setup
      */
     protected function setUp()
@@ -38,6 +50,9 @@ class TransactionMapTest extends \PHPUnit_Framework_TestCase
         $this->attributeValueFactoryMock = $this->getMockBuilder(AttributeValueFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
+            ->getMock();
+        $this->defaultRenderer = Phrase::getRenderer();
+        $this->rendererMock = $this->getMockBuilder(RendererInterface::class)
             ->getMock();
     }
 
@@ -65,6 +80,8 @@ class TransactionMapTest extends \PHPUnit_Framework_TestCase
             $this->transactionStub
         );
 
+        Phrase::setRenderer($this->rendererMock);
+
         /** @var AttributeValue[] $result */
         $result = $map->getCustomAttributes();
 
@@ -77,6 +94,31 @@ class TransactionMapTest extends \PHPUnit_Framework_TestCase
             $result[6]->getValue()
         );
         $this->assertEquals(implode(', ', $transaction['refundIds']), $result[11]->getValue());
+        $this->assertEquals($transaction['merchantAccountId'], $result[1]->getValue());
+        $this->assertEquals($transaction['orderId'], $result[2]->getValue());
+        $this->assertEquals($transaction['amount'], $result[7]->getValue());
+        $this->assertEquals($transaction['processorSettlementResponseCode'], $result[8]->getValue());
+        $this->assertEquals($transaction['processorSettlementResponseText'], $result[10]->getValue());
+        $this->assertEquals($transaction['settlementBatchId'], $result[12]->getValue());
+        $this->assertEquals($transaction['currencyIsoCode'], $result[13]->getValue());
+
+        $this->rendererMock->expects($this->at(0))
+            ->method('render')
+            ->with([$transaction['paymentInstrumentType']])
+            ->willReturn('Credit card');
+        $this->assertEquals('Credit card', $result[3]->getValue()->render());
+
+        $this->rendererMock->expects($this->at(0))
+            ->method('render')
+            ->with([$transaction['type']])
+            ->willReturn('Sale');
+        $this->assertEquals('Sale', $result[5]->getValue()->render());
+
+        $this->rendererMock->expects($this->at(0))
+            ->method('render')
+            ->with([$transaction['status']])
+            ->willReturn('Pending for settlement');
+        $this->assertEquals('Pending for settlement', $result[9]->getValue()->render());
     }
 
     /**
@@ -90,9 +132,27 @@ class TransactionMapTest extends \PHPUnit_Framework_TestCase
                     'id' => 1,
                     'createdAt' => new \DateTime(),
                     'paypalDetails' => new PayPalDetails(['paymentId' => 10]),
-                    'refundIds' => [1, 2, 3, 4, 5]
+                    'refundIds' => [1, 2, 3, 4, 5],
+                    'merchantAccountId' => 'MerchantId',
+                    'orderId' => 1,
+                    'paymentInstrumentType' => 'credit_card',
+                    'type' => 'sale',
+                    'amount' => '$19.99',
+                    'processorSettlementResponseCode' => 1,
+                    'status' => 'pending_for_settlement',
+                    'processorSettlementResponseText' => 'sample text',
+                    'settlementBatchId' => 2,
+                    'currencyIsoCode' => 'USD'
                 ]
             ]
         ];
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown()
+    {
+        Phrase::setRenderer($this->defaultRenderer);
     }
 }

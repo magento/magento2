@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -44,9 +44,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = $this->objectManager->getObject(\Magento\Ui\DataProvider\Modifier\ModifierFactory::class, [
-            'objectManager' => $this->objectManagerMock,
-        ]);
+        $this->model = $this->objectManager->getObject(
+            \Magento\Ui\DataProvider\Modifier\ModifierFactory::class,
+            ['objectManager' => $this->objectManagerMock]
+        );
     }
 
     public function testCreate()

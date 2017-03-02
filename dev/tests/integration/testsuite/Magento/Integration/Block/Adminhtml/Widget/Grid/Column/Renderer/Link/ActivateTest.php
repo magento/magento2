@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -24,9 +24,9 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->activateLinkBlock = $objectManager->create(
-            'Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Activate'
+            \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link\Activate::class
         );
-        $column = $objectManager->create('Magento\Backend\Block\Widget\Grid\Column');
+        $column = $objectManager->create(\Magento\Backend\Block\Widget\Grid\Column::class);
         $this->activateLinkBlock->setColumn($column);
     }
 
@@ -99,7 +99,7 @@ class ActivateTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $integration Integration */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $integration = $objectManager->create('Magento\Integration\Model\Integration');
+        $integration = $objectManager->create(\Magento\Integration\Model\Integration::class);
         return $integration->load('Fixture Integration', 'name');
     }
 }

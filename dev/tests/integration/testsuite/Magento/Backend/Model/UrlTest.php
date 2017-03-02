@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model;
@@ -21,7 +21,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Backend\Model\UrlInterface'
+            \Magento\Backend\Model\UrlInterface::class
         );
     }
 
@@ -48,7 +48,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $request \Magento\Framework\App\RequestInterface */
         $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\RequestInterface');
+            ->create(\Magento\Framework\App\RequestInterface::class);
         $request->setControllerName(
             'default_controller'
         )->setActionName(
@@ -59,7 +59,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setRequest($request);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Session\SessionManagerInterface'
+            \Magento\Framework\Session\SessionManagerInterface::class
         )->setData(
             '_form_key',
             'salt'
@@ -75,7 +75,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $encryptor \Magento\Framework\Encryption\EncryptorInterface */
-        $encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
+        $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
 
         return [
             [
@@ -132,16 +132,16 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $encryptor \Magento\Framework\Encryption\EncryptorInterface */
-        $encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
+        $encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
 
         /** @var $request \Magento\Framework\App\Request\Http */
         $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\RequestInterface');
+            ->create(\Magento\Framework\App\RequestInterface::class);
         $request->setControllerName('controller')->setActionName('action');
         $request->initForward()->setControllerName(uniqid())->setActionName(uniqid());
         $this->_model->setRequest($request);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Session\SessionManagerInterface'
+            \Magento\Framework\Session\SessionManagerInterface::class
         )->setData(
             '_form_key',
             'salt'

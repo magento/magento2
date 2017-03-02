@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,11 +22,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->factory = $this->objectManagerHelper->getObject(
-            'Magento\Paypal\Helper\Shortcut\Factory',
+            \Magento\Paypal\Helper\Shortcut\Factory::class,
             [
                 'objectManager' => $this->objectManagerMock
             ]
@@ -35,28 +35,28 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateDefault()
     {
-        $instance = $this->getMockBuilder('Magento\Paypal\Helper\Shortcut\ValidatorInterface')->getMock();
+        $instance = $this->getMockBuilder(\Magento\Paypal\Helper\Shortcut\ValidatorInterface::class)->getMock();
 
         $this->objectManagerMock->expects($this->once())->method('create')->with(Factory::DEFAULT_VALIDATOR)
             ->will($this->returnValue($instance));
 
         $this->assertInstanceOf(
-            'Magento\Paypal\Helper\Shortcut\ValidatorInterface',
+            \Magento\Paypal\Helper\Shortcut\ValidatorInterface::class,
             $this->factory->create()
         );
     }
 
     public function testCreateCheckout()
     {
-        $checkoutMock = $this->getMockBuilder('Magento\Checkout\Model\Session')->disableOriginalConstructor()
+        $checkoutMock = $this->getMockBuilder(\Magento\Checkout\Model\Session::class)->disableOriginalConstructor()
             ->setMethods([])->getMock();
-        $instance = $this->getMockBuilder('Magento\Paypal\Helper\Shortcut\ValidatorInterface')->getMock();
+        $instance = $this->getMockBuilder(\Magento\Paypal\Helper\Shortcut\ValidatorInterface::class)->getMock();
 
         $this->objectManagerMock->expects($this->once())->method('create')->with(Factory::CHECKOUT_VALIDATOR)
             ->will($this->returnValue($instance));
 
         $this->assertInstanceOf(
-            'Magento\Paypal\Helper\Shortcut\ValidatorInterface',
+            \Magento\Paypal\Helper\Shortcut\ValidatorInterface::class,
             $this->factory->create($checkoutMock)
         );
     }

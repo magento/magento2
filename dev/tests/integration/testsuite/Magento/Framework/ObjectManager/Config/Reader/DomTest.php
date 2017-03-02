@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Config\Reader;
@@ -51,7 +51,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->_fileResolverMock = $this->getMock(
-            'Magento\Framework\App\Arguments\FileResolver\Primary',
+            \Magento\Framework\App\Arguments\FileResolver\Primary::class,
             [],
             [],
             '',
@@ -59,7 +59,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
         );
         $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue($this->_fileList));
         $this->_mapper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\ObjectManager\Config\Mapper\Dom'
+            \Magento\Framework\ObjectManager\Config\Mapper\Dom::class
         );
         $this->_validationState = new \Magento\Framework\App\Arguments\ValidationState(
             \Magento\Framework\App\State::MODE_DEFAULT

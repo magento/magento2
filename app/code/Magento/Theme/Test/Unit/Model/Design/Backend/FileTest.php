@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
@@ -9,6 +9,9 @@ use Magento\Framework\UrlInterface;
 use Magento\Theme\Model\Design\Backend\File;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -20,28 +23,37 @@ class FileTest extends \PHPUnit_Framework_TestCase
     /** @var File */
     protected $fileBackend;
 
+    /**
+     * @var \Magento\Framework\File\Mime|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mime;
+
     public function setUp()
     {
-        $context = $this->getMockObject('Magento\Framework\Model\Context');
-        $registry = $this->getMockObject('Magento\Framework\Registry');
-        $config = $this->getMockObjectForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
-        $cacheTypeList = $this->getMockObjectForAbstractClass('Magento\Framework\App\Cache\TypeListInterface');
-        $uploaderFactory = $this->getMockObject('Magento\MediaStorage\Model\File\UploaderFactory', ['create']);
+        $context = $this->getMockObject(\Magento\Framework\Model\Context::class);
+        $registry = $this->getMockObject(\Magento\Framework\Registry::class);
+        $config = $this->getMockObjectForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $cacheTypeList = $this->getMockObjectForAbstractClass(\Magento\Framework\App\Cache\TypeListInterface::class);
+        $uploaderFactory = $this->getMockObject(\Magento\MediaStorage\Model\File\UploaderFactory::class, ['create']);
         $requestData = $this->getMockObjectForAbstractClass(
-            'Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface'
+            \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface::class
         );
-        $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mediaDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $this->mediaDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMockForAbstractClass();
 
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
+
+        $this->mime = $this->getMockBuilder(\Magento\Framework\File\Mime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->fileBackend = new File(
             $context,
@@ -52,6 +64,13 @@ class FileTest extends \PHPUnit_Framework_TestCase
             $requestData,
             $filesystem,
             $this->urlBuilder
+        );
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->fileBackend,
+            'mime',
+            $this->mime
         );
     }
 
@@ -88,6 +107,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testAfterLoad()
     {
         $value = 'filename.jpg';
+        $mime = 'image/jpg';
+
+        $absoluteFilePath = '/absolute_path/' . $value;
+
         $this->fileBackend->setValue($value);
         $this->fileBackend->setFieldConfig(
             [
@@ -106,6 +129,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->method('isExist')
             ->with('value/' . $value)
             ->willReturn(true);
+        $this->mediaDirectory->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('value/' . $value)
+            ->willReturn($absoluteFilePath);
+
         $this->urlBuilder->expects($this->once())
             ->method('getBaseUrl')
             ->with(['_type' => UrlInterface::URL_TYPE_MEDIA])
@@ -119,6 +147,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->with('value/' . $value)
             ->willReturn(['size' => 234234]);
 
+        $this->mime->expects($this->once())
+            ->method('getMimeType')
+            ->with($absoluteFilePath)
+            ->willReturn($mime);
+
         $this->fileBackend->afterLoad();
         $this->assertEquals(
             [
@@ -127,6 +160,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
                     'file' => $value,
                     'size' => 234234,
                     'exists' => true,
+                    'name' => $value,
+                    'type' => $mime,
                 ]
             ],
             $this->fileBackend->getValue()

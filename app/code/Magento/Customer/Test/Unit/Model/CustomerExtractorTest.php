@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
@@ -45,7 +45,7 @@ class CustomerExtractorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->formFactory = $this->getMockForAbstractClass(
-            'Magento\Customer\Model\Metadata\FormFactory',
+            \Magento\Customer\Model\Metadata\FormFactory::class,
             [],
             '',
             false,
@@ -54,7 +54,7 @@ class CustomerExtractorTest extends \PHPUnit_Framework_TestCase
             ['create']
         );
         $this->customerFactory = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
             [],
             '',
             false,
@@ -63,34 +63,34 @@ class CustomerExtractorTest extends \PHPUnit_Framework_TestCase
             ['create']
         );
         $this->storeManager = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            \Magento\Store\Model\StoreManagerInterface::class,
             [],
             '',
             false
         );
         $this->customerGroupManagement = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\GroupManagementInterface',
+            \Magento\Customer\Api\GroupManagementInterface::class,
             [],
             '',
             false
         );
-        $this->dataObjectHelper = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '', false);
-        $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface', [], '', false);
-        $this->customerForm = $this->getMock('Magento\Customer\Model\Metadata\Form', [], [], '', false);
+        $this->dataObjectHelper = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
+        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false);
+        $this->customerForm = $this->getMock(\Magento\Customer\Model\Metadata\Form::class, [], [], '', false);
         $this->customerData = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\CustomerInterface',
+            \Magento\Customer\Api\Data\CustomerInterface::class,
             [],
             '',
             false
         );
         $this->store = $this->getMockForAbstractClass(
-            'Magento\Store\Api\Data\StoreInterface',
+            \Magento\Store\Api\Data\StoreInterface::class,
             [],
             '',
             false
         );
         $this->customerGroup = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\GroupInterface',
+            \Magento\Customer\Api\Data\GroupInterface::class,
             [],
             '',
             false
@@ -121,6 +121,10 @@ class CustomerExtractorTest extends \PHPUnit_Framework_TestCase
             ->with($this->request)
             ->willReturn($customerData);
         $this->customerForm->expects($this->once())
+            ->method('compactData')
+            ->with($customerData)
+            ->willReturn($customerData);
+        $this->customerForm->expects($this->once())
             ->method('getAllowedAttributes')
             ->willReturn(['group_id' => 'attribute object']);
         $this->customerFactory->expects($this->once())
@@ -128,7 +132,7 @@ class CustomerExtractorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->customerData);
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($this->customerData, $customerData, '\Magento\Customer\Api\Data\CustomerInterface')
+            ->with($this->customerData, $customerData, \Magento\Customer\Api\Data\CustomerInterface::class)
             ->willReturn($this->customerData);
         $this->storeManager->expects($this->once())
             ->method('getStore')

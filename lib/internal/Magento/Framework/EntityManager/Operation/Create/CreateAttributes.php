@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\EntityManager\Operation\Create;
@@ -56,7 +56,7 @@ class CreateAttributes
         $entityData = array_merge($hydrator->extract($entity), $arguments);
         $actions = $this->attributePool->getActions($entityType, 'create');
         foreach ($actions as $action) {
-            $action->execute($entityType, $entityData);
+            $action->execute($entityType, $entityData, $arguments);
         }
         $entity = $hydrator->hydrate($entity, $entityData);
         return $entity;

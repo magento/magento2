@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -16,6 +16,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @magentoDataFixture Magento/Catalog/_files/categories.php
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,10 +33,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Api\ProductRepositoryInterface');
+            ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
     }
 
@@ -43,11 +44,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Catalog\Model\Product\Media\Config $config */
-        $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+        $config = $objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
 
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $objectManager->get(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
             DirectoryList::MEDIA
         );
@@ -102,7 +103,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testCleanCache()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\CacheInterface'
+            \Magento\Framework\App\CacheInterface::class
         )->save(
             'test',
             'catalog_product_999',
@@ -112,7 +113,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->_model->setId(999)->cleanCache();
         $this->assertFalse(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\App\CacheInterface'
+                \Magento\Framework\App\CacheInterface::class
             )->load(
                 'catalog_product_999'
             )
@@ -144,11 +145,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Catalog\Model\Product\Media\Config $config */
-        $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+        $config = $objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
 
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $objectManager->get(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
             DirectoryList::MEDIA
         );
@@ -171,7 +172,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         // fixture
         /** @var \Magento\Catalog\Model\Product\Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Product\Copier'
+            \Magento\Catalog\Model\Product\Copier::class
         );
         $duplicate = $copier->copy($this->_model);
         try {
@@ -200,7 +201,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('simple', $this->_model->getSku());
         /** @var \Magento\Catalog\Model\Product\Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Product\Copier'
+            \Magento\Catalog\Model\Product\Copier::class
         );
         $duplicate = $copier->copy($this->_model);
         $this->assertEquals('simple-5', $duplicate->getSku());
@@ -214,7 +215,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected function _undo($duplicate)
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
         )->getStore()->setId(
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
         );
@@ -289,6 +290,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue((bool)$this->_model->isSaleable());
         $this->assertTrue((bool)$this->_model->isAvailable());
         $this->assertTrue($this->_model->isInStock());
+    }
+
+    /**
+     * @covers \Magento\Catalog\Model\Product::isSalable
+     * @covers \Magento\Catalog\Model\Product::isSaleable
+     * @covers \Magento\Catalog\Model\Product::isAvailable
+     * @covers \Magento\Catalog\Model\Product::isInStock
+     */
+    public function testIsNotSalableWhenStatusDisabled()
+    {
+        $this->_model = $this->productRepository->get('simple');
+
         $this->_model->setStatus(0);
         $this->assertFalse((bool)$this->_model->isSalable());
         $this->assertFalse((bool)$this->_model->isSaleable());
@@ -307,7 +320,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         /** @var $model \Magento\Catalog\Model\Product */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['data' => ['type_id' => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL]]
         );
         $this->assertTrue($model->isVirtual());
@@ -396,7 +409,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $request = new \Magento\Framework\DataObject();
         $result = $this->_model->processBuyRequest($request);
-        $this->assertInstanceOf('Magento\Framework\DataObject', $result);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $result);
         $this->assertArrayHasKey('errors', $result->getData());
     }
 
@@ -441,7 +454,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+            ->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'unique_input_attribute');
         $this->_model->setTypeId(
             'simple'
@@ -475,13 +488,24 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
      * @magentoAppIsolation enabled
      */
     public function testGetOptions()
     {
-        $this->_model = $this->productRepository->get('simple');
-
-        $this->assertEquals(4, count($this->_model->getOptions()));
+        $this->_model = $this->productRepository->get('simple_with_custom_options');
+        $options = $this->_model->getOptions();
+        $this->assertNotEmpty($options);
+        $expectedValue = [
+            '3-1-select' => 3000.00,
+            '3-2-select' => 5000.00,
+            '4-1-radio' => 600.234,
+            '4-2-radio' => 40000.00
+        ];
+        foreach ($options as $option) {
+            foreach ($option->getValues() as $value) {
+                $this->assertEquals($expectedValue[$value->getSku()], floatval($value->getPrice()));
+            }
+        }
     }
 }

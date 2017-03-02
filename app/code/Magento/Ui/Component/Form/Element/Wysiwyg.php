@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Form\Element;
@@ -49,7 +49,7 @@ class Wysiwyg extends AbstractElement
         $this->form = $formFactory->create();
         $this->editor = $this->form->addField(
             $context->getNamespace() . '_' . $data['name'],
-            'Magento\Framework\Data\Form\Element\Editor',
+            \Magento\Framework\Data\Form\Element\Editor::class,
             [
                 'force_load' => true,
                 'rows' => 20,

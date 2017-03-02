@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /** @var \Magento\TestFramework\ObjectManager $objectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$objectManager->removeSharedInstance('Magento\Catalog\Model\ProductRepository');
-$objectManager->removeSharedInstance('Magento\Catalog\Model\Product\Option\Repository');
-$objectManager->removeSharedInstance('Magento\Catalog\Model\Product\Option\SaveHandler');
+$objectManager->removeSharedInstance(\Magento\Catalog\Model\ProductRepository::class);
+$objectManager->removeSharedInstance(\Magento\Catalog\Model\Product\Option\Repository::class);
+$objectManager->removeSharedInstance(\Magento\Catalog\Model\Product\Option\SaveHandler::class);
 
-$productRepository = $objectManager->get('Magento\Catalog\Model\ProductRepository');
+$productRepository = $objectManager->get(\Magento\Catalog\Model\ProductRepository::class);
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 
 $product->setTypeId(
     'simple'
@@ -75,8 +75,10 @@ $options = [
 $customOptions = [];
 
 /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
-$customOptionFactory = $objectManager->create('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
-$optionValueFactory = $objectManager->create('Magento\Catalog\Api\Data\ProductCustomOptionValuesInterfaceFactory');
+$customOptionFactory = $objectManager->create(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
+$optionValueFactory = $objectManager->create(
+    \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterfaceFactory::class
+);
 
 foreach ($options as $option) {
     /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $customOption */

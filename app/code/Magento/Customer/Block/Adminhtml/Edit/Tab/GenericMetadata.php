@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -119,7 +119,7 @@ class GenericMetadata extends \Magento\Backend\Block\Widget\Form\Generic
         foreach ($options as $option) {
             $result[] = $this->dataObjectProcessor->buildOutputDataArray(
                 $option,
-                'Magento\Customer\Api\Data\OptionInterface'
+                \Magento\Customer\Api\Data\OptionInterface::class
             );
         }
         return $result;

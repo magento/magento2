@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
@@ -18,7 +18,7 @@ class ImportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $body = $this->getResponse()->getBody();
         $this->assertContains(
             (string)\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\ImportExport\Helper\Data'
+                \Magento\ImportExport\Helper\Data::class
             )->getMaxUploadSizeMessage(),
             $body
         );

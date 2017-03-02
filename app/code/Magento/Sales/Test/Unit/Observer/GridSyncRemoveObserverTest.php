@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,9 +33,9 @@ class GridSyncRemoveObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->gridAggregatorMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\GridInterface')
+        $this->gridAggregatorMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\GridInterface::class)
             ->getMockForAbstractClass();
-        $this->eventObserverMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $this->eventObserverMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -44,7 +44,7 @@ class GridSyncRemoveObserverTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        $this->salesModelMock = $this->getMockBuilder('Magento\Sales\Model\AbstractModel')
+        $this->salesModelMock = $this->getMockBuilder(\Magento\Sales\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [

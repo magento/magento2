@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Guest;
@@ -51,7 +51,7 @@ class PrintShipment extends \Magento\Sales\Controller\AbstractController\PrintSh
 
         $shipmentId = (int)$this->getRequest()->getParam('shipment_id');
         if ($shipmentId) {
-            $shipment = $this->_objectManager->create('Magento\Sales\Model\Order\Shipment')->load($shipmentId);
+            $shipment = $this->_objectManager->create(\Magento\Sales\Model\Order\Shipment::class)->load($shipmentId);
             $order = $shipment->getOrder();
         } else {
             $order = $this->_coreRegistry->registry('current_order');

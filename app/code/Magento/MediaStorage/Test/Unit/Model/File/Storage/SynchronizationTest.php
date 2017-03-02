@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
@@ -13,14 +13,14 @@ class SynchronizationTest extends \PHPUnit_Framework_TestCase
         $relativeFileName = 'config.xml';
 
         $storageFactoryMock = $this->getMock(
-            'Magento\MediaStorage\Model\File\Storage\DatabaseFactory',
+            \Magento\MediaStorage\Model\File\Storage\DatabaseFactory::class,
             ['create', '_wakeup'],
             [],
             '',
             false
         );
         $storageMock = $this->getMock(
-            'Magento\MediaStorage\Model\File\Storage\Database',
+            \Magento\MediaStorage\Model\File\Storage\Database::class,
             ['getContent', 'getId', 'loadByFilename', '__wakeup'],
             [],
             '',
@@ -33,7 +33,7 @@ class SynchronizationTest extends \PHPUnit_Framework_TestCase
         $storageMock->expects($this->once())->method('loadByFilename');
 
         $file = $this->getMock(
-            'Magento\Framework\Filesystem\File\Write',
+            \Magento\Framework\Filesystem\File\Write::class,
             ['lock', 'write', 'unlock', 'close'],
             [],
             '',
@@ -43,7 +43,7 @@ class SynchronizationTest extends \PHPUnit_Framework_TestCase
         $file->expects($this->once())->method('write')->with($content);
         $file->expects($this->once())->method('unlock');
         $file->expects($this->once())->method('close');
-        $directory = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
+        $directory = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $directory->expects($this->once())
             ->method('openFile')
             ->with($relativeFileName)

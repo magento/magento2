@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Test\Unit\Url\Plugin;
@@ -19,7 +19,7 @@ class SecurityInfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_model = new \Magento\Store\Url\Plugin\SecurityInfo($this->_scopeConfigMock);
     }
 
@@ -35,7 +35,7 @@ class SecurityInfoTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $this->assertFalse(
             $this->_model->aroundIsSecure(
-                $this->getMock('Magento\Framework\Url\SecurityInfo'),
+                $this->getMock(\Magento\Framework\Url\SecurityInfo::class),
                 function () {
                 },
                 'http://example.com/account'
@@ -55,7 +55,7 @@ class SecurityInfoTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->assertTrue(
             $this->_model->aroundIsSecure(
-                $this->getMock('Magento\Framework\Url\SecurityInfo'),
+                $this->getMock(\Magento\Framework\Url\SecurityInfo::class),
                 function () {
                     return true;
                 },

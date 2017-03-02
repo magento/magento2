@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
 /**
  * Class AddCommentTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddCommentTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,63 +65,63 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->shipmentLoaderMock = $this->getMock(
-            'Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader',
+            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
             ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load', '__wakeup'],
             [],
             '',
             false
         );
         $this->shipmentCommentSenderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender',
+            \Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender::class,
             ['send', '__wakeup'],
             [],
             '',
             false
         );
         $this->requestMock = $this->getMock(
-            'Magento\Framework\App\Request\Http',
+            \Magento\Framework\App\Request\Http::class,
             ['getParam', 'getPost', 'setParam', '__wakeup'],
             [],
             '',
             false
         );
         $this->responseMock = $this->getMock(
-            'Magento\Framework\App\Response\Http',
+            \Magento\Framework\App\Response\Http::class,
             ['setBody', 'representJson', '__wakeup'],
             [],
             '',
             false
         );
         $this->resultLayoutFactoryMock = $this->getMock(
-            'Magento\Framework\View\Result\LayoutFactory',
+            \Magento\Framework\View\Result\LayoutFactory::class,
             ['create'],
             [],
             '',
             false
         );
 
-        $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+        $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->shipmentMock = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             ['save', 'addComment', '__wakeup'],
             [],
             '',
             false
         );
         $this->viewInterfaceMock = $this->getMock(
-            'Magento\Framework\App\ViewInterface',
+            \Magento\Framework\App\ViewInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $contextMock = $this->getMock(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             ['getRequest', 'getResponse', 'getTitle', 'getView', 'getObjectManager', '__wakeup'],
             [],
             '',
@@ -152,7 +154,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected function exceptionResponse()
     {
         $dataMock = $this->getMock(
-            'Magento\Framework\Json\Helper\Data',
+            \Magento\Framework\Json\Helper\Data::class,
             ['jsonEncode'],
             [],
             '',
@@ -177,7 +179,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $tracking = [];
 
         $resultLayoutMock = $this->getMock(
-            'Magento\Framework\View\Result\Layout',
+            \Magento\Framework\View\Result\Layout::class,
             ['getBlock', 'getDefaultLayoutHandle', 'addDefaultHandle', 'getLayout'],
             [],
             '',
@@ -212,8 +214,8 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->shipmentMock->expects($this->once())->method('addComment');
         $this->shipmentCommentSenderMock->expects($this->once())->method('send');
         $this->shipmentMock->expects($this->once())->method('save');
-        $layoutMock = $this->getMock('Magento\Framework\View\Layout', ['getBlock'], [], '', false);
-        $blockMock = $this->getMock('Magento\Shipping\Block\Adminhtml\View\Comments', ['toHtml'], [], '', false);
+        $layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, ['getBlock'], [], '', false);
+        $blockMock = $this->getMock(\Magento\Shipping\Block\Adminhtml\View\Comments::class, ['toHtml'], [], '', false);
         $blockMock->expects($this->once())->method('toHtml')->willReturn($result);
         $layoutMock->expects($this->once())->method('getBlock')
             ->with('shipment_comments')->willReturn($blockMock);

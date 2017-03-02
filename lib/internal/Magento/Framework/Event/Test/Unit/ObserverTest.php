@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function testIsValidFor()
     {
         $eventName = 'eventName';
-        $eventMock = $this->getMock('Magento\Framework\Event', ['getName']);
+        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getName']);
         $eventMock->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($eventName));
@@ -102,11 +102,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $eventName = 'eventName';
         $callbackName = 'testCallback';
-        $callbackMock = [$this->getMock('stdClass', [$callbackName]), $callbackName];
+        $callbackMock = [$this->getMock(\stdClass::class, [$callbackName]), $callbackName];
         $callbackMock[0]->expects($this->once())
             ->method('testCallback')
             ->will($this->returnValue(true));
-        $eventMock = $this->getMock('Magento\Framework\Event', ['getName']);
+        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getName']);
         $eventMock->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($eventName));
@@ -120,7 +120,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $eventName = 'eventName';
         $notValidName = 'event_name_2';
-        $eventMock = $this->getMock('Magento\Framework\Event', ['getName']);
+        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getName']);
         $eventMock->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($eventName));

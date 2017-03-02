@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -51,6 +51,21 @@ class Images extends AbstractModifier
      */
     public function modifyData(array $data)
     {
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $product = $this->locator->getProduct();
+        $modelId = $product->getId();
+        if (
+            isset($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery'])
+            && !empty($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery'])
+            && !empty($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'])
+        ) {
+            foreach ($data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'] as $index => $image) {
+                if (!isset($image['label'])) {
+                    $data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'][$index]['label'] = "";
+                }
+            }
+        };
+
         return $data;
     }
 }

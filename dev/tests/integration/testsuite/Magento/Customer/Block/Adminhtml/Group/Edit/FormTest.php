@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,14 +43,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->layout = Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Layout'
-        );
+        $this->layout = Bootstrap::getObjectManager()->create(\Magento\Framework\View\Layout::class);
         $this->groupRepository = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Api\GroupRepositoryInterface');
+            ->get(\Magento\Customer\Api\GroupRepositoryInterface::class);
         $this->groupManagement = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Api\GroupManagementInterface');
-        $this->registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+            ->get(\Magento\Customer\Api\GroupManagementInterface::class);
+        $this->registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
     }
 
     /**
@@ -70,7 +68,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->register(RegistryConstants::CURRENT_GROUP_ID, $this->groupManagement->getDefaultGroup(0)->getId());
 
         /** @var $block Form */
-        $block = $this->layout->createBlock('Magento\Customer\Block\Adminhtml\Group\Edit\Form', 'block');
+        $block = $this->layout->createBlock(\Magento\Customer\Block\Adminhtml\Group\Edit\Form::class, 'block');
         $form = $block->getForm();
 
         $this->assertEquals('edit_form', $form->getId());
@@ -86,7 +84,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('1', $idElement->getValue());
         $this->assertEquals('3', $taxClassIdElement->getValue());
         /** @var \Magento\Tax\Model\TaxClass\Source\Customer $taxClassCustomer */
-        $taxClassCustomer = Bootstrap::getObjectManager()->get('Magento\Tax\Model\TaxClass\Source\Customer');
+        $taxClassCustomer = Bootstrap::getObjectManager()->get(\Magento\Tax\Model\TaxClass\Source\Customer::class);
         $this->assertEquals($taxClassCustomer->toOptionArray(false), $taxClassIdElement->getData('values'));
         $this->assertEquals('General', $groupCodeElement->getValue());
     }
@@ -96,17 +94,17 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormExistInCustomGroup()
     {
-        $builder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
+        $builder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteria */
         $searchCriteria = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Api\SearchCriteriaBuilder')
+            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class)
             ->addFilters([$builder->setField('code')->setValue('custom_group')->create()]);
         /** @var GroupInterface $customerGroup */
         $customerGroup = $this->groupRepository->getList($searchCriteria->create())->getItems()[0];
         $this->registry->register(RegistryConstants::CURRENT_GROUP_ID, $customerGroup->getId());
 
         /** @var $block Form */
-        $block = $this->layout->createBlock('Magento\Customer\Block\Adminhtml\Group\Edit\Form', 'block');
+        $block = $this->layout->createBlock(\Magento\Customer\Block\Adminhtml\Group\Edit\Form::class, 'block');
         $form = $block->getForm();
 
         $this->assertEquals('edit_form', $form->getId());
@@ -122,7 +120,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($customerGroup->getId(), $idElement->getValue());
         $this->assertEquals($customerGroup->getTaxClassId(), $taxClassIdElement->getValue());
         /** @var \Magento\Tax\Model\TaxClass\Source\Customer $taxClassCustomer */
-        $taxClassCustomer = Bootstrap::getObjectManager()->get('Magento\Tax\Model\TaxClass\Source\Customer');
+        $taxClassCustomer = Bootstrap::getObjectManager()->get(\Magento\Tax\Model\TaxClass\Source\Customer::class);
         $this->assertEquals($taxClassCustomer->toOptionArray(false), $taxClassIdElement->getData('values'));
         $this->assertEquals($customerGroup->getCode(), $groupCodeElement->getValue());
     }

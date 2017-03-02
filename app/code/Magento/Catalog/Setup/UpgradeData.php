@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Eav\Model\Entity\AttributeCache;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -16,6 +17,7 @@ use Magento\Eav\Setup\EavSetupFactory;
 /**
  * Upgrade Data script
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -34,15 +36,25 @@ class UpgradeData implements UpgradeDataInterface
     private $eavSetupFactory;
 
     /**
+     * @var AttributeCache
+     */
+    private $attributeCache;
+
+    /**
      * Init
      *
      * @param CategorySetupFactory $categorySetupFactory
      * @param EavSetupFactory $eavSetupFactory
+     * @param AttributeCache $attributeCache
      */
-    public function __construct(CategorySetupFactory $categorySetupFactory, EavSetupFactory $eavSetupFactory)
-    {
+    public function __construct(
+        CategorySetupFactory $categorySetupFactory,
+        EavSetupFactory $eavSetupFactory,
+        AttributeCache $attributeCache
+    ) {
         $this->categorySetupFactory = $categorySetupFactory;
         $this->eavSetupFactory = $eavSetupFactory;
+        $this->attributeCache = $attributeCache;
     }
 
     /**
@@ -92,38 +104,38 @@ class UpgradeData implements UpgradeDataInterface
             $categorySetup->updateEntityType(
                 \Magento\Catalog\Model\Category::ENTITY,
                 'entity_model',
-                'Magento\Catalog\Model\ResourceModel\Category'
+                \Magento\Catalog\Model\ResourceModel\Category::class
             );
             $categorySetup->updateEntityType(
                 \Magento\Catalog\Model\Category::ENTITY,
                 'attribute_model',
-                'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+                \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
             );
             $categorySetup->updateEntityType(
                 \Magento\Catalog\Model\Category::ENTITY,
                 'entity_attribute_collection',
-                'Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection'
+                \Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection::class
             );
             $categorySetup->updateAttribute(
                 \Magento\Catalog\Model\Category::ENTITY,
                 'custom_design_from',
                 'attribute_model',
-                'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+                \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
             );
             $categorySetup->updateEntityType(
                 \Magento\Catalog\Model\Product::ENTITY,
                 'entity_model',
-                'Magento\Catalog\Model\ResourceModel\Product'
+                \Magento\Catalog\Model\ResourceModel\Product::class
             );
             $categorySetup->updateEntityType(
                 \Magento\Catalog\Model\Product::ENTITY,
                 'attribute_model',
-                'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+                \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
             );
             $categorySetup->updateEntityType(
                 \Magento\Catalog\Model\Product::ENTITY,
                 'entity_attribute_collection',
-                'Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection'
+                \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
             );
         }
 
@@ -134,19 +146,24 @@ class UpgradeData implements UpgradeDataInterface
         }
 
         if (version_compare($context->getVersion(), '2.0.4') < 0) {
+            $mediaBackendType = 'static';
+            $mediaBackendModel = null;
             /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
             $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
             $categorySetup->updateAttribute(
                 'catalog_product',
                 'media_gallery',
                 'backend_type',
-                'static'
+                $mediaBackendType
             );
             $categorySetup->updateAttribute(
                 'catalog_product',
                 'media_gallery',
-                'backend_model'
+                'backend_model',
+                $mediaBackendModel
             );
+
+            $this->changeMediaGalleryAttributeInCache($mediaBackendType, $mediaBackendModel);
         }
 
         if (version_compare($context->getVersion(), '2.0.5', '<')) {
@@ -167,30 +184,31 @@ class UpgradeData implements UpgradeDataInterface
                 'frontend_label',
                 'Product Name'
             );
+            $attributeSetId = $categorySetup->getDefaultAttributeSetId(ProductAttributeInterface::ENTITY_TYPE_CODE);
             $categorySetup->addAttributeToGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Product Details',
                 'visibility',
                 80
             );
             $categorySetup->addAttributeToGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Product Details',
                 'news_from_date',
                 90
             );
             $categorySetup->addAttributeToGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Product Details',
                 'news_to_date',
                 100
             );
             $categorySetup->addAttributeToGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Product Details',
                 'country_of_manufacture',
                 110
@@ -199,26 +217,26 @@ class UpgradeData implements UpgradeDataInterface
             //Content tab
             $categorySetup->addAttributeGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Content',
                 15
             );
             $categorySetup->updateAttributeGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Content',
                 'tab_group_code',
                 'basic'
             );
             $categorySetup->addAttributeToGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Content',
                 'description'
             );
             $categorySetup->addAttributeToGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Content',
                 'short_description',
                 100
@@ -227,20 +245,20 @@ class UpgradeData implements UpgradeDataInterface
             //Images tab
             $groupId = (int)$categorySetup->getAttributeGroupByCode(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'image-management',
                 'attribute_group_id'
             );
             $categorySetup->addAttributeToGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 $groupId,
                 'image',
                 1
             );
             $categorySetup->updateAttributeGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 $groupId,
                 'attribute_group_name',
                 'Images'
@@ -282,27 +300,27 @@ class UpgradeData implements UpgradeDataInterface
             //Schedule Design Update tab
             $categorySetup->addAttributeGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Schedule Design Update',
                 55
             );
             $categorySetup->updateAttributeGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Schedule Design Update',
                 'tab_group_code',
                 'advanced'
             );
             $categorySetup->addAttributeToGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Schedule Design Update',
                 'custom_design_from',
                 20
             );
             $categorySetup->addAttributeToGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Schedule Design Update',
                 'custom_design_to',
                 30
@@ -316,7 +334,7 @@ class UpgradeData implements UpgradeDataInterface
             );
             $categorySetup->addAttributeToGroup(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'Default',
+                $attributeSetId,
                 'Schedule Design Update',
                 'custom_design'
             );
@@ -327,7 +345,7 @@ class UpgradeData implements UpgradeDataInterface
                     'type' => 'varchar',
                     'label' => 'New Layout',
                     'input' => 'select',
-                    'source' => 'Magento\Catalog\Model\Product\Attribute\Source\Layout',
+                    'source' => \Magento\Catalog\Model\Product\Attribute\Source\Layout::class,
                     'required' => false,
                     'sort_order' => 50,
                     'global' => ScopedAttributeInterface::SCOPE_STORE,
@@ -338,10 +356,10 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             );
         }
-        
+
         if (version_compare($context->getVersion(), '2.0.7') < 0) {
-            /** @var EavSetup $eavSetupF */
-            $eavSetup= $this->eavSetupFactory->create(['setup' => $setup]);
+            /** @var EavSetup $eavSetup */
+            $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
 
             $eavSetup->updateAttribute(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
@@ -351,7 +369,53 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             );
         }
-        
+
+        if (version_compare($context->getVersion(), '2.1.3') < 0) {
+            /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
+            $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+            $this->changePriceAttributeDefaultScope($categorySetup);
+        }
+
         $setup->endSetup();
+    }
+
+    /**
+     * @param \Magento\Catalog\Setup\CategorySetup $categorySetup
+     * @return void
+     */
+    private function changePriceAttributeDefaultScope($categorySetup)
+    {
+        $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+        foreach (['price', 'cost', 'special_price'] as $attributeCode) {
+            $attribute = $categorySetup->getAttribute($entityTypeId, $attributeCode);
+            $categorySetup->updateAttribute(
+                $entityTypeId,
+                $attribute['attribute_id'],
+                'is_global',
+                \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
+            );
+
+        }
+    }
+
+    /**
+     * @param string $mediaBackendType
+     * @param string $mediaBackendModel
+     * @return void
+     */
+    private function changeMediaGalleryAttributeInCache($mediaBackendType, $mediaBackendModel)
+    {
+        // need to do, because media_gallery has backend model in cache.
+        $catalogProductAttributes = $this->attributeCache->getAttributes('catalog_product', '0-0');
+
+        if (is_array($catalogProductAttributes)) {
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $catalogProductAttribute */
+            foreach ($catalogProductAttributes as $catalogProductAttribute) {
+                if ($catalogProductAttribute->getAttributeCode() == 'media_gallery') {
+                    $catalogProductAttribute->setBackendModel($mediaBackendModel);
+                    $catalogProductAttribute->setBackendType($mediaBackendType);
+                }
+            }
+        }
     }
 }

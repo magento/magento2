@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
@@ -17,6 +17,8 @@ use Magento\Framework\DataObject;
 
 /**
  * Tests for Magento\Quote\Model\Service\Quote\Processor
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,7 +65,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->quoteItemFactoryMock = $this->getMock(
-            'Magento\Quote\Model\Quote\ItemFactory',
+            \Magento\Quote\Model\Quote\ItemFactory::class,
             ['create'],
             [],
             '',
@@ -71,7 +73,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->itemMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             [
                 'getId',
                 'setOptions',
@@ -91,19 +93,19 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->itemMock));
 
         $this->storeManagerMock = $this->getMock(
-            'Magento\Store\Model\StoreManager',
+            \Magento\Store\Model\StoreManager::class,
             ['getStore'],
             [],
             '',
             false
         );
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', ['getId', '__wakeup'], [], '', false);
+        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup'], [], '', false);
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
 
         $this->stateMock = $this->getMock(
-            'Magento\Framework\App\State',
+            \Magento\Framework\App\State::class,
             [],
             [],
             '',
@@ -117,14 +119,14 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getCustomOptions', '__wakeup', 'getParentProductId', 'getCartQty', 'getStickWithinParent'],
             [],
             '',
             false
         );
         $this->objectMock = $this->getMock(
-            'Magento\Framework\DataObject',
+            \Magento\Framework\DataObject::class,
             ['getResetCount', 'getId', 'getCustomPrice'],
             [],
             '',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,7 +54,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _getDefaultAttributeModel()
     {
-        return 'Magento\Catalog\Model\ResourceModel\Eav\Attribute';
+        return \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class;
     }
 
     /**
@@ -502,7 +502,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 $staticTable,
                 $staticAttributes
             )->join(
-                ['e' => $this->getTable('catalog_product_entity')],
+                ['e' => $this->getTable($this->getEntityTable())],
                 'e.' . $this->getLinkField() . ' = ' . $staticTable . '.' . $this->getLinkField()
             )->where(
                 'e.entity_id = :entity_id'
@@ -523,7 +523,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 $select = $connection->select()
                     ->from(['default_value' => $table], ['attribute_id'])
                     ->join(
-                        ['e' => $this->getTable('catalog_product_entity')],
+                        ['e' => $this->getTable($this->getEntityTable())],
                         'e.' . $this->getLinkField() . ' = ' . 'default_value.' . $this->getLinkField(),
                         ''
                     )->where('default_value.attribute_id IN (?)', array_keys($_attributes))
@@ -563,7 +563,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             }
         }
 
-        if (sizeof($attributesData) == 1) {
+        if (is_array($attributesData) && sizeof($attributesData) == 1) {
             $_data = each($attributesData);
             $attributesData = $_data[1];
         }

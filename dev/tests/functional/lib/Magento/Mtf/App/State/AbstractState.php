@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Abstract class AbstractState
@@ -18,6 +19,20 @@ use Magento\Framework\App\DeploymentConfig;
 abstract class AbstractState implements StateInterface
 {
     /**
+     * Object Manager.
+     *
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * List of handlers
+     *
+     * @var string[]
+     */
+    private $arguments;
+
+    /**
      * Specifies whether to clean instance under test
      *
      * @var bool
@@ -25,10 +40,28 @@ abstract class AbstractState implements StateInterface
     protected $isCleanInstance = false;
 
     /**
+     * AbstractState constructor.
+     *
+     * @param ObjectManager $objectManager
+     * @param array $arguments
+     */
+    public function __construct(
+        ObjectManager $objectManager,
+        array $arguments = []
+    ) {
+        $this->objectManager = $objectManager;
+        $this->arguments = $arguments;
+    }
+
+    /**
      * @inheritdoc
      */
     public function apply()
     {
+        foreach ($this->arguments as $argument) {
+            $handler = $this->objectManager->get($argument);
+            $handler->execute($this);
+        }
         if ($this->isCleanInstance) {
             $this->clearInstance();
         }
@@ -42,13 +75,13 @@ abstract class AbstractState implements StateInterface
     public function clearInstance()
     {
         $dirList = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
-            ->get('Magento\Framework\Filesystem\DirectoryList');
+            ->get(\Magento\Framework\Filesystem\DirectoryList::class);
 
         $configFilePool = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
-            ->get('\Magento\Framework\Config\File\ConfigFilePool');
+            ->get(\Magento\Framework\Config\File\ConfigFilePool::class);
 
         $driverPool = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
-            ->get('\Magento\Framework\Filesystem\DriverPool');
+            ->get(\Magento\Framework\Filesystem\DriverPool::class);
 
         $reader = new Reader($dirList, $driverPool, $configFilePool);
         $deploymentConfig = new DeploymentConfig($reader);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Observer;
@@ -21,7 +21,7 @@ class CustomerLogoutTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerSession = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['setWishlistItemCount', 'isLoggedIn', 'getCustomerId'])
             ->getMock();
@@ -33,7 +33,7 @@ class CustomerLogoutTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $event = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $event = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         /** @var $event \Magento\Framework\Event\Observer */

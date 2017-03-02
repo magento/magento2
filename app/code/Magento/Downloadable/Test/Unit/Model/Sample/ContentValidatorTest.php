@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Sample;
@@ -37,26 +37,26 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->fileValidatorMock = $this->getMock(
-            '\Magento\Downloadable\Model\File\ContentValidator',
+            \Magento\Downloadable\Model\File\ContentValidator::class,
             [],
             [],
             '',
             false
         );
         $this->urlValidatorMock = $this->getMock(
-            '\Magento\Framework\Url\Validator',
+            \Magento\Framework\Url\Validator::class,
             [],
             [],
             '',
             false
         );
-        $this->sampleFileMock = $this->getMock('\Magento\Downloadable\Api\Data\File\ContentInterface');
+        $this->sampleFileMock = $this->getMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
         $this->validator = new ContentValidator($this->fileValidatorMock, $this->urlValidatorMock);
     }
 
     public function testIsValid()
     {
-        $sampleFileContentMock = $this->getMock('Magento\Downloadable\Api\Data\File\ContentInterface');
+        $sampleFileContentMock = $this->getMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
         $sampleContentData = [
             'title' => 'Title',
             'sort_order' => 1,
@@ -105,7 +105,7 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function getSampleContentMock(array $sampleContentData)
     {
-        $contentMock = $this->getMock('\Magento\Downloadable\Api\Data\SampleInterface');
+        $contentMock = $this->getMock(\Magento\Downloadable\Api\Data\SampleInterface::class);
         $contentMock->expects($this->any())->method('getTitle')->will($this->returnValue(
             $sampleContentData['title']
         ));

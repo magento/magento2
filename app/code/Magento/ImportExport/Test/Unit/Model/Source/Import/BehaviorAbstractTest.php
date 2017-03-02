@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,7 @@ class BehaviorAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Source\
         parent::setUp();
 
         $model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Source\Import\AbstractBehavior',
+            \Magento\ImportExport\Model\Source\Import\AbstractBehavior::class,
             [[]],
             '',
             false,

@@ -2,7 +2,7 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver;
@@ -21,7 +21,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_stat = $this->getMock('Magento\Framework\Profiler\Driver\Standard\Stat');
+        $this->_stat = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\Stat::class);
         $this->_driver = new \Magento\Framework\Profiler\Driver\Standard(['stat' => $this->_stat]);
     }
 
@@ -36,7 +36,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
     public function testDefaultConstructor()
     {
         $driver = new \Magento\Framework\Profiler\Driver\Standard();
-        $this->assertAttributeInstanceOf('Magento\Framework\Profiler\Driver\Standard\Stat', '_stat', $driver);
+        $this->assertAttributeInstanceOf(\Magento\Framework\Profiler\Driver\Standard\Stat::class, '_stat', $driver);
     }
 
     /**
@@ -89,7 +89,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitOutputs()
     {
-        $outputFactory = $this->getMock('Magento\Framework\Profiler\Driver\Standard\Output\Factory');
+        $outputFactory = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\Output\Factory::class);
         $config = [
             'outputs' => [
                 'outputTypeOne' => ['baseDir' => '/custom/base/dir'],
@@ -99,8 +99,8 @@ class StandardTest extends \PHPUnit_Framework_TestCase
             'outputFactory' => $outputFactory,
         ];
 
-        $outputOne = $this->getMock('Magento\Framework\Profiler\Driver\Standard\OutputInterface');
-        $outputTwo = $this->getMock('Magento\Framework\Profiler\Driver\Standard\OutputInterface');
+        $outputOne = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class);
+        $outputTwo = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class);
 
         $outputFactory->expects(
             $this->at(0)
@@ -132,9 +132,9 @@ class StandardTest extends \PHPUnit_Framework_TestCase
      */
     public function testDisplayAndRegisterOutput()
     {
-        $outputOne = $this->getMock('Magento\Framework\Profiler\Driver\Standard\OutputInterface');
+        $outputOne = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class);
         $outputOne->expects($this->once())->method('display')->with($this->_stat);
-        $outputTwo = $this->getMock('Magento\Framework\Profiler\Driver\Standard\OutputInterface');
+        $outputTwo = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class);
         $outputTwo->expects($this->once())->method('display')->with($this->_stat);
 
         $this->_driver->registerOutput($outputOne);
@@ -153,7 +153,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->_driver, '_getOutputFactory');
         $method->setAccessible(true);
         $this->assertInstanceOf(
-            'Magento\Framework\Profiler\Driver\Standard\Output\Factory',
+            \Magento\Framework\Profiler\Driver\Standard\Output\Factory::class,
             $method->invoke($this->_driver)
         );
     }

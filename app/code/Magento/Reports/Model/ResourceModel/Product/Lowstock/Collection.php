@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -244,12 +244,13 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * Add filter by product type(s)
      *
      * @param array|string $typeFilter
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function filterByProductType($typeFilter)
     {
         if (!is_string($typeFilter) && !is_array($typeFilter)) {
-            new \Magento\Framework\Exception\LocalizedException(__('The product type filter specified is incorrect.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The product type filter specified is incorrect.'));
         }
         $this->addAttributeToFilter('type_id', $typeFilter);
         return $this;

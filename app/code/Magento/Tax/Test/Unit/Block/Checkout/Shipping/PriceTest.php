@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Block\Checkout\Shipping;
@@ -37,13 +37,15 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $this->priceCurrency = $this->getMockBuilder(
+            \Magento\Framework\Pricing\PriceCurrencyInterface::class
+        )->getMock();
 
-        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
+        $this->quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStore', '__wakeup', 'getCustomerTaxClassId'])
             ->getMock();
@@ -52,7 +54,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($this->store));
 
-        $checkoutSession = $this->getMockBuilder('\Magento\Checkout\Model\Session')
+        $checkoutSession = $this->getMockBuilder(\Magento\Checkout\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQuote', '__wakeup'])
             ->getMock();
@@ -61,7 +63,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->method('getQuote')
             ->will($this->returnValue($this->quote));
 
-        $this->taxHelper = $this->getMockBuilder('\Magento\Tax\Helper\Data')
+        $this->taxHelper = $this->getMockBuilder(\Magento\Tax\Helper\Data::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getShippingPrice', 'displayShippingPriceIncludingTax', 'displayShippingBothPrices',
@@ -69,7 +71,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->priceObj = $objectManager->getObject(
-            'Magento\Tax\Block\Checkout\Shipping\Price',
+            \Magento\Tax\Block\Checkout\Shipping\Price::class,
             [
                 'checkoutSession' => $checkoutSession,
                 'taxHelper' => $this->taxHelper,
@@ -84,7 +86,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setupShippingRate($shippingPrice)
     {
-        $shippingRateMock = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address\Rate')
+        $shippingRateMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Rate::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPrice', '__wakeup'])
             ->getMock();

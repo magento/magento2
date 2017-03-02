@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Control;
@@ -144,7 +144,7 @@ class ActionPool implements ActionPoolInterface
     protected function createContainer($key, UiComponentInterface $view)
     {
         $container = $this->context->getPageLayout()->createBlock(
-            'Magento\Ui\Component\Control\Container',
+            \Magento\Ui\Component\Control\Container::class,
             'container-' . $view->getName() . '-' . $key,
             [
                 'data' => [

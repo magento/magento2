@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Setup\Test\TestCase\ExtensionMultipleTest"
+              summary="Multiple Install Extensions">
+        <variation name="PerformMultipleInstallExtensions">
+            <data name="needAuthentication" xsi:type="boolean">false</data>
+            <data name="extensions" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">firstExtension</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="dataset" xsi:type="string">secondExtension</item>
+                </item>
+            </data>
+        </variation>
+    </testCase>
+</config>

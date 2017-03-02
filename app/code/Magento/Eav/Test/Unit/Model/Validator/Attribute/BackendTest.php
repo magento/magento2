@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Validator\Attribute;
@@ -20,7 +20,7 @@ class BackendTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->model = new \Magento\Eav\Model\Validator\Attribute\Backend();
-        $this->entityMock = $this->getMock('\Magento\Framework\Model\AbstractModel', [], [], '', false);
+        $this->entityMock = $this->getMock(\Magento\Framework\Model\AbstractModel::class, [], [], '', false);
     }
 
     /**
@@ -30,7 +30,7 @@ class BackendTest extends \PHPUnit_Framework_TestCase
     public function testisValidIfProvidedModelIsIncorrect()
     {
         $this->model->isValid(
-            $this->getMock('\Magento\Framework\DataObject', [], [], '', false)
+            $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false)
         );
     }
 
@@ -40,7 +40,7 @@ class BackendTest extends \PHPUnit_Framework_TestCase
      */
     public function testisValidIfProvidedResourceModelIsIncorrect()
     {
-        $resourceMock = $this->getMock('\Magento\Framework\DataObject', [], [], '', false);
+        $resourceMock = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
         $this->entityMock->expects($this->once())->method('getResource')->willReturn($resourceMock);
         $this->model->isValid($this->entityMock);
     }
@@ -48,14 +48,14 @@ class BackendTest extends \PHPUnit_Framework_TestCase
     public function testisValidIfAttributeValueNotValid()
     {
         $exceptionMessage = __('The value of attribute not valid');
-        $attributeMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute', [], [], '', false);
-        $resourceMock = $this->getMock('\Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);
+        $attributeMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, [], [], '', false);
+        $resourceMock = $this->getMock(\Magento\Eav\Model\Entity\AbstractEntity::class, [], [], '', false);
         $this->entityMock->expects($this->once())->method('getResource')->willReturn($resourceMock);
 
         $resourceMock->expects($this->once())->method('loadAllAttributes')->with($this->entityMock)->willReturnSelf();
         $resourceMock->expects($this->once())->method('getAttributesByCode')->willReturn([$attributeMock]);
 
-        $backendMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend');
+        $backendMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class);
         $attributeMock->expects($this->once())->method('getBackend')->willReturn($backendMock);
 
         $backendMock->expects($this->once())
@@ -68,14 +68,14 @@ class BackendTest extends \PHPUnit_Framework_TestCase
 
     public function testisValidIfValidationResultIsFalse()
     {
-        $attributeMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute', [], [], '', false);
-        $resourceMock = $this->getMock('\Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);
+        $attributeMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, [], [], '', false);
+        $resourceMock = $this->getMock(\Magento\Eav\Model\Entity\AbstractEntity::class, [], [], '', false);
         $this->entityMock->expects($this->once())->method('getResource')->willReturn($resourceMock);
 
         $resourceMock->expects($this->once())->method('loadAllAttributes')->with($this->entityMock)->willReturnSelf();
         $resourceMock->expects($this->once())->method('getAttributesByCode')->willReturn([$attributeMock]);
 
-        $backendMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend');
+        $backendMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class);
         $backendMock->expects($this->once())->method('validate')->with($this->entityMock)->willReturn(false);
 
         $attributeMock->expects($this->once())->method('getBackend')->willReturn($backendMock);
@@ -86,14 +86,14 @@ class BackendTest extends \PHPUnit_Framework_TestCase
 
     public function testisValidIfValidationResultIsString()
     {
-        $attributeMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute', [], [], '', false);
-        $resourceMock = $this->getMock('\Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);
+        $attributeMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, [], [], '', false);
+        $resourceMock = $this->getMock(\Magento\Eav\Model\Entity\AbstractEntity::class, [], [], '', false);
         $this->entityMock->expects($this->once())->method('getResource')->willReturn($resourceMock);
 
         $resourceMock->expects($this->once())->method('loadAllAttributes')->with($this->entityMock)->willReturnSelf();
         $resourceMock->expects($this->once())->method('getAttributesByCode')->willReturn([$attributeMock]);
 
-        $backendMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend');
+        $backendMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class);
         $backendMock->expects($this->once())->method('validate')->with($this->entityMock)->willReturn('string');
 
         $attributeMock->expects($this->once())->method('getBackend')->willReturn($backendMock);
@@ -104,14 +104,14 @@ class BackendTest extends \PHPUnit_Framework_TestCase
 
     public function testisValidSuccess()
     {
-        $attributeMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute', [], [], '', false);
-        $resourceMock = $this->getMock('\Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);
+        $attributeMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, [], [], '', false);
+        $resourceMock = $this->getMock(\Magento\Eav\Model\Entity\AbstractEntity::class, [], [], '', false);
         $this->entityMock->expects($this->once())->method('getResource')->willReturn($resourceMock);
 
         $resourceMock->expects($this->once())->method('loadAllAttributes')->with($this->entityMock)->willReturnSelf();
         $resourceMock->expects($this->once())->method('getAttributesByCode')->willReturn([$attributeMock]);
 
-        $backendMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend');
+        $backendMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class);
         $backendMock->expects($this->once())->method('validate')->with($this->entityMock)->willReturn(true);
         $attributeMock->expects($this->once())->method('getBackend')->willReturn($backendMock);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Search;
@@ -179,7 +179,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'name',
             [
                 'header' => __('Product'),
-                'renderer' => 'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Product',
+                'renderer' => \Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Product::class,
                 'index' => 'name'
             ]
         );
@@ -193,7 +193,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'currency_code' => $this->getStore()->getCurrentCurrencyCode(),
                 'rate' => $this->getStore()->getBaseCurrency()->getRate($this->getStore()->getCurrentCurrencyCode()),
                 'index' => 'price',
-                'renderer' => 'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Price'
+                'renderer' => \Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Price::class
             ]
         );
 
@@ -217,7 +217,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'filter' => false,
                 'sortable' => false,
                 'header' => __('Quantity'),
-                'renderer' => 'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty',
+                'renderer' => \Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty::class,
                 'name' => 'qty',
                 'inline_css' => 'qty',
                 'type' => 'input',

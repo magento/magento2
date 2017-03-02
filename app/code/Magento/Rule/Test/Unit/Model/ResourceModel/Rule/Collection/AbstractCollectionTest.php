@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,14 +45,24 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $_db;
 
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $connectionMock;
+
+    /**
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $selectMock;
+
     protected function setUp()
     {
-        $this->_entityFactoryMock = $this->getMock('Magento\Framework\Data\Collection\EntityFactoryInterface');
-        $this->_loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $this->_fetchStrategyMock = $this->getMock('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
-        $this->_managerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $this->_entityFactoryMock = $this->getMock(\Magento\Framework\Data\Collection\EntityFactoryInterface::class);
+        $this->_loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->_fetchStrategyMock = $this->getMock(\Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class);
+        $this->_managerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->_db = $this->getMockForAbstractClass(
-            '\Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -62,7 +72,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->abstractCollection = $this->getMockForAbstractClass(
-            '\Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection',
+            \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection::class,
             [
                 'entityFactory' => $this->_entityFactoryMock,
                 'logger' => $this->_loggerMock,
@@ -104,9 +114,9 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         $entityInfo['rule_id_field'] = 'rule_id';
         $entityInfo['associations_table'] = 'assoc_table';
 
-        $connection = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface');
-        $select = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
-        $collectionSelect = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
+        $connection = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $collectionSelect = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
 
         $connection->expects($this->any())
             ->method('select')
@@ -140,15 +150,39 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     public function testAddWebsiteFilter()
     {
         $this->_prepareAddFilterStubs();
-        $website = $this->getMock('\Magento\Store\Model\Website', ['getId', '__sleep', '__wakeup'], [], '', false);
+        $website = $this->getMock(\Magento\Store\Model\Website::class, ['getId', '__sleep', '__wakeup'], [], '', false);
 
         $website->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(1));
 
         $this->assertInstanceOf(
-            '\Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection',
+            \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection::class,
             $this->abstractCollection->addWebsiteFilter($website)
+        );
+    }
+
+    public function testAddWebsiteFilterArray()
+    {
+        $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->connectionMock->expects($this->atLeastOnce())
+            ->method('quoteInto')
+            ->with($this->equalTo('website. IN (?)'), $this->equalTo(['2', '3']))
+            ->willReturn(true);
+
+        $this->abstractCollection->expects($this->atLeastOnce())->method('getSelect')->willReturn($this->selectMock);
+        $this->abstractCollection->expects($this->atLeastOnce())->method('getConnection')
+            ->willReturn($this->connectionMock);
+
+        $this->assertInstanceOf(
+            \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection::class,
+            $this->abstractCollection->addWebsiteFilter(['2', '3'])
         );
     }
 

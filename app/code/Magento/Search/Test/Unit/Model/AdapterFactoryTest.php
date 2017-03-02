@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Model;
@@ -33,14 +33,14 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->helper = new ObjectManager($this);
 
-        $this->scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->adapterFactory = $this->helper->getObject(
-            '\Magento\Search\Model\AdapterFactory',
+            \Magento\Search\Model\AdapterFactory::class,
             [
                 'objectManager' => $this->objectManager,
                 'scopeConfig' => $this->scopeConfig,
@@ -57,7 +57,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('some_path'), $this->equalTo('some_scopeType'))
             ->will($this->returnValue('ClassName'));
 
-        $adapter = $this->getMockBuilder('\Magento\Framework\Search\AdapterInterface')
+        $adapter = $this->getMockBuilder(\Magento\Framework\Search\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -66,7 +66,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($adapter));
 
         $result = $this->adapterFactory->create(['input']);
-        $this->assertInstanceOf('\Magento\Framework\Search\AdapterInterface', $result);
+        $this->assertInstanceOf(\Magento\Framework\Search\AdapterInterface::class, $result);
     }
 
     /**

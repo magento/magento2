@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,12 +28,18 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->jsonHelperMock = $this->getMock('Magento\Framework\Json\Helper\Data', ['jsonEncode'], [], '', false);
-        $this->mathRandom = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
+        $this->jsonHelperMock = $this->getMock(
+            \Magento\Framework\Json\Helper\Data::class,
+            ['jsonEncode'],
+            [],
+            '',
+            false
+        );
+        $this->mathRandom = $this->getMock(\Magento\Framework\Math\Random::class, [], [], '', false);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
-            'Magento\Catalog\Pricing\Render\PriceBox',
+            \Magento\Catalog\Pricing\Render\PriceBox::class,
             [
                 'jsonHelper' => $this->jsonHelperMock,
                 'mathRandom' => $this->mathRandom,
@@ -79,7 +85,7 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCanDisplayQty($typeCode, $expected)
     {
-        $product = $this->getMock('Magento\Catalog\Model\Product', ['getTypeId', '__wakeup'], [], '', false);
+        $product = $this->getMock(\Magento\Catalog\Model\Product::class, ['getTypeId', '__wakeup'], [], '', false);
 
         $product->expects($this->once())
             ->method('getTypeId')

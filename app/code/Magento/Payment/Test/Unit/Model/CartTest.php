@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model;
@@ -20,9 +20,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
-        $this->_salesModelMock = $this->getMock('Magento\Payment\Model\Cart\SalesModel\SalesModelInterface');
-        $factoryMock = $this->getMock('Magento\Payment\Model\Cart\SalesModel\Factory', [], [], '', false);
+        $this->_eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->_salesModelMock = $this->getMock(\Magento\Payment\Model\Cart\SalesModel\SalesModelInterface::class);
+        $factoryMock = $this->getMock(\Magento\Payment\Model\Cart\SalesModel\Factory::class, [], [], '', false);
         $factoryMock->expects($this->once())->method('create')->will($this->returnValue($this->_salesModelMock));
 
         $this->_model = new \Magento\Payment\Model\Cart($factoryMock, $this->_eventManagerMock, null);

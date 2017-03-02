@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@
 
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Payment\Info;
@@ -106,6 +107,11 @@ class Payment extends Info implements OrderPaymentInterface
     protected $orderRepository;
 
     /**
+     * @var OrderStateResolverInterface
+     */
+    private $orderStateResolver;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -169,7 +175,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Payment');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Payment::class);
     }
 
     /**
@@ -626,42 +632,48 @@ class Payment extends Info implements OrderPaymentInterface
             $this->transactionManager->generateTransactionId($this, Transaction::TYPE_REFUND)
         );
 
-        // call refund from gateway if required
         $isOnline = false;
         $gateway = $this->getMethodInstance();
         $invoice = null;
-        if ($gateway->canRefund() && $creditmemo->getDoTransaction()) {
+        if ($gateway->canRefund()) {
             $this->setCreditmemo($creditmemo);
-            $invoice = $creditmemo->getInvoice();
-            if ($invoice) {
-                $isOnline = true;
-                $captureTxn = $this->transactionRepository->getByTransactionId(
-                    $invoice->getTransactionId(),
-                    $this->getId(),
-                    $this->getOrder()->getId()
-                );
-                if ($captureTxn) {
-                    $this->setTransactionIdsForRefund($captureTxn);
-                }
-                $this->setShouldCloseParentTransaction(true);
-                // TODO: implement multiple refunds per capture
-                try {
-                    $gateway->setStore(
-                        $this->getOrder()->getStoreId()
+            if ($creditmemo->getDoTransaction()) {
+                $invoice = $creditmemo->getInvoice();
+                if ($invoice) {
+                    $isOnline = true;
+                    $captureTxn = $this->transactionRepository->getByTransactionId(
+                        $invoice->getTransactionId(),
+                        $this->getId(),
+                        $this->getOrder()->getId()
                     );
-                    $this->setRefundTransactionId($invoice->getTransactionId());
-                    $gateway->refund($this, $baseAmountToRefund);
-
-                    $creditmemo->setTransactionId($this->getLastTransId());
-                } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    if (!$captureTxn) {
-                        throw new \Magento\Framework\Exception\LocalizedException(
-                            __('If the invoice was created offline, try creating an offline credit memo.'),
-                            $e
-                        );
+                    if ($captureTxn) {
+                        $this->setTransactionIdsForRefund($captureTxn);
                     }
-                    throw $e;
+                    $this->setShouldCloseParentTransaction(true);
+                    // TODO: implement multiple refunds per capture
+                    try {
+                        $gateway->setStore(
+                            $this->getOrder()->getStoreId()
+                        );
+                        $this->setRefundTransactionId($invoice->getTransactionId());
+                        $gateway->refund($this, $baseAmountToRefund);
+
+                        $creditmemo->setTransactionId($this->getLastTransId());
+                    } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                        if (!$captureTxn) {
+                            throw new \Magento\Framework\Exception\LocalizedException(
+                                __('If the invoice was created offline, try creating an offline credit memo.'),
+                                $e
+                            );
+                        }
+                        throw $e;
+                    }
                 }
+            } else if ($gateway->isOffline()) {
+                $gateway->setStore(
+                    $this->getOrder()->getStoreId()
+                );
+                $gateway->refund($this, $baseAmountToRefund);
             }
         }
 
@@ -692,7 +704,12 @@ class Payment extends Info implements OrderPaymentInterface
         }
         $message = $message = $this->prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $this->setOrderStateProcessing($message);
+        $orderState = $this->getOrderStateResolver()->getStateForOrder($this->getOrder());
+        $this->getOrder()
+            ->addStatusHistoryComment(
+                $message,
+                $this->getOrder()->getConfig()->getStateDefaultStatus($orderState)
+            )->setIsCustomerNotified($creditmemo->getOrder()->getCustomerNoteNotify());
         $this->_eventManager->dispatch(
             'sales_order_payment_refund',
             ['payment' => $this, 'creditmemo' => $creditmemo]
@@ -759,7 +776,7 @@ class Payment extends Info implements OrderPaymentInterface
             true
         )->setAutomaticallyCreated(
             true
-        )->register()->addComment(
+        )->addComment(
             __('The credit memo has been created automatically.')
         );
         $creditmemo->save();
@@ -1272,7 +1289,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function isCaptureFinal($amountToCapture)
     {
-        $total = $this->getOrder()->getTotalDue();
+        $total = $this->getOrder()->getBaseTotalDue();
         return $this->formatAmount($total, true) == $this->formatAmount($amountToCapture, true);
     }
 
@@ -1386,6 +1403,19 @@ class Payment extends Info implements OrderPaymentInterface
             }
         }
         return false;
+    }
+
+    /**
+     * @deprecated
+     * @return OrderStateResolverInterface
+     */
+    private function getOrderStateResolver()
+    {
+        if ($this->orderStateResolver === null) {
+            $this->orderStateResolver = ObjectManager::getInstance()->get(OrderStateResolverInterface::class);
+        }
+
+        return$this->orderStateResolver;
     }
 
     //@codeCoverageIgnoreStart
@@ -1703,6 +1733,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_issue
      *
      * @return string
+     * @deprecated unused
      */
     public function getCcSsIssue()
     {
@@ -1713,6 +1744,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_month
      *
      * @return string
+     * @deprecated unused
      */
     public function getCcSsStartMonth()
     {
@@ -1723,6 +1755,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_year
      *
      * @return string
+     * @deprecated unused
      */
     public function getCcSsStartYear()
     {
@@ -2087,6 +2120,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @deprecated unused
      */
     public function setCcSsStartYear($ccSsStartYear)
     {
@@ -2175,6 +2209,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @deprecated unused
      */
     public function setCcSsStartMonth($ccSsStartMonth)
     {
@@ -2279,6 +2314,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
+     * @deprecated unused
      */
     public function setCcSsIssue($ccSsIssue)
     {

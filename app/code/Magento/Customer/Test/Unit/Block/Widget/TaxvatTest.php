@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,9 +31,9 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->attribute = $this->getMockBuilder('\Magento\Customer\Api\Data\AttributeMetadataInterface')
+        $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
-        $this->customerMetadata = $this->getMockBuilder('\Magento\Customer\Api\CustomerMetadataInterface')
+        $this->customerMetadata = $this->getMockBuilder(\Magento\Customer\Api\CustomerMetadataInterface::class)
             ->getMockForAbstractClass();
         $this->customerMetadata->expects(
             $this->any()
@@ -46,8 +46,8 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_block = new \Magento\Customer\Block\Widget\Taxvat(
-            $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false),
-            $this->getMock('Magento\Customer\Helper\Address', [], [], '', false),
+            $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false),
+            $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false),
             $this->customerMetadata
         );
     }

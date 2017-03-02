@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model;
@@ -16,7 +16,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
         $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Design\ThemeInterface'
+            \Magento\Framework\View\Design\ThemeInterface::class
         );
         $themeModel->setData($this->_getThemeValidData());
 
@@ -49,7 +49,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\Design\ThemeInterface'
+            \Magento\Framework\View\Design\ThemeInterface::class
         );
         $collection = $theme->getCollection()
             ->addTypeFilter(\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL);
@@ -73,12 +73,12 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
         $registration = $objectManager->get(
-            'Magento\Theme\Model\Theme\Registration'
+            \Magento\Theme\Model\Theme\Registration::class
         );
         $registration->register();
         /** @var \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory */
         $themeFactory = $objectManager->get(
-            'Magento\Framework\View\Design\Theme\FlyweightFactory'
+            \Magento\Framework\View\Design\Theme\FlyweightFactory::class
         );
         $theme = $themeFactory->create('Vendor_FrameworkThemeTest/custom_theme');
         $this->assertCount(2, $theme->getInheritedThemes());

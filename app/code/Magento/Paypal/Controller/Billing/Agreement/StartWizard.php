@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Billing\Agreement;
@@ -15,20 +15,20 @@ class StartWizard extends \Magento\Paypal\Controller\Billing\Agreement
      */
     public function execute()
     {
-        $agreement = $this->_objectManager->create('Magento\Paypal\Model\Billing\Agreement');
+        $agreement = $this->_objectManager->create(\Magento\Paypal\Model\Billing\Agreement::class);
         $paymentCode = $this->getRequest()->getParam('payment_method');
         if ($paymentCode) {
             try {
                 $agreement->setStoreId(
-                    $this->_objectManager->get('Magento\Store\Model\StoreManager')->getStore()->getId()
+                    $this->_objectManager->get(\Magento\Store\Model\StoreManager::class)->getStore()->getId()
                 )->setMethodCode(
                     $paymentCode
                 )->setReturnUrl(
                     $this->_objectManager->create(
-                        'Magento\Framework\UrlInterface'
+                        \Magento\Framework\UrlInterface::class
                     )->getUrl('*/*/returnWizard', ['payment_method' => $paymentCode])
                 )->setCancelUrl(
-                    $this->_objectManager->create('Magento\Framework\UrlInterface')
+                    $this->_objectManager->create(\Magento\Framework\UrlInterface::class)
                         ->getUrl('*/*/cancelWizard', ['payment_method' => $paymentCode])
                 );
 

@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
-use Magento\Framework\App\ResourceConnection;
+use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
 
 /**
  * Class TableBuilder
@@ -31,6 +31,11 @@ class TableBuilder
      * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
+
+    /**
+     * @var BuilderInterfaceFactory
+     */
+    private $tableBuilderFactory;
 
     /**
      * Check whether builder was executed
@@ -123,17 +128,27 @@ class TableBuilder
         $valueTables = [];
         if (!empty($columns)) {
             $valueTableName = $tableName . $valueFieldSuffix;
-            $temporaryTable = $this->_connection->newTable($tableName);
-            $valueTemporaryTable = $this->_connection->newTable($valueTableName);
+            $temporaryTableBuilder = $this->getTableBuilderFactory()->create(
+                [
+                    'connection' => $this->_connection,
+                    'tableName' => $tableName
+                ]
+            );
+            $valueTemporaryTableBuilder = $this->getTableBuilderFactory()->create(
+                [
+                    'connection' => $this->_connection,
+                    'tableName' => $valueTableName
+                ]
+            );
             $flatColumns = $this->_productIndexerHelper->getFlatColumns();
 
-            $temporaryTable->addColumn('entity_id', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER);
+            $temporaryTableBuilder->addColumn('entity_id', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER);
 
-            $temporaryTable->addColumn('type_id', \Magento\Framework\DB\Ddl\Table::TYPE_TEXT);
+            $temporaryTableBuilder->addColumn('type_id', \Magento\Framework\DB\Ddl\Table::TYPE_TEXT);
 
-            $temporaryTable->addColumn('attribute_set_id', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER);
+            $temporaryTableBuilder->addColumn('attribute_set_id', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER);
 
-            $valueTemporaryTable->addColumn('entity_id', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER);
+            $valueTemporaryTableBuilder->addColumn('entity_id', \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER);
 
             /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
             foreach ($columns as $columnName => $attribute) {
@@ -145,7 +160,7 @@ class TableBuilder
                     $column = $column[$attributeCode];
                 }
 
-                $temporaryTable->addColumn(
+                $temporaryTableBuilder->addColumn(
                     $columnName,
                     $column['type'],
                     isset($column['length']) ? $column['length'] : null
@@ -154,7 +169,7 @@ class TableBuilder
                 $columnValueName = $attributeCode . $valueFieldSuffix;
                 if (isset($flatColumns[$columnValueName])) {
                     $columnValue = $flatColumns[$columnValueName];
-                    $valueTemporaryTable->addColumn(
+                    $valueTemporaryTableBuilder->addColumn(
                         $columnValueName,
                         $columnValue['type'],
                         isset($columnValue['length']) ? $columnValue['length'] : null
@@ -162,11 +177,11 @@ class TableBuilder
                 }
             }
             $this->_connection->dropTemporaryTable($tableName);
-            $this->_connection->createTemporaryTable($temporaryTable);
+            $this->_connection->createTemporaryTable($temporaryTableBuilder->getTable());
 
-            if (count($valueTemporaryTable->getColumns()) > 1) {
+            if (count($valueTemporaryTableBuilder->getTable()->getColumns()) > 1) {
                 $this->_connection->dropTemporaryTable($valueTableName);
-                $this->_connection->createTemporaryTable($valueTemporaryTable);
+                $this->_connection->createTemporaryTable($valueTemporaryTableBuilder->getTable());
                 $valueTables[$valueTableName] = $valueTableName;
             }
         }
@@ -197,7 +212,8 @@ class TableBuilder
         if (!empty($columns)) {
             $select = $this->_connection->select();
             $temporaryEntityTable = $this->_getTemporaryTableName($tableName);
-            $idsColumns = ['entity_id', 'type_id', 'attribute_set_id'];
+            $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+            $idsColumns = array_unique([$metadata->getLinkField(), 'entity_id', 'type_id', 'attribute_set_id']);
 
             $columns = array_merge($idsColumns, array_keys($columns));
 
@@ -261,7 +277,7 @@ class TableBuilder
                 );
                 $temporaryTableName = $this->_getTemporaryTableName($tableName);
                 $temporaryValueTableName = $temporaryTableName . $valueFieldSuffix;
-                $keyColumn = ['entity_id'];
+                $keyColumn = array_unique([$metadata->getLinkField(), 'entity_id']);
                 $columns = array_merge($keyColumn, array_keys($columnsList));
                 $valueColumns = $keyColumn;
                 $flatColumns = $this->_productIndexerHelper->getFlatColumns();
@@ -334,13 +350,26 @@ class TableBuilder
     }
 
     /**
+     * @return BuilderInterfaceFactory
+     */
+    private function getTableBuilderFactory()
+    {
+        if (null === $this->tableBuilderFactory) {
+            $this->tableBuilderFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(BuilderInterfaceFactory::class);
+        }
+
+        return $this->tableBuilderFactory;
+    }
+
+    /**
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

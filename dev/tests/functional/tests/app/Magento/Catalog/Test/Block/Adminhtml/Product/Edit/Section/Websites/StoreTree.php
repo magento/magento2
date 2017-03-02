@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Typified element class for store tree element
+ * Typified element class for store tree element.
  */
 class StoreTree extends SimpleElement
 {
@@ -19,14 +19,14 @@ class StoreTree extends SimpleElement
      *
      * @var string
      */
-    protected $website = './/input[contains(@name, "product[website_ids]")]';
+    protected $website = './/label[contains(text(), "%s")]';
 
     /**
      * Selector for selected website checkbox.
      *
      * @var string
      */
-    protected $selectedWebsite = './/input[contains(@name, "product[website_ids][%d]") and not(@value="0")]/../label';
+    protected $selectedWebsite = '(.//input[contains(@name, "product[website_ids]") and not(@value="0")])[%d]/../label';
 
     /**
      * Set value.
@@ -37,6 +37,8 @@ class StoreTree extends SimpleElement
      */
     public function setValue($values)
     {
+        $this->clearValue();
+
         $values = is_array($values) ? $values : [$values];
         foreach ($values as $value) {
             $website = $this->find(sprintf($this->website, $value), Locator::SELECTOR_XPATH);
@@ -66,5 +68,17 @@ class StoreTree extends SimpleElement
             $website = $this->find(sprintf($this->selectedWebsite, $count), Locator::SELECTOR_XPATH);
         }
         return $values;
+    }
+
+    /**
+     * Clear selected checkboxes.
+     *
+     * @return void
+     */
+    private function clearValue()
+    {
+        foreach ($this->getValue() as $value) {
+            $this->find(sprintf($this->website, $value), Locator::SELECTOR_XPATH)->click();
+        }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Test\Unit\Validator;
@@ -32,7 +32,7 @@ class ContextAggregationTest extends \PHPUnit_Framework_TestCase
             PHP_EOL .
             '\ClassFirst already exists in context object';
 
-        $this->setExpectedException('\Magento\Framework\Exception\ValidatorException', $message);
+        $this->setExpectedException(\Magento\Framework\Exception\ValidatorException::class, $message);
         $this->_model->validate('ClassArgumentAlreadyInjectedInContext');
     }
 
@@ -53,7 +53,7 @@ class ContextAggregationTest extends \PHPUnit_Framework_TestCase
             PHP_EOL .
             '\\InterfaceFirst already exists in context object';
 
-        $this->setExpectedException('\Magento\Framework\Exception\ValidatorException', $message);
+        $this->setExpectedException(\Magento\Framework\Exception\ValidatorException::class, $message);
         $this->_model->validate('ClassArgumentWithAlreadyInjectedInterface');
     }
 }

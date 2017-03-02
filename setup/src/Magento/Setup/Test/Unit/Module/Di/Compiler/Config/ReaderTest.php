@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Compiler\Config;
@@ -47,17 +47,20 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->diContainerConfig = $this->getMock('Magento\Framework\ObjectManager\ConfigInterface', [], [], '', false);
-        $this->configLoader = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
+        $this->diContainerConfig =
+            $this->getMock(\Magento\Framework\ObjectManager\ConfigInterface::class, [], [], '', false);
+        $this->configLoader =
+            $this->getMock(\Magento\Framework\App\ObjectManager\ConfigLoader::class, [], [], '', false);
+
         $this->argumentsResolverFactory = $this->getMock(
-            'Magento\Setup\Module\Di\Compiler\ArgumentsResolverFactory',
+            \Magento\Setup\Module\Di\Compiler\ArgumentsResolverFactory::class,
             [],
             [],
             '',
             false
         );
         $this->argumentsResolver = $this->getMock(
-            'Magento\Setup\Module\Di\Compiler\ArgumentsResolver',
+            \Magento\Setup\Module\Di\Compiler\ArgumentsResolver::class,
             [],
             [],
             '',
@@ -67,13 +70,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->argumentsResolver);
         $this->classReaderDecorator = $this->getMock(
-            'Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator',
+            \Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator::class,
             [],
             [],
             '',
             false
         );
-        $this->typeReader = $this->getMock('Magento\Setup\Module\Di\Code\Reader\Type', [], [], '', false);
+        $this->typeReader = $this->getMock(\Magento\Setup\Module\Di\Code\Reader\Type::class, [], [], '', false);
 
         $this->model = new \Magento\Setup\Module\Di\Compiler\Config\Reader(
             $this->diContainerConfig,

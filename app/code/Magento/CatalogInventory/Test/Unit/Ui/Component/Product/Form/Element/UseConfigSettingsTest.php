@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Ui\Component\Product\Form\Element;
@@ -30,7 +30,7 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $processorMock = $this->getMock(
-            'Magento\Framework\View\Element\UiComponent\Processor',
+            \Magento\Framework\View\Element\UiComponent\Processor::class,
             [],
             [],
             '',
@@ -39,7 +39,7 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
         );
         $processorMock->expects($this->once())
             ->method('register');
-        $this->contextMock = $this->getMock('Magento\Framework\View\Element\UiComponent\ContextInterface');
+        $this->contextMock = $this->getMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getProcessor')
             ->willReturn($processorMock);

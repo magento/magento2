@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -24,6 +24,11 @@ class General extends AbstractModifier
      * @var ArrayManager
      */
     protected $arrayManager;
+
+    /**
+     * @var \Magento\Framework\Locale\CurrencyInterface
+     */
+    private $localeCurrency;
 
     /**
      * @param LocatorInterface $locator
@@ -310,17 +315,6 @@ class General extends AbstractModifier
             $importsConfig = [
                 'mask' => $this->locator->getStore()->getConfig('catalog/fields_masks/' . $listener),
                 'component' => 'Magento_Catalog/js/components/import-handler',
-                'imports' => [
-                    'handleNameChanges' => '${$.provider}:data.product.name',
-                    'handleDescriptionChanges' => '${$.provider}:data.product.description',
-                    'handleSkuChanges' => '${$.provider}:data.product.sku',
-                    'handleColorChanges' => '${$.provider}:data.product.color',
-                    'handleCountryChanges' => '${$.provider}:data.product.country_of_manufacture',
-                    'handleGenderChanges' => '${$.provider}:data.product.gender',
-                    'handleMaterialChanges' => '${$.provider}:data.product.material',
-                    'handleShortDescriptionChanges' => '${$.provider}:data.product.short_description',
-                    'handleSizeChanges' => '${$.provider}:data.product.size'
-                ],
                 'allowImport' => !$this->locator->getProduct()->getId(),
             ];
 
@@ -349,5 +343,62 @@ class General extends AbstractModifier
                 'valueUpdate' => 'keyup'
             ]
         );
+    }
+
+    /**
+     * The getter function to get the locale currency for real application code
+     *
+     * @return \Magento\Framework\Locale\CurrencyInterface
+     *
+     * @deprecated
+     */
+    private function getLocaleCurrency()
+    {
+        if ($this->localeCurrency === null) {
+            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Locale\CurrencyInterface::class);
+        }
+        return $this->localeCurrency;
+    }
+
+    /**
+     * Format price according to the locale of the currency
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatPrice($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $store = $this->locator->getStore();
+        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+
+        return $value;
+    }
+
+    /**
+     * Format number according to the locale of the currency and precision of input
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatNumber($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $value = (float)$value;
+        $precision = strlen(substr(strrchr($value, "."), 1));
+        $store = $this->locator->getStore();
+        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL,
+                                                'precision' => $precision]);
+
+        return $value;
     }
 }

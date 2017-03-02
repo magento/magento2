@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
@@ -20,10 +20,10 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
-        $this->_block = $this->_layout->addBlock('Magento\Wishlist\Block\Customer\Wishlist\Item\Column', 'test');
-        $this->_layout->addBlock('Magento\Framework\View\Element\Text', 'child', 'test');
+        $this->_block = $this->_layout->addBlock(\Magento\Wishlist\Block\Customer\Wishlist\Item\Column::class, 'test');
+        $this->_layout->addBlock(\Magento\Framework\View\Element\Text::class, 'child', 'test');
     }
 
     /**

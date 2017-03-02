@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget;
@@ -18,13 +18,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(
-            'Magento\Framework\View\DesignInterface'
+            \Magento\Framework\View\DesignInterface::class
         )->setArea(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         )->setDefaultDesignTheme();
-        $layout = $objectManager->create('Magento\Framework\View\Layout');
-        $formBlock = $layout->addBlock('Magento\Backend\Block\Widget\Form');
-        $fieldSet = $objectManager->create('Magento\Framework\Data\Form\Element\Fieldset');
+        $layout = $objectManager->create(\Magento\Framework\View\Layout::class);
+        $formBlock = $layout->addBlock(\Magento\Backend\Block\Widget\Form::class);
+        $fieldSet = $objectManager->create(\Magento\Framework\Data\Form\Element\Fieldset::class);
         $arguments = [
             'data' => [
                 'attribute_code' => 'date',
@@ -33,14 +33,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 'frontend_label' => 'Date',
             ],
         ];
-        $attributes = [$objectManager->create('Magento\Eav\Model\Entity\Attribute', $arguments)];
-        $method = new \ReflectionMethod('Magento\Backend\Block\Widget\Form', '_setFieldset');
+        $attributes = [$objectManager->create(\Magento\Eav\Model\Entity\Attribute::class, $arguments)];
+        $method = new \ReflectionMethod(\Magento\Backend\Block\Widget\Form::class, '_setFieldset');
         $method->setAccessible(true);
         $method->invoke($formBlock, $attributes, $fieldSet);
         $fields = $fieldSet->getElements();
 
         $this->assertEquals(1, count($fields));
-        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Date', $fields[0]);
+        $this->assertInstanceOf(\Magento\Framework\Data\Form\Element\Date::class, $fields[0]);
         $this->assertNotEmpty($fields[0]->getDateFormat());
     }
 }

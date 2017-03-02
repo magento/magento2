@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Controller\Adminhtml\Email;
@@ -13,7 +13,7 @@ class TemplateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     public function testDefaultTemplateAction()
     {
         /** @var $formKey \Magento\Framework\Data\Form\FormKey */
-        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
+        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
         $post = [
             'form_key' => $formKey->getFormKey(),
             'code' => 'customer_password_forgot_email_template',

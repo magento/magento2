@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model\Template;
@@ -49,7 +49,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_dataStorage = $this->getMock(
-            'Magento\Email\Model\Template\Config\Data',
+            \Magento\Email\Model\Template\Config\Data::class,
             ['get'],
             [],
             '',
@@ -63,27 +63,33 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(require __DIR__ . '/Config/_files/email_templates_merged.php')
         );
         $this->_moduleReader = $this->getMock(
-            'Magento\Framework\Module\Dir\Reader',
+            \Magento\Framework\Module\Dir\Reader::class,
             ['getModuleDir'],
             [],
             '',
             false
         );
         $this->viewFileSystem = $this->getMock(
-            '\Magento\Framework\View\FileSystem',
+            \Magento\Framework\View\FileSystem::class,
             ['getEmailTemplateFileName'],
             [],
             '',
             false
         );
         $this->themePackages = $this->getMock(
-            '\Magento\Framework\View\Design\Theme\ThemePackageList',
+            \Magento\Framework\View\Design\Theme\ThemePackageList::class,
             [],
             [],
             '',
             false
         );
-        $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $this->readDirFactory = $this->getMock(
+            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new Config(
             $this->_dataStorage,
             $this->_moduleReader,
@@ -100,7 +106,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $themes = [];
         $i = 1;
         foreach ($templates as $templateData) {
-            $theme = $this->getMock('\Magento\Framework\View\Design\Theme\ThemePackage', [], [], '', false);
+            $theme = $this->getMock(\Magento\Framework\View\Design\Theme\ThemePackage::class, [], [], '', false);
             $theme->expects($this->any())
                 ->method('getArea')
                 ->willReturn($templateData['area']);
@@ -119,7 +125,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->themePackages->expects($this->exactly(count($templates)))
             ->method('getThemes')
             ->willReturn($themes);
-        $dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $this->readDirFactory->expects($this->any())
             ->method('create')
             ->willReturn($dir);
@@ -159,7 +165,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $template = $templates[$templateId];
 
         $foundThemePath = 'Vendor/custom_theme';
-        $theme = $this->getMock('\Magento\Framework\View\Design\Theme\ThemePackage', [], [], '', false);
+        $theme = $this->getMock(\Magento\Framework\View\Design\Theme\ThemePackage::class, [], [], '', false);
         $theme->expects($this->any())
             ->method('getArea')
             ->willReturn('frontend');
@@ -175,7 +181,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->themePackages->expects($this->once())
             ->method('getThemes')
             ->willReturn([$theme]);
-        $dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $this->readDirFactory->expects($this->once())
             ->method('create')
             ->with('/theme/path')
@@ -333,7 +339,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $argument = null
     ) {
         $this->setExpectedException('UnexpectedValueException', $expectedException);
-        $dataStorage = $this->getMock('Magento\Email\Model\Template\Config\Data', ['get'], [], '', false);
+        $dataStorage = $this->getMock(\Magento\Email\Model\Template\Config\Data::class, ['get'], [], '', false);
         $dataStorage->expects(
             $this->atLeastOnce()
         )->method(

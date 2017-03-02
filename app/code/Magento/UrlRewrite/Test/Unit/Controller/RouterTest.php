@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\UrlRewrite\Controller\Router */
@@ -38,17 +41,22 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->actionFactory = $this->getMock('Magento\Framework\App\ActionFactory', [], [], '', false);
-        $this->url = $this->getMock('Magento\Framework\UrlInterface');
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->response = $this->getMock('Magento\Framework\App\ResponseInterface', ['setRedirect', 'sendResponse']);
-        $this->request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
+        $this->actionFactory = $this->getMock(\Magento\Framework\App\ActionFactory::class, [], [], '', false);
+        $this->url = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->response = $this->getMock(
+            \Magento\Framework\App\ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
+        );
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->urlFinder = $this->getMock('Magento\UrlRewrite\Model\UrlFinderInterface');
-        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $this->urlFinder = $this->getMock(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
+        $this->store = $this->getMockBuilder(
+            \Magento\Store\Model\Store::class
+        )->disableOriginalConstructor()->getMock();
 
         $this->router = (new ObjectManager($this))->getObject(
-            'Magento\UrlRewrite\Controller\Router',
+            \Magento\UrlRewrite\Controller\Router::class,
             [
                 'actionFactory' => $this->actionFactory,
                 'url' => $this->url,
@@ -73,17 +81,17 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->any())->method('getPathInfo')->will($this->returnValue('request-path'));
         $this->request->expects($this->any())->method('getParam')->with('___from_store')
             ->will($this->returnValue('old-store'));
-        $oldStore = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $oldStore = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
         $this->storeManager->expects($this->any())->method('getStore')
             ->will($this->returnValueMap([['old-store', $oldStore], [null, $this->store]]));
         $oldStore->expects($this->any())->method('getId')->will($this->returnValue('old-store-id'));
         $this->store->expects($this->any())->method('getId')->will($this->returnValue('current-store-id'));
-        $oldUrlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+        $oldUrlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
         $oldUrlRewrite->expects($this->any())->method('getEntityType')->will($this->returnValue('entity-type'));
         $oldUrlRewrite->expects($this->any())->method('getEntityId')->will($this->returnValue('entity-id'));
         $oldUrlRewrite->expects($this->any())->method('getRequestPath')->will($this->returnValue('old-request-path'));
-        $urlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+        $urlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
         $urlRewrite->expects($this->any())->method('getRequestPath')->will($this->returnValue('new-request-path'));
 
@@ -108,7 +116,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->with('new-request-path', OptionProvider::TEMPORARY);
         $this->request->expects($this->once())->method('setDispatched')->with(true);
         $this->actionFactory->expects($this->once())->method('create')
-            ->with('Magento\Framework\App\Action\Redirect');
+            ->with(\Magento\Framework\App\Action\Redirect::class);
 
         $this->router->match($this->request);
     }
@@ -118,17 +126,17 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->any())->method('getPathInfo')->will($this->returnValue('request-path'));
         $this->request->expects($this->any())->method('getParam')->with('___from_store')
             ->will($this->returnValue('old-store'));
-        $oldStore = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $oldStore = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
         $this->storeManager->expects($this->any())->method('getStore')
             ->will($this->returnValueMap([['old-store', $oldStore], [null, $this->store]]));
         $oldStore->expects($this->any())->method('getId')->will($this->returnValue('old-store-id'));
         $this->store->expects($this->any())->method('getId')->will($this->returnValue('current-store-id'));
-        $oldUrlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+        $oldUrlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
         $oldUrlRewrite->expects($this->any())->method('getEntityType')->will($this->returnValue('entity-type'));
         $oldUrlRewrite->expects($this->any())->method('getEntityId')->will($this->returnValue('entity-id'));
         $oldUrlRewrite->expects($this->any())->method('getRequestPath')->will($this->returnValue('request-path'));
-        $urlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+        $urlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
         $urlRewrite->expects($this->any())->method('getRequestPath')->will($this->returnValue('request-path'));
 
@@ -140,17 +148,17 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->any())->method('getPathInfo')->will($this->returnValue('request-path'));
         $this->request->expects($this->any())->method('getParam')->with('___from_store')
             ->will($this->returnValue('old-store'));
-        $oldStore = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $oldStore = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
         $this->storeManager->expects($this->any())->method('getStore')
             ->will($this->returnValueMap([['old-store', $oldStore], [null, $this->store]]));
         $oldStore->expects($this->any())->method('getId')->will($this->returnValue('old-store-id'));
         $this->store->expects($this->any())->method('getId')->will($this->returnValue('current-store-id'));
-        $oldUrlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+        $oldUrlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
         $oldUrlRewrite->expects($this->any())->method('getEntityType')->will($this->returnValue('entity-type'));
         $oldUrlRewrite->expects($this->any())->method('getEntityId')->will($this->returnValue('entity-id'));
         $oldUrlRewrite->expects($this->any())->method('getRequestPath')->will($this->returnValue('old-request-path'));
-        $urlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+        $urlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
         $urlRewrite->expects($this->any())->method('getRequestPath')->will($this->returnValue('old-request-path'));
 
@@ -178,7 +186,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testMatchWithRedirect()
     {
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
-        $urlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+        $urlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
         $urlRewrite->expects($this->any())->method('getRedirectType')->will($this->returnValue('redirect-code'));
         $urlRewrite->expects($this->any())->method('getTargetPath')->will($this->returnValue('target-path'));
@@ -189,7 +197,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('new-target-path'));
         $this->request->expects($this->once())->method('setDispatched')->with(true);
         $this->actionFactory->expects($this->once())->method('create')
-            ->with('Magento\Framework\App\Action\Redirect');
+            ->with(\Magento\Framework\App\Action\Redirect::class);
 
         $this->router->match($this->request);
     }
@@ -197,7 +205,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testMatchWithCustomInternalRedirect()
     {
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
-        $urlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+        $urlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
         $urlRewrite->expects($this->any())->method('getEntityType')->will($this->returnValue('custom'));
         $urlRewrite->expects($this->any())->method('getRedirectType')->will($this->returnValue('redirect-code'));
@@ -207,7 +215,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->url->expects($this->once())->method('getUrl')->with('', ['_direct' => 'target-path'])->willReturn('a');
         $this->request->expects($this->once())->method('setDispatched')->with(true);
         $this->actionFactory->expects($this->once())->method('create')
-            ->with('Magento\Framework\App\Action\Redirect');
+            ->with(\Magento\Framework\App\Action\Redirect::class);
 
         $this->router->match($this->request);
     }
@@ -219,7 +227,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testMatchWithCustomExternalRedirect($targetPath)
     {
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
-        $urlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+        $urlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
         $urlRewrite->expects($this->any())->method('getEntityType')->will($this->returnValue('custom'));
         $urlRewrite->expects($this->any())->method('getRedirectType')->will($this->returnValue('redirect-code'));
@@ -229,7 +237,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->url->expects($this->never())->method('getUrl');
         $this->request->expects($this->once())->method('setDispatched')->with(true);
         $this->actionFactory->expects($this->once())->method('create')
-            ->with('Magento\Framework\App\Action\Redirect');
+            ->with(\Magento\Framework\App\Action\Redirect::class);
 
         $this->router->match($this->request);
     }
@@ -248,7 +256,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testMatch()
     {
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
-        $urlRewrite = $this->getMockBuilder('Magento\UrlRewrite\Service\V1\Data\UrlRewrite')
+        $urlRewrite = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
             ->disableOriginalConstructor()->getMock();
         $urlRewrite->expects($this->any())->method('getRedirectType')->will($this->returnValue(0));
         $urlRewrite->expects($this->any())->method('getTargetPath')->will($this->returnValue('target-path'));
@@ -258,7 +266,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())->method('setAlias')
             ->with(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, 'request-path');
         $this->actionFactory->expects($this->once())->method('create')
-            ->with('Magento\Framework\App\Action\Forward');
+            ->with(\Magento\Framework\App\Action\Forward::class);
 
         $this->router->match($this->request);
     }

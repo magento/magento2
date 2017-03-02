@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\AdminOrder;
@@ -37,28 +37,28 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->messageManagerMock = $this->getMock(
-            '\Magento\Framework\Message\Manager',
+            \Magento\Framework\Message\Manager::class,
             [],
             [],
             '',
             false
         );
         $this->loggerMock = $this->getMock(
-            '\Psr\Log\LoggerInterface',
+            \Psr\Log\LoggerInterface::class,
             [],
             [],
             '',
             false
         );
         $this->orderMock = $this->getMock(
-            '\Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             [],
             [],
             '',
             false
         );
         $this->orderSenderMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Sender\OrderSender',
+            \Magento\Sales\Model\Order\Email\Sender\OrderSender::class,
             [],
             [],
             '',

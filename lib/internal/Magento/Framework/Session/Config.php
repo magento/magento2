@@ -2,7 +2,7 @@
 /**
  * Session configuration object
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -15,6 +15,8 @@ use Magento\Framework\Session\SaveHandlerInterface;
 
 /**
  * Magento session configuration
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Config implements ConfigInterface
 {
@@ -292,7 +294,7 @@ class Config implements ConfigInterface
     {
         $validator = $this->_validatorFactory->create(
             [],
-            'Magento\Framework\Session\Config\Validator\CookieLifetimeValidator'
+            \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator::class
         );
         if ($validator->isValid($cookieLifetime)) {
             $this->setOption('session.cookie_lifetime', (int)$cookieLifetime);
@@ -325,7 +327,7 @@ class Config implements ConfigInterface
         $cookiePath = (string)$cookiePath;
         $validator = $this->_validatorFactory->create(
             [],
-            'Magento\Framework\Session\Config\Validator\CookiePathValidator'
+            \Magento\Framework\Session\Config\Validator\CookiePathValidator::class
         );
         if ($validator->isValid($cookiePath)) {
             $this->setOption('session.cookie_path', $cookiePath);
@@ -357,7 +359,7 @@ class Config implements ConfigInterface
     {
         $validator = $this->_validatorFactory->create(
             [],
-            'Magento\Framework\Session\Config\Validator\CookieDomainValidator'
+            \Magento\Framework\Session\Config\Validator\CookieDomainValidator::class
         );
         if ($validator->isValid($cookieDomain)) {
             $this->setOption('session.cookie_domain', $cookieDomain);

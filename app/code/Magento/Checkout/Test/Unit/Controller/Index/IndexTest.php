@@ -2,7 +2,7 @@
 /**
  * Test for \Magento\Checkout\Controller\Index\Index
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
@@ -104,23 +105,23 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     {
         // mock objects
         $this->objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->basicMock('\Magento\Framework\ObjectManagerInterface');
-        $this->dataMock = $this->basicMock('Magento\Checkout\Helper\Data');
-        $this->quoteMock = $this->basicMock('\Magento\Quote\Model\Quote');
-        $this->contextMock = $this->basicMock('\Magento\Framework\App\Action\Context');
-        $this->sessionMock = $this->basicMock('\Magento\Customer\Model\Session');
-        $this->onepageMock = $this->basicMock('\Magento\Checkout\Model\Type\Onepage');
-        $this->layoutMock = $this->basicMock('\Magento\Framework\View\Layout');
-        $this->requestMock = $this->basicMock('\Magento\Framework\App\RequestInterface');
-        $this->responseMock = $this->basicMock('\Magento\Framework\App\ResponseInterface');
-        $this->redirectMock = $this->basicMock('\Magento\Framework\App\Response\RedirectInterface');
-        $this->resultPageMock = $this->basicMock('\Magento\Framework\View\Result\Page');
-        $this->pageConfigMock = $this->basicMock('\Magento\Framework\View\Page\Config');
-        $this->titleMock = $this->basicMock('\Magento\Framework\View\Page\Title');
-        $this->url = $this->getMock('Magento\Framework\UrlInterface');
-        $this->resultRedirectMock = $this->basicMock('Magento\Framework\Controller\Result\Redirect');
+        $this->objectManagerMock = $this->basicMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->dataMock = $this->basicMock(\Magento\Checkout\Helper\Data::class);
+        $this->quoteMock = $this->basicMock(\Magento\Quote\Model\Quote::class);
+        $this->contextMock = $this->basicMock(\Magento\Framework\App\Action\Context::class);
+        $this->sessionMock = $this->basicMock(\Magento\Customer\Model\Session::class);
+        $this->onepageMock = $this->basicMock(\Magento\Checkout\Model\Type\Onepage::class);
+        $this->layoutMock = $this->basicMock(\Magento\Framework\View\Layout::class);
+        $this->requestMock = $this->basicMock(\Magento\Framework\App\RequestInterface::class);
+        $this->responseMock = $this->basicMock(\Magento\Framework\App\ResponseInterface::class);
+        $this->redirectMock = $this->basicMock(\Magento\Framework\App\Response\RedirectInterface::class);
+        $this->resultPageMock = $this->basicMock(\Magento\Framework\View\Result\Page::class);
+        $this->pageConfigMock = $this->basicMock(\Magento\Framework\View\Page\Config::class);
+        $this->titleMock = $this->basicMock(\Magento\Framework\View\Page\Title::class);
+        $this->url = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->resultRedirectMock = $this->basicMock(\Magento\Framework\Controller\Result\Redirect::class);
 
-        $resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+        $resultPageFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -128,7 +129,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultPageMock);
 
-        $resultRedirectFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RedirectFactory')
+        $resultRedirectFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\RedirectFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -141,37 +142,37 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->basicStub($this->resultPageMock, 'getLayout')->willReturn($this->layoutMock);
 
         $this->basicStub($this->layoutMock, 'getBlock')
-            ->willReturn($this->basicMock('Magento\Theme\Block\Html\Head'));
+            ->willReturn($this->basicMock(\Magento\Theme\Block\Html\Header::class));
         $this->basicStub($this->resultPageMock, 'getConfig')->willReturn($this->pageConfigMock);
         $this->basicStub($this->pageConfigMock, 'getTitle')->willReturn($this->titleMock);
         $this->basicStub($this->titleMock, 'set')->willReturn($this->titleMock);
 
         // objectManagerMock
         $objectManagerReturns = [
-            ['Magento\Checkout\Helper\Data', $this->dataMock],
-            ['Magento\Checkout\Model\Type\Onepage', $this->onepageMock],
-            ['Magento\Checkout\Model\Session', $this->basicMock('Magento\Checkout\Model\Session')],
-            ['Magento\Customer\Model\Session', $this->basicMock('Magento\Customer\Model\Session')],
+            [\Magento\Checkout\Helper\Data::class, $this->dataMock],
+            [\Magento\Checkout\Model\Type\Onepage::class, $this->onepageMock],
+            [\Magento\Checkout\Model\Session::class, $this->basicMock(\Magento\Checkout\Model\Session::class)],
+            [\Magento\Customer\Model\Session::class, $this->basicMock(\Magento\Customer\Model\Session::class)],
 
         ];
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap($objectManagerReturns));
         $this->basicStub($this->objectManagerMock, 'create')
-            ->willReturn($this->basicMock('Magento\Framework\UrlInterface'));
+            ->willReturn($this->basicMock(\Magento\Framework\UrlInterface::class));
         // context stubs
         $this->basicStub($this->contextMock, 'getObjectManager')->willReturn($this->objectManagerMock);
         $this->basicStub($this->contextMock, 'getRequest')->willReturn($this->requestMock);
         $this->basicStub($this->contextMock, 'getResponse')->willReturn($this->responseMock);
         $this->basicStub($this->contextMock, 'getMessageManager')
-            ->willReturn($this->basicMock('\Magento\Framework\Message\ManagerInterface'));
+            ->willReturn($this->basicMock(\Magento\Framework\Message\ManagerInterface::class));
         $this->basicStub($this->contextMock, 'getRedirect')->willReturn($this->redirectMock);
         $this->basicStub($this->contextMock, 'getUrl')->willReturn($this->url);
         $this->basicStub($this->contextMock, 'getResultRedirectFactory')->willReturn($resultRedirectFactoryMock);
 
         // SUT
         $this->model = $this->objectManager->getObject(
-            'Magento\Checkout\Controller\Index\Index',
+            \Magento\Checkout\Controller\Index\Index::class,
             [
                 'context' => $this->contextMock,
                 'customerSession' => $this->sessionMock,

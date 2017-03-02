@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 
 /**
  * Product type price model
@@ -79,6 +80,11 @@ class Price
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $config;
+
+    /**
+     * @var ProductTierPriceExtensionFactory
+     */
+    private $tierPriceExtensionFactory;
 
     /**
      * Price constructor.
@@ -354,7 +360,8 @@ class Price
         $tierPrices = $this->getExistingPrices($product, 'tier_price');
         foreach ($tierPrices as $price) {
             /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
-            $tierPrice = $this->tierPriceFactory->create();
+            $tierPrice = $this->tierPriceFactory->create()
+                ->setExtensionAttributes($this->getTierPriceExtensionAttributes());
             $tierPrice->setCustomerGroupId($price['cust_group']);
             if (array_key_exists('website_price', $price)) {
                 $value = $price['website_price'];
@@ -363,9 +370,27 @@ class Price
             }
             $tierPrice->setValue($value);
             $tierPrice->setQty($price['price_qty']);
+            if (isset($price['percentage_value'])) {
+                $tierPrice->getExtensionAttributes()->setPercentageValue($price['percentage_value']);
+            }
+            $websiteId = isset($price['website_id']) ? $price['website_id'] : $this->getWebsiteForPriceScope();
+            $tierPrice->getExtensionAttributes()->setWebsiteId($websiteId);
             $prices[] = $tierPrice;
         }
         return $prices;
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface
+     */
+    private function getTierPriceExtensionAttributes()
+    {
+        if (!$this->tierPriceExtensionFactory) {
+            $this->tierPriceExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(ProductTierPriceExtensionFactory::class);
+        }
+        return $this->tierPriceExtensionFactory->create();
     }
 
     /**
@@ -382,19 +407,25 @@ class Price
             return $this;
         }
 
-        $websiteId = $this->getWebsiteForPriceScope();
         $allGroupsId = $this->getAllCustomerGroupsId();
+        $websiteId = $this->getWebsiteForPriceScope();
 
         // build the new array of tier prices
         $prices = [];
         foreach ($tierPrices as $price) {
+            $extensionAttributes = $price->getExtensionAttributes();
+            $priceWebsiteId = $websiteId;
+            if (isset($extensionAttributes) && is_numeric($extensionAttributes->getWebsiteId())) {
+                $priceWebsiteId = (string)$extensionAttributes->getWebsiteId();
+            }
             $prices[] = [
-                'website_id' => $websiteId,
+                'website_id' => $priceWebsiteId,
                 'cust_group' => $price->getCustomerGroupId(),
                 'website_price' => $price->getValue(),
                 'price' => $price->getValue(),
                 'all_groups' => ($price->getCustomerGroupId() == $allGroupsId),
-                'price_qty' => $price->getQty()
+                'price_qty' => $price->getQty(),
+                'percentage_value' => $extensionAttributes ? $extensionAttributes->getPercentageValue() : null
             ];
         }
         $product->setData('tier_price', $prices);

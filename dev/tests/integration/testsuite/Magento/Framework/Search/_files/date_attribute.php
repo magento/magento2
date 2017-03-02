@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,13 +11,13 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
 $installer = $objectManager->create(
-    'Magento\Catalog\Setup\CategorySetup',
+    \Magento\Catalog\Setup\CategorySetup::class,
     ['resourceName' => 'catalog_setup']
 );
 
 /** @var $selectAttribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $dateAttribute = $objectManager->create(
-    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
 );
 $dateAttribute->setData(
     [
@@ -35,7 +35,7 @@ $dateAttribute->save();
 $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $dateAttribute->getId());
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product
     ->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
@@ -49,7 +49,7 @@ $product
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 5, 'is_in_stock' => 1])
     ->save();
 
-$objectManager->get('Magento\Catalog\Model\Product\Action')
+$objectManager->get(\Magento\Catalog\Model\Product\Action::class)
     ->updateAttributes(
         [$product->getId()],
         [

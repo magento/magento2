@@ -1,43 +1,49 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Config\Structure\Element;
 
+use Magento\Framework\App\RequestInterface;
+use Magento\Config\Model\Config\Structure\Element\Field as FieldConfigStructure;
+use Magento\Paypal\Model\Config\StructurePlugin as ConfigStructurePlugin;
+
+/**
+ * Plugin for \Magento\Config\Model\Config\Structure\Element\Field
+ */
 class FieldPlugin
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
-    protected $_request;
+    private $request;
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      */
-    public function __construct(\Magento\Framework\App\RequestInterface $request)
+    public function __construct(RequestInterface $request)
     {
-        $this->_request = $request;
+        $this->request = $request;
     }
 
     /**
      * Get original configPath (not changed by PayPal configuration inheritance)
      *
-     * @param \Magento\Config\Model\Config\Structure\Element\Field $subject
-     * @param \Closure $proceed
+     * @param FieldConfigStructure $subject
+     * @param string|null $result
      * @return string|null
      */
-    public function aroundGetConfigPath(
-        \Magento\Config\Model\Config\Structure\Element\Field $subject,
-        \Closure $proceed
-    ) {
-        $configPath = $proceed();
-        if (!isset($configPath) && $this->_request->getParam('section') == 'payment') {
-            $configPath = preg_replace('@^(' . implode(
-                '|',
-                \Magento\Paypal\Model\Config\StructurePlugin::getPaypalConfigCountries(true)
-            ) . ')/@', 'payment/', $subject->getPath());
+    public function afterGetConfigPath(FieldConfigStructure $subject, $result)
+    {
+        if (!$result && $this->request->getParam('section') == 'payment') {
+            $result = preg_replace(
+                '@^(' . implode('|', ConfigStructurePlugin::getPaypalConfigCountries(true)) . ')/@',
+                'payment/',
+                $subject->getPath()
+            );
         }
-        return $configPath;
+
+        return $result;
     }
 }

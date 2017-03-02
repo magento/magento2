@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,9 @@ use Magento\Quote\Model\Shipping;
 use Magento\Quote\Model\ShippingAssignment;
 use Magento\Quote\Api\Data\CartExtensionInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CheckoutTest extends \PHPUnit_Framework_TestCase
 {
     const SHIPPING_METHOD = 'new_shipping_method';
@@ -54,29 +57,30 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->customerMock = $this->getMock('Magento\Customer\Model\Customer', [], [], '', false);
-        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote',
+        $this->customerMock = $this->getMock(\Magento\Customer\Model\Customer::class, [], [], '', false);
+        $this->quoteMock = $this->getMock(
+            \Magento\Quote\Model\Quote::class,
             [
                 'getId', 'assignCustomer', 'assignCustomerWithAddressChange', 'getBillingAddress',
                 'getShippingAddress', 'isVirtual', 'addCustomerAddress', 'collectTotals', '__wakeup',
                 'save', 'getCustomerData', 'getIsVirtual', 'getExtensionAttributes'
             ], [], '', false);
         $this->customerAccountManagementMock = $this->getMock(
-            '\Magento\Customer\Model\AccountManagement',
+            \Magento\Customer\Model\AccountManagement::class,
             [],
             [],
             '',
             false
         );
-        $this->objectCopyServiceMock = $this->getMockBuilder('\Magento\Framework\DataObject\Copy')
+        $this->objectCopyServiceMock = $this->getMockBuilder(\Magento\Framework\DataObject\Copy::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerSessionMock = $this->getMockBuilder('\Magento\Customer\Model\Session')
+        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $paypalConfigMock = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
+        $paypalConfigMock = $this->getMock(\Magento\Paypal\Model\Config::class, [], [], '', false);
         $this->checkoutModel = $this->objectManager->getObject(
-            'Magento\Paypal\Model\Express\Checkout',
+            \Magento\Paypal\Model\Express\Checkout::class,
             [
                 'params'                 => [
                     'quote' => $this->quoteMock,
@@ -92,7 +96,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCustomerData()
     {
-        $customerDataMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $customerDataMock = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class, [], [], '', false);
         $this->quoteMock->expects($this->once())->method('assignCustomer')->with($customerDataMock);
         $customerDataMock->expects($this->once())
             ->method('getId');
@@ -102,9 +106,9 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     public function testSetCustomerWithAddressChange()
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customerDataMock */
-        $customerDataMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $customerDataMock = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class, [], [], '', false);
         /** @var \Magento\Quote\Model\Quote\Address $customerDataMock */
-        $quoteAddressMock = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $quoteAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
         $this->quoteMock
             ->expects($this->once())
             ->method('assignCustomerWithAddressChange')

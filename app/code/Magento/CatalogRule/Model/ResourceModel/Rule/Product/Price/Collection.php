@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price;
@@ -15,8 +15,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         parent::_construct();
         $this->_init(
-            'Magento\CatalogRule\Model\Rule\Product\Price',
-            'Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price'
+            \Magento\CatalogRule\Model\Rule\Product\Price::class,
+            \Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price::class
         );
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -40,7 +40,6 @@
     <preference for="Magento\Quote\Api\GuestCartTotalManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartTotalManagement" />
     <preference for="Magento\Quote\Api\Data\EstimateAddressInterface" type="Magento\Quote\Model\EstimateAddress" />
     <preference for="Magento\Quote\Api\Data\ProductOptionInterface" type="\Magento\Quote\Model\Quote\ProductOption" />
-    <!--<preference for="Magento\Quote\Model\Quote\Address\Total\CollectorInterface" type="\Magento\Quote\Model\Quote\Address\Total\Composite" />-->
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>
             <argument name="paramOverriders" xsi:type="array">
@@ -90,4 +89,9 @@
     <preference for="Magento\Quote\Model\ShippingMethodManagementInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
     <preference for="Magento\Quote\Api\Data\ShippingInterface" type="Magento\Quote\Model\Shipping" />
     <preference for="Magento\Quote\Api\Data\ShippingAssignmentInterface" type="Magento\Quote\Model\ShippingAssignment" />
+    <preference for="Magento\Quote\Model\Product\QuoteItemsCleanerInterface" type="Magento\Quote\Model\Product\QuoteItemsCleaner" />
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="clean_quote_items_after_product_delete" type="Magento\Quote\Model\Product\Plugin\RemoveQuoteItems"/>
+        <plugin name="update_quote_items_after_product_save" type="Magento\Quote\Model\Product\Plugin\UpdateQuoteItems"/>
+    </type>
 </config>

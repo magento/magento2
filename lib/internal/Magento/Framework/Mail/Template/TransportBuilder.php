@@ -2,7 +2,7 @@
 /**
  * Mail Template Transport Builder
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -238,7 +238,7 @@ class TransportBuilder
      */
     protected function reset()
     {
-        $this->message = $this->objectManager->create('Magento\Framework\Mail\Message');
+        $this->message = $this->objectManager->create(\Magento\Framework\Mail\Message::class);
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;

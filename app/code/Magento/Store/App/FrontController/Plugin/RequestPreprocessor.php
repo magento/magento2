@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\App\FrontController\Plugin;
@@ -104,7 +104,7 @@ class RequestPreprocessor
     {
         if ($this->baseUrlChecker === null) {
             $this->baseUrlChecker = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Store\Model\BaseUrlChecker'
+                \Magento\Store\Model\BaseUrlChecker::class
             );
         }
 

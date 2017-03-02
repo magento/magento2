@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -109,7 +109,6 @@
                     </item>
                 </argument>
             </filterSelect>
-            <!--
             <filterSelect name="paymentInstrumentType">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\Braintree\Ui\Component\Report\Listing\Column\PaymentType</argument>
@@ -126,7 +125,6 @@
                     </item>
                 </argument>
             </filterSelect>
-            -->
             <filterInput name="paypalDetails_paymentId">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -135,6 +133,22 @@
                     </item>
                 </argument>
             </filterInput>
+            <filterRange name="createdAt" class="Magento\Braintree\Ui\Component\Report\Filters\Type\DateRange">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="provider" xsi:type="string">${ $.parentName }</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">componentType = column, index = ${ $.index }:visible</item>
+                        </item>
+                        <item name="parent" xsi:type="string">braintree_report.braintree_report.listing_top.listing_filters</item>
+                        <item name="template" xsi:type="string">ui/grid/filters/elements/group</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/range</item>
+                        <item name="rangeType" xsi:type="string">date</item>
+                        <item name="dataScope" xsi:type="string">createdAt</item>
+                        <item name="label" xsi:type="string" translate="true">Created At</item>
+                    </item>
+                </argument>
+            </filterRange>
         </filters>
     </container>
     <columns name="braintree_report_columns">
@@ -216,7 +230,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sorting" xsi:type="string">desc</item>
-                    <item name="filter" xsi:type="string">dateRange</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="label" xsi:type="string" translate="true">Created At</item>

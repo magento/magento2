@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model;
@@ -52,7 +52,7 @@ class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         $this->emailSender = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender',
+            \Magento\Sales\Model\Order\Email\Sender::class,
             ['send'],
             [],
             '',
@@ -60,7 +60,7 @@ class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->entityResource = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\ResourceModel\EntityAbstract',
+            \Magento\Sales\Model\ResourceModel\EntityAbstract::class,
             [],
             '',
             false,
@@ -70,7 +70,7 @@ class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->entityCollection = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\ResourceModel\Collection\AbstractCollection',
+            \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection::class,
             [],
             '',
             false,
@@ -80,7 +80,7 @@ class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->globalConfig = $this->getMock(
-            'Magento\Framework\App\Config',
+            \Magento\Framework\App\Config::class,
             [],
             [],
             '',
@@ -88,7 +88,7 @@ class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->object = $objectManager->getObject(
-            'Magento\Sales\Model\EmailSenderHandler',
+            \Magento\Sales\Model\EmailSenderHandler::class,
             [
                 'emailSender' => $this->emailSender,
                 'entityResource' => $this->entityResource,
@@ -165,7 +165,7 @@ class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
     public function executeDataProvider()
     {
         $entityModel = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\AbstractModel',
+            \Magento\Sales\Model\AbstractModel::class,
             [],
             '',
             false,

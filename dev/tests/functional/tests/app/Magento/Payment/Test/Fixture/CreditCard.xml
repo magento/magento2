@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -12,6 +12,8 @@
              entity_type="credit_card"
              repository_class="Magento\Payment\Test\Repository\CreditCard"
              class="Magento\Payment\Test\Fixture\CreditCard">
+        <field name="payment_code" />
+        <field name="cc_type" />
         <field name="cc_number" />
         <field name="cc_exp_month" />
         <field name="cc_exp_year" />

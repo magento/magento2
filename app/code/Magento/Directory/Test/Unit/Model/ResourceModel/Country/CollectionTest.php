@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,9 @@
 
 namespace Magento\Directory\Test\Unit\Model\ResourceModel\Country;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -17,11 +20,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $connection = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
+        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $connection->expects($this->once())->method('select')->will($this->returnValue($select));
 
-        $resource = $this->getMockForAbstractClass('Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+        $resource = $this->getMockForAbstractClass(
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -32,23 +36,25 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
         $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
 
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $localeListsMock = $this->getMock('Magento\Framework\Locale\ListsInterface');
+        $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
+        $localeListsMock = $this->getMock(\Magento\Framework\Locale\ListsInterface::class);
         $localeListsMock->expects($this->any())->method('getCountryTranslation')->will($this->returnArgument(0));
 
-        $fetchStrategy = $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
-        $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
-        $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $fetchStrategy = $this->getMockForAbstractClass(
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
+        );
+        $entityFactory = $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false);
+        $scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $logger = $this->getMock(\Psr\Log\LoggerInterface::class);
         $countryFactory = $this->getMock(
-            'Magento\Directory\Model\ResourceModel\CountryFactory',
+            \Magento\Directory\Model\ResourceModel\CountryFactory::class,
             [],
             [],
             '',
             false
         );
         $helperDataMock = $this->getMock(
-            'Magento\Directory\Helper\Data',
+            \Magento\Directory\Helper\Data::class,
             [],
             [],
             '',
@@ -66,7 +72,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             'resource' => $resource,
             'helperData' => $helperDataMock
         ];
-        $this->_model = $objectManager->getObject('Magento\Directory\Model\ResourceModel\Country\Collection', $arguments);
+        $this->_model = $objectManager->getObject(
+            \Magento\Directory\Model\ResourceModel\Country\Collection::class,
+            $arguments
+        );
     }
 
     /**

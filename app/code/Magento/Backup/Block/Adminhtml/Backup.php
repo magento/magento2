@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Block\Adminhtml;
@@ -30,7 +30,7 @@ class Backup extends \Magento\Backend\Block\Template
 
         $this->getToolbar()->addChild(
             'createSnapshotButton',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('System Backup'),
                 'onclick' => "return backup.backup('" . \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT . "')",
@@ -39,7 +39,7 @@ class Backup extends \Magento\Backend\Block\Template
         );
         $this->getToolbar()->addChild(
             'createMediaBackupButton',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Database and Media Backup'),
                 'onclick' => "return backup.backup('" . \Magento\Framework\Backup\Factory::TYPE_MEDIA . "')",
@@ -48,7 +48,7 @@ class Backup extends \Magento\Backend\Block\Template
         );
         $this->getToolbar()->addChild(
             'createButton',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Database Backup'),
                 'onclick' => "return backup.backup('" . \Magento\Framework\Backup\Factory::TYPE_DB . "')",
@@ -56,7 +56,7 @@ class Backup extends \Magento\Backend\Block\Template
             ]
         );
 
-        $this->addChild('dialogs', 'Magento\Backup\Block\Adminhtml\Dialogs');
+        $this->addChild('dialogs', \Magento\Backup\Block\Adminhtml\Dialogs::class);
     }
 
     /**

@@ -2,7 +2,7 @@
 /**
  * Service Input Processor
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi;
@@ -26,7 +26,7 @@ use Magento\Framework\Reflection\MethodsMap;
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
-    const EXTENSION_ATTRIBUTES_TYPE = '\Magento\Framework\Api\ExtensionAttributesInterface';
+    const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
     /** @var \Magento\Framework\Reflection\TypeProcessor */
     protected $typeProcessor;
@@ -82,7 +82,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     {
         if ($this->nameFinder === null) {
             $this->nameFinder = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Framework\Reflection\NameFinder');
+                ->get(\Magento\Framework\Reflection\NameFinder::class);
         }
         return $this->nameFinder;
     }

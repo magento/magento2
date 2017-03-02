@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,14 +23,13 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Click 'Submit Shipment' button.
  * 6. Perform all asserts.
  *
- * @group Order_Management_(CS)
+ * @group Order_Management
  * @ZephyrId MAGETWO-28708
  */
 class CreateShipmentEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
@@ -42,7 +41,7 @@ class CreateShipmentEntityTest extends Injectable
     public function __prepare()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => "checkmo,flatrate"]
         )->run();
     }
@@ -61,7 +60,7 @@ class CreateShipmentEntityTest extends Injectable
 
         // Steps
         $createShipping = $this->objectManager->create(
-            'Magento\Sales\Test\TestStep\CreateShipmentStep',
+            \Magento\Sales\Test\TestStep\CreateShipmentStep::class,
             ['order' => $order, 'data' => $data]
         );
 

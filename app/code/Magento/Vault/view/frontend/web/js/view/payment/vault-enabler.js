@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -56,8 +56,8 @@ define(
              * @returns {Boolean}
              */
             isVaultEnabled: function () {
-                return window.checkoutConfig.vault['is_enabled'] === true &&
-                    window.checkoutConfig.vault['vault_provider_code'] === this.paymentCode;
+                return typeof window.checkoutConfig.vault[this.paymentCode] !== 'undefined' &&
+                    window.checkoutConfig.vault[this.paymentCode]['is_enabled'] === true;
             }
         });
     }

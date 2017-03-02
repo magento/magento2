@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\TemplateEngine\Plugin;
@@ -36,18 +36,18 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->devHelperMock = $this->getMockBuilder('Magento\Developer\Helper\Data')
+        $this->devHelperMock = $this->getMockBuilder(\Magento\Developer\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->debugHintsFactory = $this->getMockBuilder(
-            'Magento\Developer\Model\TemplateEngine\Decorator\DebugHintsFactory'
+            \Magento\Developer\Model\TemplateEngine\Decorator\DebugHintsFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -68,10 +68,10 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
 
         $this->setupConfigFixture($debugHintsPath, true, $showBlockHints);
 
-        $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
+        $engine = $this->getMock(\Magento\Framework\View\TemplateEngineInterface::class);
 
         $debugHintsDecorator = $this->getMockBuilder(
-            'Magento\Developer\Model\TemplateEngine\Decorator\DebugHints'
+            \Magento\Developer\Model\TemplateEngine\Decorator\DebugHints::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -84,7 +84,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturn($debugHintsDecorator);
 
-        $subjectMock = $this->getMockBuilder('Magento\Framework\View\TemplateEngineFactory')
+        $subjectMock = $this->getMockBuilder(\Magento\Framework\View\TemplateEngineFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -127,9 +127,9 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
 
         $this->setupConfigFixture($debugHintsPath, $showTemplateHints, true);
 
-        $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
+        $engine = $this->getMock(\Magento\Framework\View\TemplateEngineInterface::class);
 
-        $subjectMock = $this->getMockBuilder('Magento\Framework\View\TemplateEngineFactory')
+        $subjectMock = $this->getMockBuilder(\Magento\Framework\View\TemplateEngineFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -170,7 +170,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
     protected function setupConfigFixture($debugHintsPath, $showTemplateHints, $showBlockHints)
     {
         $storeCode = 'default';
-        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface');
+        $storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class);
         $storeMock->expects($this->once())
             ->method('getCode')
             ->willReturn($storeCode);

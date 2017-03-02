@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,8 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
+use Magento\Framework\DB\Query\BatchIteratorInterface as BatchIteratorInterface;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 
@@ -98,19 +100,33 @@ abstract class AbstractAction
     protected $metadataPool;
 
     /**
+     * @var string
+     */
+    protected $tempTreeIndexTableName;
+
+    /**
+     * @var QueryGenerator
+     */
+    private $queryGenerator;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
+     * @param QueryGenerator $queryGenerator
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Config $config
+        \Magento\Catalog\Model\Config $config,
+        QueryGenerator $queryGenerator = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
         $this->config = $config;
+        $this->queryGenerator = $queryGenerator ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(QueryGenerator::class);
     }
 
     /**
@@ -304,15 +320,26 @@ abstract class AbstractAction
      * @param int $range
      * @return \Magento\Framework\DB\Select[]
      */
-    protected function prepareSelectsByRange(\Magento\Framework\DB\Select $select, $field, $range = self::RANGE_CATEGORY_STEP)
-    {
-        return $this->isRangingNeeded() ? $this->connection->selectsByRange(
-            $field,
-            $select,
-            $range
-        ) : [
-            $select
-        ];
+    protected function prepareSelectsByRange(
+        \Magento\Framework\DB\Select $select,
+        $field,
+        $range = self::RANGE_CATEGORY_STEP
+    ) {
+        if($this->isRangingNeeded()) {
+            $iterator = $this->queryGenerator->generate(
+                $field,
+                $select,
+                $range,
+                \Magento\Framework\DB\Query\BatchIteratorInterface::NON_UNIQUE_FIELD_ITERATOR
+            );
+
+            $queries = [];
+            foreach ($iterator as $query) {
+                $queries[] = $query;
+            }
+            return $queries;
+        }
+        return [$select];
     }
 
     /**
@@ -368,6 +395,8 @@ abstract class AbstractAction
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
 
+        $temporaryTreeTable = $this->makeTempCategoryTreeIndex();
+
         $productMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $categoryMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
         $productLinkField = $productMetadata->getLinkField();
@@ -377,17 +406,15 @@ abstract class AbstractAction
             ['cc' => $this->getTable('catalog_category_entity')],
             []
         )->joinInner(
-            ['cc2' => $this->getTable('catalog_category_entity')],
-            'cc2.path LIKE ' . $this->connection->getConcatSql(
-                [$this->connection->quoteIdentifier('cc.path'), $this->connection->quote('/%')]
-            ) . ' AND cc.entity_id NOT IN (' . implode(
+            ['cc2' => $temporaryTreeTable],
+            'cc2.parent_id = cc.entity_id AND cc.entity_id NOT IN (' . implode(
                 ',',
                 $rootCatIds
             ) . ')',
             []
         )->joinInner(
             ['ccp' => $this->getTable('catalog_category_product')],
-            'ccp.category_id = cc2.entity_id',
+            'ccp.category_id = cc2.child_id',
             []
         )->joinInner(
             ['cpe' => $this->getTable('catalog_product_entity')],
@@ -456,6 +483,92 @@ abstract class AbstractAction
                 'store_id' => new \Zend_Db_Expr($store->getId()),
                 'visibility' => new \Zend_Db_Expr($this->connection->getIfNullSql('cpvs.value', 'cpvd.value')),
             ]
+        );
+    }
+
+    /**
+     * Get temporary table name for concurrent indexing in persistent connection
+     * Temp table name is NOT shared between action instances and each action has it's own temp tree index
+     *
+     * @return string
+     */
+    protected function getTemporaryTreeIndexTableName()
+    {
+        if (empty($this->tempTreeIndexTableName)) {
+            $this->tempTreeIndexTableName = $this->connection->getTableName('temp_catalog_category_tree_index')
+                . '_'
+                . substr(md5(time() . rand(0, 999999999)), 0, 8);
+        }
+
+        return $this->tempTreeIndexTableName;
+    }
+
+    /**
+     * Build and populate the temporary category tree index table
+     *
+     * Returns the name of the temporary table to use in queries.
+     *
+     * @return string
+     */
+    protected function makeTempCategoryTreeIndex()
+    {
+        // Note: this temporary table is per-connection, so won't conflict by prefix.
+        $temporaryName = $this->getTemporaryTreeIndexTableName();
+
+        $temporaryTable = $this->connection->newTable($temporaryName);
+        $temporaryTable->addColumn(
+            'parent_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['nullable' => false, 'unsigned' => true]
+        );
+        $temporaryTable->addColumn(
+            'child_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['nullable' => false, 'unsigned' => true]
+        );
+        // Each entry will be unique.
+        $temporaryTable->addIndex(
+            'idx_primary',
+            ['parent_id', 'child_id'],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY]
+        );
+
+        // Drop the temporary table in case it already exists on this (persistent?) connection.
+        $this->connection->dropTemporaryTable($temporaryName);
+        $this->connection->createTemporaryTable($temporaryTable);
+
+        $this->fillTempCategoryTreeIndex($temporaryName);
+
+        return $temporaryName;
+    }
+
+    /**
+     * Populate the temporary category tree index table
+     *
+     * @param string $temporaryName
+     */
+    protected function fillTempCategoryTreeIndex($temporaryName)
+    {
+        // This finds all children (cc2) that descend from a parent (cc) by path.
+        // For example, cc.path may be '1/2', and cc2.path may be '1/2/3/4/5'.
+        $temporarySelect = $this->connection->select()->from(
+            ['cc' => $this->getTable('catalog_category_entity')],
+            ['parent_id' => 'entity_id']
+        )->joinInner(
+            ['cc2' => $this->getTable('catalog_category_entity')],
+            'cc2.path LIKE ' . $this->connection->getConcatSql(
+                [$this->connection->quoteIdentifier('cc.path'), $this->connection->quote('/%')]
+            ),
+            ['child_id' => 'entity_id']
+        );
+
+        $this->connection->query(
+            $temporarySelect->insertFromSelect(
+                $temporaryName,
+                ['parent_id', 'child_id']
+            )
         );
     }
 
@@ -634,7 +747,7 @@ abstract class AbstractAction
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

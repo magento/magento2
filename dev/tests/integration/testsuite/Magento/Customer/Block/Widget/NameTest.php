@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Widget;
@@ -19,11 +19,11 @@ class NameTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
         $this->_block = $objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Customer\Block\Widget\Name'
+            \Magento\Customer\Block\Widget\Name::class
         );
     }
 
@@ -33,7 +33,9 @@ class NameTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlSimpleName()
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
-        $customerFactory = Bootstrap::getObjectManager()->get('Magento\Customer\Api\Data\CustomerInterfaceFactory');
+        $customerFactory = Bootstrap::getObjectManager()->get(
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+        );
         $customerDataObject = $customerFactory->create();
         $customerDataObject->setFirstname('Jane');
         $customerDataObject->setLastname('Doe');
@@ -41,13 +43,13 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
         $html = $this->_block->toHtml();
 
-        $this->assertContains('title="First Name"', $html);
+        $this->assertContains('title="First&#x20;Name"', $html);
         $this->assertContains('value="Jane"', $html);
-        $this->assertContains('title="Last Name"', $html);
+        $this->assertContains('title="Last&#x20;Name"', $html);
         $this->assertContains('value="Doe"', $html);
-        $this->assertNotContains('title="Middle Name/Initial"', $html);
-        $this->assertNotContains('title="Prefix"', $html);
-        $this->assertNotContains('title="Suffix"', $html);
+        $this->assertNotContains('title="Middle&#x20;Name&#x2F;Initial"', $html);
+        $this->assertNotContains('title="Name&#x20;Prefix"', $html);
+        $this->assertNotContains('title="Name&#x20;Suffix"', $html);
     }
 
     /**
@@ -57,7 +59,9 @@ class NameTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlFancyName()
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
-        $customerFactory = Bootstrap::getObjectManager()->get('Magento\Customer\Api\Data\CustomerInterfaceFactory');
+        $customerFactory = Bootstrap::getObjectManager()->get(
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+        );
         $customerDataObject = $customerFactory->create();
         $customerDataObject->setPrefix(
             'Dr.'
@@ -74,15 +78,15 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
         $html = $this->_block->toHtml();
 
-        $this->assertContains('title="First Name"', $html);
+        $this->assertContains('title="First&#x20;Name"', $html);
         $this->assertContains('value="Jane"', $html);
-        $this->assertContains('title="Last Name"', $html);
+        $this->assertContains('title="Last&#x20;Name"', $html);
         $this->assertContains('value="Doe"', $html);
-        $this->assertContains('title="Middle Name/Initial"', $html);
+        $this->assertContains('title="Middle&#x20;Name&#x2F;Initial"', $html);
         $this->assertContains('value="Roe"', $html);
-        $this->assertContains('title="Prefix"', $html);
+        $this->assertContains('title="Name&#x20;Prefix"', $html);
         $this->assertContains('value="Dr."', $html);
-        $this->assertContains('title="Suffix"', $html);
+        $this->assertContains('title="Name&#x20;Suffix"', $html);
         $this->assertContains('value="Ph.D."', $html);
     }
 }

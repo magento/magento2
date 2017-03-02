@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
@@ -12,7 +12,7 @@ class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System
 
     public function testExecute()
     {
-        $serviceModel = $this->getMock('Magento\Theme\Model\Uploader\Service', [], [], '', false);
+        $serviceModel = $this->getMock(\Magento\Theme\Model\Uploader\Service::class, [], [], '', false);
         $serviceModel->expects($this->once())
             ->method('uploadCssFile')
             ->with('css_file_uploader')
@@ -20,10 +20,10 @@ class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System
 
         $this->_objectManagerMock->expects($this->at(0))
             ->method('get')
-            ->with('Magento\Theme\Model\Uploader\Service')
+            ->with(\Magento\Theme\Model\Uploader\Service::class)
             ->willReturn($serviceModel);
 
-        $jsonData = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);
+        $jsonData = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
         $jsonData->expects($this->once())
             ->method('jsonEncode')
             ->with(['error' => false, 'content' => 'content'])
@@ -31,7 +31,7 @@ class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System
 
         $this->_objectManagerMock->expects($this->at(1))
             ->method('get')
-            ->with('Magento\Framework\Json\Helper\Data')
+            ->with(\Magento\Framework\Json\Helper\Data::class)
             ->willReturn($jsonData);
 
         $this->response
@@ -45,7 +45,7 @@ class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System
     public function testExecuteWithLocalizedException()
     {
         $exception = new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('Message'));
-        $serviceModel = $this->getMock('Magento\Theme\Model\Uploader\Service', [], [], '', false);
+        $serviceModel = $this->getMock(\Magento\Theme\Model\Uploader\Service::class, [], [], '', false);
         $serviceModel->expects($this->once())
             ->method('uploadCssFile')
             ->with('css_file_uploader')
@@ -53,10 +53,10 @@ class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System
 
         $this->_objectManagerMock->expects($this->at(0))
             ->method('get')
-            ->with('Magento\Theme\Model\Uploader\Service')
+            ->with(\Magento\Theme\Model\Uploader\Service::class)
             ->willReturn($serviceModel);
 
-        $jsonData = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);
+        $jsonData = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
         $jsonData->expects($this->once())
             ->method('jsonEncode')
             ->with(['error' => true, 'message' => 'Message'])
@@ -64,7 +64,7 @@ class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System
 
         $this->_objectManagerMock->expects($this->at(1))
             ->method('get')
-            ->with('Magento\Framework\Json\Helper\Data')
+            ->with(\Magento\Framework\Json\Helper\Data::class)
             ->willReturn($jsonData);
 
         $this->_model->execute();
@@ -73,7 +73,7 @@ class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System
     public function testExecuteWithException()
     {
         $exception = new \Exception('Message');
-        $serviceModel = $this->getMock('Magento\Theme\Model\Uploader\Service', [], [], '', false);
+        $serviceModel = $this->getMock(\Magento\Theme\Model\Uploader\Service::class, [], [], '', false);
         $serviceModel->expects($this->once())
             ->method('uploadCssFile')
             ->with('css_file_uploader')
@@ -81,18 +81,18 @@ class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System
 
         $this->_objectManagerMock->expects($this->at(0))
             ->method('get')
-            ->with('Magento\Theme\Model\Uploader\Service')
+            ->with(\Magento\Theme\Model\Uploader\Service::class)
             ->willReturn($serviceModel);
 
-        $logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface', [], '', false);
+        $logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class, [], '', false);
         $logger->expects($this->once())
             ->method('critical');
         $this->_objectManagerMock->expects($this->at(1))
             ->method('get')
-            ->with('Psr\Log\LoggerInterface')
+            ->with(\Psr\Log\LoggerInterface::class)
             ->willReturn($logger);
 
-        $jsonData = $this->getMock('Magento\Framework\Json\Helper\Data', [], [], '', false);
+        $jsonData = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
         $jsonData->expects($this->once())
             ->method('jsonEncode')
             ->with(['error' => true, 'message' => 'We can\'t upload the CSS file right now.'])
@@ -100,7 +100,7 @@ class UploadCssTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System
 
         $this->_objectManagerMock->expects($this->at(2))
             ->method('get')
-            ->with('Magento\Framework\Json\Helper\Data')
+            ->with(\Magento\Framework\Json\Helper\Data::class)
             ->willReturn($jsonData);
 
         $this->_model->execute();

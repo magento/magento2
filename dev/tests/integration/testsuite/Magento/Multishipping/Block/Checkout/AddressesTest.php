@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Block\Checkout;
@@ -29,26 +29,26 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
         $customerData = $customerRepository->getById(self::FIXTURE_CUSTOMER_ID);
 
         /** @var \Magento\Customer\Model\Session $customerSession */
-        $customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
+        $customerSession = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
         $customerSession->setCustomerData($customerData);
 
         /** @var \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection */
-        $quoteCollection = $this->_objectManager->get('Magento\Quote\Model\ResourceModel\Quote\Collection');
+        $quoteCollection = $this->_objectManager->get(\Magento\Quote\Model\ResourceModel\Quote\Collection::class);
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $quoteCollection->getLastItem();
 
         /** @var $checkoutSession \Magento\Checkout\Model\Session */
-        $checkoutSession = $this->_objectManager->get('Magento\Checkout\Model\Session');
+        $checkoutSession = $this->_objectManager->get(\Magento\Checkout\Model\Session::class);
         $checkoutSession->setQuoteId($quote->getId());
         $checkoutSession->setLoadInactive(true);
 
         $this->_addresses = $this->_objectManager->create(
-            'Magento\Multishipping\Block\Checkout\Addresses'
+            \Magento\Multishipping\Block\Checkout\Addresses::class
         );
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -64,7 +64,9 @@ class Quote extends AbstractDb
         $select = parent::_getLoadSelect($field, $value, $object);
         $storeIds = $object->getSharedStoreIds();
         if ($storeIds) {
-            $select->where('store_id IN (?)', $storeIds);
+            if ($storeIds != ['*']) {
+                $select->where('store_id IN (?)', $storeIds);
+            }
         } else {
             /**
              * For empty result
@@ -168,6 +170,29 @@ class Quote extends AbstractDb
             $quote->getStore()->getGroup()->getDefaultStoreId()
         )
         ->getNextValue();
+    }
+
+    /**
+     * Check if order increment ID is already used.
+     * Method can be used to avoid collisions of order IDs.
+     *
+     * @param int $orderIncrementId
+     * @return bool
+     */
+    public function isOrderIncrementIdUsed($orderIncrementId)
+    {
+        /** @var  \Magento\Framework\DB\Adapter\AdapterInterface $adapter */
+        $adapter = $this->getConnection();
+        $bind = [':increment_id' => $orderIncrementId];
+        /** @var \Magento\Framework\DB\Select $select */
+        $select = $adapter->select();
+        $select->from($this->getTable('sales_order'), 'entity_id')->where('increment_id = :increment_id');
+        $entity_id = $adapter->fetchOne($select, $bind);
+        if ($entity_id > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,7 @@ class Tabs extends WigetTabs
     /**
      * @var string
      */
-    protected $_attributeTabBlock = 'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes';
+    protected $_attributeTabBlock = \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes::class;
 
     /**
      * @var string
@@ -189,7 +189,7 @@ class Tabs extends WigetTabs
                         'label' => __('Websites'),
                         'content' => $this->_translateHtml(
                             $this->getLayout()->createBlock(
-                                'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Websites'
+                                \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Websites::class
                             )->toHtml()
                         ),
                         'group_code' => self::BASIC_TAB_GROUP_CODE

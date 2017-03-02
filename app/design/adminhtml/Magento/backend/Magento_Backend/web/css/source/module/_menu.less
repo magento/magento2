@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -321,7 +321,6 @@
             margin-bottom: 4.5rem;
 
             //  Section title
-            > a, // ToDo UI: Should be deleted after template changes a -> strong.submenu-group-title
             .submenu-group-title {
                 color: @submenu-section-label__color;
                 display: block;
@@ -502,6 +501,12 @@
             }
         }
     }
+
+    //  This part hides Submenu Group Titles only for menus with single groups.
+    .submenu .column:only-of-type .submenu-group-title,
+    .level-0 > .submenu > ul > .level-1:only-of-type > .submenu-group-title {
+        display: none;
+    }
 }
 
 .admin__menu-overlay {
@@ -526,3 +531,4 @@
         }
     }
 }
+

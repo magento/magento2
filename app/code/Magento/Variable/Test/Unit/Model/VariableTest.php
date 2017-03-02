@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Variable\Test\Unit\Model;
@@ -27,14 +27,14 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
+        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder('Magento\Variable\Model\ResourceModel\Variable')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManager->getObject(
-            'Magento\Variable\Model\Variable',
+            \Magento\Variable\Model\Variable::class,
             [
                 'escaper' => $this->escaperMock,
                 'resource' => $this->resourceMock
@@ -109,16 +109,16 @@ class VariableTest extends \PHPUnit_Framework_TestCase
             ['value' => '{{customVar code=VAL}}', 'label' => __('%1', 'LBL')]
         ];
 
-        $collectionMock = $this->getMockBuilder('\Magento\Variable\Model\ResourceModel\Variable\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->any())
             ->method('toOptionArray')
             ->willReturn($origOptions);
         $mockVariable = $this->getMock(
-            'Magento\Variable\Model\Variable',
+            \Magento\Variable\Model\Variable::class,
             ['getCollection'],
-            $this->objectManager->getConstructArguments('Magento\Variable\Model\Variable')
+            $this->objectManager->getConstructArguments(\Magento\Variable\Model\Variable::class)
         );
         $mockVariable->expects($this->any())
             ->method('getCollection')
@@ -139,16 +139,16 @@ class VariableTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $collectionMock = $this->getMockBuilder('\Magento\Variable\Model\ResourceModel\Variable\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->any())
             ->method('toOptionArray')
             ->willReturn($origOptions);
         $mockVariable = $this->getMock(
-            'Magento\Variable\Model\Variable',
+            \Magento\Variable\Model\Variable::class,
             ['getCollection'],
-            $this->objectManager->getConstructArguments('Magento\Variable\Model\Variable')
+            $this->objectManager->getConstructArguments(\Magento\Variable\Model\Variable::class)
         );
         $mockVariable->expects($this->any())
             ->method('getCollection')

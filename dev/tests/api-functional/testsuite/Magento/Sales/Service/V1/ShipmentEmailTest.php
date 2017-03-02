@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class ShipmentEmailTest extends WebapiAbstract
     public function testShipmentEmail()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $shipmentCollection = $objectManager->get('Magento\Sales\Model\ResourceModel\Order\Shipment\Collection');
+        $shipmentCollection = $objectManager->get(\Magento\Sales\Model\ResourceModel\Order\Shipment\Collection::class);
         $shipment = $shipmentCollection->getFirstItem();
         $serviceInfo = [
             'rest' => [

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity;
@@ -49,38 +49,38 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
-        $this->registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $this->attrFactoryMock = $this->getMock(
-            'Magento\Eav\Model\Entity\AttributeFactory',
+            \Magento\Eav\Model\Entity\AttributeFactory::class,
             [],
             [],
             '',
             false
         );
         $this->attrSetFactoryMock = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\SetFactory',
+            \Magento\Eav\Model\Entity\Attribute\SetFactory::class,
             [],
             [],
             '',
             false
         );
         $this->storeFactoryMock = $this->getMock(
-            'Magento\Eav\Model\Entity\StoreFactory',
+            \Magento\Eav\Model\Entity\StoreFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->universalFactoryMock = $this->getMock(
-            'Magento\Framework\Validator\UniversalFactory',
+            \Magento\Framework\Validator\UniversalFactory::class,
             [],
             [],
             '',
             false
         );
         $this->resourceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,

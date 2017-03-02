@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\Indexer;
@@ -20,9 +20,9 @@ class ProductRuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resourceRule = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\ResourceModel\Rule');
+        $this->resourceRule = Bootstrap::getObjectManager()->get(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
 
-        Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor')
+        Bootstrap::getObjectManager()->get(\Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class)
             ->getIndexer()->isScheduled(false);
     }
 
@@ -36,7 +36,7 @@ class ProductRuleTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         $product = $productRepository->get('simple');
         $product->setData('test_attribute', 'test_attribute_value')->save();

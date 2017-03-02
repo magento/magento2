@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,7 @@ class ProductVariationsBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->customAttributeFactory = $this->getMock(
-            '\Magento\Framework\Api\AttributeValueFactory',
+            \Magento\Framework\Api\AttributeValueFactory::class,
             [],
             [],
             '',
@@ -45,17 +45,17 @@ class ProductVariationsBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->product = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getData', 'getPrice', 'getName', 'getSku', '__wakeup', 'getCustomAttributes'],
             [],
             '',
             false
         );
 
-        $this->productFactory = $this->getMock('\Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
+        $this->productFactory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, ['create'], [], '', false);
 
         $this->variationMatrix = $this->getMock(
-            '\Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix',
+            \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix::class,
             [],
             [],
             '',
@@ -72,7 +72,7 @@ class ProductVariationsBuilderTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $output = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['setPrice', '__wakeup', 'setData', 'getCustomAttributes', 'setName', 'setSku', 'setVisibility'],
             [],
             '',
@@ -96,7 +96,7 @@ class ProductVariationsBuilderTest extends \PHPUnit_Framework_TestCase
 
         $output->expects($this->at(0))->method('setData')->with($productData);
 
-        $attribute = $this->getMock('\Magento\Framework\Api\AttributeInterface');
+        $attribute = $this->getMock(\Magento\Framework\Api\AttributeInterface::class);
         $attribute->expects($this->once())
             ->method('setAttributeCode')
             ->with('sort_order')

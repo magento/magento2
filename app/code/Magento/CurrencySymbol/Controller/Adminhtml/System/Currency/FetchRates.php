@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
@@ -19,7 +19,7 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
     public function execute()
     {
         /** @var \Magento\Backend\Model\Session $backendSession */
-        $backendSession = $this->_objectManager->get('Magento\Backend\Model\Session');
+        $backendSession = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
         try {
             $service = $this->getRequest()->getParam('rate_services');
             $this->_getSession()->setCurrencyRateService($service);
@@ -28,7 +28,7 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
             }
             try {
                 /** @var \Magento\Directory\Model\Currency\Import\ImportInterface $importModel */
-                $importModel = $this->_objectManager->get('Magento\Directory\Model\Currency\Import\Factory')
+                $importModel = $this->_objectManager->get(\Magento\Directory\Model\Currency\Import\Factory::class)
                     ->create($service);
             } catch (\Exception $e) {
                 throw new LocalizedException(__('We can\'t initialize the import model.'));

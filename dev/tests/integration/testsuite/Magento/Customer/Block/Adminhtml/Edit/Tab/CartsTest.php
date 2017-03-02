@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -29,11 +29,11 @@ class CartsTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_customerRepository = $this->_objectManager->get(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
-        $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManager');
+        $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManager::class);
         $this->_context = $this->_objectManager->get(
-            'Magento\Backend\Block\Template\Context',
+            \Magento\Backend\Block\Template\Context::class,
             ['storeManager' => $storeManager]
         );
     }
@@ -48,9 +48,9 @@ class CartsTest extends \PHPUnit_Framework_TestCase
         $this->_context->getBackendSession()->setCustomerData($data);
 
         $this->_block = $this->_objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Customer\Block\Adminhtml\Edit\Tab\Carts',
+            \Magento\Customer\Block\Adminhtml\Edit\Tab\Carts::class,
             '',
             ['context' => $this->_context]
         );
@@ -62,7 +62,10 @@ class CartsTest extends \PHPUnit_Framework_TestCase
             $html
         );
         $this->assertContains("customer_cart_grid1JsObject = new varienGrid(\"customer_cart_grid1\",", $html);
-        $this->assertContains("backend/customer/cart_product_composite_cart/configure/website_id/1", $html);
+        $this->assertContains(
+            'backend\u002Fcustomer\u002Fcart_product_composite_cart\u002Fconfigure\u002Fwebsite_id\u002F1',
+            $html
+        );
     }
 
     public function testGetHtmlNoCustomer()
@@ -71,9 +74,9 @@ class CartsTest extends \PHPUnit_Framework_TestCase
         $this->_context->getBackendSession()->setCustomerData($data);
 
         $this->_block = $this->_objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Customer\Block\Adminhtml\Edit\Tab\Carts',
+            \Magento\Customer\Block\Adminhtml\Edit\Tab\Carts::class,
             '',
             ['context' => $this->_context]
         );
@@ -85,6 +88,6 @@ class CartsTest extends \PHPUnit_Framework_TestCase
             $html
         );
         $this->assertContains("customer_cart_gridJsObject = new varienGrid(\"customer_cart_grid\",", $html);
-        $this->assertContains("backend/customer/cart_product_composite_cart/configure/key/", $html);
+        $this->assertContains('backend\u002Fcustomer\u002Fcart_product_composite_cart\u002Fupdate\u002Fkey', $html);
     }
 }

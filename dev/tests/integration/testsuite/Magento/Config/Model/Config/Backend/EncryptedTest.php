@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
         $originalValue = '1Password';
 
         /** @var $model \Magento\Config\Model\Config\Backend\Encrypted */
-        $model = Bootstrap::getObjectManager()->create('Magento\Config\Model\Config\Backend\Encrypted');
+        $model = Bootstrap::getObjectManager()->create(\Magento\Config\Model\Config\Backend\Encrypted::class);
         $model->setPath('carriers/usps/password');
         $model->setScopeId(0);
         $model->setScope('default');

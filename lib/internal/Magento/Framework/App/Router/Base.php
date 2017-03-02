@@ -2,13 +2,10 @@
 /**
  * Base router
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Router;
-
-use Magento\Framework\App\RequestInterface;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -24,7 +21,7 @@ class Base implements \Magento\Framework\App\RouterInterface
     /**
      * @var string
      */
-    protected $actionInterface = '\Magento\Framework\App\ActionInterface';
+    protected $actionInterface = \Magento\Framework\App\ActionInterface::class;
 
     /**
      * @var array

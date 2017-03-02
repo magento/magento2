@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,14 +32,14 @@ class BasePackageInfoTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $this->readFactoryMock = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\ReadFactory',
+            \Magento\Framework\Filesystem\Directory\ReadFactory::class,
             [],
             [],
             '',
             false
         );
         $this->readerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Filesystem\Directory\ReadInterface',
+            \Magento\Framework\Filesystem\Directory\ReadInterface::class,
             [],
             '',
             false
@@ -55,7 +55,7 @@ class BasePackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->readerMock->expects($this->never())->method('isReadable');
         $this->readerMock->expects($this->never())->method('readFile');
         $this->setExpectedException(
-            'Magento\Setup\Exception',
+            \Magento\Setup\Exception::class,
             sprintf('Could not locate %s file.', BasePackageInfo::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE)
         );
         $this->basePackageInfo->getPaths();
@@ -68,7 +68,7 @@ class BasePackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->readerMock->expects($this->once())->method('isReadable')->willReturn(false);
         $this->readerMock->expects($this->never())->method('readFile');
         $this->setExpectedException(
-            'Magento\Setup\Exception',
+            \Magento\Setup\Exception::class,
             sprintf('Could not read %s file.', BasePackageInfo::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE)
         );
         $this->basePackageInfo->getPaths();

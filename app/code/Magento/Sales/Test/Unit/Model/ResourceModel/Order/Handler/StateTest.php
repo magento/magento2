@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Handler;
@@ -25,7 +25,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
+            \Magento\Sales\Model\Order::class,
             [
                 '__wakeup',
                 'getId',
@@ -42,7 +42,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
                 'getTotalRefunded',
                 'hasForcedCanCreditmemo',
                 'getIsInProcess',
-                'getConfig'
+                'getConfig',
             ],
             [],
             '',
@@ -52,14 +52,14 @@ class StateTest extends \PHPUnit_Framework_TestCase
             ->method('getConfig')
             ->willReturnSelf();
         $this->addressMock = $this->getMock(
-            'Magento\Sales\Model\Order\Address',
+            \Magento\Sales\Model\Order\Address::class,
             [],
             [],
             '',
             false
         );
         $this->addressCollectionMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Address\Collection',
+            \Magento\Sales\Model\ResourceModel\Order\Address\Collection::class,
             [],
             [],
             '',
@@ -74,9 +74,12 @@ class StateTest extends \PHPUnit_Framework_TestCase
     public function testCheckOrderEmpty()
     {
         $this->orderMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue(null));
-        $this->assertEquals($this->orderMock, $this->state->check($this->orderMock));
+            ->method('getBaseGrandTotal')
+            ->willReturn(100);
+        $this->orderMock->expects($this->never())
+            ->method('setState');
+
+        $this->state->check($this->orderMock);
     }
 
     /**
@@ -84,7 +87,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckSetStateComplete()
     {
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(1));
         $this->orderMock->expects($this->once())
@@ -120,7 +123,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckSetStateClosed()
     {
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(1));
         $this->orderMock->expects($this->once())
@@ -162,7 +165,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckSetStateProcessing()
     {
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(1));
         $this->orderMock->expects($this->once())

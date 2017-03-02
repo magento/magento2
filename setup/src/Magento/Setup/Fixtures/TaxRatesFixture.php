@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ class TaxRatesFixture extends Fixture
     /**
      * @var int
      */
-    protected $priority = 90;
+    protected $priority = 100;
 
     /**
      * {@inheritdoc}
@@ -27,13 +27,13 @@ class TaxRatesFixture extends Fixture
         }
         $this->fixtureModel->resetObjectManager();
         /** Clean predefined tax rates to maintain consistency */
-        /** @var $collection Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection */
+        /** @var $collection \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection */
         $collection = $this->fixtureModel->getObjectManager()
-            ->get('Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection');
+            ->get(\Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection::class);
 
-        /** @var $model Magento\Tax\Model\Calculation\Rate */
+        /** @var $model \Magento\Tax\Model\Calculation\Rate */
         $model = $this->fixtureModel->getObjectManager()
-            ->get('Magento\Tax\Model\Calculation\Rate');
+            ->get(\Magento\Tax\Model\Calculation\Rate::class);
 
         foreach ($collection->getAllIds() as $id) {
             $model->setId($id);
@@ -42,7 +42,7 @@ class TaxRatesFixture extends Fixture
         /**
          * Import tax rates with import handler
          */
-        $filename = realpath(__DIR__ . '/' . $taxRatesFile);
+        $filename = realpath(__DIR__ . DIRECTORY_SEPARATOR . "_files" . DIRECTORY_SEPARATOR . $taxRatesFile);
         $file = [
             'name' => $filename,
             'type' => 'fixtureModel/vnd.ms-excel',
@@ -51,7 +51,7 @@ class TaxRatesFixture extends Fixture
             'size' => filesize($filename),
         ];
         $importHandler = $this->fixtureModel->getObjectManager()
-            ->create('Magento\TaxImportExport\Model\Rate\CsvImportHandler');
+            ->create(\Magento\TaxImportExport\Model\Rate\CsvImportHandler::class);
         $importHandler->importFromCsvFile($file);
 
     }

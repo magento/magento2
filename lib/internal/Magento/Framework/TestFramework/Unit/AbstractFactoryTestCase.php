@@ -2,7 +2,7 @@
 /**
  * Framework for unit tests containing helper methods
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  * Number of fields is necessary because of the number of fields used by multiple layers
@@ -38,10 +38,14 @@ abstract class AbstractFactoryTestCase extends \PHPUnit_Framework_TestCase
      */
     protected $factory;
 
+    /**
+     * Setup function
+     * @return void
+     */
     protected function setUp()
     {
         $this->objectManager = new Helper\ObjectManager($this);
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->factory = $this->objectManager->getObject(
@@ -50,6 +54,10 @@ abstract class AbstractFactoryTestCase extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test create
+     * @return void
+     */
     public function testCreate()
     {
         $instanceMock = $this->getMockBuilder($this->instanceClassName)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@
  */
 namespace Magento\Test;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -22,7 +25,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
     {
         $resource = new \stdClass();
 
-        $configMock = $this->getMockBuilder('Magento\TestFramework\ObjectManager\Config')
+        $configMock = $this->getMockBuilder(\Magento\TestFramework\ObjectManager\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPreference', 'clean'])
             ->getMock();
@@ -35,49 +38,53 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
                 }
             ));
 
-        $cache = $this->getMock('Magento\Framework\App\CacheInterface');
-        $configLoader = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false);
-        $configCache = $this->getMock('Magento\Framework\App\ObjectManager\ConfigCache', [], [], '', false);
+        $cache = $this->getMock(\Magento\Framework\App\CacheInterface::class);
+        $configLoader = $this->getMock(\Magento\Framework\App\ObjectManager\ConfigLoader::class, [], [], '', false);
+        $configCache = $this->getMock(\Magento\Framework\App\ObjectManager\ConfigCache::class, [], [], '', false);
         $primaryLoaderMock = $this->getMock(
-            'Magento\Framework\App\ObjectManager\ConfigLoader\Primary',
+            \Magento\Framework\App\ObjectManager\ConfigLoader\Primary::class,
             [],
             [],
             '',
             false
         );
-        $factory = $this->getMock('Magento\Framework\ObjectManager\FactoryInterface');
+        $factory = $this->getMock(\Magento\Framework\ObjectManager\FactoryInterface::class);
         $factory->expects($this->exactly(2))->method('create')->will(
             $this->returnCallback(
                 function ($className) {
-                    if ($className === 'Magento\Framework\DataObject') {
-                        return $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+                    if ($className === \Magento\Framework\DataObject::class) {
+                        return $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
                     }
                 }
             )
         );
 
-        $connectionMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $connectionMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $sharedInstances = [
-            'Magento\Framework\App\Cache\Type\Config' => $cache,
-            'Magento\Framework\App\ObjectManager\ConfigLoader' => $configLoader,
-            'Magento\Framework\App\ObjectManager\ConfigCache' => $configCache,
-            'Magento\Framework\Config\ReaderInterface' => $this->getMock(
-                'Magento\Framework\Config\ReaderInterface'
-            ),
-            'Magento\Framework\Config\ScopeInterface' => $this->getMock('Magento\Framework\Config\ScopeInterface'),
-            'Magento\Framework\Config\CacheInterface' => $this->getMock('Magento\Framework\Config\CacheInterface'),
-            'Magento\Framework\Cache\FrontendInterface' =>
-                $this->getMock('Magento\Framework\Cache\FrontendInterface'),
-            'Magento\Framework\App\ResourceConnection' => $connectionMock,
-            'Magento\Framework\App\ResourceConnection\Config' => $this->getMock(
-                'Magento\Framework\App\ResourceConnection\Config',
-                [],
-                [],
-                '',
-                false
-            )
+            \Magento\Framework\App\Cache\Type\Config::class => $cache,
+            \Magento\Framework\App\ObjectManager\ConfigLoader::class => $configLoader,
+            \Magento\Framework\App\ObjectManager\ConfigCache::class => $configCache,
+            \Magento\Framework\Config\ReaderInterface::class =>
+                $this->getMock(
+                    \Magento\Framework\Config\ReaderInterface::class
+                ),
+            \Magento\Framework\Config\ScopeInterface::class =>
+                $this->getMock(\Magento\Framework\Config\ScopeInterface::class),
+            \Magento\Framework\Config\CacheInterface::class =>
+                $this->getMock(\Magento\Framework\Config\CacheInterface::class),
+            \Magento\Framework\Cache\FrontendInterface::class =>
+                $this->getMock(\Magento\Framework\Cache\FrontendInterface::class),
+            \Magento\Framework\App\ResourceConnection::class => $connectionMock,
+            \Magento\Framework\App\ResourceConnection\Config::class =>
+                $this->getMock(
+                    \Magento\Framework\App\ResourceConnection\Config::class,
+                    [],
+                    [],
+                    '',
+                    false
+                )
         ];
         $model = new \Magento\TestFramework\ObjectManager(
             $factory,
@@ -86,13 +93,13 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
             $primaryLoaderMock
         );
 
-        $model->addSharedInstance($resource, 'Magento\Framework\App\ResourceConnection');
-        $instance1 = $model->get('Magento\Framework\DataObject');
+        $model->addSharedInstance($resource, \Magento\Framework\App\ResourceConnection::class);
+        $instance1 = $model->get(\Magento\Framework\DataObject::class);
 
-        $this->assertSame($instance1, $model->get('Magento\Framework\DataObject'));
+        $this->assertSame($instance1, $model->get(\Magento\Framework\DataObject::class));
         $this->assertSame($model, $model->clearCache());
-        $this->assertSame($model, $model->get('Magento\Framework\ObjectManagerInterface'));
-        $this->assertSame($resource, $model->get('Magento\Framework\App\ResourceConnection'));
-        $this->assertNotSame($instance1, $model->get('Magento\Framework\DataObject'));
+        $this->assertSame($model, $model->get(\Magento\Framework\ObjectManagerInterface::class));
+        $this->assertSame($resource, $model->get(\Magento\Framework\App\ResourceConnection::class));
+        $this->assertNotSame($instance1, $model->get(\Magento\Framework\DataObject::class));
     }
 }

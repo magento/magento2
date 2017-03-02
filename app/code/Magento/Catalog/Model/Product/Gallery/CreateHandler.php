@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -59,6 +59,11 @@ class CreateHandler implements ExtensionInterface
     protected $fileStorageDb;
 
     /**
+     * @var array
+     */
+    private $mediaAttributeCodes;
+
+    /**
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
@@ -76,7 +81,7 @@ class CreateHandler implements ExtensionInterface
         \Magento\Framework\Filesystem $filesystem,
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
     ) {
-        $this->metadata = $metadataPool->getMetadata('Magento\Catalog\Api\Data\ProductInterface');
+        $this->metadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->attributeRepository = $attributeRepository;
         $this->resourceModel = $resourceModel;
         $this->jsonHelper = $jsonHelper;
@@ -145,9 +150,11 @@ class CreateHandler implements ExtensionInterface
         }
 
         /* @var $mediaAttribute \Magento\Catalog\Api\Data\ProductAttributeInterface */
-        foreach ($this->mediaConfig->getMediaAttributeCodes() as $mediaAttrCode) {
+        foreach ($this->getMediaAttributeCodes() as $mediaAttrCode) {
             $attrData = $product->getData($mediaAttrCode);
-
+            if (empty($attrData) && empty($clearImages) && empty($newImages) && empty($existImages)) {
+                continue;
+            }
             if (in_array($attrData, $clearImages)) {
                 $product->setData($mediaAttrCode, 'no_selection');
             }
@@ -160,12 +167,13 @@ class CreateHandler implements ExtensionInterface
             if (in_array($attrData, array_keys($existImages))) {
                 $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
             }
-
-            $product->addAttributeUpdate(
-                $mediaAttrCode,
-                $product->getData($mediaAttrCode),
-                $product->getStoreId()
-            );
+            if (!empty($product->getData($mediaAttrCode))) {
+                $product->addAttributeUpdate(
+                    $mediaAttrCode,
+                    $product->getData($mediaAttrCode),
+                    $product->getStoreId()
+                );
+            }
         }
 
         $product->setData($attrCode, $value);
@@ -392,5 +400,18 @@ class CreateHandler implements ExtensionInterface
                 __('We couldn\'t copy file %1. Please delete media with non-existing images and try again.', $file)
             );
         }
+    }
+
+    /**
+     * Get Media Attribute Codes cached value
+     *
+     * @return array
+     */
+    private function getMediaAttributeCodes()
+    {
+        if ($this->mediaAttributeCodes === null) {
+            $this->mediaAttributeCodes = $this->mediaConfig->getMediaAttributeCodes();
+        }
+        return $this->mediaAttributeCodes;
     }
 }

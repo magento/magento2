@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\System\Config;
@@ -32,27 +32,27 @@ class PriceScopeTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_indexerMock = $this->getMock(
-            'Magento\Indexer\Model\Indexer',
+            \Magento\Indexer\Model\Indexer::class,
             ['load', 'invalidate'],
             [],
             '',
             false
         );
         $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
+            \Magento\Framework\Indexer\IndexerRegistry::class,
             ['get'],
             [],
             '',
             false
         );
 
-        $contextMock = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
-        $registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
-        $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
+        $registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
+        $configMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->_model = $this->_objectManager->getObject(
-            'Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope',
+            \Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope::class,
             [
                 'context' => $contextMock,
                 'registry' => $registryMock,

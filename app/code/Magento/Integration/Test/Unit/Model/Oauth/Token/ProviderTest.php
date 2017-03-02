@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,21 +40,21 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->consumerFactoryMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\ConsumerFactory')
+        $this->consumerFactoryMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\ConsumerFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->tokenFactoryMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\TokenFactory')
+        $this->tokenFactoryMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\TokenFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->consumerMock = $this->getMockBuilder('Magento\Framework\Oauth\ConsumerInterface')
+        $this->consumerMock = $this->getMockBuilder(\Magento\Framework\Oauth\ConsumerInterface::class)
             ->setMethods(
                 [
                     'load',
@@ -71,7 +71,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestTokenMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
+        $this->requestTokenMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
             ->setMethods(
                 [
                     'loadByConsumerIdAndUserType',
@@ -89,7 +89,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->accessTokenMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
+        $this->accessTokenMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
             ->setMethods(
                 [
                     'getToken',
@@ -105,7 +105,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->tokenProvider = $objectManagerHelper->getObject(
-            'Magento\Integration\Model\Oauth\Token\Provider',
+            \Magento\Integration\Model\Oauth\Token\Provider::class,
             [
                 'consumerFactory' => $this->consumerFactoryMock,
                 'tokenFactory' => $this->tokenFactoryMock,
@@ -172,7 +172,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
         $tokenString = '12345678901234567890123456789012';
         $secret = 'secret';
 
-        $tokenMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
+        $tokenMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
             ->setMethods(
                 [
                     'loadByConsumerIdAndUserType',
@@ -217,7 +217,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
         $consumerId = 1;
         $tokenId = 1;
 
-        $tokenMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
+        $tokenMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
             ->setMethods(
                 [
                     'loadByConsumerIdAndUserType',

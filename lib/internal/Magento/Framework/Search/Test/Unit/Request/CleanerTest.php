@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Request;
@@ -21,13 +21,13 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->status = $this->getMockBuilder('\Magento\Framework\Search\Request\Aggregation\StatusInterface')
+        $this->status = $this->getMockBuilder(\Magento\Framework\Search\Request\Aggregation\StatusInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['isEnabled'])
             ->getMockForAbstractClass();
 
         $this->cleaner = $helper->getObject(
-            'Magento\Framework\Search\Request\Cleaner',
+            \Magento\Framework\Search\Request\Cleaner::class,
             ['aggregationStatus' => $this->status]
         );
     }

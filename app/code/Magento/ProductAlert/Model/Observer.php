@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Model;
@@ -157,6 +157,7 @@ class Observer
      * Retrieve website collection array
      *
      * @return array
+     * @throws \Exception
      */
     protected function _getWebsites()
     {
@@ -165,6 +166,7 @@ class Observer
                 $this->_websites = $this->_storeManager->getWebsites();
             } catch (\Exception $e) {
                 $this->_errors[] = $e->getMessage();
+                throw $e;
             }
         }
         return $this->_websites;
@@ -175,6 +177,7 @@ class Observer
      *
      * @param \Magento\ProductAlert\Model\Email $email
      * @return $this
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -183,7 +186,6 @@ class Observer
         $email->setType('price');
         foreach ($this->_getWebsites() as $website) {
             /* @var $website \Magento\Store\Model\Website */
-
             if (!$website->getDefaultGroup() || !$website->getDefaultGroup()->getDefaultStore()) {
                 continue;
             }
@@ -201,7 +203,7 @@ class Observer
                 )->setCustomerOrder();
             } catch (\Exception $e) {
                 $this->_errors[] = $e->getMessage();
-                return $this;
+                throw $e;
             }
 
             $previousCustomer = null;
@@ -244,6 +246,7 @@ class Observer
                     }
                 } catch (\Exception $e) {
                     $this->_errors[] = $e->getMessage();
+                    throw $e;
                 }
             }
             if ($previousCustomer) {
@@ -251,6 +254,7 @@ class Observer
                     $email->send();
                 } catch (\Exception $e) {
                     $this->_errors[] = $e->getMessage();
+                    throw $e;
                 }
             }
         }
@@ -262,6 +266,7 @@ class Observer
      *
      * @param \Magento\ProductAlert\Model\Email $email
      * @return $this
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -291,7 +296,7 @@ class Observer
                 )->setCustomerOrder();
             } catch (\Exception $e) {
                 $this->_errors[] = $e->getMessage();
-                return $this;
+                throw $e;
             }
 
             $previousCustomer = null;
@@ -331,6 +336,7 @@ class Observer
                     }
                 } catch (\Exception $e) {
                     $this->_errors[] = $e->getMessage();
+                    throw $e;
                 }
             }
 
@@ -339,6 +345,7 @@ class Observer
                     $email->send();
                 } catch (\Exception $e) {
                     $this->_errors[] = $e->getMessage();
+                    throw $e;
                 }
             }
         }

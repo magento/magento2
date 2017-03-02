@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model;
@@ -31,12 +31,12 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Paypal\Block\Express\Form';
+    protected $_formBlockType = \Magento\Paypal\Block\Express\Form::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Payment\Info';
+    protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
     /**
      * Availability option
@@ -672,19 +672,13 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         
         $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
 
-        if (
-            !is_array($additionalData)
-            || !isset($additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT])
-        ) {
+        if (!is_array($additionalData)) {
             return $this;
         }
 
-        $this->getInfoInstance()
-            ->setAdditionalInformation(
-                ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT,
-                $additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT]
-            );
-        
+        foreach ($additionalData as $key => $value) {
+            $this->getInfoInstance()->setAdditionalInformation($key, $value);
+        }
         return $this;
     }
 

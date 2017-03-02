@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Block\Adminhtml\Export;
 
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
 /**
  * Export filter block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -92,7 +94,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         ];
         /** @var $selectBlock \Magento\Framework\View\Element\Html\Date */
         $dateBlock = $this->_layout->createBlock(
-            'Magento\Framework\View\Element\Html\Date',
+            \Magento\Framework\View\Element\Html\Date::class,
             '',
             ['data' => $arguments]
         );
@@ -157,7 +159,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             ];
             /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
             $selectBlock = $this->_layout->createBlock(
-                'Magento\Framework\View\Element\Html\Select',
+                \Magento\Framework\View\Element\Html\Select::class,
                 '',
                 ['data' => $arguments]
             );
@@ -184,25 +186,39 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             $toValue = $this->escapeHtml(next($value));
         }
 
-        return '<strong class="admin__control-support-text">' . __(
-            'From'
-        ) .
-        ':</strong>&nbsp;' .
-        '<input type="text" name="' .
-        $name .
-        '[]" class="admin__control-text input-text input-text-range"' .
-        ' value="' .
-        $fromValue .
-        '"/>&nbsp;' .
-        '<strong class="admin__control-support-text">' .
-        __(
-            'To'
-        ) .
-        ':</strong>&nbsp;<input type="text" name="' .
-        $name .
-        '[]" class="admin__control-text input-text input-text-range" value="' .
-        $toValue .
-        '" />';
+        return '<strong class="admin__control-support-text">' .
+            $this->getFromAttributePrefix($attribute) .
+            ':</strong>&nbsp;' .
+            '<input type="text" name="' .
+            $name .
+            '[]" class="admin__control-text input-text input-text-range"' .
+            ' value="' .
+            $fromValue .
+            '"/>&nbsp;' .
+            '<strong class="admin__control-support-text">' .
+            __(
+                'To'
+            ) .
+            ':</strong>&nbsp;<input type="text" name="' .
+            $name .
+            '[]" class="admin__control-text input-text input-text-range" value="' .
+            $toValue .
+            '" />';
+    }
+
+    /**
+     * Get 'From' prefix to attribute.
+     *
+     * @param Attribute $attribute
+     * @return \Magento\Framework\Phrase
+     */
+    protected function getFromAttributePrefix(Attribute $attribute)
+    {
+        $attributePrefix = $attribute->getAttributeCode() === ProductAttributeInterface::CODE_TIER_PRICE
+            ? __('Fixed Price: From')
+            : __('From');
+
+        return $attributePrefix;
     }
 
     /**
@@ -240,7 +256,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             ];
             /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
             $selectBlock = $this->_layout->createBlock(
-                'Magento\Framework\View\Element\Html\Select',
+                \Magento\Framework\View\Element\Html\Select::class,
                 '',
                 ['data' => $arguments]
             );

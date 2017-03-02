@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
@@ -36,25 +36,28 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->saleable = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $this->saleable = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->localeDate = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
+        $this->localeDate = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
 
         $this->saleable->expects($this->once())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
 
-        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectHelper->getObject('Magento\Bundle\Pricing\Price\SpecialPrice', [
-            'saleableItem' => $this->saleable,
-            'localeDate' => $this->localeDate,
-            'priceCurrency' => $this->priceCurrencyMock,
-        ]);
+        $this->model = $objectHelper->getObject(
+            \Magento\Bundle\Pricing\Price\SpecialPrice::class,
+            [
+                'saleableItem' => $this->saleable,
+                'localeDate' => $this->localeDate,
+                'priceCurrency' => $this->priceCurrencyMock
+            ]
+        );
     }
 
     /**
@@ -74,7 +77,7 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getSpecialPrice')
             ->will($this->returnValue($specialPrice));
 
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->saleable->expects($this->once())
@@ -96,7 +99,7 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
             ->method('convertAndRound');
 
         if ($isScopeDateInInterval) {
-            $price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
+            $price = $this->getMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
             $this->priceInfo->expects($this->once())
                 ->method('getPrice')
                 ->with(\Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE)

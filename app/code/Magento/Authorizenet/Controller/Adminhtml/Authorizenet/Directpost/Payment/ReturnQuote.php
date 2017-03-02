@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost\Payment;
@@ -15,11 +15,11 @@ class ReturnQuote extends \Magento\Sales\Controller\Adminhtml\Order\Create
      */
     protected function _returnQuote()
     {
-        $directpostSession = $this->_objectManager->get('Magento\Authorizenet\Model\Directpost\Session');
+        $directpostSession = $this->_objectManager->get(\Magento\Authorizenet\Model\Directpost\Session::class);
         $incrementId = $directpostSession->getLastOrderIncrementId();
         if ($incrementId && $directpostSession->isCheckoutOrderIncrementIdExist($incrementId)) {
             /* @var $order \Magento\Sales\Model\Order */
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId($incrementId);
+            $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->loadByIncrementId($incrementId);
             if ($order->getId()) {
                 $directpostSession->removeCheckoutOrderIncrementId($order->getIncrementId());
             }
@@ -35,7 +35,7 @@ class ReturnQuote extends \Magento\Sales\Controller\Adminhtml\Order\Create
     {
         $this->_returnQuote();
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode(['success' => 1])
+            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode(['success' => 1])
         );
     }
 }

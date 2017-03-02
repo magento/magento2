@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Product\Compare;
@@ -33,12 +33,14 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
 
             if ($product) {
                 $this->_catalogProductCompareList->addProduct($product);
-                $productName = $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getName());
+                $productName = $this->_objectManager->get(
+                    \Magento\Framework\Escaper::class
+                )->escapeHtml($product->getName());
                 $this->messageManager->addSuccess(__('You added product %1 to the comparison list.', $productName));
                 $this->_eventManager->dispatch('catalog_product_compare_add_product', ['product' => $product]);
             }
 
-            $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare')->calculate();
+            $this->_objectManager->get(\Magento\Catalog\Helper\Product\Compare::class)->calculate();
         }
         return $resultRedirect->setRefererOrBaseUrl();
     }

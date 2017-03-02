@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 
 /**
  * Class CancelTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CancelTest extends \PHPUnit_Framework_TestCase
 {
@@ -86,52 +88,54 @@ class CancelTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->creditmemoManagementMock = $this->getMock(
-            'Magento\Sales\Api\CreditmemoManagementInterface',
+            \Magento\Sales\Api\CreditmemoManagementInterface::class,
             [],
             [],
             '',
             false
         );
-        $titleMock = $this->getMockBuilder('Magento\Framework\App\Action\Title')
+        $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->responseMock = $this->getMockBuilder('Magento\Framework\App\Response\Http')
+        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->messageManagerMock = $this->getMockBuilder('Magento\Framework\Message\Manager')
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session')
+        $this->sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->helperMock = $this->getMockBuilder('Magento\Backend\Helper\Data')
+        $this->helperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
-            ->disableOriginalConstructor()
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
+        )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultForwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
-            ->disableOriginalConstructor()
+        $this->resultForwardFactoryMock = $this->getMockBuilder(
+            \Magento\Backend\Model\View\Result\ForwardFactory::class
+        )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultForwardMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
+        $this->resultForwardMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getHelper')
             ->will($this->returnValue($this->helperMock));
-        $this->actionFlagMock = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
+        $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())
@@ -161,7 +165,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->controller = $objectManager->getObject(
-            'Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Cancel',
+            \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Cancel::class,
             [
                 'context' => $this->contextMock,
                 'resultForwardFactory' => $this->resultForwardFactoryMock
@@ -184,7 +188,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->willReturn($creditmemoId);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Api\CreditmemoManagementInterface')
+            ->with(\Magento\Sales\Api\CreditmemoManagementInterface::class)
             ->willReturn($this->creditmemoManagementMock);
         $this->creditmemoManagementMock->expects($this->once())
             ->method('cancel')
@@ -199,7 +203,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->controller->execute()
         );
     }
@@ -219,7 +223,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->willReturn($creditmemoId);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Api\CreditmemoManagementInterface')
+            ->with(\Magento\Sales\Api\CreditmemoManagementInterface::class)
             ->willReturn($this->creditmemoManagementMock);
         $this->creditmemoManagementMock->expects($this->once())
             ->method('cancel')
@@ -234,7 +238,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->controller->execute()
         );
     }
@@ -257,7 +261,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Forward',
+            \Magento\Backend\Model\View\Result\Forward::class,
             $this->controller->execute()
         );
     }
@@ -275,7 +279,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->willReturn($creditmemoId);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Api\CreditmemoManagementInterface')
+            ->with(\Magento\Sales\Api\CreditmemoManagementInterface::class)
             ->willReturn($this->creditmemoManagementMock);
         $this->creditmemoManagementMock->expects($this->once())
             ->method('cancel')
@@ -292,7 +296,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->controller->execute()
         );
     }

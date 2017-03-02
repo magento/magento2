@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\App\Action\Plugin;
@@ -23,17 +23,14 @@ class StoreCheck
     }
 
     /**
-     * @param \Magento\Framework\App\ActionInterface $subject
-     * @param callable $proceed
+     * @param \Magento\Framework\App\Action\AbstractAction $subject
      * @param \Magento\Framework\App\RequestInterface $request
-     *
-     * @return \Magento\Framework\App\ResponseInterface
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws \Magento\Framework\Exception\State\InitException
      */
-    public function aroundDispatch(
-        \Magento\Framework\App\ActionInterface $subject,
-        \Closure $proceed,
+    public function beforeDispatch(
+        \Magento\Framework\App\Action\AbstractAction $subject,
         \Magento\Framework\App\RequestInterface $request
     ) {
         if (!$this->_storeManager->getStore()->isActive()) {
@@ -41,6 +38,5 @@ class StoreCheck
                 __('Current store is not active.')
             );
         }
-        return $proceed($request);
     }
 }

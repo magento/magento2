@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
@@ -34,7 +34,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         $this->_eventManager = $eventManager;
         $this->_conditionAddress = $conditionAddress;
         parent::__construct($context, $data);
-        $this->setType('Magento\SalesRule\Model\Rule\Condition\Combine');
+        $this->setType(\Magento\SalesRule\Model\Rule\Condition\Combine::class);
     }
 
     /**
@@ -58,15 +58,15 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
             $conditions,
             [
                 [
-                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Product\Found',
+                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                     'label' => __('Product attribute combination'),
                 ],
                 [
-                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Product\Subselect',
+                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product\Subselect::class,
                     'label' => __('Products subselection')
                 ],
                 [
-                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Combine',
+                    'value' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                     'label' => __('Conditions combination')
                 ],
                 ['label' => __('Cart Attribute'), 'value' => $attributes]

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test \Magento\Tax\Model\Sales\Total\Quote\Subtotal
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SubtotalTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +32,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
     }
 
     protected function getCustomerById($id)
@@ -38,7 +40,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         /**
          * @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface
          */
-        $customerRepository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerRepository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         return $customerRepository->getById($id);
     }
 
@@ -57,10 +59,10 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $customerTaxClassId = $this->getCustomerTaxClassId();
         $fixtureCustomerId = 1;
         /** @var \Magento\Customer\Model\Customer $customer */
-        $customer = $this->objectManager->create('Magento\Customer\Model\Customer')->load($fixtureCustomerId);
+        $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load($fixtureCustomerId);
         /** @var \Magento\Customer\Model\Group $customerGroup */
         $customerGroup = $this->objectManager->create(
-            'Magento\Customer\Model\Group'
+            \Magento\Customer\Model\Group::class
         )->load(
                 'custom_group',
                 'customer_group_code'
@@ -76,12 +78,12 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $quoteShippingAddressDataObject = $this->getShippingAddressDataObject($fixtureCustomerId);
 
         /** @var \Magento\Quote\Model\Quote\Address $quoteShippingAddress */
-        $quoteShippingAddress = $this->objectManager->create('Magento\Quote\Model\Quote\Address');
+        $quoteShippingAddress = $this->objectManager->create(\Magento\Quote\Model\Quote\Address::class);
         $quoteShippingAddress->importCustomerAddressData($quoteShippingAddressDataObject);
         $quantity = 2;
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->setStoreId(
                 1
             )->setIsActive(
@@ -104,23 +106,26 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             );
         $address = $quote->getShippingAddress();
         /** @var \Magento\Quote\Model\ShippingAssignment $shippingAssignment */
-        $shippingAssignment = $this->objectManager->create('Magento\Quote\Model\ShippingAssignment');
-        $shipping = $this->objectManager->create('Magento\Quote\Model\Shipping');
+        $shippingAssignment = $this->objectManager->create(\Magento\Quote\Model\ShippingAssignment::class);
+        $shipping = $this->objectManager->create(\Magento\Quote\Model\Shipping::class);
         $shipping->setAddress($address);
         $shippingAssignment->setShipping($shipping);
         $shippingAssignment->setItems($address->getAllItems());
         /** @var  \Magento\Quote\Model\Quote\Address\Total $total */
-        $total = $this->objectManager->create('Magento\Quote\Model\Quote\Address\Total');
+        $total = $this->objectManager->create(\Magento\Quote\Model\Quote\Address\Total::class);
         /** @var \Magento\Quote\Model\Quote\Address\Total\Subtotal $addressSubtotalCollector */
-        $addressSubtotalCollector = $this->objectManager->create('Magento\Quote\Model\Quote\Address\Total\Subtotal');
+        $addressSubtotalCollector = $this->objectManager->create(
+            \Magento\Quote\Model\Quote\Address\Total\Subtotal::class
+        );
         $addressSubtotalCollector->collect($quote, $shippingAssignment, $total);
 
         /** @var \Magento\Tax\Model\Sales\Total\Quote\Subtotal $subtotalCollector */
-        $subtotalCollector = $this->objectManager->create('Magento\Tax\Model\Sales\Total\Quote\Subtotal');
+        $subtotalCollector = $this->objectManager->create(\Magento\Tax\Model\Sales\Total\Quote\Subtotal::class);
         $subtotalCollector->collect($quote, $shippingAssignment, $total);
 
         $this->assertEquals($expected['subtotal'], $total->getSubtotal());
         $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $total->getSubtotalInclTax());
+        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $address->getBaseSubtotalTotalInclTax());
         $this->assertEquals($expected['discount_amount'], $total->getDiscountAmount());
         $items = $address->getAllItems();
         /** @var \Magento\Quote\Model\Quote\Address\Item $item */
@@ -172,10 +177,10 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $customerTaxClassId = $this->getCustomerTaxClassId();
         $fixtureCustomerId = 1;
         /** @var \Magento\Customer\Model\Customer $customer */
-        $customer = $this->objectManager->create('Magento\Customer\Model\Customer')->load($fixtureCustomerId);
+        $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load($fixtureCustomerId);
         /** @var \Magento\Customer\Model\Group $customerGroup */
         $customerGroup = $this->objectManager->create(
-            'Magento\Customer\Model\Group'
+            \Magento\Customer\Model\Group::class
         )->load(
                 'custom_group',
                 'customer_group_code'
@@ -196,12 +201,12 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $quoteShippingAddressDataObject = $this->getShippingAddressDataObject($fixtureCustomerId);
 
         /** @var \Magento\Quote\Model\Quote\Address $quoteShippingAddress */
-        $quoteShippingAddress = $this->objectManager->create('Magento\Quote\Model\Quote\Address');
+        $quoteShippingAddress = $this->objectManager->create(\Magento\Quote\Model\Quote\Address::class);
         $quoteShippingAddress->importCustomerAddressData($quoteShippingAddressDataObject);
         $quantity = 2;
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->setStoreId(
                 1
             )->setIsActive(
@@ -224,19 +229,21 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             );
         $address = $quote->getShippingAddress();
         /** @var \Magento\Quote\Model\ShippingAssignment $shippingAssignment */
-        $shippingAssignment = $this->objectManager->create('Magento\Quote\Model\ShippingAssignment');
-        $shipping = $this->objectManager->create('Magento\Quote\Model\Shipping');
+        $shippingAssignment = $this->objectManager->create(\Magento\Quote\Model\ShippingAssignment::class);
+        $shipping = $this->objectManager->create(\Magento\Quote\Model\Shipping::class);
         $shipping->setAddress($address);
         $shippingAssignment->setShipping($shipping);
         $shippingAssignment->setItems($quote->getAllItems());
         /** @var  \Magento\Quote\Model\Quote\Address\Total $total */
-        $total = $this->objectManager->create('Magento\Quote\Model\Quote\Address\Total');
+        $total = $this->objectManager->create(\Magento\Quote\Model\Quote\Address\Total::class);
         /** @var \Magento\Quote\Model\Quote\Address\Total\Subtotal $addressSubtotalCollector */
-        $addressSubtotalCollector = $this->objectManager->create('Magento\Quote\Model\Quote\Address\Total\Subtotal');
+        $addressSubtotalCollector = $this->objectManager->create(
+            \Magento\Quote\Model\Quote\Address\Total\Subtotal::class
+        );
         $addressSubtotalCollector->collect($quote, $shippingAssignment, $total);
 
         /** @var \Magento\Tax\Model\Sales\Total\Quote\Subtotal $subtotalCollector */
-        $subtotalCollector = $this->objectManager->create('Magento\Tax\Model\Sales\Total\Quote\Subtotal');
+        $subtotalCollector = $this->objectManager->create(\Magento\Tax\Model\Sales\Total\Quote\Subtotal::class);
         $subtotalCollector->collect($quote, $shippingAssignment, $total);
 
         $this->assertEquals($expected['subtotal'], $total->getSubtotal());
@@ -258,7 +265,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCustomerTaxClassId()
     {
-        $customerTaxClass = $this->objectManager->create('Magento\Tax\Model\ClassModel');
+        $customerTaxClass = $this->objectManager->create(\Magento\Tax\Model\ClassModel::class);
         $fixtureCustomerTaxClass = 'CustomerTaxClass2';
         /** @var \Magento\Tax\Model\ClassModel $customerTaxClass */
         $customerTaxClass->load($fixtureCustomerTaxClass, 'class_name');
@@ -273,7 +280,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
     protected function getProductTaxClassId()
     {
         /** @var \Magento\Tax\Model\ClassModel $productTaxClass */
-        $productTaxClass = $this->objectManager->create('Magento\Tax\Model\ClassModel');
+        $productTaxClass = $this->objectManager->create(\Magento\Tax\Model\ClassModel::class);
         $fixtureProductTaxClass = 'ProductTaxClass1';
         $productTaxClass->load($fixtureProductTaxClass, 'class_name');
         return $productTaxClass->getId();
@@ -286,13 +293,15 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
     protected function getShippingAddressDataObject($fixtureCustomerId)
     {
         $fixtureCustomerAddressId = 1;
-        $customerAddress = $this->objectManager->create('Magento\Customer\Model\Address')->load($fixtureCustomerId);
+        $customerAddress = $this->objectManager->create(
+            \Magento\Customer\Model\Address::class
+        )->load($fixtureCustomerId);
         /** Set data which corresponds tax class fixture */
         $customerAddress->setCountryId('US')->setRegionId(12)->save();
         /**
          * @var $addressRepository \Magento\Customer\Api\AddressRepositoryInterface
          */
-        $addressRepository = $this->objectManager->get('Magento\Customer\Api\AddressRepositoryInterface');
+        $addressRepository = $this->objectManager->get(\Magento\Customer\Api\AddressRepositoryInterface::class);
         $quoteShippingAddressDataObject = $addressRepository->getById($fixtureCustomerAddressId);
         return $quoteShippingAddressDataObject;
     }

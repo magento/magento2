@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
@@ -21,7 +21,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
     {
         $collection = $this->getMockedAbstractCollection();
         $this->assertInstanceOf(
-            '\Magento\Catalog\Model\Product\Condition',
+            \Magento\Catalog\Model\Product\Condition::class,
             $this->model->applyToCollection($collection)
         );
     }
@@ -29,7 +29,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
     public function testGetIdsSelect()
     {
         $connection = $this->getMockedAdapterInterface();
-        $this->assertInstanceOf('\Magento\Framework\DB\Select', $this->model->getIdsSelect($connection));
+        $this->assertInstanceOf(\Magento\Framework\DB\Select::class, $this->model->getIdsSelect($connection));
         $this->model->setTable(null);
         $this->assertEmpty($this->model->getIdsSelect($connection));
     }
@@ -37,7 +37,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new ObjectManager($this);
-        $this->model = $helper->getObject('Magento\Catalog\Model\Product\Condition');
+        $this->model = $helper->getObject(\Magento\Catalog\Model\Product\Condition::class);
         $this->model->setTable('testTable')
             ->setPkFieldName('testFieldName');
     }
@@ -47,7 +47,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
      */
     private function getMockedAbstractCollection()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Eav\Model\Entity\Collection\AbstractCollection')
+        $mockBuilder = $this->getMockBuilder(\Magento\Eav\Model\Entity\Collection\AbstractCollection::class)
             ->setMethods(['joinTable'])
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMockForAbstractClass();
@@ -65,7 +65,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
     {
         $mockedDbSelect = $this->getMockedDbSelect();
 
-        $mockBuilder = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $mockBuilder = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->setMethods(['select'])
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMockForAbstractClass();
@@ -82,7 +82,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
      */
     private function getMockedDbSelect()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Framework\DB\Select')
+        $mockBuilder = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->setMethods(['from'])
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMockForAbstractClass();

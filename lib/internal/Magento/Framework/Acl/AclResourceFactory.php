@@ -2,7 +2,7 @@
 /**
  * Factory for Acl resource
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl;
@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 class AclResourceFactory
 {
-    const RESOURCE_CLASS_NAME = 'Magento\Framework\Acl\AclResource';
+    const RESOURCE_CLASS_NAME = \Magento\Framework\Acl\AclResource::class;
 
     /**
      * @var ObjectManagerInterface

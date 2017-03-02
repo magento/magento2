@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Helper;
@@ -83,7 +83,7 @@ class SubjectReader
      */
     public function readCustomerId(array $subject)
     {
-        if (empty($subject['customer_id'])) {
+        if (!isset($subject['customer_id'])) {
             throw new \InvalidArgumentException('The "customerId" field does not exists');
         }
 

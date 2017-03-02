@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Test\Unit\Model\ResourceModel;
@@ -64,7 +64,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->connectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
@@ -73,28 +73,28 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             ['query']
         );
         $this->dbContext = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\Context',
+            \Magento\Framework\Model\ResourceModel\Db\Context::class,
             [],
             [],
             '',
             false
         );
         $this->metaFactory = $this->getMock(
-            'Magento\SalesSequence\Model\MetaFactory',
+            \Magento\SalesSequence\Model\MetaFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->resourceProfile = $this->getMock(
-            'Magento\SalesSequence\Model\ResourceModel\Profile',
+            \Magento\SalesSequence\Model\ResourceModel\Profile::class,
             ['loadActiveProfile', 'save'],
             [],
             '',
             false
         );
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             ['getConnection', 'getTableName'],
             [],
             '',
@@ -102,21 +102,21 @@ class MetaTest extends \PHPUnit_Framework_TestCase
         );
         $this->dbContext->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $this->select = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             [],
             [],
             '',
             false
         );
         $this->meta = $this->getMock(
-            'Magento\SalesSequence\Model\Meta',
+            \Magento\SalesSequence\Model\Meta::class,
             [],
             [],
             '',
             false
         );
         $this->profile = $this->getMock(
-            'Magento\SalesSequence\Model\Profile',
+            \Magento\SalesSequence\Model\Profile::class,
             [],
             [],
             '',
@@ -161,6 +161,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             ->willReturn($metaId);
         $this->metaFactory->expects($this->once())->method('create')->willReturn($this->meta);
         $this->stepCheckSaveWithActiveProfile($metaData);
+        $this->meta->expects($this->once())->method('beforeLoad');
         $this->assertEquals($this->meta, $this->resource->loadByEntityTypeAndStore($entityType, $storeId));
     }
 
@@ -177,7 +178,5 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             ->method('quoteIdentifier');
         $this->connectionMock->expects($this->once())->method('fetchRow')->willReturn($metaData);
         $this->resourceProfile->expects($this->once())->method('loadActiveProfile')->willReturn($this->profile);
-        $this->meta->expects($this->at(0))->method('setData')->with($metaData);
-        $this->meta->expects($this->at(2))->method('setData')->with('active_profile', $this->profile);
     }
 }

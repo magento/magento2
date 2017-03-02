@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Template;
@@ -33,11 +33,11 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
-        $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
+        $this->appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
         $this->template = $this->getMock(
-            'Magento\Newsletter\Model\Template',
+            \Magento\Newsletter\Model\Template::class,
             [
                 'setTemplateType',
                 'setTemplateText',
@@ -52,10 +52,10 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $templateFactory = $this->getMock('Magento\Newsletter\Model\TemplateFactory', ['create'], [], '', false);
+        $templateFactory = $this->getMock(\Magento\Newsletter\Model\TemplateFactory::class, ['create'], [], '', false);
         $templateFactory->expects($this->once())->method('create')->willReturn($this->template);
         $this->subscriberFactory = $this->getMock(
-            'Magento\Newsletter\Model\SubscriberFactory',
+            \Magento\Newsletter\Model\SubscriberFactory::class,
             ['create'],
             [],
             '',
@@ -64,7 +64,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->preview = $this->objectManagerHelper->getObject(
-            'Magento\Newsletter\Block\Adminhtml\Template\Preview',
+            \Magento\Newsletter\Block\Adminhtml\Template\Preview::class,
             [
                 'appState' => $this->appState,
                 'storeManager' => $this->storeManager,
@@ -118,11 +118,10 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $this->template->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
         $this->template->expects($this->atLeastOnce())->method('revertDesign');
 
-        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $store->expects($this->atLeastOnce())->method('getId')->willReturn(1);
 
         $this->storeManager->expects($this->atLeastOnce())->method('getStores')->willReturn([$store]);
-
 
         $this->appState->expects($this->atLeastOnce())->method('emulateAreaCode')
             ->with(
@@ -151,7 +150,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
                 ['subscriber', null, 3]
             ]
         );
-        $subscriber = $this->getMock('Magento\Newsletter\Model\Subscriber', [], [], '', false);
+        $subscriber = $this->getMock(\Magento\Newsletter\Model\Subscriber::class, [], [], '', false);
         $subscriber->expects($this->atLeastOnce())->method('load')->with(3)->willReturnSelf();
         $this->subscriberFactory->expects($this->atLeastOnce())->method('create')->willReturn($subscriber);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,11 +50,12 @@ class UpdateRow
     {
         $output = [];
         foreach ($connection->describeTable($metadata->getEntityTable()) as $column) {
-            if ($column['DEFAULT'] == 'CURRENT_TIMESTAMP' || $column['IDENTITY']) {
+            $columnName = strtolower($column['COLUMN_NAME']);
+            if ($this->canNotSetTimeStamp($columnName, $column, $data) || $column['IDENTITY']) {
                 continue;
             }
 
-            if (isset($data[strtolower($column['COLUMN_NAME'])])) {
+            if (isset($data[$columnName])) {
                 $output[strtolower($column['COLUMN_NAME'])] = $data[strtolower($column['COLUMN_NAME'])];
             } elseif (!empty($column['NULLABLE'])) {
                 $output[strtolower($column['COLUMN_NAME'])] = null;
@@ -65,6 +66,18 @@ class UpdateRow
         }
 
         return $output;
+    }
+
+    /**
+     * @param string $columnName
+     * @param string $column
+     * @param array $data
+     * @return bool
+     */
+    private function canNotSetTimeStamp($columnName, $column, array $data)
+    {
+        return $column['DEFAULT'] == 'CURRENT_TIMESTAMP' && !isset($data[$columnName])
+        && empty($column['NULLABLE']);
     }
 
     /**

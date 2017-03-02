@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,14 +28,14 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->webSiteModel = $this->getMock(
-            '\Magento\Store\Model\WebSite',
+            \Magento\Store\Model\WebSite::class,
             ['getBaseCurrency'],
             [],
             '',
             false
         );
         $this->storeResolver = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Product\StoreResolver',
+            \Magento\CatalogImportExport\Model\Import\Product\StoreResolver::class,
             ['getWebsiteCodeToId'],
             [],
             '',
@@ -43,7 +43,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->website = $this->getMock(
-            '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website',
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website::class,
             ['getAllWebsitesValue', '_clearMessages', '_addMessages'],
             [
                 $this->storeResolver,
@@ -106,7 +106,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     public function testGetAllWebsitesValue()
     {
         $currencyCode = 'currencyCodeValue';
-        $currency = $this->getMock('\Magento\Directory\Model\Currency', ['getCurrencyCode'], [], '', false);
+        $currency = $this->getMock(\Magento\Directory\Model\Currency::class, ['getCurrencyCode'], [], '', false);
         $currency->expects($this->once())->method('getCurrencyCode')->willReturn($currencyCode);
 
         $this->webSiteModel->expects($this->once())->method('getBaseCurrency')->willReturn($currency);
@@ -114,7 +114,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $expectedResult = AdvancedPricing::VALUE_ALL_WEBSITES . ' [' . $currencyCode . ']';
 
         $website = $this->getMock(
-            '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website',
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website::class,
             null,
             [
                 $this->storeResolver,

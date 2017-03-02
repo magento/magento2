@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework;
@@ -21,19 +21,19 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
      *
      * @var string
      */
-    protected $_locatorClassName = 'Magento\TestFramework\ObjectManager';
+    protected $_locatorClassName = \Magento\TestFramework\ObjectManager::class;
 
     /**
      * Config class name
      *
      * @var string
      */
-    protected $_configClassName = 'Magento\TestFramework\ObjectManager\Config';
+    protected $_configClassName = \Magento\TestFramework\ObjectManager\Config::class;
 
     /**
      * @var string
      */
-    protected $envFactoryClassName = 'Magento\TestFramework\App\EnvironmentFactory';
+    protected $envFactoryClassName = \Magento\TestFramework\App\EnvironmentFactory::class;
 
     /**
      * @var array
@@ -53,20 +53,18 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
         \Magento\TestFramework\ObjectManager::setInstance($objectManager);
         $this->directoryList = $directoryList;
         $objectManager->configure($this->_primaryConfigData);
-        $objectManager->addSharedInstance($this->directoryList, 'Magento\Framework\App\Filesystem\DirectoryList');
-        $objectManager->addSharedInstance($this->directoryList, 'Magento\Framework\Filesystem\DirectoryList');
+        $objectManager->addSharedInstance($this->directoryList, \Magento\Framework\App\Filesystem\DirectoryList::class);
+        $objectManager->addSharedInstance($this->directoryList, \Magento\Framework\Filesystem\DirectoryList::class);
         $deploymentConfig = $this->createDeploymentConfig($directoryList, $this->configFilePool, $arguments);
         $this->factory->setArguments($arguments);
-        $objectManager->addSharedInstance($deploymentConfig, 'Magento\Framework\App\DeploymentConfig');
+        $objectManager->addSharedInstance($deploymentConfig, \Magento\Framework\App\DeploymentConfig::class);
         $objectManager->addSharedInstance(
-            $objectManager->get(
-                'Magento\Framework\App\ObjectManager\ConfigLoader'
-            ),
-            'Magento\Framework\ObjectManager\ConfigLoaderInterface'
+            $objectManager->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class),
+            \Magento\Framework\ObjectManager\ConfigLoaderInterface::class
         );
-        $objectManager->get('Magento\Framework\Interception\PluginListInterface')->reset();
+        $objectManager->get(\Magento\Framework\Interception\PluginListInterface::class)->reset();
         $objectManager->configure(
-            $objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader')->load('global')
+            $objectManager->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class)->load('global')
         );
 
         return $objectManager;
@@ -87,7 +85,7 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
             $this->_primaryConfigData = array_replace(
                 parent::_loadPrimaryConfig($directoryList, $driverPool, $argumentMapper, $appMode),
                 [
-                    'default_setup' => ['type' => 'Magento\TestFramework\Db\ConnectionAdapter']
+                    'default_setup' => ['type' => \Magento\TestFramework\Db\ConnectionAdapter::class]
                 ]
             );
             $diPreferences = [];

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Api;
@@ -40,7 +40,7 @@ class CheckoutAgreementsRepositoryTest extends WebapiAbstract
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $agreement \Magento\CheckoutAgreements\Model\Agreement */
-        $agreement = $objectManager->create('Magento\CheckoutAgreements\Model\Agreement');
+        $agreement = $objectManager->create(\Magento\CheckoutAgreements\Model\Agreement::class);
         $agreement->load($name, 'name');
         if (!$agreement->getId()) {
             throw new \InvalidArgumentException('There is no checkout agreement with provided ID.');

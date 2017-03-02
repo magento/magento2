@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /** Creates datepicker binding and registers in to ko.bindingHandlers object */
@@ -8,8 +8,10 @@ define([
     'underscore',
     'jquery',
     'mage/translate',
-    'mage/calendar'
-], function (ko, _, $, $t) {
+    'mage/calendar',
+    'moment',
+    'mageUtils'
+], function (ko, _, $, $t, calendar, moment, utils) {
     'use strict';
 
     var defaults = {
@@ -46,7 +48,17 @@ define([
             }
 
             $(el).calendar(options);
-            observable() && $(el).datepicker('setDate', observable());
+
+            observable() && $(el).datepicker(
+                'setDate',
+                moment(
+                    observable(),
+                    utils.convertToMomentFormat(
+                        options.dateFormat + (options.showsTime ? ' ' + options.timeFormat : '')
+                    )
+                ).toDate()
+            );
+
             $(el).blur();
 
             ko.utils.registerEventHandler(el, 'change', function () {

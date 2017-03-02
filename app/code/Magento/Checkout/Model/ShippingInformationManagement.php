@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model;
@@ -134,12 +134,17 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $carrierCode = $addressInformation->getShippingCarrierCode();
         $methodCode = $addressInformation->getShippingMethodCode();
 
+        if (!$address->getCustomerAddressId()) {
+            $address->setCustomerAddressId(null);
+        }
+
         if (!$address->getCountryId()) {
             throw new StateException(__('Shipping address is not set'));
         }
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
+        $address->setLimitCarrier($carrierCode);
         $quote = $this->prepareShippingAssignment($quote, $address, $carrierCode . '_' . $methodCode);
         $this->validateQuote($quote);
         $quote->setIsMultiShipping(false);

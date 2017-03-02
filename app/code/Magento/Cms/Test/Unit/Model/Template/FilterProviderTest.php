@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\Template;
@@ -24,8 +24,8 @@ class FilterProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filterMock = $this->getMock('Magento\Cms\Model\Template\Filter', [], [], '', false);
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_filterMock = $this->getMock(\Magento\Cms\Model\Template\Filter::class, [], [], '', false);
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnValue($this->_filterMock));
         $this->_model = new \Magento\Cms\Model\Template\FilterProvider($this->_objectManagerMock);
     }
@@ -35,7 +35,7 @@ class FilterProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBlockFilter()
     {
-        $this->assertInstanceOf('Magento\Cms\Model\Template\Filter', $this->_model->getBlockFilter());
+        $this->assertInstanceOf(\Magento\Cms\Model\Template\Filter::class, $this->_model->getBlockFilter());
     }
 
     /**
@@ -43,7 +43,7 @@ class FilterProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPageFilter()
     {
-        $this->assertInstanceOf('Magento\Cms\Model\Template\Filter', $this->_model->getPageFilter());
+        $this->assertInstanceOf(\Magento\Cms\Model\Template\Filter::class, $this->_model->getPageFilter());
     }
 
     /**
@@ -63,7 +63,7 @@ class FilterProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetPageWrongInstance()
     {
         $someClassMock = $this->getMock('SomeClass');
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($someClassMock));
         $model = new \Magento\Cms\Model\Template\FilterProvider($objectManagerMock, 'SomeClass', 'SomeClass');
         $model->getPageFilter();

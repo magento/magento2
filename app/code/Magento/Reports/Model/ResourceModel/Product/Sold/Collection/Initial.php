@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,5 +18,5 @@ class Initial extends \Magento\Reports\Model\ResourceModel\Report\Collection
      *
      * @var string
      */
-    protected $_reportCollection = 'Magento\Reports\Model\ResourceModel\Product\Sold\Collection';
+    protected $_reportCollection = \Magento\Reports\Model\ResourceModel\Product\Sold\Collection::class;
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Export;
@@ -76,6 +76,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => '',
         ImportAdvancedPricing::COL_TIER_PRICE_QTY => '',
         ImportAdvancedPricing::COL_TIER_PRICE => '',
+        ImportAdvancedPricing::COL_TIER_PRICE_TYPE => ''
     ];
 
     /**
@@ -279,6 +280,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     }
 
     /**
+     * Correct export data.
+     *
      * @param array $exportData
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -302,6 +305,12 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                             : null
                         );
                         unset($exportRow[ImportAdvancedPricing::VALUE_ALL_GROUPS]);
+                    } elseif ($keyTemplate === ImportAdvancedPricing::COL_TIER_PRICE) {
+                        $exportRow[$keyTemplate] = $row[ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE]
+                            ? $row[ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE]
+                            : $row[ImportAdvancedPricing::COL_TIER_PRICE];
+                        $exportRow[ImportAdvancedPricing::COL_TIER_PRICE_TYPE]
+                            = $this->tierPriceTypeValue($row[ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE]);
                     } else {
                         $exportRow[$keyTemplate] = $row[$keyTemplate];
                     }
@@ -311,11 +320,25 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             $customExportData[$key] = $exportRow;
             unset($exportRow);
         }
+
         return $customExportData;
     }
 
     /**
-     * Get Tier and Group Pricing
+     * Check type for tier price.
+     *
+     * @param string $tierPricePercentage
+     * @return string
+     */
+    private function tierPriceTypeValue($tierPricePercentage)
+    {
+        return $tierPricePercentage
+            ? ImportAdvancedPricing::TIER_PRICE_TYPE_PERCENT
+            : ImportAdvancedPricing::TIER_PRICE_TYPE_FIXED;
+    }
+
+    /**
+     * Get tier prices.
      *
      * @param array $listSku
      * @param string $table
@@ -336,6 +359,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'ap.customer_group_id',
                 ImportAdvancedPricing::COL_TIER_PRICE_QTY => 'ap.qty',
                 ImportAdvancedPricing::COL_TIER_PRICE => 'ap.value',
+                ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE => 'ap.percentage_value',
             ];
             if (isset($exportFilter) && !empty($exportFilter)) {
                 $price = $exportFilter['tier_price'];
@@ -371,6 +395,9 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 if (isset($price[1]) && !empty($price[1])) {
                     $select->where('ap.value <= ?', $price[1]);
                 }
+                if (isset($price[0]) && !empty($price[0]) || isset($price[1]) && !empty($price[1])) {
+                    $select->orWhere('ap.percentage_value IS NOT NULL');
+                }
                 if (isset($updatedAtFrom) && !empty($updatedAtFrom)) {
                     $select->where('cpe.updated_at >= ?', $updatedAtFrom);
                 }
@@ -395,7 +422,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     {
         $storeName = ($websiteId == 0)
             ? ImportAdvancedPricing::VALUE_ALL_WEBSITES
-            : $this->_storeManager->getWebsite($websiteId)->getName();
+            : $this->_storeManager->getWebsite($websiteId)->getCode();
+        $currencyCode = '';
         if ($websiteId == 0) {
             $currencyCode = $this->_storeManager->getWebsite($websiteId)->getBaseCurrencyCode();
         }

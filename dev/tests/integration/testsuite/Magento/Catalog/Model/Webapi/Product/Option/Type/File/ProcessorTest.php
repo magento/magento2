@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Webapi\Product\Option\Type\File;
@@ -27,7 +27,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $model = $this->getModel($pathConfig);
         /** @var \Magento\Framework\Api\Data\ImageContentInterface $imageContent */
         $imageContent = $this->objectManager->create(
-            '\Magento\Framework\Api\Data\ImageContentInterface'
+            \Magento\Framework\Api\Data\ImageContentInterface::class
         );
         $imageContent->setName('my_file');
         $imageContent->setType('image/png');
@@ -38,7 +38,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(file_exists($result['fullpath']));
 
         /** @var  $filesystem \Magento\Framework\Filesystem */
-        $filesystem = $this->objectManager->get('Magento\Framework\Filesystem');
+        $filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         $this->assertArrayHasKey('quote_path', $result);
         $filePath = $filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($result['quote_path']);
         $this->assertTrue(file_exists($filePath));
@@ -72,15 +72,15 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $rootPath = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppTempDir();
         $dirList = $this->objectManager->create(
-            '\Magento\Framework\App\Filesystem\DirectoryList',
+            \Magento\Framework\App\Filesystem\DirectoryList::class,
             ['root' => $rootPath, 'config' => $pathConfig]
         );
         $fileSystem = $this->objectManager->create(
-            '\Magento\Framework\Filesystem',
+            \Magento\Framework\Filesystem::class,
             ['directoryList' => $dirList]
         );
         $model = $this->objectManager->create(
-            '\Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor',
+            \Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor::class,
             ['filesystem' => $fileSystem]
         );
         return $model;

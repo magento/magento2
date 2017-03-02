@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Aggregation\Builder;
@@ -59,17 +59,17 @@ class RangeTest extends \PHPUnit_Framework_TestCase
         $helper = new ObjectManager($this);
 
         $this->metricsBuilder = $this->getMockBuilder(
-            'Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Metrics'
+            \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Metrics::class
         )
             ->setMethods(['build'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->setMethods(['fetchAssoc', 'select', 'getCaseSql'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -77,32 +77,32 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->willReturn($this->select);
 
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
 
-        $this->bucket = $this->getMockBuilder('Magento\Framework\Search\Request\BucketInterface')
+        $this->bucket = $this->getMockBuilder(\Magento\Framework\Search\Request\BucketInterface::class)
             ->setMethods(['getName', 'getRanges'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->range = $this->getMockBuilder('Magento\Framework\Search\Request\Aggregation\Range')
+        $this->range = $this->getMockBuilder(\Magento\Framework\Search\Request\Aggregation\Range::class)
             ->setMethods(['getFrom', 'getTo'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->dataProvider = $this->getMockBuilder(
-            'Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface'
+            \Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface::class
         )
             ->setMethods(['getDataSet', 'execute'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->builder = $helper->getObject(
-            'Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Range',
+            \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Range::class,
             ['metricsBuilder' => $this->metricsBuilder, 'resource' => $this->resource]
         );
     }
@@ -154,7 +154,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
         $this->dataProvider->expects($this->once())->method('execute')->willReturn($this->select);
 
         /** @var \Magento\Framework\DB\Ddl\Table|\PHPUnit_Framework_MockObject_MockObject $table */
-        $table = $this->getMockBuilder('Magento\Framework\DB\Ddl\Table')
+        $table = $this->getMockBuilder(\Magento\Framework\DB\Ddl\Table::class)
             ->disableOriginalConstructor()
             ->getMock();
 

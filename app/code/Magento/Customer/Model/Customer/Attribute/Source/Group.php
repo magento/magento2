@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Customer\Attribute\Source;
@@ -12,7 +12,7 @@ use Magento\Customer\Api\GroupManagementInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
+class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table implements GroupSourceLoggedInOnlyInterface
 {
     /**
      * @var GroupManagementInterface
@@ -50,6 +50,7 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
             $groups = $this->_groupManagement->getLoggedInGroups();
             $this->_options = $this->_converter->toOptionArray($groups, 'id', 'code');
         }
+
         return $this->_options;
     }
 }

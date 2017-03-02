@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -79,6 +79,79 @@
     .gift-wrapping-form {
         .admin__legend {
             margin: 0;
+        }
+    }
+}
+
+//
+//  Stores -> Other Settings -> Gift wrapping (create/edit)
+//  _____________________________________________
+//  TODO UI: remove after page build on ui-components
+
+[class*='adminhtml-giftwrapping-'] {
+    .field-base_price {
+        .admin__field-control {
+            max-width: @field-size__s;
+        }
+
+        .admin__control-addon {
+            > .addafter {
+                &:extend(.admin__addon-prefix all);
+                .lib-vendor-prefix-flex-basis(auto);
+                .lib-vendor-prefix-flex-grow(0);
+                .lib-vendor-prefix-flex-shrink(0);
+                position: relative;
+                z-index: 1;
+            }
+
+            [class*='admin__control-'][class] {
+                & ~ .addafter:last-child {
+                    padding-left: 1rem;
+                    position: static !important;
+                    z-index: 0;
+
+                    > * {
+                        position: relative;
+                        vertical-align: top;
+                        z-index: 1;
+                    }
+                }
+
+                & ~ .addafter:last-child:before {
+                    &:extend(.abs-form-control-pattern);
+                    bottom: 0;
+                    box-sizing: border-box;
+                    content: '';
+                    left: 0;
+                    position: absolute;
+                    top: 0;
+                    width: 100%;
+                    z-index: -1;
+                }
+
+                &[disabled] ~ .addafter:last-child:before {
+                    &:extend(.abs-form-control-pattern[disabled]);
+                }
+
+                &:focus ~ .addafter:last-child:before {
+                    &:extend(.abs-form-control-pattern:focus);
+                }
+
+                &:hover ~ .addafter:last-child:before {
+                    &:extend(.abs-form-control-pattern:hover);
+                }
+            }
+        }
+    }
+
+    .field-image {
+        .admin__field-control {
+            padding-top: .8rem;
+
+            > a {
+                display: inline-block;
+                vertical-align: middle;
+            }
         }
     }
 }

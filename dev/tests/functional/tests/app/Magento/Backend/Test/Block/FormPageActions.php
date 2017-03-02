@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -85,7 +85,7 @@ class FormPageActions extends PageActions
      */
     public function reset()
     {
-        $this->waitBeforeClick();
+        $this->waitForElementVisible($this->resetButton);
         $this->_rootElement->find($this->resetButton)->click();
     }
 
@@ -94,7 +94,7 @@ class FormPageActions extends PageActions
      */
     public function saveAndContinue()
     {
-        $this->waitBeforeClick();
+        $this->waitForElementVisible($this->saveAndContinueButton);
         $this->_rootElement->find($this->saveAndContinueButton)->click();
         $this->waitForElementNotVisible('.popup popup-loading');
         $this->waitForElementNotVisible('.loader');
@@ -105,7 +105,7 @@ class FormPageActions extends PageActions
      */
     public function save()
     {
-        $this->waitBeforeClick();
+        $this->waitForElementVisible($this->saveButton);
         $this->_rootElement->find($this->saveButton)->click();
         $this->waitForElementNotVisible($this->spinner);
         $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
@@ -117,7 +117,10 @@ class FormPageActions extends PageActions
      */
     public function delete()
     {
-        $this->waitBeforeClick();
+        $this->waitForElementNotVisible($this->spinner);
+        $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
+        $this->waitForElementNotVisible($this->loaderOld, Locator::SELECTOR_XPATH);
+        $this->waitForElementVisible($this->deleteButton);
         $this->_rootElement->find($this->deleteButton)->click();
     }
 
@@ -129,17 +132,5 @@ class FormPageActions extends PageActions
     public function checkDeleteButton()
     {
         return $this->_rootElement->find($this->deleteButton)->isVisible();
-    }
-
-    /**
-     * Wait for User before clicking any Button which calls JS validation on correspondent form.
-     * See details in MAGETWO-31121.
-     *
-     * @return void
-     */
-    protected function waitBeforeClick()
-    {
-        time_nanosleep(0, 600000000);
-        usleep(1000000);
     }
 }

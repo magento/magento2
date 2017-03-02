@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,11 +21,11 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->formFactoryMock = $this->getMockBuilder('Magento\Framework\Data\FormFactory')
+        $this->formFactoryMock = $this->getMockBuilder(\Magento\Framework\Data\FormFactory::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $roleMock = $this->getMockBuilder('Magento\User\Block\Role')
+        $roleMock = $this->getMockBuilder(\Magento\User\Block\Role::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData'])
             ->getMock();
@@ -33,7 +33,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $roleMock->expects($this->any())->method('getData')->willReturn(['test_data' => 1]);
 
         $this->model = $objectManager->getObject(
-            'Magento\User\Block\Role\Tab\Info',
+            \Magento\User\Block\Role\Tab\Info::class,
             [
                 'formFactory' => $this->formFactoryMock,
                 'data' => ['role' => $roleMock]
@@ -63,11 +63,11 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeToHtml()
     {
-        $formMock = $this->getMockBuilder('Magento\Framework\Data\Form')
+        $formMock = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $fieldsetMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\Fieldset')
+        $fieldsetMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\Fieldset::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -82,6 +82,6 @@ class InfoTest extends \PHPUnit_Framework_TestCase
                 ['in_role_user_old'],
                 ['current_password']
             );
-        $this->assertInstanceOf('Magento\User\Block\Role\Tab\Info', $this->model->_beforeToHtml());
+        $this->assertInstanceOf(\Magento\User\Block\Role\Tab\Info::class, $this->model->_beforeToHtml());
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model;
@@ -30,7 +30,7 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
         $this->quoteValidator = new \Magento\Quote\Model\QuoteValidator();
 
         $this->quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             [
                 'getShippingAddress',
                 'getBillingAddress',
@@ -109,7 +109,7 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateBeforeSubmitThrowsExceptionIfShippingAddressIsInvalid()
     {
-        $shippingAddressMock = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $shippingAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
         $this->quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($shippingAddressMock);
         $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn(false);
         $shippingAddressMock->expects($this->any())->method('validate')->willReturn(['Invalid Shipping Address']);
@@ -125,7 +125,7 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $shippingMethod = 'checkmo';
         $shippingAddressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             [
                 'validate',
                 'getShippingMethod',
@@ -151,7 +151,7 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateBeforeSubmitThrowsExceptionIfBillingAddressIsNotValid()
     {
-        $billingAddressMock = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $billingAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($billingAddressMock);
         $this->quoteMock->expects($this->any())->method('isVirtual')->willReturn(true);
         $billingAddressMock->expects($this->any())->method('validate')->willReturn(['Invalid Billing Address']);
@@ -165,8 +165,8 @@ class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateBeforeSubmitThrowsExceptionIfPaymentMethodIsNotSelected()
     {
-        $paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
-        $billingAddressMock = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
+        $billingAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
         $billingAddressMock->expects($this->any())->method('validate')->willReturn(true);
 
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($billingAddressMock);

@@ -1,28 +1,26 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-/**
- * @var $block \Magento\Review\Block\Form
- */
+/** @var \Magento\Review\Block\Form $block */
 ?>
 <div class="block review-add">
-    <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('Write Your Own Review') ?></strong></div>
+    <div class="block-title"><strong><?php echo $block->escapeHtml(__('Write Your Own Review')) ?></strong></div>
 <div class="block-content">
 <?php if ($block->getAllowWriteReviewFlag()): ?>
-<form action="<?php /* @escapeNotVerified */ echo $block->getAction() ?>" class="review-form" method="post" id="review-form" data-role="product-review-form" data-bind="scope: 'review-form'">
+<form action="<?php echo $block->escapeUrl($block->getAction()) ?>" class="review-form" method="post" id="review-form" data-role="product-review-form" data-bind="scope: 'review-form'">
     <?php echo $block->getBlockHtml('formkey'); ?>
     <?php echo $block->getChildHtml('form_fields_before')?>
-    <fieldset class="fieldset review-fieldset" data-hasrequired="<?php __('* Required Fields'); ?>">
-        <legend class="legend review-legend"><span><?php /* @escapeNotVerified */ echo __("You're reviewing:"); ?></span><strong><?php echo $block->escapeHtml($block->getProductInfo()->getName()) ?></strong></legend><br />
+    <fieldset class="fieldset review-fieldset" data-hasrequired="<?php echo $block->escapeHtmlAttr(__('* Required Fields')); ?>">
+        <legend class="legend review-legend"><span><?php echo $block->escapeHtml(__("You're reviewing:")); ?></span><strong><?php echo $block->escapeHtml($block->getProductInfo()->getName()) ?></strong></legend><br />
         <?php if ($block->getRatings() && $block->getRatings()->getSize()): ?>
         <span id="input-message-box"></span>
         <fieldset class="field required review-field-ratings">
-            <legend class="label"><span><?php /* @escapeNotVerified */ echo __('Your Rating') ?><span></legend><br/>
+            <legend class="label"><span><?php echo $block->escapeHtml(__('Your Rating')) ?></span></legend><br/>
             <div class="control">
                 <div class="nested" id="product-review-table">
                     <?php foreach ($block->getRatings() as $_rating): ?>
@@ -33,18 +31,18 @@
                             <?php $iterator = 1; foreach ($options as $_option): ?>
                                 <input
                                     type="radio"
-                                    name="ratings[<?php /* @escapeNotVerified */ echo $_rating->getId() ?>]"
-                                    id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>"
-                                    value="<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
+                                    name="ratings[<?php echo $block->escapeHtmlAttr($_rating->getId()) ?>]"
+                                    id="<?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?php echo $block->escapeHtmlAttr($_option->getValue()) ?>"
+                                    value="<?php echo $block->escapeHtmlAttr($_option->getId()) ?>"
                                     class="radio"
                                     data-validate="{required:true, messages:{required:'Please select one of each of the ratings above.'}}"
-                                    aria-labelledby="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_rating_label <?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>_label" />
+                                    aria-labelledby="<?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_rating_label <?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?php echo $block->escapeHtmlAttr($_option->getValue()) ?>_label" />
                                 <label
-                                    class="rating-<?php /* @escapeNotVerified */ echo $iterator; ?>"
-                                    for="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>"
-                                    title="<?php /* @escapeNotVerified */ echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?>"
-                                    id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>_label">
-                                    <span><?php /* @escapeNotVerified */ echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?></span>
+                                    class="rating-<?php echo $block->escapeHtmlAttr($iterator); ?>"
+                                    for="<?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?php echo $block->escapeHtmlAttr($_option->getValue()) ?>"
+                                    title="<?php echo $block->escapeHtmlAttr(__('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star')) ?>"
+                                    id="<?php echo $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?php echo $block->escapeHtmlAttr($_option->getValue()) ?>_label">
+                                    <span><?php echo $block->escapeHtml(__('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star')) ?></span>
                                 </label>
                             <?php $iterator++; ?>
                             <?php endforeach; ?>
@@ -57,19 +55,19 @@
         </fieldset>
     <?php endif ?>
         <div class="field review-field-nickname required">
-            <label for="nickname_field" class="label"><span><?php /* @escapeNotVerified */ echo __('Nickname') ?></span></label>
+            <label for="nickname_field" class="label"><span><?php echo $block->escapeHtml(__('Nickname')) ?></span></label>
             <div class="control">
                 <input type="text" name="nickname" id="nickname_field" class="input-text" data-validate="{required:true}" data-bind="value: nickname()" />
             </div>
         </div>
         <div class="field review-field-summary required">
-            <label for="summary_field" class="label"><span><?php /* @escapeNotVerified */ echo __('Summary') ?></span></label>
+            <label for="summary_field" class="label"><span><?php echo $block->escapeHtml(__('Summary')) ?></span></label>
             <div class="control">
                 <input type="text" name="title" id="summary_field" class="input-text" data-validate="{required:true}" data-bind="value: review().title" />
             </div>
         </div>
         <div class="field review-field-text required">
-            <label for="review_field" class="label"><span><?php /* @escapeNotVerified */ echo __('Review') ?></span></label>
+            <label for="review_field" class="label"><span><?php echo $block->escapeHtml(__('Review')) ?></span></label>
             <div class="control">
                 <textarea name="detail" id="review_field" cols="5" rows="3" data-validate="{required:true}" data-bind="value: review().detail"></textarea>
             </div>
@@ -77,14 +75,14 @@
     </fieldset>
     <div class="actions-toolbar review-form-actions">
         <div class="primary actions-primary">
-            <button type="submit" class="action submit primary"><span><?php /* @escapeNotVerified */ echo __('Submit Review') ?></span></button>
+            <button type="submit" class="action submit primary"><span><?php echo $block->escapeHtml(__('Submit Review')) ?></span></button>
         </div>
     </div>
 </form>
 <script type="text/x-magento-init">
 {
     "[data-role=product-review-form]": {
-        "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>
+        "Magento_Ui/js/core/app": <?php /* @noEscape */ echo $block->getJsLayout(); ?>
     },
     "#review-form": {
         "Magento_Review/js/error-placement": {}
@@ -94,7 +92,7 @@
 <?php else: ?>
     <div class="message info notlogged" id="review-form">
         <div>
-            <?php /* @escapeNotVerified */ echo __('Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>', $block->getLoginLink(), $block->getRegisterUrl()) ?>
+            <?php echo $block->escapeHtml(__('Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>', $block->getLoginLink(), $block->getRegisterUrl()), ['a']) ?>
         </div>
     </div>
 <?php endif ?>

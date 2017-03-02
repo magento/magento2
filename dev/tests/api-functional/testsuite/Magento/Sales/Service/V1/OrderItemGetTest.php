@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -32,7 +32,7 @@ class OrderItemGetTest extends WebapiAbstract
     public function testGet()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId(self::ORDER_INCREMENT_ID);
         /** @var \Magento\Sales\Model\Order\Item $orderItem */
         $orderItem = current($order->getItems());
@@ -53,6 +53,14 @@ class OrderItemGetTest extends WebapiAbstract
 
         $this->assertTrue(is_array($response));
         $this->assertOrderItem($orderItem, $response);
+
+        //check that nullable fields were marked as optional and were not sent
+        foreach ($response as $fieldName => $value) {
+            if ($fieldName == 'sku') {
+                continue;
+            }
+            $this->assertNotNull($value);
+        }
     }
 
     /**

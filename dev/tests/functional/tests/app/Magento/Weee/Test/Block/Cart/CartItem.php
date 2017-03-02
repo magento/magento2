@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,7 +36,7 @@ class CartItem extends \Magento\Checkout\Test\Block\Cart\CartItem
     public function getPriceFptBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Weee\Test\Block\Cart\CartItem\Fpt',
+            \Magento\Weee\Test\Block\Cart\CartItem\Fpt::class,
             ['element' => $this->_rootElement->find($this->priceFptBlock, Locator::SELECTOR_XPATH)]
         );
     }
@@ -49,7 +49,7 @@ class CartItem extends \Magento\Checkout\Test\Block\Cart\CartItem
     public function getSubtotalFptBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Weee\Test\Block\Cart\CartItem\Fpt',
+            \Magento\Weee\Test\Block\Cart\CartItem\Fpt::class,
             ['element' => $this->_rootElement->find($this->subtotalFptBlock, Locator::SELECTOR_XPATH)]
         );
     }

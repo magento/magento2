@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,12 +35,12 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
+        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
-        $this->urlBuilderMock = $this->getMock('Magento\Framework\UrlInterface', [], [], '', false);
+        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
         $this->urlBuilderMock->expects($this->any())->method('getUrl')->willReturn('http://magento.loc/linkurl');
         $this->contextMock = $this->getMock(
-            'Magento\Backend\Block\Context',
+            \Magento\Backend\Block\Context::class,
             ['getEscaper', 'getUrlBuilder'],
             [],
             '',
@@ -53,7 +53,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->nameRenderer = $this->objectManagerHelper->getObject(
-            'Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Name',
+            \Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Name::class,
             ['context' => $this->contextMock]
         );
     }
@@ -64,7 +64,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     public function testRender($endpoint, $name, $expectedResult)
     {
-        $column = $this->getMockBuilder('Magento\Backend\Block\Widget\Grid\Column')
+        $column = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\Column::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIndex', 'getEditable', 'getGetter'])
             ->getMock();
@@ -79,7 +79,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
             ->willReturn('getName');
         $this->nameRenderer->setColumn($column);
 
-        $integrationMock = $this->getMockBuilder('Magento\Integration\Model\Integration')
+        $integrationMock = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getEndpoint', 'getIdentityLinkUrl'])
             ->getMock();
@@ -101,7 +101,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
             [
                 'http://myurl',
                 'Custom Integration',
-                'Custom Integration<span class="icon-error"><span>Integration not secure</span></span>'
+                'Custom Integration<span class="security-notice"><span>Integration not secure</span></span>'
             ]
         ];
     }

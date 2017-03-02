@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Type;
@@ -18,9 +18,9 @@ class AccessProxyTest extends \PHPUnit_Framework_TestCase
     {
         $identifier = 'cache_type_identifier';
 
-        $frontendMock = $this->getMock('Magento\Framework\Cache\FrontendInterface');
+        $frontendMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
 
-        $cacheEnabler = $this->getMock('Magento\Framework\App\Cache\StateInterface');
+        $cacheEnabler = $this->getMock(\Magento\Framework\App\Cache\StateInterface::class);
         $cacheEnabler->expects($this->at(0))->method('isEnabled')->with($identifier)->will($this->returnValue(false));
         $cacheEnabler->expects($this->at(1))->method('isEnabled')->with($identifier)->will($this->returnValue(true));
 

@@ -1,43 +1,56 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
 
-use \Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup;
+use Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ResourceModel\Group;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Store\Model\Group as GroupModel;
+use Magento\Catalog\Model\Indexer\Category\Product;
 
 class StoreGroupTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var GroupModel|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexerMock;
+    private $groupMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|
+     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
      */
-    protected $pluginMock;
+    private $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|Group
      */
-    protected $subject;
+    private $subject;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexerRegistryMock;
+    private $indexerRegistryMock;
 
     /**
      * @var StoreGroup
      */
-    protected $model;
+    private $model;
 
     protected function setUp()
     {
+        $this->groupMock = $this->getMock(
+            GroupModel::class,
+            ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
+            [],
+            '',
+            false
+        );
         $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\IndexerInterface',
+            IndexerInterface::class,
             [],
             '',
             false,
@@ -45,57 +58,44 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->subject = $this->getMock('Magento\Store\Model\ResourceModel\Group', [], [], '', false);
+        $this->subject = $this->getMock(Group::class, [], [], '', false);
         $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
+            IndexerRegistry::class,
             ['get'],
             [],
             '',
             false
         );
 
-        $this->model = new StoreGroup($this->indexerRegistryMock);
+        $this->model = (new ObjectManager($this))
+            ->getObject(StoreGroup::class, ['indexerRegistry' => $this->indexerRegistryMock]);
     }
 
     /**
      * @param array $valueMap
      * @dataProvider changedDataProvider
      */
-    public function testAroundSave($valueMap)
+    public function testBeforeAndAfterSave($valueMap)
     {
         $this->mockIndexerMethods();
-        $groupMock = $this->getMock(
-            'Magento\Store\Model\Group',
-            ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $groupMock->expects($this->exactly(2))->method('dataHasChangedFor')->will($this->returnValueMap($valueMap));
-        $groupMock->expects($this->once())->method('isObjectNew')->will($this->returnValue(false));
+        $this->groupMock->expects($this->exactly(2))->method('dataHasChangedFor')->willReturnMap($valueMap);
+        $this->groupMock->expects($this->once())->method('isObjectNew')->willReturn(false);
 
-        $proceed = $this->mockPluginProceed();
-        $this->assertFalse($this->model->aroundSave($this->subject, $proceed, $groupMock));
+        $this->model->beforeSave($this->subject, $this->groupMock);
+        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->groupMock));
     }
 
     /**
      * @param array $valueMap
      * @dataProvider changedDataProvider
      */
-    public function testAroundSaveNotNew($valueMap)
+    public function testBeforeAndAfterSaveNotNew($valueMap)
     {
-        $groupMock = $this->getMock(
-            'Magento\Store\Model\Group',
-            ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $groupMock->expects($this->exactly(2))->method('dataHasChangedFor')->will($this->returnValueMap($valueMap));
-        $groupMock->expects($this->once())->method('isObjectNew')->will($this->returnValue(true));
+        $this->groupMock->expects($this->exactly(2))->method('dataHasChangedFor')->willReturnMap($valueMap);
+        $this->groupMock->expects($this->once())->method('isObjectNew')->willReturn(true);
 
-        $proceed = $this->mockPluginProceed();
-        $this->assertFalse($this->model->aroundSave($this->subject, $proceed, $groupMock));
+        $this->model->beforeSave($this->subject, $this->groupMock);
+        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->groupMock));
     }
 
     public function changedDataProvider()
@@ -108,41 +108,23 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testAroundSaveWithoutChanges()
+    public function testBeforeAndAfterSaveWithoutChanges()
     {
-        $groupMock = $this->getMock(
-            'Magento\Store\Model\Group',
-            ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $groupMock->expects(
-            $this->exactly(2)
-        )->method(
-            'dataHasChangedFor'
-        )->will(
-            $this->returnValueMap([['root_category_id', false], ['website_id', false]])
-        );
-        $groupMock->expects($this->never())->method('isObjectNew');
+        $this->groupMock->expects($this->exactly(2))
+            ->method('dataHasChangedFor')
+            ->willReturnMap([['root_category_id', false], ['website_id', false]]);
+        $this->groupMock->expects($this->never())->method('isObjectNew');
 
-        $proceed = $this->mockPluginProceed();
-        $this->assertFalse($this->model->aroundSave($this->subject, $proceed, $groupMock));
+        $this->model->beforeSave($this->subject, $this->groupMock);
+        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->groupMock));
     }
 
-    protected function mockIndexerMethods()
+    private function mockIndexerMethods()
     {
         $this->indexerMock->expects($this->once())->method('invalidate');
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
-            ->with(\Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
-    }
-
-    protected function mockPluginProceed($returnValue = false)
-    {
-        return function () use ($returnValue) {
-            return $returnValue;
-        };
+            ->with(Product::INDEXER_ID)
+            ->willReturn($this->indexerMock);
     }
 }

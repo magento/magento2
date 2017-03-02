@@ -2,7 +2,7 @@
 /**
  * Cms Template Filter Provider
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Template;
@@ -39,8 +39,8 @@ class FilterProvider
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $pageFilter = 'Magento\Cms\Model\Template\Filter',
-        $blockFilter = 'Magento\Cms\Model\Template\Filter'
+        $pageFilter = \Magento\Cms\Model\Template\Filter::class,
+        $blockFilter = \Magento\Cms\Model\Template\Filter::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_pageFilter = $pageFilter;

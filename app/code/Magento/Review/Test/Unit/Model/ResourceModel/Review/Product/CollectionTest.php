@@ -1,12 +1,22 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review\Product;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\Review\Model\ResourceModel\Review\Product\Collection
      */
@@ -24,14 +34,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $attribute = $this->getMock('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute', null, [], '', false);
-        $eavConfig = $this->getMock('\Magento\Eav\Model\Config', ['getAttribute'], [], '', false);
+        $attribute = $this->getMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class, null, [], '', false);
+        $eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getAttribute'], [], '', false);
         $eavConfig->expects($this->any())->method('getAttribute')->will($this->returnValue($attribute));
-        $this->dbSelect = $this->getMock('Magento\Framework\DB\Select', ['where', 'from', 'join'], [], '', false);
+        $this->dbSelect = $this->getMock(\Magento\Framework\DB\Select::class, ['where', 'from', 'join'], [], '', false);
         $this->dbSelect->expects($this->any())->method('from')->will($this->returnSelf());
         $this->dbSelect->expects($this->any())->method('join')->will($this->returnSelf());
         $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['prepareSqlCondition', 'select', 'quoteInto'],
             [],
             '',
@@ -39,7 +49,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->connectionMock->expects($this->once())->method('select')->will($this->returnValue($this->dbSelect));
         $entity = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product',
+            \Magento\Catalog\Model\ResourceModel\Product::class,
             ['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable', 'getEntityType', 'getType'],
             [],
             '',
@@ -51,30 +61,43 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([1 => 1]));
         $entity->expects($this->any())->method('getType')->will($this->returnValue('type'));
         $entity->expects($this->any())->method('getEntityType')->will($this->returnValue('type'));
-        $universalFactory = $this->getMock('\Magento\Framework\Validator\UniversalFactory', ['create'], [], '', false);
+        $universalFactory = $this->getMock(
+            \Magento\Framework\Validator\UniversalFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
         $universalFactory->expects($this->any())->method('create')->will($this->returnValue($entity));
-        $store = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId'], [], '', false);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $fetchStrategy = $this->getMock(
-            '\Magento\Framework\Data\Collection\Db\FetchStrategy\Query',
+            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class,
             ['fetchAll'],
             [],
             '',
             false
         );
         $fetchStrategy->expects($this->any())->method('fetchAll')->will($this->returnValue([]));
-        $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject(
-                '\Magento\Review\Model\ResourceModel\Review\Product\Collection',
-                [
-                    'universalFactory' => $universalFactory,
-                    'storeManager' => $storeManager,
-                    'eavConfig' => $eavConfig,
-                    'fetchStrategy' => $fetchStrategy
-                ]
-            );
+        $productLimitationMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
+        );
+        $productLimitationFactoryMock = $this->getMock(ProductLimitationFactory::class, ['create']);
+        $productLimitationFactoryMock->method('create')
+            ->willReturn($productLimitationMock);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $this->objectManager->getObject(
+            \Magento\Review\Model\ResourceModel\Review\Product\Collection::class,
+            [
+                'universalFactory' => $universalFactory,
+                'storeManager' => $storeManager,
+                'eavConfig' => $eavConfig,
+                'fetchStrategy' => $fetchStrategy,
+                'productLimitationFactory' => $productLimitationFactoryMock
+            ]
+        );
     }
 
     /**

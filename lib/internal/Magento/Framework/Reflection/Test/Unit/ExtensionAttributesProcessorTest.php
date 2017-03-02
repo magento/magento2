@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,27 +61,27 @@ class ExtensionAttributesProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->dataObjectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
+        $this->dataObjectProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\DataObjectProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->methodsMapProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\MethodsMap')
+        $this->methodsMapProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\MethodsMap::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->typeCasterMock = $this->getMockBuilder('Magento\Framework\Reflection\TypeCaster')
+        $this->typeCasterMock = $this->getMockBuilder(\Magento\Framework\Reflection\TypeCaster::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fieldNamerMock = $this->getMockBuilder('Magento\Framework\Reflection\FieldNamer')
+        $this->fieldNamerMock = $this->getMockBuilder(\Magento\Framework\Reflection\FieldNamer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configMock = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\Config')
+        $this->configMock = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttribute\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->authorizationMock = $this->getMockBuilder('Magento\Framework\AuthorizationInterface')
+        $this->authorizationMock = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = $objectManager->getObject(
-            'Magento\Framework\Reflection\ExtensionAttributesProcessor',
+            \Magento\Framework\Reflection\ExtensionAttributesProcessor::class,
             [
                 'dataObjectProcessor' => $this->dataObjectProcessorMock,
                 'methodsMapProcessor' => $this->methodsMapProcessorMock,
@@ -102,7 +102,7 @@ class ExtensionAttributesProcessorTest extends \PHPUnit_Framework_TestCase
     public function testBuildOutputDataArrayWithPermission($isPermissionAllowed, $expectedValue)
     {
         $dataObject = new \Magento\Framework\Reflection\Test\Unit\ExtensionAttributesObject();
-        $dataObjectType = 'Magento\Framework\Reflection\Test\Unit\ExtensionAttributesObject';
+        $dataObjectType = \Magento\Framework\Reflection\Test\Unit\ExtensionAttributesObject::class;
         $methodName = 'getAttrName';
         $attributeName = 'attr_name';
         $attributeValue = 'attrName';

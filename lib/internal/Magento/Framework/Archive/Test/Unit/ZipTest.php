@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->zip = $this->getMockBuilder('\Magento\Framework\Archive\Zip')
+        $this->zip = $this->getMockBuilder(\Magento\Framework\Archive\Zip::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -30,7 +30,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
     public function testConstructorNoExceptions()
     {
         try {
-            $reflectedClass = new \ReflectionClass('\Magento\Framework\Archive\Zip');
+            $reflectedClass = new \ReflectionClass(\Magento\Framework\Archive\Zip::class);
             $constructor = $reflectedClass->getConstructor();
             $constructor->invoke($this->zip, []);
         } catch (\Exception $e) {

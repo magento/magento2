@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Metadata;
@@ -45,24 +45,30 @@ class ValueProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->searchCriteriaBuilderMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteriaBuilder',
+            \Magento\Framework\Api\SearchCriteriaBuilder::class,
             [],
             [],
             '',
             false
         );
-        $this->storeMock = $this->getMock('Magento\Store\Model\System\Store', [], [], '', false);
-        $this->groupRepositoryMock = $this->getMock('Magento\Customer\Api\GroupRepositoryInterface', [], [], '', false);
-        $this->dataObjectMock = $this->getMock('Magento\Framework\Convert\DataObject', [], [], '', false);
-        $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteriaInterface', [], [], '', false);
+        $this->storeMock = $this->getMock(\Magento\Store\Model\System\Store::class, [], [], '', false);
+        $this->groupRepositoryMock = $this->getMock(
+            \Magento\Customer\Api\GroupRepositoryInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->dataObjectMock = $this->getMock(\Magento\Framework\Convert\DataObject::class, [], [], '', false);
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class, [], [], '', false);
         $groupSearchResultsMock = $this->getMock(
-            'Magento\Customer\Api\Data\GroupSearchResultsInterface',
+            \Magento\Customer\Api\Data\GroupSearchResultsInterface::class,
             [],
             [],
             '',
             false
         );
-        $groupsMock = $this->getMock('Magento\Customer\Api\Data\GroupInterface', [], [], '', false);
+        $groupsMock = $this->getMock(\Magento\Customer\Api\Data\GroupInterface::class, [], [], '', false);
 
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
         $this->groupRepositoryMock->expects($this->once())->method('getList')->with($searchCriteriaMock)
@@ -71,9 +77,9 @@ class ValueProviderTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->once())->method('getWebsiteValuesForForm')->willReturn([]);
         $this->dataObjectMock->expects($this->once())->method('toOptionArray')->with([$groupsMock], 'id', 'code')
             ->willReturn([]);
-        $this->ruleFactoryMock = $this->getMock('Magento\SalesRule\Model\RuleFactory', ['create'], [], '', false);
+        $this->ruleFactoryMock = $this->getMock(\Magento\SalesRule\Model\RuleFactory::class, ['create'], [], '', false);
         $this->model = (new ObjectManager($this))->getObject(
-            'Magento\SalesRule\Model\Rule\Metadata\ValueProvider',
+            \Magento\SalesRule\Model\Rule\Metadata\ValueProvider::class,
             [
                 'store' => $this->storeMock,
                 'groupRepository' => $this->groupRepositoryMock,
@@ -89,7 +95,7 @@ class ValueProviderTest extends \PHPUnit_Framework_TestCase
         $expectedData = include __DIR__ . '/_files/MetaData.php';
 
         /** @var \Magento\SalesRule\Model\Rule|\PHPUnit_Framework_MockObject_MockObject $ruleMock */
-        $ruleMock = $this->getMock('Magento\SalesRule\Model\Rule', [], [], '', false);
+        $ruleMock = $this->getMock(\Magento\SalesRule\Model\Rule::class, [], [], '', false);
         $this->ruleFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($ruleMock);

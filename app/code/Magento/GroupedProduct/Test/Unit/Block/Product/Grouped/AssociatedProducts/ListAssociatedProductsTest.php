@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Test\Unit\Block\Product\Grouped\AssociatedProducts;
@@ -49,13 +49,13 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false);
-        $this->registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Backend\Block\Template\Context::class, [], [], '', false);
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $this->typeInstanceMock = $this->getMock(
-            'Magento\GroupedProduct\Model\Product\Type\Grouped',
+            \Magento\GroupedProduct\Model\Product\Type\Grouped::class,
             [],
             [],
             '',
@@ -70,7 +70,9 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->storeManagerMock)
         );
 
-        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $this->priceCurrency = $this->getMockBuilder(
+            \Magento\Framework\Pricing\PriceCurrencyInterface::class
+        )->getMock();
 
         $this->block = new \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts(
             $this->contextMock,
@@ -157,7 +159,7 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
     protected function generateAssociatedProduct($productKey = 0)
     {
         $associatedProduct = $this->getMock(
-            'Magento\Framework\DataObject',
+            \Magento\Framework\DataObject::class,
             ['getQty', 'getPosition', 'getId', 'getSku', 'getName', 'getPrice'],
             [],
             '',

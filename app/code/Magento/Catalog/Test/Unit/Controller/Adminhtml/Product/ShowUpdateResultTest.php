@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
 use Magento\Catalog\Controller\Adminhtml\Product\ShowUpdateResult;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
@@ -29,7 +32,7 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
     protected function getSession()
     {
         $session = $this->getMock(
-            'Magento\Backend\Model\Session',
+            \Magento\Backend\Model\Session::class,
             ['hasCompositeProductResult', 'getCompositeProductResult', 'unsCompositeProductResult'],
             [],
             '',
@@ -54,20 +57,25 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
      */
     protected function getContext()
     {
-        $productActionMock = $this->getMock('Magento\Catalog\Model\Product\Action', [], [], '', false);
-        $objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $productActionMock = $this->getMock(\Magento\Catalog\Model\Product\Action::class, [], [], '', false);
+        $objectManagerMock = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willreturn($productActionMock);
 
-        $eventManager = $this->getMockForAbstractClass('Magento\Framework\Event\Manager', ['dispatch'], '', false);
+        $eventManager = $this->getMockForAbstractClass(
+            \Magento\Framework\Event\Manager::class,
+            ['dispatch'],
+            '',
+            false
+        );
 
         $eventManager->expects($this->any())
             ->method('dispatch')
             ->willReturnSelf();
 
         $this->request = $this->getMock(
-            'Magento\Framework\App\Request\Http',
+            \Magento\Framework\App\Request\Http::class,
             ['getParam', 'getPost', 'getFullActionName', 'getPostValue'],
             [],
             '',
@@ -75,19 +83,19 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
         );
 
         $responseInterfaceMock = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse'],
             [],
             '',
             false
         );
 
-        $managerInterfaceMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
+        $managerInterfaceMock = $this->getMock(\Magento\Framework\Message\ManagerInterface::class);
         $this->session = $this->getSession();
-        $actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
-        $helperDataMock = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
+        $actionFlagMock = $this->getMock(\Magento\Framework\App\ActionFlag::class, [], [], '', false);
+        $helperDataMock = $this->getMock(\Magento\Backend\Helper\Data::class, [], [], '', false);
         $this->context = $this->getMock(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             [
                 'getRequest',
                 'getResponse',
@@ -137,11 +145,17 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $productCompositeHelper = $this->getMock('Magento\Catalog\Helper\Product\Composite', [], [], '', false);
+        $productCompositeHelper = $this->getMock(\Magento\Catalog\Helper\Product\Composite::class, [], [], '', false);
         $productCompositeHelper->expects($this->once())
             ->method('renderUpdateResult');
 
-        $productBuilder = $this->getMock('Magento\Catalog\Controller\Adminhtml\Product\Builder', [], [], '', false);
+        $productBuilder = $this->getMock(
+            \Magento\Catalog\Controller\Adminhtml\Product\Builder::class,
+            [],
+            [],
+            '',
+            false
+        );
         $context = $this->getContext();
 
         /** @var \Magento\Catalog\Controller\Adminhtml\Product\ShowUpdateResult $controller */

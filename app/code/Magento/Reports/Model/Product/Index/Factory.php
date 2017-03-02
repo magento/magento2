@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\Product\Index;
@@ -15,8 +15,8 @@ class Factory
      * @var array
      */
     protected $_typeClasses = [
-        self::TYPE_COMPARED => 'Magento\Reports\Model\Product\Index\Compared',
-        self::TYPE_VIEWED => 'Magento\Reports\Model\Product\Index\Viewed',
+        self::TYPE_COMPARED => \Magento\Reports\Model\Product\Index\Compared::class,
+        self::TYPE_VIEWED => \Magento\Reports\Model\Product\Index\Viewed::class,
     ];
 
     /**

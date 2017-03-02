@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
@@ -15,7 +15,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $locale = $this->getMock(
-            'Magento\Framework\Stdlib\DateTime\TimezoneInterface',
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class,
             [],
             [],
             '',
@@ -23,15 +23,15 @@ class TextTest extends \PHPUnit_Framework_TestCase
             false
         );
         $localeResolver = $this->getMock(
-            'Magento\Framework\Locale\ResolverInterface',
+            \Magento\Framework\Locale\ResolverInterface::class,
             [],
             [],
             '',
             false,
             false
         );
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
-        $helper = $this->getMock('Magento\Framework\Stdlib\StringUtils', [], [], '', false, false);
+        $logger = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $helper = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class, [], [], '', false, false);
 
         $attributeData = [
             'store_label' => 'Test',
@@ -40,9 +40,9 @@ class TextTest extends \PHPUnit_Framework_TestCase
             'validate_rules' => ['min_text_length' => 0, 'max_text_length' => 0, 'input_validation' => 0],
         ];
 
-        $attributeClass = 'Magento\Eav\Model\Entity\Attribute\AbstractAttribute';
+        $attributeClass = \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class;
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $eavTypeFactory = $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false, false);
+        $eavTypeFactory = $this->getMock(\Magento\Eav\Model\Entity\TypeFactory::class, [], [], '', false, false);
         $arguments = $objectManagerHelper->getConstructArguments(
             $attributeClass,
             ['eavTypeFactory' => $eavTypeFactory, 'data' => $attributeData]
