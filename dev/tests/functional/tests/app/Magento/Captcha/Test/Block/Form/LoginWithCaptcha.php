@@ -48,4 +48,14 @@ class LoginWithCaptcha extends Login
     {
         return $this->_rootElement->find($this->captchaReload, Locator::SELECTOR_CSS)->isVisible();
     }
+
+    /**
+     * Click on reload captcha button.
+     *
+     * @return void
+     */
+    public function reloadCaptcha()
+    {
+        $this->_rootElement->find($this->captchaReload, Locator::SELECTOR_CSS)->click();
+    }
 }

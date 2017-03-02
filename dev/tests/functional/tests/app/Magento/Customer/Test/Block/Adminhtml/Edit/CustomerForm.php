@@ -171,7 +171,6 @@ class CustomerForm extends FormTabs
         return $jsErrors;
     }
 
-
     /**
      * Get personal information.
      *

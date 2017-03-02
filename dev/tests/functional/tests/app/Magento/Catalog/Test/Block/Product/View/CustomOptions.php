@@ -15,6 +15,7 @@ use Magento\Mtf\Client\Element\SimpleElement;
 /**
  * Class CustomOptions
  * Form of custom options product
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CustomOptions extends Form
 {
