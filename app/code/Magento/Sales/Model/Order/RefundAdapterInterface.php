@@ -1,26 +1,30 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+
 /**
- * Interface RefundAdapterInterface
+ * Encapsulates refund operation behind unified interface.
+ * Can be used as extension point.
  *
  * @api
  */
 interface RefundAdapterInterface
 {
     /**
-     * @param \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo
-     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @param CreditmemoInterface $creditmemo
+     * @param OrderInterface $order
      * @param bool $isOnline
-     * @return \Magento\Sales\Api\Data\OrderInterface
+     * @return OrderInterface
      */
     public function refund(
-        \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
-        \Magento\Sales\Api\Data\OrderInterface $order,
+        CreditmemoInterface $creditmemo,
+        OrderInterface $order,
         $isOnline = false
     );
 }
