@@ -365,9 +365,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
-     * Return HTML code
+     * Produce and return block's html output.
      *
-     * @codeCoverageIgnore
      * @return string
      */
     protected function _toHtml()
