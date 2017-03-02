@@ -586,7 +586,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      */
     protected function _getStoreBaseUrl($type = \Magento\Framework\UrlInterface::URL_TYPE_LINK)
     {
-        return rtrim($this->_storeManager->getStore($this->getStoreId())->getBaseUrl($type), '/') . '/';
+        return rtrim($this->_storeManager->getStore($this->getStoreId())->getBaseUrl($type, true), '/') . '/';
     }
 
     /**

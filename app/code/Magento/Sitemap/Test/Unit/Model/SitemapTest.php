@@ -51,6 +51,11 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     protected $_fileMock;
 
     /**
+     * @var \Magento\Store\Model\Store
+     */
+    protected $_storeMock;
+
+    /**
      * Set helper mocks, create resource model mock
      */
     protected function setUp()
@@ -141,6 +146,12 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_directoryMock)
         );
+
+        $this->_storeMock = $this->getMockBuilder(
+            'Magento\Store\Model\Store'
+        )->setMethods(
+            ['getBaseUrl']
+        )->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -611,6 +622,14 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $cmsFactory->expects($this->any())->method('create')->will($this->returnValue($this->_sitemapCmsPageMock));
 
+        $storeManager = $this->getMockBuilder(
+            'Magento\Store\Model\StoreManager'
+        )->setMethods(
+            ['getStore']
+        )->disableOriginalConstructor()->getMock();
+
+        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->_storeMock));
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructArguments = $objectManager->getConstructArguments(
             'Magento\Sitemap\Model\Sitemap',
@@ -619,7 +638,8 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 'productFactory' => $productFactory,
                 'cmsFactory' => $cmsFactory,
                 'sitemapData' => $this->_helperMockSitemap,
-                'filesystem' => $this->_filesystemMock
+                'filesystem' => $this->_filesystemMock,
+                'storeManager' => $storeManager
             ]
         );
         $constructArguments['resource'] = null;
@@ -630,6 +650,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      * Check site URL getter
      *
      * @param string $storeBaseUrl
+     * @param string $urlType
      * @param string $documentRoot
      * @param string $baseDir
      * @param string $sitemapPath
@@ -637,18 +658,42 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      * @param string $result
      * @dataProvider siteUrlDataProvider
      */
-    public function testGetSitemapUrl($storeBaseUrl, $documentRoot, $baseDir, $sitemapPath, $sitemapFileName, $result)
+    public function testGetSitemapUrl($storeBaseUrl, $urlType, $documentRoot, $baseDir, $sitemapPath, $sitemapFileName, $result)
     {
+        if ($urlType == \Magento\Framework\UrlInterface::URL_TYPE_WEB) {
+            $this->_storeMock
+                ->expects($this->at(0))
+                ->method('getBaseUrl')->with(
+                    \Magento\Framework\UrlInterface::URL_TYPE_LINK,
+                    true
+                )
+                ->will($this->returnValue($storeBaseUrl));
+            $this->_storeMock
+                ->expects($this->at(1))
+                ->method('getBaseUrl')->with(
+                    \Magento\Framework\UrlInterface::URL_TYPE_WEB,
+                    true
+                )
+                ->will($this->returnValue($storeBaseUrl));
+        } else {
+            $this->_storeMock
+                ->expects($this->any())
+                ->method('getBaseUrl')->with(
+                    $urlType,
+                    true
+                )
+                ->will($this->returnValue($storeBaseUrl));
+        }
         /** @var $model \Magento\Sitemap\Model\Sitemap */
         $model = $this->getMockBuilder(
             'Magento\Sitemap\Model\Sitemap'
         )->setMethods(
-            ['_getStoreBaseUrl', '_getDocumentRoot', '_getBaseDir', '_construct']
+            ['getStoreId', '_getDocumentRoot', '_getBaseDir', '_construct']
         )->setConstructorArgs(
             $this->_getModelConstructorArgs()
         )->getMock();
 
-        $model->expects($this->any())->method('_getStoreBaseUrl')->will($this->returnValue($storeBaseUrl));
+        $model->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
 
         $model->expects($this->any())->method('_getDocumentRoot')->will($this->returnValue($documentRoot));
 
@@ -668,6 +713,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'http://store.com',
+                \Magento\Framework\UrlInterface::URL_TYPE_LINK,
                 'c:\\http\\mage2\\',
                 'c:\\http\\mage2\\',
                 '/',
@@ -676,6 +722,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'http://store.com/store2',
+                \Magento\Framework\UrlInterface::URL_TYPE_LINK,
                 'c:\\http\\mage2\\',
                 'c:\\http\\mage2\\',
                 '/sitemaps/store2',
@@ -684,6 +731,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'http://store.com/builds/regression/ee/',
+                \Magento\Framework\UrlInterface::URL_TYPE_WEB,
                 '/var/www/html',
                 '/opt/builds/regression/ee',
                 '/',
@@ -692,6 +740,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'http://store.com/store2',
+                \Magento\Framework\UrlInterface::URL_TYPE_LINK,
                 'c:\\http\\mage2\\',
                 'c:\\http\\mage2\\store2',
                 '/sitemaps/store2',
@@ -700,6 +749,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'http://store2.store.com',
+                \Magento\Framework\UrlInterface::URL_TYPE_LINK,
                 'c:\\http\\mage2\\',
                 'c:\\http\\mage2\\',
                 '/sitemaps/store2',
@@ -708,6 +758,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'http://store.com',
+                \Magento\Framework\UrlInterface::URL_TYPE_LINK,
                 '/var/www/store/',
                 '/var/www/store/',
                 '/',
@@ -716,11 +767,21 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'http://store.com/store2',
+                \Magento\Framework\UrlInterface::URL_TYPE_LINK,
                 '/var/www/store/',
                 '/var/www/store/store2/',
                 '/sitemaps/store2',
                 'sitemap.xml',
                 'http://store.com/store2/sitemaps/store2/sitemap.xml'
+            ],
+            [
+                'https://store.com/store3',
+                \Magento\Framework\UrlInterface::URL_TYPE_LINK,
+                '/var/www/store/',
+                '/var/www/store/store3/',
+                '/sitemaps/store3',
+                'sitemap.xml',
+                'https://store.com/store3/sitemaps/store3/sitemap.xml'
             ]
         ];
     }
