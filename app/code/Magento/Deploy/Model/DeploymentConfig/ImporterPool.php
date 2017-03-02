@@ -7,7 +7,6 @@ namespace Magento\Deploy\Model\DeploymentConfig;
 
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 
 /**
  * Pool of all deployment configuration importers.
@@ -59,11 +58,11 @@ class ImporterPool
     private $importers = [];
 
     /**
-     * The same as $importers, sorted by sortOrder.
+     *
      *
      * @var array
      */
-    private $sortedImporters;
+    private $sortedImporters = [];
 
     /**
      * Magento object manager.
@@ -101,45 +100,37 @@ class ImporterPool
     }
 
     /**
-     * Retrieves list of all sections with their importer instances, sorted by sortOrder.
+     * Retrieves list of all sections with their importer class names, sorted by sortOrder.
      *
      * E.g.
      * ```php
      * [
-     *     'scopes' => SomeScopeImporter(),
+     *     'scopes' => Magento\Store\Model\StoreImporter,
      *     ...
      * ]
      * ```
      *
-     * @return array the list of all sections with their importer instances
-     * @throws ConfigurationMismatchException is thrown when instance of importer implements a wrong interface
+     * @return array the list of all sections with their importer class names
+     * @throws ConfigurationMismatchException is thrown when parameter class is empty
      */
     public function getImporters()
     {
-        $result = [];
+        if (!$this->sortedImporters) {
+            $sortedImporters = [];
+            $importers = $this->sort($this->importers);
 
-        if (null == $this->sortedImporters) {
-            $this->sortedImporters = $this->sort($this->importers);
-        }
+            foreach ($importers as $section => $importer) {
+               if (empty($importer['class'])) {
+                   throw new ConfigurationMismatchException(__('Parameter "class" must be present.'));
+               }
 
-        foreach ($this->sortedImporters as $section => $importer) {
-            if (empty($importer['class'])) {
-                throw new ConfigurationMismatchException(__('Parameter "class" must be present.'));
+               $sortedImporters[$section] = $importer['class'];
             }
 
-            $importerObj = $this->objectManager->get($importer['class']);
-            if (!$importerObj instanceof ImporterInterface) {
-                throw new ConfigurationMismatchException(__(
-                    '%1: Instance of %2 is expected, got %3 instead',
-                    $section,
-                    ImporterInterface::class,
-                    get_class($importerObj)
-                ));
-            }
-            $result[$section] = $importerObj;
+            $this->sortedImporters = $sortedImporters;
         }
 
-        return $result;
+        return $this->sortedImporters;
     }
 
     /**

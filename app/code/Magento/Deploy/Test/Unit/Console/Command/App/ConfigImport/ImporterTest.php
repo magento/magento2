@@ -14,6 +14,7 @@ use Magento\Deploy\Model\DeploymentConfig\Validator;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
 
 class ImporterTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,6 +27,11 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
      * @var ImporterPool|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configImporterPoolMock;
+
+    /**
+     * @var ImporterFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $importerFactoryMock;
 
     /**
      * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
@@ -57,6 +63,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->importerFactoryMock = $this->getMockBuilder(ImporterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->configValidatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -78,6 +87,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->importer = new Importer(
             $this->configValidatorMock,
             $this->configImporterPoolMock,
+            $this->importerFactoryMock,
             $this->deploymentConfigMock,
             $this->configHashMock,
             $this->loggerMock
@@ -92,13 +102,18 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $configData = ['some data'];
         $messages = ['Import has done'];
         $expectsMessages = ['Import has done'];
+        $importerClassName = 'someImporterClassName';
+        $importers = ['someSection' => $importerClassName];
         $importerMock = $this->getMockBuilder(ImporterInterface::class)
             ->getMockForAbstractClass();
-        $importers = ['someSection' => $importerMock];
 
         $this->configImporterPoolMock->expects($this->once())
             ->method('getImporters')
             ->willReturn($importers);
+        $this->importerFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($importerClassName)
+            ->willReturn($importerMock);
         $this->configValidatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(false);

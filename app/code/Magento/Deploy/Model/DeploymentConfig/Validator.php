@@ -59,7 +59,7 @@ class Validator
      */
     public function isValid($sectionName = null)
     {
-        $configs = $this->dataConfigCollector->getConfig($sectionName ?: null);
+        $configs = $this->dataConfigCollector->getConfig($sectionName);
         $hashes = $this->configHash->get();
 
         foreach ($configs as $section => $config) {

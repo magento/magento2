@@ -5,26 +5,16 @@
  */
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Magento\Deploy\Model\DeploymentConfig\Hash\Generator;
 use Magento\Deploy\Model\DeploymentConfig\DataCollector;
+use Magento\Deploy\Model\DeploymentConfig\Hash\Generator;
+use Magento\Framework\Flag\FlagResource;
+use Magento\Framework\Flag;
+use Magento\Framework\FlagFactory;
 
 class HashTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfigMock;
-
-    /**
-     * @var Writer|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $writerMock;
-
     /**
      * @var Generator|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -36,6 +26,21 @@ class HashTest extends \PHPUnit_Framework_TestCase
     private $dataConfigCollectorMock;
 
     /**
+     * @var FlagFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $flagFactoryMock;
+
+    /**
+     * @var FlagResource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $flagResourceMock;
+
+    /**
+     * @var Flag|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $flagMock;
+
+    /**
      * @var Hash
      */
     private $hash;
@@ -45,10 +50,16 @@ class HashTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+        $this->flagResourceMock = $this->getMockBuilder(FlagResource::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->writerMock = $this->getMockBuilder(Writer::class)
+        $this->flagFactoryMock = $this->getMockBuilder(FlagFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->flagMock = $this->getMockBuilder(Flag::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configHashGeneratorMock = $this->getMockBuilder(Generator::class)
@@ -59,10 +70,10 @@ class HashTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->hash = new Hash(
-            $this->deploymentConfigMock,
-            $this->writerMock,
             $this->configHashGeneratorMock,
-            $this->dataConfigCollectorMock
+            $this->dataConfigCollectorMock,
+            $this->flagResourceMock,
+            $this->flagFactoryMock
         );
     }
 
@@ -74,10 +85,17 @@ class HashTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet($dataFromStorage, $expectedResult)
     {
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('getConfigData')
-            ->with(Hash::CONFIG_KEY)
+        $this->flagMock->expects($this->once())
+            ->method('getFlagData')
             ->willReturn($dataFromStorage);
+        $this->flagFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['data' => ['flag_code' => Hash::CONFIG_KEY]])
+            ->willReturn($this->flagMock);
+        $this->flagResourceMock->expects($this->once())
+            ->method('load')
+            ->with($this->flagMock, Hash::CONFIG_KEY, 'flag_code')
+            ->willReturnSelf();
 
         $this->assertSame($expectedResult, $this->hash->get());
     }
@@ -106,10 +124,12 @@ class HashTest extends \PHPUnit_Framework_TestCase
         $hash = 'some hash';
         $hashes = [$section => $hash];
 
-        $this->generalRegenerateMocks($fullConfig, $config, $hash);
-        $this->writerMock->expects($this->once())
-            ->method('saveConfig')
-            ->with([ConfigFilePool::APP_ENV => [Hash::CONFIG_KEY => $hashes]]);
+        $this->generalRegenerateMocks($fullConfig, $config, $hash, $hashes);
+
+        $this->flagResourceMock->expects($this->once())
+            ->method('save')
+            ->with($this->flagMock)
+            ->willReturnSelf();
 
         $this->hash->regenerate();
     }
@@ -127,12 +147,12 @@ class HashTest extends \PHPUnit_Framework_TestCase
         $hash = 'some hash';
         $hashes = [$section => $hash];
 
-        $this->generalRegenerateMocks($fullConfig, $config, $hash, $section);
-        $this->writerMock->expects($this->once())
-            ->method('saveConfig')
-            ->with([ConfigFilePool::APP_ENV => [Hash::CONFIG_KEY => $hashes]])
-            ->willThrowException(new FileSystemException(__('Some error')));
+        $this->generalRegenerateMocks($fullConfig, $config, $hash, $hashes, $section);
 
+        $this->flagResourceMock->expects($this->once())
+            ->method('save')
+            ->with($this->flagMock)
+            ->willThrowException(new \Exception('Some error'));
         $this->hash->regenerate($section);
     }
 
@@ -140,10 +160,11 @@ class HashTest extends \PHPUnit_Framework_TestCase
      * @param array $fullConfig
      * @param string $config
      * @param string $hash
+     * @param array $hashes
      * @param string|null $sectionName
      * @return void
      */
-    private function generalRegenerateMocks($fullConfig, $config, $hash, $sectionName = null)
+    private function generalRegenerateMocks($fullConfig, $config, $hash, $hashes, $sectionName = null)
     {
         $this->dataConfigCollectorMock->expects($this->once())
             ->method('getConfig')
@@ -153,5 +174,15 @@ class HashTest extends \PHPUnit_Framework_TestCase
             ->method('generate')
             ->with($config)
             ->willReturn($hash);
+        $this->flagMock->expects($this->once())
+            ->method('setFlagData')
+            ->willReturn($hashes);
+        $this->flagFactoryMock->expects($this->exactly(2))
+            ->method('create')
+            ->with(['data' => ['flag_code' => Hash::CONFIG_KEY]])
+            ->willReturn($this->flagMock);
+        $this->flagResourceMock->expects($this->exactly(2))
+            ->method('load')
+            ->with($this->flagMock, Hash::CONFIG_KEY, 'flag_code');
     }
 }

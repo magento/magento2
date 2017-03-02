@@ -8,7 +8,7 @@ namespace Magento\Deploy\Test\Unit\Console\Command\App;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
 use Magento\Framework\Console\Cli;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Deploy\Model\DeploymentConfig\ImportFailedException;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\App\DeploymentConfig\Writer;
 
@@ -88,7 +88,7 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->importerMock->expects($this->once())
             ->method('import')
-            ->willThrowException(new LocalizedException(__('Some error')));
+            ->willThrowException(new ImportFailedException(__('Some error')));
 
         $this->assertSame(Cli::RETURN_FAILURE, $this->commandTester->execute([]));
         $this->assertContains('Some error', $this->commandTester->getDisplay());

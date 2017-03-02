@@ -6,7 +6,6 @@
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
-use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 class ImporterPoolTest extends \PHPUnit_Framework_TestCase
@@ -22,31 +21,12 @@ class ImporterPoolTest extends \PHPUnit_Framework_TestCase
     private $objectManagerMock;
 
     /**
-     * @var ImporterInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $importerMock;
-
-    /**
-     * @var \StdClass
-     */
-    private $wrongImporter;
-
-    /**
      * @return void
      */
     protected function setUp()
     {
-        $this->importerMock = $this->getMockBuilder(ImporterInterface::class)
-            ->getMockForAbstractClass();
-        $this->wrongImporter = new \StdClass();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
-        $this->objectManagerMock->expects($this->any())
-            ->method('get')
-            ->willReturnMap([
-                ['Magento\Importer\SomeImporter', $this->importerMock],
-                ['Magento\Importer\WrongSection', $this->wrongImporter],
-            ]);
         $this->configImporterPool = new ImporterPool(
             $this->objectManagerMock,
             [
@@ -63,28 +43,11 @@ class ImporterPoolTest extends \PHPUnit_Framework_TestCase
     public function testGetImporters()
     {
         $expectedResult = [
-            'secondSection' => $this->importerMock,
-            'thirdSection' => $this->importerMock,
-            'firstSection' => $this->importerMock,
+            'secondSection' => 'Magento\Importer\SomeImporter',
+            'thirdSection' => 'Magento\Importer\SomeImporter',
+            'firstSection' => 'Magento\Importer\SomeImporter',
         ];
         $this->assertSame($expectedResult, $this->configImporterPool->getImporters());
-    }
-
-    /**
-     * @return void
-     * @expectedException \Magento\Framework\Exception\ConfigurationMismatchException
-     * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage wrongSection: Instance of Magento\Framework\App\DeploymentConfig\ImporterInterface is expected, got stdClass instead
-     * @codingStandardsIgnoreEnd
-     */
-    public function testGetImportersWrongImplementation()
-    {
-        $this->configImporterPool = new ImporterPool(
-            $this->objectManagerMock,
-            ['wrongSection' => ['class' => 'Magento\Importer\WrongSection']]
-        );
-
-        $this->configImporterPool->getImporters();
     }
 
     /**

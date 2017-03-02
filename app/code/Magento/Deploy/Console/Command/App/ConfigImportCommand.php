@@ -5,7 +5,7 @@
  */
 namespace Magento\Deploy\Console\Command\App;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Deploy\Model\DeploymentConfig\ImportFailedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -76,7 +76,7 @@ class ConfigImportCommand extends Command
 
         try {
             $this->importer->import($output);
-        } catch (LocalizedException $e) {
+        } catch (ImportFailedException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 
             return Cli::RETURN_FAILURE;
