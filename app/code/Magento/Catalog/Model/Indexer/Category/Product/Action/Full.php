@@ -240,10 +240,14 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     }
 
     /**
-     * @inheritdoc
-     * @return string main table name based on the suffix stored in the 'indexer_state' table
+     * This overridden method returns ALTERNATIVE table name to work with.
+     *
+     * When the table used on frontend is 'catalog_category_product_index' this indexer should work
+     * with 'catalog_category_product_index_replica' and vice versa.
+     *
+     * @return string table name which is NOT used on frontend
      */
-    public function getMainTable()
+    protected function getMainTable()
     {
         $table = parent::getMainTable();
         $indexerState = $this->indexerStateFactory->create()->loadByIndexer(

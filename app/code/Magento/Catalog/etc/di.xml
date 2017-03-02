@@ -960,4 +960,9 @@
             <argument name="categoryProductIndexerFrontend" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Product\AbstractAction">
+        <arguments>
+            <argument name="categoryProductIndexerFrontend" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource</argument>
+        </arguments>
+    </type>
 </config>

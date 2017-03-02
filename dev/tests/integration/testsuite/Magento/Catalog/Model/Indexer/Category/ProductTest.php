@@ -113,7 +113,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->indexer->reindexAll();
 
         /**
-         * Move category from $categoryThird to $categorySecond
+         * Move $categoryFourth from $categoryThird to $categorySecond
          */
         $categoryFourth->move($categorySecond->getId(), null);
 
@@ -169,8 +169,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $categorySecond->setIsAnchor(0);
         $categorySecond->save();
 
-        /** @var Category $categoryFifth */
-        $categoryFifth = end($categories);
+        /** @var Category $categoryFourth */
+        $categoryFourth = end($categories);
 
         /** @var Category $categorySixth */
         $categorySixth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -179,7 +179,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $categorySixth->setName(
             'Category 6'
         )->setPath(
-            $categoryFifth->getPath()
+            $categoryFourth->getPath()
         )->setAvailableSortBy(
             'name'
         )->setDefaultSortBy(
@@ -193,7 +193,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $productThird->setCategoryIds([$categorySixth->getId()]);
         $productThird->save();
 
-        $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId(), $categoryFifth->getId()];
+        $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId(), $categoryFourth->getId()];
         foreach ($categories as $categoryId) {
             $this->assertTrue((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
         }
