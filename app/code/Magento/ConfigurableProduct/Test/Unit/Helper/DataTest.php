@@ -231,7 +231,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Data\Collection::class,
             $this->_model->getGalleryImages($productMock)
         );
-
     }
 
     /**
