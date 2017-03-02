@@ -3,19 +3,28 @@
  * See COPYING.txt for license details.
  */
 define([
-    "customerDataInvalidationRules",
-    "underscore"
-], function (invalidationRules, _) {
+    "underscore",
+    "uiClass",
+    "require"
+], function (_, Class, require) {
     "use strict";
 
-    return {
+    return Class.extend({
+        defaults: {
+            invalidationRules: {}
+        },
+
         /**
          * Process all rules in loop, each rule can invalidate some sections in customer data
          *
          * @param {Object} customerData
          */
         process: function (customerData) {
-            _.each(invalidationRules, function (rule, ruleName) {
+            var rule;
+
+            _.each(this.invalidationRules, function (rulePath, ruleName) {
+                debugger;
+                rule = require(rulePath);
                 if (!_.isFunction(rule.process)) {
                     throw new Error("Rule " + ruleName + " should implement invalidationProcessor interface");
                 }
@@ -23,5 +32,5 @@ define([
                 rule.process(customerData);
             });
         }
-    }
+    });
 });

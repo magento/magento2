@@ -11,10 +11,7 @@ var config = {
             changeEmailPassword: 'Magento_Customer/change-email-password',
             passwordStrengthIndicator: 'Magento_Customer/js/password-strength-indicator',
             zxcvbn: 'Magento_Customer/js/zxcvbn',
-            addressValidation: 'Magento_Customer/js/addressValidation',
-            customerDataInvalidationRules: {
-                websiteRule: 'Magento_Customer/js/invalidation-rules/website-rule'
-            }
+            addressValidation: 'Magento_Customer/js/addressValidation'
         }
     }
 };

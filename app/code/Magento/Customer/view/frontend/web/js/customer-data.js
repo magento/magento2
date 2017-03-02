@@ -11,7 +11,7 @@ define([
     'mage/storage',
     'jquery/jquery-storageapi',
     'Magento_Customer/js/invalidation-processor'
-], function ($, _, ko, sectionConfig, sectionInvalidator) {
+], function ($, _, ko, sectionConfig) {
     'use strict';
 
     var options,
@@ -215,7 +215,7 @@ define([
                 }
             }
 
-            sectionInvalidator.process(this);//all invalidation rules should be move here
+            //sectionInvalidator().process(this);//all invalidation rules should be move here
 
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
