@@ -90,8 +90,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
         $expectsValue,
         $className,
         $value
-    )
-    {
+    ) {
         $scope = 'someScope';
         $scopeCode = 'someScopeCode';
         $path = 'some/config/path';
