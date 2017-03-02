@@ -40,7 +40,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
             return [];
         }
         $blocks = json_decode($blocks);
-        $handles = json_decode($handles);
+        $handles = json_decode(base64_decode($handles));
 
         $this->_view->loadLayout($handles, true, true, false);
         $data = [];

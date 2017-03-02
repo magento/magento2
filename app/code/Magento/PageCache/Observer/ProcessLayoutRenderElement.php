@@ -56,7 +56,7 @@ class ProcessLayoutRenderElement implements ObserverInterface
             'page_cache/block/esi',
             [
                 'blocks' => json_encode([$block->getNameInLayout()]),
-                'handles' => json_encode($layout->getUpdate()->getHandles())
+                'handles' =>  base64_encode(json_encode($layout->getUpdate()->getHandles()))
             ]
         );
         return sprintf('<esi:include src="%s" />', $url);
