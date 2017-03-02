@@ -15,12 +15,14 @@ define([
 
     var totals = quote.getTotals(),
         couponCode = ko.observable(null),
-        isApplied = ko.observable(couponCode() != null);
+        isApplied;
 
     if (totals()) {
         couponCode(totals()['coupon_code']);
     }
 
+    isApplied = ko.observable(couponCode() != null);
+    
     return Component.extend({
         defaults: {
             template: 'Magento_SalesRule/payment/discount'
