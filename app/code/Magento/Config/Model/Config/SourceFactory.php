@@ -26,7 +26,7 @@ class SourceFactory
      * Create backend model by name
      *
      * @param string $modelName
-     * @return \Magento\Framework\Option\ArrayInterface|object
+     * @return \Magento\Framework\Option\ArrayInterface
      */
     public function create($modelName)
     {
