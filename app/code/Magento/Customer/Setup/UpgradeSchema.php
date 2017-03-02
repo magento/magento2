@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -136,14 +136,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ]
         );
         foreach ($keys as $key) {
-            $setup->getConnection()->modifyColumn(
+            $description = $setup->getConnection()->describeTable($key['TABLE_NAME'])[$key['COLUMN_NAME']];
+            $description['DATA_TYPE'] = 'int';
+            $setup->getConnection()->modifyColumnByDdl(
                 $key['TABLE_NAME'],
                 $key['COLUMN_NAME'],
-                [
-                    'type' => 'integer',
-                    'unsigned' => true,
-                    'nullable' => false
-                ]
+                $description
             );
         }
     }

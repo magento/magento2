@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -242,7 +242,7 @@ abstract class AbstractData
         if ($filterCode) {
             $filterClass = 'Magento\Framework\Data\Form\Filter\\' . ucfirst($filterCode);
             if ($filterCode == 'date') {
-                $filter = new $filterClass($this->_dateFilterFormat(), $this->_localeResolver->getLocale());
+                $filter = new $filterClass($this->_dateFilterFormat(), $this->_localeResolver);
             } else {
                 $filter = new $filterClass();
             }

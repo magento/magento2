@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
@@ -176,6 +176,13 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     protected $stockRegistry;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param ExtensionAttributesFactory $extensionFactory
@@ -191,6 +198,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      *
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -207,13 +215,16 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_errorInfos = $statusListFactory->create();
         $this->_localeFormat = $localeFormat;
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->quoteItemCompare = $quoteItemCompare;
         $this->stockRegistry = $stockRegistry;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct(
             $context,
             $registry,
@@ -808,7 +819,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     public function getBuyRequest()
     {
         $option = $this->getOptionByCode('info_buyRequest');
-        $buyRequest = new \Magento\Framework\DataObject($option ? unserialize($option->getValue()) : []);
+        $data = $option ? $this->serializer->unserialize($option->getValue()) : [];
+        $buyRequest = new \Magento\Framework\DataObject($data);
 
         // Overwrite standard buy request qty, because item qty could have changed since adding to quote
         $buyRequest->setOriginalQty($buyRequest->getQty())->setQty($this->getQty() * 1);

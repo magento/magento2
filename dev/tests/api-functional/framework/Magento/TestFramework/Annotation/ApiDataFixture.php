@@ -6,7 +6,7 @@
  * that no transactions should be used for API data fixtures.
  * Otherwise fixture data will not be accessible to Web API functional tests.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -65,6 +65,7 @@ class ApiDataFixture
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Eav\Model\Entity\AttributeCache::class)->clear();
+        $objectManager->get(\Magento\Customer\Model\Metadata\AttributeMetadataCache::class)->clean();
     }
 
     /**

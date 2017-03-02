@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,14 +11,45 @@
         <store_groups>1</store_groups> <!--Number of stores-->
         <store_views>1</store_views> <!-- Number of store views -->
         <simple_products>800</simple_products> <!-- Simple products count -->
-        <configurable_products>50</configurable_products> <!--Configurable products count (each configurable has 3 simple products as options, that are not displayed individually in catalog) -->
+        <!-- If 1 then products will be assigned to all websites. By default products are equidistributed per websites -->
+        <assign_entities_to_all_websites>0</assign_entities_to_all_websites>
+        <!--Configurable products configuration (configurable option is not displayed individually in catalog) -->
+        <!--
+            Support the following formats:
+
+            1. Generate specified amount of configurable products distributed per Default and pre-defined attribute sets
+            <configurable_products>{amount of configurable products}</configurable_products>
+
+            2. Generate products based on existing attribute set
+            <configurable_products>
+                <config>
+                    <attributeSet>{Existing attribute set name}</attributeSet>
+                    <sku>{Configurable sku pattern with %s}</sku>
+                    <products>{Amount of configurable products}</products>
+                    <category>[{Category Name}]</category> By default category name from CategoriesFixture will be used
+                </config>
+            </configurable_products>
+
+            3. Generate products based on dynamically created attribute set with specified amount of attributes and options
+            <configurable_products>
+                <config>
+                    <attributes>{Amount of attributes in configurable prduct}</attributes>
+                    <options>{Amount of options per attribute}</options>
+                    <sku>{Configurable sku pattern with %s}</sku>
+                    <products>{Amount of configurable products}</products>
+                    <category>[{Category Name}]</category> By default category name from CategoriesFixture will be used
+                    <swatches>{color, image}</swatches> Type of Swatch attribute.
+                </config>
+            </configurable_products>
+        -->
+        <configurable_products>50</configurable_products>
         <categories>30</categories> <!-- Number of categories to generate -->
         <categories_nesting_level>3</categories_nesting_level> <!-- Nesting level for categories -->
         <catalog_price_rules>10</catalog_price_rules> <!-- Number os catalog price rules -->
         <cart_price_rules>10</cart_price_rules> <!-- Number of cart price rules -->
         <cart_price_rules_floor>2</cart_price_rules_floor> <!-- The price rule condition: minimum products amount in shopping cart for price rule to be applied -->
         <customers>20</customers> <!-- Number of customers to generate -->
-        <tax_rates_file>tax_rates.csv</tax_rates_file> <!-- Tax rates file in fixtures directory-->
+        <tax_rates_file>tax_rates_small.csv</tax_rates_file> <!-- Tax rates file in fixtures directory-->
         <orders>80</orders> <!-- Orders count -->
         <configs> <!-- Config variables and values for change -->
             <config>
@@ -71,5 +102,8 @@
         <xi:include href="../../config/searchTerms.xml" />
         <xi:include href="../../config/searchConfig.xml" />
         <xi:include href="../../config/attributeSets.xml" />
+        <xi:include href="../../config/customerConfig.xml" />
+        <xi:include href="../../config/description.xml" />
+        <xi:include href="../../config/shortDescription.xml" />
     </profile>
 </config>

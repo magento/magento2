@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,12 +12,12 @@ use Magento\Framework\Code\GeneratedFiles;
 class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject
      */
     private $directoryList;
 
     /**
-     * @var Magento\Framework\Filesystem\Directory\WriteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private $writeInterface;
 
@@ -77,8 +77,8 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
         $pathToConfig = 'path/to/config';
 
         $getPathMap =     [
-            [DirectoryList::GENERATION, $pathToGeneration],
-            [DirectoryList::DI, $pathToDi],
+            [DirectoryList::GENERATED_CODE, $pathToGeneration],
+            [DirectoryList::GENERATED_METADATA, $pathToDi],
             [DirectoryList::CACHE, $pathToCache],
             [DirectoryList::CONFIG, $pathToConfig],
         ];

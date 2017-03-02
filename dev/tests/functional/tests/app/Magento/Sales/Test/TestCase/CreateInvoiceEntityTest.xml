@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -68,7 +68,7 @@
         </variation>
         <variation name="CreateInvoiceEntityTestVariationWithZeroSubtotalCheckout">
             <data name="order/dataset" xsi:type="string">default</data>
-            <data name="order/data/price/dataset" xsi:type="string">partial_invoice</data>
+            <data name="order/data/price/dataset" xsi:type="string">free_invoice</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="order/data/total_qty_ordered/0" xsi:type="string">-</data>
             <data name="order/data/payment_auth_expiration/method" xsi:type="string">free</data>

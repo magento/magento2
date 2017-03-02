@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -254,10 +254,10 @@ class InstallSchema implements InstallSchemaInterface
             ->addIndex(
                 $installer->getIdxName(
                     'cataloginventory_stock_item',
-                    ['product_id', 'website_id'],
+                    ['product_id', 'stock_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
-                ['product_id', 'website_id'],
+                ['product_id', 'stock_id'],
                 ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addIndex(

@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
- * Sales Order Shipment Pdf items renderer
+ * Order shipment pdf items renderer
  */
 class Shipment extends AbstractItems
 {
@@ -16,6 +19,8 @@ class Shipment extends AbstractItems
     protected $string;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
@@ -25,6 +30,8 @@ class Shipment extends AbstractItems
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -35,7 +42,8 @@ class Shipment extends AbstractItems
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->string = $string;
         parent::__construct(
@@ -46,7 +54,8 @@ class Shipment extends AbstractItems
             $filterManager,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $serializer
         );
     }
 

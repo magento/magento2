@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+Bootstrap::getInstance()->reinitialize();
 
 require __DIR__ . '/configurable_attribute.php';
 
@@ -33,7 +33,7 @@ $options = $attribute->getOptions();
 $attributeValues = [];
 $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
 $associatedProductIds = [];
-$productIds = [10, 20];
+$productIds = [1010, 1020];
 array_shift($options); //remove the first option which is empty
 
 $isFirstOption = true;
@@ -108,29 +108,8 @@ $extensionConfigurableAttributes->setConfigurableProductLinks($associatedProduct
 
 $product->setExtensionAttributes($extensionConfigurableAttributes);
 
-// Remove any previously created product with the same id.
-/** @var \Magento\Framework\Registry $registry */
-$registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
-$registry->unregister('isSecureArea');
-$registry->register('isSecureArea', true);
-try {
-    $productToDelete = $productRepository->getById(1);
-    $productRepository->delete($productToDelete);
-
-    /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $itemResource */
-    $itemResource = Bootstrap::getObjectManager()->get(\Magento\Quote\Model\ResourceModel\Quote\Item::class);
-    $itemResource->getConnection()->delete(
-        $itemResource->getMainTable(),
-        'product_id = ' . $productToDelete->getId()
-    );
-} catch (\Exception $e) {
-    // Nothing to remove
-}
-$registry->unregister('isSecureArea');
-$registry->register('isSecureArea', false);
-
 $product->setTypeId(Configurable::TYPE_CODE)
-    ->setId(1)
+    ->setId(1001)
     ->setAttributeSetId($attributeSetId)
     ->setWebsiteIds([1])
     ->setName('Configurable Product')
@@ -140,8 +119,3 @@ $product->setTypeId(Configurable::TYPE_CODE)
     ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1]);
 
 $productRepository->save($product);
-//
-///** @var \Magento\Catalog\Model\Indexer\Product\Eav\Processor $eavIndexer */
-//$eavIndexer = Bootstrap::getObjectManager()
-//    ->get(\Magento\Catalog\Model\Indexer\Product\Eav\Processor::class);
-//$eavIndexer->reindexAll();

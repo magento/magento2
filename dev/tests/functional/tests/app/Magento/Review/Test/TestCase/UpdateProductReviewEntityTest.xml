@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Review\Test\TestCase\UpdateProductReviewEntityTest" summary="Update Product Review" ticketId="MAGETWO-25604">
         <variation name="UpdateProductReviewEntityTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="reviewInitial/dataset" xsi:type="string">review_for_simple_product_with_rating</data>
             <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>
             <data name="review/data/title" xsi:type="string">title_upd_%isolation%</data>
