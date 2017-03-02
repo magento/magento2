@@ -342,8 +342,7 @@ define([
 
             if (!productId) {
                 // Check individual product.
-                var product = document.getElementsByName('product')[0];
-                productId = product ? product.value : undefined;
+                productId = $('[name=product]').val();
                 isInProductView = productId > 0;
             }
 
