@@ -112,7 +112,7 @@ class Generator
             $this->tryToLoadSourceClass($className, $generator);
             if (!($file = $generator->generate())) {
                 $errors = $generator->getErrors();
-                throw new \RuntimeException(implode(' ', $errors));
+                throw new \RuntimeException(implode(' ', $errors) . ' in [' . $className . ']');
             }
             if (!$this->definedClasses->isClassLoadableFromMemory($className)) {
                 $this->_ioObject->includeFile($file);
