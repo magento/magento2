@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\CacheCleaner;
 
 /**
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
+ * @magentoDataFixture Magento/Catalog/_files/category_attribute.php
  */
 class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,22 +45,6 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
     ) {
         /** @var \Magento\Catalog\Model\ResourceModel\Category $categoryResourceModel */
         $categoryResourceModel = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Category::class);
-
-        // Create an attribute not in any attribute set
-        $entityTypeId = $categoryResourceModel->getEntityType()->getEntityTypeId();
-        /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
-        $attribute = $this->objectManager->create(\Magento\Eav\Model\Entity\Attribute::class);
-        $attribute->setData(
-            [
-                'attribute_code' => 'test_attribute',
-                'entity_type_id' => $entityTypeId,
-                'backend_type' => 'varchar',
-                'is_required' => 0,
-                'is_user_defined' => 1,
-                'is_unique' => 0,
-            ]
-        );
-        $attribute->save();
 
         // Before load all attributes
         $attributesByCode = $categoryResourceModel->getAttributesByCode();
