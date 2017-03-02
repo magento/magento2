@@ -9,11 +9,13 @@ use Magento\Deploy\Model\DeploymentConfig\Validator as DeploymentConfigValidator
 use Magento\Framework\App\FrontController;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Phrase;
 
 /**
+ * This is plugin for Magento\Framework\App\FrontController class.
+ *
  * Checks that config data form deployment configuration files was not changed.
- * If config data was changed throws LocalizedException.
+ * If config data was changed throws LocalizedException because we should stop work of Magento and then import
+ * config data from shared configuration files into appropriate application sources.
  */
 class ConfigValidator
 {
@@ -45,7 +47,7 @@ class ConfigValidator
     {
         if (!$this->configValidator->isValid()) {
             throw new LocalizedException(
-                new Phrase(
+                __(
                     'A change in configuration has been detected.'
                     . ' Run app:config:import or setup:upgrade command to synchronize configuration.'
                 )

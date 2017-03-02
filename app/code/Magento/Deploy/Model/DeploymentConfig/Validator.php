@@ -9,6 +9,9 @@ use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
 
 /**
  * Configuration data validator of specific sections in the deployment configuration files.
+ *
+ * This validator checks that configuration data from specific sections was not changed.
+ * If the data was changed validator returns false.
  */
 class Validator
 {
@@ -49,9 +52,12 @@ class Validator
     }
 
     /**
-     * Check if config data in the deployment configuration files is valid.
+     * Checks if config data in the deployment configuration files is valid.
      *
-     * If config data is empty always returns true because it means that nothing to import.
+     * Checks if config data was changed based on its hash.
+     * If the new hash of config data and the saved hash are different returns false.
+     * If config data is empty always returns true.
+     * In the other cases returns true.
      *
      * @return bool
      */
