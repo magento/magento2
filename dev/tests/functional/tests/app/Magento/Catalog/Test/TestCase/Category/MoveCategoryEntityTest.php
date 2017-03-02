@@ -107,12 +107,8 @@ class MoveCategoryEntityTest extends Injectable
         );
         $this->catalogCategoryEdit->getModalBlock()->acceptWarning();
 
-        if ($newCategory != null) {
-            $childCategory = $newCategory;
-        }
-
         return [
-            'category' => $childCategory,
+            'category' => $newCategory,
             'parentCategory' => $parentCategory,
             'childCategory' => $childCategory,
         ];
