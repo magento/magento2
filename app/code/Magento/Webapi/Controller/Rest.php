@@ -200,6 +200,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * Handle REST request
      *
+     * Based on request decide is it schema request or API request and process accordingly.
+     * Throws Exception in case if cannot be processed properly.
+     *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
