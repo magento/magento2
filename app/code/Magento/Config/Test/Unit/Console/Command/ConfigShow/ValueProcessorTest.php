@@ -73,6 +73,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $expectsAfterLoad
      * @param string $expectsValue
      * @param string $className
+     * @param string $value
      * @dataProvider processDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -87,11 +88,12 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
         $expectsSetValue,
         $expectsAfterLoad,
         $expectsValue,
-        $className
-    ) {
+        $className,
+        $value
+    )
+    {
         $scope = 'someScope';
         $scopeCode = 'someScopeCode';
-        $value = 'someValue';
         $path = 'some/config/path';
         $oldConfigScope = 'oldConfigScope';
 
@@ -165,6 +167,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function processDataProvider()
     {
@@ -181,7 +184,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
                 'expectsAfterLoad' => $this->once(),
                 'expectsValue' => 'someValue',
                 'className' => Value::class,
-
+                'value' => 'someValue'
             ],
             [
                 'hasBackendModel' => false,
@@ -194,7 +197,8 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
                 'expectsSetValue' => $this->once(),
                 'expectsAfterLoad' => $this->once(),
                 'expectsValue' => 'someValue',
-                'className' => Value::class
+                'className' => Value::class,
+                'value' => 'someValue'
             ],
             [
                 'hasBackendModel' => true,
@@ -208,6 +212,35 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
                 'expectsAfterLoad' => $this->never(),
                 'expectsValue' => ValueProcessor::SAFE_PLACEHOLDER,
                 'className' => Encrypted::class,
+                'value' => 'someValue'
+            ],
+            [
+                'hasBackendModel' => true,
+                'expectsGetBackendModel' => $this->once(),
+                'expectsCreate' => $this->never(),
+                'expectsGetValue' => $this->once(),
+                'expectsSetPath' => $this->once(),
+                'expectsSetScope' => $this->once(),
+                'expectsSetScopeId' => $this->once(),
+                'expectsSetValue' => $this->once(),
+                'expectsAfterLoad' => $this->once(),
+                'expectsValue' => null,
+                'className' => Value::class,
+                'value' => null
+            ],
+            [
+                'hasBackendModel' => true,
+                'expectsGetBackendModel' => $this->once(),
+                'expectsCreate' => $this->never(),
+                'expectsGetValue' => $this->never(),
+                'expectsSetPath' => $this->never(),
+                'expectsSetScope' => $this->never(),
+                'expectsSetScopeId' => $this->never(),
+                'expectsSetValue' => $this->never(),
+                'expectsAfterLoad' => $this->never(),
+                'expectsValue' => null,
+                'className' => Encrypted::class,
+                'value' => null
             ],
         ];
     }

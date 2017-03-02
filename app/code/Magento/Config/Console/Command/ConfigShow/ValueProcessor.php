@@ -21,8 +21,6 @@ class ValueProcessor
 {
     /**
      * Placeholder for the output of sensitive data.
-     *
-     * @const
      */
     const SAFE_PLACEHOLDER = '******';
 
