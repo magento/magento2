@@ -115,7 +115,6 @@ class MoveCategoryEntityTest extends Injectable
             'category' => $childCategory,
             'parentCategory' => $parentCategory,
             'childCategory' => $childCategory,
-            'newCategory' => $newCategory,
         ];
     }
 
