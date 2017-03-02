@@ -76,7 +76,7 @@ abstract class AbstractAction
     private $productResource;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
      */
     private $indexerFrontendResource;
 
@@ -135,7 +135,7 @@ abstract class AbstractAction
     {
         // delete invalid rows
         $select = $this->_connection->select()->from(
-            ['index_price' => $this->indexerFrontendResource->getMainTable()],
+            ['index_price' => $this->getIndexerDefaultTable()],
             null
         )->joinLeft(
             ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()],
@@ -152,7 +152,7 @@ abstract class AbstractAction
 
         $this->_insertFromTable(
             $this->_defaultIndexerResource->getIdxTable(),
-            $this->indexerFrontendResource->getMainTable()
+            $this->getIndexerDefaultTable()
         );
         return $this;
     }
@@ -471,7 +471,7 @@ abstract class AbstractAction
 
         if ($children) {
             $select = $this->_connection->select()->from(
-                $this->indexerFrontendResource->getMainTable()
+                $this->getIndexerDefaultTable()
             )->where(
                 'entity_id IN(?)',
                 $children
@@ -481,6 +481,19 @@ abstract class AbstractAction
         }
 
         return $this;
+    }
+
+    /**
+     * Returns default table name for writing
+     *
+     * Method support writing to frontend table in case with partial reindex
+     * and case with writing to replica table during full reindex
+     *
+     * @return string
+     */
+    protected function getIndexerDefaultTable()
+    {
+        return $this->indexerFrontendResource->getMainTable();
     }
 
     /**

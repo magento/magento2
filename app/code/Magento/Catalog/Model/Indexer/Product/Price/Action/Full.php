@@ -154,6 +154,15 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     }
 
     /**
+     * @inheritdoc
+     * @return string
+     */
+    protected function getIndexerDefaultTable()
+    {
+        return $this->_defaultIndexerResource->getMainTable();
+    }
+
+    /**
      * Remove price index data
      *
      * Remove all price data from index table for current website
