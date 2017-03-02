@@ -19,6 +19,8 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class StockTest covers Magento\CatalogInventory\Model\ResourceModel\Stock
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockTest extends \PHPUnit_Framework_TestCase
 {
