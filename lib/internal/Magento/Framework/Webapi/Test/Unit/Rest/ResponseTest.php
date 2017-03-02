@@ -2,7 +2,7 @@
 /**
  * Test Rest response controller.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Test\Unit\Rest;
@@ -27,15 +27,15 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         /** Mock all objects required for SUT. */
         $this->rendererMock = $this->getMockBuilder(
-            'Magento\Framework\Webapi\Rest\Response\Renderer\Json'
+            \Magento\Framework\Webapi\Rest\Response\Renderer\Json::class
         )->disableOriginalConstructor()->getMock();
         $rendererFactoryMock = $this->getMockBuilder(
-            'Magento\Framework\Webapi\Rest\Response\RendererFactory'
+            \Magento\Framework\Webapi\Rest\Response\RendererFactory::class
         )->disableOriginalConstructor()->getMock();
         $rendererFactoryMock->expects($this->any())->method('get')->will($this->returnValue($this->rendererMock));
-        $this->errorProcessorMock = $this->getMockBuilder('Magento\Framework\Webapi\ErrorProcessor')
+        $this->errorProcessorMock = $this->getMockBuilder(\Magento\Framework\Webapi\ErrorProcessor::class)
             ->disableOriginalConstructor()->getMock();
-        $this->appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
 
         /** Init SUP. */
         $this->responseRest = new \Magento\Framework\Webapi\Rest\Response(
@@ -70,7 +70,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->responseRest->setException($apiException);
         /** Assert that \Magento\Framework\Webapi\Exception was set and presented in the list. */
         $this->assertTrue(
-            $this->responseRest->hasExceptionOfType('Magento\Framework\Webapi\Exception'),
+            $this->responseRest->hasExceptionOfType(\Magento\Framework\Webapi\Exception::class),
             'Magento\Framework\Webapi\Exception was not set.'
         );
     }

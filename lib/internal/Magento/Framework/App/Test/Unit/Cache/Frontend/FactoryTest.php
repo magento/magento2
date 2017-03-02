@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Frontend;
@@ -19,12 +19,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $result = $model->create(['backend' => 'Zend_Cache_Backend_BlackHole']);
 
         $this->assertInstanceOf(
-            'Magento\Framework\Cache\FrontendInterface',
+            \Magento\Framework\Cache\FrontendInterface::class,
             $result,
             'Created object must implement \Magento\Framework\Cache\FrontendInterface'
         );
         $this->assertInstanceOf(
-            'Magento\Framework\Cache\Core',
+            \Magento\Framework\Cache\Core::class,
             $result->getLowLevelFrontend(),
             'Created object must have \Magento\Framework\Cache\Core frontend by default'
         );
@@ -100,7 +100,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             [],
             [
                 [
-                    'class' => 'Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy',
+                    'class' => \Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy::class,
                     'parameters' => ['param' => 'value'],
                 ]
             ]
@@ -108,7 +108,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $result = $model->create(['backend' => 'Zend_Cache_Backend_BlackHole']);
 
         $this->assertInstanceOf(
-            'Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy',
+            \Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy::class,
             $result
         );
 
@@ -128,9 +128,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $processFrontendFunc = function ($class, $params) {
             switch ($class) {
-                case 'Magento\Framework\Cache\Frontend\Adapter\Zend':
+                case \Magento\Framework\Cache\Frontend\Adapter\Zend::class:
                     return new $class($params['frontend']);
-                case 'Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy':
+                case \Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy::class:
                     $frontend = $params['frontend'];
                     unset($params['frontend']);
                     return new $class($frontend, $params);
@@ -140,18 +140,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             }
         };
         /** @var $objectManager \PHPUnit_Framework_MockObject_MockObject */
-        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManager->expects($this->any())->method('create')->will($this->returnCallback($processFrontendFunc));
 
-        $dirMock = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
+        $dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $dirMock->expects($this->any())
             ->method('getAbsolutePath')
             ->will($this->returnValue('DIR'));
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($dirMock));
         $filesystem->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($dirMock));
 
-        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
 
         $model = new \Magento\Framework\App\Cache\Frontend\Factory(
             $objectManager,

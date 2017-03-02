@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,10 +40,10 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->quoteMock = $this->getMock(
-            '\Magento\Quote\Model\Quote', ['getCustomerNoteNotify'], [], '', false
+            \Magento\Quote\Model\Quote::class, ['getCustomerNoteNotify'], [], '', false
         );
         $this->sessionQuoteMock = $this->getMock(
-            '\Magento\Backend\Model\Session\Quote', [], [], '', false
+            \Magento\Backend\Model\Session\Quote::class, [], [], '', false
         );
 
         $this->sessionQuoteMock->expects($this->any())
@@ -51,7 +51,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->quoteMock);
 
         $this->totals = $this->objectManager->getObject(
-            '\Magento\Sales\Block\Adminhtml\Order\Create\Totals',
+            \Magento\Sales\Block\Adminhtml\Order\Create\Totals::class,
             [
                 'sessionQuote' => $this->sessionQuoteMock
             ]

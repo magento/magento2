@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\GuestCart;
@@ -42,11 +42,11 @@ class GuestBillingAddressManagement implements GuestBillingAddressManagementInte
     /**
      * {@inheritDoc}
      */
-    public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address)
+    public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->billingAddressManagement->assign($quoteIdMask->getQuoteId(), $address);
+        return $this->billingAddressManagement->assign($quoteIdMask->getQuoteId(), $address, $useForShipping);
     }
 
     /**

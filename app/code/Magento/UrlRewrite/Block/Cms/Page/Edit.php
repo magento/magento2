@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Cms\Page;
@@ -80,7 +80,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     {
         $this->addChild(
             'cms_page_link',
-            'Magento\UrlRewrite\Block\Link',
+            \Magento\UrlRewrite\Block\Link::class,
             [
                 'item_url' => $this->_adminhtmlData->getUrl('adminhtml/*/*') . 'cms_page',
                 'item_name' => $this->getCmsPage()->getTitle(),
@@ -96,7 +96,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      */
     private function _addCmsPageGridBlock()
     {
-        $this->addChild('cms_pages_grid', 'Magento\UrlRewrite\Block\Cms\Page\Grid');
+        $this->addChild('cms_pages_grid', \Magento\UrlRewrite\Block\Cms\Page\Grid::class);
     }
 
     /**
@@ -107,7 +107,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     protected function _createEditFormBlock()
     {
         return $this->getLayout()->createBlock(
-            'Magento\UrlRewrite\Block\Cms\Page\Edit\Form',
+            \Magento\UrlRewrite\Block\Cms\Page\Edit\Form::class,
             '',
             ['data' => ['cms_page' => $this->_getCmsPage(), 'url_rewrite' => $this->_getUrlRewrite()]]
         );

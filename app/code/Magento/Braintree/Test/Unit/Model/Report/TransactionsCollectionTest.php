@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Model\Report;
@@ -183,5 +183,43 @@ class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
         $items = $collection->getItems();
         $this->assertEquals(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, count($items));
         $this->assertInstanceOf(DocumentInterface::class, $items[1]);
+    }
+
+    /**
+     * Add fields to filter
+     * 
+     * @dataProvider addToFilterDataProvider
+     */
+    public function testAddToFilter($field, $condition, $filterMapperCall, $expectedCondition)
+    {
+        $this->filterMapperMock->expects(static::exactly($filterMapperCall))
+            ->method('getFilter')
+            ->with($field, $expectedCondition)
+            ->willReturn(new BraintreeSearchNodeStub());
+
+        $collection = new TransactionsCollection(
+            $this->entityFactoryMock,
+            $this->braintreeAdapterMock,
+            $this->filterMapperMock
+        );
+
+        static::assertInstanceOf(
+            TransactionsCollection::class,
+            $collection->addFieldToFilter($field, $condition)
+        );
+    }
+
+    /**
+     * addToFilter DataProvider
+     * 
+     * @return array
+     */
+    public function addToFilterDataProvider()
+    {
+        return [
+            ['orderId', ['like' => 1], 1, ['like' => 1]],
+            ['type', 'sale', 1, ['eq' => 'sale']],
+            [['type', 'orderId'], [], 0, []],
+        ];
     }
 }

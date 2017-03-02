@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,14 +19,14 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->source = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Source\AbstractSource')
+        $this->source = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class)
             ->getMockForAbstractClass();
 
-        $this->attribute = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $this->attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->swatch = $this->getMockBuilder('Magento\Swatches\Model\Form\Element\AbstractSwatch')
+        $this->swatch = $this->getMockBuilder(\Magento\Swatches\Model\Form\Element\AbstractSwatch::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData'])
             ->getMockForAbstractClass();
@@ -45,7 +45,7 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
             ->with('entity_attribute')
             ->willReturn($this->attribute);
 
-        $method = new \ReflectionMethod('Magento\Swatches\Model\Form\Element\AbstractSwatch', 'getValues');
+        $method = new \ReflectionMethod(\Magento\Swatches\Model\Form\Element\AbstractSwatch::class, 'getValues');
         $method->setAccessible(true);
 
         $this->assertEquals($expected, $method->invoke($this->swatch));
@@ -57,7 +57,7 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
             ->with('entity_attribute')
             ->willReturn(null);
 
-        $method = new \ReflectionMethod('Magento\Swatches\Model\Form\Element\AbstractSwatch', 'getValues');
+        $method = new \ReflectionMethod(\Magento\Swatches\Model\Form\Element\AbstractSwatch::class, 'getValues');
         $method->setAccessible(true);
 
         $this->assertEmpty($method->invoke($this->swatch));

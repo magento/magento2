@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Test\Unit\Model\Rule;
@@ -19,7 +19,7 @@ class WebsitesOptionsProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setup()
     {
-        $this->storeMock = $this->getMock('\Magento\Store\Model\System\Store', [], [], '', false);
+        $this->storeMock = $this->getMock(\Magento\Store\Model\System\Store::class, [], [], '', false);
         $this->model = new \Magento\CatalogRule\Model\Rule\WebsitesOptionsProvider($this->storeMock);
     }
 

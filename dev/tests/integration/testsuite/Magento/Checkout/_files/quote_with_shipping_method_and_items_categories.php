@@ -5,7 +5,7 @@
  * The quote is not saved inside the original fixture. It is later saved inside child fixtures, but along with some
  * additional data which may break some tests.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 require __DIR__ . '/../../Catalog/_files/categories_no_products.php';
@@ -16,7 +16,7 @@ $quote->removeAllItems();
 $quote->setReservedOrderId('test_order_item_with_items');
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
@@ -49,14 +49,14 @@ $product->setTypeId(
 $quote->addProduct($product->load($product->getIdBySku('simple_cat_3')), 1);
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
 )->setId(
     444
 )->setAttributeSetId(
-    5
+    4
 )->setStoreId(
     1
 )->setWebsiteIds(
@@ -86,7 +86,7 @@ $quote->collectTotals()->save();
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+    ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
     ->create();
 $quoteIdMask->setQuoteId($quote->getId());
 $quoteIdMask->setDataChanges(true);

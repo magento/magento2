@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -95,8 +95,19 @@
         }
     }
 
+    //  Full name fieldset
+    .fieldset {
+        .fullname {
+            > .label {
+                &:extend(.abs-visually-hidden all);
+            }
+        }
+    }
+
     .box-billing-address,
     .box-shipping-address,
+    .box-address-billing,
+    .box-address-shipping,
     .box-information,
     .box-newsletter {
         .box-content {
@@ -232,6 +243,7 @@
 
             .input-text {
                 .lib-vendor-prefix-order(0);
+                z-index: 2;
             }
         }
     }
@@ -253,35 +265,35 @@
             z-index: -1;
         }
 
-        .password-strength-meter-0 & {
+        .password-none & {
             &:before {
                 background-color: @_password-default;
                 width: 100%;
             }
         }
 
-        .password-strength-meter-1 & {
+        .password-weak & {
             &:before {
                 background-color: @_password-weak;
                 width: 25%;
             }
         }
 
-        .password-strength-meter-2 & {
+        .password-medium & {
             &:before {
                 background-color: @_password-medium;
                 width: 50%;
             }
         }
 
-        .password-strength-meter-3 & {
+        .password-strong & {
             &:before {
                 background-color: @_password-strong;
                 width: 75%;
             }
         }
 
-        .password-strength-meter-4 & {
+        .password-very-strong & {
             &:before {
                 background-color: @_password-very-strong;
                 width: 100%;
@@ -309,6 +321,11 @@
 
     .order-products-toolbar {
         position: relative;
+
+        .toolbar-amount {
+            position: relative;
+            text-align: center;
+        }
     }
 }
 
@@ -348,9 +365,15 @@
     .form-create-account {
         .fieldset-fullname {
             .fields {
+                display: table;
+                width: 100%;
+
                 .field {
-                    float: left;
-                    margin: 0 @indent__s @indent__s 0;
+                    display: table-cell;
+
+                    + .field {
+                        padding-left: @indent__s;
+                    }
                 }
             }
 
@@ -416,14 +439,22 @@
     .block-addresses-list {
         .items.addresses {
             &:extend(.abs-add-clearfix-desktop all);
+            font-size: 0;
 
             > .item {
-                &:extend(.abs-blocks-2columns all);
+                display: inline-block;
+                font-size: @font-size__base;
                 margin-bottom: @indent__base;
+                vertical-align: top;
+                width: 48%;
 
                 &:nth-last-child(1),
                 &:nth-last-child(2) {
                     margin-bottom: 0;
+                }
+
+                &:nth-child(even) {
+                    margin-left: 4%;
                 }
             }
         }
@@ -440,7 +471,7 @@
     }
 
     .form-address-edit {
-        .fieldset {
+        > .fieldset {
             &:extend(.abs-blocks-2columns all);
         }
     }
@@ -458,6 +489,8 @@
 
     .box-billing-address,
     .box-shipping-address,
+    .box-address-billing,
+    .box-address-shipping,
     .box-information {
         .box-content {
             &:extend(.abs-account-block-font-size all);

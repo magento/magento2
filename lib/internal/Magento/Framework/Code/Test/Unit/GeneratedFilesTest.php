@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,12 +12,12 @@ use Magento\Framework\Code\GeneratedFiles;
 class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject
      */
     private $directoryList;
 
     /**
-     * @var Magento\Framework\Filesystem\Directory\WriteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private $writeInterface;
 
@@ -28,10 +28,11 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->directoryList = $this->getMock('\Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $writeFactory = $this->getMock('\Magento\Framework\Filesystem\Directory\WriteFactory', [], [], '', false);
+        $this->directoryList =
+            $this->getMock(\Magento\Framework\App\Filesystem\DirectoryList::class, [], [], '', false);
+        $writeFactory = $this->getMock(\Magento\Framework\Filesystem\Directory\WriteFactory::class, [], [], '', false);
         $this->writeInterface = $this->getMock(
-            '\Magento\Framework\Filesystem\Directory\WriteInterface',
+            \Magento\Framework\Filesystem\Directory\WriteInterface::class,
             [],
             [],
             '',
@@ -45,9 +46,9 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
      * @param array $getPathMap
      * @param array $isDirectoryMap
      * @param array $deleteMap
-     * @dataProvider regenerateDataProvider
+     * @dataProvider cleanGeneratedFilesDataProvider
      */
-    public function testRegenerate($getPathMap, $isDirectoryMap, $deleteMap)
+    public function testCleanGeneratedFiles($getPathMap, $isDirectoryMap, $deleteMap)
     {
 
         $this->writeInterface
@@ -62,21 +63,22 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
         $this->writeInterface->expects($this->any())->method('getRelativePath')->willReturnMap($getPathMap);
         $this->writeInterface->expects($this->any())->method('isDirectory')->willReturnMap($isDirectoryMap);
         $this->writeInterface->expects($this->exactly(1))->method('delete')->willReturnMap($deleteMap);
-        $this->model->regenerate();
+        $this->model->cleanGeneratedFiles();
     }
 
     /**
      * @return array
      */
-    public function regenerateDataProvider()
+    public function cleanGeneratedFilesDataProvider()
     {
         $pathToGeneration = 'path/to/generation';
         $pathToDi = 'path/to/di';
         $pathToCache = 'path/to/di';
         $pathToConfig = 'path/to/config';
 
-        $getPathMap =     [[DirectoryList::GENERATION, $pathToGeneration],
-            [DirectoryList::DI, $pathToDi],
+        $getPathMap =     [
+            [DirectoryList::GENERATED_CODE, $pathToGeneration],
+            [DirectoryList::GENERATED_METADATA, $pathToDi],
             [DirectoryList::CACHE, $pathToCache],
             [DirectoryList::CONFIG, $pathToConfig],
         ];
@@ -98,7 +100,7 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testRegenerateWithNoFlag()
+    public function testCleanGeneratedFilesWithNoFlag()
     {
         $this->writeInterface
             ->expects($this->once())
@@ -108,7 +110,7 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
         $this->directoryList->expects($this->never())->method('getPath');
         $this->writeInterface->expects($this->never())->method('getPath');
         $this->writeInterface->expects($this->never())->method('delete');
-        $this->model->regenerate();
+        $this->model->cleanGeneratedFiles();
     }
 
     public function testRequestRegeneration()

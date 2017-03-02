@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,7 +69,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $value = 'test';
 
         // Case 1. Validators fails without breaking chain
-        $validatorA = $this->getMock('Magento\Framework\Validator\ValidatorInterface');
+        $validatorA = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
         $validatorA->expects(
             $this->once()
@@ -79,7 +79,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(['foo' => ['Foo message 1'], 'bar' => ['Foo message 2']])
         );
 
-        $validatorB = $this->getMock('Magento\Framework\Validator\ValidatorInterface');
+        $validatorB = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
         $validatorB->expects(
             $this->once()
@@ -97,7 +97,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Case 2. Validators fails with breaking chain
-        $validatorA = $this->getMock('Magento\Framework\Validator\ValidatorInterface');
+        $validatorA = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(false));
         $validatorA->expects(
             $this->once()
@@ -107,17 +107,17 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(['field' => 'Error message'])
         );
 
-        $validatorB = $this->getMock('Magento\Framework\Validator\ValidatorInterface');
+        $validatorB = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorB->expects($this->never())->method('isValid');
 
         $result[] = [$value, [$validatorA, $validatorB], false, ['field' => 'Error message'], true];
 
         // Case 3. Validators succeed
-        $validatorA = $this->getMock('Magento\Framework\Validator\ValidatorInterface');
+        $validatorA = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorA->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(true));
         $validatorA->expects($this->never())->method('getMessages');
 
-        $validatorB = $this->getMock('Magento\Framework\Validator\ValidatorInterface');
+        $validatorB = $this->getMock(\Magento\Framework\Validator\ValidatorInterface::class);
         $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(true));
         $validatorB->expects($this->never())->method('getMessages');
 
@@ -136,7 +136,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $propertyValidator = new \Magento\Framework\Validator\Constraint\Property($classConstraint, 'name', 'id');
 
         /** @var \Magento\Framework\Translate\AbstractAdapter $translator */
-        $translator = $this->getMockBuilder('Magento\Framework\Translate\AbstractAdapter')->getMockForAbstractClass();
+        $translator = $this->getMockBuilder(
+            \Magento\Framework\Translate\AbstractAdapter::class
+        )->getMockForAbstractClass();
         \Magento\Framework\Validator\AbstractValidator::setDefaultTranslator($translator);
 
         $this->_validator->addValidator($classConstraint);
@@ -157,7 +159,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $fooValidator = new \Magento\Framework\Validator\Test\Unit\Test\IsTrue();
         $this->_validator->addValidator($fooValidator);
         /** @var \Magento\Framework\Translate\AbstractAdapter $translator */
-        $translator = $this->getMockBuilder('Magento\Framework\Translate\AbstractAdapter')->getMockForAbstractClass();
+        $translator = $this->getMockBuilder(
+            \Magento\Framework\Translate\AbstractAdapter::class
+        )->getMockForAbstractClass();
         $this->_validator->setTranslator($translator);
         $this->assertEquals($translator, $fooValidator->getTranslator());
         $this->assertEquals($translator, $this->_validator->getTranslator());

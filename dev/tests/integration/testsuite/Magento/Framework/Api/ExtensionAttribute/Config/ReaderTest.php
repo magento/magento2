@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api\ExtensionAttribute\Config;
@@ -48,7 +48,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             file_get_contents($fixturePath . 'config_two.xml'),
         ];
 
-        $this->_fileResolverMock = $this->getMockBuilder('Magento\Framework\App\Arguments\FileResolver\Primary')
+        $this->_fileResolverMock = $this->getMockBuilder(\Magento\Framework\App\Arguments\FileResolver\Primary::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
@@ -76,15 +76,15 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $expectedArray = [
-            'Magento\Tax\Api\Data\TaxRateInterface' => [],
-            'Magento\Catalog\Api\Data\Product' => [
+            \Magento\Tax\Api\Data\TaxRateInterface::class => [],
+            \Magento\Catalog\Api\Data\Product::class => [
                 'stock_item' => [
                     "type" => "Magento\CatalogInventory\Api\Data\StockItem",
                     "resourceRefs" => [],
                     "join" => null,
                 ],
             ],
-            'Magento\Customer\Api\Data\CustomerInterface' => [
+            \Magento\Customer\Api\Data\CustomerInterface::class => [
                 'custom_1' => [
                     "type" => "Magento\Customer\Api\Data\CustomerCustom",
                     "resourceRefs" => [],

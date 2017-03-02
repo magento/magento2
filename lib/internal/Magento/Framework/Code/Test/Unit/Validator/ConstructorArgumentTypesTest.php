@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,14 +29,14 @@ class ConstructorArgumentTypesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->argumentsReaderMock = $this->getMock(
-            '\Magento\Framework\Code\Reader\ArgumentsReader',
+            \Magento\Framework\Code\Reader\ArgumentsReader::class,
             [],
             [],
             '',
             false
         );
         $this->sourceArgumentsReaderMock = $this->getMock(
-            '\Magento\Framework\Code\Reader\SourceArgumentsReader',
+            \Magento\Framework\Code\Reader\SourceArgumentsReader::class,
             [],
             [],
             '',

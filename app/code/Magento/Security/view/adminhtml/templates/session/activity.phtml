@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,13 +14,13 @@ $sessionInfoCollection = $block->getSessionInfoCollection();
 ?>
 <header>
     <div class="page-title-wrapper">
-        <h1 class="page-title" align="center"><?php /* @escapeNotVerified */ echo __('Account Activity') ?></h1>
+        <h1 class="page-title" align="center"><?php echo $block->escapeHtml(__('Account Activity')) ?></h1>
         <?php
         if ($block->areMultipleSessionsActive()) {
-            /* @escapeNotVerified */ echo __(
+            echo $block->escapeHtml(__(
                 'This administrator account is open in more than one location. '
                 .'Note that other locations might be different browsers or sessions on the same computer.'
-            );
+            ));
         } ?>
     </div>
 </header>
@@ -28,20 +28,20 @@ $sessionInfoCollection = $block->getSessionInfoCollection();
 <div class="page-content">
     <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
     <div>
-        <div class="information-title"><?php /* @escapeNotVerified */ echo __('Concurrent session information:')?></div>
+        <div class="information-title"><?php echo $block->escapeHtml(__('Concurrent session information:'))?></div>
         <table cellspacing="0" border="1" class="information-table">
             <thead>
                 <tr>
-                    <th><?php /* @escapeNotVerified */ echo __('IP Address') ?></th>
-                    <th><?php /* @escapeNotVerified */ echo __('Time of session start') ?></th>
+                    <th><?php echo $block->escapeHtml(__('IP Address')) ?></th>
+                    <th><?php echo $block->escapeHtml(__('Time of session start')) ?></th>
                 </tr>
             </thead>
             <tbody>
             <?php
             foreach ($sessionInfoCollection as $item):?>
                 <tr>
-                    <td><?php /* @escapeNotVerified */ echo $item->getFormattedIp() ?></td>
-                    <td><?php /* @escapeNotVerified */ echo $block->formatDateTime($item->getCreatedAt()) ?></td>
+                    <td><?php echo $block->escapeHtml($item->getFormattedIp()) ?></td>
+                    <td><?php echo $block->escapeHtml($block->formatDateTime($item->getCreatedAt())) ?></td>
                 </tr>
             <?php
             endforeach;
@@ -55,18 +55,21 @@ $sessionInfoCollection = $block->getSessionInfoCollection();
                 if ($block->areMultipleSessionsActive()): ?>
                     data-mage-init='{"confirmRedirect":{
                         "message": "<?php
-                    /* @escapeNotVerified */ echo __('Are you sure that you want to log out all other sessions?') ?>",
-                        "url":"<?php /* @escapeNotVerified */ echo $block->getUrl('security/session/logoutAll') ?>"
+                            echo $block->escapeJs(__('Are you sure that you want to log out all other sessions?'))
+                        ?>",
+                        "url":"<?php
+                            echo $block->escapeJs($block->escapeUrl($block->getUrl('security/session/logoutAll')))
+                        ?>"
                     }}'
                 <?php
                 else: ?>disabled<?php
                 endif ?>
-                title="<?php /* @escapeNotVerified */ echo __('Log out all other sessions') ?>">
-                <?php /* @escapeNotVerified */ echo __('Log out all other sessions') ?>
+                title="<?php echo $block->escapeHtmlAttr(__('Log out all other sessions')) ?>">
+                <?php echo $block->escapeHtml(__('Log out all other sessions')) ?>
             </button>
         </div>
 
         <div><?php
-            /* @escapeNotVerified */ echo __('This computer is using IP address %1.', $block->getRemoteIp()) ?></div>
+            echo $block->escapeHtml(__('This computer is using IP address %1.', $block->getRemoteIp())) ?></div>
     </div>
 </div>

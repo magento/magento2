@@ -3,7 +3,7 @@
 /**
  * PHPUnit configuration for Web API functional tests.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -35,7 +35,7 @@
         <!-- WebSerivice Type. Possible values: soap, rest -->
         <const name="TESTS_WEB_API_ADAPTER" value="rest"/>
         <!-- Webserver URL -->
-        <const name="TESTS_BASE_URL" value="http://magento-ee.localhost"/>
+        <const name="TESTS_BASE_URL" value="http://magento.url"/>
         <!-- Webserver API user -->
         <const name="TESTS_WEBSERVICE_USER" value="admin"/>
         <!-- Webserver API key -->

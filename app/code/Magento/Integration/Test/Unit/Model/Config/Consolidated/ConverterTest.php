@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model\Config\Consolidated;
@@ -22,13 +22,13 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->resourceProviderMock = $this->getMockBuilder('Magento\Framework\Acl\AclResource\ProviderInterface')
+        $this->resourceProviderMock = $this->getMockBuilder(\Magento\Framework\Acl\AclResource\ProviderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Integration\Model\Config\Consolidated\Converter',
+            \Magento\Integration\Model\Config\Consolidated\Converter::class,
             [
                 'resourceProvider' => $this->resourceProviderMock
             ]

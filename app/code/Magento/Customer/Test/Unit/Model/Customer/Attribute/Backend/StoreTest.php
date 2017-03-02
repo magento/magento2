@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $storeManager = $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->getMock();
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $this->testable = new \Magento\Customer\Model\Customer\Attribute\Backend\Store($storeManager);
@@ -30,7 +30,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSaveWithId()
     {
-        $object = $this->getMockBuilder('Magento\Framework\DataObject')
+        $object = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
@@ -39,7 +39,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\DataObject $object */
 
         $this->assertInstanceOf(
-            'Magento\Customer\Model\Customer\Attribute\Backend\Store',
+            \Magento\Customer\Model\Customer\Attribute\Backend\Store::class,
             $this->testable->beforeSave($object)
         );
     }
@@ -48,12 +48,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 1;
         $storeName = 'store';
-        $object = $this->getMockBuilder('Magento\Framework\DataObject')
+        $object = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'hasStoreId', 'setStoreId', 'hasData', 'setData', 'getStoreId'])
             ->getMock();
 
-        $store = $this->getMockBuilder('Magento\Framework\DataObject')->setMethods(['getId', 'getName'])->getMock();
+        $store = $this->getMockBuilder(
+            \Magento\Framework\DataObject::class
+        )->setMethods(['getId', 'getName'])->getMock();
         $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
         $store->expects($this->once())->method('getName')->will($this->returnValue($storeName));
 
@@ -73,7 +75,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\DataObject $object */
 
         $this->assertInstanceOf(
-            'Magento\Customer\Model\Customer\Attribute\Backend\Store',
+            \Magento\Customer\Model\Customer\Attribute\Backend\Store::class,
             $this->testable->beforeSave($object)
         );
     }

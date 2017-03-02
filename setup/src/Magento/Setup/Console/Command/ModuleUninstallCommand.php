@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -135,10 +135,10 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->deploymentConfig = $deploymentConfig;
         $this->maintenanceMode = $maintenanceMode;
         $this->fullModuleList = $fullModuleList;
-        $this->packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $this->packageInfo = $this->objectManager->get(\Magento\Framework\Module\PackageInfoFactory::class)->create();
         $this->collector = $collector;
-        $this->dependencyChecker = $this->objectManager->get('Magento\Framework\Module\DependencyChecker');
-        $this->backupRollbackFactory = $this->objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
+        $this->dependencyChecker = $this->objectManager->get(\Magento\Framework\Module\DependencyChecker::class);
+        $this->backupRollbackFactory = $this->objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class);
         $this->moduleUninstaller = $moduleUninstaller;
         $this->moduleRegistryUninstaller = $moduleRegistryUninstaller;
     }
@@ -372,10 +372,10 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     {
         $areaCode = 'adminhtml';
         /** @var \Magento\Framework\App\State $appState */
-        $appState = $this->objectManager->get('Magento\Framework\App\State');
+        $appState = $this->objectManager->get(\Magento\Framework\App\State::class);
         $appState->setAreaCode($areaCode);
         /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
-        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
         $this->objectManager->configure($configLoader->load($areaCode));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Observer\Webapi;
@@ -44,17 +44,17 @@ class SubmitObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
-        $this->paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $this->orderMock = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
+        $this->paymentMock = $this->getMock(\Magento\Quote\Model\Quote\Payment::class, [], [], '', false);
         $this->orderSenderMock =
-            $this->getMock('Magento\Sales\Model\Order\Email\Sender\OrderSender', [], [], '', false);
-        $eventMock = $this->getMockBuilder('Magento\Framework\Event')
+            $this->getMock(\Magento\Sales\Model\Order\Email\Sender\OrderSender::class, [], [], '', false);
+        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQuote', 'getOrder'])
             ->getMock();
-        $this->observerMock = $this->getMock('Magento\Framework\Event\Observer', ['getEvent'], [], '', false);
+        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, ['getEvent'], [], '', false);
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
         $eventMock->expects($this->once())->method('getOrder')->willReturn($this->orderMock);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml;
@@ -76,7 +76,7 @@ abstract class Transactions extends \Magento\Backend\App\Action
     protected function _initTransaction()
     {
         $txn = $this->_objectManager->create(
-            'Magento\Sales\Model\Order\Payment\Transaction'
+            \Magento\Sales\Model\Order\Payment\Transaction::class
         )->load(
             $this->getRequest()->getParam('txn_id')
         );

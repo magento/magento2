@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -7,7 +7,7 @@
 //  Variables
 //  _____________________________________________
 
-@component-indicator__size: 20px;
+@component-indicator__size: 16px;
 
 //
 //  Component grid elements
@@ -19,6 +19,7 @@
     display: inline-block;
     height: @component-indicator__size;
     text-align: center;
+    vertical-align: middle;
     width: @component-indicator__size;
 
     &::before,
@@ -37,7 +38,7 @@
         box-shadow: 0 0 2px rgba(0,0,0,.4);
         content: attr(data-label);
         font-size: @font-size__s;
-        margin: 34px 0 0 -10px;
+        margin: 30px 0 0 -10px;
         min-width: 50px;
         padding: 4px 5px;
     }
@@ -73,7 +74,7 @@
             content: '';
             display: block;
             font-family: @icons__font-family;
-            font-size: 20px;
+            font-size: @component-indicator__size;
             height: 100%;
             line-height: @component-indicator__size;
             width: 100%;
@@ -105,10 +106,125 @@
 
             &:before {
                 color: @color-info;
-                content: @icon-notice-messages__content;
+                content: @icon-alert-round__content;
                 font-family: @icons__font-family;
-                font-size: 21px;
+                font-size: @component-indicator__size;
             }
         }
     }
+
+    &._tooltip {
+        background: transparent;
+        margin: 0px 0px 8px 5px;
+
+        a {
+            width: 21px;
+
+            &:hover {
+                text-decoration: none;
+            }
+
+            &:before {
+                color: @color-tertiary;
+                content: @icon-help__content;
+                font-family: @icons__font-family;
+                font-size: @component-indicator__size;
+            }
+        }
+    }
+}
+
+.col-manager-item-name {
+    .data-grid-data {
+        padding-left: 5px;
+    }
+
+    .ng-hide {
+        + .data-grid-data {
+            padding-left: 24px;
+        }
+    }
+
+    ._show-dependencies,
+    ._hide-dependencies {
+        cursor: pointer;
+        padding-left: 24px;
+        position: relative;
+
+        &:before {
+            display: block;
+            font-family: @icons__font-family;
+            font-size: 12px;
+            left: 0;
+            position: absolute;
+            top: 1px;
+        }
+    }
+
+    ._show-dependencies {
+        &:before {
+            content: @icon-caret-up__content;
+        }
+    }
+
+    ._hide-dependencies {
+        &:before {
+            content: @icon-caret-down__content;
+        }
+    }
+
+    ._no-dependencies {
+        padding-left: 24px;
+    }
+}
+
+.product-modules-block {
+    .lib-font-size(12);
+    padding: 15px 0 0;
+
+    .col-manager-item-name & {
+        padding-left: @indent__s;
+    }
+}
+
+.product-modules-title,
+.product-modules-descriprion {
+    font-weight: @font-weight__bold;
+    margin: 0 0 7px;
+}
+
+.product-modules-list {
+    .lib-font-size(11);
+    list-style: none;
+    margin: 0;
+
+    .col-manager-item-name & {
+        margin-left: 15px;
+
+        li {
+            padding: 0 0 0 15px;
+            position: relative;
+        }
+    }
+
+    li {
+        margin: 0 0 @indent__xs;
+    }
+
+    .component-indicator {
+        height: 10px;
+        left: 0;
+        position: absolute;
+        top: 3px;
+        width: 10px;
+    }
+}
+
+.module-summary {
+    white-space: nowrap;
+}
+
+.module-summary-title {
+    .lib-font-size(21);
+    margin-right: @indent__s;
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,11 +23,10 @@ class AttributesListTest extends \PHPUnit_Framework_TestCase
      */
     protected $attributeMock;
 
-
     protected function setUp()
     {
         $this->collectionMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection',
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class,
             [],
             [],
             '',
@@ -36,7 +35,7 @@ class AttributesListTest extends \PHPUnit_Framework_TestCase
 
         /** @var  \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactoryMock */
         $collectionFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -46,7 +45,7 @@ class AttributesListTest extends \PHPUnit_Framework_TestCase
 
         $methods = ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource'];
         $this->attributeMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             $methods,
             [],
             '',
@@ -83,7 +82,7 @@ class AttributesListTest extends \PHPUnit_Framework_TestCase
         $this->attributeMock->expects($this->once())->method('getFrontendLabel')->will($this->returnValue('label'));
         $this->attributeMock->expects($this->once())->method('getAttributeCode')->will($this->returnValue('code'));
 
-        $source = $this->getMock('Magento\Eav\Model\Entity\Attribute\Source\AbstractSource', [], [], '', false);
+        $source = $this->getMock(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class, [], [], '', false);
         $source->expects($this->once())->method('getAllOptions')->with(false)->will($this->returnValue(['options']));
         $this->attributeMock->expects($this->once())->method('getSource')->will($this->returnValue($source));
 

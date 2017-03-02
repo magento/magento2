@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
@@ -20,9 +20,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container'
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container::class
         );
     }
 
@@ -40,7 +40,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testAvailableContainers()
     {
         $themeToTest = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            '\Magento\Theme\Model\Theme'
+            \Magento\Theme\Model\Theme::class
         );
         $themeId = $themeToTest->load('Magento/blank', 'code')
             ->getId();

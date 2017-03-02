@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,9 +33,9 @@ class MainTest extends \PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $this->customerRepository = $this
-            ->getMockForAbstractClass('Magento\Customer\Api\CustomerRepositoryInterface');
-        $this->customerViewHelper = $this->getMock('Magento\Customer\Helper\View', [], [], '', false);
-        $dummyCustomer = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface');
+            ->getMockForAbstractClass(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $this->customerViewHelper = $this->getMock(\Magento\Customer\Helper\View::class, [], [], '', false);
+        $dummyCustomer = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\CustomerInterface::class);
 
         $this->customerRepository->expects($this->once())
             ->method('getById')
@@ -45,7 +45,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerName')
             ->with($dummyCustomer)
             ->will($this->returnValue(new \Magento\Framework\DataObject()));
-        $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
+        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
         $this->request->expects($this->at(0))
             ->method('getParam')
             ->with('customerId', false)
@@ -57,7 +57,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Review\Block\Adminhtml\Main',
+            \Magento\Review\Block\Adminhtml\Main::class,
             [
                 'request' => $this->request,
                 'customerRepository' => $this->customerRepository,

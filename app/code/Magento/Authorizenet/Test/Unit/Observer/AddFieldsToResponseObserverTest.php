@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Observer;
@@ -9,6 +9,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class AddFieldsToResponseObserverTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddFieldsToResponseObserverTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,28 +60,28 @@ class AddFieldsToResponseObserverTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->coreRegistryMock = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->coreRegistryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->paymentMock = $this->getMockBuilder('Magento\Authorizenet\Model\Directpost')
+        $this->paymentMock = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionMock = $this->getMockBuilder('Magento\Authorizenet\Model\Directpost\Session')
+        $this->sessionMock = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost\Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['setLastOrderIncrementId', 'addCheckoutOrderIncrementId'])
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->actionMock = $this->getMockBuilder('Magento\Checkout\Controller\Onepage\SaveOrder')
+        $this->actionMock = $this->getMockBuilder(\Magento\Checkout\Controller\Onepage\SaveOrder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $this->resultMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->addFieldsToResponseObserver = $helper->getObject(
-            'Magento\Authorizenet\Observer\AddFieldsToResponseObserver',
+            \Magento\Authorizenet\Observer\AddFieldsToResponseObserver::class,
             [
                 'coreRegistry' => $this->coreRegistryMock,
                 'payment' => $this->paymentMock,
@@ -98,27 +100,27 @@ class AddFieldsToResponseObserverTest extends \PHPUnit_Framework_TestCase
     {
         $testData = $this->getAddFieldsToResponseSuccessTestData();
 
-        $observerMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
+        $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $orderPaymentMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment')
+        $orderPaymentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $instanceMock = $this->getMockBuilder('Magento\Authorizenet\Model\Directpost')
+        $instanceMock = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $requestToAuthorizenetMock = $this->getMockBuilder('Magento\Authorizenet\Model\Directpost\Request')
+        $requestToAuthorizenetMock = $this->getMockBuilder(\Magento\Authorizenet\Model\Directpost\Request::class)
             ->disableOriginalConstructor()
             ->setMethods(['setControllerActionName', 'setIsSecure', 'getData'])
             ->getMock();
-        $requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getControllerName'])
             ->getMockForAbstractClass();
-        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 require __DIR__ . '/product_downloadable.php';
@@ -9,12 +9,12 @@ require __DIR__ . '/product_downloadable.php';
 $product->load(1);
 
 /** @var \Magento\Quote\Model\Quote $quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
 $quote->setCustomerIsGuest(
     true
 )->setStoreId(
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
+        \Magento\Store\Model\StoreManagerInterface::class
     )->getStore()->getId()
 )->setReservedOrderId(
     'reserved_order_id_1'
@@ -31,7 +31,7 @@ $quote->save();
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+    ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
     ->create();
 $quoteIdMask->setQuoteId($quote->getId());
 $quoteIdMask->setDataChanges(true);

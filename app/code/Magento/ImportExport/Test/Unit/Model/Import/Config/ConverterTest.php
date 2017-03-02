@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\Config;
@@ -25,10 +25,16 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filePath = realpath(__DIR__) . '/_files/';
-        $this->moduleManager = $this->getMock('Magento\Framework\Module\Manager', ['isOutputEnabled'], [], '', false);
+        $this->moduleManager = $this->getMock(
+            \Magento\Framework\Module\Manager::class,
+            ['isOutputEnabled'],
+            [],
+            '',
+            false
+        );
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            '\Magento\ImportExport\Model\Import\Config\Converter',
+            \Magento\ImportExport\Model\Import\Config\Converter::class,
             [
                 'moduleManager' => $this->moduleManager
             ]

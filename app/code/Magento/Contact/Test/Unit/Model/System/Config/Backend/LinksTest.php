@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Contact\Test\Unit\Model\System\Config\Backend;
@@ -16,7 +16,9 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = (new ObjectManager($this))->getObject('Magento\Contact\Model\System\Config\Backend\Links');
+        $this->_model = (new ObjectManager($this))->getObject(
+            \Magento\Contact\Model\System\Config\Backend\Links::class
+        );
     }
 
     public function testGetIdentities()

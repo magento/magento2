@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Service\V1;
@@ -26,19 +26,19 @@ class StoreViewServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
-        $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $this->config = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
+        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->setMethods(['select', 'from', 'where', 'join'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
 
         $this->storeViewService = (new ObjectManager($this))->getObject(
-            'Magento\CatalogUrlRewrite\Service\V1\StoreViewService',
+            \Magento\CatalogUrlRewrite\Service\V1\StoreViewService::class,
             [
                 'eavConfig' => $this->config,
                 'resource' => $this->resource,
@@ -80,13 +80,13 @@ class StoreViewServiceTest extends \PHPUnit_Framework_TestCase
     {
         $entityType = 'entity_type';
         $productId = 'product_id';
-        $attribute = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'getBackendTable', 'getId', 'getEntity'])
             ->getMockForAbstractClass();
         $this->config->expects($this->once())->method('getAttribute')->with($entityType, 'url_key')
             ->will($this->returnValue($attribute));
-        $entity = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
+        $entity = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
             ->disableOriginalConstructor()
             ->getMock();
         $attribute->expects($this->exactly(2))->method('getEntity')->willReturn($entity);

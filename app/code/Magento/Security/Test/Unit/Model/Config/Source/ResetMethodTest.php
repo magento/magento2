@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Test\Unit\Model\Config\Source;
@@ -30,7 +30,7 @@ class ResetMethodTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->model = $this->objectManager->getObject('\Magento\Security\Model\Config\Source\ResetMethod');
+        $this->model = $this->objectManager->getObject(\Magento\Security\Model\Config\Source\ResetMethod::class);
     }
 
     public function testToOptionArray()

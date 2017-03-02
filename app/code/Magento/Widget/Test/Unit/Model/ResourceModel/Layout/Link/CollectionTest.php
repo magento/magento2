@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model\ResourceModel\Layout\Link;
@@ -25,14 +25,14 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
      */
     protected function _getCollection(\Magento\Framework\DB\Select $select)
     {
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+        $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
 
         return new \Magento\Widget\Model\ResourceModel\Layout\Link\Collection(
-            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false),
-            $this->getMock('Psr\Log\LoggerInterface'),
-            $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface'),
+            $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false),
+            $this->getMock(\Psr\Log\LoggerInterface::class),
+            $this->getMockForAbstractClass(\Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class),
             $eventManager,
-            $this->getMock('Magento\Framework\Stdlib\DateTime', null, [], '', true),
+            $this->getMock(\Magento\Framework\Stdlib\DateTime::class, null, [], '', true),
             null,
             $this->_getResource($select)
         );
@@ -44,7 +44,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
      */
     public function testAddTemporaryFilter($flag)
     {
-        $select = $this->getMock('Magento\Framework\DB\Select', [], ['where'], '', false);
+        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], ['where'], '', false);
         $select->expects($this->once())->method('where')->with(self::TEST_WHERE_CONDITION);
 
         $collection = $this->_getCollection($select);
@@ -81,7 +81,7 @@ class CollectionTest extends \Magento\Widget\Test\Unit\Model\ResourceModel\Layou
      */
     public function testJoinWithUpdate()
     {
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $select->expects(
             $this->once()
         )->method(

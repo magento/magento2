@@ -1,14 +1,16 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Model\AuthenticationInterface;
+use Magento\Customer\Model\Customer\Mapper;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -59,14 +61,14 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     private $emailNotification;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @var AuthenticationInterface
      */
     private $authentication;
+
+    /**
+     * @var Mapper
+     */
+    private $customerMapper;
 
     /**
      * @param Context $context
@@ -101,7 +103,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     {
 
         if (!($this->authentication instanceof AuthenticationInterface)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+            return ObjectManager::getInstance()->get(
                 \Magento\Customer\Model\AuthenticationInterface::class
             );
         } else {
@@ -118,7 +120,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     private function getEmailNotification()
     {
         if (!($this->emailNotification instanceof EmailNotificationInterface)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+            return ObjectManager::getInstance()->get(
                 EmailNotificationInterface::class
             );
         } else {
@@ -164,8 +166,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $this->messageManager->addError($e->getMessage());
             } catch (UserLockedException $e) {
                 $message = __(
-                    'The account is locked. Please wait and try again or contact %1.',
-                    $this->getScopeConfig()->getValue('contact/email/recipient_email')
+                    'You did not sign in correctly or your account is temporarily disabled.'
                 );
                 $this->session->logout();
                 $this->session->start();
@@ -186,22 +187,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         }
 
         return $resultRedirect->setPath('*/*/edit');
-    }
-
-    /**
-     * Get scope config
-     *
-     * @return ScopeConfigInterface
-     */
-    private function getScopeConfig()
-    {
-        if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\App\Config\ScopeConfigInterface::class
-            );
-        } else {
-            return $this->scopeConfig;
-        }
     }
 
     /**
@@ -241,7 +226,12 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
         \Magento\Framework\App\RequestInterface $inputData,
         \Magento\Customer\Api\Data\CustomerInterface $currentCustomerData
     ) {
-        $customerDto = $this->customerExtractor->extract(self::FORM_DATA_EXTRACTOR_CODE, $inputData);
+        $attributeValues = $this->getCustomerMapper()->toFlatArray($currentCustomerData);
+        $customerDto = $this->customerExtractor->extract(
+            self::FORM_DATA_EXTRACTOR_CODE,
+            $inputData,
+            $attributeValues
+        );
         $customerDto->setId($currentCustomerData->getId());
         if (!$customerDto->getAddresses()) {
             $customerDto->setAddresses($currentCustomerData->getAddresses());
@@ -298,5 +288,20 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
             }
         }
+    }
+
+    /**
+     * Get Customer Mapper instance
+     *
+     * @return Mapper
+     *
+     * @deprecated
+     */
+    private function getCustomerMapper()
+    {
+        if ($this->customerMapper === null) {
+            $this->customerMapper = ObjectManager::getInstance()->get(\Magento\Customer\Model\Customer\Mapper::class);
+        }
+        return $this->customerMapper;
     }
 }

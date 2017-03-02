@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,6 @@ namespace Magento\Backend\Block\Store;
 
 /**
  * Store switcher block
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Switcher extends \Magento\Backend\Block\Template
 {
@@ -152,11 +150,7 @@ class Switcher extends \Magento\Backend\Block\Template
     {
         $websites = $this->_storeManager->getWebsites();
         if ($websiteIds = $this->getWebsiteIds()) {
-            foreach (array_keys($websites) as $websiteId) {
-                if (!in_array($websiteId, $websiteIds)) {
-                    unset($websites[$websiteId]);
-                }
-            }
+            $websites = array_intersect_key($websites, array_flip($websiteIds));
         }
         return $websites;
     }

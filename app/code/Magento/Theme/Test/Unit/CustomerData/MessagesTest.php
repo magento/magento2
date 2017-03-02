@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\CustomerData;
@@ -27,9 +27,9 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->messageManager = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')->getMock();
+        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)->getMock();
         $this->messageInterpretationStrategy = $this->getMock(
-            'Magento\Framework\View\Element\Message\InterpretationStrategyInterface'
+            \Magento\Framework\View\Element\Message\InterpretationStrategyInterface::class
         );
         $this->object = new Messages($this->messageManager, $this->messageInterpretationStrategy);
     }
@@ -38,9 +38,9 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
     {
         $msgType = 'error';
         $msgText = 'All is lost';
-        $msg = $this->getMockBuilder('Magento\Framework\Message\MessageInterface')->getMock();
+        $msg = $this->getMockBuilder(\Magento\Framework\Message\MessageInterface::class)->getMock();
         $messages = [$msg];
-        $msgCollection = $this->getMockBuilder('Magento\Framework\Message\Collection')
+        $msgCollection = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
             ->getMock();
 
         $msg->expects($this->once())

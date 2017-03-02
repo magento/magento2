@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
@@ -8,7 +8,11 @@ namespace Magento\Setup\Test\Unit\Model\Cron;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\Cron\ComponentUninstallerFactory;
 use Magento\Setup\Model\Cron\JobComponentUninstall;
+use Magento\Framework\Composer\ComposerInformation;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -64,47 +68,48 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->output = $this->getMockForAbstractClass(
-            'Symfony\Component\Console\Output\OutputInterface',
+            \Symfony\Component\Console\Output\OutputInterface::class,
             [],
             '',
             false
         );
-        $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
+        $this->status = $this->getMock(\Magento\Setup\Model\Cron\Status::class, [], [], '', false);
         $this->moduleUninstallHelper = $this->getMock(
-            'Magento\Setup\Model\Cron\Helper\ModuleUninstall',
+            \Magento\Setup\Model\Cron\Helper\ModuleUninstall::class,
             [],
             [],
             '',
             false
         );
         $this->themeUninstallHelper = $this->getMock(
-            'Magento\Setup\Model\Cron\Helper\ThemeUninstall',
+            \Magento\Setup\Model\Cron\Helper\ThemeUninstall::class,
             [],
             [],
             '',
             false
         );
         $this->composerInformation = $this->getMock(
-            'Magento\Framework\Composer\ComposerInformation',
+            \Magento\Framework\Composer\ComposerInformation::class,
             [],
             [],
             '',
             false
         );
-        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $this->objectManagerProvider =
+            $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass(
-            'Magento\Framework\ObjectManagerInterface',
+            \Magento\Framework\ObjectManagerInterface::class,
             [],
             '',
             false
         );
 
-        $packageInfoFactory = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
-        $packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
+        $packageInfoFactory = $this->getMock(\Magento\Framework\Module\PackageInfoFactory::class, [], [], '', false);
+        $packageInfo = $this->getMock(\Magento\Framework\Module\PackageInfo::class, [], [], '', false);
         $packageInfoFactory->expects($this->any())->method('create')->willReturn($packageInfo);
         $this->objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
-        $this->quence = $this->getMock('Magento\Setup\Model\Cron\Queue', ['addJobs'], [], '', false);
+        $this->updater = $this->getMock(\Magento\Setup\Model\Updater::class, [], [], '', false);
+        $this->quence = $this->getMock(\Magento\Setup\Model\Cron\Queue::class, ['addJobs'], [], '', false);
     }
 
     private function setUpUpdater()
@@ -147,7 +152,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
 
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')
-            ->willReturn(['vendor/module-package' => ['type' => JobComponentUninstall::COMPONENT_MODULE]]);
+            ->willReturn(['vendor/module-package' => ['type' => ComposerInformation::MODULE_PACKAGE_TYPE]]);
         $this->job->execute();
     }
 
@@ -157,7 +162,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
         $this->setUpQuence();
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')
-            ->willReturn(['vendor/language-a' => ['type' => JobComponentUninstall::COMPONENT_LANGUAGE]]);
+            ->willReturn(['vendor/language-a' => ['type' =>  ComposerInformation::LANGUAGE_PACKAGE_TYPE]]);
 
         $this->moduleUninstallHelper->expects($this->never())->method($this->anything());
         $this->themeUninstallHelper->expects($this->never())->method($this->anything());
@@ -189,7 +194,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
         $this->setUpQuence();
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')
-            ->willReturn(['vendor/theme-a' => ['type' => JobComponentUninstall::COMPONENT_THEME]]);
+            ->willReturn(['vendor/theme-a' => ['type' => ComposerInformation::THEME_PACKAGE_TYPE]]);
         $this->themeUninstallHelper->expects($this->once())
             ->method('uninstall')
             ->with($this->output, 'vendor/theme-a');
@@ -295,7 +300,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
         $this->updater->expects($this->once())->method('createUpdaterTask')->willReturn('error');
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')
-            ->willReturn(['vendor/language-a' => ['type' => JobComponentUninstall::COMPONENT_LANGUAGE]]);
+            ->willReturn(['vendor/language-a' => ['type' => ComposerInformation::LANGUAGE_PACKAGE_TYPE]]);
 
         $this->job = new JobComponentUninstall(
             $this->composerInformation,

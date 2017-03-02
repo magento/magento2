@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Test\Unit\Helper;
@@ -23,13 +23,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')->disableOriginalConstructor()
+        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)->disableOriginalConstructor()
             ->getMock();
 
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->will($this->returnCallback(function ($code) {
-                $dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+                $dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
                 $dir->expects($this->any())
                     ->method('getAbsolutePath')
                     ->will($this->returnCallback(function ($path) use ($code) {
@@ -40,9 +40,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             }));
 
         $this->helper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject('Magento\Backup\Helper\Data', [
-                'filesystem' => $this->filesystem,
-            ]);
+            ->getObject(
+                \Magento\Backup\Helper\Data::class,
+                ['filesystem' => $this->filesystem]
+            );
     }
 
     public function testGetBackupIgnorePaths()

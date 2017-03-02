@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Utility;
@@ -22,7 +22,7 @@ class AggregateInvokerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_testCase = $this->getMock(
-            'PHPUnit_Framework_Test',
+            \PHPUnit_Framework_Test::class,
             ['run', 'count', 'fail', 'markTestIncomplete', 'markTestSkipped']
         );
         $this->_invoker = new AggregateInvoker($this->_testCase, []);

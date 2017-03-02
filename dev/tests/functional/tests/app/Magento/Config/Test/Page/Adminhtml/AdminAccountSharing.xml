@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="AdminAccountSharing" area="Adminhtml" mca="admin/system_config/edit/section/admin/" module="Magento_Config">
+           <block name="adminForm" class="Magento\Config\Test\Block\System\Config\AdminForm" locator="[id='page:main-container']" strategy="css selector" />
+       </page>
+   </config>

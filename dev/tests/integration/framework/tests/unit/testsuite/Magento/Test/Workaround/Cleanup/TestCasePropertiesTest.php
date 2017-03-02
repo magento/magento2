@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,7 @@ class TestCasePropertiesTest extends \PHPUnit_Framework_TestCase
         /** @var $testClass \Magento\Test\Workaround\Cleanup\TestCasePropertiesTest\DummyTestCase */
         $testClass = $testSuite->testAt(0);
 
-        $propertyObjectMock = $this->getMock('stdClass', ['__destruct']);
+        $propertyObjectMock = $this->getMock(\stdClass::class, ['__destruct']);
         $propertyObjectMock->expects($this->atLeastOnce())->method('__destruct');
         $testClass->setPropertyObject($propertyObjectMock);
 

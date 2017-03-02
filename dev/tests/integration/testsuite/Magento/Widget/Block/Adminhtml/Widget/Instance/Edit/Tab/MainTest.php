@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
@@ -14,32 +14,32 @@ class MainTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')
+        $objectManager->get(\Magento\Framework\Registry::class)
             ->register('current_widget_instance', new \Magento\Framework\DataObject());
         /** @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main $block */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main'
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main::class
         );
         $block->setTemplate(null);
         $block->toHtml();
         $element = $block->getForm()->getElement('theme_id');
-        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Select', $element);
+        $this->assertInstanceOf(\Magento\Framework\Data\Form\Element\Select::class, $element);
         $this->assertTrue($element->getDisabled());
     }
 
     public function testTypeElement()
     {
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\Layout'
+            \Magento\Framework\View\Layout::class
         )->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main'
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main::class
         );
         $block->setTemplate(null);
         $block->toHtml();
         $element = $block->getForm()->getElement('instance_code');
-        $this->assertInstanceOf('Magento\Framework\Data\Form\Element\Select', $element);
+        $this->assertInstanceOf(\Magento\Framework\Data\Form\Element\Select::class, $element);
         $this->assertTrue($element->getDisabled());
     }
 }

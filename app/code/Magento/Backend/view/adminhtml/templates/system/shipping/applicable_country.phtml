@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -37,7 +37,7 @@ CountryModel.prototype = {
             var showMethodElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'showmethod'));
             //var specifErrMsgElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificerrmsg'));
             if (specifCountryElement) {
-                if (applyCountryElement.value == 1) {
+                if (applyCountryElement.value == 1 && !specifCountryElement.hasAttribute('disabled')) {
                    //if specific country element selected
                    specifCountryElement.enable();
                    if (showMethodElement) {
@@ -61,11 +61,14 @@ CountryModel.prototype = {
         if (applyCountryElement && applyCountryElement.id) {
             var specifCountryElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificcountry'));
             var showMethodElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'showmethod'));
+            // 'Use Default' checkbox of the related county list UI element
+            var useDefaultElement = document.getElementById(specifCountryElement.id + '_inherit');
+
             //var specifErrMsgElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificerrmsg'));
             if (specifCountryElement) {
                 if (applyCountryElement.value == 1) {
-                   //if specific country element selected
-                   specifCountryElement.enable();
+                   // enable related country select only if its 'Use Default' checkbox is absent or is unchecked
+                   specifCountryElement.disabled = useDefaultElement ? useDefaultElement.checked : false;
                    if (showMethodElement) {
                        this.showElement(showMethodElement.up(1));
                    }

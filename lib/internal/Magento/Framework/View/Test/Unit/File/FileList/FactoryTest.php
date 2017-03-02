@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->model = new \Magento\Framework\View\File\FileList\Factory($this->objectManager);
     }
 
@@ -28,7 +28,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $collator = $helperObjectManager->getObject(\Magento\Framework\View\File\FileList\Factory::FILE_LIST_COLLATOR);
-        $list = $helperObjectManager->getObject('Magento\Framework\View\File\FileList');
+        $list = $helperObjectManager->getObject(\Magento\Framework\View\File\FileList::class);
 
         $this->objectManager
             ->expects($this->once())
@@ -40,7 +40,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('create')
             ->with(
-                $this->equalTo('Magento\Framework\View\File\FileList'),
+                $this->equalTo(\Magento\Framework\View\File\FileList::class),
                 $this->equalTo(['collator' => $collator])
             )
             ->will($this->returnValue($list));

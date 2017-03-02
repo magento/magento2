@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model\ResourceModel;
@@ -19,10 +19,10 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     public function testCreateSearchPostCodeTemplates($postalCode, $exactPostalcode)
     {
         // create the mocks
-        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
 
-        $taxData = $this->getMock('Magento\Tax\Helper\Data', ['getPostCodeSubStringLength'], [], '', false);
+        $taxData = $this->getMock(\Magento\Tax\Helper\Data::class, ['getPostCodeSubStringLength'], [], '', false);
         $taxData
             ->expects($this->any())
             ->method('getPostCodeSubStringLength')
@@ -30,7 +30,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $calcMock = $objectManager->getObject(
-            'Magento\Tax\Model\ResourceModel\Calculation',
+            \Magento\Tax\Model\ResourceModel\Calculation::class,
             [
                 'resource' => $resource,
                 'taxData' => $taxData,
@@ -40,7 +40,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
 
         // get access to the method
         $method = new \ReflectionMethod(
-            'Magento\Tax\Model\ResourceModel\Calculation',
+            \Magento\Tax\Model\ResourceModel\Calculation::class,
             '_createSearchPostCodeTemplates'
         );
         $method->setAccessible(true);

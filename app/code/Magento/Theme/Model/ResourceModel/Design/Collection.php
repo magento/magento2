@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\ResourceModel\Design;
@@ -44,7 +44,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Theme\Model\Design', 'Magento\Theme\Model\ResourceModel\Design');
+        $this->_init(\Magento\Theme\Model\Design::class, \Magento\Theme\Model\ResourceModel\Design::class);
     }
 
     /**

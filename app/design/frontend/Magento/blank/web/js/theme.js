@@ -1,7 +1,8 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'mage/smart-keyboard-handler',
@@ -12,7 +13,9 @@ define([
     'use strict';
 
     if ($('body').hasClass('checkout-cart-index')) {
-        if ($('#co-shipping-method-form .fieldset.rates').length > 0 && $('#co-shipping-method-form .fieldset.rates :checked').length === 0) {
+        if ($('#co-shipping-method-form .fieldset.rates').length > 0 &&
+            $('#co-shipping-method-form .fieldset.rates :checked').length === 0
+        ) {
             $('#block-shipping').on('collapsiblecreate', function () {
                 $('#block-shipping').collapsible('forceActivate');
             });

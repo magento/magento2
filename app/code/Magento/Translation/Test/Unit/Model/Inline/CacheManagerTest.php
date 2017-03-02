@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,29 +38,29 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
+        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->translateResourceMock = $this->getMockBuilder('Magento\Framework\Translate\ResourceInterface')
+        $this->translateResourceMock = $this->getMockBuilder(\Magento\Framework\Translate\ResourceInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->localeResolverMock = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')
+        $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->fileManagerMock = $this->getMockBuilder('Magento\Translation\Model\FileManager')
+        $this->fileManagerMock = $this->getMockBuilder(\Magento\Translation\Model\FileManager::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Translation\Model\Inline\CacheManager',
+            \Magento\Translation\Model\Inline\CacheManager::class,
             [
                 'eventManager' => $this->eventManagerMock,
                 'translateResource' => $this->translateResourceMock,

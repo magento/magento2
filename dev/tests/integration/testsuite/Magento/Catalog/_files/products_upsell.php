@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
 )->setId(
@@ -30,14 +30,14 @@ $product->setTypeId(
 
 /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
 $productLink = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Api\Data\ProductLinkInterface'
+    \Magento\Catalog\Api\Data\ProductLinkInterface::class
 );
 $productLink->setSku('simple_with_upsell');
 $productLink->setLinkedProductSku('simple');
 $productLink->setPosition(1);
 $productLink->setLinkType('upsell');
 
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
 )->setId(

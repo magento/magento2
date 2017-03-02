@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -45,6 +45,36 @@
                 <item name="Ship" xsi:type="string">Magento_Sales::ship</item>
                 <item name="Comment" xsi:type="string">Magento_Sales::comment</item>
                 <item name="Send Sales Emails" xsi:type="string">Magento_Sales::emails</item>
+            </field>
+        </dataset>
+
+        <dataset name="role_without_variable">
+            <field name="rolename" xsi:type="string">RoleName%isolation%</field>
+            <field name="resource_access" xsi:type="string">Custom</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="roles_resources" xsi:type="array">
+                <item name="Dashboard" xsi:type="string">Magento_Backend::dashboard</item>
+                <item name="AdminNotification" xsi:type="string">Magento_AdminNotification::adminnotification</item>
+                <item name="EncryptionKey" xsi:type="string">Magento_EncryptionKey::crypt_key</item>
+                <item name="Content" xsi:type="string">Magento_Backend::content</item>
+                <item name="ContentElements" xsi:type="string">Magento_Backend::content_elements</item>
+                <item name="Page" xsi:type="string">Magento_Cms::page</item>
+                <item name="SavePage" xsi:type="string">Magento_Cms::save</item>
+                <item name="DeletePage" xsi:type="string">Magento_Cms::page_delete</item>
+            </field>
+        </dataset>
+
+        <dataset name="role_without_synonym">
+            <field name="rolename" xsi:type="string">RoleName%isolation%</field>
+            <field name="resource_access" xsi:type="string">Custom</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="roles_resources" xsi:type="array">
+                <item name="Dashboard" xsi:type="string">Magento_Backend::dashboard</item>
+                <item name="Marketing" xsi:type="string">Magento_Backend::marketing</item>
+                <item name="Seo" xsi:type="string">Magento_Backend::marketing_seo</item>
+                <item name="SearchTerms" xsi:type="string">Magento_Search::search</item>
+                <item name="UrlRewrite" xsi:type="string">Magento_UrlRewrite::urlrewrite</item>
+                <item name="Sitemap" xsi:type="string">Magento_Sitemap::sitemap</item>
             </field>
         </dataset>
     </repository>

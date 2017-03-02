@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 // no notice of license for now
@@ -51,6 +51,7 @@ require([
             showHour: false,
             showMinute: false,
             serverTimezoneSeconds: <?php echo (int) $block->getStoreTimestamp(); ?>,
+            serverTimezoneOffset: <?php echo (int) $block->getTimezoneOffsetSeconds(); ?>,
             yearRange: '<?php /* @escapeNotVerified */ echo $block->getYearRange() ?>'
         }
     });

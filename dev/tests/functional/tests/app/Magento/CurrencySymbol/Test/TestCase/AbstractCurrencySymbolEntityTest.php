@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,7 +84,7 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
     protected function importCurrencyRate($configData)
     {
         $this->objectManager->getInstance()->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]
         )->run();
 
@@ -97,7 +97,7 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
         $this->currencyIndex->getCurrencyRateForm()->clickImportButton();
         $this->currencyIndex->getCurrencyRateForm()->fillCurrencyUSDUAHRate();
         if ($this->currencyIndex->getMessagesBlock()->isVisibleMessage('warning')) {
-            throw new \Exception($this->currencyIndex->getMessagesBlock()->getWarningMessages());
+            throw new \Exception($this->currencyIndex->getMessagesBlock()->getWarningMessage());
         }
         $this->currencyIndex->getFormPageActions()->save();
     }
@@ -110,7 +110,7 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->getInstance()->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'config_currency_symbols_usd']
         )->run();
     }

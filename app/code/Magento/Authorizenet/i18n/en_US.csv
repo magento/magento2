@@ -2,7 +2,7 @@
 "Order saving error: %1","Order saving error: %1"
 "Please choose a payment method.","Please choose a payment method."
 "We can\'t process your order right now. Please try again later.","We can\'t process your order right now. Please try again later."
-"Unable to place order. Please try again later.","Unable to place order. Please try again later."
+"An error occurred on the server. Please try to place the order again.","An error occurred on the server. Please try to place the order again."
 "Credit Card: xxxx-%1","Credit Card: xxxx-%1"
 "amount %1","amount %1"
 failed.,failed.
@@ -64,3 +64,4 @@ Debug,Debug
 "Minimum Order Total","Minimum Order Total"
 "Maximum Order Total","Maximum Order Total"
 "Sort Order","Sort Order"
+"Sorry, but something went wrong. Please contact the seller.","Sorry, but something went wrong. Please contact the seller."

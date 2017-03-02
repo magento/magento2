@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ abstract class Storage extends \Magento\Backend\App\Action
      */
     protected function _getSyncSingleton()
     {
-        return $this->_objectManager->get('Magento\MediaStorage\Model\File\Storage');
+        return $this->_objectManager->get(\Magento\MediaStorage\Model\File\Storage::class);
     }
 
     /**

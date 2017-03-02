@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Test\Unit\Model\Rule;
@@ -30,21 +30,21 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collectionFactoryMock = $this->getMock(
-            'Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory',
+            \Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->collectionMock = $this->getMock(
-            'Magento\CatalogRule\Model\ResourceModel\Rule\Collection',
+            \Magento\CatalogRule\Model\ResourceModel\Rule\Collection::class,
             [],
             [],
             '',
             false
         );
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
-        $this->dataPersistorMock = $this->getMock('Magento\Framework\App\Request\DataPersistorInterface');
+        $this->dataPersistorMock = $this->getMock(\Magento\Framework\App\Request\DataPersistorInterface::class);
 
         $this->model = new \Magento\CatalogRule\Model\Rule\DataProvider(
             'Name',
@@ -60,7 +60,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $ruleId = 42;
         $ruleData = ['name' => 'Catalog Price Rule'];
 
-        $ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
+        $ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
         $this->collectionMock->expects($this->once())->method('getItems')->willReturn([$ruleMock]);
 
         $ruleMock->expects($this->atLeastOnce())->method('getId')->willReturn($ruleId);
@@ -88,7 +88,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('clear')
             ->with('catalog_rule');
 
-        $newRuleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
+        $newRuleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
         $newRuleMock->expects($this->atLeastOnce())->method('setData')->with($persistedData)->willReturnSelf();
         $newRuleMock->expects($this->atLeastOnce())->method('getId')->willReturn($ruleId);
         $newRuleMock->expects($this->once())->method('getData')->willReturn($ruleData);

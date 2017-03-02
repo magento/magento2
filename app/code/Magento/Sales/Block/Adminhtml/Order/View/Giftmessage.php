@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
@@ -99,7 +99,7 @@ class Giftmessage extends \Magento\Backend\Block\Widget
     {
         $this->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Save Gift Message'), 'class' => 'save']
         );
 

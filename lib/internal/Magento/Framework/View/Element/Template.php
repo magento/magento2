@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
@@ -139,7 +139,7 @@ class Template extends AbstractBlock
     }
 
     /**
-     * Set template context. Sets the object that should represent $this in template
+     * Set template context. Sets the object that should represent $block in template
      *
      * @param \Magento\Framework\View\Element\BlockInterface $templateContext
      * @return void
@@ -194,7 +194,7 @@ class Template extends AbstractBlock
      * Get absolute path to template
      *
      * @param string|null $template
-     * @return string
+     * @return string|bool
      */
     public function getTemplateFile($template = null)
     {

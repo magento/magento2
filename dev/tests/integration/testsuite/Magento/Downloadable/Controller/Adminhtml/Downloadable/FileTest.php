@@ -4,7 +4,7 @@ namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
 /**
  * Magento\Downloadable\Controller\Adminhtml\Downloadable\File
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  * @magentoAppArea adminhtml
  */
@@ -26,7 +26,7 @@ class FileTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->dispatch('backend/admin/downloadable_file/upload/type/samples');
         $body = $this->getResponse()->getBody();
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Json\Helper\Data'
+            \Magento\Framework\Json\Helper\Data::class
         )->jsonDecode(
             $body
         );

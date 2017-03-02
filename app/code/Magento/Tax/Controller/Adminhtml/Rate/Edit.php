@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
@@ -32,11 +32,14 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
         $resultPage = $this->initResultPage();
         $layout = $resultPage->getLayout();
 
-        $toolbarSaveBlock = $layout->createBlock('Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save')
+        $toolbarSaveBlock = $layout->createBlock(\Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save::class)
             ->assign('header', __('Edit Tax Rate'))
             ->assign(
                 'form',
-                $layout->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form')->setShowLegend(true)
+                $layout->createBlock(
+                    \Magento\Tax\Block\Adminhtml\Rate\Form::class,
+                    'tax_rate_form'
+                )->setShowLegend(true)
             );
 
         $resultPage->addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'), $this->getUrl('tax/rate'))

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Report\Filter;
@@ -89,7 +89,7 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
                 $this->setChild(
                     'form_after',
                     $this->getLayout()->createBlock(
-                        'Magento\Backend\Block\Widget\Form\Element\Dependence'
+                        \Magento\Backend\Block\Widget\Form\Element\Dependence::class
                     )->addFieldMap(
                         "{$htmlIdPrefix}show_order_statuses",
                         'show_order_statuses'

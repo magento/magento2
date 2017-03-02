@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Product;
@@ -87,7 +87,7 @@ class View extends \Magento\Catalog\Controller\Product
             }
             if ($this->getRequest()->isAjax()) {
                 $this->getResponse()->representJson(
-                    $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode([
+                    $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode([
                         'backUrl' => $this->_redirect->getRedirectUrl()
                     ])
                 );
@@ -111,7 +111,7 @@ class View extends \Magento\Catalog\Controller\Product
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return $this->noProductRedirect();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             $resultForward = $this->resultForwardFactory->create();
             $resultForward->forward('noroute');
             return $resultForward;

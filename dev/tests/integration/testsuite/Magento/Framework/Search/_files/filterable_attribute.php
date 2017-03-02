@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /* Create attribute */
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Setup\CategorySetup',
+    \Magento\Catalog\Setup\CategorySetup::class,
     ['resourceName' => 'catalog_setup']
 );
 /** @var $selectAttribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $selectAttribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
 );
 $selectAttribute->setData(
     [
@@ -34,12 +34,12 @@ $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $select
 
 /** @var $selectOptions \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
 $selectOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
+    \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
 );
 $selectOptions->setAttributeFilter($selectAttribute->getId());
 
 $multiselectAttribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
 );
 $multiselectAttribute->setData(
     [
@@ -61,7 +61,7 @@ $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $multis
 
 /** @var $multiselectOptions \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
 $multiselectOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
+    \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
 );
 $multiselectOptions->setAttributeFilter($multiselectAttribute->getId());
 
@@ -69,7 +69,9 @@ $multiselectOptions->setAttributeFilter($multiselectAttribute->getId());
 /* Create simple products per each select(dropdown) option */
 foreach ($selectOptions as $option) {
     /** @var $product \Magento\Catalog\Model\Product */
-    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        \Magento\Catalog\Model\Product::class
+    );
     $product->setTypeId(
         \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
     )->setAttributeSetId(
@@ -93,7 +95,7 @@ foreach ($selectOptions as $option) {
     )->save();
 
     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Catalog\Model\Product\Action'
+        \Magento\Catalog\Model\Product\Action::class
     )->updateAttributes(
         [$product->getId()],
         [

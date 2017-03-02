@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
@@ -27,28 +27,28 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactory = $this->getMock(
-            'Magento\Framework\View\Element\UiComponentFactory',
+            \Magento\Framework\View\Element\UiComponentFactory::class,
             [],
             [],
             '',
             false
         );
         $this->attributeRepository = $this->getMock(
-            'Magento\Customer\Ui\Component\Listing\AttributeRepository',
+            \Magento\Customer\Ui\Component\Listing\AttributeRepository::class,
             [],
             [],
             '',
             false
         );
         $this->attributeMetadata = $this->getMockForAbstractClass(
-            '\Magento\Customer\Api\Data\AttributeMetadataInterface',
+            \Magento\Customer\Api\Data\AttributeMetadataInterface::class,
             [],
             '',
             false

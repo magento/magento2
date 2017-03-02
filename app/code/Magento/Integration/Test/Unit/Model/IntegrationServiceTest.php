@@ -2,7 +2,7 @@
 /**
  * Test for \Magento\Integration\Model\IntegrationService
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model;
@@ -42,12 +42,12 @@ class IntegrationServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_integrationFactory = $this->getMockBuilder('Magento\Integration\Model\IntegrationFactory')
+        $this->_integrationFactory = $this->getMockBuilder(\Magento\Integration\Model\IntegrationFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->_integrationMock = $this->getMockBuilder(
-            'Magento\Integration\Model\Integration'
+            \Magento\Integration\Model\Integration::class
         )->disableOriginalConstructor()->setMethods(
             [
                 'getData',
@@ -78,10 +78,10 @@ class IntegrationServiceTest extends \PHPUnit_Framework_TestCase
         );
 
         $oauthConsumerHelper = $this->getMockBuilder(
-            'Magento\Integration\Api\OauthServiceInterface'
+            \Magento\Integration\Api\OauthServiceInterface::class
         )->disableOriginalConstructor()->getMock();
         $oauthConsumer = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\Consumer'
+            \Magento\Integration\Model\Oauth\Consumer::class
         )->disableOriginalConstructor()->getMock();
         $oauthConsumerHelper->expects(
             $this->any()
@@ -97,7 +97,7 @@ class IntegrationServiceTest extends \PHPUnit_Framework_TestCase
             $oauthConsumerHelper
         );
         $this->_emptyIntegrationMock = $this->getMockBuilder(
-            'Magento\Integration\Model\Integration'
+            \Magento\Integration\Model\Integration::class
         )->disableOriginalConstructor()->setMethods(
             [
                 'getData',
@@ -479,7 +479,7 @@ class IntegrationServiceTest extends \PHPUnit_Framework_TestCase
         $integrationId = self::VALUE_INTEGRATION_ID
     ) {
         $integrationMock = $this->getMockBuilder(
-            'Magento\Integration\Model\Integration'
+            \Magento\Integration\Model\Integration::class
         )->disableOriginalConstructor()->setMethods(
             [
                 'getData',

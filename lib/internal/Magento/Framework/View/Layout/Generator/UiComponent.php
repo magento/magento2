@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Generator;
@@ -31,7 +31,7 @@ class UiComponent implements GeneratorInterface
     /**
      * Block container for components
      */
-    const CONTAINER = 'Magento\Framework\View\Element\UiComponent\ContainerInterface';
+    const CONTAINER = \Magento\Framework\View\Element\UiComponent\ContainerInterface::class;
 
     /**
      * @var UiComponentFactory
@@ -115,14 +115,18 @@ class UiComponent implements GeneratorInterface
             $structure->addToParentGroup($elementName, $attributes['group']);
         }
 
-        $context = $this->contextFactory->create([
-            'namespace' => $elementName,
-            'pageLayout' => $layout
-        ]);
+        $context = $this->contextFactory->create(
+            [
+                'namespace' => $elementName,
+                'pageLayout' => $layout
+            ]
+        );
 
-        $component = $this->uiComponentFactory->create($elementName, null, [
-            'context' => $context
-        ]);
+        $component = $this->uiComponentFactory->create(
+            $elementName,
+            null,
+            ['context' => $context]
+        );
         $this->prepareComponent($component);
 
         /** @var ContainerInterface $blockContainer */

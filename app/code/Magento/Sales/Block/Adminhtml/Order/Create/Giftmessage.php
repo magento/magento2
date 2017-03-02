@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
@@ -61,7 +61,7 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
     public function getFormHtml(\Magento\Framework\DataObject $entity, $entityType = 'quote')
     {
         return $this->getLayout()->createBlock(
-            'Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage\Form'
+            \Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage\Form::class
         )->setEntity(
             $entity
         )->setEntityType(

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 require __DIR__ . '/../../../Magento/Catalog/_files/product_virtual.php';
 
 /** @var \Magento\Quote\Model\Quote $quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
 $quote->setStoreId(1)
     ->setIsActive(true)
     ->setIsMultiShipping(false)
@@ -22,7 +22,7 @@ $quote->collectTotals()->save();
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+    ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
     ->create();
 $quoteIdMask->setQuoteId($quote->getId());
 $quoteIdMask->setDataChanges(true);

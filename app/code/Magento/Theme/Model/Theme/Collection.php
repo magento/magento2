@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Theme;
@@ -40,7 +40,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Theme\Model\Theme';
+    protected $_itemObjectClass = \Magento\Theme\Model\Theme::class;
 
     /**
      * @var \Magento\Framework\Config\ThemeFactory $themeConfigFactory

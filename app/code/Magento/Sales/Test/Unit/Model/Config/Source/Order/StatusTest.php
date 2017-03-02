@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Config\Source\Order;
@@ -20,12 +20,13 @@ class StatusTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock('Magento\Sales\Model\Order\Config', [], [], '', false);
+        $this->config = $this->getMock(\Magento\Sales\Model\Order\Config::class, [], [], '', false);
 
         $this->objectManager = new ObjectManager($this);
-        $this->object = $this->objectManager->getObject('Magento\Sales\Model\Config\Source\Order\Status', [
-            'orderConfig' => $this->config
-        ]);
+        $this->object = $this->objectManager->getObject(
+            \Magento\Sales\Model\Config\Source\Order\Status::class,
+            ['orderConfig' => $this->config]
+        );
     }
 
     public function testToOptionArray()

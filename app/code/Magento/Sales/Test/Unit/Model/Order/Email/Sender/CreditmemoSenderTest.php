@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
@@ -29,7 +29,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
         $this->stepMockSetup();
 
         $this->creditmemoResourceMock = $this->getMock(
-            '\Magento\Sales\Model\ResourceModel\Order\Creditmemo',
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo::class,
             ['saveAttribute'],
             [],
             '',
@@ -37,7 +37,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
         );
 
         $this->creditmemoMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Creditmemo',
+            \Magento\Sales\Model\Order\Creditmemo::class,
             [
                 'getStore', '__wakeup', 'getOrder',
                 'setSendEmail', 'setEmailSent', 'getCustomerNoteNotify',
@@ -55,7 +55,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
             ->will($this->returnValue($this->orderMock));
 
         $this->identityContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity',
+            \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity::class,
             ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
             [],
             '',
@@ -104,7 +104,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
 
         if (!$configValue || $forceSyncMode) {
             $addressMock = $this->getMock(
-                'Magento\Sales\Model\Order\Address',
+                \Magento\Sales\Model\Order\Address::class,
                 [],
                 [],
                 '',
@@ -115,7 +115,6 @@ class CreditmemoSenderTest extends AbstractSenderTest
                 ->method('format')
                 ->with($addressMock, 'html')
                 ->willReturn($address);
-
 
             $this->stepAddressFormat($addressMock);
 
@@ -176,7 +175,10 @@ class CreditmemoSenderTest extends AbstractSenderTest
                 );
             }
         } else {
-            $this->creditmemoResourceMock->expects($this->once())
+            $this->creditmemoResourceMock->expects($this->at(0))
+                ->method('saveAttribute')
+                ->with($this->creditmemoMock, 'email_sent');
+            $this->creditmemoResourceMock->expects($this->at(1))
                 ->method('saveAttribute')
                 ->with($this->creditmemoMock, 'send_email');
 
@@ -223,7 +225,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
             ->with('sales_email/general/async_sending')
             ->willReturn(false);
 
-        $addressMock = $this->getMock('Magento\Sales\Model\Order\Address', [], [], '', false);
+        $addressMock = $this->getMock(\Magento\Sales\Model\Order\Address::class, [], [], '', false);
 
         $this->addressRenderer->expects($this->exactly($formatCallCount))
             ->method('format')

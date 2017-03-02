@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
@@ -16,7 +16,7 @@ class Pause extends \Magento\Newsletter\Controller\Adminhtml\Queue
     public function execute()
     {
         $queue = $this->_objectManager->get(
-            'Magento\Newsletter\Model\Queue'
+            \Magento\Newsletter\Model\Queue::class
         )->load(
             $this->getRequest()->getParam('id')
         );

@@ -2,7 +2,7 @@
 /**
  * Test Webapi Error Processor.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi\Test\Unit;
@@ -31,18 +31,18 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Set up mocks for SUT. */
-        $this->encoderMock = $this->getMockBuilder('Magento\Framework\Json\Encoder')
+        $this->encoderMock = $this->getMockBuilder(\Magento\Framework\Json\Encoder::class)
             ->disableOriginalConstructor()
             ->setMethods(['encode'])
             ->getMock();
 
-        $this->_appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
+        $this->_appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $this->_loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
 
-        $filesystemMock = $this->getMockBuilder('\Magento\Framework\Filesystem')
+        $filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -194,7 +194,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         $logicalException = new \LogicException($errorMessage);
         /** Assert that Logic exception is converted to WebapiException without message obfuscation. */
         $maskedException = $this->_errorProcessor->maskException($logicalException);
-        $this->assertInstanceOf('Magento\Framework\Webapi\Exception', $maskedException);
+        $this->assertInstanceOf(\Magento\Framework\Webapi\Exception::class, $maskedException);
         $this->assertEquals(
             $errorMessage,
             $maskedException->getMessage(),
@@ -313,7 +313,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
         $expectedDetails
     ) {
         /** All masked exceptions must be WebapiException */
-        $expectedType = 'Magento\Framework\Webapi\Exception';
+        $expectedType = \Magento\Framework\Webapi\Exception::class;
         $this->assertInstanceOf(
             $expectedType,
             $maskedException,

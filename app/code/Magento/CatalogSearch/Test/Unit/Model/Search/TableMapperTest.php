@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -16,11 +19,18 @@ use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  */
 class TableMapperTest extends \PHPUnit_Framework_TestCase
 {
-    const WEBSITE_ID = 4512;
-    const STORE_ID = 2514;
+    /**
+     * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $aliasResolver;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eavConfig;
+
+    /**
+     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeCollection;
 
@@ -55,11 +65,6 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     private $resource;
 
     /**
-     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $store;
-
-    /**
      * @var \Magento\CatalogSearch\Model\Search\TableMapper
      */
     private $target;
@@ -68,78 +73,67 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connection->expects($this->any())
-            ->method('quoteInto')
-            ->willReturnCallback(
-                function ($query, $expression) {
-                    return str_replace('?', $expression, $query);
-                }
-            );
+        $this->connection->expects($this->never())->method('quoteInto');
 
-        $this->resource = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
+        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource->method('getTableName')
-            ->willReturnCallback(
-                function ($table) {
-                    return 'prefix_' . $table;
-                }
-            );
-        $this->resource->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connection);
+        $this->resource->expects($this->never())->method('getTableName');
+        $this->resource->expects($this->never())->method('getConnection');
 
-        $this->website = $this->getMockBuilder('\Magento\Store\Api\Data\WebsiteInterface')
+        $this->website = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->website->expects($this->any())
-            ->method('getId')
-            ->willReturn(self::WEBSITE_ID);
-        $this->store = $this->getMockBuilder('\Magento\Store\Api\Data\StoreInterface')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->store->expects($this->any())
-            ->method('getId')
-            ->willReturn(self::STORE_ID);
-        $this->storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $this->website->expects($this->never())->method('getId');
+
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager->expects($this->any())
-            ->method('getWebsite')
-            ->willReturn($this->website);
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->store);
-        $this->attributeCollection = $this->getMockBuilder(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection'
-        )
+        $this->storeManager->expects($this->never())->method('getWebsite');
+        $this->storeManager->expects($this->never())->method('getStore');
+
+        $this->attributeCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $attributeCollectionFactory = $this->getMockBuilder(
-            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory'
-        )
+        $attributeCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $attributeCollectionFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->attributeCollection);
+        $attributeCollectionFactory->expects($this->never())
+            ->method('create');
+
+        $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+            ->setMethods(['getAttribute'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->aliasResolver = $this->getMockBuilder(AliasResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->aliasResolver->expects($this->any())
+            ->method('getAlias')
+            ->willReturnCallback(function (FilterInterface $filter) {
+                return $filter->getField() . '_alias';
+            });
+
         $this->target = $objectManager->getObject(
-            '\Magento\CatalogSearch\Model\Search\TableMapper',
+            \Magento\CatalogSearch\Model\Search\TableMapper::class,
             [
                 'resource' => $this->resource,
                 'storeManager' => $this->storeManager,
-                'attributeCollectionFactory' => $attributeCollectionFactory
+                'attributeCollectionFactory' => $attributeCollectionFactory,
+                'eavConfig' => $this->eavConfig,
+                'aliasResolver' => $this->aliasResolver,
             ]
         );
 
-        $this->select = $this->getMockBuilder('\Magento\Framework\DB\Select')
+        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder('\Magento\Framework\Search\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -151,14 +145,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
-        $this->select->expects($this->once())
-            ->method('joinLeft')
-            ->with(
-                ['price_index' => 'prefix_catalog_product_index_price'],
-                'search_index.entity_id = price_index.entity_id AND price_index.website_id = ' . self::WEBSITE_ID,
-                []
-            )
-            ->willReturnSelf();
+
         $select = $this->target->addTables($this->select, $this->request);
         $this->assertEquals($this->select, $select, 'Returned results isn\'t equal to passed select');
     }
@@ -167,18 +154,10 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     {
         $priceFilter = $this->createRangeFilter('static');
         $query = $this->createFilterQuery($priceFilter);
-        $this->createAttributeMock('static', 'static', 'backend_table', 0, 'select');
         $this->request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
-        $this->select->expects($this->once())
-            ->method('joinLeft')
-            ->with(
-                ['static_filter' => 'backend_table'],
-                'search_index.entity_id = static_filter.entity_id',
-                null
-            )
-            ->willReturnSelf();
+
         $select = $this->target->addTables($this->select, $this->request);
         $this->assertEquals($this->select, $select, 'Returned results isn\'t equal to passed select');
     }
@@ -190,46 +169,25 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
-        $this->select->expects($this->once())
-            ->method('joinLeft')
-            ->with(
-                ['category_ids_index' => 'prefix_catalog_category_product_index'],
-                'search_index.entity_id = category_ids_index.product_id',
-                []
-            )
-            ->willReturnSelf();
+
         $select = $this->target->addTables($this->select, $this->request);
         $this->assertEquals($this->select, $select, 'Returned results isn\'t equal to passed select');
     }
 
     public function testAddTermFilter()
     {
-        $this->createAttributeMock('color', null, null, 132, 'select', 0);
         $categoryIdsFilter = $this->createTermFilter('color');
         $query = $this->createFilterQuery($categoryIdsFilter);
         $this->request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
-        $this->select->expects($this->once())
-            ->method('joinLeft')
-            ->with(
-                ['color_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = color_filter.entity_id'
-                . ' AND color_filter.attribute_id = 132'
-                . ' AND color_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
+
         $select = $this->target->addTables($this->select, $this->request);
         $this->assertEquals($this->select, $select, 'Returned results isn\'t equal to passed select');
     }
 
     public function testAddBoolQueryWithTermFiltersInside()
     {
-        $this->createAttributeMock('must1', null, null, 101, 'select', 0);
-        $this->createAttributeMock('should1', null, null, 102, 'select', 1);
-        $this->createAttributeMock('mustNot1', null, null, 103, 'select', 2);
-
         $query = $this->createBoolQuery(
             [
                 $this->createFilterQuery($this->createTermFilter('must1')),
@@ -244,45 +202,13 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
-        $this->select->expects($this->at(0))
-            ->method('joinLeft')
-            ->with(
-                ['must1_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = must1_filter.entity_id'
-                . ' AND must1_filter.attribute_id = 101'
-                . ' AND must1_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
-        $this->select->expects($this->at(1))
-            ->method('joinLeft')
-            ->with(
-                ['should1_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = should1_filter.entity_id'
-                . ' AND should1_filter.attribute_id = 102'
-                . ' AND should1_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
-        $this->select->expects($this->at(2))
-            ->method('joinLeft')
-            ->with(
-                ['mustNot1_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = mustNot1_filter.entity_id'
-                . ' AND mustNot1_filter.attribute_id = 103'
-                . ' AND mustNot1_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
+
         $select = $this->target->addTables($this->select, $this->request);
         $this->assertEquals($this->select, $select, 'Returned results isn\'t equal to passed select');
     }
 
     public function testAddBoolQueryWithTermAndPriceFiltersInside()
     {
-        $this->createAttributeMock('must1', null, null, 101, 'select', 0);
-        $this->createAttributeMock('should1', null, null, 102, 'select', 1);
-        $this->createAttributeMock('mustNot1', null, null, 103, 'select', 2);
         $query = $this->createBoolQuery(
             [
                 $this->createFilterQuery($this->createTermFilter('must1')),
@@ -298,53 +224,13 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
-        $this->select->expects($this->at(0))
-            ->method('joinLeft')
-            ->with(
-                ['must1_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = must1_filter.entity_id'
-                . ' AND must1_filter.attribute_id = 101'
-                . ' AND must1_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
-        $this->select->expects($this->at(1))
-            ->method('joinLeft')
-            ->with(
-                ['price_index' => 'prefix_catalog_product_index_price'],
-                'search_index.entity_id = price_index.entity_id AND price_index.website_id = ' . self::WEBSITE_ID,
-                []
-            )
-            ->willReturnSelf();
-        $this->select->expects($this->at(2))
-            ->method('joinLeft')
-            ->with(
-                ['should1_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = should1_filter.entity_id'
-                . ' AND should1_filter.attribute_id = 102'
-                . ' AND should1_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
-        $this->select->expects($this->at(3))
-            ->method('joinLeft')
-            ->with(
-                ['mustNot1_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = mustNot1_filter.entity_id'
-                . ' AND mustNot1_filter.attribute_id = 103'
-                . ' AND mustNot1_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
+
         $select = $this->target->addTables($this->select, $this->request);
         $this->assertEquals($this->select, $select, 'Returned results isn\'t equal to passed select');
     }
 
     public function testAddBoolFilterWithTermFiltersInside()
     {
-        $this->createAttributeMock('must1', null, null, 101, 'select', 0);
-        $this->createAttributeMock('should1', null, null, 102, 'select', 1);
-        $this->createAttributeMock('mustNot1', null, null, 103, 'select', 2);
         $query = $this->createFilterQuery(
             $this->createBoolFilter(
                 [
@@ -361,45 +247,13 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
-        $this->select->expects($this->at(0))
-            ->method('joinLeft')
-            ->with(
-                ['must1_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = must1_filter.entity_id'
-                . ' AND must1_filter.attribute_id = 101'
-                . ' AND must1_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
-        $this->select->expects($this->at(1))
-            ->method('joinLeft')
-            ->with(
-                ['should1_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = should1_filter.entity_id'
-                . ' AND should1_filter.attribute_id = 102'
-                . ' AND should1_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
-        $this->select->expects($this->at(2))
-            ->method('joinLeft')
-            ->with(
-                ['mustNot1_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = mustNot1_filter.entity_id'
-                . ' AND mustNot1_filter.attribute_id = 103'
-                . ' AND mustNot1_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
+
         $select = $this->target->addTables($this->select, $this->request);
         $this->assertEquals($this->select, $select, 'Returned results isn\'t equal to passed select');
     }
 
     public function testAddBoolFilterWithBoolFiltersInside()
     {
-        $this->createAttributeMock('must1', null, null, 101, 'select', 0);
-        $this->createAttributeMock('should1', null, null, 102, 'select', 1);
-        $this->createAttributeMock('mustNot1', null, null, 103, 'select', 2);
         $query = $this->createFilterQuery(
             $this->createBoolFilter(
                 [
@@ -416,36 +270,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
-        $this->select->expects($this->at(0))
-            ->method('joinLeft')
-            ->with(
-                ['must1_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = must1_filter.entity_id'
-                . ' AND must1_filter.attribute_id = 101'
-                . ' AND must1_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
-        $this->select->expects($this->at(1))
-            ->method('joinLeft')
-            ->with(
-                ['should1_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = should1_filter.entity_id'
-                . ' AND should1_filter.attribute_id = 102'
-                . ' AND should1_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
-        $this->select->expects($this->at(2))
-            ->method('joinLeft')
-            ->with(
-                ['mustNot1_filter' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = mustNot1_filter.entity_id'
-                . ' AND mustNot1_filter.attribute_id = 103'
-                . ' AND mustNot1_filter.store_id = 2514',
-                []
-            )
-            ->willReturnSelf();
+
         $select = $this->target->addTables($this->select, $this->request);
         $this->assertEquals($this->select, $select, 'Returned results isn\'t equal to passed select');
     }
@@ -456,13 +281,14 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
      */
     private function createFilterQuery($filter)
     {
-        $query = $this->getMockBuilder('\Magento\Framework\Search\Request\Query\Filter')
+        $query = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query->method('getType')
             ->willReturn(QueryInterface::TYPE_FILTER);
         $query->method('getReference')
             ->willReturn($filter);
+
         return $query;
     }
 
@@ -475,7 +301,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
      */
     private function createBoolQuery(array $must, array $should, array $mustNot)
     {
-        $query = $this->getMockBuilder('\Magento\Framework\Search\Request\Query\BoolExpression')
+        $query = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\BoolExpression::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query->method('getType')
@@ -486,6 +312,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->willReturn($should);
         $query->method('getMustNot')
             ->willReturn($mustNot);
+
         return $query;
     }
 
@@ -498,7 +325,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
      */
     private function createBoolFilter(array $must, array $should, array $mustNot)
     {
-        $query = $this->getMockBuilder('\Magento\Framework\Search\Request\Filter\BoolExpression')
+        $query = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\BoolExpression::class)
             ->disableOriginalConstructor()
             ->getMock();
         $query->method('getType')
@@ -509,6 +336,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->willReturn($should);
         $query->method('getMustNot')
             ->willReturn($mustNot);
+
         return $query;
     }
 
@@ -519,10 +347,11 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     private function createRangeFilter($field)
     {
         $filter = $this->createFilterMock(
-            '\Magento\Framework\Search\Request\Filter\Range',
+            \Magento\Framework\Search\Request\Filter\Range::class,
             FilterInterface::TYPE_RANGE,
             $field
         );
+
         return $filter;
     }
 
@@ -533,10 +362,11 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     private function createTermFilter($field)
     {
         $filter = $this->createFilterMock(
-            '\Magento\Framework\Search\Request\Filter\Term',
+            \Magento\Framework\Search\Request\Filter\Term::class,
             FilterInterface::TYPE_TERM,
             $field
         );
+
         return $filter;
     }
 
@@ -555,40 +385,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->willReturn($type);
         $filter->method('getField')
             ->willReturn($field);
-        return $filter;
-    }
 
-    /**
-     * @param string $code
-     * @param string $backendType
-     * @param string $backendTable
-     * @param int $attributeId
-     * @param string $frontendInput
-     * @param int $positionInCollection
-     */
-    private function createAttributeMock(
-        $code,
-        $backendType = null,
-        $backendTable = null,
-        $attributeId = 120,
-        $frontendInput = 'select',
-        $positionInCollection = 0
-    ) {
-        $attribute = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Eav\Attribute')
-            ->setMethods(['getBackendType', 'getBackendTable', 'getId', 'getFrontendInput'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attribute->method('getId')
-            ->willReturn($attributeId);
-        $attribute->method('getBackendType')
-            ->willReturn($backendType);
-        $attribute->method('getBackendTable')
-            ->willReturn($backendTable);
-        $attribute->method('getFrontendInput')
-            ->willReturn($frontendInput);
-        $this->attributeCollection->expects($this->at($positionInCollection))
-            ->method('getItemByColumnValue')
-            ->with('attribute_code', $code)
-            ->willReturn($attribute);
+        return $filter;
     }
 }

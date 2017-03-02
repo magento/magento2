@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GoogleOptimizer\Test\Unit\Block\Code;
@@ -20,9 +20,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $this->registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
         $this->block = $objectManager->getObject(
-            'Magento\GoogleOptimizer\Block\Code\Category',
+            \Magento\GoogleOptimizer\Block\Code\Category::class,
             ['registry' => $this->registry]
         );
     }
@@ -35,7 +35,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities()
     {
         $categoryTags = ['catalog_category_1'];
-        $category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $category = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $category->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTags));
         $this->registry->expects(
             $this->once()

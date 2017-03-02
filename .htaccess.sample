@@ -1,11 +1,12 @@
 ############################################
-## Optional override of deployment mode. We recommend you use the
-## command bin/magento deploy:mode:set to switch modes instead
-#   SetEnv MAGE_MODE default # or production or developer
+## overrides deployment configuration mode value
+## use command bin/magento deploy:mode:set to switch modes
+
+#   SetEnv MAGE_MODE developer
 
 ############################################
-## Uncomment these lines for CGI mode.
-## Make sure to specify the correct cgi php binary file name
+## uncomment these lines for CGI mode
+## make sure to specify the correct cgi php binary file name
 ## it might be /cgi-bin/php-cgi
 
 #    Action php5-cgi /cgi-bin/php5-cgi
@@ -16,76 +17,46 @@
 
 #   Options -MultiViews
 
-## You might also need to add this line to php.ini
+## you might also need to add this line to php.ini
 ##     cgi.fix_pathinfo = 1
-## If it still doesn't work, rename php.ini to php5.ini
+## if it still doesn't work, rename php.ini to php5.ini
 
 ############################################
-## This line is specific for 1and1 hosting
+## this line is specific for 1and1 hosting
 
     #AddType x-mapp-php5 .php
     #AddHandler x-mapp-php5 .php
 
 ############################################
-## Default index file
+## default index file
 
     DirectoryIndex index.php
 
-<IfModule mod_php5.c>
-
 ############################################
-## Adjust memory limit
+## adjust memory limit
 
     php_value memory_limit 768M
     php_value max_execution_time 18000
 
 ############################################
-## Disable automatic session start
+## disable automatic session start
 ## before autoload was initialized
 
     php_flag session.auto_start off
 
 ############################################
-## Enable resulting html compression
+## enable resulting html compression
 
     #php_flag zlib.output_compression on
 
 ###########################################
-## Disable user agent verification to not break multiple image upload
+## disable user agent verification to not break multiple image upload
 
     php_flag suhosin.session.cryptua off
-
-</IfModule>
-
-<IfModule mod_php7.c>
-
-############################################
-## Adjust memory limit
-
-    php_value memory_limit 768M
-    php_value max_execution_time 18000
-
-############################################
-## Disable automatic session start
-## before autoload was initialized
-
-    php_flag session.auto_start off
-
-############################################
-## Enable resulting html compression
-
-    #php_flag zlib.output_compression on
-
-###########################################
-## Disable user agent verification to not break multiple image upload
-
-    php_flag suhosin.session.cryptua off
-
-</IfModule>
 
 <IfModule mod_security.c>
 ###########################################
-## Disable POST processing to not break multiple image upload
+## disable POST processing to not break multiple image upload
 
     SecFilterEngine Off
     SecFilterScanPOST Off
@@ -94,7 +65,7 @@
 <IfModule mod_deflate.c>
 
 ############################################
-## Enable apache served files compression
+## enable apache served files compression
 ## http://developer.yahoo.com/performance/rules.html#gzip
 
     # Insert filter on all content
@@ -122,14 +93,14 @@
 <IfModule mod_ssl.c>
 
 ############################################
-## Make HTTPS env vars available for CGI mode
+## make HTTPS env vars available for CGI mode
 
     SSLOptions StdEnvVars
 
 </IfModule>
 
 ############################################
-## Workaround for Apache 2.4.6 CentOS build when working via ProxyPassMatch with HHVM (or any other)
+## workaround for Apache 2.4.6 CentOS build when working via ProxyPassMatch with HHVM (or any other)
 ## Please, set it on virtual host configuration level
 
 ##    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
@@ -138,19 +109,19 @@
 <IfModule mod_rewrite.c>
 
 ############################################
-## Enable rewrites
+## enable rewrites
 
     Options +FollowSymLinks
     RewriteEngine on
 
 ############################################
-## You can put here your magento root folder
+## you can put here your magento root folder
 ## path relative to web root
 
     #RewriteBase /magento/
 
 ############################################
-## Workaround for HTTP authorization
+## workaround for HTTP authorization
 ## in CGI environment
 
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -162,21 +133,21 @@
     RewriteRule .* - [L,R=405]
 
 ############################################
-## Redirect for mobile user agents
+## redirect for mobile user agents
 
     #RewriteCond %{REQUEST_URI} !^/mobiledirectoryhere/.*$
     #RewriteCond %{HTTP_USER_AGENT} "android|blackberry|ipad|iphone|ipod|iemobile|opera mobile|palmos|webos|googlebot-mobile" [NC]
     #RewriteRule ^(.*)$ /mobiledirectoryhere/ [L,R=302]
 
 ############################################
-## Never rewrite for existing files, directories and links
+## never rewrite for existing files, directories and links
 
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-l
 
 ############################################
-## Rewrite everything else to index.php
+## rewrite everything else to index.php
 
     RewriteRule .* index.php [L]
 
@@ -205,7 +176,7 @@
 
 ###########################################
 ## Deny access to root files to hide sensitive application information
-    RedirectMatch 404 /\.git
+    RedirectMatch 403 /\.git
 
     <Files composer.json>
         order allow,deny
@@ -279,6 +250,10 @@
         order allow,deny
         deny from all
     </Files>
+
+# For 404s and 403s that aren't handled by the application, show plain 404 response
+ErrorDocument 404 /pub/errors/404.php
+ErrorDocument 403 /pub/errors/404.php
 
 ################################
 ## If running in cluster environment, uncomment this

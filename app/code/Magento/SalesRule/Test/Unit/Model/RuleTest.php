@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\SalesRule\Test\Unit\Model;
 
 class RuleTest extends \PHPUnit_Framework_TestCase
@@ -32,12 +31,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->coupon = $this->getMockBuilder('Magento\SalesRule\Model\Coupon')
+        $this->coupon = $this->getMockBuilder(\Magento\SalesRule\Model\Coupon::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadPrimaryByRule', 'setRule', 'setIsPrimary', 'getCode', 'getUsageLimit'])
             ->getMock();
 
-        $couponFactory = $this->getMockBuilder('Magento\SalesRule\Model\CouponFactory')
+        $couponFactory = $this->getMockBuilder(\Magento\SalesRule\Model\CouponFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -46,30 +45,19 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->coupon);
 
         $this->conditionCombineFactoryMock = $this->getMockBuilder(
-            '\Magento\SalesRule\Model\Rule\Condition\CombineFactory'
+            \Magento\SalesRule\Model\Rule\Condition\CombineFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->condProdCombineFactoryMock = $this->getMockBuilder(
-            '\Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory'
+            \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->prepareObjectManager([
-            [
-                'Magento\Framework\Api\ExtensionAttributesFactory',
-                $this->getMock('Magento\Framework\Api\ExtensionAttributesFactory', [], [], '', false)
-            ],
-            [
-                'Magento\Framework\Api\AttributeValueFactory',
-                $this->getMock('Magento\Framework\Api\AttributeValueFactory', [], [], '', false)
-            ],
-        ]);
-
         $this->model = $objectManager->getObject(
-            'Magento\SalesRule\Model\Rule',
+            \Magento\SalesRule\Model\Rule::class,
             [
                 'couponFactory' => $couponFactory,
                 'condCombineFactory' => $this->conditionCombineFactoryMock,
@@ -127,7 +115,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setupProdConditionMock()
     {
-        $prodConditionMock = $this->getMockBuilder('\Magento\SalesRule\Model\Rule\Condition\Product\Combine')
+        $prodConditionMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule\Condition\Product\Combine::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRule', 'setId', 'loadArray', 'getConditions'])
             ->getMock();
@@ -147,7 +135,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setupConditionMock()
     {
-        $conditionMock = $this->getMockBuilder('\Magento\SalesRule\Model\Rule\Condition\Combine')
+        $conditionMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule\Condition\Combine::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRule', 'setId', 'loadArray', 'getConditions'])
             ->getMock();
@@ -178,21 +166,5 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->model->setId(100);
         $expectedResult = 'form_namerule_actions_fieldset_100';
         $this->assertEquals($expectedResult, $this->model->getActionsFieldSetId($formName));
-    }
-
-    /**
-     * @param $map
-     */
-    private function prepareObjectManager($map)
-    {
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
-        $reflectionProperty = $reflectionClass->getProperty('_instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
     }
 }

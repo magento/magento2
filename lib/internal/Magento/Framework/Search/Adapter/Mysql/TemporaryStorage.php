@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,20 +33,13 @@ class TemporaryStorage
     /**
      * Stores Documents
      *
-     * @param \ArrayIterator|\Magento\Framework\Search\Document[] $documents
+     * @param \Magento\Framework\Api\Search\DocumentInterface[] $documents
      * @return Table
+     * @deprecated
      */
     public function storeDocuments($documents)
     {
-        $data = [];
-        foreach ($documents as $document) {
-            $data[] = [
-                $document->getId(),
-                $document->getField('score')->getValue(),
-            ];
-        }
-
-        return $this->populateTemporaryTable($this->createTemporaryTable(), $data);
+        return $this->storeApiDocuments($documents);
     }
 
     /**

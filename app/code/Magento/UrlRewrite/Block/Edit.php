@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block;
@@ -208,7 +208,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
     protected function _createEditFormBlock()
     {
         return $this->getLayout()->createBlock(
-            'Magento\UrlRewrite\Block\Edit\Form',
+            \Magento\UrlRewrite\Block\Edit\Form::class,
             '',
             ['data' => ['url_rewrite' => $this->_getUrlRewrite()]]
         );
@@ -232,7 +232,7 @@ class Edit extends \Magento\Backend\Block\Widget\Container
     private function _getSelectorBlock()
     {
         if (!$this->_selectorBlock) {
-            $this->_selectorBlock = $this->getLayout()->createBlock('Magento\UrlRewrite\Block\Selector');
+            $this->_selectorBlock = $this->getLayout()->createBlock(\Magento\UrlRewrite\Block\Selector::class);
         }
         return $this->_selectorBlock;
     }

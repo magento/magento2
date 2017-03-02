@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Observer;
@@ -22,7 +22,7 @@ class AddSwatchAttributeTypeObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->moduleManagerMock = $this->getMock(
-            '\Magento\Framework\Module\Manager',
+            \Magento\Framework\Module\Manager::class,
             [],
             [],
             '',
@@ -30,7 +30,7 @@ class AddSwatchAttributeTypeObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->eventObserverMock = $this->getMock(
-            '\Magento\Framework\Event\Observer',
+            \Magento\Framework\Event\Observer::class,
             ['getForm', 'getEvent', 'getAttribute'],
             [],
             '',
@@ -38,7 +38,7 @@ class AddSwatchAttributeTypeObserverTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->observerMock = $objectManager->getObject(
-            'Magento\Swatches\Observer\AddSwatchAttributeTypeObserver',
+            \Magento\Swatches\Observer\AddSwatchAttributeTypeObserver::class,
             [
                 'moduleManager' => $this->moduleManagerMock,
             ]
@@ -55,13 +55,13 @@ class AddSwatchAttributeTypeObserverTest extends \PHPUnit_Framework_TestCase
             ->method('isOutputEnabled')
             ->willReturn($exp['isOutputEnabled']);
 
-        $eventMock = $this->getMock('\Magento\Framework\Event', ['getResponse'], [], '', false);
+        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getResponse'], [], '', false);
         $this->eventObserverMock
             ->expects($this->exactly($exp['methods_count']))
             ->method('getEvent')
             ->willReturn($eventMock);
 
-        $response = $this->getMock('\Magento\Framework\DataObject', ['getTypes'], [], '', false);
+        $response = $this->getMock(\Magento\Framework\DataObject::class, ['getTypes'], [], '', false);
         $eventMock
             ->expects($this->exactly($exp['methods_count']))
             ->method('getResponse')

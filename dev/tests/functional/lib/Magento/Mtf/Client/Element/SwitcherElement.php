@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Mtf\Client\Element;
+
+use Magento\Mtf\Client\Locator;
 
 /**
  * Toggle element in the backend.
@@ -20,6 +22,13 @@ class SwitcherElement extends SimpleElement
     protected $parentContainer = 'parent::div[@data-role="switcher"]';
 
     /**
+     * XPath selector for label text on swticher element.
+     *
+     * @var string
+     */
+    private $labelText = './following-sibling::label';
+
+    /**
      * Set value to Yes or No.
      *
      * @param string $value Yes|No
@@ -33,7 +42,7 @@ class SwitcherElement extends SimpleElement
             );
         }
         if ($value != $this->getValue()) {
-            $this->click();
+            $this->find($this->labelText, Locator::SELECTOR_XPATH)->click();
         }
     }
 

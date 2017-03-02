@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Group;
@@ -20,7 +20,7 @@ class Save extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $model = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Group');
+        $model = $this->_objectManager->create(\Magento\Eav\Model\Entity\Attribute\Group::class);
 
         $model->setAttributeGroupName(
             $this->getRequest()->getParam('attribute_group_name')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,33 +8,36 @@
 
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CleanMediaTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
         // Wire object with mocks
-        $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $response = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
 
-        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $backendHelper = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
+        $objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $backendHelper = $this->getMock(\Magento\Backend\Helper\Data::class, [], [], '', false);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $session = $this->getMock(
-            'Magento\Backend\Model\Session',
+            \Magento\Backend\Model\Session::class,
             ['setIsUrlNotice'],
-            $helper->getConstructArguments('Magento\Backend\Model\Session')
+            $helper->getConstructArguments(\Magento\Backend\Model\Session::class)
         );
         $messageManager = $this->getMock(
-            'Magento\Framework\Message\Manager',
+            \Magento\Framework\Message\Manager::class,
             ['addSuccess'],
-            $helper->getConstructArguments('Magento\Framework\Message\Manager')
+            $helper->getConstructArguments(\Magento\Framework\Message\Manager::class)
         );
         $context = $this->getMock(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             ['getRequest', 'getResponse', 'getMessageManager', 'getSession', 'getResultFactory'],
             $helper->getConstructArguments(
-                'Magento\Backend\App\Action\Context',
+                \Magento\Backend\App\Action\Context::class,
                 [
                     'session' => $session,
                     'response' => $response,
@@ -45,11 +48,11 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
-        $resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultFactory->expects($this->atLeastOnce())
@@ -63,14 +66,14 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())->method('getResultFactory')->willReturn($resultFactory);
 
         $controller = $helper->getObject(
-            'Magento\Backend\Controller\Adminhtml\Cache\CleanMedia',
+            \Magento\Backend\Controller\Adminhtml\Cache\CleanMedia::class,
             [
                 'context' => $context
             ]
         );
 
         // Setup expectations
-        $mergeService = $this->getMock('Magento\Framework\View\Asset\MergeService', [], [], '', false);
+        $mergeService = $this->getMock(\Magento\Framework\View\Asset\MergeService::class, [], [], '', false);
         $mergeService->expects($this->once())->method('cleanMergedJsCss');
 
         $messageManager->expects($this->once())
@@ -79,8 +82,8 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
         );
 
         $valueMap = [
-            ['Magento\Framework\View\Asset\MergeService', $mergeService],
-            ['Magento\Framework\Session\SessionManager', $session],
+            [\Magento\Framework\View\Asset\MergeService::class, $mergeService],
+            [\Magento\Framework\Session\SessionManager::class, $session],
         ];
         $objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
 

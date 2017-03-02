@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,14 +25,13 @@ use Magento\Customer\Test\Fixture\Customer;
  * 5. Save Customer Address.
  * 6. Perform assertions.
  *
- * @group VAT_ID_(CS)
+ * @group VAT_ID
  * @ZephyrId MAGETWO-12447
  */
 class ApplyVatIdTest extends AbstractApplyVatIdTest
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
     /* end tags */
 
@@ -84,7 +83,7 @@ class ApplyVatIdTest extends AbstractApplyVatIdTest
         $this->configData = $configData;
         $this->customer = $customer;
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData]
         )->run();
         $this->customer->persist();
@@ -92,7 +91,7 @@ class ApplyVatIdTest extends AbstractApplyVatIdTest
 
         // Steps
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $this->customer]
         )->run();
         $this->customerAccountIndex->getDashboardAddress()->editBillingAddress();

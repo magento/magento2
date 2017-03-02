@@ -1,12 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Widget\Test\Unit\Helper;
-
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ConditionsTest
@@ -18,29 +16,39 @@ class ConditionsTest extends \PHPUnit_Framework_TestCase
      */
     protected $conditions;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->conditions = $objectManagerHelper->getObject('Magento\Widget\Helper\Conditions');
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, null);
+        $this->conditions = new \Magento\Widget\Helper\Conditions(
+            $this->serializer
+        );
     }
 
     public function testEncodeDecode()
     {
         $value = [
             '1' => [
-                "type" => "Magento\\CatalogWidget\\Model\\Rule\\Condition\\Combine",
+                "type" => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
                 "aggregator" => "all",
                 "value" => "1",
                 "new_child" => "",
             ],
             '1--1' => [
-                "type" => "Magento\\CatalogWidget\\Model\\Rule\\Condition\\Product",
+                "type" => \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
                 "attribute" => "attribute_set_id",
                 "value" => "4",
                 "operator" => "==",
             ],
             '1--2' => [
-                "type" => "Magento\\CatalogWidget\\Model\\Rule\\Condition\\Product",
+                "type" => \Magento\CatalogWidget\Model\Rule\Condition\Product::class,
                 "attribute" => "category_ids",
                 "value" => "2",
                 "operator" => "==",

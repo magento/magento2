@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,6 +30,7 @@ class ExternalVideoEntryConverter extends ImageEntryConverter
      * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory
      */
     protected $mediaGalleryEntryExtensionFactory;
+
     /**
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
@@ -67,7 +68,7 @@ class ExternalVideoEntryConverter extends ImageEntryConverter
         $this->dataObjectHelper->populateWithArray(
             $videoEntry,
             $rowData,
-            'Magento\Framework\Api\Data\VideoContentInterface'
+            \Magento\Framework\Api\Data\VideoContentInterface::class
         );
         $entryExtension = $this->mediaGalleryEntryExtensionFactory->create();
         $entryExtension->setVideoContent($videoEntry);

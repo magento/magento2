@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Block;
@@ -59,13 +59,13 @@ class Form extends \Magento\Payment\Block\Form
     protected function createVaultBlocks()
     {
         $icons = $this->cardConfigProvider->getIcons();
-        $payments = $this->tokensProvider->getTokensComponents();
+        $payments = $this->tokensProvider->getTokensComponents($this->_nameInLayout);
         foreach ($payments as $key => $payment) {
             $this->addChild(
                 $key,
                 $payment->getName(),
                 array_merge(
-                    ['id' => $key, 'icons' => $icons],
+                    ['id' => $this->_nameInLayout . $key, 'icons' => $icons],
                     $payment->getConfig()
                 )
             );

@@ -1,0 +1,13 @@
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="data-grid-cell-content"
+     if="!$col.isLink($row())"
+     text="$col.getLabel($row())"/>
+<a   class="action-menu-item"
+     if="$col.isLink($row())"
+     text="$col.getLabel($row())"
+     attr="href: $col.getLink($row())"/>

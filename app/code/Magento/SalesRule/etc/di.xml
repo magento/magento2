@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -78,7 +78,7 @@
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
-                <item name="Magento\SalesRule\Api\Data\RuleInterface" xsi:type="string">Magento\SalesRule\Api\RuleRepositoryInterface</item>
+                <item name="Magento\SalesRule\Api\Data\RuleInterface" xsi:type="string">Magento\SalesRule\Model\ResourceModel\Rule</item>
             </argument>
         </arguments>
     </type>

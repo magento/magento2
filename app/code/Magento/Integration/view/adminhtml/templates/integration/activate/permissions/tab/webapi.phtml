@@ -2,7 +2,7 @@
 /**
  * API permissions tab template for integration activation dialog.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  * @var \Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi $block
@@ -24,22 +24,20 @@
 </fieldset>
 <?php if (!$block->isTreeEmpty()): ?>
     <script>
-require(["jquery", "Magento_User/js/roles-tree"], function($){
+        require(["jquery", "Magento_User/js/roles-tree"], function($){
+            $.widget('mage.rolesTree', $.mage.rolesTree, {
+                _checkNode: function(event) {},
+                _checkNodes: function() {
+                    this._super();
+                    this.element.jstree('disable_hotkeys').jstree('hide_checkboxes')
+                        .find('li.jstree-unchecked').hide().end().find('li.jstree-checked').attr('rel', 'disabled');
+                }
+            });
 
-    $.widget('mage.rolesTree', $.mage.rolesTree, {
-        _checkNode: function(event) {},
-        _checkNodes: function() {
-            this._super();
-            this.element.jstree('disable_hotkeys').jstree('hide_checkboxes')
-                .find('li.jstree-unchecked').hide().end().find('li.jstree-checked').attr('rel', 'disabled');
-        }
-    });
-
-    $('[data-role="resource-tree"]').rolesTree({
-        'treeInitData': <?php /* @escapeNotVerified */ echo $block->getResourcesTreeJson() ?>,
-        'treeInitSelectedData': <?php /* @escapeNotVerified */ echo $block->getSelectedResourcesJson() ?>
-    });
-
-});
-</script>
+            $('[data-role="resource-tree"]').rolesTree({
+                'treeInitData': <?php /* @escapeNotVerified */ echo $block->getResourcesTreeJson() ?>,
+                'treeInitSelectedData': <?php /* @escapeNotVerified */ echo $block->getSelectedResourcesJson() ?>
+            });
+        });
+    </script>
 <?php endif ?>

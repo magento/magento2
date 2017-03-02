@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Model\Config\Reader;
@@ -18,16 +18,16 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $fileResolver = $this->getMockBuilder(
-            'Magento\Framework\App\Config\FileResolver'
+            \Magento\Framework\App\Config\FileResolver::class
         )->disableOriginalConstructor()->getMock();
         $converter = $this->getMockBuilder(
-            'Magento\Cron\Model\Config\Converter\Xml'
+            \Magento\Cron\Model\Config\Converter\Xml::class
         )->disableOriginalConstructor()->getMock();
         $schema = $this->getMockBuilder(
-            'Magento\Cron\Model\Config\SchemaLocator'
+            \Magento\Cron\Model\Config\SchemaLocator::class
         )->disableOriginalConstructor()->getMock();
         $validator = $this->getMockBuilder(
-            '\Magento\Framework\Config\ValidationStateInterface'
+            \Magento\Framework\Config\ValidationStateInterface::class
         )->disableOriginalConstructor()->getMock();
         $this->_xmlReader = new \Magento\Cron\Model\Config\Reader\Xml($fileResolver, $converter, $schema, $validator);
     }
@@ -37,6 +37,6 @@ class XmlTest extends \PHPUnit_Framework_TestCase
      */
     public function testInstanceof()
     {
-        $this->assertInstanceOf('Magento\Cron\Model\Config\Reader\Xml', $this->_xmlReader);
+        $this->assertInstanceOf(\Magento\Cron\Model\Config\Reader\Xml::class, $this->_xmlReader);
     }
 }

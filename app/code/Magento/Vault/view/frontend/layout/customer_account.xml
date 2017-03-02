@@ -1,17 +1,18 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="customer_account_navigation">
-            <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-my-credit-cards-link">
+            <block class="Magento\Customer\Block\Account\SortLinkInterface" name="customer-account-navigation-my-credit-cards-link">
                 <arguments>
                     <argument name="path" xsi:type="string">vault/cards/listaction</argument>
-                    <argument name="label" xsi:type="string" translate="true">My Credit Cards</argument>
+                    <argument name="label" xsi:type="string" translate="true">Stored Payment Methods</argument>
+                    <argument name="sortOrder" xsi:type="number">160</argument>
                 </arguments>
             </block>
         </referenceBlock>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->_model->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
     }
@@ -34,19 +34,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         // model getter
         $typeInstance = $this->_model->getTypeInstance();
-        $this->assertInstanceOf('Magento\Bundle\Model\Product\Type', $typeInstance);
+        $this->assertInstanceOf(\Magento\Bundle\Model\Product\Type::class, $typeInstance);
         $this->assertSame($typeInstance, $this->_model->getTypeInstance());
 
         // singleton getter
         $otherProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $otherProduct->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
         $this->assertSame($typeInstance, $otherProduct->getTypeInstance());
 
         // model setter
         $customTypeInstance = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Bundle\Model\Product\Type'
+            \Magento\Bundle\Model\Product\Type::class
         );
         $this->_model->setTypeInstance($customTypeInstance);
         $this->assertSame($customTypeInstance, $this->_model->getTypeInstance());
@@ -88,7 +88,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
         $type = $this->_model->getPriceModel();
-        $this->assertInstanceOf('Magento\Bundle\Model\Product\Price', $type);
+        $this->assertInstanceOf(\Magento\Bundle\Model\Product\Price::class, $type);
         $this->assertSame($type, $this->_model->getPriceModel());
     }
 

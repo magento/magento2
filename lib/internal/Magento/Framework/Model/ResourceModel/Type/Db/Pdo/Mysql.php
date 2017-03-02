@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -112,6 +112,12 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements Co
             if (!isset($config[$name])) {
                 throw new \InvalidArgumentException("MySQL adapter: Missing required configuration option '$name'");
             }
+        }
+
+        if (isset($config['port'])) {
+            throw new \InvalidArgumentException(
+                "Port must be configured within host (like '$config[host]:$config[port]') parameter, not within port"
+            );
         }
 
         $config['active'] = !(

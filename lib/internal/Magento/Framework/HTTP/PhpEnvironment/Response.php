@@ -2,7 +2,7 @@
 /**
  * Base HTTP response object
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
@@ -16,12 +16,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     protected $isRedirect = false;
 
     /**
-     * Get header value by name.
-     * Returns first found header by passed name.
-     * If header with specified name was not found returns false.
-     *
-     * @param string $name
-     * @return \Zend\Http\Header\HeaderInterface|bool
+     * {@inheritdoc}
      */
     public function getHeader($name)
     {
@@ -45,8 +40,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * @param string $value
-     * @return $this
+     * {@inheritdoc}
      */
     public function appendBody($value)
     {
@@ -56,8 +50,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * @param string $value
-     * @return $this
+     * {@inheritdoc}
      */
     public function setBody($value)
     {
@@ -76,15 +69,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * Set a header
-     *
-     * If $replace is true, replaces any headers already defined with that
-     * $name.
-     *
-     * @param string $name
-     * @param string $value
-     * @param boolean $replace
-     * @return $this
+     * {@inheritdoc}
      */
     public function setHeader($name, $value, $replace = false)
     {
@@ -99,10 +84,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * Remove header by name from header stack
-     *
-     * @param string $name
-     * @return $this
+     * {@inheritdoc}
      */
     public function clearHeader($name)
     {
@@ -117,6 +99,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * Remove all headers
+     * 
      * @return $this
      */
     public function clearHeaders()
@@ -128,14 +111,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * Set redirect URL
-     *
-     * Sets Location header and response code. Forces replacement of any prior
-     * redirects.
-     *
-     * @param string $url
-     * @param int $code
-     * @return $this
+     * {@inheritdoc}
      */
     public function setRedirect($url, $code = 302)
     {
@@ -146,10 +122,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * Set HTTP response code to use with headers
-     *
-     * @param int $code
-     * @return $this
+     * {@inheritdoc}
      */
     public function setHttpResponseCode($code)
     {
@@ -164,10 +137,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * @param int|string $httpCode
-     * @param null|int|string $version
-     * @param null|string $phrase
-     * @return $this
+     * {@inheritdoc}
      */
     public function setStatusHeader($httpCode, $version = null, $phrase = null)
     {
@@ -182,9 +152,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * Get response code
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getHttpResponseCode()
     {

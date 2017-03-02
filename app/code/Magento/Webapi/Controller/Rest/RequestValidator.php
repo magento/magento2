@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -71,11 +71,6 @@ class RequestValidator
         $route = $this->router->match($this->request);
         if ($route->isSecure() && !$this->request->isSecure()) {
             throw new \Magento\Framework\Webapi\Exception(__('Operation allowed only in HTTPS'));
-        }
-        if ($this->storeManager->getStore()->getCode() === Store::ADMIN_CODE
-            && strtoupper($this->request->getMethod()) === RestRequest::HTTP_METHOD_GET
-        ) {
-            throw new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
         }
     }
 

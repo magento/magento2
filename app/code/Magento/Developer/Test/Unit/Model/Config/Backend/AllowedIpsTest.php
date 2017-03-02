@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\Config\Backend;
@@ -19,10 +19,10 @@ class AllowedIpsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $contextMock = $this->getMockBuilder('\Magento\Framework\Model\Context')
+        $contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $eventMangerMock = $this->getMockBuilder('\Magento\Framework\Event\ManagerInterface')
+        $eventMangerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())
@@ -30,9 +30,9 @@ class AllowedIpsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($eventMangerMock);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $escaper = $objectManagerHelper->getObject('\Magento\Framework\Escaper');
+        $escaper = $objectManagerHelper->getObject(\Magento\Framework\Escaper::class);
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Developer\Model\Config\Backend\AllowedIps',
+            \Magento\Developer\Model\Config\Backend\AllowedIps::class,
             [
                 'context' => $contextMock,
                 'escaper' => $escaper,

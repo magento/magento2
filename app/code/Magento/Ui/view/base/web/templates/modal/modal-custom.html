@@ -1,15 +1,15 @@
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 
-<aside class="modal-<%= data.type %> <%= data.modalClass %>
-       <% if(data.responsive){ %><%= data.responsiveClass %><% } %>
-       <% if(data.innerScroll){ %><%= data.innerScrollClass %><% } %>"
+<aside class="modal-<%- data.type %> <%- data.modalClass %>
+       <% if(data.responsive){ %><%- data.responsiveClass %><% } %>
+       <% if(data.innerScroll){ %><%- data.innerScrollClass %><% } %>"
     data-role="modal"
-    data-type="<%= data.type %>"
+    data-type="<%- data.type %>"
     tabindex="0">
     <div data-role="focusable-start" tabindex="0"></div>
     <div class="modal-inner-wrap"
@@ -31,7 +31,7 @@
         <footer class="modal-footer">
             <% _.each(data.buttons, function(button) { %>
             <button
-                    class="<%= button.class %>"
+                    class="<%- button.class %>"
                     type="button"
                     data-role="action"><span><%= button.text %></span></button>
             <% }); %>

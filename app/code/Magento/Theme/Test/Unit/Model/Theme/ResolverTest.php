@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
@@ -39,29 +39,29 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->designMock = $this->getMockForAbstractClass('Magento\Framework\View\DesignInterface');
+        $this->designMock = $this->getMockForAbstractClass(\Magento\Framework\View\DesignInterface::class);
         $this->themeCollectionFactoryMock = $this->getMock(
-            'Magento\Theme\Model\ResourceModel\Theme\CollectionFactory',
+            \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->themeCollectionMock = $this->getMock(
-            'Magento\Theme\Model\ResourceModel\Theme\Collection',
+            \Magento\Theme\Model\ResourceModel\Theme\Collection::class,
             [],
             [],
             '',
             false
         );
         $this->appStateMock = $this->getMock(
-            'Magento\Framework\App\State',
+            \Magento\Framework\App\State::class,
             [],
             [],
             '',
             false
         );
-        $this->themeMock = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $this->themeMock = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
 
         $this->model = new \Magento\Theme\Model\Theme\Resolver(
             $this->appStateMock,

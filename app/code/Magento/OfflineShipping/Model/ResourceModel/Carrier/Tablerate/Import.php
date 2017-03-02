@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -128,12 +128,13 @@ class Import
         $items = [];
         while (false !== ($csvLine = $file->readCsv())) {
             try {
+                $rowNumber++;
                 if (empty($csvLine)) {
                     continue;
                 }
                 $rowData = $this->rowParser->parse(
                     $csvLine,
-                    ++$rowNumber,
+                    $rowNumber,
                     $websiteId,
                     $conditionShortName,
                     $conditionFullName,
@@ -151,7 +152,7 @@ class Import
                         )
                     );
                 }
-                $this->uniqueHash[$hash] = $csvLine;
+                $this->uniqueHash[$hash] = $rowNumber;
 
                 $items[] = $rowData;
                 if (count($items) === $bunchSize) {

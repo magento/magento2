@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,7 +22,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_elementFactory = $objectManager->create('Magento\Framework\Data\Form\ElementFactory');
+        $this->_elementFactory = $objectManager->create(\Magento\Framework\Data\Form\ElementFactory::class);
     }
 
     /**
@@ -31,7 +31,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     public function testGetValue(array $data, $expect)
     {
         /** @var $date \Magento\Framework\Data\Form\Element\Date */
-        $date = $this->_elementFactory->create('Magento\Framework\Data\Form\Element\Date', $data);
+        $date = $this->_elementFactory->create(\Magento\Framework\Data\Form\Element\Date::class, $data);
         $this->assertEquals($expect, $date->getValue());
     }
 

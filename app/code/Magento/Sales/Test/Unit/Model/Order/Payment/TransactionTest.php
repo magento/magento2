@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,11 +24,11 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('\Magento\Framework\Model\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->setMethods(['getEventDispatcher'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder('\Magento\Framework\Event\ManagerInterface')
+        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->setMethods(['dispatch'])
             ->getMockForAbstractClass();
 
@@ -38,7 +38,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->transaction = $this->objectManagerHelper->getObject(
-            '\Magento\Sales\Model\Order\Payment\Transaction',
+            \Magento\Sales\Model\Order\Payment\Transaction::class,
             [
                 'context' => $this->contextMock
             ]
@@ -52,7 +52,6 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
         $this->transaction->setData('html_txn_id', 'test');
 
-
         $this->assertEquals('test', $this->transaction->getHtmlTxnId());
     }
 
@@ -62,7 +61,6 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch');
 
         $this->transaction->setData('txn_id', 'test');
-
 
         $this->assertEquals('test', $this->transaction->getHtmlTxnId());
         $this->assertEquals(null, $this->transaction->getData('html_txn_id'));

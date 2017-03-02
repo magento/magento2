@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
@@ -47,7 +47,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
         if ($storeId) {
             if (!$categoryId) {
                 $store = $this->_objectManager
-                    ->get('Magento\Store\Model\StoreManagerInterface')
+                    ->get(\Magento\Store\Model\StoreManagerInterface::class)
                     ->getStore($storeId);
                 $rootId = $store->getRootCategoryId();
                 $this->getRequest()->setParam('id', $rootId);
@@ -61,7 +61,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
-        $block = $this->layoutFactory->create()->createBlock('Magento\Catalog\Block\Adminhtml\Category\Tree');
+        $block = $this->layoutFactory->create()->createBlock(\Magento\Catalog\Block\Adminhtml\Category\Tree::class);
         $root = $block->getRoot();
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();

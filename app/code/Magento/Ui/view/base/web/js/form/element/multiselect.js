@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,29 +13,10 @@ define([
     return Select.extend({
         defaults: {
             size: 5,
-            elementTmpl: 'ui/form/element/multiselect'
-        },
-
-        /**
-         * @inheritdoc
-         */
-        initConfig: function () {
-            this._super();
-
-            this.value = this.normalizeData(this.value);
-
-            return this;
-        },
-
-        /**
-         * @inheritdoc
-         */
-        initLinks: function () {
-            var scope = this.source.get(this.dataScope);
-
-            this.multipleScopeValue = _.isArray(scope) ? utils.copy(scope) : undefined;
-
-            return this._super();
+            elementTmpl: 'ui/form/element/multiselect',
+            listens: {
+                value: 'setDifferedFromDefault setPrepareToSendData'
+            }
         },
 
         /**
@@ -61,14 +42,32 @@ define([
         },
 
         /**
+         * Sets the prepared data to dataSource
+         * by path, where key is component link to dataSource with
+         * suffix "-prepared-for-send"
+         *
+         * @param {Array} data - current component value
+         */
+        setPrepareToSendData: function (data) {
+            if (!data.length) {
+                data = '';
+            }
+
+            this.source.set(this.dataScope + '-prepared-for-send', data);
+        },
+
+        /**
          * @inheritdoc
          */
         getInitialValue: function () {
-            var values = [this.multipleScopeValue, this.default, this.value.peek(), []],
+            var values = [
+                    this.normalizeData(this.source.get(this.dataScope)),
+                    this.normalizeData(this.default)
+                ],
                 value;
 
             values.some(function (v) {
-                return _.isArray(v) && (value = utils.copy(v));
+                return _.isArray(v) && (value = utils.copy(v)) && !_.isEmpty(v);
             });
 
             return value;

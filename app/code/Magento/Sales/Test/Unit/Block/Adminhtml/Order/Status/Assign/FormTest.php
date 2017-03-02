@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Status\Assign;
@@ -37,18 +37,18 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->formFactory = $this->getMock('Magento\Framework\Data\FormFactory', ['create'], [], '', false);
+        $this->formFactory = $this->getMock(\Magento\Framework\Data\FormFactory::class, ['create'], [], '', false);
         $this->collectionFactory = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory',
+            \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->orderConfig = $this->getMock('Magento\Sales\Model\Order\Config', [], [], '', false);
+        $this->orderConfig = $this->getMock(\Magento\Sales\Model\Order\Config::class, [], [], '', false);
 
         $this->block = $objectManager->getObject(
-            'Magento\Sales\Block\Adminhtml\Order\Status\Assign\Form',
+            \Magento\Sales\Block\Adminhtml\Order\Status\Assign\Form::class,
             [
                 'formFactory' => $this->formFactory,
                 'collectionFactory' => $this->collectionFactory,
@@ -67,9 +67,15 @@ class FormTest extends \PHPUnit_Framework_TestCase
         array_unshift($statusesForField, ['value' => '', 'label' => '']);
         $statesForField = array_merge(['' => ''], $states);
 
-        $form = $this->getMock('Magento\Framework\Data\Form', [], [], '', false);
-        $fieldset = $this->getMock('Magento\Framework\Data\Form\Element\Fieldset', [], [], '', false);
-        $collection = $this->getMock('Magento\Sales\Model\ResourceModel\Order\Status\Collection', [], [], '', false);
+        $form = $this->getMock(\Magento\Framework\Data\Form::class, [], [], '', false);
+        $fieldset = $this->getMock(\Magento\Framework\Data\Form\Element\Fieldset::class, [], [], '', false);
+        $collection = $this->getMock(
+            \Magento\Sales\Model\ResourceModel\Order\Status\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $form->expects($this->once())
             ->method('addFieldset')

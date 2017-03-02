@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -22,6 +22,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertTaxReportNotInGrid" />
         </variation>
         <variation name="SalesTaxReportEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="orderSteps" xsi:type="string">invoice</data>
             <data name="taxRule/dataset" xsi:type="string">custom_rule</data>
             <data name="order/dataset" xsi:type="string">default</data>
@@ -37,6 +38,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertTaxReportInGrid" />
         </variation>
         <variation name="SalesTaxReportEntityTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="orderSteps" xsi:type="string">invoice,shipment</data>
             <data name="taxRule/dataset" xsi:type="string">custom_rule</data>
             <data name="order/dataset" xsi:type="string">default</data>

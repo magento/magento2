@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,6 +18,7 @@ class InstallSchema implements InstallSchemaInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Zend_Db_Exception
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -1853,6 +1854,9 @@ class InstallSchema implements InstallSchemaInterface
         $installer->getConnection()
             ->createTable($table);
 
+        $customerGroupTable = $setup->getConnection()->describeTable($setup->getTable('customer_group'));
+        $customerGroupIdType = $customerGroupTable['customer_group_id']['DATA_TYPE'] == 'int'
+            ? \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER : $customerGroupTable['customer_group_id']['DATA_TYPE'];
         /**
          * Create table 'catalog_product_entity_tier_price'
          */
@@ -1883,7 +1887,7 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addColumn(
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                $customerGroupIdType,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Customer Group ID'
@@ -2426,7 +2430,6 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 $installer->getTable('catalog_product_option'),
                 'option_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -2937,7 +2940,7 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addColumn(
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                $customerGroupIdType,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Customer Group ID'
@@ -3056,7 +3059,7 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addColumn(
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                $customerGroupIdType,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Customer Group ID'

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\AbstractController;
@@ -53,11 +53,11 @@ abstract class PrintShipment extends \Magento\Framework\App\Action\Action
     {
         $shipmentId = (int)$this->getRequest()->getParam('shipment_id');
         if ($shipmentId) {
-            $shipment = $this->_objectManager->create('Magento\Sales\Model\Order\Shipment')->load($shipmentId);
+            $shipment = $this->_objectManager->create(\Magento\Sales\Model\Order\Shipment::class)->load($shipmentId);
             $order = $shipment->getOrder();
         } else {
             $orderId = (int)$this->getRequest()->getParam('order_id');
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+            $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
         }
         if ($this->orderAuthorization->canView($order)) {
             $this->_coreRegistry->register('current_order', $order);
@@ -71,7 +71,7 @@ abstract class PrintShipment extends \Magento\Framework\App\Action\Action
         } else {
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            if ($this->_objectManager->get('Magento\Customer\Model\Session')->isLoggedIn()) {
+            if ($this->_objectManager->get(\Magento\Customer\Model\Session::class)->isLoggedIn()) {
                 $resultRedirect->setPath('*/*/history');
             } else {
                 $resultRedirect->setPath('sales/guest/form');

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
@@ -24,13 +24,13 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->fallbackResolver = $this->getMockForAbstractClass(
-            'Magento\Framework\App\ScopeFallbackResolverInterface',
+            \Magento\Framework\App\ScopeFallbackResolverInterface::class,
             [],
             '',
             false
         );
-        $this->appConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
-        $this->valueProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\ValueProcessor')
+        $this->appConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
+        $this->valueProcessor = $this->getMockBuilder(\Magento\Theme\Model\Design\Config\ValueProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Model\Order\Payment;
 
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\OrderPaymentRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Metadata;
@@ -34,14 +35,22 @@ class Repository implements OrderPaymentRepositoryInterface
      */
     protected $searchResultFactory;
 
+    /** @var  CollectionProcessorInterface */
+    private $collectionProcessor;
+
     /**
      * @param Metadata $metaData
      * @param SearchResultFactory $searchResultFactory
+     * @param CollectionProcessorInterface $collectionProcessor
      */
-    public function __construct(Metadata $metaData, SearchResultFactory $searchResultFactory)
-    {
+    public function __construct(
+        Metadata $metaData,
+        SearchResultFactory $searchResultFactory,
+        CollectionProcessorInterface $collectionProcessor = null
+    ) {
         $this->metaData = $metaData;
         $this->searchResultFactory = $searchResultFactory;
+        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
     /**
@@ -54,14 +63,8 @@ class Repository implements OrderPaymentRepositoryInterface
     {
         /** @var \Magento\Sales\Model\ResourceModel\Order\Payment\Collection $collection */
         $collection = $this->searchResultFactory->create();
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
-        }
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
+        $collection->setSearchCriteria($searchCriteria);
+        $this->collectionProcessor->process($searchCriteria, $collection);
         return $collection;
     }
 
@@ -120,5 +123,21 @@ class Repository implements OrderPaymentRepositoryInterface
     public function create()
     {
         return $this->metaData->getNewInstance();
+    }
+
+    /**
+     * Retrieve collection processor
+     *
+     * @deprecated
+     * @return CollectionProcessorInterface
+     */
+    private function getCollectionProcessor()
+    {
+        if (!$this->collectionProcessor) {
+            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            );
+        }
+        return $this->collectionProcessor;
     }
 }

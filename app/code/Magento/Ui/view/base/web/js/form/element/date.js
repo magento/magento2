@@ -1,11 +1,12 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
     'moment',
     'mageUtils',
-    './abstract'
+    './abstract',
+    'moment-timezone-with-data'
 ], function (moment, utils, Abstract) {
     'use strict';
 
@@ -13,12 +14,8 @@ define([
         defaults: {
             options: {},
 
-            timeOffset: 0,
+            storeTimeZone: 'UTC',
 
-            showsTime: false,
-
-            dateFormat: 'MM/dd/y', // ICU Date Format
-            timeFormat: 'HH:mm', // ICU Time Format
             validationParams: {
                 dateFormat: '${ $.outputDateFormat }'
             },
@@ -28,7 +25,7 @@ define([
              * server (ICU Date Format).
              *
              * Used only in date picker mode
-             * (this.showsTime == false).
+             * (this.options.showsTime == false).
              *
              * @type {String}
              */
@@ -39,7 +36,7 @@ define([
              * server (ICU Date Format).
              *
              * Used only in date picker mode
-             * (this.showsTime == false).
+             * (this.options.showsTime == false).
              *
              * @type {String}
              */
@@ -51,9 +48,17 @@ define([
              *
              * @type {String}
              */
-            datetimeFormat: '',
+            pickerDateTimeFormat: '',
+
+            pickerDefaultDateFormat: 'MM/dd/y', // ICU Date Format
+            pickerDefaultTimeFormat: 'h:mm a', // ICU Time Format
 
             elementTmpl: 'ui/form/element/date',
+
+            /**
+             * Format needed by moment timezone for conversion
+             */
+            timezoneFormat: 'YYYY-MM-DD HH:mm',
 
             listens: {
                 'value': 'onValueChange',
@@ -62,7 +67,7 @@ define([
 
             /**
              * Date/time value shifted to corresponding timezone
-             * according to this.timeOffset property. This value
+             * according to this.storeTimeZone property. This value
              * will be sent to the server.
              *
              * @type {String}
@@ -78,13 +83,15 @@ define([
         initConfig: function () {
             this._super();
 
-            utils.extend(this.options, {
-                showsTime: this.showsTime,
-                timeFormat: this.timeFormat,
-                dateFormat: this.dateFormat
-            });
+            if (!this.options.dateFormat) {
+                this.options.dateFormat = this.pickerDefaultDateFormat;
+            }
 
-            this.prepareDatetimeFormats();
+            if (!this.options.timeFormat) {
+                this.options.timeFormat = this.pickerDefaultTimeFormat;
+            }
+
+            this.prepareDateTimeFormats();
 
             return this;
         },
@@ -107,15 +114,15 @@ define([
                 shiftedValue;
 
             if (value) {
-                if (this.showsTime) {
-                    shiftedValue = moment.utc(value).add(this.timeOffset, 'seconds');
+                if (this.options.showsTime) {
+                    shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
                     dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
 
                     shiftedValue = moment(value, dateFormat);
                 }
 
-                shiftedValue = shiftedValue.format(this.datetimeFormat);
+                shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
             } else {
                 shiftedValue = '';
             }
@@ -132,16 +139,18 @@ define([
          * @param {String} shiftedValue
          */
         onShiftedValueChange: function (shiftedValue) {
-            var value;
+            var value,
+                formattedValue,
+                momentValue;
 
             if (shiftedValue) {
+                momentValue = moment(shiftedValue, this.pickerDateTimeFormat);
 
-                if (this.showsTime) {
-                    value = moment.utc(shiftedValue, this.datetimeFormat);
-                    value = value.subtract(this.timeOffset, 'seconds').toISOString();
+                if (this.options.showsTime) {
+                    formattedValue = moment(momentValue).format(this.timezoneFormat);
+                    value = moment.tz(formattedValue, this.storeTimeZone).tz('UTC').toISOString();
                 } else {
-                    value = moment(shiftedValue, this.datetimeFormat);
-                    value = value.format(this.outputDateFormat);
+                    value = momentValue.format(this.outputDateFormat);
                 }
             } else {
                 value = '';
@@ -156,17 +165,22 @@ define([
          * Prepares and converts all date/time formats to be compatible
          * with moment.js library.
          */
-        prepareDatetimeFormats: function () {
-            this.datetimeFormat = this.dateFormat;
+        prepareDateTimeFormats: function () {
+            this.pickerDateTimeFormat = this.options.dateFormat;
 
-            if (this.showsTime) {
-                this.datetimeFormat += ' ' + this.timeFormat;
+            if (this.options.showsTime) {
+                this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
             }
 
-            this.datetimeFormat = utils.normalizeDate(this.datetimeFormat);
+            this.pickerDateTimeFormat = utils.convertToMomentFormat(this.pickerDateTimeFormat);
 
-            this.inputDateFormat = utils.normalizeDate(this.inputDateFormat);
-            this.outputDateFormat = utils.normalizeDate(this.outputDateFormat);
+            if (this.dateFormat) {
+                this.inputDateFormat = this.dateFormat;
+            }
+
+            this.inputDateFormat = utils.convertToMomentFormat(this.inputDateFormat);
+            this.outputDateFormat = utils.convertToMomentFormat(this.outputDateFormat);
+
             this.validationParams.dateFormat = this.outputDateFormat;
         }
     });

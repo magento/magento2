@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
@@ -99,51 +99,53 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderManagementMock = $this->getMockBuilder('Magento\Sales\Api\OrderManagementInterface')
+        $this->orderManagementMock = $this->getMockBuilder(\Magento\Sales\Api\OrderManagementInterface::class)
             ->getMockForAbstractClass();
-        $this->orderRepositoryMock = $this->getMockBuilder('Magento\Sales\Api\OrderRepositoryInterface')
+        $this->orderRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMockForAbstractClass();
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMock();
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMock();
-        $this->orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManagerMock = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
+        $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->getMock();
-        $this->actionFlagMock = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
+        $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->coreRegistryMock = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->coreRegistryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+        $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $this->pageTitleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+        $this->resultPageFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Page')
+        $this->resultPageMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->context = $objectManager->getObject(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             [
                 'request' => $this->requestMock,
                 'objectManager' => $this->objectManagerMock,
@@ -153,7 +155,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->viewAction = $objectManager->getObject(
-            'Magento\Sales\Controller\Adminhtml\Order\View',
+            \Magento\Sales\Controller\Adminhtml\Order\View::class,
             [
                 'context' => $this->context,
                 'coreRegistry' => $this->coreRegistryMock,
@@ -196,7 +198,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Page',
+            \Magento\Backend\Model\View\Result\Page::class,
             $this->viewAction->execute()
         );
     }
@@ -223,7 +225,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->setPath('sales/*/');
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->viewAction->execute()
         );
     }
@@ -252,7 +254,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->setPath('sales/order/index');
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->viewAction->execute()
         );
     }

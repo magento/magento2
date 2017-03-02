@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,12 +42,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
-        $this->scopeConfig = $this->objectManager->create('Magento\Framework\App\MutableScopeConfig');
+        $this->scopeConfig = $this->objectManager->create(\Magento\Framework\App\MutableScopeConfig::class);
         $this->scopeConfig->setValue(Observer::IMPORT_ENABLE, 1, ScopeInterface::SCOPE_STORE);
         $this->scopeConfig->setValue(Observer::CRON_STRING_PATH, 'cron-string-path', ScopeInterface::SCOPE_STORE);
         $this->scopeConfig->setValue(Observer::IMPORT_SERVICE, 'webservicex', ScopeInterface::SCOPE_STORE);
 
-        $this->configResource = $this->objectManager->get('Magento\Config\Model\ResourceModel\Config');
+        $this->configResource = $this->objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
         $this->configResource->saveConfig(
             $this->baseCurrencyPath,
             $this->baseCurrency,
@@ -55,18 +55,19 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             0
         );
 
-        $this->observer = $this->objectManager->create('Magento\Directory\Model\Observer');
+        $this->observer = $this->objectManager->create(\Magento\Directory\Model\Observer::class);
     }
 
     public function testScheduledUpdateCurrencyRates()
     {
         //skipping test if service is unavailable
         $url = str_replace('{{CURRENCY_FROM}}', 'USD',
-            \Magento\Directory\Model\Currency\Import\Webservicex::CURRENCY_CONVERTER_URL);
+            \Magento\Directory\Model\Currency\Import\Webservicex::CURRENCY_CONVERTER_URL
+        );
         $url = str_replace('{{CURRENCY_TO}}', 'GBP', $url);
         try {
             file_get_contents($url);
-        } catch (\PHPUnit_Framework_Error_Warning $e) {
+        } catch (\PHPUnit_Framework_Exception $e) {
             $this->markTestSkipped('http://www.webservicex.net is unavailable ');
         }
 
@@ -80,7 +81,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->observer->scheduledUpdateCurrencyRates(null);
         /** @var Currency $currencyResource */
         $currencyResource = $this->objectManager
-            ->create('Magento\Directory\Model\CurrencyFactory')
+            ->create(\Magento\Directory\Model\CurrencyFactory::class)
             ->create()
             ->getResource();
         $rates = $currencyResource->getCurrencyRates($this->baseCurrency, explode(',', $allowedCurrencies));

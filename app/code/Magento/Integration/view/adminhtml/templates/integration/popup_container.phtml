@@ -2,7 +2,7 @@
 /**
  * Popup container template.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
  * @var \Magento\Backend\Block\Template $block
@@ -19,9 +19,9 @@
     ], function ($, Confirm) {
 
         window.integration = new Integration(
-            '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/permissionsDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
-            '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/tokensDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
-            '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/tokensExchange', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
+            '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/permissionsDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]); ?>',
+            '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/tokensDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]); ?>',
+            '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/tokensExchange', ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]); ?>',
             '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*'); ?>',
             '<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/loginSuccessCallback'); ?>'
         );

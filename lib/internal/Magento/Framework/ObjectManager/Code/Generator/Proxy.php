@@ -2,7 +2,7 @@
 /**
  * Proxy generator
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Code\Generator;
@@ -17,7 +17,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * Marker interface
      */
-    const NON_INTERCEPTABLE_INTERFACE = '\Magento\Framework\ObjectManager\NoninterceptableInterface';
+    const NON_INTERCEPTABLE_INTERFACE = \Magento\Framework\ObjectManager\NoninterceptableInterface::class;
 
     /**
      * @param string $modelClassName
@@ -99,11 +99,11 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             'name' => '_getSubject',
             'visibility' => 'protected',
             'body' => "if (!\$this->_subject) {\n" .
-            "    \$this->_subject = true === \$this->_isShared\n" .
-            "        ? \$this->_objectManager->get(\$this->_instanceName)\n" .
-            "        : \$this->_objectManager->create(\$this->_instanceName);\n" .
-            "}\n" .
-            "return \$this->_subject;",
+                "    \$this->_subject = true === \$this->_isShared\n" .
+                "        ? \$this->_objectManager->get(\$this->_instanceName)\n" .
+                "        : \$this->_objectManager->create(\$this->_instanceName);\n" .
+                "}\n" .
+                "return \$this->_subject;",
             'docblock' => [
                 'shortDescription' => 'Get proxied instance',
                 'tags' => [['name' => 'return', 'description' => $this->getSourceClassName()]],
@@ -113,12 +113,12 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
             if (!($method->isConstructor() ||
-                $method->isFinal() ||
-                $method->isStatic() ||
-                $method->isDestructor()) && !in_array(
-                    $method->getName(),
-                    ['__sleep', '__wakeup', '__clone']
-                )
+                    $method->isFinal() ||
+                    $method->isStatic() ||
+                    $method->isDestructor()) && !in_array(
+                        $method->getName(),
+                        ['__sleep', '__wakeup', '__clone']
+                    )
             ) {
                 $methods[] = $this->_getMethodInfo($method);
             }
@@ -136,10 +136,10 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $reflection = new \ReflectionClass($typeName);
 
         if ($reflection->isInterface()) {
-            $this->_classGenerator->setImplementedInterfaces([$typeName, self::NON_INTERCEPTABLE_INTERFACE]);
+            $this->_classGenerator->setImplementedInterfaces([$typeName, '\\' . self::NON_INTERCEPTABLE_INTERFACE]);
         } else {
             $this->_classGenerator->setExtendedClass($typeName);
-            $this->_classGenerator->setImplementedInterfaces([self::NON_INTERCEPTABLE_INTERFACE]);
+            $this->_classGenerator->setImplementedInterfaces(['\\' . self::NON_INTERCEPTABLE_INTERFACE]);
         }
         return parent::_generateCode();
     }
@@ -186,13 +186,13 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         return [
             'name' => '__construct',
             'parameters' => [
-                ['name' => 'objectManager', 'type' => '\Magento\Framework\ObjectManagerInterface'],
+                ['name' => 'objectManager', 'type' => '\\' . \Magento\Framework\ObjectManagerInterface::class],
                 ['name' => 'instanceName', 'defaultValue' => $this->getSourceClassName()],
                 ['name' => 'shared', 'defaultValue' => true],
             ],
             'body' => "\$this->_objectManager = \$objectManager;" .
-            "\n\$this->_instanceName = \$instanceName;" .
-            "\n\$this->_isShared = \$shared;",
+                "\n\$this->_instanceName = \$instanceName;" .
+                "\n\$this->_isShared = \$shared;",
             'docblock' => [
                 'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
                 'tags' => [

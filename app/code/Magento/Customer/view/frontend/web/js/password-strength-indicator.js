@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,6 @@ define([
     $.widget('mage.passwordStrengthIndicator', {
         options: {
             cache: {},
-            defaultClassName: 'password-strength-meter-',
             passwordSelector: '[type=password]',
             passwordStrengthMeterSelector: '[data-role=password-strength-meter]',
             passwordStrengthMeterLabelSelector: '[data-role=password-strength-meter-label]'
@@ -54,14 +53,15 @@ define([
             var password = this._getPassword(),
                 isEmpty = password.length === 0,
                 zxcvbnScore = zxcvbn(password).score,
-                isValid = $.validator.validateSingleElement(this.options.cache.input),
-                displayScore = zxcvbnScore || 1;
+                displayScore,
+                isValid;
 
             // Display score is based on combination of whether password is empty, valid, and zxcvbn strength
             if (isEmpty) {
                 displayScore = 0;
-            } else if (!isValid) {
-                displayScore = 1;
+            } else {
+                isValid  = $.validator.validateSingleElement(this.options.cache.input);
+                displayScore = isValid ? zxcvbnScore : 1;
             }
 
             // Update label
@@ -75,27 +75,32 @@ define([
          */
         _displayStrength: function (displayScore) {
             var strengthLabel = '',
-                className = this._getClassName(displayScore);
+                className = 'password-';
 
             switch (displayScore) {
                 case 0:
                     strengthLabel = $t('No Password');
+                    className += 'none';
                     break;
 
                 case 1:
                     strengthLabel = $t('Weak');
+                    className += 'weak';
                     break;
 
                 case 2:
                     strengthLabel = $t('Medium');
+                    className += 'medium';
                     break;
 
                 case 3:
                     strengthLabel = $t('Strong');
+                    className += 'strong';
                     break;
 
                 case 4:
                     strengthLabel = $t('Very Strong');
+                    className += 'very-strong';
                     break;
             }
 
@@ -112,16 +117,6 @@ define([
          */
         _getPassword: function () {
             return this.options.cache.input.val();
-        },
-
-        /**
-         * Get class name for score
-         * @param {int} displayScore
-         * @returns {String}
-         * @private
-         */
-        _getClassName: function (displayScore) {
-            return this.options.defaultClassName + displayScore;
         }
     });
 

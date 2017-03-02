@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Test\Unit\Collection\Db\FetchStrategy;
@@ -37,7 +37,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_select = $this->getMock('Magento\Framework\DB\Select', ['assemble'], [], '', false);
+        $this->_select = $this->getMock(\Magento\Framework\DB\Select::class, ['assemble'], [], '', false);
         $this->_select->expects(
             $this->once()
         )->method(
@@ -46,9 +46,9 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('SELECT * FROM fixture_table')
         );
 
-        $this->_cache = $this->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface');
+        $this->_cache = $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
         $this->_fetchStrategy = $this->getMockForAbstractClass(
-            'Magento\Framework\Data\Collection\Db\FetchStrategyInterface'
+            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
         );
 
         $this->_object = new \Magento\Framework\Data\Collection\Db\FetchStrategy\Cache(

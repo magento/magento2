@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,14 +20,13 @@ use Magento\Customer\Test\Page\CustomerAccountForgotPassword;
  * 3. Click forgot password button.
  * 4. Check forgot password message.
  *
- * @group Customer_(CS)
+ * @group Customer
  * @ZephyrId MAGETWO-37145
  */
 class ForgotPasswordOnFrontendTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

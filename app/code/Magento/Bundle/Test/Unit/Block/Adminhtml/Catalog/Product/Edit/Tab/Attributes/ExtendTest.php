@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
@@ -23,13 +23,15 @@ class ExtendTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registry = $this->getMockBuilder('Magento\\Framework\\Registry')->disableOriginalConstructor()->getMock(
-        );
-        $this->formFactory = $this->getMockBuilder('Magento\\Framework\\Data\\FormFactory')->disableOriginalConstructor(
-        )->getMock();
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->formFactory = $this->getMockBuilder(
+            \Magento\Framework\Data\FormFactory::class
+        )->disableOriginalConstructor()->getMock();
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $this->objectManagerHelper->getObject(
-            'Magento\\Bundle\\Block\\Adminhtml\\Catalog\\Product\\Edit\\Tab\\Attributes\\Extend',
+            \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend::class,
             ['registry' => $this->registry, 'formFactory' => $this->formFactory]
         );
     }

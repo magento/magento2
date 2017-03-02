@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -51,7 +51,7 @@
     <fieldset name="general">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string">Currently Active</item>
+                <item name="label" xsi:type="string" translate="true">Currently Active</item>
                 <item name="additionalClasses" xsi:type="string">fieldset-schedule</item>
             </item>
         </argument>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model;
@@ -92,7 +92,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
             $this->dataObjectHelper->populateWithArray(
                 $downloadableOption,
                 ['downloadable_links' => $links],
-                'Magento\Downloadable\Api\Data\DownloadableOptionInterface'
+                \Magento\Downloadable\Api\Data\DownloadableOptionInterface::class
             );
 
             return ['downloadable_option' => $downloadableOption];

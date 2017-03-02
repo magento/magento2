@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model\Export\Entity;
@@ -24,7 +24,7 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Export\Entity\AbstractEav',
+            \Magento\ImportExport\Model\Export\Entity\AbstractEav::class,
             [],
             '',
             false,
@@ -57,7 +57,7 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->_model, '_addAttributesToCollection');
         $method->setAccessible(true);
         $stubCollection = $this->getMock(
-            'Magento\Eav\Model\Entity\Collection\AbstractCollection',
+            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
             ['addAttributeToSelect'],
             [],
             '',
@@ -80,7 +80,7 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
         $testAttributeOptions = ['value' => 'option'];
         /** @var $testAttribute \Magento\Eav\Model\Entity\Attribute */
         $testAttribute = $this->getMockForAbstractClass(
-            'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             [],
             '',
             false,
@@ -108,7 +108,7 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
 
         /** @var $item \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
         $item = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\AbstractModel',
+            \Magento\Framework\Model\AbstractModel::class,
             [],
             '',
             false,

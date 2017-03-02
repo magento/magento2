@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
@@ -21,7 +21,7 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
     {
         $elementData = ['group1' => ['id' => 1], 'group2' => ['id' => 2], 'group3' => ['id' => 3]];
         $this->_flyweightMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Group',
+            \Magento\Config\Model\Config\Structure\Element\Group::class,
             [],
             [],
             '',
@@ -70,7 +70,7 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
     public function testIsLast($elementId, $result)
     {
         $elementMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Element\Field',
+            \Magento\Config\Model\Config\Structure\Element\Field::class,
             [],
             [],
             '',

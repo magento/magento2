@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Test\Unit\Block\Email;
@@ -29,19 +29,19 @@ class StockTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_filter = $this->getMock(
-            '\Magento\Framework\Filter\Input\MaliciousCode',
+            \Magento\Framework\Filter\Input\MaliciousCode::class,
             ['filter'],
             [],
             '',
             false
         );
 
-        $this->imageBuilder = $this->getMockBuilder('Magento\Catalog\Block\Product\ImageBuilder')
+        $this->imageBuilder = $this->getMockBuilder(\Magento\Catalog\Block\Product\ImageBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->_block = $objectManager->getObject(
-            'Magento\ProductAlert\Block\Email\Stock',
+            \Magento\ProductAlert\Block\Email\Stock::class,
             [
                 'maliciousCode' => $this->_filter,
                 'imageBuilder' => $this->imageBuilder,
@@ -74,11 +74,11 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $imageId = 'test_image_id';
         $attributes = [];
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $imageMock = $this->getMockBuilder('Magento\Catalog\Block\Product\Image')
+        $imageMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Image::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -99,7 +99,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
             ->willReturn($imageMock);
 
         $this->assertInstanceOf(
-            'Magento\Catalog\Block\Product\Image',
+            \Magento\Catalog\Block\Product\Image::class,
             $this->_block->getImage($productMock, $imageId, $attributes)
         );
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../vendor/magento/mtf/Magento/Mtf/TestRunner/etc/testRunner.xsd">
     <rule scope="testsuite">
         <allow>
-            <module value="Magento_Upgrade"/>
+            <class value="Magento\Setup\Test\TestCase\UpgradeSystemTest"/>
         </allow>
     </rule>
 </config>

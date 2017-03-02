@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config;
@@ -38,21 +38,21 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->iteratorFactory = $this->getMock(
-            'Magento\Framework\Config\FileIteratorFactory',
+            \Magento\Framework\Config\FileIteratorFactory::class,
             [],
             ['getPath'],
             '',
             false
         );
         $this->filesystem = $this->getMock(
-            'Magento\Framework\Filesystem',
+            \Magento\Framework\Filesystem::class,
             ['getDirectoryRead'],
             [],
             '',
             false
         );
         $this->moduleReader = $this->getMock(
-            'Magento\Framework\Module\Dir\Reader',
+            \Magento\Framework\Module\Dir\Reader::class,
             [],
             ['getConfigurationFiles'],
             '',
@@ -76,7 +76,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetPrimary($filename, $fileList)
     {
         $scope = 'primary';
-        $directory = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $directory = $this->getMock(\Magento\Framework\Filesystem\Directory\Read::class, [], [], '', false);
         $directory->expects(
             $this->once()
         )->method(

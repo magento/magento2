@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         parent::assert404NotFound();
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->assertNull($objectManager->get('Magento\Framework\Registry')->registry('current_product'));
+        $this->assertNull($objectManager->get(\Magento\Framework\Registry::class)->registry('current_product'));
     }
 
     protected function _getProductImageFile()
@@ -36,7 +36,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         /**
          * @var $repository \Magento\Catalog\Model\ProductRepository
          */
-        $repository = $objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get('simple_product_1');
         $images = $product->getMediaGalleryImages()->getItems();
         $image = reset($images);
@@ -54,17 +54,17 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         /**
          * @var $repository \Magento\Catalog\Model\ProductRepository
          */
-        $repository = $objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get('simple_product_1');
         $this->dispatch(sprintf('catalog/product/view/id/%s', $product->getEntityId()));
 
         /** @var $currentProduct \Magento\Catalog\Model\Product */
-        $currentProduct = $objectManager->get('Magento\Framework\Registry')->registry('current_product');
-        $this->assertInstanceOf('Magento\Catalog\Model\Product', $currentProduct);
+        $currentProduct = $objectManager->get(\Magento\Framework\Registry::class)->registry('current_product');
+        $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $currentProduct);
         $this->assertEquals($product->getEntityId(), $currentProduct->getEntityId());
 
         $lastViewedProductId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Session'
+            \Magento\Catalog\Model\Session::class
         )->getLastViewedProductId();
         $this->assertEquals($product->getEntityId(), $lastViewedProductId);
 
@@ -97,7 +97,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         /**
          * @var $repository \Magento\Catalog\Model\ProductRepository
          */
-        $repository = $objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get('simple');
         $this->dispatch(sprintf('catalog/product/view/id/%s', $product->getEntityId()));
         $html = $this->getResponse()->getBody();
@@ -127,7 +127,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         /**
          * @var $repository \Magento\Catalog\Model\ProductRepository
          */
-        $repository = $objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get('simple_product_1');
         $this->dispatch(sprintf('catalog/product/gallery/id/%s', $product->getEntityId()));
 

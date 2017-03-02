@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
@@ -27,7 +27,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     public function testReSetPayment()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1_with_payment', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -60,7 +60,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     public function testSetPaymentWithVirtualProduct()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_with_virtual_product', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -92,7 +92,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     public function testSetPaymentWithSimpleProduct()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -127,7 +127,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     public function testSetPaymentWithSimpleProductWithoutAddress()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_with_simple_product_without_address', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -159,7 +159,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     public function testGetList()
     {
         /** @var \Magento\Quote\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -193,7 +193,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     public function testGet()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1_with_payment', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -228,7 +228,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $this->_markTestAsRestOnly();
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
 
         $serviceInfo = [
@@ -250,7 +250,6 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $this->assertContains($expectedResponse, $requestResponse);
     }
 
-
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_payment_saved.php
      */
@@ -259,7 +258,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $this->_markTestAsRestOnly();
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1_with_payment', 'reserved_order_id');
 
         $serviceInfo = [
@@ -287,7 +286,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $this->_markTestAsRestOnly();
 
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
 
         $serviceInfo = [
@@ -325,7 +324,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
     {
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         return $token;

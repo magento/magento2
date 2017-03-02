@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Model;
@@ -15,7 +15,7 @@ class CaptchaFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Captcha\Model\CaptchaFactory($this->_objectManagerMock);
     }
 
@@ -23,7 +23,7 @@ class CaptchaFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $captchaType = 'default';
 
-        $defaultCaptchaMock = $this->getMock('Magento\Captcha\Model\DefaultModel', [], [], '', false);
+        $defaultCaptchaMock = $this->getMock(\Magento\Captcha\Model\DefaultModel::class, [], [], '', false);
 
         $this->_objectManagerMock->expects(
             $this->once()
@@ -42,7 +42,7 @@ class CaptchaFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $captchaType = 'wrong_instance';
 
-        $defaultCaptchaMock = $this->getMock('stdClass');
+        $defaultCaptchaMock = $this->getMock(\stdClass::class);
 
         $this->_objectManagerMock->expects(
             $this->once()

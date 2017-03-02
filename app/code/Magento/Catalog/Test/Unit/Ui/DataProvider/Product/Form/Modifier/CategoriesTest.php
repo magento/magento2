@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -8,6 +8,7 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
@@ -111,5 +112,39 @@ class CategoriesTest extends AbstractModifierTest
         ];
 
         $this->assertArrayHasKey($groupCode, $this->getModel()->modifyMeta($meta));
+    }
+
+    public function testModifyMetaWithCaching()
+    {
+        $this->arrayManagerMock->expects($this->exactly(2))
+            ->method('findPath')
+            ->willReturn(true);
+        $cacheManager = $this->getMockBuilder(CacheInterface::class)
+            ->getMockForAbstractClass();
+        $cacheManager->expects($this->once())
+            ->method('load')
+            ->with(Categories::CATEGORY_TREE_ID . '_');
+        $cacheManager->expects($this->once())
+            ->method('save');
+        
+        $modifier = $this->createModel();
+        $cacheContextProperty = new \ReflectionProperty(
+            Categories::class,
+            'cacheManager'
+        );
+        $cacheContextProperty->setAccessible(true);
+        $cacheContextProperty->setValue($modifier, $cacheManager);
+
+        $groupCode = 'test_group_code';
+        $meta = [
+            $groupCode => [
+                'children' => [
+                    'category_ids' => [
+                        'sortOrder' => 10,
+                    ],
+                ],
+            ],
+        ];
+        $modifier->modifyMeta($meta);
     }
 }

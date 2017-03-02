@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Factory;
@@ -38,6 +38,13 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     protected $globalArguments;
 
     /**
+     * Object creation stack
+     *
+     * @var array
+     */
+    protected $creationStack = [];
+
+    /**
      * @param \Magento\Framework\ObjectManager\ConfigInterface $config
      * @param ObjectManagerInterface $objectManager
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
@@ -51,7 +58,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     ) {
         $this->config = $config;
         $this->objectManager = $objectManager;
-        $this->definitions = $definitions ?: new \Magento\Framework\ObjectManager\Definition\Runtime();
+        $this->definitions = $definitions ?: $this->getDefinitions();
         $this->globalArguments = $globalArguments;
     }
 
@@ -80,129 +87,28 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     }
 
     /**
+     * @return \Magento\Framework\ObjectManager\DefinitionInterface
+     */
+    public function getDefinitions()
+    {
+        if ($this->definitions === null) {
+            $this->definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
+        }
+        return $this->definitions;
+    }
+
+    /**
      * Create object
      *
      * @param string $type
      * @param array $args
      *
      * @return object
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      *
      */
     protected function createObject($type, $args)
     {
-        switch (count($args)) {
-            case 0:
-                return new $type();
-            case 1:
-                return new $type($args[0]);
-            case 2:
-                return new $type($args[0], $args[1]);
-            case 3:
-                return new $type($args[0], $args[1], $args[2]);
-            case 4:
-                return new $type($args[0], $args[1], $args[2], $args[3]);
-            case 5:
-                return new $type($args[0], $args[1], $args[2], $args[3], $args[4]);
-            case 6:
-                return new $type($args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
-            case 7:
-                return new $type($args[0], $args[1], $args[2], $args[3], $args[4], $args[5], $args[6]);
-            case 8:
-                return new $type($args[0], $args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7]);
-            case 9:
-                return new $type(
-                    $args[0], $args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7], $args[8]
-                );
-            case 10:
-                return new $type(
-                    $args[0], $args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7], $args[8], $args[9]
-                );
-            case 11:
-                return new $type(
-                    $args[0],
-                    $args[1],
-                    $args[2],
-                    $args[3],
-                    $args[4],
-                    $args[5],
-                    $args[6],
-                    $args[7],
-                    $args[8],
-                    $args[9],
-                    $args[10]
-                );
-            case 12:
-                return new $type(
-                    $args[0],
-                    $args[1],
-                    $args[2],
-                    $args[3],
-                    $args[4],
-                    $args[5],
-                    $args[6],
-                    $args[7],
-                    $args[8],
-                    $args[9],
-                    $args[10],
-                    $args[11]
-                );
-            case 13:
-                return new $type(
-                    $args[0],
-                    $args[1],
-                    $args[2],
-                    $args[3],
-                    $args[4],
-                    $args[5],
-                    $args[6],
-                    $args[7],
-                    $args[8],
-                    $args[9],
-                    $args[10],
-                    $args[11],
-                    $args[12]
-                );
-            case 14:
-                return new $type(
-                    $args[0],
-                    $args[1],
-                    $args[2],
-                    $args[3],
-                    $args[4],
-                    $args[5],
-                    $args[6],
-                    $args[7],
-                    $args[8],
-                    $args[9],
-                    $args[10],
-                    $args[11],
-                    $args[12],
-                    $args[13]
-                );
-            case 15:
-                return new $type(
-                    $args[0],
-                    $args[1],
-                    $args[2],
-                    $args[3],
-                    $args[4],
-                    $args[5],
-                    $args[6],
-                    $args[7],
-                    $args[8],
-                    $args[9],
-                    $args[10],
-                    $args[11],
-                    $args[12],
-                    $args[13],
-                    $args[14]
-                );
-            default:
-                $reflection = new \ReflectionClass($type);
-                return $reflection->newInstanceArgs($args);
-        }
+        return new $type(...array_values($args));
     }
 
     /**
@@ -288,5 +194,45 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
                 }
             }
         }
+    }
+
+    /**
+     * Resolve constructor arguments
+     *
+     * @param string $requestedType
+     * @param array $parameters
+     * @param array $arguments
+     *
+     * @return array
+     *
+     * @throws \UnexpectedValueException
+     * @throws \BadMethodCallException
+     */
+    protected function resolveArgumentsInRuntime($requestedType, array $parameters, array $arguments = [])
+    {
+        $resolvedArguments = [];
+        foreach ($parameters as $parameter) {
+            list($paramName, $paramType, $paramRequired, $paramDefault) = $parameter;
+            $argument = null;
+            if (!empty($arguments) && (isset($arguments[$paramName]) || array_key_exists($paramName, $arguments))) {
+                $argument = $arguments[$paramName];
+            } elseif ($paramRequired) {
+                if ($paramType) {
+                    $argument = ['instance' => $paramType];
+                } else {
+                    $this->creationStack = [];
+                    throw new \BadMethodCallException(
+                        'Missing required argument $' . $paramName . ' of ' . $requestedType . '.'
+                    );
+                }
+            } else {
+                $argument = $paramDefault;
+            }
+
+            $this->resolveArgument($argument, $paramType, $paramDefault, $paramName, $requestedType);
+
+            $resolvedArguments[] = $argument;
+        }
+        return $resolvedArguments;
     }
 }

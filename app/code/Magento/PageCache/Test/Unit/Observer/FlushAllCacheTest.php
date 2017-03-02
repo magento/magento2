@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,22 +32,22 @@ class FlushAllCacheTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_configMock = $this->getMock(
-            'Magento\PageCache\Model\Config',
+            \Magento\PageCache\Model\Config::class,
             ['getType', 'isEnabled'],
             [],
             '',
             false
         );
-        $this->_cacheMock = $this->getMock('Magento\Framework\App\PageCache\Cache', ['clean'], [], '', false);
-        $this->fullPageCacheMock = $this->getMock('\Magento\PageCache\Model\Cache\Type', ['clean'], [], '', false);
-        $this->observerMock = $this->getMock('Magento\Framework\Event\Observer');
+        $this->_cacheMock = $this->getMock(\Magento\Framework\App\PageCache\Cache::class, ['clean'], [], '', false);
+        $this->fullPageCacheMock = $this->getMock(\Magento\PageCache\Model\Cache\Type::class, ['clean'], [], '', false);
+        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class);
 
         $this->_model = new \Magento\PageCache\Observer\FlushAllCache(
             $this->_configMock,
             $this->_cacheMock
         );
 
-        $reflection = new \ReflectionClass('\Magento\PageCache\Observer\FlushAllCache');
+        $reflection = new \ReflectionClass(\Magento\PageCache\Observer\FlushAllCache::class);
         $reflectionProperty = $reflection->getProperty('fullPageCache');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->_model, $this->fullPageCacheMock);

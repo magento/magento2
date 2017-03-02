@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Request;
@@ -18,9 +18,8 @@ class VaultDataBuilder implements BuilderInterface
     const OPTIONS = 'options';
 
     /**
-     * The option that determines whether the shipping address information
-     * provided with the transaction should be associated with the customer ID specified.
-     * When passed, the payment method will always be stored in the Vault.
+     * The option that determines whether the payment method associated with
+     * the successful transaction should be stored in the Vault.
      */
     const STORE_IN_VAULT_ON_SUCCESS = 'storeInVaultOnSuccess';
 

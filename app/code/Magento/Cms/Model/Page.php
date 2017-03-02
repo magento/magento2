@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -39,12 +39,12 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     /**
      * CMS page cache tag
      */
-    const CACHE_TAG = 'cms_page';
+    const CACHE_TAG = 'cms_p';
 
     /**
      * @var string
      */
-    protected $_cacheTag = 'cms_page';
+    protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * Prefix of model events names
@@ -65,7 +65,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\ResourceModel\Page');
+        $this->_init(\Magento\Cms\Model\ResourceModel\Page::class);
     }
 
     /**

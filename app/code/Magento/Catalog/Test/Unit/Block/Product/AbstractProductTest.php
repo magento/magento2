@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,16 +45,16 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productContextMock = $this->getMock(
-            'Magento\Catalog\Block\Product\Context',
+            \Magento\Catalog\Block\Product\Context::class,
             ['getLayout', 'getStockRegistry', 'getImageBuilder'],
             [],
             '',
             false
         );
-        $arrayUtilsMock = $this->getMock('Magento\Framework\Stdlib\ArrayUtils', [], [], '', false);
-        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', ['getBlock'], [], '', false);
+        $arrayUtilsMock = $this->getMock(\Magento\Framework\Stdlib\ArrayUtils::class, [], [], '', false);
+        $this->layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, ['getBlock'], [], '', false);
         $this->stockRegistryMock = $this->getMockForAbstractClass(
-            'Magento\CatalogInventory\Api\StockRegistryInterface',
+            \Magento\CatalogInventory\Api\StockRegistryInterface::class,
             [],
             '',
             false,
@@ -63,7 +63,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
             ['getStockItem']
         );
 
-        $this->imageBuilder = $this->getMockBuilder('Magento\Catalog\Block\Product\ImageBuilder')
+        $this->imageBuilder = $this->getMockBuilder(\Magento\Catalog\Block\Product\ImageBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -92,8 +92,8 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
     public function testGetProductPrice()
     {
         $expectedPriceHtml = '<html>Expected Price html with price $30</html>';
-        $priceRenderBlock = $this->getMock('Magento\Framework\Pricing\Render', ['render'], [], '', false);
-        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $priceRenderBlock = $this->getMock(\Magento\Framework\Pricing\Render::class, ['render'], [], '', false);
+        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
 
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
@@ -112,8 +112,8 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
     public function testGetProductPriceHtml()
     {
         $expectedPriceHtml = '<html>Expected Price html with price $30</html>';
-        $priceRenderBlock = $this->getMock('Magento\Framework\Pricing\Render', ['render'], [], '', false);
-        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $priceRenderBlock = $this->getMock(\Magento\Framework\Pricing\Render::class, ['render'], [], '', false);
+        $product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
 
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
@@ -144,21 +144,21 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
         $websiteId = 99;
 
         $productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getId', 'getStore'],
             [],
             '',
             false
         );
         $storeMock = $this->getMock(
-            'Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             ['getWebsiteId'],
             [],
             '',
             false
         );
         $stockItemMock = $this->getMockForAbstractClass(
-            'Magento\CatalogInventory\Api\Data\StockItemInterface',
+            \Magento\CatalogInventory\Api\Data\StockItemInterface::class,
             [],
             '',
             false,
@@ -212,11 +212,11 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
         $imageId = 'test_image_id';
         $attributes = [];
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $imageMock = $this->getMockBuilder('Magento\Catalog\Block\Product\Image')
+        $imageMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Image::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -237,7 +237,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
             ->willReturn($imageMock);
 
         $this->assertInstanceOf(
-            'Magento\Catalog\Block\Product\Image',
+            \Magento\Catalog\Block\Product\Image::class,
             $this->block->getImage($productMock, $imageId, $attributes)
         );
     }

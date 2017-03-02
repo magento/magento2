@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit;
@@ -22,10 +22,10 @@ class ShellTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->loggerMock = $this->getMockBuilder('\Psr\Log\LoggerInterface')
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->driverMock = $this->getMockBuilder('\Magento\Framework\Shell\Driver')
+        $this->driverMock = $this->getMockBuilder(\Magento\Framework\Shell\Driver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new Shell(

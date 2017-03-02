@@ -3,3 +3,7 @@
 \Magento\Framework\Config\Dom\ValidationException
 \Magento\Framework\Search\Request\EmptyRequestDataException
 \Magento\Framework\Search\Request\NonExistingRequestNameException
+\Magento\Framework\DB\Adapter\ConnectionException
+\Magento\Framework\DB\Adapter\DeadlockException
+\Magento\Framework\DB\Adapter\LockWaitException
+\Magento\Framework\DB\Adapter\DuplicateException

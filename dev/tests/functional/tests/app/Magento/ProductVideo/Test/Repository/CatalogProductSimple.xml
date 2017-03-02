@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,7 +26,9 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="url_key" xsi:type="string">simple-product-with-video-%isolation%</field>
@@ -61,7 +63,9 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="url_key" xsi:type="string">simple-product-with-video-%isolation%</field>

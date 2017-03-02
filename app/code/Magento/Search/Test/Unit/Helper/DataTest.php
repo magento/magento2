@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Helper;
@@ -45,15 +45,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stringMock = $this->getMock('Magento\Framework\Stdlib\StringUtils');
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->escaperMock = $this->getMock('Magento\Framework\Escaper');
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->requestMock = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
+        $this->stringMock = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false);
         $this->contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
 

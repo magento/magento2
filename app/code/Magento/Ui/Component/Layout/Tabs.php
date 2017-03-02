@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Layout;
@@ -350,12 +350,12 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
         /** @var \Magento\Ui\Component\Layout\Tabs\Nav $navBlock */
         if (isset($this->navContainerName)) {
             $navBlock = $pageLayout->addBlock(
-                'Magento\Ui\Component\Layout\Tabs\Nav',
+                \Magento\Ui\Component\Layout\Tabs\Nav::class,
                 'tabs_nav',
                 $this->navContainerName
             );
         } else {
-            $navBlock = $pageLayout->addBlock('Magento\Ui\Component\Layout\Tabs\Nav', 'tabs_nav', 'content');
+            $navBlock = $pageLayout->addBlock(\Magento\Ui\Component\Layout\Tabs\Nav::class, 'tabs_nav', 'content');
         }
         $navBlock->setTemplate('Magento_Ui::layout/tabs/nav/default.phtml');
         $navBlock->setData('data_scope', $this->namespace);

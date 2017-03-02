@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
@@ -22,7 +22,7 @@ class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notificatio
     public function execute()
     {
         if ($id = $this->getRequest()->getParam('id')) {
-            $model = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox')->load($id);
+            $model = $this->_objectManager->create(\Magento\AdminNotification\Model\Inbox::class)->load($id);
 
             if (!$model->getId()) {
                 $this->_redirect('adminhtml/*/');

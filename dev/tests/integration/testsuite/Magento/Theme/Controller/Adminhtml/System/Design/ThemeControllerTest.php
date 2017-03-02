@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design;
@@ -17,7 +17,7 @@ class ThemeControllerTest extends \Magento\TestFramework\TestCase\AbstractBacken
     {
         $name = 'simple-js-file.js';
         $this->createUploadFixture($name);
-        $theme = $this->_objectManager->create('Magento\Framework\View\Design\ThemeInterface')
+        $theme = $this->_objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class)
             ->getCollection()
             ->getFirstItem();
 
@@ -37,7 +37,7 @@ class ThemeControllerTest extends \Magento\TestFramework\TestCase\AbstractBacken
     private function createUploadFixture($name)
     {
         /** @var \Magento\TestFramework\App\Filesystem $filesystem */
-        $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
+        $filesystem = $this->_objectManager->get(\Magento\Framework\Filesystem::class);
         $tmpDir = $filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $subDir = str_replace('\\', '_', __CLASS__);
         $tmpDir->create($subDir);

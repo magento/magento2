@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,12 +48,12 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->collector = $this->getMock('Magento\Setup\Model\ConfigOptionsListCollector', [], [], '', false);
-        $this->writer = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->configOptionsList = $this->getMock('Magento\Backend\Setup\ConfigOptionsList', [], [], '', false);
-        $this->configData = $this->getMock('Magento\Framework\Config\Data\ConfigData', [], [], '', false);
-        $this->filePermissions = $this->getMock('\Magento\Framework\Setup\FilePermissions', [], [], '', false);
+        $this->collector = $this->getMock(\Magento\Setup\Model\ConfigOptionsListCollector::class, [], [], '', false);
+        $this->writer = $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false);
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->configOptionsList = $this->getMock(\Magento\Backend\Setup\ConfigOptionsList::class, [], [], '', false);
+        $this->configData = $this->getMock(\Magento\Framework\Config\Data\ConfigData::class, [], [], '', false);
+        $this->filePermissions = $this->getMock(\Magento\Framework\Setup\FilePermissions::class, [], [], '', false);
 
         $this->deploymentConfig->expects($this->any())->method('get');
 
@@ -67,7 +67,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
 
     public function testValidate()
     {
-        $option = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option = $this->getMock(\Magento\Framework\Setup\Option\TextConfigOption::class, [], [], '', false);
         $option->expects($this->exactly(3))->method('getName')->willReturn('Fake');
         $optionsSet = [
             $option,

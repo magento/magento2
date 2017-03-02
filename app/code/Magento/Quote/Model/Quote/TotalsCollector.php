@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -121,7 +121,7 @@ class TotalsCollector
     public function collect(\Magento\Quote\Model\Quote $quote)
     {
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
-        $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
+        $total = $this->totalFactory->create(\Magento\Quote\Model\Quote\Address\Total::class);
 
         $this->eventManager->dispatch(
             'sales_quote_collect_totals_before',
@@ -250,7 +250,7 @@ class TotalsCollector
         $shippingAssignment->setItems($address->getAllItems());
 
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
-        $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
+        $total = $this->totalFactory->create(\Magento\Quote\Model\Quote\Address\Total::class);
         $this->eventManager->dispatch(
             'sales_quote_address_collect_totals_before',
             [

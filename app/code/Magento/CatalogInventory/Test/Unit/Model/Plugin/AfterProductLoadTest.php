@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,8 +33,9 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stockRegistryMock = $this->getMock('\Magento\CatalogInventory\Api\StockRegistryInterface');
-        $this->productExtensionFactoryMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductExtensionFactory')
+        $stockRegistryMock = $this->getMock(\Magento\CatalogInventory\Api\StockRegistryInterface::class);
+        $this->productExtensionFactoryMock = $this->getMockBuilder(
+            \Magento\Catalog\Api\Data\ProductExtensionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -45,14 +46,14 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
         );
 
         $productId = 5494;
-        $stockItemMock = $this->getMock('\Magento\CatalogInventory\Api\Data\StockItemInterface');
+        $stockItemMock = $this->getMock(\Magento\CatalogInventory\Api\Data\StockItemInterface::class);
 
         $stockRegistryMock->expects($this->once())
             ->method('getStockItem')
             ->with($productId)
             ->willReturn($stockItemMock);
 
-        $this->productExtensionMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductExtension')
+        $this->productExtensionMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtension::class)
             ->setMethods(['setStockItem'])
             ->getMock();
         $this->productExtensionMock->expects($this->once())
@@ -60,7 +61,7 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
             ->with($stockItemMock)
             ->willReturnSelf();
 
-        $this->productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $this->productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->productMock->expects($this->once())

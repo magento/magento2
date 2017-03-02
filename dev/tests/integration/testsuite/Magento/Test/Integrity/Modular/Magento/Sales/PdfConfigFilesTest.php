@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Modular\Magento\Sales;
@@ -15,11 +15,17 @@ class PdfConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Sales\Model\Order\Pdf\Config\SchemaLocator $schemaLocator */
         $schemaLocator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Sales\Model\Order\Pdf\Config\SchemaLocator'
+            \Magento\Sales\Model\Order\Pdf\Config\SchemaLocator::class
         );
         $schemaFile = $schemaLocator->getPerFileSchema();
 
-        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock = $this->getMock(
+            \Magento\Framework\Config\ValidationStateInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $dom = new \Magento\Framework\Config\Dom(file_get_contents($file), $validationStateMock);
@@ -37,12 +43,12 @@ class PdfConfigFilesTest extends \PHPUnit_Framework_TestCase
 
     public function testMergedFormat()
     {
-        $validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
+        $validationState = $this->getMock(\Magento\Framework\Config\ValidationStateInterface::class);
         $validationState->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
 
         /** @var \Magento\Sales\Model\Order\Pdf\Config\Reader $reader */
         $reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Order\Pdf\Config\Reader',
+            \Magento\Sales\Model\Order\Pdf\Config\Reader::class,
             ['validationState' => $validationState]
         );
         try {

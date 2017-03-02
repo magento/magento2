@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Api;
@@ -57,7 +57,7 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
         $this->_webApiCall($serviceInfo, ['entity' => $productData]);
 
         /** @var \Magento\Catalog\Api\ProductLinkManagementInterface $linkManagement */
-        $linkManagement = $this->objectManager->get('Magento\Catalog\Api\ProductLinkManagementInterface');
+        $linkManagement = $this->objectManager->get(\Magento\Catalog\Api\ProductLinkManagementInterface::class);
         $actual = $linkManagement->getLinkedItemsByType($productSku, $linkType);
         array_walk($actual, function (&$item) {
             $item = $item->__toArray();

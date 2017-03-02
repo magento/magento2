@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Observer\Frontend\Quote\Address;
@@ -25,7 +25,7 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(
-            'Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver'
+            \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver::class
         );
     }
 
@@ -43,31 +43,31 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = $objectManager->create('Magento\Customer\Model\Customer');
+        $customer = $objectManager->create(\Magento\Customer\Model\Customer::class);
         $customer->load(1);
         $customer->setDisableAutoGroupChange(1);
         $customer->setGroupId(2);
         $customer->save();
 
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerRepository = $objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customerData = $customerRepository->getById($customer->getId());
 
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test01', 'reserved_order_id');
         $quote->setCustomer($customerData);
 
         $quoteAddress = $quote->getBillingAddress();
-        $shippingAssignment = $this->objectManager->create('Magento\Quote\Model\ShippingAssignment');
-        $shipping = $this->objectManager->create('Magento\Quote\Model\Shipping');
+        $shippingAssignment = $this->objectManager->create(\Magento\Quote\Model\ShippingAssignment::class);
+        $shipping = $this->objectManager->create(\Magento\Quote\Model\Shipping::class);
         $shipping->setAddress($quoteAddress);
         $shippingAssignment->setShipping($shipping);
         /** @var  \Magento\Quote\Model\Quote\Address\Total $total */
-        $total = $this->objectManager->create('Magento\Quote\Model\Quote\Address\Total');
+        $total = $this->objectManager->create(\Magento\Quote\Model\Quote\Address\Total::class);
 
         $eventObserver = $objectManager->create(
-            'Magento\Framework\Event\Observer',
+            \Magento\Framework\Event\Observer::class,
             ['data' => [
                 'quote' => $quote,
                 'shipping_assignment' => $shippingAssignment,
@@ -94,36 +94,36 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = $objectManager->create('Magento\Customer\Model\Customer');
+        $customer = $objectManager->create(\Magento\Customer\Model\Customer::class);
         $customer->load(1);
         $customer->setDisableAutoGroupChange(0);
         $customer->setGroupId(2);
         $customer->save();
 
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
-        $customerRegistry = $objectManager->get('Magento\Customer\Model\CustomerRegistry');
+        $customerRegistry = $objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
         $customerRegistry->remove($customer->getId());
 
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerRepository = $objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customerData = $customerRepository->getById($customer->getId());
 
         /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test01', 'reserved_order_id');
         $quote->setCustomer($customerData);
 
         $quoteAddress = $quote->getBillingAddress();
 
-        $shippingAssignment = $this->objectManager->create('Magento\Quote\Model\ShippingAssignment');
-        $shipping = $this->objectManager->create('Magento\Quote\Model\Shipping');
+        $shippingAssignment = $this->objectManager->create(\Magento\Quote\Model\ShippingAssignment::class);
+        $shipping = $this->objectManager->create(\Magento\Quote\Model\Shipping::class);
         $shipping->setAddress($quoteAddress);
         $shippingAssignment->setShipping($shipping);
         /** @var  \Magento\Quote\Model\Quote\Address\Total $total */
-        $total = $this->objectManager->create('Magento\Quote\Model\Quote\Address\Total');
+        $total = $this->objectManager->create(\Magento\Quote\Model\Quote\Address\Total::class);
 
         $eventObserver = $objectManager->create(
-            'Magento\Framework\Event\Observer',
+            \Magento\Framework\Event\Observer::class,
             ['data' => [
                 'quote' => $quote,
                 'shipping_assignment' => $shippingAssignment,

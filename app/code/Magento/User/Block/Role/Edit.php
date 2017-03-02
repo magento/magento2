@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\Role;
@@ -54,7 +54,7 @@ class Edit extends \Magento\Backend\Block\Widget\Tabs
 
         $this->addTab(
             'info',
-            $this->getLayout()->createBlock('Magento\User\Block\Role\Tab\Info')->setRole($role)->setActive(true)
+            $this->getLayout()->createBlock(\Magento\User\Block\Role\Tab\Info::class)->setRole($role)->setActive(true)
         );
 
         if ($role->getId()) {
@@ -64,7 +64,7 @@ class Edit extends \Magento\Backend\Block\Widget\Tabs
                     'label' => __('Role Users'),
                     'title' => __('Role Users'),
                     'content' => $this->getLayout()->createBlock(
-                        'Magento\User\Block\Role\Tab\Users',
+                        \Magento\User\Block\Role\Tab\Users::class,
                         'role.users.grid'
                     )->toHtml()
                 ]

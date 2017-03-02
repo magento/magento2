@@ -1,51 +1,64 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\ResourceConnection;
 
+use Magento\Framework\Config\ConfigOptionsListConstants;
+
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\\Config
+     * @var \Magento\Framework\App\ResourceConnection\Config
      */
-    protected $_model;
+    private $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_scopeMock;
+    private $scopeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_cacheMock;
+    private $cacheMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_readerMock;
+    private $readerMock;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
 
     /**
      * @var array
      */
-    protected $_resourcesConfig;
+    private $resourcesConfig;
 
     /**
-     * @var array
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_initialResources;
+    private $deploymentConfig;
 
     protected function setUp()
     {
-        $this->_scopeMock = $this->getMock('Magento\Framework\Config\ScopeInterface');
-        $this->_cacheMock = $this->getMock('Magento\Framework\Config\CacheInterface');
+        $this->scopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
+        $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
 
-        $this->_readerMock =
-            $this->getMock('Magento\Framework\App\ResourceConnection\Config\Reader', [], [], '', false);
+        $this->readerMock = $this->getMock(
+            \Magento\Framework\App\ResourceConnection\Config\Reader::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
 
-        $this->_resourcesConfig = [
+        $this->resourcesConfig = [
             'mainResourceName' => ['name' => 'mainResourceName', 'extends' => 'anotherResourceName'],
             'otherResourceName' => ['name' => 'otherResourceName', 'connection' => 'otherConnectionName'],
             'anotherResourceName' => ['name' => 'anotherResourceName', 'connection' => 'anotherConnection'],
@@ -53,61 +66,61 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'extendedResourceName' => ['name' => 'extendedResourceName', 'extends' => 'validResource'],
         ];
 
-        $this->_initialResources = [
-            'validResource' => ['connection' => 'validConnectionName'],
-        ];
+        $serializedData = 'serialized data';
+        $this->cacheMock->expects($this->any())
+            ->method('load')
+            ->willReturn($serializedData);
+        $this->serializerMock->method('unserialize')
+            ->with($serializedData)
+            ->willReturn($this->resourcesConfig);
 
-        $this->_cacheMock->expects(
-            $this->any()
-        )->method(
-            'load'
-        )->will(
-            $this->returnValue(serialize($this->_resourcesConfig))
-        );
-
-        $deploymentConfig = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $deploymentConfig->expects($this->once())
-            ->method('getConfigData')
-            ->with('resource')
-            ->willReturn($this->_initialResources);
-
-        $this->_model = new \Magento\Framework\App\ResourceConnection\Config(
-            $this->_readerMock,
-            $this->_scopeMock,
-            $this->_cacheMock,
-            $deploymentConfig,
-            'cacheId'
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->config = new \Magento\Framework\App\ResourceConnection\Config(
+            $this->readerMock,
+            $this->scopeMock,
+            $this->cacheMock,
+            $this->deploymentConfig,
+            'cacheId',
+            $this->serializerMock
         );
     }
 
     /**
-     * @dataProvider getConnectionNameDataProvider
      * @param string $resourceName
      * @param string $connectionName
+     * @dataProvider getConnectionNameDataProvider
      */
     public function testGetConnectionName($resourceName, $connectionName)
     {
-        $this->assertEquals($connectionName, $this->_model->getConnectionName($resourceName));
+        $this->deploymentConfig->expects($this->once())
+            ->method('getConfigData')
+            ->with(ConfigOptionsListConstants::KEY_RESOURCE)
+            ->willReturn([
+                'validResource' => ['connection' => 'validConnectionName'],
+            ]);
+        $this->assertEquals($connectionName, $this->config->getConnectionName($resourceName));
     }
 
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testExceptionConstructor()
+    public function testGetConnectionNameWithException()
     {
-        $deploymentConfig = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $deploymentConfig->expects($this->once())
+        $deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
-            ->with('resource')
+            ->with(ConfigOptionsListConstants::KEY_RESOURCE)
             ->willReturn(['validResource' => ['somekey' => 'validConnectionName']]);
 
-        new \Magento\Framework\App\ResourceConnection\Config(
-            $this->_readerMock,
-            $this->_scopeMock,
-            $this->_cacheMock,
-            $deploymentConfig,
-            'cacheId'
+        $config = new \Magento\Framework\App\ResourceConnection\Config(
+            $this->readerMock,
+            $this->scopeMock,
+            $this->cacheMock,
+            $deploymentConfigMock,
+            'cacheId',
+            $this->serializerMock
         );
+        $config->getConnectionName('default');
     }
 
     /**

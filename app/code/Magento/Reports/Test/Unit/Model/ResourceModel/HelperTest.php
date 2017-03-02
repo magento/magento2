@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,11 +30,11 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->getMock();
 
         $this->resourceMock
@@ -76,7 +76,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $column = 'column';
         $aggregationTable = 'aggregationTable';
 
-        $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
+        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $selectMock

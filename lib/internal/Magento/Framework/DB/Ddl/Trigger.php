@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Ddl;
@@ -187,7 +187,7 @@ class Trigger
                 (string)new \Magento\Framework\Phrase('Trigger table name should be a string')
             );
         }
-        $this->tableName = strtolower($name);
+        $this->tableName = $name;
         return $this;
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
@@ -81,7 +81,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
         $formData['custom_css_content'] = $this->_customCssFile ? $this->_customCssFile->getContent() : null;
 
         /** @var $session \Magento\Backend\Model\Session */
-        $session = $this->_objectManager->get('Magento\Backend\Model\Session');
+        $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
         $cssFileContent = $session->getThemeCustomCssData();
         if ($cssFileContent) {
             $formData['custom_css_content'] = $cssFileContent;
@@ -178,7 +178,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
 
         /** @var $imageButton \Magento\Backend\Block\Widget\Button */
         $imageButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
                 'id' => 'css_images_manager',
@@ -191,7 +191,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
                         Storage::PARAM_THEME_ID => $this->_getCurrentTheme()->getId(),
                         Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
                     ]
-                ) . "', null, null,'" . $this->escapeQuote(
+                ) . "', null, null,'" . $this->escapeJs(
                     __('Upload Images'),
                     true
                 ) . "');",
@@ -206,7 +206,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
 
         /** @var $fontButton \Magento\Backend\Block\Widget\Button */
         $fontButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
                 'id' => 'css_fonts_manager',
@@ -219,7 +219,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
                         Storage::PARAM_THEME_ID => $this->_getCurrentTheme()->getId(),
                         Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
                     ]
-                ) . "', null, null,'" . $this->escapeQuote(
+                ) . "', null, null,'" . $this->escapeJs(
                     __('Upload Fonts'),
                     true
                 ) . "');",
@@ -252,7 +252,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
             __('Allowed file types *.css.'),
             __('This file will replace the current custom.css file and can\'t be more than 2 MB.'),
         ];
-        $maxFileSize = $this->_objectManager->get('Magento\Framework\File\Size')->getMaxFileSizeInMb();
+        $maxFileSize = $this->_objectManager->get(\Magento\Framework\File\Size::class)->getMaxFileSizeInMb();
         if ($maxFileSize) {
             $messages[] = __('Max file size to upload %1M', $maxFileSize);
         } else {
@@ -269,8 +269,8 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      */
     protected function _getAdditionalElementTypes()
     {
-        $linksElement = 'Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\Links';
-        $fileElement = 'Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File';
+        $linksElement = \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\Links::class;
+        $fileElement = \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File::class;
         return ['links' => $linksElement, 'css_file' => $fileElement];
     }
 

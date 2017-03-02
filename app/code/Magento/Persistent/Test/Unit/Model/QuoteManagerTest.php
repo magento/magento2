@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -55,9 +55,10 @@ class QuoteManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->persistentSessionMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
+        $this->persistentSessionMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
         $this->sessionMock =
-            $this->getMock('Magento\Persistent\Model\Session',
+            $this->getMock(
+                \Magento\Persistent\Model\Session::class,
                 [
                     'setLoadInactive',
                     'setCustomerData',
@@ -70,14 +71,15 @@ class QuoteManagerTest extends \PHPUnit_Framework_TestCase
                 [],
                 '',
                 false);
-        $this->persistentDataMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
-        $this->checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
+        $this->persistentDataMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
+        $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
 
         $this->abstractCollectionMock =
-            $this->getMock('Magento\Eav\Model\Entity\Collection\AbstractCollection', [], [], '', false);
+            $this->getMock(\Magento\Eav\Model\Entity\Collection\AbstractCollection::class, [], [], '', false);
 
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote',
+        $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->quoteMock = $this->getMock(
+            \Magento\Quote\Model\Quote::class,
             [
                 'getId',
                 'getIsPersistent',
@@ -183,7 +185,7 @@ class QuoteManagerTest extends \PHPUnit_Framework_TestCase
             ->method('setIsPersistent')->with(false)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
             ->method('removeAllAddresses')->will($this->returnValue($this->quoteMock));
-        $quoteAddressMock = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $quoteAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($quoteAddressMock));
         $this->quoteMock->expects($this->once())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -47,7 +47,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             ['addProduct', '__wakeup', 'getStore'],
             [],
             '',
@@ -55,7 +55,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getId', 'setIsQtyDecimal', 'setCartQty', '__wakeup'],
             [],
             '',
@@ -63,20 +63,20 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->configMock = $this->getMock(
-            'Magento\Framework\DataObject',
+            \Magento\Framework\DataObject::class,
             ['getQty', 'setQty'],
             [],
             '',
             false
         );
 
-        $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\StockRegistry')
+        $this->stockRegistry = $this->getMockBuilder(\Magento\CatalogInventory\Model\StockRegistry::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStockItem', '__wakeup'])
             ->getMock();
 
         $this->stockItemMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Stock\Item',
+            \Magento\CatalogInventory\Model\Stock\Item::class,
             ['getIsQtyDecimal', '__wakeup'],
             [],
             '',
@@ -87,7 +87,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->will($this->returnValue($this->stockItemMock));
 
-        $store = $this->getMock('Magento\Store\Model\Store', ['getWebsiteId'], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getWebsiteId'], [], '', false);
         $store->expects($this->once())
             ->method('getWebsiteId')
             ->will($this->returnValue(10));
@@ -98,7 +98,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $this->objectManager
             ->getObject(
-                'Magento\Sales\Model\AdminOrder\Product\Quote\Initializer',
+                \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer::class,
                 ['stockRegistry' => $this->stockRegistry]
             );
     }
@@ -106,7 +106,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
     public function testInitWithDecimalQty()
     {
         $quoteItemMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getStockId', 'getIsQtyDecimal', '__wakeup'],
             [],
             '',
@@ -141,7 +141,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quoteItemMock));
 
         $this->assertInstanceOf(
-            'Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             $this->model->init(
                 $this->quoteMock,
                 $this->productMock,
@@ -153,7 +153,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
     public function testInitWithNonDecimalQty()
     {
         $quoteItemMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getStockId', 'getIsQtyDecimal', '__wakeup'],
             [],
             '',
@@ -184,7 +184,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quoteItemMock));
 
         $this->assertInstanceOf(
-            'Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             $this->model->init(
                 $this->quoteMock,
                 $this->productMock,

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,7 +80,7 @@ class ClearProductUrlsObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->importProduct = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Product',
+            \Magento\CatalogImportExport\Model\Import\Product::class,
             [
                 'getNewSku',
                 'getProductCategories',
@@ -93,18 +93,18 @@ class ClearProductUrlsObserverTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->event = $this->getMock('\Magento\Framework\Event', ['getAdapter', 'getBunch'], [], '', false);
+        $this->event = $this->getMock(\Magento\Framework\Event::class, ['getAdapter', 'getBunch'], [], '', false);
         $this->event->expects($this->any())->method('getAdapter')->willReturn($this->importProduct);
         $this->event->expects($this->any())->method('getBunch')->willReturn($this->products);
-        $this->observer = $this->getMock('\Magento\Framework\Event\Observer', ['getEvent'], [], '', false);
+        $this->observer = $this->getMock(\Magento\Framework\Event\Observer::class, ['getEvent'], [], '', false);
         $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
-        $this->urlPersist = $this->getMockBuilder('\Magento\UrlRewrite\Model\UrlPersistInterface')
+        $this->urlPersist = $this->getMockBuilder(\Magento\UrlRewrite\Model\UrlPersistInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->clearProductUrlsObserver = $this->objectManagerHelper->getObject(
-            '\Magento\CatalogUrlRewrite\Observer\ClearProductUrlsObserver',
+            \Magento\CatalogUrlRewrite\Observer\ClearProductUrlsObserver::class,
             [
                 'urlPersist' => $this->urlPersist,
             ]

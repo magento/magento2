@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -68,7 +68,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
         $isEnable = $this->isEnable();
         if ($input->getOption(self::INPUT_KEY_ALL)) {
             /** @var \Magento\Framework\Module\FullModuleList $fullModulesList */
-            $fullModulesList = $this->objectManager->get('Magento\Framework\Module\FullModuleList');
+            $fullModulesList = $this->objectManager->get(\Magento\Framework\Module\FullModuleList::class);
             $modules = $fullModulesList->getNames();
         } else {
             $modules = $input->getArgument(self::INPUT_KEY_MODULES);

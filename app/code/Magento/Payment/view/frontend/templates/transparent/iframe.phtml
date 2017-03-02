@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ $params = $block->getParams();
     <head>
         <script>
         <?php if (isset($params['redirect'])): ?>
-            window.location="<?php echo $block->escapeXssInUrl($params['redirect']); ?>";
+            window.location="<?php echo $block->escapeUrl($params['redirect']); ?>";
         <?php elseif (isset($params['redirect_parent'])): ?>
             var require = window.top.require;
             require(
@@ -24,7 +24,7 @@ $params = $block->getParams();
                 function($) {
                     var parent = window.top;
                     $(parent).trigger('clearTimeout');
-                    parent.location="<?php echo $block->escapeXssInUrl($params['redirect_parent']); ?>";
+                    parent.location="<?php echo $block->escapeUrl($params['redirect_parent']); ?>";
                 }
             );
         <?php elseif (isset($params['error_msg'])): ?>
@@ -39,12 +39,12 @@ $params = $block->getParams();
                     var parent = window.top;
                     $(parent).trigger('clearTimeout');
                     globalMessageList.addErrorMessage({
-                        message: $t('Unable to place order. Please try again later.')
+                        message: $t('An error occurred on the server. Please try to place the order again.')
                     });
                 }
             );
         <?php elseif (isset($params['order_success'])): ?>
-            window.top.location = "<?php echo $block->escapeXssInUrl($params['order_success']); ?>";
+            window.top.location = "<?php echo $block->escapeUrl($params['order_success']); ?>";
         <?php else: ?>
             var require = window.top.require;
             require(

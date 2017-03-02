@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Listing\Columns;
@@ -42,7 +42,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->contextMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ContextInterface',
+            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
             [],
             '',
             false,
@@ -50,17 +50,17 @@ class DateTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
 
-        $this->timezoneMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
+        $this->timezoneMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Ui\Component\Listing\Columns\Date',
+            \Magento\Ui\Component\Listing\Columns\Date::class,
             [
                 'context' => $this->contextMock,
                 'data' => [

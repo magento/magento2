@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,8 @@ use Magento\Framework\DataObject as MagentoObject;
 
 /**
  * Class DataTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,26 +31,47 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected $taxConfigMock;
 
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    protected $serializer;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->orderTaxManagementMock = $this->getMockBuilder('Magento\Tax\Api\OrderTaxManagementInterface')
+        $this->orderTaxManagementMock = $this->getMockBuilder(\Magento\Tax\Api\OrderTaxManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->priceCurrencyMock = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')
+        $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->taxConfigMock = $this->getMockBuilder('Magento\Tax\Model\Config')
+        $this->taxConfigMock = $this->getMockBuilder(\Magento\Tax\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
 
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
         $this->helper = $objectManager->getObject(
-            'Magento\Tax\Helper\Data',
+            \Magento\Tax\Helper\Data::class,
             [
                 'orderTaxManagement' => $this->orderTaxManagementMock,
                 'priceCurrency' => $this->priceCurrencyMock,
-                'taxConfig' => $this->taxConfigMock
+                'taxConfig' => $this->taxConfigMock,
+                'serializer' => $this->serializer
             ]
         );
     }
@@ -71,7 +94,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $expectedAmount = $itemAmount + 1;
         $expectedBaseAmount = $itemBaseAmount + 1;
 
-        $orderDetailsItem = $this->getMockBuilder('Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface')
+        $orderDetailsItem = $this->getMockBuilder(\Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $orderDetailsItem->expects($this->once())
@@ -100,7 +123,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $appliedTaxes = [$orderDetailsItem];
 
-        $orderDetails = $this->getMockBuilder('Magento\Tax\Api\Data\OrderTaxDetailsInterface')
+        $orderDetails = $this->getMockBuilder(\Magento\Tax\Api\Data\OrderTaxDetailsInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $orderDetails->expects($this->once())
@@ -111,7 +134,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with($orderId)
             ->willReturn($orderDetails);
 
-        $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
         $orderMock->expects($this->once())
@@ -135,7 +158,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected function mapOrderTaxItemDetail($inputArray)
     {
-        $orderTaxItemDetailsMock = $this->getMockBuilder('\Magento\Tax\Api\Data\OrderTaxDetailsInterface')
+        $orderTaxItemDetailsMock = $this->getMockBuilder(\Magento\Tax\Api\Data\OrderTaxDetailsInterface::class)
             ->getMock();
         $itemMocks = [];
         foreach ($inputArray['items'] as $orderTaxDetailsItemData) {
@@ -147,7 +170,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $appliedTaxesData = $orderTaxDetailsItemData['applied_taxes'];
             $appliedTaxesMocks = [];
             foreach ($appliedTaxesData as $appliedTaxData) {
-                $appliedTaxesMock = $this->getMockBuilder('\Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface')
+                $appliedTaxesMock = $this->getMockBuilder(
+                    \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface::class)
                     ->getMock();
                 $appliedTaxesMock->expects($this->any())
                     ->method('getAmount')
@@ -166,7 +190,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                     ->will($this->returnValue($appliedTaxData['percent']));
                 $appliedTaxesMocks[] = $appliedTaxesMock;
             }
-            $orderTaxDetailsItemMock = $this->getMockBuilder('\Magento\Tax\Api\Data\OrderTaxDetailsItemInterface')
+            $orderTaxDetailsItemMock = $this->getMockBuilder(\Magento\Tax\Api\Data\OrderTaxDetailsItemInterface::class)
                 ->getMock();
             $orderTaxDetailsItemMock->expects($this->any())
                 ->method('getItemId')
@@ -200,7 +224,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $orderTaxDetails = $orderData['order_tax_details'];
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order $orderMock */
-        $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
         $orderMock->expects($this->once())
@@ -220,7 +244,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             isset($invoiceData['shipping_tax_amount']) ? $invoiceData['shipping_tax_amount'] : 0;
         $invoiceItems = $invoiceData['invoice_items'];
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Invoice $source */
-        $source = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
+        $source = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $source->expects($this->once())
@@ -362,7 +386,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                                         ),
                                     'tax_amount' => 5.0,
                                     //half of weee tax is invoiced
-                                    'tax_ratio' => serialize(['weee' => 0.5]),
+                                    'tax_ratio' => json_encode(['weee' => 0.5]),
                                 ]
                             ),
                     ],

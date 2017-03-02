@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,7 +29,7 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
         $mainTable = 'sales_creditmemo_grid',
-        $resourceModel = '\Magento\Sales\Model\ResourceModel\Order\Creditmemo'
+        $resourceModel = \Magento\Sales\Model\ResourceModel\Order\Creditmemo::class
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }

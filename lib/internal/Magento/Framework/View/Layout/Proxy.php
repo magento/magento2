@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
@@ -48,7 +48,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\\Magento\\Framework\\View\\Layout',
+        $instanceName = \Magento\Framework\View\Layout::class,
         $shared = true
     ) {
         $this->_objectManager = $objectManager;

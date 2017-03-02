@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Helper\Wysiwyg;
@@ -77,15 +77,15 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
         $this->path = 'PATH/';
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
 
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
 
-        $this->urlEncoderMock = $this->getMock('Magento\Framework\Url\EncoderInterface', [], [], '', false);
+        $this->urlEncoderMock = $this->getMock(\Magento\Framework\Url\EncoderInterface::class, [], [], '', false);
 
-        $this->backendDataMock = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
+        $this->backendDataMock = $this->getMock(\Magento\Backend\Helper\Data::class, [], [], '', false);
 
-        $this->contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false);
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
             ->willReturn($this->eventManagerMock);
@@ -97,7 +97,7 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->urlEncoderMock);
 
         $this->directoryWriteMock = $this->getMock(
-            '\Magento\Framework\Filesystem\Directory\Write',
+            \Magento\Framework\Filesystem\Directory\Write::class,
             [],
             ['path' => $this->path],
             '',
@@ -112,12 +112,12 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->willReturn($this->directoryWriteMock);
 
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->setMethods(
                 [
                     'clearWebsiteCache', 'getDefaultStoreView', 'getGroup', 'getGroups',
@@ -128,10 +128,10 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
 
         $this->imagesHelper = $this->objectManager->getObject(
-            'Magento\Cms\Helper\Wysiwyg\Images',
+            \Magento\Cms\Helper\Wysiwyg\Images::class,
             [
                 'context' => $this->contextMock,
                 'filesystem' => $this->filesystemMock,
@@ -360,7 +360,7 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
     public function testGetCurrentPathThrowException()
     {
         $this->setExpectedException(
-            '\Magento\Framework\Exception\LocalizedException',
+            \Magento\Framework\Exception\LocalizedException::class,
             'The directory PATH/wysiwyg is not writable by server.'
         );
 

@@ -2,7 +2,7 @@
 /**
  * Application area front name resolver
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Area;
@@ -16,7 +16,7 @@ interface FrontNameResolverInterface
     /**
      * Retrieve front name
      *
-     * @param bool if true,  only return frontname if it is valid for the host
+     * @param bool $checkHost if true, return front name only if it is valid for the current host
      * @return string|bool
      */
     public function getFrontName($checkHost = false);

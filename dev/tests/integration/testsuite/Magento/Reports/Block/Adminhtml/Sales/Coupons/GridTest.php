@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Sales\Coupons;
@@ -19,9 +19,9 @@ class GridTest extends \PHPUnit_Framework_TestCase
     protected function _createBlock($reportType = null)
     {
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid'
+            \Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid::class
         );
 
         $filterData = new \Magento\Framework\DataObject();

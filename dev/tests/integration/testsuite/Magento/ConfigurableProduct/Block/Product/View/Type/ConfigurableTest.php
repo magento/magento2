@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
@@ -26,13 +26,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->_product->load(1);
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\ConfigurableProduct\Block\Product\View\Type\Configurable'
+            \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable::class
         );
         $this->_block->setProduct($this->_product);
     }
@@ -44,7 +44,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $attributes = $this->_block->getAllowAttributes();
         $this->assertInstanceOf(
-            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection',
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection::class,
             $attributes
         );
         $this->assertGreaterThanOrEqual(1, $attributes->getSize());
@@ -66,7 +66,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $products = $this->_block->getAllowProducts();
         $this->assertGreaterThanOrEqual(2, count($products));
         foreach ($products as $product) {
-            $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
+            $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
         }
     }
 

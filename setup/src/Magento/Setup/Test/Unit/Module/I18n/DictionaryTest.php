@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n;
@@ -15,13 +15,13 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_dictionary = $objectManagerHelper->getObject('Magento\Setup\Module\I18n\Dictionary');
+        $this->_dictionary = $objectManagerHelper->getObject(\Magento\Setup\Module\I18n\Dictionary::class);
     }
 
     public function testPhraseCollecting()
     {
-        $phraseFirstMock = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
-        $phraseSecondMock = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
+        $phraseFirstMock = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
+        $phraseSecondMock = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
 
         $this->_dictionary->addPhrase($phraseFirstMock);
         $this->_dictionary->addPhrase($phraseSecondMock);
@@ -31,11 +31,11 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDuplicates()
     {
-        $phraseFirstMock = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
+        $phraseFirstMock = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
         $phraseFirstMock->expects($this->once())->method('getKey')->will($this->returnValue('key_1'));
-        $phraseSecondMock = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
+        $phraseSecondMock = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
         $phraseSecondMock->expects($this->once())->method('getKey')->will($this->returnValue('key_1'));
-        $phraseThirdMock = $this->getMock('Magento\Setup\Module\I18n\Dictionary\Phrase', [], [], '', false);
+        $phraseThirdMock = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
         $phraseThirdMock->expects($this->once())->method('getKey')->will($this->returnValue('key_3'));
 
         $this->_dictionary->addPhrase($phraseFirstMock);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -149,7 +149,7 @@
                     <item name="source" xsi:type="string">catalog_rule</item>
                     <item name="dataScope" xsi:type="string">customer_group_ids</item>
                 </item>
-                <item name="options" xsi:type="object">Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider</item>
+                <item name="options" xsi:type="object">\Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider</item>
             </argument>
         </field>
         <field name="from_date">

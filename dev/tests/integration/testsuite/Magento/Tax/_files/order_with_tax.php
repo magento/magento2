@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,11 +8,11 @@ require __DIR__ . '/../../../Magento/Sales/_files/order.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Sales\Model\Order $order */
-$order = $objectManager->create('Magento\Sales\Model\Order');
+$order = $objectManager->create(\Magento\Sales\Model\Order::class);
 $order->loadByIncrementId('100000001')->setBaseToGlobalRate(2)->save();
 
 /** @var \Magento\Tax\Model\Sales\Order\Tax $tax */
-$tax = $objectManager->create('Magento\Tax\Model\Sales\Order\Tax');
+$tax = $objectManager->create(\Magento\Tax\Model\Sales\Order\Tax::class);
 $tax->setData(
     [
         'order_id' => $order->getId(),

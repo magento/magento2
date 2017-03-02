@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -67,37 +67,37 @@ abstract class AbstractControllerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->requestMock = $this->getMockForAbstractClassBuilder(
-            'Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             ['isDispatched', 'initForward', 'setDispatched', 'isForwarded']
         );
         $this->breadcrumbsBlockMock = $this->getMockForAbstractClassBuilder(
-            'Magento\Framework\View\Element\BlockInterface',
+            \Magento\Framework\View\Element\BlockInterface::class,
             ['addLink']
         );
         $this->menuBlockMock = $this->getMockForAbstractClassBuilder(
-            'Magento\Framework\View\Element\BlockInterface',
+            \Magento\Framework\View\Element\BlockInterface::class,
             ['setActive', 'getMenuModel']
         );
         $this->viewMock = $this->getMockForAbstractClassBuilder(
-            'Magento\Framework\App\ViewInterface'
+            \Magento\Framework\App\ViewInterface::class
         );
 
-        $this->layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
+        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->switcherBlockMock = $this->getMockBuilder('Magento\Framework\View\Element\BlockInterface')
+        $this->switcherBlockMock = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileFactoryMock = $this->getMockBuilder('Magento\Framework\App\Response\Http\FileFactory')
+        $this->fileFactoryMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->menuModelMock = $this->getMockBuilder('Magento\Backend\Model\Menu')
+        $this->menuModelMock = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->abstractBlockMock = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
+        $this->abstractBlockMock = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
             ->setMethods(['getCsvFile', 'getExcelFile', 'setSaveParametersInSession', 'getCsv', 'getExcel'])
             ->disableOriginalConstructor()
             ->getMock();

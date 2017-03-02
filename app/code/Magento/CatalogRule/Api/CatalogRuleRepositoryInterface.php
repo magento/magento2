@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Api;
 
+/**
+ * Interface CatalogRuleRepositoryInterface
+ * @api
+ */
 interface CatalogRuleRepositoryInterface
 {
     /**
-     * @api
      * @param \Magento\CatalogRule\Api\Data\RuleInterface $rule
      * @return \Magento\CatalogRule\Api\Data\RuleInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
@@ -16,7 +19,6 @@ interface CatalogRuleRepositoryInterface
     public function save(\Magento\CatalogRule\Api\Data\RuleInterface $rule);
 
     /**
-     * @api
      * @param int $ruleId
      * @return \Magento\CatalogRule\Api\Data\RuleInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -24,7 +26,6 @@ interface CatalogRuleRepositoryInterface
     public function get($ruleId);
 
     /**
-     * @api
      * @param \Magento\CatalogRule\Api\Data\RuleInterface $rule
      * @return bool
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
@@ -32,7 +33,6 @@ interface CatalogRuleRepositoryInterface
     public function delete(\Magento\CatalogRule\Api\Data\RuleInterface $rule);
 
     /**
-     * @api
      * @param int $ruleId
      * @return bool
      * @throws \Magento\Framework\Exception\CouldNotDeleteException

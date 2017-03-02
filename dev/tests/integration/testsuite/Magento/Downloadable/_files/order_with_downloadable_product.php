@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Sales\Model\Order\Address',
+    \Magento\Sales\Model\Order\Address::class,
     [
         'data' => [
             'firstname' => 'guest',
@@ -24,10 +24,12 @@ $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->c
 );
 $billingAddress->setAddressType('billing');
 
-$payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order\Payment');
+$payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Sales\Model\Order\Payment::class);
 $payment->setMethod('checkmo');
 
-$orderItem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order\Item');
+$orderItem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Sales\Model\Order\Item::class);
 $orderItem->setProductId(
     1
 )->setProductType(
@@ -38,7 +40,7 @@ $orderItem->setProductId(
     1
 );
 
-$order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+$order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
 $order->setCustomerEmail('mail@to.co')
     ->addItem(
     $orderItem

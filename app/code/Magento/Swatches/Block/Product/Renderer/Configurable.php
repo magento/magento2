@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Block\Product\Renderer;
@@ -365,6 +365,22 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * Produce and return block's html output
+     *
+     * @codeCoverageIgnore
+     * @return string
+     */
+    public function toHtml()
+    {
+        $this->initIsProductHasSwatchAttribute();
+        $this->setTemplate(
+            $this->getRendererTemplate()
+        );
+
+        return parent::toHtml();
+    }
+
+    /**
      * Return HTML code
      *
      * @codeCoverageIgnore
@@ -372,11 +388,6 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function _toHtml()
     {
-        $this->initIsProductHasSwatchAttribute();
-        $this->setTemplate(
-            $this->getRendererTemplate()
-        );
-
         return $this->getHtmlOutput();
     }
 

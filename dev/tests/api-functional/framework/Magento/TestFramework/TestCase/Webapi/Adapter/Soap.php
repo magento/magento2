@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\TestCase\Webapi\Adapter;
@@ -40,8 +40,8 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
-        $this->_soapConfig = $objectManager->get('Magento\Webapi\Model\Soap\Config');
-        $this->_converter = $objectManager->get('Magento\Framework\Api\SimpleDataObjectConverter');
+        $this->_soapConfig = $objectManager->get(\Magento\Webapi\Model\Soap\Config::class);
+        $this->_converter = $objectManager->get(\Magento\Framework\Api\SimpleDataObjectConverter::class);
         ini_set('default_socket_timeout', 120);
     }
 
@@ -124,7 +124,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         ksort($services);
         if ($storeCode == null) {
             $storeCode = Bootstrap::getObjectManager()
-                ->get('Magento\Store\Model\StoreManagerInterface')
+                ->get(\Magento\Store\Model\StoreManagerInterface::class)
                 ->getStore()
                 ->getCode();
         }

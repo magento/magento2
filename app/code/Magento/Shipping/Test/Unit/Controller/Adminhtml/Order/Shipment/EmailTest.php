@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -83,14 +83,14 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->shipmentLoader = $this->getMock(
-            'Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader',
+            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
             ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load'],
             [],
             '',
             false
         );
         $this->context = $this->getMock(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             [
                 'getRequest',
                 'getResponse',
@@ -107,13 +107,13 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->response = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse'],
             [],
             '',
             false
         );
-        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->setMethods([
                 'isPost',
                 'getModuleName',
@@ -125,25 +125,25 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMockForAbstractClass();
         $this->objectManager = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
+            \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create'],
             [],
             '',
             false
         );
         $this->messageManager = $this->getMock(
-            'Magento\Framework\Message\Manager',
+            \Magento\Framework\Message\Manager::class,
             ['addSuccess', 'addError'],
             [],
             '',
             false
         );
-        $this->session = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
-        $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get'], [], '', false);
-        $this->helper = $this->getMock('\Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
-        $this->resultRedirect = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
+        $this->session = $this->getMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice'], [], '', false);
+        $this->actionFlag = $this->getMock(\Magento\Framework\App\ActionFlag::class, ['get'], [], '', false);
+        $this->helper = $this->getMock(\Magento\Backend\Helper\Data::class, ['getUrl'], [], '', false);
+        $this->resultRedirect = $this->getMock(\Magento\Backend\Model\View\Result\Redirect::class, [], [], '', false);
         $this->resultFactory = $this->getMock(
-            'Magento\Framework\Controller\ResultFactory',
+            \Magento\Framework\Controller\ResultFactory::class,
             ['create'],
             [],
             '',
@@ -164,7 +164,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())->method('getResultFactory')->willReturn($this->resultFactory);
 
         $this->shipmentEmail = $objectManagerHelper->getObject(
-            'Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email',
+            \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email::class,
             [
                 'context' => $this->context,
                 'shipmentLoader' => $this->shipmentLoader,
@@ -181,13 +181,13 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $tracking = [];
         $shipment = ['items' => []];
         $orderShipment = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             ['load', 'save', '__wakeup'],
             [],
             '',
             false
         );
-        $shipmentNotifierClassName = 'Magento\Shipping\Model\ShipmentNotifier';
+        $shipmentNotifierClassName = \Magento\Shipping\Model\ShipmentNotifier::class;
         $shipmentNotifier = $this->getMock($shipmentNotifierClassName, ['notify', '__wakeup'], [], '', false);
 
         $this->request->expects($this->any())

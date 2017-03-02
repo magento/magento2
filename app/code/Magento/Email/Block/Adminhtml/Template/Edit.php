@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Block\Adminhtml\Template;
@@ -13,6 +13,7 @@ use Magento\Backend\Block\Widget\ContainerInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @method array getTemplateOptions()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Edit extends Widget implements ContainerInterface
 {
@@ -216,7 +217,7 @@ class Edit extends Widget implements ContainerInterface
             null
         );
         $this->toolbar->pushButtons($this, $this->buttonList);
-        $this->addChild('form', 'Magento\Email\Block\Adminhtml\Template\Edit\Form');
+        $this->addChild('form', \Magento\Email\Block\Adminhtml\Template\Edit\Form::class);
         return parent::_prepareLayout();
     }
 

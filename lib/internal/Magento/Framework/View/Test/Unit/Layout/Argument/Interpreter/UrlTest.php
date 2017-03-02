@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
@@ -26,9 +26,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_urlResolver = $this->getMock('Magento\Framework\UrlInterface');
+        $this->_urlResolver = $this->getMock(\Magento\Framework\UrlInterface::class);
         $this->_interpreter = $this->getMock(
-            'Magento\Framework\View\Layout\Argument\Interpreter\NamedParams',
+            \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams::class,
             [],
             [],
             '',

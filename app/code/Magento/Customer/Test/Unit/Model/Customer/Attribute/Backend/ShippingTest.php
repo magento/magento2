@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,14 +17,14 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
         /** @var \Psr\Log\LoggerInterface $logger */
         $this->testable = new \Magento\Customer\Model\Customer\Attribute\Backend\Shipping($logger);
     }
 
     public function testBeforeSave()
     {
-        $object = $this->getMockBuilder('Magento\Framework\DataObject')
+        $object = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultShipping', 'unsetDefaultShipping'])
             ->getMock();
@@ -41,22 +41,22 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $addressId = 1;
         $attributeCode = 'attribute_code';
         $defaultShipping = 'default Shipping address';
-        $object = $this->getMockBuilder('Magento\Framework\DataObject')
+        $object = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultShipping', 'getAddresses', 'setDefaultShipping'])
             ->getMock();
 
-        $address = $this->getMockBuilder('Magento\Framework\DataObject')
+        $address = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPostIndex', 'getId'])
             ->getMock();
 
-        $attribute = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods(['__wakeup', 'getEntity', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $entity = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
+        $entity = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
             ->setMethods(['saveAttribute'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
