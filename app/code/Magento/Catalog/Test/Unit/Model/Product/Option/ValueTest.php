@@ -9,6 +9,7 @@ use \Magento\Catalog\Model\Product\Option\Value;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Model\ActionValidator\RemoveAction;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -285,5 +286,10 @@ class ValueTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch');
 
         return $mock;
+    }
+    
+    public function testExtensibleDataInterface()
+    {
+        $this->assertTrue($this->model instanceof ExtensibleDataInterface);
     }
 }
