@@ -22,47 +22,93 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
     private $metadataPoolMock;
 
     /**
+     * @var EntityMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $metadataMock;
+
+    /**
      * @var \Magento\Eav\Model\ResourceModel\ReadHandler
      */
     private $readHandler;
 
+    /**
+     * @var \Magento\Framework\Model\Entity\ScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeResolverMock;
+
     protected function setUp()
     {
-        $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+        $objectManager = new ObjectManager($this);
+        $args = $objectManager->getConstructArguments(\Magento\Eav\Model\ResourceModel\ReadHandler::class);
+        $this->metadataPoolMock = $args['metadataPool'];
+        $this->metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->readHandler = (new ObjectManager($this))->getObject(
-            \Magento\Eav\Model\ResourceModel\ReadHandler::class,
-            [
-                'metadataPool' => $this->metadataPoolMock,
-                'config' => $this->configMock,
-            ]
-        );
+        $this->metadataPoolMock->expects($this->any())
+            ->method('getMetadata')
+            ->willReturn($this->metadataMock);
+        $this->configMock = $args['config'];
+        $this->scopeResolverMock = $args['scopeResolver'];
+        $this->scopeResolverMock->method('getEntityContext')
+            ->willReturn([]);
+
+        $this->readHandler = $objectManager->getObject(\Magento\Eav\Model\ResourceModel\ReadHandler::class, $args);
     }
 
     /**
      * @param string $eavEntityType
      * @param int $callNum
      * @param array $expected
-     * @dataProvider getAttributesDataProvider
+     * @param bool $isStatic
+     * @dataProvider executeDataProvider
      */
-    public function testGetAttributes($eavEntityType, $callNum, array $expected)
+    public function testExecute($eavEntityType, $callNum, array $expected, $isStatic = true)
     {
-        $metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
+        $entityData = ['linkField' => 'theLinkField'];
+        $this->metadataMock->method('getEavEntityType')
+            ->willReturn($eavEntityType);
+        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataPoolMock->expects($this->once())
-            ->method('getMetadata')
-            ->willReturn($metadataMock);
-        $metadataMock->expects($this->once())
-            ->method('getEavEntityType')
-            ->willReturn($eavEntityType);
+        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $selectMock->method('from')
+            ->willReturnSelf();
+        $selectMock->method('where')
+            ->willReturnSelf();
+        $connectionMock->method('select')
+            ->willReturn($selectMock);
+        $connectionMock->method('fetchAll')
+            ->willReturn(
+                [
+                    [
+                        'attribute_id' => 'attributeId',
+                        'value' => 'attributeValue',
+                    ]
+                ]
+            );
+        $this->metadataMock->method('getEntityConnection')
+            ->willReturn($connectionMock);
+        $this->metadataMock->method('getLinkField')
+            ->willReturn('linkField');
+
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $attributeMock->method('isStatic')
+            ->willReturn($isStatic);
+        $backendMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $backendMock->method('getTable')
+            ->willReturn('backendTable');
+        $attributeMock->method('getBackend')
+            ->willReturn($backendMock);
+        $attributeMock->method('getAttributeId')
+            ->willReturn('attributeId');
+        $attributeMock->method('getAttributeCode')
+            ->willReturn('attributeCode');
         $this->configMock->expects($this->exactly($callNum))
             ->method('getAttributes')
             ->willReturn([$attributeMock]);
@@ -71,25 +117,30 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             'getAttributes'
         );
         $getAttributesMethod->setAccessible(true);
-        $this->assertEquals($expected, $getAttributesMethod->invoke($this->readHandler, 'entity_type'));
+        $this->assertEquals($expected, $this->readHandler->execute('entity_type', $entityData));
     }
 
-    public function getAttributesDataProvider()
+    public function executeDataProvider()
     {
-        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         return [
-            [null, 0, []],
-            ['env-entity-type', 1, [$attributeMock]]
+            'null entity type' => [null, 0, ['linkField' => 'theLinkField']],
+            'static attribute' => ['env-entity-type', 1, ['linkField' => 'theLinkField']],
+            'non-static attribute' => [
+                'env-entity-type',
+                1,
+                [
+                    'linkField' => 'theLinkField',
+                    'attributeCode' => 'attributeValue'
+                ],
+                false
+            ],
         ];
     }
 
     /**
      * @expectedException \Exception
      */
-    public function testGetAttributesWithException()
+    public function testExecuteWithException()
     {
         $this->metadataPoolMock->expects($this->once())
             ->method('getMetadata')
