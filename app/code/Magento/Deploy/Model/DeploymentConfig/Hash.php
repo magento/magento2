@@ -14,7 +14,10 @@ use Magento\Framework\Exception\FileSystemException;
 /**
  * Saves and Retrieves deployment configuration hash.
  *
- * We need the hash of configuration data for its validation.
+ * This hash keeps version of last imported data. Hash is used to define whether data was updated
+ * and import is required.
+ *
+ * @see \Magento\Deploy\Model\DeploymentConfig\Validator::isValid()
  */
 class Hash
 {
@@ -72,10 +75,10 @@ class Hash
     /**
      * Updates hash in the storage.
      *
-     * The hash is updated based on configuration data from shared configuration files.
+     * The hash is generated based on data from configuration files
      *
      * @return void
-     * @throws LocalizedException is thrown when import has failed
+     * @throws LocalizedException is thrown when hash was not saved
      */
     public function regenerate()
     {

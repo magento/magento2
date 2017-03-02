@@ -72,8 +72,8 @@ class ImporterPool
     }
 
     /**
-     * Retrieves sections from deployment configuration files which need to import into
-     * appropriate application sources.
+     * Retrieves names of sections for configuration files whose data is read from these files for import
+     * to appropriate application sources.
      *
      * @return array the list of sections
      * E.g.
