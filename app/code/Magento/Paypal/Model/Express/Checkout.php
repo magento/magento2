@@ -905,30 +905,15 @@ class Checkout
     protected function _setExportedAddressData($address, $exportedAddress)
     {
         // Exported data is more priority if we came from Express Checkout button
-        $isButton  = (bool)$this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON);
+        $isButton = (bool)$this->_quote->getPayment()->getAdditionalInformation(self::PAYMENT_INFO_BUTTON);
         if (!$isButton) {
-            foreach ($exportedAddress->getExportedKeys() as $key) {
-                $oldData = $address->getDataUsingMethod($key);
-                $isEmpty = null;
-                if (is_array($oldData)) {
-                    foreach ($oldData as $val) {
-                        if (!empty($val)) {
-                            $isEmpty = false;
-                            break;
-                        }
-                        $isEmpty = true;
-                    }
-                }
-                if (empty($oldData) || $isEmpty === true) {
-                    $address->setDataUsingMethod($key, $exportedAddress->getData($key));
-                }
-            }
-        } else {
-            foreach ($exportedAddress->getExportedKeys() as $key) {
-                $data = $exportedAddress->getData($key);
-                if (!empty($data)) {
-                    $address->setDataUsingMethod($key, $data);
-                }
+            return;
+        }
+
+        foreach ($exportedAddress->getExportedKeys() as $key) {
+            $data = $exportedAddress->getData($key);
+            if (!empty($data)) {
+                $address->setDataUsingMethod($key, $data);
             }
         }
     }
