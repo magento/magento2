@@ -139,8 +139,16 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
                     ->will($this->returnValue($blockTtl));
                 $this->_blockMock->expects($this->any())
                     ->method('getUrl')
-                    ->with('page_cache/block/esi', ['blocks' => '[null]', 'handles' => '["default","catalog_product_view"]'])
-                    ->will($this->returnValue('page_cache/block/wrapesi/with/handles/and/other/stuff'));
+                    ->with(
+                        'page_cache/block/esi',
+                        [
+                            'blocks' => '[null]',
+                            'handles' => base64_encode(
+                                json_encode(["default", "catalog_product_view"])
+                            )
+                        ]
+                    )
+                    ->will($this->returnValue('page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='));
             }
             if ($scopeIsPrivate) {
                 $this->_blockMock->expects($this->once())
@@ -197,6 +205,10 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
                 ->method('getBlock')
                 ->will($this->returnValue($this->_blockMock));
 
+        $this->entitySpecificHandlesListMock->expects($this->any())
+            ->method('getHandles')
+            ->will($this->returnValue(['catalog_product_view_id_1']));
+
         $this->_blockMock->expects($this->once())
             ->method('getData')
             ->with('ttl')
@@ -229,7 +241,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
                 true,
                 false,
                 360,
-                '<esi:include src="page_cache/block/wrapesi/with/handles/and/other/stuff" />',
+                '<esi:include src="page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ==" />',
             ],
             'full_page type and Varnish enabled, public scope, ttl is not set' => [
                 true,
