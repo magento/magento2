@@ -21,6 +21,7 @@ namespace Magento\Authorization\Model;
  * @method \Magento\Authorization\Model\Rules setAssertId(int $value)
  * @method string getPermission()
  * @method \Magento\Authorization\Model\Rules setPermission(string $value)
+ * @api
  */
 class Rules extends \Magento\Framework\Model\AbstractModel
 {

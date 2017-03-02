@@ -24,6 +24,7 @@ namespace Magento\Authorization\Model;
  * @method \Magento\Authorization\Model\Role setUserType(string $value)
  * @method string getRoleName()
  * @method \Magento\Authorization\Model\Role setRoleName(string $value)
+ * @api
  */
 class Role extends \Magento\Framework\Model\AbstractModel
 {

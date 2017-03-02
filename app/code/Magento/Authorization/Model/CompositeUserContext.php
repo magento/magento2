@@ -10,6 +10,8 @@ use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
 
 /**
  * Composite user context (implements composite pattern).
+ *
+ * @api
  */
 class CompositeUserContext implements \Magento\Authorization\Model\UserContextInterface
 {
