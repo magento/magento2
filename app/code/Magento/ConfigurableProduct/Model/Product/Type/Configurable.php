@@ -574,15 +574,17 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                     ]
                 )
             );
-            $collection = $this->getUsedProductCollection($product);
             $data = unserialize($this->getCache()->load($key));
             if (!empty($data)) {
                 $usedProducts = [];
                 foreach ($data as $item) {
-                    $productItem = $collection->getNewEmptyItem()->setData($item);
+                    $productItem = ObjectManager::getInstance()->create(ProductInterface::class);
+                    $productItem->setData($item);
+
                     $usedProducts[] = $productItem;
                 }
             } else {
+                $collection = $this->getUsedProductCollection($product);
                 $collection
                     ->setFlag('has_stock_status_filter', true)
                     ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())
