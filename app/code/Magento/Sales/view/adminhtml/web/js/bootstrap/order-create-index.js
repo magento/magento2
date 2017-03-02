@@ -4,5 +4,5 @@
  */
 
 require([
-    "Magento_Sales/order/create/giftmessage"
+    'Magento_Sales/order/create/giftmessage'
 ]);

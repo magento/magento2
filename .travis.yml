@@ -9,7 +9,7 @@ addons:
     - postfix
 language: php
 php:
-  - 5.6
+  - 5.6.29
   - 7.0
 env:
   global:
