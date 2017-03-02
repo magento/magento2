@@ -1015,7 +1015,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _initSkus()
     {
         $this->skuProcessor->setTypeModels($this->_productTypeModels);
-        $this->_oldSku = $this->skuProcessor->getOldSkus();
+        $this->_oldSku = $this->skuProcessor->reloadOldSkus()->getOldSkus();
         return $this;
     }
 

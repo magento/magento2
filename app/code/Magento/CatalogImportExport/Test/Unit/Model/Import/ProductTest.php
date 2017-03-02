@@ -516,6 +516,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     protected function _initSkus()
     {
         $this->skuProcessor->expects($this->once())->method('setTypeModels');
+        $this->skuProcessor->expects($this->once())->method('reloadOldSkus')->willReturnSelf();
         $this->skuProcessor->expects($this->once())->method('getOldSkus');
         return $this;
     }
