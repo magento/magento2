@@ -52,6 +52,7 @@ class Method extends Block
             $shippingMethod['shipping_service'],
             $shippingMethod['shipping_method']
         );
+        $this->waitFormLoading();
         $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->click();
     }
 
