@@ -144,6 +144,65 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedOutput, $this->_transport['output']);
     }
 
+    public function testExecuteWithBase64Encode()
+    {
+        $expectedOutput = '<esi:include src="page_cache/block/wrapesi/with/handles/YW5kL290aGVyL3N0dWZm" />';
+        $eventMock = $this->getMock(
+            'Magento\Framework\Event',
+            ['getLayout', 'getElementName', 'getTransport'],
+            [],
+            '',
+            false
+        );
+        $expectedUrl = 'page_cache/block/wrapesi/with/handles/' . base64_encode('and/other/stuff');
+
+        $this->_observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
+        $eventMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->_layoutMock));
+        $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
+
+            $eventMock->expects($this->once())
+                ->method('getElementName')
+                ->will($this->returnValue('blockName'));
+
+            $eventMock->expects($this->once())
+                ->method('getTransport')
+                ->will($this->returnValue($this->_transport));
+
+            $this->_layoutMock->expects($this->once())
+                ->method('isCacheable')
+                ->will($this->returnValue(true));
+
+            $this->_layoutMock->expects($this->any())
+                ->method('getUpdate')
+                ->will($this->returnSelf());
+
+            $this->_layoutMock->expects($this->any())
+                ->method('getHandles')
+                ->will($this->returnValue([]));
+
+            $this->_layoutMock->expects($this->once())
+                ->method('getBlock')
+                ->will($this->returnValue($this->_blockMock));
+
+        $this->_blockMock->expects($this->once())
+            ->method('getData')
+            ->with('ttl')
+            ->will($this->returnValue(100));
+        $this->_blockMock->expects($this->any())
+            ->method('getUrl')
+            ->will($this->returnValue($expectedUrl));
+
+        $this->_blockMock->expects($this->once())
+            ->method('getNameInLayout')
+            ->will($this->returnValue('testBlockName'));
+
+        $this->_configMock->expects($this->any())->method('getType')->will($this->returnValue(true));
+
+        $this->_model->execute($this->_observerMock);
+
+        $this->assertEquals($expectedOutput, $this->_transport['output']);
+    }
+
     /**
      * Data provider for testProcessLayoutRenderElement
      *
