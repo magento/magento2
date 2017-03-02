@@ -170,6 +170,13 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
 
         $newImage->compositeImage(
             $this->_imageHandler,
+            \Imagick::COMPOSITE_COPYOPACITY,
+            $dims['dst']['x'],
+            $dims['dst']['y']
+        );
+
+        $newImage->compositeImage(
+            $this->_imageHandler,
             \Imagick::COMPOSITE_OVER,
             $dims['dst']['x'],
             $dims['dst']['y']

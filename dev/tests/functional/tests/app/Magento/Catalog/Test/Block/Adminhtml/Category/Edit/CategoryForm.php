@@ -58,6 +58,7 @@ class CategoryForm extends FormSections
                 ['element' => $modalElement]
             );
             $modal->acceptAlert();
+            $modal->waitModalWindowToDisappear();
         }
         return parent::fill($fixture, $element);
     }

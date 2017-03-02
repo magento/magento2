@@ -370,7 +370,7 @@ interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataIn
     /**
      * Set customer address id
      *
-     * @param int $customerAddressId
+     * @param int|null $customerAddressId
      * @return $this
      */
     public function setCustomerAddressId($customerAddressId);
