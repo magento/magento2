@@ -74,6 +74,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
      * @param string $expectsValue
      * @param string $className
      * @dataProvider processDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testProcess(
         $hasBackendModel,
@@ -87,8 +88,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
         $expectsAfterLoad,
         $expectsValue,
         $className
-    )
-    {
+    ) {
         $scope = 'someScope';
         $scopeCode = 'someScopeCode';
         $value = 'someValue';
