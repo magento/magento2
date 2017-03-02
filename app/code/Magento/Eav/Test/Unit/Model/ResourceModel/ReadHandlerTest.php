@@ -112,11 +112,6 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $this->configMock->expects($this->exactly($callNum))
             ->method('getAttributes')
             ->willReturn([$attributeMock]);
-        $getAttributesMethod = new \ReflectionMethod(
-            \Magento\Eav\Model\ResourceModel\ReadHandler::class,
-            'getAttributes'
-        );
-        $getAttributesMethod->setAccessible(true);
         $this->assertEquals($expected, $this->readHandler->execute('entity_type', $entityData));
     }
 
@@ -147,11 +142,6 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Exception('Unknown entity type'));
         $this->configMock->expects($this->never())
             ->method('getAttributes');
-        $getAttributesMethod = new \ReflectionMethod(
-            \Magento\Eav\Model\ResourceModel\ReadHandler::class,
-            'getAttributes'
-        );
-        $getAttributesMethod->setAccessible(true);
-        $getAttributesMethod->invoke($this->readHandler, 'entity_type');
+        $this->readHandler->execute('entity_type', ['linkField' => 'theLinkField']);
     }
 }
