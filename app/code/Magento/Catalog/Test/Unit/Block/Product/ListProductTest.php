@@ -162,7 +162,10 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             ->method('getIdentities')
             ->will($this->returnValue([$productTag]));
 
-        $itemsCollection = new \ReflectionProperty(\Magento\Catalog\Block\Product\ListProduct::class, '_productCollection');
+        $itemsCollection = new \ReflectionProperty(
+            \Magento\Catalog\Block\Product\ListProduct::class,
+            '_productCollection'
+        );
         $itemsCollection->setAccessible(true);
         $itemsCollection->setValue($this->block, [$this->productMock]);
 
