@@ -22,6 +22,6 @@ class ClassesScannerTest extends \PHPUnit_Framework_TestCase
         $pathToScan = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files/app/code/Magento/SomeModule');
         $actual = $this->model->getList($pathToScan);
         $this->assertTrue(is_array($actual));
-        $this->assertCount(5, $actual);
+        $this->assertCount(6, $actual);
     }
 }
