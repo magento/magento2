@@ -159,8 +159,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
         $products = $this->prepareProducts($productsData);
 
         // Steps
-        $this->addToCart($products);
-        $this->waitAddToCartMessage($isValidationFailed);
+        $this->addToCart($products, $isValidationFailed);
 
         $cart['data']['items'] = ['products' => $products];
         return [
@@ -190,30 +189,16 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      * Add products to cart.
      *
      * @param array $products
-     * @return void
-     */
-    protected function addToCart(array $products)
-    {
-        $addToCartStep = $this->testStepFactory->create(
-            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
-            ['products' => $products]
-        );
-        $addToCartStep->run();
-    }
-
-    /**
-     * Wait message after add product to cart.
-     *
      * @param bool $isValidationFailed
      * @return void
      */
-    private function waitAddToCartMessage($isValidationFailed)
+    protected function addToCart(array $products, $isValidationFailed)
     {
-        if ($isValidationFailed) {
-            $this->catalogProductView->getMessagesBlock()->waitValidationErrorMessage();
-        } else {
-            $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
-        }
+        $addToCartStep = $this->testStepFactory->create(
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
+            ['products' => $products, 'isValidationFailed' => $isValidationFailed]
+        );
+        $addToCartStep->run();
     }
 
     /**

@@ -118,8 +118,8 @@ class MoveCategoryEntityTest extends Injectable
      * Get moved category tree.
      *
      * @param Category $movedCategory
-     * @param Category $childCategory
      * @param Category $parentCategory
+     * @param Category $childCategory
      * @return Category
      */
     public function getMovedCategoryTree(Category $movedCategory, Category $parentCategory, Category $childCategory)

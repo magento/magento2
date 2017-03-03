@@ -8,7 +8,7 @@ namespace Magento\Contact\Test\Fixture\Comment;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 
 /**
  * Customer comment on contact page.
@@ -18,7 +18,7 @@ class Customer extends DataSource
     /**
      * Customer Fixture.
      *
-     * @var FixtureInterface
+     * @var CustomerFixture
      */
     private $customer;
 
@@ -28,13 +28,6 @@ class Customer extends DataSource
      * @var FixtureFactory
      */
     private $fixtureFactory;
-
-    /**
-     * Rought fixture field data.
-     *
-     * @var array
-     */
-    private $fixtureData = null;
 
     /**
      * @param FixtureFactory $fixtureFactory
@@ -48,7 +41,6 @@ class Customer extends DataSource
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->params = $params;
-        $this->fixtureData = $data;
         $this->data = $data;
     }
 
@@ -61,12 +53,13 @@ class Customer extends DataSource
      */
     public function getData($key = null)
     {
-        if (empty($this->fixtureData)) {
+        if (empty($this->data)) {
             throw new \Exception("Data must be set");
         }
 
-        if (isset($this->fixtureData['dataset']) && !$this->customer) {
-            $customer = $this->fixtureFactory->createByCode('customer', $this->fixtureData);
+        if (isset($this->data['dataset']) && !$this->customer) {
+            /** @var CustomerFixture $customer */
+            $customer = $this->fixtureFactory->createByCode('customer', $this->data);
 
             if (!$customer->getId()) {
                 $customer->persist();
@@ -76,9 +69,8 @@ class Customer extends DataSource
             $this->data = [
                 'firstname' => $customer->getFirstname(),
                 'email' => $customer->getEmail(),
-                'telephone' => $customer->getEmail()
+                'telephone' => $customer->hasData('telephone') ? $customer->getData('telephone') : ''
             ];
-
         }
 
         return parent::getData($key);
@@ -87,7 +79,7 @@ class Customer extends DataSource
     /**
      * Return customer.
      *
-     * @return FixtureInterface
+     * @return CustomerFixture
      */
     public function getCustomer()
     {

@@ -171,6 +171,16 @@ class CustomOptions extends Form
     }
 
     /**
+     * Wait for error message.
+     *
+     * @return bool
+     */
+    public function waitValidationErrorMessage()
+    {
+        return $this->waitForElementVisible($this->validationErrorMessage, Locator::SELECTOR_XPATH);
+    }
+
+    /**
      * Get list custom options
      *
      * @return array
