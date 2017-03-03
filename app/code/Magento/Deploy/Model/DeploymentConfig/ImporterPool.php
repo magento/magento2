@@ -60,7 +60,17 @@ class ImporterPool
     private $importers = [];
 
     /**
+     * Sorted list of importers class names.
      *
+     * This list sorted by parameter "sortOrder", that defined in di.xml
+     *
+     * ```php
+     * [
+     *     'themes' => 'Magento\Theme\Model\ThemeImporter',
+     *     'scopes' => 'Magento\Store\Model\StoreImporter',
+     *     ...
+     * ]
+     * ```
      *
      * @var array
      */
@@ -127,7 +137,7 @@ class ImporterPool
                     throw new ConfigurationMismatchException(__('Parameter "class" must be present.'));
                 }
 
-               $sortedImporters[$section] = $importer['class'];
+                $sortedImporters[$section] = $importer['class'];
             }
 
             $this->sortedImporters = $sortedImporters;
