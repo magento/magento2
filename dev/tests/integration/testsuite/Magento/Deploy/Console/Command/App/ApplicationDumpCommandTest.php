@@ -82,14 +82,6 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return array
-     */
-    private function loadEnvConfig()
-    {
-        return $this->reader->load(ConfigFilePool::APP_ENV);
-    }
-
-    /**
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Deploy/_files/config_data.php
      */
