@@ -5,6 +5,7 @@
  */
 namespace Magento\Analytics\Model\Config\Backend\Enabled;
 
+use Magento\Analytics\Model\Config\Backend\CollectionTime;
 use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\NotificationTime;
@@ -92,9 +93,17 @@ class SubscriptionHandler
      */
     public function process(Value $configValue)
     {
-        if ($configValue->isValueChanged() && !$this->analyticsToken->isTokenExist()) {
-            $enabled = $configValue->getData('value');
+        if (!$configValue->isValueChanged()) {
+            return true;
+        }
 
+        $enabled = $configValue->getData('value');
+
+        if (!$enabled) {
+            $this->disableCollectionData();
+        }
+
+        if (!$this->analyticsToken->isTokenExist()) {
             if ($enabled) {
                 $this->setCronSchedule();
                 $this->setAttemptsFlag();
@@ -149,5 +158,17 @@ class SubscriptionHandler
     {
         return $this->flagManager
             ->deleteFlag(self::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
+    }
+
+    /**
+     * Unset schedule of collection data cron.
+     *
+     * @return bool
+     */
+    private function disableCollectionData()
+    {
+        $this->configWriter->delete(CollectionTime::CRON_SCHEDULE_PATH);
+
+        return true;
     }
 }
