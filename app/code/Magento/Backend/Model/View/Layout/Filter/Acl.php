@@ -23,7 +23,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * Example of declaration in layout
  *
- * <uiComponent name="form" acl="Resource::name" />
+ * <uiComponent name="form" aclResource="Resource::name" />
  */
 class Acl implements FilterInterface
 {
