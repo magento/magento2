@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Braintree\Test\TestStep;
+namespace Magento\Sales\Test\TestStep;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;

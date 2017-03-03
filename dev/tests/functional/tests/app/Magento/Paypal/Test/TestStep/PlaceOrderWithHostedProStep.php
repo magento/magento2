@@ -7,6 +7,7 @@
 namespace Magento\Paypal\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
+use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestStep\TestStepInterface;
@@ -54,9 +55,15 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
     private $creditCard;
 
     /**
+     * @var CheckoutOnepageSuccess
+     */
+    private $checkoutOnepageSuccess;
+
+    /**
      * @param CheckoutOnepage $checkoutOnepage
      * @param FixtureFactory $fixtureFactory
      * @param CreditCard $creditCard
+     * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param array $payment
      * @param array $products
      */
@@ -64,6 +71,7 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
         CheckoutOnepage $checkoutOnepage,
         FixtureFactory $fixtureFactory,
         CreditCard $creditCard,
+        CheckoutOnepageSuccess $checkoutOnepageSuccess,
         array $payment,
         array $products
     ) {
@@ -72,6 +80,7 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
         $this->creditCard = $creditCard;
         $this->payment = $payment;
         $this->products = $products;
+        $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
     }
 
     /**
@@ -90,6 +99,8 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
             $this->checkoutOnepage->getHostedProBlock()->fillPaymentData($this->creditCard);
             $attempts++;
         }
+
+        $orderId = $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
         /** @var OrderInjectable $order */
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
@@ -99,6 +110,9 @@ class PlaceOrderWithHostedProStep implements TestStepInterface
                 ]
             ]
         );
-        return ['order' => $order];
+        return [
+            'orderId' => $orderId,
+            'order' => $order
+        ];
     }
 }

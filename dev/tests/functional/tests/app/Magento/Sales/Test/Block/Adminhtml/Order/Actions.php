@@ -12,6 +12,9 @@ use Magento\Ui\Test\Block\Adminhtml\Modal;
 
 /**
  * Order actions block.
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Actions extends Block
 {
@@ -56,6 +59,13 @@ class Actions extends Block
      * @var string
      */
     protected $hold = '[id$=hold-button]';
+
+    /**
+     * 'Unhold' button.
+     *
+     * @var string
+     */
+    protected $unhold = '[id$=unhold-button]';
 
     /**
      * 'Invoice' button.
@@ -210,6 +220,16 @@ class Actions extends Block
     public function hold()
     {
         $this->_rootElement->find($this->hold)->click();
+    }
+
+    /**
+     * Unhold order.
+     *
+     * @return void
+     */
+    public function unhold()
+    {
+        $this->_rootElement->find($this->unhold)->click();
     }
 
     /**
