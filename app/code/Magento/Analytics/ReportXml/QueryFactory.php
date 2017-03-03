@@ -108,7 +108,8 @@ class QueryFactory
             [
                 'select' => $select,
                 'selectHydrator' => $this->selectHydrator,
-                'connectionName' => $selectBuilder->getConnectionName()
+                'connectionName' => $selectBuilder->getConnectionName(),
+                'config' => $queryConfig
             ]
         );
     }
@@ -129,7 +130,8 @@ class QueryFactory
                 [
                     'select' => $this->selectHydrator->recreate($queryData['select_parts']),
                     'selectHydrator' => $this->selectHydrator,
-                    'connectionName' => $queryData['connectionName']
+                    'connectionName' => $queryData['connectionName'],
+                    'config' => $queryData['config']
                 ]
             );
         }
