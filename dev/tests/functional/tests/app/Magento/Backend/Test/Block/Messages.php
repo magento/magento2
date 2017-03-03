@@ -57,6 +57,13 @@ class Messages extends Block
     protected $warningMessage = '[data-ui-id$=message-warning]';
 
     /**
+     * Selector for "This is a required field." validation error message.
+     *
+     * @var string
+     */
+    private $validationErrorMessage = '.mage-error';
+
+    /**
      * Wait for success message.
      *
      * @return bool
@@ -64,6 +71,16 @@ class Messages extends Block
     public function waitSuccessMessage()
     {
         return $this->waitForElementVisible($this->successMessage, Locator::SELECTOR_CSS);
+    }
+
+    /**
+     * Wait for error message.
+     *
+     * @return bool
+     */
+    public function waitValidationErrorMessage()
+    {
+        return $this->waitForElementVisible($this->validationErrorMessage, Locator::SELECTOR_CSS);
     }
 
     /**

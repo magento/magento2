@@ -133,10 +133,16 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      * @param array $cart
      * @param string|null $configData [optional]
      * @param bool $flushCache [optional]
+     * @param bool $isValidationFailed
      * @return array
      */
-    public function test(array $productsData, array $cart, $configData = null, $flushCache = false)
-    {
+    public function test(
+        array $productsData,
+        array $cart,
+        $configData = null,
+        $flushCache = false,
+        $isValidationFailed = false
+    ) {
         // Preconditions
         $this->configData = $configData;
         $this->flushCache = $flushCache;
@@ -154,6 +160,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
 
         // Steps
         $this->addToCart($products);
+        $this->waitAddToCartMessage($isValidationFailed);
 
         $cart['data']['items'] = ['products' => $products];
         return [
@@ -192,6 +199,21 @@ class AddProductsToShoppingCartEntityTest extends Injectable
             ['products' => $products]
         );
         $addToCartStep->run();
+    }
+
+    /**
+     * Wait message after add product to cart.
+     *
+     * @param bool $isValidationFailed
+     * @return void
+     */
+    private function waitAddToCartMessage($isValidationFailed)
+    {
+        if ($isValidationFailed) {
+            $this->catalogProductView->getMessagesBlock()->waitValidationErrorMessage();
+        } else {
+            $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();
+        }
     }
 
     /**

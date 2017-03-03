@@ -23,12 +23,12 @@ class AssertCaptchaFieldOnRegisterForm extends AbstractConstraint
     public function processAssertRegisterForm(CustomerAccountCreate $createAccountPage)
     {
         \PHPUnit_Framework_Assert::assertTrue(
-            $createAccountPage->getRegisterFormWithCaptcha()->isVisibleCaptcha(),
+            $createAccountPage->getRegisterForm()->isVisibleCaptcha(),
             'Captcha image is not displayed on the storefront account register page.'
         );
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $createAccountPage->getRegisterFormWithCaptcha()->isVisibleCaptchaReloadButton(),
+            $createAccountPage->getRegisterForm()->isVisibleCaptchaReloadButton(),
             'Captcha reload button is not displayed on the storefront account register page.'
         );
     }

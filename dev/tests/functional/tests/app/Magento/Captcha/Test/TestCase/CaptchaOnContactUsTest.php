@@ -75,7 +75,7 @@ class CaptchaOnContactUsTest extends Injectable
      * Test creation for send comment using the contact us form with captcha.
      *
      * @param Comment $comment
-     * @param null|string $configData
+     * @param string $configData
      * @return void
      */
     public function test(
@@ -92,9 +92,9 @@ class CaptchaOnContactUsTest extends Injectable
 
         $this->contactIndex->open();
         $this->assertCaptcha->processAssertRegisterForm($this->contactIndex);
-        $this->contactIndex->getFormWithCaptcha()->fill($comment);
-        $this->contactIndex->getFormWithCaptcha()->reloadCaptcha();
-        $this->contactIndex->getFormWithCaptcha()->sendComment();
+        $this->contactIndex->getContactUs()->fill($comment);
+        $this->contactIndex->getContactUs()->reloadCaptcha();
+        $this->contactIndex->getContactUs()->sendComment();
     }
 
     /**

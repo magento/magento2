@@ -8,16 +8,17 @@ namespace Magento\Contact\Test\Fixture\Comment;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Source for attribute field.
+ * Customer comment on contact page.
  */
 class Customer extends DataSource
 {
     /**
-     * Customer Fixtures.
+     * Customer Fixture.
      *
-     * @var array
+     * @var FixtureInterface
      */
     private $customer;
 
@@ -36,7 +37,6 @@ class Customer extends DataSource
     private $fixtureData = null;
 
     /**
-     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array|int $data
@@ -65,16 +65,32 @@ class Customer extends DataSource
             throw new \Exception("Data must be set");
         }
 
-        if (isset($this->fixtureData['dataset'])) {
+        if (isset($this->fixtureData['dataset']) && !$this->customer) {
             $customer = $this->fixtureFactory->createByCode('customer', $this->fixtureData);
-            /** @var Customer $customer */
+
             if (!$customer->getId()) {
                 $customer->persist();
             }
+
             $this->customer = $customer;
-            $this->data = $customer->getData();
+            $this->data = [
+                'firstname' => $customer->getFirstname(),
+                'email' => $customer->getEmail(),
+                'telephone' => $customer->getEmail()
+            ];
+
         }
 
         return parent::getData($key);
+    }
+
+    /**
+     * Return customer.
+     *
+     * @return FixtureInterface
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
     }
 }

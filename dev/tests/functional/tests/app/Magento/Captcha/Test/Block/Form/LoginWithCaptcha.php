@@ -8,7 +8,6 @@ namespace Magento\Captcha\Test\Block\Form;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Customer\Test\Block\Form\Login;
-use Magento\Mtf\Client\ElementInterface;
 
 /**
  * Form for storefront login with captcha.

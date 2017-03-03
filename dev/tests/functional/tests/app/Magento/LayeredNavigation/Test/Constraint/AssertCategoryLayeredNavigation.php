@@ -40,7 +40,7 @@ class AssertCategoryLayeredNavigation extends AbstractConstraint
         $this->openCategory($category->getDataFieldConfig('parent_id')['source']->getParentCategory());
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $catalogCategoryView->getLayeredNavigationBlock()->isCategoryVisible($category->getName(), 1),
+            $catalogCategoryView->getLayeredNavigationBlock()->isCategoryVisible($category, 1),
             'Category ' . $category->getName() . ' is absent in Layered Navigation.'
         );
 

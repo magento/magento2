@@ -23,12 +23,12 @@ class AssertCaptchaFieldOnContactUsForm extends AbstractConstraint
     public function processAssertRegisterForm(ContactIndex $contactIndex)
     {
         \PHPUnit_Framework_Assert::assertTrue(
-            $contactIndex->getFormWithCaptcha()->isVisibleCaptcha(),
+            $contactIndex->getContactUs()->isVisibleCaptcha(),
             'Captcha image is not displayed on the Contact Us page.'
         );
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $contactIndex->getFormWithCaptcha()->isVisibleCaptchaReloadButton(),
+            $contactIndex->getContactUs()->isVisibleCaptchaReloadButton(),
             'Captcha reload button is not displayed on the Contact Us page.'
         );
     }

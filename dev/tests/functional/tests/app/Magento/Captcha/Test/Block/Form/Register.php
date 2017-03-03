@@ -7,12 +7,12 @@
 namespace Magento\Captcha\Test\Block\Form;
 
 use Magento\Mtf\Client\Locator;
-use Magento\Customer\Test\Block\Form\Register;
+use Magento\Customer\Test\Block\Form\Register as CustomerRegister;
 
 /**
  * Form for storefront register customer with captcha.
  */
-class RegisterFormWithCaptcha extends Register
+class Register extends CustomerRegister
 {
     /**
      * Captcha image selector.

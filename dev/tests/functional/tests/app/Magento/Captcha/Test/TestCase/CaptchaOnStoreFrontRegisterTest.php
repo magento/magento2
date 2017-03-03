@@ -92,8 +92,8 @@ class CaptchaOnStoreFrontRegisterTest extends Injectable
 
         $this->customerAccountCreate->open();
         $this->assertCaptcha->processAssertRegisterForm($this->customerAccountCreate);
-        $this->customerAccountCreate->getRegisterFormWithCaptcha()->reloadCaptcha();
-        $this->customerAccountCreate->getRegisterFormWithCaptcha()->registerCustomer($customer);
+        $this->customerAccountCreate->getRegisterForm()->reloadCaptcha();
+        $this->customerAccountCreate->getRegisterForm()->registerCustomer($customer);
     }
 
     /**

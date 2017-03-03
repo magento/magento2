@@ -31,7 +31,7 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
  * @group Captcha
  * @ZephyrId MAGETWO-49048
  */
-class CaptchaAndLockoutCustomerTest extends Injectable
+class CaptchaLockoutCustomerTest extends Injectable
 {
     /**
      * Step factory.

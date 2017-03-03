@@ -7,14 +7,6 @@
 -->
 <mapping strict="0">
     <fields>
-        <firstname>
-            <selector>input[name*=name]</selector>
-        </firstname>
-        <email />
-        <telephone />
-        <comment>
-            <selector>#comment</selector>
-        </comment>
         <captcha>
             <selector>[name='captcha[contact_us]']</selector>
         </captcha>

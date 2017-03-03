@@ -123,14 +123,14 @@ class Navigation extends Block
     /**
      * Check that category with product quantity can be displayed on layered navigation.
      *
-     * @param string $name
+     * @param Category $category
      * @param int $qty
      * @return bool
      */
-    public function isCategoryVisible($name, $qty)
+    public function isCategoryVisible(Category $category, $qty)
     {
         return $this->_rootElement->find(
-            sprintf($this->categoryName, $name) . sprintf($this->productQty, $qty),
+            sprintf($this->categoryName, $category->getName()) . sprintf($this->productQty, $qty),
             Locator::SELECTOR_XPATH
         )->isVisible();
     }
