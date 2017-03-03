@@ -1570,7 +1570,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'progressdetail' => [],
         ];
 
-        if (!empty($trackInfo->ShipTimestamp) && ($datetime = $this->parseDate($trackInfo->ShipTimestamp)) !== false) {
+        $datetime = $this->parseDate(!empty($trackInfo->ShipTimestamp) ? $trackInfo->ShipTimestamp : null);
+        if ($datetime) {
             $result['shippeddate'] = gmdate('Y-m-d', $datetime->getTimestamp());
         }
 
@@ -1684,7 +1685,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'deliverylocation' => null
             ];
 
-            if (!empty($event->Timestamp) && ($datetime = $this->parseDate($event->Timestamp)) !== false) {
+            $datetime = $this->parseDate(!empty($event->Timestamp) ? $event->Timestamp : null);
+            if ($datetime) {
                 $item['deliverydate'] = gmdate('Y-m-d', $datetime->getTimestamp());
                 $item['deliverytime'] = gmdate('H:i:s', $datetime->getTimestamp());
             }
@@ -1725,6 +1727,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     private function parseDate($timestamp)
     {
+        if ($timestamp === null) {
+            return false;
+        }
         $formats = [\DateTime::ATOM, 'Y-m-d\TH:i:s'];
         $tz = date_default_timezone_get();
 
