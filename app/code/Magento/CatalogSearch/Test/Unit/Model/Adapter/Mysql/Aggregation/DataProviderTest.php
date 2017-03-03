@@ -59,6 +59,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $frontendResourceStockMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $adapterMock;
 
     protected function setUp()
@@ -68,6 +73,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->scopeResolverMock = $this->getMock(ScopeResolverInterface::class);
         $this->sessionMock = $this->getMock(Session::class, [], [], '', false);
         $this->frontendResourceMock = $this->getMock(FrontendResource::class, [], [], '', false);
+        $this->frontendResourceStockMock = $this->getMock(FrontendResource::class, [], [], '', false);
         $this->adapterMock = $this->getMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
 
@@ -76,7 +82,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $this->resourceConnectionMock,
             $this->scopeResolverMock,
             $this->sessionMock,
-            $this->frontendResourceMock
+            $this->frontendResourceMock,
+            $this->frontendResourceStockMock
         );
     }
 

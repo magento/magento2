@@ -55,18 +55,27 @@ class DataProvider implements DataProviderInterface
     private $indexerFrontendResource;
 
     /**
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource
+     */
+    private $indexerStockFrontendResource;
+
+    /**
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Session $customerSession
      * @param FrontendResource $indexerFrontendResource
+     * @param FrontendResource $indexerStockFrontendResource
+     *
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         Config $eavConfig,
         ResourceConnection $resource,
         ScopeResolverInterface $scopeResolver,
         Session $customerSession,
-        FrontendResource $indexerFrontendResource = null
+        FrontendResource $indexerFrontendResource = null,
+        FrontendResource $indexerStockFrontendResource = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->resource = $resource;
@@ -76,6 +85,8 @@ class DataProvider implements DataProviderInterface
         $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
             Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
         );
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
     }
 
     /**
@@ -118,7 +129,7 @@ class DataProvider implements DataProviderInterface
             $subSelect = $select;
             $subSelect->from(['main_table' => $table], ['main_table.value'])
                 ->joinLeft(
-                    ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
+                    ['stock_index' => $this->indexerStockFrontendResource->getMainTable()],
                     'main_table.source_id = stock_index.product_id',
                     []
                 )

@@ -19,11 +19,13 @@ use Magento\Framework\Indexer\BatchProviderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction;
+use Magento\Indexer\Model\ResourceModel\FrontendResource;
 
 /**
  * Class Full reindex action
  *
  * @package Magento\CatalogInventory\Model\Indexer\Stock\Action
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Full extends AbstractAction
 {
@@ -53,10 +55,13 @@ class Full extends AbstractAction
      * @param ProductType $catalogProductType
      * @param CacheContext $cacheContext
      * @param EventManager $eventManager
+     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
      * @param MetadataPool|null $metadataPool
      * @param BatchCalculator|null $batchSizeCalculator
      * @param BatchProviderInterface|null $batchProvider
      * @param array $memoryTablesMinRows
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourceConnection $resource,
@@ -64,12 +69,20 @@ class Full extends AbstractAction
         ProductType $catalogProductType,
         CacheContext $cacheContext,
         EventManager $eventManager,
+        FrontendResource $indexerStockFrontendResource = null,
         MetadataPool $metadataPool = null,
         BatchCalculator $batchSizeCalculator = null,
         BatchProviderInterface $batchProvider = null,
         array $memoryTablesMinRows = []
     ) {
-        parent::__construct($resource, $indexerFactory, $catalogProductType, $cacheContext, $eventManager);
+        parent::__construct(
+            $resource,
+            $indexerFactory,
+            $catalogProductType,
+            $cacheContext,
+            $eventManager,
+            $indexerStockFrontendResource
+        );
 
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         $this->batchProvider = $batchProvider ?: ObjectManager::getInstance()->get(BatchProviderInterface::class);
@@ -93,12 +106,12 @@ class Full extends AbstractAction
             $this->useIdxTable(false);
             $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
 
-            $tableName = $this->_getTable('cataloginventory_stock_status');
             $columns = array_keys($this->_getConnection()->describeTable($this->_getIdxTable()));
 
             /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer $indexer */
             foreach ($this->_getTypeIndexers() as $indexer) {
                 $connection = $indexer->getConnection();
+                $tableName = $indexer->getMainTable();
 
                 $memoryTableMinRows = isset($this->memoryTablesMinRows[$indexer->getTypeId()])
                     ? $this->memoryTablesMinRows[$indexer->getTypeId()]

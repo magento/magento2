@@ -16,6 +16,36 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
     /**
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource
+     */
+    private $indexerStockFrontendResource;
+
+    /**
+     * Class constructor
+     *
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param string $connectionName
+     * @param null|\Magento\Indexer\Model\Indexer\StateFactory $stateFactory
+     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
+     */
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        $connectionName = null,
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
+    ) {
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
+        parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName, $stateFactory);
+    }
+
+    /**
      * Get the select object for get stock status by grouped product ids
      *
      * @param int|array $entityIds
@@ -25,7 +55,7 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
         $connection = $this->getConnection();
-        $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
+        $idxTable = $usePrimaryTable ? $this->indexerStockFrontendResource->getMainTable() : $this->getIdxTable();
         $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $select = parent::_getStockStatusSelect($entityIds, $usePrimaryTable);
         $select->reset(

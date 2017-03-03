@@ -12,12 +12,14 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * This strategy handles attributes which comply with two criteria:
  *   - The filter for dropdown or multi-select attribute
  *   - The filter is Term filter
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TermDropdownStrategy implements FilterStrategyInterface
 {
@@ -47,24 +49,33 @@ class TermDropdownStrategy implements FilterStrategyInterface
     private $scopeConfig;
 
     /**
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource
+     */
+    private $indexerStockFrontendResource;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param ResourceConnection $resourceConnection
      * @param EavConfig $eavConfig
      * @param ScopeConfigInterface $scopeConfig
      * @param AliasResolver $aliasResolver
+     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         ResourceConnection $resourceConnection,
         EavConfig $eavConfig,
         ScopeConfigInterface $scopeConfig,
-        AliasResolver $aliasResolver
+        AliasResolver $aliasResolver,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
     ) {
         $this->storeManager = $storeManager;
         $this->resourceConnection = $resourceConnection;
         $this->eavConfig = $eavConfig;
         $this->scopeConfig = $scopeConfig;
         $this->aliasResolver = $aliasResolver;
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
     }
 
     /**
@@ -92,7 +103,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
             $stockAlias = $alias . AliasResolver::STOCK_FILTER_SUFFIX;
             $select->joinLeft(
                 [
-                    $stockAlias => $this->resourceConnection->getTableName('cataloginventory_stock_status'),
+                    $stockAlias => $this->indexerStockFrontendResource->getMainTable(),
                 ],
                 sprintf('%2$s.product_id = %1$s.source_id', $alias, $stockAlias),
                 []

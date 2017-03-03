@@ -10,6 +10,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
@@ -49,6 +50,16 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     protected $stockConfiguration;
 
     /**
+     * @var \Magento\Indexer\Model\Indexer\StateFactory
+     */
+    private $indexerStateFactory;
+
+    /**
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource
+     */
+    private $indexerStockFrontendResource;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -56,15 +67,23 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $connectionName
+     * @param null|\Magento\Indexer\Model\Indexer\StateFactory $stateFactory
+     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
     ) {
         $this->_scopeConfig = $scopeConfig;
+        $this->indexerStateFactory = $stateFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Indexer\Model\Indexer\StateFactory::class);
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
     }
 
@@ -287,7 +306,11 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         }
 
         $connection = $this->getConnection();
-        $connection->insertOnDuplicate($this->getMainTable(), $data, ['qty', 'stock_status']);
+        $connection->insertOnDuplicate(
+            $this->indexerStockFrontendResource->getMainTable(),
+            $data,
+            ['qty', 'stock_status']
+        );
 
         return $this;
     }
@@ -352,5 +375,23 @@ class DefaultStock extends AbstractIndexer implements StockInterface
                 ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\QueryProcessorComposite::class);
         }
         return $this->queryProcessorComposite;
+    }
+
+    /**
+     * @inheritdoc
+     * Returns main table name based on the suffix stored in the 'indexer_state' table
+     *
+     * @return string
+     */
+    public function getMainTable()
+    {
+        $table = parent::getMainTable();
+        $indexerState = $this->indexerStateFactory->create()->loadByIndexer(
+            \Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID
+        );
+        $destinationTableSuffix = ($indexerState->getTableSuffix() === '')
+            ? \Magento\Framework\Indexer\StateInterface::ADDITIONAL_TABLE_SUFFIX
+            : '';
+        return $table . $destinationTableSuffix;
     }
 }

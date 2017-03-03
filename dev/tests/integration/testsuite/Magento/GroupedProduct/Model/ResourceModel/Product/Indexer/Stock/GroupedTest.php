@@ -39,11 +39,16 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class
         );
 
+        /** @var \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource */
+        $indexerStockFrontendResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class
+        );
+
         $productCollection->addAttributeToSelect('name');
         $productCollection->addUrlRewrite($category->getId());
         $productCollection->joinField(
             'qty',
-            'cataloginventory_stock_status',
+            $indexerStockFrontendResource->getMainTable(),
             'qty',
             'product_id=entity_id',
             '{{table}}.stock_id=1',

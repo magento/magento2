@@ -151,4 +151,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Bundle\Model\ResourceModel\Selection\Collection">
+        <arguments>
+            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+        </arguments>
+    </type>
 </config>

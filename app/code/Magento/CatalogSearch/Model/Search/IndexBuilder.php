@@ -19,6 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Build base Query for Index
@@ -68,6 +69,11 @@ class IndexBuilder implements IndexBuilderInterface
     private $stockConfiguration;
 
     /**
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource
+     */
+    private $indexerStockFrontendResource;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ScopeConfigInterface $config
      * @param StoreManagerInterface $storeManager
@@ -75,6 +81,7 @@ class IndexBuilder implements IndexBuilderInterface
      * @param IndexScopeResolver $scopeResolver
      * @param TableMapper $tableMapper
      * @param ScopeResolverInterface $dimensionScopeResolver
+     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
      */
     public function __construct(
         ResourceConnection $resource,
@@ -83,7 +90,8 @@ class IndexBuilder implements IndexBuilderInterface
         ConditionManager $conditionManager,
         IndexScopeResolver $scopeResolver,
         TableMapper $tableMapper,
-        ScopeResolverInterface $dimensionScopeResolver
+        ScopeResolverInterface $dimensionScopeResolver,
+        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
     ) {
         $this->resource = $resource;
         $this->config = $config;
@@ -92,6 +100,8 @@ class IndexBuilder implements IndexBuilderInterface
         $this->scopeResolver = $scopeResolver;
         $this->tableMapper = $tableMapper;
         $this->dimensionScopeResolver = $dimensionScopeResolver;
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
     }
 
     /**
@@ -125,7 +135,7 @@ class IndexBuilder implements IndexBuilderInterface
         );
         if ($isShowOutOfStock === false) {
             $select->joinInner(
-                ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
+                ['stock_index' => $this->indexerStockFrontendResource->getMainTable()],
                 'search_index.entity_id = stock_index.product_id'
                 . $this->resource->getConnection()->quoteInto(
                     ' AND stock_index.website_id = ?',
