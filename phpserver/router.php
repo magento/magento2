@@ -33,13 +33,11 @@ $debug = function ($val) {
 };
 
 /**
- * Caution, this is very experimental stuff
- * no guarantee for working result
- * has tons of potential big security holes
+ * Note: the code below is experimental and not intended to be used outside development environment.
+ * The code is protected against running outside of PHP built-in web server.
  */
 
 if (php_sapi_name() === 'cli-server') {
-
     $debug($_SERVER["REQUEST_URI"]);
     if (preg_match('/^\/(index|get|static)\.php(\/)?/', $_SERVER["REQUEST_URI"])) {
         return false;    // serve the requested resource as-is.
