@@ -568,6 +568,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             $attributesData = $_data[1];
         }
 
-        return $attributesData ? $attributesData : false;
+        return $attributesData!==false ? $attributesData : false;
     }
 }
