@@ -472,7 +472,15 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             }
             $quotePath = $value['quote_path'];
             $orderPath = $value['order_path'];
-      $this->_mediaDirectory->getAbsolutePath($orderPath)
+
+            if (!$this->_mediaDirectory->isFile($quotePath) || !$this->_mediaDirectory->isReadable($quotePath)) {
+                throw new \Exception();
+            }
+            
+            if ($this->_coreFileStorageDatabase->checkDbUsage()) {
+                $this->_coreFileStorageDatabase->copyFile(
+                    $this->_mediaDirectory->getAbsolutePath($quotePath),
+                    $this->_mediaDirectory->getAbsolutePath($orderPath)
                 );
             } else {
                 $this->_mediaDirectory->copyFile($quotePath, $orderPath);
@@ -489,15 +497,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $url
      * @return $this
      */
-    public function setCustomOp
-            if (!$this->_mediaDirectory->isFile($quotePath) || !$this->_mediaDirectory->isReadable($quotePath)) {
-                throw new \Exception();
-            }
-
-            if ($this->_coreFileStorageDatabase->checkDbUsage()) {
-                $this->_coreFileStorageDatabase->copyFile(
-                    $this->_mediaDirectory->getAbsolutePath($quotePath),
-              tionDownloadUrl($url)
+    public function setCustomOptionDownloadUrl($url)
     {
         $this->_customOptionDownloadUrl = $url;
         return $this;
