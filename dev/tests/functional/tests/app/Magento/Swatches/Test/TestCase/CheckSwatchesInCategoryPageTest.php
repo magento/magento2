@@ -9,11 +9,9 @@ use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Config\Test\TestStep\SetupConfigurationStep;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Magento\Framework\App\ObjectManager;
 use Magento\Mtf\Constraint\ConstraintFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Mtf\Util\Command\Cli\Indexer;
 use Magento\Swatches\Test\Constraint\AssertSwatchesVisibilityInCategory;
 
@@ -32,11 +30,11 @@ use Magento\Swatches\Test\Constraint\AssertSwatchesVisibilityInCategory;
  * 4. Save configuration.
  * 5. Clean cache.
  * 6. Go to storefron category.
- * 7. Check swatches aren't visible in catalog item.
+ * 7. Check swatches not visible in catalog item.
  * 8. Set Show Swatches in Product List = Yes.
- * 9  Save configuration.
+ * 9.  Save configuration.
  * 10. Clean cache.
- * 11 Perform assertions.
+ * 11. Check swatches are visible in catalog item.
  *
  * @group Swatches (MX)
  * @ZephyrId MAGETWO-65485
@@ -72,31 +70,21 @@ class CheckSwatchesInCategoryPageTest extends Injectable
     protected $constraintFactory;
 
     /**
-     * Cache.
-     *
-     * @var Cache
-     */
-    protected $cache;
-
-    /**
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
      * @param TestStepFactory $testStepFactory
      * @param ConstraintFactory $constraintFactory
-     * @param Cache $cache
      */
     public function __prepare(
         CatalogCategoryView $catalogCategoryView,
         CmsIndex $cmsIndex,
         TestStepFactory $testStepFactory,
-        ConstraintFactory $constraintFactory,
-        Cache $cache
+        ConstraintFactory $constraintFactory
     ) {
         $this->catalogCategoryView = $catalogCategoryView;
         $this->cmsIndex = $cmsIndex;
         $this->testStepFactory = $testStepFactory;
         $this->constraintFactory = $constraintFactory;
-        $this->cache = $cache;
     }
 
     /**
@@ -111,11 +99,10 @@ class CheckSwatchesInCategoryPageTest extends Injectable
         $product->persist();
 
         //Steps:
-        $configStep = $this->testStepFactory->create(
+        $this->testStepFactory->create(
             SetupConfigurationStep::class,
-            ['configData' => 'swatches_visibility_in_catalog', 'flushCache' => true]
-        );
-        $configStep->run();
+            ['configData' => 'disable_swatches_visibility_in_catalog']
+        )->run();
 
         /** @var AssertSwatchesVisibilityInCategory $assertSwatchesVisibility */
         $assertSwatchesVisibility = $this->constraintFactory->get(
@@ -128,7 +115,10 @@ class CheckSwatchesInCategoryPageTest extends Injectable
             false
         );
 
-        $configStep->cleanUp();
+        $this->testStepFactory->create(
+            SetupConfigurationStep::class,
+            ['configData' => 'enable_swatches_visibility_in_catalog', 'flushCache' => true]
+        )->run();
 
         return ['product' => $product];
     }

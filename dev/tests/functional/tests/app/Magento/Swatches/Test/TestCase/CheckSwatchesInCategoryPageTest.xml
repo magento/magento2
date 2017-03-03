@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Swatches\Test\TestCase\CheckSwatchesInCategoryPageTest" summary="Check Swathes visibility in category page" ticketId="MAGETWO-65485">
-        <variation name="CheckSwatchesInCategoryPageTest1">
+        <variation name="CheckSwatchesInCategoryPageTestVariation1">
             <data name="product/dataset" xsi:type="string">product_with_text_swatch</data>
             <constraint name="Magento\Swatches\Test\Constraint\AssertSwatchesVisibilityInCategory" />
         </variation>
