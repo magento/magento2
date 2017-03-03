@@ -10,6 +10,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Pool of all deployment configuration importers.
+ *
+ * All importers should implement Magento\Framework\App\DeploymentConfig\ImporterInterface interface.
  */
 class ImporterPool
 {
@@ -82,7 +84,8 @@ class ImporterPool
     }
 
     /**
-     * Retrieves sections from deployment configuration files which need to import into the DB.
+     * Retrieves names of sections for configuration files whose data is read from these files for import
+     * to appropriate application sources.
      *
      * @return array the list of sections
      * E.g.

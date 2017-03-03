@@ -9,6 +9,9 @@ use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
 
 /**
  * Configuration data validator of specific sections in the deployment configuration files.
+ *
+ * This validator checks that configuration data from specific sections was not changed.
+ * If the data was changed validator returns false.
  */
 class Validator
 {
@@ -51,8 +54,10 @@ class Validator
     /**
      * Checks if config data in the deployment configuration files is valid.
      *
-     * If the section name is set checks only its configuration data.
-     * If config data is empty always returns true because it means that nothing to import.
+     * Checks if config data was changed based on its hash.
+     * If the new hash of config data and the saved hash are different returns false.
+     * If config data is empty always returns true.
+     * In the other cases returns true.
      *
      * @param string $sectionName is name section for check data of the specific section
      * @return bool

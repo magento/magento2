@@ -21,7 +21,7 @@ use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
 class Importer
 {
     /**
-     * The manager of deployment configuration hash.
+     * The configuration data validator.
      *
      * @var Validator
      */

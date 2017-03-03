@@ -6,8 +6,10 @@
 namespace Magento\Framework\Locale\Deployed;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\AvailableLocalesInterface;
 use Magento\Framework\Locale\ListsInterface;
+use Magento\Framework\Locale\OptionInterface;
 use Magento\Framework\View\DesignInterface;
 
 /**
@@ -64,7 +66,7 @@ class Options implements OptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getLocales()
+    public function getOptionLocales()
     {
         return $this->filterLocales($this->localeLists->getOptionLocales());
     }
@@ -72,7 +74,7 @@ class Options implements OptionInterface
     /**
      * {@inheritdoc}
      */
-    public function getTranslatedLocales()
+    public function getTranslatedOptionLocales()
     {
         return $this->filterLocales($this->localeLists->getTranslatedOptionLocales());
     }
@@ -118,7 +120,11 @@ class Options implements OptionInterface
         }
 
         $theme = $this->design->getDesignTheme();
-        $availableLocales = $this->availableLocales->getList($theme->getCode(), $theme->getArea());
+        try {
+            $availableLocales = $this->availableLocales->getList($theme->getCode(), $theme->getArea());
+        } catch (LocalizedException $e) {
+            $availableLocales = [];
+        }
 
         return array_filter($locales, function ($localeData) use ($availableLocales) {
             return in_array($localeData['value'], $availableLocales);

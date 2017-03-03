@@ -12,6 +12,11 @@ use Magento\Framework\FlagFactory;
 
 /**
  * Saves and Retrieves deployment configuration hash.
+ *
+ * This hash keeps version of last imported data. Hash is used to define whether data was updated
+ * and import is required.
+ *
+ * @see \Magento\Deploy\Model\DeploymentConfig\Validator::isValid()
  */
 class Hash
 {
@@ -71,10 +76,11 @@ class Hash
      *
      * If the specific section name is set, then hash will be updated only for this section,
      * in another case hash will be updated for all sections which defined in di.xml
+     * The hash is generated based on data from configuration files.
      *
      * @param string $sectionName the specific section name
      * @return void
-     * @throws LocalizedException is thrown when hash is not saved in a storage
+     * @throws LocalizedException is thrown when hash was not saved
      */
     public function regenerate($sectionName = null)
     {

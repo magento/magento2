@@ -21,8 +21,6 @@ class ValueProcessor
 {
     /**
      * Placeholder for the output of sensitive data.
-     *
-     * @const
      */
     const SAFE_PLACEHOLDER = '******';
 
@@ -63,7 +61,7 @@ class ValueProcessor
     }
 
     /**
-     * Processes value using backend model.
+     * Processes value to display using backend model.
      *
      * @param string $scope The scope of configuration. E.g. 'default', 'website' or 'store'
      * @param string $scopeCode The scope code of configuration
@@ -86,14 +84,17 @@ class ValueProcessor
         $backendModel = $field && $field->hasBackendModel()
             ? $field->getBackendModel()
             : $this->configValueFactory->create();
+
+        if ($backendModel instanceof Encrypted) {
+            return  $value ? self::SAFE_PLACEHOLDER : null;
+        }
+
         $backendModel->setPath($path);
         $backendModel->setScope($scope);
         $backendModel->setScopeId($scopeCode);
         $backendModel->setValue($value);
         $backendModel->afterLoad();
 
-        return ($backendModel instanceof Encrypted) && !empty($backendModel->getValue())
-            ? self::SAFE_PLACEHOLDER
-            : $backendModel->getValue();
+        return $backendModel->getValue();
     }
 }

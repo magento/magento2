@@ -6,7 +6,7 @@
 namespace Magento\Backend\Block\System\Account\Edit;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Locale\Deployed\OptionInterface;
+use Magento\Framework\Locale\OptionInterface;
 
 /**
  * Adminhtml edit admin user account form
@@ -135,7 +135,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'interface_locale',
                 'label' => __('Interface Locale'),
                 'title' => __('Interface Locale'),
-                'values' => $this->deployedLocales->getTranslatedLocales(),
+                'values' => $this->deployedLocales->getTranslatedOptionLocales(),
                 'class' => 'select'
             ]
         );
