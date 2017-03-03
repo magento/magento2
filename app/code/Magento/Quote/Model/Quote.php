@@ -1572,6 +1572,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             );
         }
 
+        if (!$product->isSalable()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Product that you are trying to add is not available.')
+            );
+        }
+
         $cartCandidates = $product->getTypeInstance()->prepareForCartAdvanced($request, $product, $processMode);
 
         /**
