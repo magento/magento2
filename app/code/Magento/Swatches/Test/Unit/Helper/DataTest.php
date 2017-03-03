@@ -5,6 +5,9 @@
  */
 namespace Magento\Swatches\Test\Unit\Helper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Helper\Image */
@@ -101,8 +104,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->attributeMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], [], '',
-            false);
+        $this->attributeMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->swatchAttributesProviderMock = $this->getMock(
             \Magento\Swatches\Model\SwatchAttributesProvider::class,

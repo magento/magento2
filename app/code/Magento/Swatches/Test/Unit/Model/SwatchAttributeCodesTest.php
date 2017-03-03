@@ -141,12 +141,12 @@ class SwatchAttributeCodesTest extends \PHPUnit_Framework_TestCase
             ->willReturn($adapterMock);
 
         $this->resourceConnection
- 	 	    ->method('getTableName')
- 	 	    ->withConsecutive(
+            ->method('getTableName')
+            ->withConsecutive(
                 [self::ATTRIBUTE_TABLE],
                 [self::ATTRIBUTE_OPTION_TABLE],
                 [self::SWATCH_OPTION_TABLE]
- 	 	    )->will(self::onConsecutiveCalls(
+            )->will(self::onConsecutiveCalls(
                 self::ATTRIBUTE_TABLE,
                 self::ATTRIBUTE_OPTION_TABLE,
                 self::SWATCH_OPTION_TABLE
@@ -163,5 +163,4 @@ class SwatchAttributeCodesTest extends \PHPUnit_Framework_TestCase
             [json_encode($this->swatchAttributesCodes), $this->swatchAttributesCodes]
         ];
     }
-
 }
