@@ -35,7 +35,6 @@ use Magento\Framework\App\DeploymentConfig;
  * files to appropriate application sources.
  *
  * @see \Magento\Deploy\Console\Command\App\ConfigImport\Importer::import()
- * @see \Magento\Deploy\Model\DeploymentConfig\Hash::regenerate()
  */
 class DataCollector
 {
