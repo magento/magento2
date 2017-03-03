@@ -10,21 +10,12 @@ namespace Magento\Backend\Model\View\Layout;
  *
  * Introduces family of visibility conditions for layout elements at the backend.
  * By using this interface a developer can specify dynamic rule for ui component visibility.
- * To be applied a condition should be registered in ConditionPool
  *
- * <type name="Magento\Backend\Model\View\Layout\ConditionPool">
- *     <arguments>
- *         <argument name="conditions" xsi:type="array">
- *             <item name="condition::identifier" xsi:type="string">Condition\Implementation</item>
- *         </argument>
- *     </arguments>
- * </type>
- * 
- * Registered condition can be used by ui component declaration in layout
+ * Condition can be used by ui component declaration in layout
  *
- * <uiComponent name="form" condition="condition::identifier" />
+ * <uiComponent name="form" visibilityCondition="ConditionFullClassPath" />
  *
- * "condition" just another optional attribute of ui component declaration
+ * "visibilityCondition" just another optional attribute of ui component declaration
  */
 interface ConditionInterface
 {
