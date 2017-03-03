@@ -66,7 +66,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
      */
     private $salableResolverMock;
 
-    /** @var ObjectManager  */
+    /** @var ObjectManager */
     private $objectManager;
 
     /** @var  Manager|\PHPUnit_Framework_MockObject_MockObject */
@@ -84,7 +84,18 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfoInterface::class, ['getPrice', 'getPrices', 'getAdjustments', 'getAdjustment'], [], '', false);
+        $this->priceInfo = $this->getMock(
+            \Magento\Framework\Pricing\PriceInfoInterface::class,
+            [
+                'getPrice',
+                'getPrices',
+                'getAdjustments',
+                'getAdjustment'
+            ],
+            [],
+            '',
+            false
+        );
         $this->product->expects($this->any())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
