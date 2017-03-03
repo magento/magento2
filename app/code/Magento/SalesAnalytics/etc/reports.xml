@@ -15,7 +15,7 @@
             <attribute name="base_grand_total"/>
             <attribute name="base_tax_amount"/>
             <attribute name="base_shipping_amount"/>
-            <attribute name="coupon_code"/>
+            <attribute name="coupon_code" function="sha1"/>
             <attribute name="store_id"/>
             <attribute name="store_name"/>
             <attribute name="base_discount_amount"/>
