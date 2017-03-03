@@ -9,9 +9,9 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Client\BrowserInterface;
 
 /**
- * Assert Free Tier Sign Up page is opened by admin dashboard link
+ * Assert Advanced Reporting Sign Up page is opened by admin dashboard link.
  */
-class AssertFreeTierLink extends AbstractConstraint
+class AssertAdvancedReportingPage extends AbstractConstraint
 {
     /**
      * Browser instance.
@@ -21,7 +21,7 @@ class AssertFreeTierLink extends AbstractConstraint
     protected $browser;
 
     /**
-     * Assert Free Tier Sign Up page is opened by link
+     * Assert Advanced Reporting Sign Up page is opened by link.
      *
      * @param BrowserInterface $browser
      * @param string $advancedReportingLink
@@ -34,7 +34,7 @@ class AssertFreeTierLink extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $advancedReportingLink,
             $this->browser->getUrl(),
-            'Free Tier Sign Up page was not opened by link.'
+            'Advanced Reporting Sign Up page was not opened by link.'
         );
     }
 
@@ -45,6 +45,6 @@ class AssertFreeTierLink extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Free Tier Sign Up page is opened by link';
+        return 'Advanced Reporting Sign Up page is opened by link';
     }
 }
