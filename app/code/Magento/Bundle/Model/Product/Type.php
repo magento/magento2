@@ -344,7 +344,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
             }
 
-            return $virtualCount == count($selections);
+            return $virtualCount === count($selections);
         }
 
         return false;
@@ -544,7 +544,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         $isSalable = false;
-        foreach ($this->getOptionsCollection($product)->getItems() as $option) {
+        foreach ($this->getOptionsCollection($product) as $option) {
             $hasSalable = false;
 
             $selectionsCollection = $this->_bundleCollection->create();
@@ -972,7 +972,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             ->getAllIds();
         $collection = $this->getSelectionsCollection($optionIds, $product);
 
-        if (count($collection) > 0 || $product->getOptions()) {
+        if ($collection->getSize() > 0 || $product->getOptions()) {
             return true;
         }
 
