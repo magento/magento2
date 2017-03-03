@@ -7,6 +7,7 @@ namespace Magento\Signifyd\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Signifyd\Test\Fixture\SignifydAddress;
+use Magento\Signifyd\Test\Fixture\SignifydData;
 use Magento\Signifyd\Test\Page\SignifydConsole\SignifydCases;
 
 /**
@@ -24,29 +25,63 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
     /**
      * @param SignifydCases $signifydCases
      * @param SignifydAddress $billingAddress
+     * @param SignifydData $signifydData
      * @param array $prices
      * @param string $orderId
      * @param string $customerFullName
-     * @param array $signifydData
      * @return void
      */
     public function processAssert(
         SignifydCases $signifydCases,
         SignifydAddress $billingAddress,
+        SignifydData $signifydData,
         array $prices,
         $orderId,
-        $customerFullName,
-        array $signifydData
+        $customerFullName
     ) {
         $this->signifydCases = $signifydCases;
 
-        $this->checkGuaranteeDisposition($signifydData['guaranteeDisposition']);
-        $this->checkCvvResponse($signifydData['cvvResponse']);
-        $this->checkAvsResponse($signifydData['avsResponse']);
+        $this->checkDeviceData();
+        $this->checkShippingPrice($signifydData->getShippingPrice());
+        $this->checkGuaranteeDisposition($signifydData->getGuaranteeDisposition());
+        $cvvResponse = $signifydData->getCvvResponse();
+        if (isset($cvvResponse)) {
+            $this->checkCvvResponse($cvvResponse);
+        }
+        $this->checkAvsResponse($signifydData->getAvsResponse());
         $this->checkOrderId($orderId);
         $this->checkOrderAmount($prices['grandTotal']);
+        $this->checkOrderAmountCurrency($prices['grandTotalCurrency']);
         $this->checkCardHolder($customerFullName);
         $this->checkBillingAddress($billingAddress);
+    }
+
+    /**
+     * Checks device data are present.
+     *
+     * @return void
+     */
+    private function checkDeviceData()
+    {
+        \PHPUnit_Framework_Assert::assertTrue(
+            $this->signifydCases->getCaseInfoBlock()->isAvailableDeviceData(),
+            'Device data are not available on case page in Signifyd console.'
+        );
+    }
+
+    /**
+     * Checks shipping price is correct.
+     *
+     * @param string $shippingPrice
+     * @return void
+     */
+    private function checkShippingPrice($shippingPrice)
+    {
+        \PHPUnit_Framework_Assert::assertContains(
+            $shippingPrice,
+            $this->signifydCases->getCaseInfoBlock()->getShippingPrice(),
+            'Shipping price is incorrect on case page in Signifyd console.'
+        );
     }
 
     /**
@@ -60,7 +95,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $guaranteeDisposition,
             $this->signifydCases->getCaseInfoBlock()->getGuaranteeDisposition(),
-            'Guarantee disposition is incorrect in Signifyd console.'
+            'Guarantee disposition is incorrect on case page in Signifyd console.'
         );
     }
 
@@ -75,7 +110,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $cvvResponse,
             $this->signifydCases->getCaseInfoBlock()->getCvvResponse(),
-            'CVV response is incorrect in Signifyd console.'
+            'CVV response is incorrect on case page in Signifyd console.'
         );
     }
 
@@ -90,7 +125,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $avsResponse,
             $this->signifydCases->getCaseInfoBlock()->getAvsResponse(),
-            'AVS response is incorrect in Signifyd console.'
+            'AVS response is incorrect on case page in Signifyd console.'
         );
     }
 
@@ -105,7 +140,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $orderId,
             $this->signifydCases->getCaseInfoBlock()->getOrderId(),
-            'Order id is incorrect in Signifyd console.'
+            'Order id is incorrect on case page in Signifyd console.'
         );
     }
 
@@ -120,7 +155,22 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             number_format($amount, 2),
             $this->signifydCases->getCaseInfoBlock()->getOrderAmount(),
-            'Order amount is incorrect in Signifyd console.'
+            'Order amount is incorrect on case page in Signifyd console.'
+        );
+    }
+
+    /**
+     * Checks order amount currency is correct.
+     *
+     * @param string $currency
+     * @return void
+     */
+    private function checkOrderAmountCurrency($currency)
+    {
+        \PHPUnit_Framework_Assert::assertEquals(
+            $currency,
+            $this->signifydCases->getCaseInfoBlock()->getOrderAmountCurrency(),
+            'Order amount currency is incorrect on case page in Signifyd console.'
         );
     }
 
@@ -135,7 +185,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $customerFullName,
             $this->signifydCases->getCaseInfoBlock()->getCardHolder(),
-            'Card holder name is incorrect in Signifyd console.'
+            'Card holder name is incorrect on case page in Signifyd console.'
         );
     }
 
@@ -150,7 +200,7 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertContains(
             $billingAddress->getStreet(),
             $this->signifydCases->getCaseInfoBlock()->getBillingAddress(),
-            'Billing address is incorrect in Signifyd console.'
+            'Billing address is incorrect on case page in Signifyd console.'
         );
     }
 
@@ -159,6 +209,6 @@ class AssertCaseInfoOnSignifydConsole extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Case information is correct in Signifyd console.';
+        return 'Case information is correct on case page in Signifyd console.';
     }
 }

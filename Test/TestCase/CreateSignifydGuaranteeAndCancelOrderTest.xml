@@ -9,29 +9,23 @@
     <testCase name="Magento\Signifyd\Test\TestCase\CreateSignifydGuaranteeAndCancelOrderTest"
               summary="One Page Checkout with Signifyd and cancel order.">
         <variation name="CreateSignifydGuaranteeAndCancelOrderWithBraintreeVariation1"
-                   summary="Registered Checkout within Braintree and Signifyd approved guarantee disposition."
+                   summary="Cancel order placed within Braintree credit card with Signifyd approved guarantee."
                    ticketId="MAGETWO-62120,MAGETWO-63221">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="customer/dataset" xsi:type="string">signifyd_approve_us_customer</data>
-            <data name="signifydAddress/dataset" xsi:type="string">signifyd_us_shipping_address</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="prices/grandTotal" xsi:type="string">15.00</data>
+            <data name="prices/grandTotalCurrency" xsi:type="string">USD</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="configData" xsi:type="string">braintree,signifyd</data>
+            <data name="placeOrderStatus" xsi:type="string">Processing</data>
+            <data name="signifydAddress/dataset" xsi:type="string">signifyd_us_shipping_address</data>
             <data name="signifydAccount/dataset" xsi:type="string">sandbox_default</data>
-            <data name="status" xsi:type="string">Processing</data>
-            <data name="signifydData/team" xsi:type="string">autotest</data>
-            <data name="signifydData/caseStatus" xsi:type="string">Open</data>
-            <data name="signifydData/caseFlag" xsi:type="string">Good</data>
-            <data name="signifydData/reviewDisposition" xsi:type="string">Good</data>
-            <data name="signifydData/guaranteeDisposition" xsi:type="string">Approved</data>
-            <data name="signifydData/cvvResponse" xsi:type="string">CVV2 Match (M)</data>
-            <data name="signifydData/avsResponse" xsi:type="string">Full match (Y)</data>
-            <data name="signifydData/cleanupWebhooks" xsi:type="boolean">false</data>
+            <data name="signifydData/dataset" xsi:type="string">signifyd_guarantee_approve</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
@@ -39,32 +33,27 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCanceled" />
             <constraint name="Magento\Sales\Test\Constraint\AssertCancelInCommentsHistory" />
             <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory" />
+            <constraint name="Magento\Signifyd\Test\Constraint\AssertAwaitingSignifydGuaranteeInCommentsHistory" />
             <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydGuaranteeCancelInCommentsHistory" />
         </variation>
         <variation name="CreateSignifydGuaranteeAndCancelOrderWithBraintreeVariation2"
-                   summary="Registered Checkout within Braintree and Signifyd declined guarantee disposition."
-                   ticketId="MAGETWO-64305,MAGETWO-63221">
+                   summary="Cancel order placed within Braintree credit card with Signifyd declined guarantee."
+                   ticketId="MAGETWO-64305, MAGETWO-65253">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="customer/dataset" xsi:type="string">signifyd_decline_us_customer</data>
-            <data name="signifydAddress/dataset" xsi:type="string">signifyd_us_shipping_address</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="prices/grandTotal" xsi:type="string">15.00</data>
+            <data name="prices/grandTotalCurrency" xsi:type="string">USD</data>
             <data name="creditCard/dataset" xsi:type="string">visa_default</data>
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="configData" xsi:type="string">braintree,signifyd</data>
+            <data name="placeOrderStatus" xsi:type="string">On Hold</data>
+            <data name="signifydAddress/dataset" xsi:type="string">signifyd_us_shipping_address</data>
             <data name="signifydAccount/dataset" xsi:type="string">sandbox_default</data>
-            <data name="status" xsi:type="string">Processing</data>
-            <data name="signifydData/team" xsi:type="string">autotest</data>
-            <data name="signifydData/caseStatus" xsi:type="string">Open</data>
-            <data name="signifydData/caseFlag" xsi:type="string">Bad</data>
-            <data name="signifydData/reviewDisposition" xsi:type="string">Fraudulent</data>
-            <data name="signifydData/guaranteeDisposition" xsi:type="string">Declined</data>
-            <data name="signifydData/cvvResponse" xsi:type="string">CVV2 Match (M)</data>
-            <data name="signifydData/avsResponse" xsi:type="string">Full match (Y)</data>
-            <data name="signifydData/cleanupWebhooks" xsi:type="boolean">true</data>
+            <data name="signifydData/dataset" xsi:type="string">signifyd_guarantee_decline</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCancelSuccessMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
@@ -72,6 +61,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCanceled" />
             <constraint name="Magento\Sales\Test\Constraint\AssertCancelInCommentsHistory" />
             <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydCaseInCommentsHistory" />
+            <constraint name="Magento\Signifyd\Test\Constraint\AssertAwaitingSignifydGuaranteeInCommentsHistory" />
             <constraint name="Magento\Signifyd\Test\Constraint\AssertSignifydGuaranteeCancelInCommentsHistory" />
         </variation>
     </testCase>

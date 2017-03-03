@@ -6,6 +6,7 @@
 namespace Magento\Signifyd\Test\TestStep;
 
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Signifyd\Test\Fixture\SignifydData;
 use Magento\Signifyd\Test\Page\SignifydConsole\SignifydNotifications;
 
 /**
@@ -21,7 +22,7 @@ class SignifydSetWebhookHandlersStep implements TestStepInterface
     private $signifydNotifications;
 
     /**
-     * Array of Signifyd config data.
+     * Signifyd data fixture.
      *
      * @var array
      */
@@ -29,11 +30,11 @@ class SignifydSetWebhookHandlersStep implements TestStepInterface
 
     /**
      * @param SignifydNotifications $signifydNotifications
-     * @param array $signifydData
+     * @param SignifydData $signifydData
      */
     public function __construct(
         SignifydNotifications $signifydNotifications,
-        array $signifydData
+        SignifydData $signifydData
     ) {
         $this->signifydNotifications = $signifydNotifications;
         $this->signifydData = $signifydData;
@@ -46,6 +47,18 @@ class SignifydSetWebhookHandlersStep implements TestStepInterface
     {
         $this->signifydNotifications->open();
         $this->signifydNotifications->getWebhooksBlock()
-            ->create($this->signifydData['team']);
+            ->create($this->signifydData->getTeam());
+    }
+
+    /**
+     * Removes webhooks if test fails, or in the end of variation execution.
+     *
+     * @return void
+     */
+    public function cleanup()
+    {
+        $this->signifydNotifications->open();
+        $this->signifydNotifications->getWebhooksBlock()
+            ->cleanup($this->signifydData->getTeam());
     }
 }

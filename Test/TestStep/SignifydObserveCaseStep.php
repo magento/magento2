@@ -8,7 +8,9 @@ namespace Magento\Signifyd\Test\TestStep;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Signifyd\Test\Constraint\AssertCaseInfoOnSignifydConsole;
 use Magento\Signifyd\Test\Fixture\SignifydAddress;
+use Magento\Signifyd\Test\Fixture\SignifydData;
 use Magento\Signifyd\Test\Page\SignifydConsole\SignifydCases;
+use Magento\Signifyd\Test\Page\SignifydConsole\SignifydNotifications;
 
 /**
  * Observe case information in Signifyd console step.
@@ -23,13 +25,6 @@ class SignifydObserveCaseStep implements TestStepInterface
     private $assertCaseInfo;
 
     /**
-     * Signifyd cases page.
-     *
-     * @var SignifydCases
-     */
-    private $signifydCases;
-
-    /**
      * Billing address fixture.
      *
      * @var SignifydAddress
@@ -37,18 +32,39 @@ class SignifydObserveCaseStep implements TestStepInterface
     private $signifydAddress;
 
     /**
+     * Signifyd cases page.
+     *
+     * @var SignifydCases
+     */
+    private $signifydCases;
+
+    /**
+     * Signifyd notifications page.
+     *
+     * @var SignifydNotifications
+     */
+    private $signifydNotifications;
+
+    /**
+     * Signifyd data fixture.
+     *
+     * @var array
+     */
+    private $signifydData;
+
+    /**
+     * Signifyd cancel order step.
+     *
+     * @var SignifydCancelOrderStep
+     */
+    private $signifydCancelOrderStep;
+
+    /**
      * Prices list.
      *
      * @var array
      */
     private $prices;
-
-    /**
-     * Array of Signifyd config data.
-     *
-     * @var array
-     */
-    private $signifydData;
 
     /**
      * Order id.
@@ -59,25 +75,31 @@ class SignifydObserveCaseStep implements TestStepInterface
 
     /**
      * @param AssertCaseInfoOnSignifydConsole $assertCaseInfoOnSignifydConsole
-     * @param SignifydCases $signifydCases
      * @param SignifydAddress $signifydAddress
+     * @param SignifydCases $signifydCases
+     * @param SignifydNotifications $signifydNotifications
+     * @param SignifydData $signifydData
+     * @param SignifydCancelOrderStep $signifydCancelOrderStep
      * @param array $prices
-     * @param array $signifydData
-     * @param string $orderId
+     * @param $orderId
      */
     public function __construct(
         AssertCaseInfoOnSignifydConsole $assertCaseInfoOnSignifydConsole,
-        SignifydCases $signifydCases,
         SignifydAddress $signifydAddress,
+        SignifydCases $signifydCases,
+        SignifydNotifications $signifydNotifications,
+        SignifydData $signifydData,
+        SignifydCancelOrderStep $signifydCancelOrderStep,
         array $prices,
-        array $signifydData,
         $orderId
     ) {
         $this->assertCaseInfo = $assertCaseInfoOnSignifydConsole;
-        $this->signifydCases = $signifydCases;
         $this->signifydAddress = $signifydAddress;
-        $this->prices = $prices;
+        $this->signifydCases = $signifydCases;
+        $this->signifydNotifications = $signifydNotifications;
         $this->signifydData = $signifydData;
+        $this->signifydCancelOrderStep = $signifydCancelOrderStep;
+        $this->prices = $prices;
         $this->orderId = $orderId;
     }
 
@@ -90,16 +112,26 @@ class SignifydObserveCaseStep implements TestStepInterface
         $this->signifydCases->getCaseSearchBlock()
             ->searchCaseByCustomerName($this->signifydAddress->getFirstname());
         $this->signifydCases->getCaseSearchBlock()->selectCase();
-        $this->signifydCases->getCaseInfoBlock()->flagCase($this->signifydData['caseFlag']);
+        $this->signifydCases->getCaseInfoBlock()->flagCase($this->signifydData->getCaseFlag());
 
         $this->assertCaseInfo->processAssert(
             $this->signifydCases,
             $this->signifydAddress,
+            $this->signifydData,
             $this->prices,
             $this->orderId,
-            $this->getCustomerFullName($this->signifydAddress),
-            $this->signifydData
+            $this->getCustomerFullName($this->signifydAddress)
         );
+    }
+
+    /**
+     * Cancel order if test fails, or in the end of variation.
+     *
+     * @return void
+     */
+    public function cleanup()
+    {
+        $this->signifydCancelOrderStep->run();
     }
 
     /**

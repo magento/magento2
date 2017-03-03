@@ -76,6 +76,13 @@ class CaseInfo extends Block
     private $orderAmount = '[ng-bind*="currentCase.orderAmount"]';
 
     /**
+     * Locator value for order amount currency.
+     *
+     * @var string
+     */
+    private $orderAmountCurrency = '[ng-bind*="currentCase.currency"]';
+
+    /**
      * Css selector of displayed card holder name.
      *
      * @var string
@@ -88,6 +95,40 @@ class CaseInfo extends Block
      * @var string
      */
     private $billingAddress = '[data-dropdown="streetLinks0"]';
+
+    /**
+     * Locator value for "No analysis available" block in "Device" container.
+     *
+     * @var string
+     */
+    private $noDeviceAnalysisAvailable = '[ng-hide^="caseAnalysis.deviceAnalysis.details.length"]';
+
+    /**
+     * Locator value for "Shipping Price" block.
+     *
+     * @var string
+     */
+    private $shippingPrice = '[ng-if$="caseOrderSummary.shipments[0].shippingPrice"]';
+
+    /**
+     * Check if device data are present.
+     *
+     * @return bool
+     */
+    public function isAvailableDeviceData()
+    {
+        return !$this->_rootElement->find($this->noDeviceAnalysisAvailable)->isVisible();
+    }
+
+    /**
+     * Returns shipping price.
+     *
+     * @return string
+     */
+    public function getShippingPrice()
+    {
+        return $this->_rootElement->find($this->shippingPrice)->getText();
+    }
 
     /**
      * Flags case as good or bad.
@@ -170,6 +211,16 @@ class CaseInfo extends Block
     public function getOrderAmount()
     {
         return $this->_rootElement->find($this->orderAmount)->getText();
+    }
+
+    /**
+     * Returns displayed order amount currency.
+     *
+     * @return string
+     */
+    public function getOrderAmountCurrency()
+    {
+        return $this->_rootElement->find($this->orderAmountCurrency)->getText();
     }
 
     /**

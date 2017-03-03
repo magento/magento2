@@ -5,6 +5,7 @@
  */
 namespace Magento\Signifyd\Test\Constraint;
 
+use Magento\Signifyd\Test\Fixture\SignifydData;
 use Magento\Signifyd\Test\Page\Adminhtml\OrdersGrid;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -17,19 +18,19 @@ class AssertSignifydCaseInOrdersGrid extends AbstractConstraint
      * @param string $orderId
      * @param string $status
      * @param OrdersGrid $ordersGrid
-     * @param array $signifydData
+     * @param SignifydData $signifydData
      * @return void
      */
     public function processAssert(
         $orderId,
         $status,
         OrdersGrid $ordersGrid,
-        array $signifydData
+        SignifydData $signifydData
     ) {
         $filter = [
             'id' => $orderId,
             'status' => $status,
-            'signifyd_guarantee_status' => $signifydData['guaranteeDisposition']
+            'signifyd_guarantee_status' => $signifydData->getGuaranteeDisposition()
         ];
 
         $errorMessage = implode(', ', $filter);

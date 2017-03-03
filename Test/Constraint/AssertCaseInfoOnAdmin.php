@@ -5,8 +5,10 @@
  */
 namespace Magento\Signifyd\Test\Constraint;
 
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Signifyd\Test\Fixture\SignifydData;
 
 /**
  * Assert that Order Case Entity is correct on order page in Admin.
@@ -21,6 +23,13 @@ class AssertCaseInfoOnAdmin extends AbstractConstraint
     private $orderView;
 
     /**
+     * Signifyd data fixture.
+     *
+     * @var SignifydData
+     */
+    private $signifydData;
+
+    /**
      * Order id.
      *
      * @var string
@@ -28,29 +37,26 @@ class AssertCaseInfoOnAdmin extends AbstractConstraint
     private $orderId;
 
     /**
-     * Array of Signifyd config data.
-     *
-     * @var array
-     */
-    private $signifydData;
-
-    /**
      * Assert that Signifyd Case information is correct in Admin.
      *
      * @param SalesOrderView $orderView
+     * @param OrderIndex $salesOrder
+     * @param SignifydData $signifydData
      * @param string $orderId
-     * @param array $signifydData
      * @return void
      */
     public function processAssert(
         SalesOrderView $orderView,
-        $orderId,
-        array $signifydData
+        OrderIndex $salesOrder,
+        SignifydData $signifydData,
+        $orderId
     ) {
+        $salesOrder->open();
+        $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
+
         $this->orderView = $orderView;
-        $this->orderView->open(['order_id' => $orderId]);
-        $this->orderId = $orderId;
         $this->signifydData = $signifydData;
+        $this->orderId = $orderId;
 
         $this->checkCaseStatus();
         $this->checkCaseGuaranteeDisposition();
@@ -65,7 +71,7 @@ class AssertCaseInfoOnAdmin extends AbstractConstraint
     private function checkCaseStatus()
     {
         \PHPUnit_Framework_Assert::assertEquals(
-            $this->signifydData['caseStatus'],
+            $this->signifydData->getCaseStatus(),
             $this->orderView->getFraudProtectionBlock()->getCaseStatus(),
             'Case status is wrong for order #' . $this->orderId
         );
@@ -79,7 +85,7 @@ class AssertCaseInfoOnAdmin extends AbstractConstraint
     private function checkCaseGuaranteeDisposition()
     {
         \PHPUnit_Framework_Assert::assertEquals(
-            $this->signifydData['guaranteeDisposition'],
+            $this->signifydData->getGuaranteeDisposition(),
             $this->orderView->getFraudProtectionBlock()->getCaseGuaranteeDisposition(),
             'Case Guarantee Disposition status is wrong for order #' . $this->orderId
         );
@@ -93,7 +99,7 @@ class AssertCaseInfoOnAdmin extends AbstractConstraint
     private function checkCaseReviewDisposition()
     {
         \PHPUnit_Framework_Assert::assertEquals(
-            $this->signifydData['reviewDisposition'],
+            $this->signifydData->getReviewDisposition(),
             $this->orderView->getFraudProtectionBlock()->getCaseReviewDisposition(),
             'Case Review Disposition status is wrong for order #' . $this->orderId
         );

@@ -11,6 +11,7 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect as AssertOrderStatus;
 use Magento\Signifyd\Test\Constraint\AssertSignifydCaseInOrdersGrid as AssertOrdersGrid;
 use Magento\Signifyd\Test\Constraint\AssertCaseInfoOnAdmin;
+use Magento\Signifyd\Test\Fixture\SignifydData;
 use Magento\Signifyd\Test\Page\Adminhtml\OrdersGrid;
 
 /**
@@ -44,7 +45,7 @@ class OpenOrderGridStep implements TestStepInterface
      *
      * @var string
      */
-    private $orderStatus;
+    private $placeOrderStatus;
 
     /**
      * Magento order id.
@@ -68,7 +69,7 @@ class OpenOrderGridStep implements TestStepInterface
     private $ordersGrid;
 
     /**
-     * Array of Signifyd config data.
+     * Signifyd data fixture.
      *
      * @var array
      */
@@ -82,7 +83,7 @@ class OpenOrderGridStep implements TestStepInterface
     private $orderIndex;
 
     /**
-     * @param string $status
+     * @param string $placeOrderStatus
      * @param int $orderId
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
@@ -90,10 +91,10 @@ class OpenOrderGridStep implements TestStepInterface
      * @param AssertOrderStatus $assertOrderStatus
      * @param AssertCaseInfoOnAdmin $assertCaseInfo
      * @param AssertOrdersGrid $assertOrdersGrid
-     * @param array $signifydData
+     * @param SignifydData $signifydData
      */
     public function __construct(
-        $status,
+        $placeOrderStatus,
         $orderId,
         OrderIndex $orderIndex,
         SalesOrderView $salesOrderView,
@@ -101,9 +102,9 @@ class OpenOrderGridStep implements TestStepInterface
         AssertOrderStatus $assertOrderStatus,
         AssertCaseInfoOnAdmin $assertCaseInfo,
         AssertOrdersGrid $assertOrdersGrid,
-        array $signifydData
+        SignifydData $signifydData
     ) {
-        $this->orderStatus = $status;
+        $this->placeOrderStatus = $placeOrderStatus;
         $this->orderId = $orderId;
         $this->orderIndex = $orderIndex;
         $this->salesOrderView = $salesOrderView;
@@ -135,7 +136,7 @@ class OpenOrderGridStep implements TestStepInterface
     {
         $this->assertOrdersGrid->processAssert(
             $this->orderId,
-            $this->orderStatus,
+            $this->placeOrderStatus,
             $this->ordersGrid,
             $this->signifydData
         );
@@ -149,7 +150,7 @@ class OpenOrderGridStep implements TestStepInterface
     private function checkOrderStatus()
     {
         $this->assertOrderStatus->processAssert(
-            $this->orderStatus,
+            $this->placeOrderStatus,
             $this->orderId,
             $this->orderIndex,
             $this->salesOrderView
@@ -165,8 +166,9 @@ class OpenOrderGridStep implements TestStepInterface
     {
         $this->assertCaseInfo->processAssert(
             $this->salesOrderView,
-            $this->orderId,
-            $this->signifydData
+            $this->orderIndex,
+            $this->signifydData,
+            $this->orderId
         );
     }
 }
