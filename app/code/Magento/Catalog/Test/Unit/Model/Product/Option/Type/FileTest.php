@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Option\Type;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
@@ -24,9 +24,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $rootDirectory;
+    protected $mediaDirectory;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
@@ -61,13 +61,13 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->rootDirectory = $this->getMockBuilder(ReadInterface::class)
+        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
             ->getMock();
 
         $this->filesystemMock->expects($this->any())
-            ->method('getDirectoryRead')
+            ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA, DriverPool::FILE)
-            ->willReturn($this->rootDirectory);
+            ->willReturn($this->mediaDirectory);
 
         $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()
@@ -158,17 +158,17 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->will($this->returnValue($quoteValue));
 
-        $this->rootDirectory->expects($this->any())
+        $this->mediaDirectory->expects($this->any())
             ->method('isFile')
             ->with($this->equalTo($quotePath))
             ->will($this->returnValue(true));
 
-        $this->rootDirectory->expects($this->any())
+        $this->mediaDirectory->expects($this->any())
             ->method('isReadable')
             ->with($this->equalTo($quotePath))
             ->will($this->returnValue(true));
 
-        $this->rootDirectory->expects($this->any())
+        $this->mediaDirectory->expects($this->any())
             ->method('getAbsolutePath')
             ->will($this->returnValue('/file.path'));
 
