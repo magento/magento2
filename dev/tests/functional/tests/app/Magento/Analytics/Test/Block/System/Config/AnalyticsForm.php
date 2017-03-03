@@ -30,6 +30,16 @@ class AnalyticsForm extends Form
     private $submitButton = '#save';
 
     /**
+     * @var string
+     */
+    private $analyticsVertical = '#analytics_general_vertical';
+
+    /**
+     * @var string
+     */
+    private $analyticsVerticalScope = '#row_analytics_general_vertical span[data-config-scope="[WEBSITE]"]';
+
+    /**
      * @return array|string
      */
     public function isAnalyticsEnabled()
@@ -59,5 +69,31 @@ class AnalyticsForm extends Form
     public function getAnalyticsStatus()
     {
         return $this->_rootElement->find($this->analyticsStatusLabel, Locator::SELECTOR_CSS)->getText();
+    }
+
+    /**
+     * @param string $vertical
+     * @return array|string
+     */
+    public function setAnalyticsVertical($vertical)
+    {
+        return $this->_rootElement->find($this->analyticsVertical, Locator::SELECTOR_CSS, 'select')
+            ->setValue($vertical);
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getAnalyticsVertical()
+    {
+        return $this->_rootElement->find($this->analyticsVertical, Locator::SELECTOR_CSS)->getValue();
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getAnalyticsVerticalScope()
+    {
+        return $this->_rootElement->find($this->analyticsVerticalScope, Locator::SELECTOR_CSS)->isVisible();
     }
 }

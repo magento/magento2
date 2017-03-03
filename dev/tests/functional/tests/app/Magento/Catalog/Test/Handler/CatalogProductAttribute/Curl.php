@@ -52,6 +52,10 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
             'Yes' => 1,
             'No' => 0,
         ],
+        'is_searchable' => [
+            'Yes' => 1,
+            'No' => 0,
+        ],
         'is_filterable' => [
             'No' => 0,
             'Filterable (with results)' => 1,

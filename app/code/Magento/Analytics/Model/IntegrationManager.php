@@ -8,7 +8,7 @@ namespace Magento\Analytics\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Config\Model\Config;
+use Magento\Config\Model\Config as SystemConfig;
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Api\OauthServiceInterface;
 
@@ -22,7 +22,7 @@ use Magento\Integration\Api\OauthServiceInterface;
 class IntegrationManager
 {
     /**
-     * @var Config
+     * @var SystemConfig
      */
     private $config;
 
@@ -39,12 +39,12 @@ class IntegrationManager
     /**
      * IntegrationManager constructor
      *
-     * @param Config $config
+     * @param SystemConfig $config
      * @param IntegrationServiceInterface $integrationService
      * @param OauthServiceInterface $oauthService
      */
     public function __construct(
-        Config $config,
+        SystemConfig $config,
         IntegrationServiceInterface $integrationService,
         OauthServiceInterface $oauthService
     ) {

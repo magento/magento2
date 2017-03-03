@@ -19,6 +19,11 @@
                         </resource>
                     </resource>
                 </resource>
+                <resource id="Magento_Reports::report">
+                    <resource id="Magento_Analytics::bi_essentials" title="BI Essential" translate="title" sortOrder="20">
+                        <resource id="Magento_Analytics::report_basic_tier" title="Basic Tier" translate="title" sortOrder="40" />
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>

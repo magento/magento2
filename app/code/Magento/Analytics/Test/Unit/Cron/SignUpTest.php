@@ -5,7 +5,7 @@
  */
 namespace Magento\Analytics\Test\Unit\Cron;
 
-use Magento\Analytics\Model\AnalyticsConnector;
+use Magento\Analytics\Model\Connector;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
@@ -21,9 +21,9 @@ use Magento\AdminNotification\Model\Inbox;
 class SignUpTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AnalyticsConnector|\PHPUnit_Framework_MockObject_MockObject
+     * @var Connector|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $analyticsConnectorMock;
+    private $connectorMock;
 
     /**
      * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -62,7 +62,7 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->analyticsConnectorMock =  $this->getMockBuilder(AnalyticsConnector::class)
+        $this->connectorMock =  $this->getMockBuilder(Connector::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configWriterMock =  $this->getMockBuilder(WriterInterface::class)
@@ -86,7 +86,7 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->signUp = new SignUp(
-            $this->analyticsConnectorMock,
+            $this->connectorMock,
             $this->configWriterMock,
             $this->inboxFactoryMock,
             $this->inboxResourceMock,
@@ -108,7 +108,7 @@ class SignUpTest extends \PHPUnit_Framework_TestCase
         $this->flagManagerMock->expects($this->once())
             ->method('saveFlag')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);
-        $this->analyticsConnectorMock->expects($this->once())
+        $this->connectorMock->expects($this->once())
             ->method('execute')
             ->with('signUp')
             ->willReturn(true);
