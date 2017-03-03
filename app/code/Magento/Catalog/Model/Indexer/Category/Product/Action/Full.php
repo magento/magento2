@@ -12,6 +12,7 @@ use Magento\Framework\App\ResourceConnection;
  * Class Full reindex action
  *
  * @package Magento\Catalog\Model\Indexer\Category\Product\Action
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
@@ -49,6 +50,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
+     * @param array $memoryTablesMinRows
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -258,5 +260,4 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             : '';
         return $table . $destinationTableSuffix;
     }
-
 }

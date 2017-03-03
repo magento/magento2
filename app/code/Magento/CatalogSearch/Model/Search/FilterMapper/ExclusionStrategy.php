@@ -46,6 +46,7 @@ class ExclusionStrategy implements FilterStrategyInterface
      * @param AliasResolver $aliasResolver
      * @param FrontendResource $indexerFrontendResource
      * @param FrontendResource $categoryProductIndexerFrontend
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,

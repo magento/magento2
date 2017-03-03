@@ -56,7 +56,7 @@ class DataProvider
         $this->layer = $layerResolver->get();
         $this->categoryProductIndexerFrontend = $categoryProductIndexerFrontend ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Product\Indexer\Category\Product\FrontendResource::class
-        );;
+        );
     }
 
     /**

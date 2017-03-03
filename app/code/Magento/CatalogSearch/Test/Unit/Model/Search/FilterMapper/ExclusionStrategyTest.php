@@ -48,6 +48,11 @@ class ExclusionStrategyTest extends \PHPUnit_Framework_TestCase
      */
     private $aliasResolverMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $categoryProductFrontendMock;
+
     protected function setUp()
     {
         $this->resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
@@ -57,12 +62,14 @@ class ExclusionStrategyTest extends \PHPUnit_Framework_TestCase
         $this->resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);
         $this->storeManagerMock = $this->getMock(StoreManagerInterface::class);
         $this->aliasResolverMock = $this->getMock(AliasResolver::class, [], [], '', false);
+        $this->categoryProductFrontendMock = $this->getMock(FrontendResource::class, [], [], '', false);
 
         $this->model = new ExclusionStrategy(
             $this->resourceConnectionMock,
             $this->storeManagerMock,
             $this->aliasResolverMock,
-            $this->frontendResourceMock
+            $this->frontendResourceMock,
+            $this->categoryProductFrontendMock
         );
     }
 
