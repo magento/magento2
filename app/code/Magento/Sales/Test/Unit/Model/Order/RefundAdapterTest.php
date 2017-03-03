@@ -6,12 +6,12 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 /**
- * Unit test for payment adapter.
+ * Unit test for refund adapter.
  */
-class PaymentAdapterTest extends \PHPUnit_Framework_TestCase
+class RefundAdapterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\PaymentAdapter
+     * @var \Magento\Sales\Model\Order\RefundAdapter
      */
     private $subject;
 
@@ -35,11 +35,6 @@ class PaymentAdapterTest extends \PHPUnit_Framework_TestCase
      */
     private $invoiceMock;
 
-    /**
-     * @var \Magento\Sales\Model\Order\Invoice\PayOperation|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $payOperationMock;
-
     protected function setUp()
     {
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
@@ -50,35 +45,29 @@ class PaymentAdapterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->refundOperationMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\RefundOperation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Api\Data\InvoiceInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->payOperationMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice\PayOperation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->subject = new \Magento\Sales\Model\Order\PaymentAdapter(
-            $this->payOperationMock
+        $this->subject = new \Magento\Sales\Model\Order\RefundAdapter(
+            $this->refundOperationMock
         );
     }
 
-    public function testPay()
+    public function testRefund()
     {
         $isOnline = true;
-
-        $this->payOperationMock->expects($this->once())
+        $this->refundOperationMock->expects($this->once())
             ->method('execute')
-            ->with($this->orderMock, $this->invoiceMock, $isOnline)
+            ->with($this->creditmemoMock, $this->orderMock, $isOnline)
             ->willReturn($this->orderMock);
-
         $this->assertEquals(
             $this->orderMock,
-            $this->subject->pay(
-                $this->orderMock,
-                $this->invoiceMock,
-                $isOnline
-            )
+            $this->subject->refund($this->creditmemoMock, $this->orderMock, $isOnline)
         );
     }
 }
