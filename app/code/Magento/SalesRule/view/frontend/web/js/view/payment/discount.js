@@ -20,9 +20,8 @@ define([
     if (totals()) {
         couponCode(totals()['coupon_code']);
     }
-
     isApplied = ko.observable(couponCode() != null);
-    
+
     return Component.extend({
         defaults: {
             template: 'Magento_SalesRule/payment/discount'
