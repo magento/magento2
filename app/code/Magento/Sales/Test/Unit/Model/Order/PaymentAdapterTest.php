@@ -26,11 +26,6 @@ class PaymentAdapterTest extends \PHPUnit_Framework_TestCase
     private $creditmemoMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\RefundOperation|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $refundOperationMock;
-
-    /**
      * @var \Magento\Sales\Api\Data\InvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $invoiceMock;
