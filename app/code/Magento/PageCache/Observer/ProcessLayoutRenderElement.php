@@ -69,7 +69,9 @@ class ProcessLayoutRenderElement implements ObserverInterface
             'page_cache/block/esi',
             [
                 'blocks' => json_encode([$block->getNameInLayout()]),
-                'handles' => json_encode(array_values(array_diff($handles, $pageSpecificHandles)))
+                'handles' => base64_encode(
+                    json_encode(array_values(array_diff($handles, $pageSpecificHandles)))
+                )
             ]
         );
         // Varnish does not support ESI over HTTPS must change to HTTP
