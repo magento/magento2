@@ -5,14 +5,14 @@
  */
 namespace Magento\Analytics\Test\Unit\Model;
 
-use Magento\Analytics\Model\AnalyticsConnector;
+use Magento\Analytics\Model\Connector;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Analytics\Model\AnalyticsConnector\SignUpCommand;
+use Magento\Analytics\Model\Connector\SignUpCommand;
 
 /**
  * Class SignUpCommandTest
  */
-class AnalyticsConnectorTest extends \PHPUnit_Framework_TestCase
+class ConnectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -20,9 +20,9 @@ class AnalyticsConnectorTest extends \PHPUnit_Framework_TestCase
     private $objectManagerMock;
 
     /**
-     * @var AnalyticsConnector
+     * @var Connector
      */
-    private $analyticsConnector;
+    private $connector;
 
     /**
      * @var SignUpCommand|\PHPUnit_Framework_MockObject_MockObject
@@ -43,7 +43,7 @@ class AnalyticsConnectorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->commands = ['signUp' => SignUpCommand::class];
-        $this->analyticsConnector = new AnalyticsConnector($this->commands, $this->objectManagerMock);
+        $this->connector = new Connector($this->commands, $this->objectManagerMock);
     }
 
     public function testExecute()
@@ -56,7 +56,7 @@ class AnalyticsConnectorTest extends \PHPUnit_Framework_TestCase
         $this->signUpCommandMock->expects($this->once())
             ->method('execute')
             ->willReturn(true);
-        $this->assertTrue($this->analyticsConnector->execute($commandName));
+        $this->assertTrue($this->connector->execute($commandName));
     }
 
     /**
@@ -65,6 +65,6 @@ class AnalyticsConnectorTest extends \PHPUnit_Framework_TestCase
     public function testExecuteCommandNotFound()
     {
         $commandName = 'register';
-        $this->analyticsConnector->execute($commandName);
+        $this->connector->execute($commandName);
     }
 }

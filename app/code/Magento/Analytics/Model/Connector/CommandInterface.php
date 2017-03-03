@@ -3,14 +3,13 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Model\AnalyticsConnector;
+namespace Magento\Analytics\Model\Connector;
 
 /**
- * Interface AnalyticsCommandInterface
  * Introduces family of integration calls.
  * Each implementation represents call to external service.
  */
-interface AnalyticsCommandInterface
+interface CommandInterface
 {
     /**
      * Execute call to external service
