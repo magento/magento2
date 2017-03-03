@@ -18,6 +18,8 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Swatches\Helper\Data as SwatchData;
 use Magento\Swatches\Helper\Media;
 use Magento\Swatches\Model\Swatch;
+use Magento\Framework\App\ObjectManager;
+use Magento\Swatches\Model\SwatchAttributesProvider;
 
 /**
  * Swatch renderer block
@@ -60,9 +62,16 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Indicate if product has one or more Swatch attributes
      *
+     * @deprecated unused
+     *
      * @var boolean
      */
     protected $isProductHasSwatchAttribute;
+
+    /**
+     * @var SwatchAttributesProvider
+     */
+    private $swatchAttributesProvider;
 
     /**
      * @param Context $context
@@ -76,6 +85,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * @param SwatchData $swatchHelper
      * @param Media $swatchMediaHelper
      * @param array $data other data
+     * @param SwatchAttributesProvider $swatchAttributesProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -89,11 +99,13 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         ConfigurableAttributeData $configurableAttributeData,
         SwatchData $swatchHelper,
         Media $swatchMediaHelper,
-        array $data = []
+        array $data = [],
+        SwatchAttributesProvider $swatchAttributesProvider = null
     ) {
         $this->swatchHelper = $swatchHelper;
         $this->swatchMediaHelper = $swatchMediaHelper;
-
+        $this->swatchAttributesProvider = $swatchAttributesProvider
+            ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
         parent::__construct(
             $context,
             $arrayUtils,
@@ -201,12 +213,25 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
+     * @deprecated unused
+     * Method isProductHasSwatchAttribute() is used instead of this.
+     *
      * @codeCoverageIgnore
      * @return void
      */
     protected function initIsProductHasSwatchAttribute()
     {
         $this->isProductHasSwatchAttribute = $this->swatchHelper->isProductHasSwatch($this->getProduct());
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return bool
+     */
+    protected function isProductHasSwatchAttribute()
+    {
+        $swatchAttributes = $this->swatchAttributesProvider->provide($this->getProduct());
+        return count($swatchAttributes) > 0;
     }
 
     /**
@@ -372,7 +397,6 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     public function toHtml()
     {
-        $this->initIsProductHasSwatchAttribute();
         $this->setTemplate(
             $this->getRendererTemplate()
         );
@@ -397,7 +421,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function getRendererTemplate()
     {
-        return $this->isProductHasSwatchAttribute ?
+        return $this->isProductHasSwatchAttribute() ?
             self::SWATCH_RENDERER_TEMPLATE : self::CONFIGURABLE_RENDERER_TEMPLATE;
     }
 

@@ -8,16 +8,16 @@ namespace Magento\Swatches\Helper;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\App\Helper\Context;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Catalog\Model\Product as ModelProduct;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 use Magento\Swatches\Model\Swatch;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Framework\Exception\InputException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Framework\App\ObjectManager;
+use Magento\Swatches\Model\SwatchAttributesProvider;
 
 /**
  * Class Helper Data
@@ -64,6 +64,11 @@ class Data
     protected $imageHelper;
 
     /**
+     * @var SwatchAttributesProvider
+     */
+    private $swatchAttributesProvider;
+
+    /**
      * Data key which should populated to Attribute entity from "additional_data" field
      *
      * @var array
@@ -80,19 +85,23 @@ class Data
      * @param StoreManagerInterface $storeManager
      * @param SwatchCollectionFactory $swatchCollectionFactory
      * @param Image $imageHelper
+     * @param SwatchAttributesProvider $swatchAttributesProvider
      */
     public function __construct(
         CollectionFactory $productCollectionFactory,
         ProductRepositoryInterface $productRepository,
         StoreManagerInterface $storeManager,
         SwatchCollectionFactory $swatchCollectionFactory,
-        Image $imageHelper
+        Image $imageHelper,
+        SwatchAttributesProvider $swatchAttributesProvider = null
     ) {
         $this->productCollectionFactory   = $productCollectionFactory;
         $this->productRepository = $productRepository;
         $this->storeManager = $storeManager;
         $this->swatchCollectionFactory = $swatchCollectionFactory;
         $this->imageHelper = $imageHelper;
+        $this->swatchAttributesProvider = $swatchAttributesProvider
+            ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
     }
 
     /**
@@ -337,14 +346,8 @@ class Data
      */
     private function getSwatchAttributes(Product $product)
     {
-        $attributes = $this->getAttributesFromConfigurable($product);
-        $result = [];
-        foreach ($attributes as $attribute) {
-            if ($this->isSwatchAttribute($attribute)) {
-                $result[] = $attribute;
-            }
-        }
-        return $result;
+        $swatchAttributes = $this->swatchAttributesProvider->provide($product);
+        return $swatchAttributes;
     }
 
     /**
@@ -449,7 +452,8 @@ class Data
      */
     public function isProductHasSwatch(Product $product)
     {
-        return sizeof($this->getSwatchAttributes($product));
+        $swatchAttributes = $this->getSwatchAttributes($product);
+        return count($swatchAttributes) > 0;
     }
 
     /**
