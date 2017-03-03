@@ -13,7 +13,7 @@ use Magento\Framework\ObjectManagerInterface;
  *
  * Aggregates and executes commands which perform requests to external services.
  */
-class AnalyticsConnector
+class Connector
 {
     /**
      * A list of possible commands.
@@ -56,7 +56,7 @@ class AnalyticsConnector
             throw new NotFoundException(__('Command was not found.'));
         }
 
-        /** @var \Magento\Analytics\Model\AnalyticsConnector\AnalyticsCommandInterface $command */
+        /** @var \Magento\Analytics\Model\Connector\CommandInterface $command */
         $command = $this->objectManager->create($this->commands[$commandName]);
 
         return $command->execute();
