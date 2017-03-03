@@ -96,6 +96,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $ifconfigCondition
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getCondition
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setCondition
+     * @param string $aclKey
+     * @param string $aclValue
+     *
      * @dataProvider processBlockDataProvider
      */
     public function testProcessBlock(
@@ -104,7 +107,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $ifconfigValue,
         $ifconfigCondition,
         $getCondition,
-        $setCondition
+        $setCondition,
+        $aclKey,
+        $aclValue
     ) {
         $this->context->expects($this->once())->method('getScheduledStructure')
             ->will($this->returnValue($this->scheduledStructure));
@@ -131,7 +136,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                         Block::ATTRIBUTE_TEMPLATE => '',
                         Block::ATTRIBUTE_TTL => '',
                         Block::ATTRIBUTE_DISPLAY => '',
-                        Block::ATTRIBUTE_ACL => ''
+                        Block::ATTRIBUTE_ACL => $aclValue
                     ],
                     'actions' => [
                         ['someMethod', [], 'action_config_path', 'scope'],
@@ -144,7 +149,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $helper->expects($scheduleStructureCount)->method('scheduleStructure')->will($this->returnValue($literal));
 
         $this->prepareReaderPool(
-            '<' . $literal . ' ifconfig="' . $ifconfigValue . '">'
+            '<' . $literal . ' ifconfig="' . $ifconfigValue . '" ' . $aclKey . '="' . $aclValue . '" >'
             . '<action method="someMethod" ifconfig="action_config_path" />'
             . '</' . $literal . '>',
             $literal
@@ -167,9 +172,36 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     public function processBlockDataProvider()
     {
         return [
-            ['block', $this->once(), '', $this->never(), $this->once(), $this->once()],
-            ['block', $this->once(), 'config_path', $this->once(), $this->once(), $this->once()],
-            ['page', $this->never(), '', $this->never(), $this->never(), $this->never()]
+            [
+                'block',
+                $this->once(),
+                '',
+                $this->never(),
+                $this->once(),
+                $this->once(),
+                'acl',
+                'test',
+            ],
+            [
+                'block',
+                $this->once(),
+                'config_path',
+                $this->once(),
+                $this->once(),
+                $this->once(),
+                'aclResource',
+                'test',
+            ],
+            [
+                'page',
+                $this->never(),
+                '',
+                $this->never(),
+                $this->never(),
+                $this->never(),
+                'aclResource',
+                'test',
+            ],
         ];
     }
 

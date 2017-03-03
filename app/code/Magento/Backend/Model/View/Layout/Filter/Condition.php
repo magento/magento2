@@ -9,7 +9,7 @@ use Magento\Backend\Model\View\Layout\FilterInterface;
 use Magento\Backend\Model\View\Layout\StructureManager;
 use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\View\Layout\ScheduledStructure;
-use Magento\Backend\Model\View\Layout\ConditionPool;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class Condition
@@ -26,22 +26,23 @@ class Condition implements FilterInterface
     private $structureManager;
 
     /**
-     * @var ConditionPool
+     * @var ObjectManagerInterface
      */
-    private $conditionPool;
+    private $objectManager;
+
 
     /**
      * Condition constructor.
      *
      * @param StructureManager $structureManager
-     * @param ConditionPool $conditionPool
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         StructureManager $structureManager,
-        ConditionPool $conditionPool
+        ObjectManagerInterface $objectManager
     ) {
         $this->structureManager = $structureManager;
-        $this->conditionPool = $conditionPool;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -55,8 +56,14 @@ class Condition implements FilterInterface
     {
         foreach ($scheduledStructure->getElements() as $name => $data) {
             list(, $data) = $data;
-            if (isset($data['attributes']['condition']) && $data['attributes']['condition']) {
-                $condition = $this->conditionPool->getCondition($data['attributes']['condition']);
+            if (isset($data['attributes']['visibilityCondition']) && $data['attributes']['visibilityCondition']) {
+//                $dataProvider = null;
+//                if (isset($data['attributes']['visibilityDataProvider'])) {
+//                    $dataProvider = $data['attributes']['visibilityDataProvider'];
+//                }
+                $condition = $this->objectManager->create(
+                    $data['attributes']['visibilityCondition']
+                );
                 if (!$condition->validate()) {
                     $this->structureManager->removeElement($scheduledStructure, $structure, $name);
                 }

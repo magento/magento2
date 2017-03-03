@@ -24,7 +24,7 @@ class UiComponent implements Layout\ReaderInterface
      *
      * @var array
      */
-    protected $attributes = ['group', 'component', 'acl', 'condition'];
+    protected $attributes = ['group', 'component', 'aclResource', 'condition'];
 
     /**
      * @var Layout\ScheduledStructure\Helper

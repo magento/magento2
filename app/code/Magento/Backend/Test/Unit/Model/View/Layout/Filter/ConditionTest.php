@@ -6,12 +6,12 @@
 namespace Magento\Backend\Test\Unit\Model\View\Layout\Filter;
 
 use Magento\Backend\Model\View\Layout\ConditionInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\Model\View\Layout\Filter\Condition;
 use Magento\Backend\Model\View\Layout\StructureManager;
 use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\View\Layout\ScheduledStructure;
-use Magento\Backend\Model\View\Layout\ConditionPool;
 
 class ConditionTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,9 +31,9 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
     private $scheduledStructureMock;
 
     /**
-     * @var ConditionPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $conditionPoolMock;
+    private $objectManagerMock;
 
     /**
      * @var ConditionInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -54,9 +54,8 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->scheduledStructureMock = $this->getMockBuilder(ScheduledStructure::class)
             ->getMock();
-        $this->conditionPoolMock = $this->getMockBuilder(ConditionPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->getMockForAbstractClass();
         $this->conditionMock = $this->getMockBuilder(ConditionInterface::class)
             ->getMock();
         $objectManager = new ObjectManager($this);
@@ -65,7 +64,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
             Condition::class,
             [
                 'structureManager' => $this->structureManagerMock,
-                'conditionPool' => $this->conditionPoolMock
+                'objectManager' => $this->objectManagerMock
             ]
         );
     }
@@ -86,7 +85,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
                 1 => [
                     'attributes' => [
                         'name' => 'element_1',
-                        'condition' => 'TestCondition1',
+                        'visibilityCondition' => 'TestConditionClassName1',
                     ],
                 ],
             ],
@@ -95,7 +94,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
                 1 => [
                     'attributes' => [
                         'name' => 'element_2',
-                        'condition' => 'TestCondition2',
+                        'visibilityCondition' => 'TestConditionClassName2',
                     ],
                 ],
             ],
@@ -104,7 +103,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
                 1 => [
                     'attributes' => [
                         'name' => 'element_3',
-                        'acl' => 'acl_non_authorised',
+                        'aclResource' => 'acl_non_authorised',
                     ],
                 ],
             ],
@@ -116,13 +115,15 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
         $this->scheduledStructureMock->expects($this->once())
             ->method('getElements')
             ->willReturn($this->getStructureData());
-        $this->conditionPoolMock->expects($this->exactly(2))
-            ->method('getCondition')
-            ->willReturnMap(
-                [
-                    ['TestCondition1', $this->conditionMock],
-                    ['TestCondition2', $this->conditionMock]
-                ]
+        $this->objectManagerMock->expects($this->exactly(2))
+            ->method('create')
+            ->withConsecutive(
+                ['TestConditionClassName1'],
+                ['TestConditionClassName2']
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->conditionMock,
+                $this->conditionMock
             );
         $this->conditionMock->expects($this->at(0))
             ->method('validate')
