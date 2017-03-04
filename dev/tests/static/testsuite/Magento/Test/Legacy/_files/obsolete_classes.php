@@ -37,7 +37,11 @@ return [
     ['Mage_Admin_Model_Resource_Rules_Collection', 'Magento\Authorization\Model\ResourceModel\Rules\Collection'],
     [
         'Mage_Admin_Model_Resource_Permissions_Collection',
+        'Magento\Authorization\Model\ResourceModel\Rules\Collection'
+    ],
+    [
         'Magento\Authorization\Model\ResourceModel\Permissions\Collection',
+        'Magento\Authorization\Model\ResourceModel\Rules\Collection'
     ],
     ['Mage_Adminhtml_Block_Abstract', 'Magento\Backend\Block\AbstractBlock'],
     ['Mage_Adminhtml_Block_Backup_Grid'],
