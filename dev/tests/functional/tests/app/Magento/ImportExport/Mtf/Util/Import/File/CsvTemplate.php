@@ -20,6 +20,13 @@ class CsvTemplate implements TemplateInterface
     private $config;
 
     /**
+     * Csv data.
+     *
+     * @var string
+     */
+    private $csv;
+
+    /**
      * @param array $config
      */
     public function __construct(array $config)
@@ -45,7 +52,6 @@ class CsvTemplate implements TemplateInterface
         }
 
         $data = include $filename;
-        $count = abs($this->config['count']);
 
         $placeholders = [];
         if (!empty($this->config['placeholders'])) {
@@ -53,27 +59,29 @@ class CsvTemplate implements TemplateInterface
         }
 
         $fh = fopen('php://temp', 'rw');
-        fputcsv($fh, array_keys($data));
+        fputcsv($fh, array_keys($data['product_0']['tier_price_0']));
 
-        for ($i = 0; $i < $count; ++$i) {
-            $row = array_map(
-                function ($value) use ($placeholders, $i) {
-                    if (is_string($value) && isset($placeholders[$i])) {
-                        return strtr($value, $placeholders[$i]);
-                    }
+        foreach ($placeholders as $productKey => $tierPrices) {
+            foreach ($tierPrices as $tierPriceKey => $tierPriceValue) {
+                $row = array_map(
+                    function ($value) use ($placeholders, $productKey, $tierPriceKey, $tierPriceValue) {
+                        if (is_string($value) && isset($placeholders[$productKey][$tierPriceKey])) {
+                            return strtr($value, $tierPriceValue);
+                        }
+                        return $value;
+                    },
+                    $data[$productKey][$tierPriceKey]
+                );
+                fputcsv($fh, $row);
 
-                    return $value;
-                },
-                $data
-            );
-            fputcsv($fh, $row);
+            }
         }
 
         rewind($fh);
-        $csv = stream_get_contents($fh);
+        $this->csv = stream_get_contents($fh);
         fclose($fh);
 
-        return $csv;
+        return $this->csv;
     }
 
     /**
@@ -86,5 +94,15 @@ class CsvTemplate implements TemplateInterface
             crc32(time()),
             basename($this->config['filename'])
         );
+    }
+
+    /**
+     * Return csv data.
+     *
+     * @return string
+     */
+    public function getCsv()
+    {
+        return $this->csv;
     }
 }

@@ -9,6 +9,7 @@ use Magento\ImportExport\Test\Fixture\Import\File;
 use Magento\ImportExport\Test\Fixture\ImportData;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Fill import form.
@@ -30,13 +31,35 @@ class FillImportFormStep implements TestStepInterface
     private $import;
 
     /**
+     * Csv as array.
+     *
+     * @var array
+     */
+    private $csv;
+
+    /**
      * @param AdminImportIndex $adminImportIndex
      * @param ImportData $import
+     * @param TestStepFactory $stepFactory
+     * @param bool $createStore
      */
-    public function __construct(AdminImportIndex $adminImportIndex, ImportData $import)
-    {
+    public function __construct(
+        AdminImportIndex $adminImportIndex,
+        ImportData $import,
+        TestStepFactory $stepFactory,
+        $createStore
+    ) {
+        $file = $import->getDataFieldConfig('import_file')['source'];
         $this->adminImportIndex = $adminImportIndex;
         $this->import = $import;
+        $this->csv = $file->getCsv();
+
+        if ($createStore === true) {
+            $this->csv = $stepFactory->create(
+                CreateCustomStoreStep::class,
+                ['products' => $file->getProducts(), 'csv' => $this->csv]
+            )->run();
+        }
     }
 
     /**
@@ -52,7 +75,9 @@ class FillImportFormStep implements TestStepInterface
         $file = $this->import->getDataFieldConfig('import_file')['source'];
 
         return [
-            'products' => $file->getProducts()
+            'products' => $file->getProducts(),
+            'csv' => $this->csv,
+            'behavior' => $this->import->getBehavior()
         ];
     }
 }

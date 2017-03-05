@@ -25,6 +25,13 @@ class File extends DataSource
     private $value;
 
     /**
+     * Template of csv file.
+     *
+     * @var array
+     */
+    private $csvTemplate;
+
+    /**
      * Generator for the uploaded file.
      *
      * @var Generator
@@ -51,6 +58,13 @@ class File extends DataSource
      * @var ObjectManager
      */
     private $objectManager;
+
+    /**
+     * Csv as array.
+     *
+     * @var array
+     */
+    private $csv;
 
     /**
      * @param ObjectManager $objectManager
@@ -82,6 +96,13 @@ class File extends DataSource
             return parent::getData($key);
         }
 
+        $filename = MTF_TESTS_PATH . $this->value['template']['filename'] . '.php';
+        if (!file_exists($filename)) {
+            throw new \Exception("CSV file '{$filename}'' not found on the server.");
+        }
+
+        $this->csvTemplate = include $filename;
+
         $placeholders = [];
         if (!isset($this->products)
             && isset($this->value['products'])
@@ -89,25 +110,23 @@ class File extends DataSource
         ) {
             $this->products = $this->createProducts();
 
-            foreach ($this->products as $product) {
-                $placeholders[] = ['%sku%' => $product->getData('sku')];
-            }
+            $placeholders = $this->getPlaceHolders();
         }
 
         if (isset($this->value['template']) && is_array($this->value['template'])) {
-            $this->data = $this->generator->generate(
-                $this->objectManager->create(
-                    CsvTemplate::class,
-                    [
-                        'config' => array_merge(
-                            $this->value['template'],
-                            [
-                                'placeholders' => $placeholders
-                            ]
-                        )
-                    ]
-                )
+            $csvTemplate = $this->objectManager->create(
+                CsvTemplate::class,
+                [
+                    'config' => array_merge(
+                        $this->value['template'],
+                        [
+                            'placeholders' => $placeholders
+                        ]
+                    )
+                ]
             );
+            $this->data = $this->generator->generate($csvTemplate);
+            $this->csv = $csvTemplate->getCsv();
 
             return parent::getData($key);
         }
@@ -151,5 +170,48 @@ class File extends DataSource
         }
 
         return $products;
+    }
+
+    /**
+     * Create placeholders for products.
+     *
+     * @return array
+     */
+    private function getPlaceHolders()
+    {
+        $key = 0;
+        foreach ($this->products as $product) {
+            $productData = $product->getData();
+            $productData['code'] = $product->getDataFieldConfig('website_ids')['source']->getWebsites()[0]->getCode();
+            foreach ($this->csvTemplate['product_' . $key] as $tierKey => $tier) {
+                $values = implode('', array_values($tier));
+                preg_match_all('/\%(.*)\%/U', $values, $indexes);
+
+                foreach ($indexes[1] as $index) {
+                    if (isset($productData[$index])) {
+                        $placeholders['product_' . $key][$tierKey]["%{$index}%"] = $productData[$index];
+                    }
+                }
+
+            }
+            $key++;
+        }
+
+        return $placeholders;
+    }
+
+    /**
+     * Return csv as array.
+     *
+     * @return array
+     */
+    public function getCsv()
+    {
+        return array_map(
+            function ($value) {
+                return explode(',', str_replace('"', '', $value));
+            },
+            str_getcsv($this->csv, "\n")
+        );
     }
 }
