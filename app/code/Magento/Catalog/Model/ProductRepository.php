@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -289,6 +289,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     protected function initializeProductData(array $productData, $createNew)
     {
+        unset($productData['media_gallery']);
         if ($createNew) {
             $product = $this->productFactory->create();
             if ($this->storeManager->hasSingleStore()) {
@@ -313,15 +314,22 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
-        if (!$this->storeManager->hasSingleStore()) {
-            if ($this->storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
-                $websiteIds = array_keys($this->storeManager->getWebsites());
-            } else {
-                $websiteIds = [$this->storeManager->getStore()->getWebsiteId()];
-            }
+        $websiteIds = $product->getWebsiteIds();
 
-            $product->setWebsiteIds(array_unique(array_merge($product->getWebsiteIds(), $websiteIds)));
+        if (!$this->storeManager->hasSingleStore()) {
+            $websiteIds = array_unique(
+                array_merge(
+                    $websiteIds,
+                    [$this->storeManager->getStore()->getWebsiteId()]
+                )
+            );
         }
+
+        if ($this->storeManager->getStore(true)->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
+            $websiteIds = array_keys($this->storeManager->getWebsites());
+        }
+
+        $product->setWebsiteIds($websiteIds);
     }
 
     /**
@@ -430,8 +438,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * @param ProductInterface $product
-     * @param array $mediaGalleryEntries
+     * Process Media gallery data before save product.
+     *
+     * Compare Media Gallery Entries Data with existing Media Gallery
+     * * If Media entry has not value_id set it as new
+     * * If Existing entry 'value_id' absent in Media Gallery set 'removed' flag
+     * * Merge Existing and new media gallery
+     *
+     * @param ProductInterface $product contains only existing media gallery items
+     * @param array $mediaGalleryEntries array which contains all media gallery items
      * @return $this
      * @throws InputException
      * @throws StateException
@@ -441,11 +456,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         $existingMediaGallery = $product->getMediaGallery('images');
         $newEntries = [];
+        $entriesById = [];
         if (!empty($existingMediaGallery)) {
-            $entriesById = [];
             foreach ($mediaGalleryEntries as $entry) {
-                if (isset($entry['id'])) {
-                    $entry['value_id'] = $entry['id'];
+                if (isset($entry['value_id'])) {
                     $entriesById[$entry['value_id']] = $entry;
                 } else {
                     $newEntries[] = $entry;
@@ -454,6 +468,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             foreach ($existingMediaGallery as $key => &$existingEntry) {
                 if (isset($entriesById[$existingEntry['value_id']])) {
                     $updatedEntry = $entriesById[$existingEntry['value_id']];
+                    if ($updatedEntry['file'] === null) {
+                        unset($updatedEntry['file']);
+                    }
                     $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
                 } else {
                     //set the removed flag
@@ -481,11 +498,18 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
             /** @var ImageContentInterface $contentDataObject */
             $contentDataObject = $this->contentFactory->create()
-                ->setName($newEntry['content'][ImageContentInterface::NAME])
-                ->setBase64EncodedData($newEntry['content'][ImageContentInterface::BASE64_ENCODED_DATA])
-                ->setType($newEntry['content'][ImageContentInterface::TYPE]);
+                ->setName($newEntry['content']['data'][ImageContentInterface::NAME])
+                ->setBase64EncodedData($newEntry['content']['data'][ImageContentInterface::BASE64_ENCODED_DATA])
+                ->setType($newEntry['content']['data'][ImageContentInterface::TYPE]);
             $newEntry['content'] = $contentDataObject;
             $this->processNewMediaGalleryEntry($product, $newEntry);
+
+            $finalGallery = $product->getData('media_gallery');
+            $newEntryId = key(array_diff_key($product->getData('media_gallery')['images'], $entriesById));
+            $newEntry = array_replace_recursive($newEntry, $finalGallery['images'][$newEntryId]);
+            $entriesById[$newEntryId] = $newEntry;
+            $finalGallery['images'][$newEntryId] = $newEntry;
+            $product->setData('media_gallery', $finalGallery);
         }
         return $this;
     }
@@ -513,8 +537,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $productDataArray = $this->extensibleDataObjectConverter
             ->toNestedArray($product, [], \Magento\Catalog\Api\Data\ProductInterface::class);
         $productDataArray = array_replace($productDataArray, $product->getData());
-        unset($productDataArray['media_gallery']);
-
         $ignoreLinksFlag = $product->getData('ignore_links_flag');
         $productLinks = null;
         if (!$ignoreLinksFlag && $ignoreLinksFlag !== null) {
@@ -524,8 +546,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);
-        if (isset($productDataArray['media_gallery_entries'])) {
-            $this->processMediaGallery($product, $productDataArray['media_gallery_entries']);
+        if (isset($productDataArray['media_gallery'])) {
+            $this->processMediaGallery($product, $productDataArray['media_gallery']['images']);
         }
 
         if (!$product->getOptionsReadonly()) {
@@ -633,6 +655,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         $collection->load();
 
+        $collection->addCategoryIds();
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());

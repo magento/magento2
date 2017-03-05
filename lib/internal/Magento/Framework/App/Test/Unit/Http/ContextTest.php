@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,5 +63,20 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         ];
         ksort($data);
         $this->assertEquals(sha1(serialize($data)), $this->object->getVaryString());
+    }
+
+    public function testToArray()
+    {
+        $newObject = new \Magento\Framework\App\Http\Context(['key' => 'value']);
+
+        $newObject->setValue('key1', 'value1', 'default1');
+        $newObject->setValue('key2', 'value2', 'default2');
+        $this->assertEquals(
+            [
+                'data' => ['key' => 'value', 'key1' => 'value1', 'key2' => 'value2'],
+                'default' => ['key1' => 'default1', 'key2' => 'default2']
+            ],
+            $newObject->toArray()
+        );
     }
 }

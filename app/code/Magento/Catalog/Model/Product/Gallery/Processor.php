@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -298,11 +298,11 @@ class Processor
         if (is_array($mediaAttribute)) {
             foreach ($mediaAttribute as $attribute) {
                 if (in_array($attribute, $mediaAttributeCodes)) {
-                    $product->setData($attribute, null);
+                    $product->setData($attribute, 'no_selection');
                 }
             }
         } elseif (in_array($mediaAttribute, $mediaAttributeCodes)) {
-            $product->setData($mediaAttribute, null);
+            $product->setData($mediaAttribute, 'no_selection');
         }
 
         return $this;

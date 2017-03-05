@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -200,7 +200,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
                 'store_id',
                 $this->getOption()->getStoreId()
             );
-            $this->unsetData('option_type_id');
+
             if ($this->getData('is_delete') == '1') {
                 if ($this->getId()) {
                     $this->deleteValues($this->getId());

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -22,6 +22,7 @@
             <argument name="code" xsi:type="const">Magento\Braintree\Model\Ui\PayPal\ConfigProvider::PAYPAL_CODE</argument>
             <argument name="infoBlockType" xsi:type="string">BraintreePayPalInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">BraintreePayPalValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">BraintreePayPalValidatorPool</argument>
             <argument name="commandPool" xsi:type="object">BraintreePayPalCommandPool</argument>
         </arguments>
     </virtualType>
@@ -364,7 +365,7 @@
         </arguments>
     </virtualType>
     <!-- END PayPal commands -->
-    
+
     <!-- Value handlers infrastructure -->
     <type name="Magento\Braintree\Gateway\Response\VaultDetailsHandler">
         <arguments>
@@ -451,7 +452,7 @@
         </arguments>
     </virtualType>
     <!-- END PayPal value handlers infrastructure -->
-    
+
     <!-- Void Command -->
     <virtualType name="BraintreeVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
@@ -474,7 +475,7 @@
         </arguments>
     </virtualType>
 
-    <!-- Value validators infrastructure -->
+    <!-- Braintree validators infrastructure -->
     <virtualType name="BraintreeCountryValidator" type="Magento\Payment\Gateway\Validator\CountryValidator">
         <arguments>
             <argument name="config" xsi:type="object">Magento\Braintree\Gateway\Config\Config</argument>
@@ -487,6 +488,22 @@
             </argument>
         </arguments>
     </virtualType>
+    <!-- Braintree validators infrastructure -->
+
+    <!-- Braintree PayPal validators -->
+    <virtualType name="BraintreePayPalCountryValidator" type="Magento\Payment\Gateway\Validator\CountryValidator">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\Braintree\Gateway\Config\PayPal\Config</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreePayPalValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="country" xsi:type="string">BraintreePayPalCountryValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- END Braintree PayPal validators -->
 
     <type name="Magento\Braintree\Block\Info">
         <arguments>
@@ -527,4 +544,16 @@
         </arguments>
     </type>
     <!-- END Settlement Report Section -->
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="payment/braintree/merchant_id" xsi:type="string">1</item>
+                <item name="payment/braintree/public_key" xsi:type="string">1</item>
+                <item name="payment/braintree/private_key" xsi:type="string">1</item>
+                <item name="payment/braintree/merchant_account_id" xsi:type="string">1</item>
+                <item name="payment/braintree/kount_id" xsi:type="string">1</item>
+                <item name="payment/braintree_paypal/merchant_name_override" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

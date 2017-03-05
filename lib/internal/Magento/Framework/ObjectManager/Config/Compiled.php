@@ -1,15 +1,20 @@
 <?php
 /**
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Config;
 
+use Magento\Framework\ObjectManager\ConfigInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 
-class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
+/**
+ * Provides object manager configuration when in compiled mode
+ */
+class Compiled implements ConfigInterface
 {
     /**
      * @var array
@@ -27,6 +32,13 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     private $preferences;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * Constructor
+     *
      * @param array $data
      */
     public function __construct($data)
@@ -70,13 +82,15 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      */
     public function getArguments($type)
     {
-        if (isset($this->arguments[$type])) {
+        if (array_key_exists($type, $this->arguments)) {
             if (is_string($this->arguments[$type])) {
-                $this->arguments[$type] = unserialize($this->arguments[$type]);
+                $this->arguments[$type] = $this->getSerializer()->unserialize($this->arguments[$type]);
+            } else if ($this->arguments[$type] === null) {
+                $this->arguments[$type] = [];
             }
             return $this->arguments[$type];
         } else {
-            return [['_i_' => \Magento\Framework\ObjectManagerInterface::class]];
+            return null;
         }
     }
 
@@ -129,9 +143,15 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      */
     public function extend(array $configuration)
     {
-        $this->arguments = $configuration['arguments'];
-        $this->virtualTypes = $configuration['instanceTypes'];
-        $this->preferences = $configuration['preferences'];
+        $this->arguments = isset($configuration['arguments'])
+            ? array_replace($this->arguments, $configuration['arguments'])
+            : $this->arguments;
+        $this->virtualTypes = isset($configuration['instanceTypes'])
+            ? array_replace($this->virtualTypes, $configuration['instanceTypes'])
+            : $this->virtualTypes;
+        $this->preferences = isset($configuration['preferences'])
+            ? array_replace($this->preferences, $configuration['preferences'])
+            : $this->preferences;
     }
 
     /**
@@ -152,5 +172,20 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     public function getPreferences()
     {
         return $this->preferences;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return SerializerInterface
+     * @deprecated
+     */
+    private function getSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(Serialize::class);
+        }
+        return $this->serializer;
     }
 }

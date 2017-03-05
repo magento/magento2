@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Setup;
@@ -13,7 +13,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
- * Setup Model of Quote Module
+ * Quote module setup class
+ *
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @codeCoverageIgnore
  */
@@ -75,9 +76,9 @@ class QuoteSetup extends EavSetup
      */
     protected function _flatTableExist($table)
     {
-        $tablesList = $this->getSetup()->getConnection(self::$connectionName)->listTables();
+        $tablesList = $this->getConnection()->listTables();
         return in_array(
-            strtoupper($this->getSetup()->getTable($table, self::$connectionName)),
+            strtoupper($this->getTable($table)),
             array_map('strtoupper', $tablesList)
         );
     }
@@ -115,15 +116,14 @@ class QuoteSetup extends EavSetup
      */
     protected function _addFlatAttribute($table, $attribute, $attr)
     {
-        $tableInfo = $this->getSetup()
-            ->getConnection(self::$connectionName)
-            ->describeTable($this->getSetup()->getTable($table, self::$connectionName));
+        $tableInfo = $this->getConnection()
+            ->describeTable($this->getTable($table));
         if (isset($tableInfo[$attribute])) {
             return $this;
         }
         $columnDefinition = $this->_getAttributeColumnDefinition($attribute, $attr);
-        $this->getSetup()->getConnection(self::$connectionName)->addColumn(
-            $this->getSetup()->getTable($table, self::$connectionName),
+        $this->getConnection()->addColumn(
+            $this->getTable($table),
             $attribute,
             $columnDefinition
         );
@@ -194,5 +194,26 @@ class QuoteSetup extends EavSetup
     public function getEncryptor()
     {
         return $this->_encryptor;
+    }
+
+    /**
+     * Get quote connection
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function getConnection()
+    {
+        return $this->getSetup()->getConnection(self::$connectionName);
+    }
+
+    /**
+     * Get table name
+     *
+     * @param string $table
+     * @return string
+     */
+    public function getTable($table)
+    {
+        return $this->getSetup()->getTable($table, self::$connectionName);
     }
 }

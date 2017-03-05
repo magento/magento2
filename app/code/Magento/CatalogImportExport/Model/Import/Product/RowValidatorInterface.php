@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
@@ -44,6 +44,8 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
     const ERROR_INVALID_TIER_PRICE_SITE = 'tierPriceWebsiteInvalid';
 
     const ERROR_INVALID_TIER_PRICE_GROUP = 'tierPriceGroupInvalid';
+
+    const ERROR_INVALID_TIER_PRICE_TYPE = 'tierPriceTypeInvalid';
 
     const ERROR_TIER_DATA_INCOMPLETE = 'tierPriceDataIsIncomplete';
 

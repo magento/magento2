@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\Unit\Controller\Adminhtml\Product\Gallery;
@@ -73,17 +73,11 @@ class RetrieveImageTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
         $this->rawFactoryMock =
             $this->getMock(\Magento\Framework\Controller\Result\RawFactory::class, ['create'], [], '', false);
-        $response =
-            $this->getMock(
-                \Magento\Framework\Controller\Result\Raw::class,
-                [],
-                [],
-                '',
-                false
-            );
+        $response = new \Magento\Framework\DataObject();
         $this->rawFactoryMock->expects($this->once())->method('create')->willReturn($response);
         $this->configMock = $this->getMock(\Magento\Catalog\Model\Product\Media\Config::class, [], [], '', false);
         $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
@@ -101,11 +95,15 @@ class RetrieveImageTest extends \PHPUnit_Framework_TestCase
         $this->adapterFactoryMock->expects($this->once())->method('create')->willReturn($this->abstractAdapter);
         $this->curlMock = $this->getMock(\Magento\Framework\HTTP\Adapter\Curl::class, [], [], '', false);
         $this->storageFileMock =
-            $this->getMock(\Magento\MediaStorage\Model\ResourceModel\File\Storage\File::class, [], [], '', false);
+        $this->getMock(\Magento\MediaStorage\Model\ResourceModel\File\Storage\File::class, [], [], '', false);
         $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
         $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
-
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $managerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMockForAbstractClass();
+        $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
+        $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($managerMock);
 
         $this->image = $objectManager->getObject(
             \Magento\ProductVideo\Controller\Adminhtml\Product\Gallery\RetrieveImage::class,
@@ -117,6 +115,7 @@ class RetrieveImageTest extends \PHPUnit_Framework_TestCase
                 'imageAdapterFactory' => $this->adapterFactoryMock,
                 'curl' => $this->curlMock,
                 'fileUtility' => $this->storageFileMock,
+                'protocolValidator' => new \Magento\Framework\Validator\AllowedProtocols(),
             ]
         );
     }

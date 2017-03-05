@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorization\Model;
@@ -15,10 +15,18 @@ class RulesTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var \Magento\User\Model\User
+     */
+    protected $user;
+
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Authorization\Model\Rules::class
+        );
+        $this->user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\User\Model\User::class
         );
     }
 
@@ -55,7 +63,9 @@ class RulesTest extends \PHPUnit_Framework_TestCase
     public function testSetAllowForAllResources()
     {
         $resources = ['Magento_Backend::all'];
-        $this->_model->setRoleId(1)->setResources($resources)->saveRel();
+        $this->user->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $roleId = $this->user->getRole()->getRoleId();
+        $this->_model->setRoleId($roleId)->setResources($resources)->saveRel();
         $expectedPermissions = ['Magento_Backend::all'];
         $this->_checkExistingPermissions($expectedPermissions);
     }
@@ -66,10 +76,13 @@ class RulesTest extends \PHPUnit_Framework_TestCase
     protected function _checkExistingPermissions($expectedDefaultPermissions)
     {
         $connection = $this->_model->getResource()->getConnection();
-        $ruleSelect = $connection->select()->from($this->_model->getResource()->getMainTable());
+        $this->user->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $roleId = $this->user->getRole()->getRoleId();
+        $ruleSelect = $connection->select()
+            ->from($this->_model->getResource()->getMainTable())
+            ->where('role_id = ?', $roleId);
 
         $rules = $ruleSelect->query()->fetchAll();
-        $this->assertEquals(1, count($rules));
         $actualPermissions = [];
         foreach ($rules as $rule) {
             $actualPermissions[] = $rule['resource_id'];

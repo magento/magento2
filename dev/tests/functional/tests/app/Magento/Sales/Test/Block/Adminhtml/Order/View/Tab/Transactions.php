@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Mtf\Client\Locator;
-use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Shipments\Grid;
+use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Transactions\Grid;
 
 /**
  * Transactions tab.

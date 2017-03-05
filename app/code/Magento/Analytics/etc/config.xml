@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <analytics>
+            <url>
+                <signup>https://advancedreporting.rjmetrics.com/signup</signup>
+                <update>https://advancedreporting.rjmetrics.com/update</update>
+                <basic_tier>https://dashboard.rjmetrics.com/v2/magento/signup</basic_tier>
+                <otp>https://advancedreporting.rjmetrics.com/otp</otp>
+                <report>https://advancedreporting.rjmetrics.com/report</report>
+            </url>
+            <integration_name>Magento Analytics user</integration_name>
+            <general>
+                <cron>
+                    <collection_time>02,00,00</collection_time>
+                </cron>
+            </general>
+        </analytics>
+    </default>
+</config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -247,14 +247,21 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $titleTableName = $this->getTable('catalog_product_option_title');
         foreach ([\Magento\Store\Model\Store::DEFAULT_STORE_ID, $object->getStoreId()] as $storeId) {
             $existInCurrentStore = $this->getColFromOptionTable($titleTableName, (int)$object->getId(), (int)$storeId);
-            $existInDefaultStore = $this->getColFromOptionTable(
-                $titleTableName,
-                (int)$object->getId(),
-                \Magento\Store\Model\Store::DEFAULT_STORE_ID
-            );
+            $existInDefaultStore = (int)$storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID ?
+                $existInCurrentStore :
+                $this->getColFromOptionTable(
+                    $titleTableName,
+                    (int)$object->getId(),
+                    \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                );
+
             if ($object->getTitle()) {
+                $isDeleteStoreTitle = (bool)$object->getData('is_delete_store_title');
                 if ($existInCurrentStore) {
-                    if ($object->getStoreId() == $storeId) {
+                    if ($isDeleteStoreTitle && (int)$storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+                        $connection->delete($titleTableName, ['option_title_id = ?' => $existInCurrentStore]);
+
+                    } elseif ($object->getStoreId() == $storeId) {
                         $data = $this->_prepareDataForTable(
                             new \Magento\Framework\DataObject(['title' => $object->getTitle()]),
                             $titleTableName
@@ -270,8 +277,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     }
                 } else {
                     // we should insert record into not default store only of if it does not exist in default store
-                    if (($storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID && !$existInDefaultStore)
-                        || ($storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID && !$existInCurrentStore)
+                    if (
+                        ($storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID && !$existInDefaultStore) ||
+                        (
+                            $storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID &&
+                            !$existInCurrentStore &&
+                            !$isDeleteStoreTitle
+                        )
                     ) {
                         $data = $this->_prepareDataForTable(
                             new \Magento\Framework\DataObject(

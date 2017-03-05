@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,16 +32,23 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     private $scopeConfig;
 
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $serializer;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
+        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
 
         $this->address = $objectManager->getObject(
             \Magento\Quote\Model\Quote\Address::class,
             [
-                'scopeConfig' => $this->scopeConfig
+                'scopeConfig' => $this->scopeConfig,
+                'serializer' => $this->serializer
             ]
         );
         $this->quote = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
@@ -133,5 +140,24 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap($scopeConfigValues);
 
         $this->assertTrue($this->address->validateMinimumAmount());
+    }
+
+    public function testSetAndGetAppliedTaxes()
+    {
+        $data = ['data'];
+        $result = json_encode($data);
+
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->with($data)
+            ->willReturn($result);
+
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->with($result)
+            ->willReturn($data);
+
+        $this->assertInstanceOf(\Magento\Quote\Model\Quote\Address::class, $this->address->setAppliedTaxes($data));
+        $this->assertEquals($data, $this->address->getAppliedTaxes());
     }
 }

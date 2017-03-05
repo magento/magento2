@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -180,6 +180,34 @@
     <type name="Magento\Paypal\Model\Payflow\Transparent">
         <arguments>
             <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\CreditCardTokenFactory</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Export\ExcludeList">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="paypal/general/business_account" xsi:type="string">1</item>
+                <item name="paypal/wpp/api_password" xsi:type="string">1</item>
+                <item name="paypal/wpp/api_signature" xsi:type="string">1</item>
+                <item name="paypal/wpp/api_username" xsi:type="string">1</item>
+                <item name="paypal/wpp/api_cert" xsi:type="string">1</item>
+                <item name="paypal/wpp/proxy_host" xsi:type="string">1</item>
+                <item name="paypal/wpp/proxy_port" xsi:type="string">1</item>
+                <item name="payment/paypal_express/merchant_id" xsi:type="string">1</item>
+                <item name="payment/paypal_express_bml/publisher_id" xsi:type="string">1</item>
+                <item name="paypal/fetch_reports/ftp_password" xsi:type="string">1</item>
+                <item name="paypal/fetch_reports/ftp_login" xsi:type="string">1</item>
+                <item name="paypal/fetch_reports/ftp_path" xsi:type="string">1</item>
+                <item name="paypal/fetch_reports/ftp_ip" xsi:type="string">1</item>
+                <item name="payment/payflow_advanced/user" xsi:type="string">1</item>
+                <item name="payment/payflow_advanced/pwd" xsi:type="string">1</item>
+                <item name="payment/payflow_link/user" xsi:type="string">1</item>
+                <item name="payment/payflow_link/pwd" xsi:type="string">1</item>
+                <item name="payment/payflowpro/user" xsi:type="string">1</item>
+                <item name="payment/payflowpro/pwd" xsi:type="string">1</item>
+                <item name="payment/payflowpro/partner" xsi:type="string">1</item>
+                <item name="payment/payflowpro/proxy_host" xsi:type="string">1</item>
+                <item name="payment/payflowpro/proxy_port" xsi:type="string">1</item>
+            </argument>
         </arguments>
     </type>
 </config>

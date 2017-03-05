@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
 
 use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -93,11 +95,22 @@ class Config
     protected $_universalFactory;
 
     /**
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
+     */
+    private $attributeProto = [];
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param SerializerInterface $serializer
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -105,13 +118,15 @@ class Config
         \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        SerializerInterface $serializer = null
     ) {
         $this->_cache = $cache;
         $this->_entityTypeFactory = $entityTypeFactory;
         $this->entityTypeCollectionFactory = $entityTypeCollectionFactory;
         $this->_cacheState = $cacheState;
         $this->_universalFactory = $universalFactory;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
     /**
@@ -278,7 +293,7 @@ class Config
         \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, ['group' => 'EAV', 'method' => __METHOD__]);
 
         if ($this->isCacheEnabled() && ($cache = $this->_cache->load(self::ENTITIES_CACHE_ID))) {
-            $this->_entityTypeData = unserialize($cache);
+            $this->_entityTypeData = $this->serializer->unserialize($cache);
             foreach ($this->_entityTypeData as $typeCode => $data) {
                 $typeId = $data['entity_type_id'];
                 $this->_addEntityTypeReference($typeId, $typeCode);
@@ -302,7 +317,7 @@ class Config
 
         if ($this->isCacheEnabled()) {
             $this->_cache->save(
-                serialize($this->_entityTypeData),
+                $this->serializer->serialize($this->_entityTypeData),
                 self::ENTITIES_CACHE_ID,
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,
@@ -372,7 +387,7 @@ class Config
         }
         $cacheKey = self::ATTRIBUTES_CACHE_ID . $entityTypeCode;
         if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
-            $attributes = unserialize($attributes);
+            $attributes = $this->serializer->unserialize($attributes);
             if ($attributes) {
                 foreach ($attributes as $attribute) {
                     $this->_createAttribute($entityType, $attribute);
@@ -402,7 +417,7 @@ class Config
         }
         if ($this->isCacheEnabled()) {
             $this->_cache->save(
-                serialize($this->_attributeData[$entityTypeCode]),
+                $this->serializer->serialize($this->_attributeData[$entityTypeCode]),
                 $cacheKey,
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,
@@ -444,8 +459,8 @@ class Config
         if (!$attribute) {
             // TODO: refactor wrong method usage in: addAttributeToSelect, joinAttribute
             $entityType = $this->getEntityType($entityType);
-            /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-            $attribute = $this->_universalFactory->create($entityType->getAttributeModel());
+            $attribute = $this->createAttribute($entityType->getAttributeModel());
+
             $attribute->setAttributeCode($code);
             $entity = $entityType->getEntity();
             if ($entity && in_array($attribute->getAttributeCode(), $entity->getDefaultAttributes())) {
@@ -461,6 +476,21 @@ class Config
         }
         \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
         return $attribute;
+    }
+
+    /**
+     * Create attribute from prototype
+     *
+     * @param string $model
+     * @return Entity\Attribute\AbstractAttribute
+     */
+    private function createAttribute($model)
+    {
+        if (!isset($this->attributeProto[$model])) {
+            /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+            $this->attributeProto[$model] = $this->_universalFactory->create($model);
+        }
+        return clone $this->attributeProto[$model];
     }
 
     /**
@@ -487,7 +517,7 @@ class Config
         }
 
         if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
-            $this->_attributeCodes[$cacheKey] = unserialize($attributes);
+            $this->_attributeCodes[$cacheKey] = $this->serializer->unserialize($attributes);
             return $this->_attributeCodes[$cacheKey];
         }
 
@@ -514,7 +544,7 @@ class Config
         $this->_attributeCodes[$cacheKey] = $attributes;
         if ($this->isCacheEnabled()) {
             $this->_cache->save(
-                serialize($attributes),
+                $this->serializer->serialize($attributes),
                 $cacheKey,
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,
@@ -555,7 +585,7 @@ class Config
             $model = $entityType->getAttributeModel();
         }
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-        $attribute = $this->_universalFactory->create($model)->setData($attributeData);
+        $attribute = $this->createAttribute($model)->setData($attributeData);
         $this->_addAttributeReference(
             $attributeData['attribute_id'],
             $attributeData['attribute_code'],

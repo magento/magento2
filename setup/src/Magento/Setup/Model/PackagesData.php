@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model;
@@ -409,6 +409,7 @@ class PackagesData
                 return in_array(
                     $item['package_type'],
                     [
+                        \Magento\Setup\Model\Grid\TypeMapper::LANGUAGE_PACKAGE_TYPE,
                         \Magento\Setup\Model\Grid\TypeMapper::MODULE_PACKAGE_TYPE,
                         \Magento\Setup\Model\Grid\TypeMapper::EXTENSION_PACKAGE_TYPE,
                         \Magento\Setup\Model\Grid\TypeMapper::THEME_PACKAGE_TYPE,
@@ -491,26 +492,38 @@ class PackagesData
 
                 return array_keys($packageVersions);
             }
-        } else {
-            $versionsPattern = '/^versions\s*\:\s(.+)$/m';
+        }
 
-            $commandParams = [
-                self::PARAM_COMMAND => self::COMPOSER_SHOW,
-                self::PARAM_PACKAGE => $package,
-                self::PARAM_AVAILABLE => true
-            ];
+        return $this->getAvailableVersionsFromAllRepositories($package);
+    }
 
-            $applicationFactory = $this->objectManagerProvider->get()
-                ->get(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
-            /** @var \Magento\Composer\MagentoComposerApplication $application */
-            $application = $applicationFactory->create();
+    /**
+     * Get available versions of package by "composer show" command
+     *
+     * @param string $package
+     * @return array
+     * @exception \RuntimeException
+     */
+    private function getAvailableVersionsFromAllRepositories($package)
+    {
+        $versionsPattern = '/^versions\s*\:\s(.+)$/m';
 
-            $result = $application->runComposerCommand($commandParams);
-            $matches = [];
-            preg_match($versionsPattern, $result, $matches);
-            if (isset($matches[1])) {
-                return explode(', ', $matches[1]);
-            }
+        $commandParams = [
+            self::PARAM_COMMAND => self::COMPOSER_SHOW,
+            self::PARAM_PACKAGE => $package,
+            self::PARAM_AVAILABLE => true
+        ];
+
+        $applicationFactory = $this->objectManagerProvider->get()
+            ->get(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
+        /** @var \Magento\Composer\MagentoComposerApplication $application */
+        $application = $applicationFactory->create();
+
+        $result = $application->runComposerCommand($commandParams);
+        $matches = [];
+        preg_match($versionsPattern, $result, $matches);
+        if (isset($matches[1])) {
+            return explode(', ', $matches[1]);
         }
 
         throw new \RuntimeException(

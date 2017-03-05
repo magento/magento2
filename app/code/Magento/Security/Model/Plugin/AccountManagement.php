@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model\Plugin;
@@ -26,17 +26,25 @@ class AccountManagement
     protected $securityManager;
 
     /**
+     * @var int
+     */
+    protected $passwordRequestEvent;
+
+    /**
      * AccountManagement constructor.
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @param SecurityManager $securityManager
+     * @param int $passwordRequestEvent
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Security\Model\SecurityManager $securityManager
+        \Magento\Security\Model\SecurityManager $securityManager,
+        $passwordRequestEvent = PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST
     ) {
         $this->request = $request;
         $this->securityManager = $securityManager;
+        $this->passwordRequestEvent = $passwordRequestEvent;
     }
 
     /**
@@ -56,7 +64,7 @@ class AccountManagement
         $websiteId = null
     ) {
         $this->securityManager->performSecurityCheck(
-            PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST,
+            $this->passwordRequestEvent,
             $email
         );
         return [$email, $template, $websiteId];

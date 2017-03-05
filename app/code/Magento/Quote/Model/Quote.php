@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -1572,6 +1572,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             );
         }
 
+        if (!$product->isSalable()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Product that you are trying to add is not available.')
+            );
+        }
+
         $cartCandidates = $product->getTypeInstance()->prepareForCartAdvanced($request, $product, $processMode);
 
         /**
@@ -2157,6 +2163,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         if (!$this->getReservedOrderId()) {
             $this->setReservedOrderId($this->_getResource()->getReservedOrderId($this));
+        } else {
+            //checking if reserved order id was already used for some order
+            //if yes reserving new one if not using old one
+            if ($this->_getResource()->isOrderIncrementIdUsed($this->getReservedOrderId())) {
+                $this->setReservedOrderId($this->_getResource()->getReservedOrderId($this));
+            }
         }
         return $this;
     }

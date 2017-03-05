@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -60,6 +60,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $stockRegistry;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
 
     const PRODUCT_ID = 1;
     const PRODUCT_TYPE = 'simple';
@@ -134,6 +139,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->will($this->returnValue($this->stockItemMock));
 
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->setMethods(['unserialize'])
+            ->getMockForAbstractClass();
+
         $this->model = $this->objectManagerHelper->getObject(
             \Magento\Quote\Model\Quote\Item::class,
             [
@@ -142,7 +151,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'statusListFactory' => $statusListFactory,
                 'itemOptionFactory' => $this->itemOptionFactory,
                 'quoteItemCompare' => $this->compareHelper,
-                'stockRegistry' => $this->stockRegistry
+                'stockRegistry' => $this->stockRegistry,
+                'serializer' => $this->serializer
             ]
         );
     }
@@ -1058,9 +1068,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $optionMock->expects($this->exactly(3))
             ->method('getCode')
             ->will($this->returnValue($optionCode));
-        $optionMock->expects($this->once())
+        $optionMock->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(serialize(['qty' => $buyRequestQuantity])));
+            ->will($this->returnValue('{"qty":23}'));
 
         $this->model->addOption($optionMock);
 
@@ -1071,6 +1081,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quantity));
         $this->model->setQty($quantity);
         $this->assertEquals($quantity, $this->model->getQty());
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturn(json_decode($optionMock->getValue(), true));
         $buyRequest = $this->model->getBuyRequest();
         $this->assertEquals($buyRequestQuantity, $buyRequest->getOriginalQty());
         $this->assertEquals($quantity, $buyRequest->getQty());

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -77,6 +77,13 @@
     <type name="Magento\CatalogInventory\Setup\UpgradeData">
         <arguments>
             <argument name="indexerProcessor" xsi:type="object">Magento\CatalogInventory\Model\Indexer\Stock\Processor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
+        <arguments>
+            <argument name="baseSelectProcessors" xsi:type="array">
+                <item name="stock_status" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</item>
+            </argument>
         </arguments>
     </type>
 </config>
