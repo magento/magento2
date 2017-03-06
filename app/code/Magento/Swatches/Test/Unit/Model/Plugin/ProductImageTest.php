@@ -34,7 +34,7 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->swatchesHelperMock = $this->getMock(
-            '\Magento\Swatches\Helper\Data',
+            \Magento\Swatches\Helper\Data::class,
             ['loadVariationByFallback', 'isSwatchAttribute', 'isProductHasSwatch'],
             [],
             '',
