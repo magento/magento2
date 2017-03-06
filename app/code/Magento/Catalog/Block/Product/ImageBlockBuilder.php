@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: akril
- * Date: 2/21/17
- * Time: 8:58 AM
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product;
 
