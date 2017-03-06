@@ -7,7 +7,7 @@ namespace Magento\Deploy\Console\Command\App\ConfigImport;
 
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Deploy\Model\DeploymentConfig\ImportFailedException;
+use Magento\Framework\Exception\RuntimeException;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Deploy\Model\DeploymentConfig\Validator;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
@@ -91,7 +91,7 @@ class Importer
      *
      * @param OutputInterface $output the CLI output
      * @return void
-     * @throws ImportFailedException is thrown when import has failed
+     * @throws RuntimeException is thrown when import has failed
      */
     public function import(OutputInterface $output)
     {
@@ -106,20 +106,20 @@ class Importer
 
             /**
              * @var string $section
-             * @var string $importer
+             * @var string $importerClassName
              */
             foreach ($importers as $section => $importerClassName) {
                 if (!$this->configValidator->isValid($section)) {
                     /** @var ImporterInterface $importer */
                     $importer = $this->importerFactory->create($importerClassName);
-                    $messages = $importer->import($this->deploymentConfig->getConfigData($section));
+                    $messages = $importer->import((array) $this->deploymentConfig->getConfigData($section));
                     $output->writeln($messages);
                     $this->configHash->regenerate($section);
                 }
             }
         } catch (\Exception $exception) {
             $this->logger->error($exception);
-            throw new ImportFailedException(__('Import is failed. Please, see the log report.'), $exception);
+            throw new RuntimeException(__('Import is failed. Please see the log report.'), $exception);
         }
     }
 }

@@ -59,7 +59,7 @@ class Validator
      * If config data is empty always returns true.
      * In the other cases returns true.
      *
-     * @param string $sectionName is name section for check data of the specific section
+     * @param string $sectionName is section name for check data of the specific section
      * @return bool
      */
     public function isValid($sectionName = null)
@@ -68,8 +68,9 @@ class Validator
         $hashes = $this->configHash->get();
 
         foreach ($configs as $section => $config) {
-            $hash = isset($hashes[$section]) ? $hashes[$section] : null;
-            if ($config && $this->hashGenerator->generate($config) !== $hash) {
+            $savedHash = isset($hashes[$section]) ? $hashes[$section] : null;
+            $generatedHash = empty($config) && !$savedHash ? null : $this->hashGenerator->generate($config);
+            if ($generatedHash !== $savedHash) {
                 return false;
             }
         }
