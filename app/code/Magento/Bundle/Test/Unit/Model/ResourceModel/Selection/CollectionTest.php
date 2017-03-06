@@ -12,6 +12,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\Validator\UniversalFactory;
 use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Framework\DB\Select;
 
 /**
@@ -84,6 +85,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $factory = $this->getMockBuilder(ProductLimitationFactory::class)
+            ->setMethods(['create'])
+            ->getMock();
 
         $this->storeManager->expects($this->any())
             ->method('getStore')
@@ -109,6 +113,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             [
                 'storeManager' => $this->storeManager,
                 'universalFactory' => $this->universalFactory,
+                'productLimitationFactory' => $factory,
                 'indexerStockFrontendResource' => $this->frontendResource
             ]
         );
@@ -122,10 +127,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($tableName);
         $this->select->expects($this->once())
             ->method('joinInner')
-            ->with(['stock' => $tableName],
+            ->with(
+                ['stock' => $tableName],
                 'selection.product_id = stock.product_id',
-                [])
-            ->willReturnSelf();
+                []
+            )->willReturnSelf();
         $this->assertEquals($this->model, $this->model->addQuantityFilter());
     }
 }

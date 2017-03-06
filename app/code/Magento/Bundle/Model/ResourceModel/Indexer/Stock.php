@@ -39,9 +39,9 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
         \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
         \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
     ) {
+        parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName, $stateFactory);
         $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
             ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
-        parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName, $stateFactory);
     }
 
     /**

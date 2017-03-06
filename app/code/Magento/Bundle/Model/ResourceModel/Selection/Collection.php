@@ -105,9 +105,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null,
         \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
     ) {
-
-        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
         parent::__construct(
             $entityFactory,
             $logger,
@@ -133,6 +130,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $metadataPool,
             $indexerFrontendResource
         );
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
     }
 
     /**
