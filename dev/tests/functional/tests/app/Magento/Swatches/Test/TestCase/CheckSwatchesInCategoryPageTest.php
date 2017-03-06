@@ -118,7 +118,6 @@ class CheckSwatchesInCategoryPageTest extends Injectable
             SetupConfigurationStep::class,
             ['configData' => 'enable_swatches_visibility_in_catalog', 'flushCache' => true]
         )->run();
-        sleep(5);
 
         return ['product' => $product];
     }
