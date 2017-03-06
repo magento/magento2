@@ -3,13 +3,13 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Model\Category;
+namespace Magento\Bundle\Model\Category;
 
 use Magento\Catalog\Model\Category;
 
 /**
+ * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
  * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
- * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
@@ -64,10 +64,10 @@ class ProductIndexerTest extends \PHPUnit_Framework_TestCase
 
         /** @var Category $categoryFourth */
         $categoryFourth = end($categories);
-        /** @var \Magento\Catalog\Model\Product $configurableProduct */
-        $configurableProduct = $this->productRepository->get('configurable');
-        $configurableProduct->setCategoryIds([$categoryFourth->getId()]);
-        $this->productRepository->save($configurableProduct);
+        /** @var \Magento\Catalog\Model\Product $bundleProduct */
+        $bundleProduct = $this->productRepository->get('bundle_product');
+        $bundleProduct->setCategoryIds([$categoryFourth->getId()]);
+        $this->productRepository->save($bundleProduct);
 
         /** @var Category $categoryThird */
         $categoryThird = $categories[2];
@@ -78,11 +78,11 @@ class ProductIndexerTest extends \PHPUnit_Framework_TestCase
 
         $categories = [self::DEFAULT_ROOT_CATEGORY, $categoryThird->getId(), $categoryFourth->getId()];
         foreach ($categories as $categoryId) {
-            $this->assertTrue((bool)$this->productResource->canBeShowInCategory($configurableProduct, $categoryId));
+            $this->assertTrue((bool)$this->productResource->canBeShowInCategory($bundleProduct, $categoryId));
         }
 
         $this->assertTrue(
-            (bool)$this->productResource->canBeShowInCategory($configurableProduct, $categoryThird->getParentId())
+            (bool)$this->productResource->canBeShowInCategory($bundleProduct, $categoryThird->getParentId())
         );
     }
 
@@ -95,9 +95,9 @@ class ProductIndexerTest extends \PHPUnit_Framework_TestCase
 
         /** @var Category $categoryFourth */
         $categoryFourth = end($categories);
-        $configurableProduct = $this->productRepository->get('configurable');
-        $configurableProduct->setCategoryIds([$categoryFourth->getId()]);
-        $this->productRepository->save($configurableProduct);
+        $bundleProduct = $this->productRepository->get('bundle_product');
+        $bundleProduct->setCategoryIds([$categoryFourth->getId()]);
+        $this->productRepository->save($bundleProduct);
 
         /** @var Category $categorySecond */
         $categorySecond = $categories[1];
@@ -119,22 +119,24 @@ class ProductIndexerTest extends \PHPUnit_Framework_TestCase
         $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySecond->getId(), $categoryFourth->getId()];
 
         foreach ($categories as $categoryId) {
-            $this->assertTrue((bool)$this->productResource->canBeShowInCategory($configurableProduct, $categoryId));
+            $this->assertTrue((bool)$this->productResource->canBeShowInCategory($bundleProduct, $categoryId));
         }
 
         $this->assertFalse(
-            (bool)$this->productResource->canBeShowInCategory($configurableProduct, $categoryThird->getId())
+            (bool)$this->productResource->canBeShowInCategory($bundleProduct, $categoryThird->getId())
         );
     }
 
     /**
      * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
      * @depends testReindex
      */
     public function testCategoryDelete()
     {
         $categories = $this->getCategories();
-        $configurableProduct = $this->productRepository->get('configurable');
+        $bundleProduct = $this->productRepository->get('bundle_product');
 
         /** @var Category $categoryFourth */
         $categoryFourth = end($categories);
@@ -146,11 +148,11 @@ class ProductIndexerTest extends \PHPUnit_Framework_TestCase
         $categories = [$categorySecond->getId(), $categoryFourth->getId()];
 
         foreach ($categories as $categoryId) {
-            $this->assertFalse((bool)$this->productResource->canBeShowInCategory($configurableProduct, $categoryId));
+            $this->assertFalse((bool)$this->productResource->canBeShowInCategory($bundleProduct, $categoryId));
         }
         $this->assertTrue(
             (bool)$this->productResource->canBeShowInCategory(
-                $configurableProduct,
+                $bundleProduct,
                 self::DEFAULT_ROOT_CATEGORY
             )
         );
@@ -158,12 +160,14 @@ class ProductIndexerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
      */
     public function testCategoryCreate()
     {
         $this->testReindex();
         $categories = $this->getCategories();
-        $configurableProduct = $this->productRepository->get('configurable');
+        $bundleProduct = $this->productRepository->get('bundle_product');
 
         /** @var Category $categorySecond */
         $categorySecond = $categories[1];
@@ -190,16 +194,16 @@ class ProductIndexerTest extends \PHPUnit_Framework_TestCase
         );
         $this->categoryRepository->save($categorySixth);
 
-        $configurableProduct->setCategoryIds([$categorySixth->getId()]);
-        $configurableProduct->save();
+        $bundleProduct->setCategoryIds([$categorySixth->getId()]);
+        $bundleProduct->save();
 
         $categories = [self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId(), $categoryFourth->getId()];
         foreach ($categories as $categoryId) {
-            $this->assertTrue((bool)$this->productResource->canBeShowInCategory($configurableProduct, $categoryId));
+            $this->assertTrue((bool)$this->productResource->canBeShowInCategory($bundleProduct, $categoryId));
         }
 
         $this->assertFalse(
-            (bool)$this->productResource->canBeShowInCategory($configurableProduct, $categorySecond->getId())
+            (bool)$this->productResource->canBeShowInCategory($bundleProduct, $categorySecond->getId())
         );
     }
 
