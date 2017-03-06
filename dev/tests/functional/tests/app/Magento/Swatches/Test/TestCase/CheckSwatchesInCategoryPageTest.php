@@ -28,12 +28,14 @@ use Magento\Swatches\Test\Constraint\AssertSwatchesVisibilityInCategory;
  * 3. Set Show Swatches in Product List = No.
  * 4. Save configuration.
  * 5. Clean cache.
- * 6. Go to storefron category.
+ * 6. Go to storefront > category with configurable product.
  * 7. Check swatches not visible in catalog item.
- * 8. Set Show Swatches in Product List = Yes.
- * 9. Save configuration.
- * 10. Clean cache.
- * 11. Check swatches are visible in catalog item.
+ * 8. Navigate to Stores > Configuration > Catalog > Catalog > Storefront.
+ * 9. Set Show Swatches in Product List = Yes.
+ * 10. Save configuration.
+ * 11. Clean cache.
+ * 12. Go to storefront > category with configurable product.
+ * 13. Check swatches are visible in catalog item.
  *
  * @group Swatches (MX)
  * @ZephyrId MAGETWO-65485
