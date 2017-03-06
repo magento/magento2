@@ -55,7 +55,7 @@ class DataProvider implements DataProviderInterface
     private $indexerFrontendResource;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
      */
     private $indexerStockFrontendResource;
 

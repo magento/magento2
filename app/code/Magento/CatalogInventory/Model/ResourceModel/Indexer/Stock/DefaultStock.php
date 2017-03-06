@@ -55,7 +55,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     private $indexerStateFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
      */
     private $indexerStockFrontendResource;
 

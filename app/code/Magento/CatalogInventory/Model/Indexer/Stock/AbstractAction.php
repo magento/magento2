@@ -71,7 +71,7 @@ abstract class AbstractAction
     private $cacheCleaner;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
      */
     private $indexerStockFrontendResource;
 

@@ -69,7 +69,7 @@ class IndexBuilder implements IndexBuilderInterface
     private $stockConfiguration;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
      */
     private $indexerStockFrontendResource;
 

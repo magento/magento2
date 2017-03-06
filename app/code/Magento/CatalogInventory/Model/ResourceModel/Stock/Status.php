@@ -41,7 +41,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $stockConfiguration;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
      */
     private $indexerStockFrontendResource;
 

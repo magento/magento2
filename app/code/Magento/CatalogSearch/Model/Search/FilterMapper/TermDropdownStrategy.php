@@ -49,7 +49,7 @@ class TermDropdownStrategy implements FilterStrategyInterface
     private $scopeConfig;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
      */
     private $indexerStockFrontendResource;
 

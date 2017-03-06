@@ -100,6 +100,11 @@
             <argument name="idFieldName" xsi:type="string">product_id</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction">
+        <arguments>
+            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+        </arguments>
+    </type>
     <type name="Magento\CatalogInventory\Model\Indexer\Stock\CacheCleaner">
         <arguments>
             <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
@@ -116,6 +121,11 @@
         </arguments>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Status">
+        <arguments>
+            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item\StockItemCriteriaMapper">
         <arguments>
             <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
         </arguments>

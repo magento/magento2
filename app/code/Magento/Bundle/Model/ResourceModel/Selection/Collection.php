@@ -44,7 +44,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $websiteScopePriceJoined = false;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource
+     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
      */
     private $indexerStockFrontendResource;
 
