@@ -19,5 +19,10 @@ return [
             'web' => [],
             'general' => []
         ]
-    ]
+    ],
+    'integrationTestImporter' => [
+        'someGroup' => [
+            'someField' => 'testValue',
+        ]
+    ],
 ];
