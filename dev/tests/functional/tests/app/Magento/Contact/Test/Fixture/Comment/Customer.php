@@ -69,8 +69,11 @@ class Customer extends DataSource
             $this->data = [
                 'firstname' => $customer->getFirstname(),
                 'email' => $customer->getEmail(),
-                'telephone' => $customer->hasData('telephone') ? $customer->getData('telephone') : ''
             ];
+
+            if ($customer->hasData('telephone')) {
+                $this->data['telephone'] = $customer->getData('telephone');
+            }
         }
 
         return parent::getData($key);
