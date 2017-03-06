@@ -35,6 +35,7 @@ class BackendTemplate extends Template
      * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
      * @param \Magento\Config\Model\Config\Structure $structure
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
