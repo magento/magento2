@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Category;
 
 /**
  * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+ * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_products.php
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
@@ -42,8 +43,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
-     * @magentoDbIsolation enabled
      */
     public function testReindexAll()
     {
@@ -82,9 +81,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      */
     public function testCategoryMove()
     {
