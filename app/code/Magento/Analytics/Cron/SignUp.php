@@ -5,7 +5,7 @@
  */
 namespace Magento\Analytics\Cron;
 
-use Magento\Analytics\Model\AnalyticsConnector;
+use Magento\Analytics\Model\Connector;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
@@ -19,9 +19,9 @@ use Magento\Analytics\Model\FlagManager;
 class SignUp
 {
     /**
-     * @var AnalyticsConnector
+     * @var Connector
      */
-    private $analyticsConnector;
+    private $connector;
 
     /**
      * @var WriterInterface
@@ -53,7 +53,7 @@ class SignUp
     /**
      * SignUp constructor.
      *
-     * @param AnalyticsConnector $analyticsConnector
+     * @param Connector $connector
      * @param WriterInterface $configWriter
      * @param InboxFactory $inboxFactory
      * @param InboxResource $inboxResource
@@ -61,14 +61,14 @@ class SignUp
      * @param ReinitableConfigInterface $reinitableConfig
      */
     public function __construct(
-        AnalyticsConnector $analyticsConnector,
+        Connector $connector,
         WriterInterface $configWriter,
         InboxFactory $inboxFactory,
         InboxResource $inboxResource,
         FlagManager $flagManager,
         ReinitableConfigInterface $reinitableConfig
     ) {
-        $this->analyticsConnector = $analyticsConnector;
+        $this->connector = $connector;
         $this->configWriter = $configWriter;
         $this->inboxFactory = $inboxFactory;
         $this->inboxResource = $inboxResource;
@@ -104,7 +104,7 @@ class SignUp
 
         $attemptsCount -= 1;
         $this->flagManager->saveFlag(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $attemptsCount);
-        $signUpResult = $this->analyticsConnector->execute('signUp');
+        $signUpResult = $this->connector->execute('signUp');
         if ($signUpResult === false) {
             return false;
         }

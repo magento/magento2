@@ -10,6 +10,7 @@
         <variation name="NavigateMenuTestBasicTier" summary="Navigate through Basic Tier admin menu to Sign Up page" ticketId="MAGETWO-63700">
             <data name="menuItem" xsi:type="string">Reports > Basic Tier</data>
             <data name="waitMenuItemNotVisible" xsi:type="boolean">false</data>
+            <data name="businessIntelligenceLink" xsi:type="string">https://dashboard.rjmetrics.com/v2/magento/signup</data>
             <constraint name="Magento\Analytics\Test\Constraint\AssertBasicTierLink" />
         </variation>
     </testCase>

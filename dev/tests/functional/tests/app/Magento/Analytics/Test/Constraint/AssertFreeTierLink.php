@@ -14,11 +14,6 @@ use Magento\Mtf\Client\BrowserInterface;
 class AssertFreeTierLink extends AbstractConstraint
 {
     /**
-     * Free Tier Sign Up page url
-     */
-    const FREE_TIER_LINK = 'http://drakelair1.corp.magento.com/mamock/report';
-
-    /**
      * Browser instance.
      *
      * @var BrowserInterface
@@ -29,14 +24,15 @@ class AssertFreeTierLink extends AbstractConstraint
      * Assert Free Tier Sign Up page is opened by link
      *
      * @param BrowserInterface $browser
+     * @param string $advancedReportingLink
      * @return void
      */
-    public function processAssert(BrowserInterface $browser)
+    public function processAssert(BrowserInterface $browser, $advancedReportingLink)
     {
         $this->browser = $browser;
         $this->browser->selectWindow();
         \PHPUnit_Framework_Assert::assertEquals(
-            self::FREE_TIER_LINK,
+            $advancedReportingLink,
             $this->browser->getUrl(),
             'Free Tier Sign Up page was not opened by link.'
         );
