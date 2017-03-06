@@ -124,4 +124,50 @@ class ArrayUtils
             $element->setData($key, $value);
         }
     }
+
+    /**
+     * Expands multidimensional array into flat structure.
+     *
+     * Example:
+     *
+     * ```php
+     *  [
+     *      'default' => [
+     *          'web' => 2
+     *      ]
+     *  ]
+     * ```
+     *
+     * Expands to:
+     *
+     * ```php
+     *  [
+     *      'default/web' => 2,
+     *  ]
+     * ```
+     *
+     * @param array $data The data to be flatten
+     * @param string $path The leading path
+     * @param string $separator The path parts separator
+     * @return array
+     */
+    public function flatten(array $data, $path = '', $separator = '/')
+    {
+        $result = [];
+
+        foreach ($data as $key => $value) {
+            if (!is_array($value)) {
+                $result[$path . $separator . $key] = $value;
+
+                continue;
+            }
+
+            $result = array_merge(
+                $result,
+                $this->flatten($value, $path ? $path . $separator . $key : $key)
+            );
+        }
+
+        return $result;
+    }
 }
