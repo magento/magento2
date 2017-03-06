@@ -5,12 +5,13 @@
  */
 namespace Magento\Deploy\Console\Command\App;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Deploy\Model\DeploymentConfig\ImportFailedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
+use Magento\Framework\App\DeploymentConfig\Writer;
 
 /**
  * Runs the process of importing configuration data from shared source to appropriate application sources.
@@ -27,16 +28,27 @@ class ConfigImportCommand extends Command
     const COMMAND_NAME = 'app:config:import';
 
     /**
+     * Configuration importer.
+     *
      * @var Importer
      */
     private $importer;
 
     /**
-     * @param Importer $importer
+     * Configuration file writer.
+     *
+     * @var Writer
      */
-    public function __construct(Importer $importer)
+    private $writer;
+
+    /**
+     * @param Importer $importer the configuration importer
+     * @param Writer $writer the configuration file writer
+     */
+    public function __construct(Importer $importer, Writer $writer)
     {
         $this->importer = $importer;
+        $this->writer = $writer;
 
         parent::__construct();
     }
@@ -58,9 +70,14 @@ class ConfigImportCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->writer->checkIfWritable()) {
+            $output->writeln('<error>Deployment configuration file is not writable.</error>');
+            return Cli::RETURN_FAILURE;
+        }
+
         try {
             $this->importer->import($output);
-        } catch (LocalizedException $e) {
+        } catch (ImportFailedException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 
             return Cli::RETURN_FAILURE;

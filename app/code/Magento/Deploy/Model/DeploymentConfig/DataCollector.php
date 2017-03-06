@@ -35,7 +35,6 @@ use Magento\Framework\App\DeploymentConfig;
  * files to appropriate application sources.
  *
  * @see \Magento\Deploy\Console\Command\App\ConfigImport\Importer::import()
- * @see \Magento\Deploy\Model\DeploymentConfig\Hash::regenerate()
  */
 class DataCollector
 {
@@ -65,6 +64,7 @@ class DataCollector
 
     /**
      * Retrieves configuration data of specific section from deployment configuration files.
+     * Or retrieves configuration data of specific sections by its name.
      *
      * E.g.
      * ```php
@@ -77,13 +77,20 @@ class DataCollector
      * ```
      * In this example key of the array is the section name, value of the array is configuration data of the section.
      *
+     * @param string $sectionName the section name for retrieving its configuration data
      * @return array
      */
-    public function getConfig()
+    public function getConfig($sectionName = null)
     {
         $result = [];
 
-        foreach ($this->configImporterPool->getSections() as $section) {
+        if ($sectionName) {
+            $sections = [$sectionName];
+        } else {
+            $sections = $this->configImporterPool->getSections();
+        }
+
+        foreach ($sections as $section) {
             $data = $this->deploymentConfig->getConfigData($section);
             if ($data) {
                 $result[$section] = $data;
