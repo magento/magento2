@@ -111,6 +111,9 @@ class DataObjectProcessor
                     foreach ($value as $singleValue) {
                         if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
                             $singleValue = $this->buildOutputDataArray($singleValue, $arrayElementType);
+                        } elseif (is_array($singleValue)) {
+                            // simple values must not contains arrays
+                            $singleValue = json_encode($singleValue);
                         }
                         $valueResult[] = $this->typeCaster->castValueToType($singleValue, $arrayElementType);
                     }
