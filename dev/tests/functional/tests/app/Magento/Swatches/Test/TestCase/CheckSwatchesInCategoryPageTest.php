@@ -12,7 +12,6 @@ use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Constraint\ConstraintFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Mtf\Util\Command\Cli\Indexer;
 use Magento\Swatches\Test\Constraint\AssertSwatchesVisibilityInCategory;
 
 /**
@@ -24,7 +23,7 @@ use Magento\Swatches\Test\Constraint\AssertSwatchesVisibilityInCategory;
  * 3. Configurable product assigned to category.
  *
  * Steps:
- * 1. Go to Backend
+ * 1. Go to Backend.
  * 2. Navigate to Stores > Configuration > Catalog > Catalog > Storefront.
  * 3. Set Show Swatches in Product List = No.
  * 4. Save configuration.
@@ -32,7 +31,7 @@ use Magento\Swatches\Test\Constraint\AssertSwatchesVisibilityInCategory;
  * 6. Go to storefron category.
  * 7. Check swatches not visible in catalog item.
  * 8. Set Show Swatches in Product List = Yes.
- * 9.  Save configuration.
+ * 9. Save configuration.
  * 10. Clean cache.
  * 11. Check swatches are visible in catalog item.
  *
@@ -119,6 +118,7 @@ class CheckSwatchesInCategoryPageTest extends Injectable
             SetupConfigurationStep::class,
             ['configData' => 'enable_swatches_visibility_in_catalog', 'flushCache' => true]
         )->run();
+        sleep(5);
 
         return ['product' => $product];
     }
