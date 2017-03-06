@@ -33,22 +33,9 @@ class Data
      * @param ImageHelper $imageHelper
      * @param UrlBuilder|null $imageUrlBuilder
      */
-    public function __construct(ImageHelper $imageHelper, UrlBuilder $imageUrlBuilder = null)
+    public function __construct(ImageHelper $imageHelper)
     {
         $this->imageHelper = $imageHelper;
-        $this->imageUrlBuilder = $imageUrlBuilder ?: ObjectManager::getInstance()->get(UrlBuilder::class);
-    }
-
-    /**
-     * @return UrlBuilder
-     * @deprecated
-     */
-    private function getImageUrlBuilder()
-    {
-        if (!$this->imageUrlBuilder) {
-            $this->imageUrlBuilder = ObjectManager::getInstance()->get(UrlBuilder::class);
-        }
-        return $this->imageUrlBuilder;
     }
 
     /**
@@ -64,8 +51,8 @@ class Data
             /** @var $image Image */
             foreach ($images as $image) {
 
-                $smaleImageUrl = $this->getImageUrlBuilder()->getUrl($image->getFile(), 'product_page_image_small');
-                $image->setData('small_image_url', $smaleImageUrl);
+                $smallImageUrl = $this->getImageUrlBuilder()->getUrl($image->getFile(), 'product_page_image_small');
+                $image->setData('small_image_url', $smallImageUrl);
 
                 $mediumImageUrl = $this->getImageUrlBuilder()
                     ->getUrl($image->getFile(), 'product_page_image_medium_no_frame');
@@ -127,5 +114,17 @@ class Data
     public function getAllowAttributes($product)
     {
         return $product->getTypeInstance()->getConfigurableAttributes($product);
+    }
+
+    /**
+     * @return UrlBuilder
+     * @deprecated
+     */
+    private function getImageUrlBuilder()
+    {
+        if (!$this->imageUrlBuilder) {
+            $this->imageUrlBuilder = ObjectManager::getInstance()->get(UrlBuilder::class);
+        }
+        return $this->imageUrlBuilder;
     }
 }

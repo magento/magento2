@@ -6,12 +6,12 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 use Magento\Catalog\Model\View\Asset\Image\ContextFactory;
 use Magento\Catalog\Model\View\Asset\ImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\View\Asset\ContextInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class ImageTest
@@ -95,6 +95,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     protected $viewAssetPlaceholderFactory;
 
+    /**
+     * @var ParamsBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $paramsBuilder;
+
     protected function setUp()
     {
         $this->context = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
@@ -129,21 +134,21 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->fileSystem = $this->getMock('Magento\Framework\View\FileSystem', [], [], '', false);
         $this->scopeConfigInterface = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
-        $context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+        $this->viewAssetPlaceholderFactory = $this->getMockBuilder(PlaceholderFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->viewAssetImageFactory = $this->getMockBuilder(ImageFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->imageAsset = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->image = new \Magento\Catalog\Model\Product\Image(
-            $context,
-            $this->registry,
-            $this->storeManager,
-            $this->config,
-            $this->coreFileHelper,
-            $this->filesystem,
-            $this->factory,
-            $this->repository,
-            $this->fileSystem,
-            $this->scopeConfigInterface
-        );
+        $this->paramsBuilder = $this->getMockBuilder(ParamsBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         //Settings for backward compatible property
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->image = $objectManagerHelper->getObject(
@@ -157,8 +162,24 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'imageFactory' => $this->factory,
                 'assetRepo' => $this->repository,
                 'viewFileSystem' => $this->fileSystem,
-                'scopeConfig' => $this->scopeConfigInterface
+                'scopeConfig' => $this->scopeConfigInterface,
+                'paramsBuilder' => $this->paramsBuilder
             ]
+        );
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->image,
+            'viewAssetPlaceholderFactory',
+            $this->viewAssetPlaceholderFactory
+        );
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->image,
+            'viewAssetImageFactory',
+            $this->viewAssetImageFactory
+        );
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->image,
+            'imageAsset',
+            $this->imageAsset
         );
     }
 
@@ -207,27 +228,33 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGetBaseFile()
     {
+        $miscParams = [
+            'image_type' => null,
+            'image_height' => null,
+            'image_width' => null,
+            'keep_aspect_ratio' => 'proportional',
+            'keep_frame' => 'frame',
+            'keep_transparency' => 'transparency',
+            'constrain_only' => 'doconstrainonly',
+            'background' => 'ffffff',
+            'angle' => null,
+            'quality' => 80,
+        ];
+        $this->paramsBuilder->expects(self::once())
+            ->method('build')
+            ->willReturn($miscParams);
         $this->mediaDirectory->expects($this->any())->method('isFile')->will($this->returnValue(true));
         $this->mediaDirectory->expects($this->any())->method('isExist')->will($this->returnValue(true));
         $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/somefile.png';
         $this->mediaDirectory->expects($this->any())->method('getAbsolutePath')
             ->will($this->returnValue($absolutePath));
+        $this->imageAsset->method('getUrl')
+            ->willReturn('http://magento.com/media/catalog/product/cache//beff4985b56e3afdbeabfc89641a4582/somefile.png');
         $this->viewAssetImageFactory->expects($this->any())
             ->method('create')
             ->with(
                 [
-                    'miscParams' => [
-                        'image_type' => null,
-                        'image_height' => null,
-                        'image_width' => null,
-                        'keep_aspect_ratio' => 'proportional',
-                        'keep_frame' => 'frame',
-                        'keep_transparency' => 'transparency',
-                        'constrain_only' => 'doconstrainonly',
-                        'background' => 'ffffff',
-                        'angle' => null,
-                        'quality' => 80,
-                    ],
+                    'miscParams' => $miscParams,
                     'filePath' => '/somefile.png',
                 ]
             )
@@ -238,7 +265,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->image->setBaseFile('/somefile.png');
         $this->assertEquals('catalog/product/somefile.png', $this->image->getBaseFile());
         $this->assertEquals(
-            'catalog/product/cache//beff4985b56e3afdbeabfc89641a4582/somefile.png',
+            null,
             $this->image->getNewFile()
         );
     }

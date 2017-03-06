@@ -59,6 +59,7 @@ class ImageBlockBuilder
      * @param string $displayArea
      * @return Image
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function buildBlock($product, $displayArea)
     {
