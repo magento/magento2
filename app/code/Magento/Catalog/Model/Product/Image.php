@@ -896,6 +896,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get assets ImageFactory object
+     *
      * @return \Magento\Catalog\Model\View\Asset\ImageFactory
      */
     private function getViewAssetImageFactory()
@@ -910,6 +912,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get assets PlaceholderFactory object
+     *
      * @return \Magento\Catalog\Model\View\Asset\PlaceholderFactory
      */
     private function getViewAssetPlaceholderFactory()

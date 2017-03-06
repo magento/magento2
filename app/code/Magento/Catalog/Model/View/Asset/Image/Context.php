@@ -30,6 +30,9 @@ class Context implements ContextInterface
     private $filesystem;
 
     /**
+     * Context constructor.
+     * @param \Magento\Catalog\Model\Product\Media\ConfigInterface $mediaConfig
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Media\ConfigInterface $mediaConfig,
