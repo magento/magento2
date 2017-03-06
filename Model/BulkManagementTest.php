@@ -67,7 +67,7 @@ class BulkManagementTest extends \PHPUnit_Framework_TestCase
             $operation = $operationFactory->create();
             $operation->setBulkUuid($bulkUuid);
             $operation->setTopicName($topicName);
-            $operation->setSerializedData(serialize(['entity_id' => $index]));
+            $operation->setSerializedData(json_encode(['entity_id' => $index]));
             $operations[] = $operation;
         }
 
