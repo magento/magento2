@@ -900,7 +900,6 @@ class Checkout
      * @param Address $address
      * @param array $exportedAddress
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _setExportedAddressData($address, $exportedAddress)
     {
