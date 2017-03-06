@@ -203,15 +203,21 @@ class File extends DataSource
     /**
      * Return csv as array.
      *
-     * @return array
+     * @return string
      */
     public function getCsv()
     {
-        return array_map(
-            function ($value) {
-                return explode(',', str_replace('"', '', $value));
-            },
-            str_getcsv($this->csv, "\n")
-        );
+        return $this->csv;
+    }
+
+    /**
+     * Return csv as array.
+     *
+     * @param $csv
+     * @return void
+     */
+    public function setCsv($csv)
+    {
+        $this->csv = $csv;
     }
 }

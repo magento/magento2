@@ -49,15 +49,13 @@ class FillImportFormStep implements TestStepInterface
         TestStepFactory $stepFactory,
         $createStore
     ) {
-        $file = $import->getDataFieldConfig('import_file')['source'];
         $this->adminImportIndex = $adminImportIndex;
         $this->import = $import;
-        $this->csv = $file->getCsv();
 
         if ($createStore === true) {
-            $this->csv = $stepFactory->create(
+            $stepFactory->create(
                 CreateCustomStoreStep::class,
-                ['products' => $file->getProducts(), 'csv' => $this->csv]
+                ['import' => $this->import]
             )->run();
         }
     }
@@ -76,8 +74,7 @@ class FillImportFormStep implements TestStepInterface
 
         return [
             'products' => $file->getProducts(),
-            'csv' => $this->csv,
-            'behavior' => $this->import->getBehavior()
+            'import' => $this->import
         ];
     }
 }

@@ -8,6 +8,7 @@ namespace Magento\AdvancedPricingImportExport\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
+use Magento\ImportExport\Test\Fixture\ImportData;
 use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
@@ -20,7 +21,7 @@ class AssertImportAdvancedPricing extends AbstractConstraint
      *
      * @param array
      */
-    private $mapping = [
+    private $mappingData = [
         'sku' => 'sku',
         'tier_price' => 'price',
         'tier_price_qty' => 'price_qty',
@@ -28,13 +29,6 @@ class AssertImportAdvancedPricing extends AbstractConstraint
         'tier_price_customer_group' => 'customer_group',
         'tier_price_value_type' => 'value_type'
     ];
-
-    /**
-     * Csv keys.
-     *
-     * @param array $csvKeys
-     */
-    private $csvKeys;
 
     /**
      * Edit page on backend
@@ -51,66 +45,68 @@ class AssertImportAdvancedPricing extends AbstractConstraint
     private $fixtureFactory;
 
     /**
+     * Import fixture.
+     *
+     * @var ImportData
+     */
+    private $import;
+
+    /**
      * Assert imported advanced prices are correct.
      *
      * @param CatalogProductEdit $catalogProductEdit
      * @param FixtureFactory $fixtureFactory
-     * @param string $behavior
-     * @param array $products
-     * @param array $csv
+     * @param ImportData $import
      * @return void
      */
     public function processAssert(
         CatalogProductEdit $catalogProductEdit,
         FixtureFactory $fixtureFactory,
-        $behavior,
-        array $products,
-        array $csv
+        ImportData $import
     ) {
         $this->catalogProductEdit = $catalogProductEdit;
         $this->fixtureFactory = $fixtureFactory;
-        $this->prepareCsv($csv);
+        $this->import = $import;
 
-        $resultArrays = $this->preparePrices($behavior, $products, array_reverse($csv));
+        $resultArrays = $this->preparePrices();
 
         \PHPUnit_Framework_Assert::assertEquals(
             $resultArrays['pageData'],
-            $resultArrays['csvData']
+            $resultArrays['csvData'],
+            'Wrong validation result is displayed.'
+            . "\nExpected: " . print_r($resultArrays['csvData'])
+            . "\nActual: " . print_r($resultArrays['pageData'])
         );
     }
 
     /**
      * Prepare arrays for compare.
      *
-     * @param string $behavior
-     * @param array $products
-     * @param array $csv
      * @return array
      */
-    public function preparePrices($behavior, array $products, array $csv)
+    public function preparePrices()
     {
+        $products = $this->import->getDataFieldConfig('import_file')['source']->getProducts();
+
+        // Prepare tier prices data from backend.
         $resultProductArray = [];
-        for ($i = 0; $i < count($products); $i++) {
-            $this->catalogProductEdit->open(['id' => $products[$i]->getId()]);
+        foreach ($products as $product) {
+            $this->catalogProductEdit->open(['id' => $product->getId()]);
             $advancedPricing = $this->catalogProductEdit->getProductForm()->openSection('advanced-pricing')
                 ->getSection('advanced-pricing');
             $tierPrices = $advancedPricing->getTierPriceForm()->getFieldsData();
+
+            $productSku = $product->getSku();
             foreach ($tierPrices as $tierPrice) {
-                asort($tierPrice);
-                $resultProductArray[$products[$i]->getSku()][] = $tierPrice;
+                $resultProductArray[$productSku][] = $tierPrice;
             }
+            $resultProductArray[$productSku] = array_reverse($resultProductArray[$productSku]);
         }
 
+        // Prepare tier prices data from csv file.
         $resultCsvArray = [];
-        if ($behavior === 'Delete') {
-            $csv = [];
-        }
-        foreach ($csv as $tierPrice) {
-            $tierPrice = array_combine($this->csvKeys, $tierPrice);
-            asort($tierPrice);
-            $sku = $tierPrice['sku'];
-            unset($tierPrice['sku']);
-            $resultCsvArray[$sku][] = $tierPrice;
+        if ($this->import->getBehavior() !== 'Delete') {
+            $resultCsvArray = $this->getResultCsv();
         }
 
         return ['pageData' => $resultProductArray, 'csvData' => $resultCsvArray];
@@ -119,17 +115,31 @@ class AssertImportAdvancedPricing extends AbstractConstraint
     /**
      * Prepare assert data.
      *
-     * @param array $csv
      * @return array
      */
-    private function prepareCsv(array &$csv)
+    private function getResultCsv()
     {
-        $this->csvKeys = array_map(
+        $rowStreamContent = $this->import->getDataFieldConfig('import_file')['source']->getCsv();
+        $csvData = array_map(
             function ($value) {
-                return strtr($value, $this->mapping);
+                return explode(',', str_replace('"', '', $value));
             },
-            array_shift($csv)
-        ) ;
+            str_getcsv($rowStreamContent, "\n")
+        );
+
+        $csvKeys = [];
+        foreach (array_shift($csvData) as $csvKey) {
+            $csvKeys[] = isset($this->mappingData[$csvKey]) ? $this->mappingData[$csvKey] : $csvKey;
+        }
+
+        $resultCsvData = [];
+        foreach ($csvData as $csvRowData) {
+            $csvRowData = array_combine($csvKeys, $csvRowData);
+            $sku = $csvRowData['sku'];
+            unset($csvRowData['sku']);
+            $resultCsvData[$sku][] = $csvRowData;
+        }
+        return $resultCsvData;
     }
 
     /**

@@ -5,6 +5,7 @@
  */
 namespace Magento\ImportExport\Test\TestStep;
 
+use Magento\ImportExport\Test\Fixture\ImportData;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -29,13 +30,6 @@ class CreateCustomStoreStep implements TestStepInterface
     private $fixtureFactory;
 
     /**
-     * Products.
-     *
-     * @var array
-     */
-    private $products;
-
-    /**
      * Currency.
      *
      * @var string
@@ -43,31 +37,28 @@ class CreateCustomStoreStep implements TestStepInterface
     private $currency;
 
     /**
-     * Csv data.
+     * Import fixture.
      *
-     * @var array
+     * @var ImportData
      */
-    private $csv;
+    private $import;
 
     /**
      * @param TestStepFactory $stepFactory
      * @param FixtureFactory $fixtureFactory
-     * @param array $products
-     * @param array $csv
+     * @param ImportData $import
      * @param string $currency
      */
     public function __construct(
         TestStepFactory $stepFactory,
         FixtureFactory $fixtureFactory,
-        array $products,
-        array $csv,
+        ImportData $import,
         $currency = 'EUR'
     ) {
         $this->stepFactory = $stepFactory;
         $this->fixtureFactory = $fixtureFactory;
-        $this->products = $products;
+        $this->import = $import;
         $this->currency = $currency;
-        $this->csv = $csv;
     }
 
     /**
@@ -82,7 +73,8 @@ class CreateCustomStoreStep implements TestStepInterface
             ['configData' => 'price_scope_website']
         )->run();
 
-        foreach ($this->products as $product) {
+        $products = $this->import->getDataFieldConfig('import_file')['source']->getProducts();
+        foreach ($products as $product) {
             $websites = $product->getDataFieldConfig('website_ids')['source']->getWebsites();
 
             $configFixture = $this->fixtureFactory->createByCode(
@@ -109,34 +101,26 @@ class CreateCustomStoreStep implements TestStepInterface
             );
             $configFixture->persist();
         }
-
-        return $this->getCsv();
+        $this->getCsv($products);
     }
 
     /**
      * Return refactored csv data with custom store.
      *
+     * @param array $products
      * @return array
      */
-    public function getCsv()
+    public function getCsv(array $products)
     {
+
         $mapping['base'] = 'Main Website[USD]';
 
-        foreach ($this->products as $product) {
+        foreach ($products as $product) {
             $website = $product->getDataFieldConfig('website_ids')['source']->getWebsites()[0];
             $mapping[$website->getCode()] = $website->getName() . "[{$this->currency}]";
         }
 
-        $csv = [];
-        foreach ($this->csv as $row) {
-            $row = array_map(
-                function ($value) use ($mapping) {
-                    return strtr($value, $mapping);
-                },
-                $row
-            );
-            $csv[] = $row;
-        }
-        return $csv;
+        $csv = $this->import->getDataFieldConfig('import_file')['source']->getCsv();
+        $this->import->getDataFieldConfig('import_file')['source']->setCsv(strtr($csv, $mapping));
     }
 }
