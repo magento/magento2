@@ -55,10 +55,9 @@ class ConfigWriter
             $config = $this->setConfig($config, $fullConfigPath, $configValue);
         }
 
-        $this->writer
-            ->saveConfig(
-                [ConfigFilePool::APP_CONFIG => $config]
-            );
+        $this->writer->saveConfig(
+            [ConfigFilePool::APP_ENV => $config]
+        );
     }
 
     /**
