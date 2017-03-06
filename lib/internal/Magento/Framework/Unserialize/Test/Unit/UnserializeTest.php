@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Unserialize\Test\Unit;
 
+use Magento\Framework\Serialize\Serializer\Serialize;
+
 /**
  * @package Magento\Framework
  */
@@ -15,7 +17,9 @@ class UnserializeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->unserialize = new \Magento\Framework\Unserialize\Unserialize();
+        $this->unserialize = new \Magento\Framework\Unserialize\Unserialize(
+            new Serialize()
+        );
     }
 
     public function testUnserializeArray()
