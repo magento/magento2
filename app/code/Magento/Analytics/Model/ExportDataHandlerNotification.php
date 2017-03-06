@@ -5,13 +5,15 @@
  */
 namespace Magento\Analytics\Model;
 
+use Magento\Analytics\Model\ExportDataHandler;
+
 /**
  * Class which add notification behaviour to classes that handling of a new data collection for MBI.
  */
 class ExportDataHandlerNotification implements ExportDataHandlerInterface
 {
     /**
-     * @var ExportDataHandlerInterface
+     * @var ExportDataHandler
      */
     private $exportDataHandler;
 
@@ -26,7 +28,7 @@ class ExportDataHandlerNotification implements ExportDataHandlerInterface
      * @param ExportDataHandlerInterface $exportDataHandler
      * @param Connector $connector
      */
-    public function __construct(ExportDataHandlerInterface $exportDataHandler, Connector $connector)
+    public function __construct(ExportDataHandler $exportDataHandler, Connector $connector)
     {
         $this->exportDataHandler = $exportDataHandler;
         $this->analyticsConnector = $connector;

@@ -16,7 +16,7 @@ class CollectData
     /**
      * Resource for the handling of a new data collection.
      *
-     * @var ExportDataHandler
+     * @var ExportDataHandlerInterface
      */
     private $exportDataHandler;
 

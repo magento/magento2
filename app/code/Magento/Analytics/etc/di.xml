@@ -12,7 +12,7 @@
     <preference for="Magento\Analytics\Api\LinkProviderInterface" type="Magento\Analytics\Model\LinkProvider" />
     <preference for="Magento\Analytics\Api\Data\LinkInterface" type="Magento\Analytics\Model\Link" />
     <preference for="Magento\Analytics\Model\Connector\Http\ClientInterface" type="Magento\Analytics\Model\Connector\Http\Client\Curl" />
-    <preference for="Magento\Analytics\Model\ExportDataHandlerInterface" type="Magento\Analytics\Model\ExportDataHandler" />
+    <preference for="Magento\Analytics\Model\ExportDataHandlerInterface" type="Magento\Analytics\Model\ExportDataHandlerNotification" />
     <type name="Magento\Analytics\Model\Connector">
         <arguments>
             <argument name="commands" xsi:type="array">
