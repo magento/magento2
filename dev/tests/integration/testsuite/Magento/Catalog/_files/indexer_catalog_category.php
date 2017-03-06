@@ -7,6 +7,8 @@
 /** @var $category \Magento\Catalog\Model\Category */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
+// products from this fixture were moved to indexer_catalog_products.php
+
 $categoryFirst = $objectManager->create(\Magento\Catalog\Model\Category::class);
 $categoryFirst->setName('Category 1')
     ->setPath('1/2')
@@ -56,5 +58,3 @@ $categoryFifth->setName('Category 5')
     ->setIsActive(true)
     ->setPosition(2)
     ->save();
-
-// products from this fixture were moved to indexer_catalog_products.php
