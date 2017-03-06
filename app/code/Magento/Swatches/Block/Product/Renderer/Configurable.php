@@ -214,7 +214,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
 
     /**
      * @deprecated unused
-     * Method isProductHasSwatchAttribute() is used instead of this.
+     * @see isProductHasSwatchAttribute().
      *
      * @codeCoverageIgnore
      * @return void
