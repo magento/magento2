@@ -26,16 +26,38 @@ class ReportProvider
     private $connectionFactory;
 
     /**
+     * @var IteratorFactory
+     */
+    private $iteratorFactory;
+
+    /**
      * ReportProvider constructor.
+     *
      * @param QueryFactory $queryFactory
      * @param ConnectionFactory $connectionFactory
+     * @param IteratorFactory $iteratorFactory
      */
     public function __construct(
         QueryFactory $queryFactory,
-        ConnectionFactory $connectionFactory
+        ConnectionFactory $connectionFactory,
+        IteratorFactory $iteratorFactory
     ) {
         $this->queryFactory = $queryFactory;
         $this->connectionFactory = $connectionFactory;
+        $this->iteratorFactory = $iteratorFactory;
+    }
+
+    /**
+     * Returns custom iterator name for report
+     * Null for default
+     *
+     * @param Query $query
+     * @return string|null
+     */
+    private function getIteratorName(Query $query)
+    {
+        $config = $query->getConfig();
+        return isset($config['iterator']) ? $config['iterator'] : null;
     }
 
     /**
@@ -51,7 +73,7 @@ class ReportProvider
         $query = $this->queryFactory->create($name);
         $connection = $this->connectionFactory->getConnection($query->getConnectionName());
         $statement = $connection->query($query->getSelect());
-        return new \IteratorIterator($statement);
+        return $this->iteratorFactory->create($statement, $this->getIteratorName($query));
 
     }
 }
