@@ -171,4 +171,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
+        <arguments>
+            <argument name="calculators" xsi:type="array">
+                <item name="configurable" xsi:type="object">\Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductBatchSizeCalculator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

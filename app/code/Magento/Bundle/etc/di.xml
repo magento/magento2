@@ -137,10 +137,10 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Indexer\Product\Price\Action\Full">
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
         <arguments>
-            <argument name="memoryTablesMinRows" xsi:type="array">
-                <item name="bundle" xsi:type="number">136</item>
+            <argument name="calculators" xsi:type="array">
+                <item name="bundle" xsi:type="object">\Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductBatchSizeCalculator</item>
             </argument>
         </arguments>
     </type>

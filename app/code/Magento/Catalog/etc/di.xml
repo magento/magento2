@@ -916,10 +916,13 @@
         </arguments>
     </type>
     <preference for="Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface" type="Magento\Catalog\Pricing\Price\MinimalTierPriceCalculator" />
-    <type name="Magento\Catalog\Model\Indexer\Product\Price\Action\Full">
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
         <arguments>
             <argument name="memoryTablesMinRows" xsi:type="array">
                 <item name="default" xsi:type="number">200</item>
+            </argument>
+            <argument name="calculators" xsi:type="array">
+                <item name="default" xsi:type="object">\Magento\Framework\Indexer\BatchSizeCalculator</item>
             </argument>
         </arguments>
     </type>

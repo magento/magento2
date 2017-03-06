@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Class Full reindex action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -12,17 +14,12 @@ namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
 class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 {
     /**
-     * @var array
-     */
-    private $memoryTablesMinRows;
-
-    /**
      * @var \Magento\Framework\EntityManager\MetadataPool
      */
     private $metadataPool;
 
     /**
-     * @var \Magento\Framework\Indexer\BatchSizeCalculatorInterface
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator
      */
     private $batchSizeCalculator;
 
@@ -42,9 +39,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource
      * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $indexerFrontendResource
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
-     * @param \Magento\Framework\Indexer\BatchSizeCalculatorInterface|null $batchSizeCalculator
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator|null $batchSizeCalculator
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
-     * @param array $memoryTablesMinRows
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -58,21 +54,18 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $defaultIndexerResource,
         \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerFrontendResource = null,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
-        \Magento\Framework\Indexer\BatchSizeCalculatorInterface $batchSizeCalculator = null,
-        \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
-        array $memoryTablesMinRows = []
+        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator $batchSizeCalculator = null,
+        \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null
     ) {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->metadataPool = $metadataPool ?: $objectManager->get(
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(
             \Magento\Framework\EntityManager\MetadataPool::class
         );
-        $this->batchSizeCalculator = $batchSizeCalculator ?: $objectManager->get(
-            \Magento\Framework\Indexer\BatchSizeCalculatorInterface::class
+        $this->batchSizeCalculator = $batchSizeCalculator ?: ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator::class
         );
-        $this->batchProvider = $batchProvider ?: $objectManager->get(
+        $this->batchProvider = $batchProvider ?: ObjectManager::getInstance()->get(
             \Magento\Framework\Indexer\BatchProviderInterface::class
         );
-        $this->memoryTablesMinRows = $memoryTablesMinRows;
         parent::__construct(
             $config,
             $storeManager,
@@ -97,27 +90,21 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     public function execute($ids = null)
     {
         try {
-            $this->_defaultIndexerResource->beginTransaction();
             $this->_defaultIndexerResource->getTableStrategy()->setUseIdxTable(false);
             $this->_prepareWebsiteDateTable();
-            $this->_emptyTable($this->_defaultIndexerResource->getIdxTable());
-            $this->emptyPriceIndexTable();
 
             $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
 
             /** @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer $indexer */
             foreach ($this->getTypeIndexers() as $indexer) {
-
-                $memoryTableMinRows = isset($this->memoryTablesMinRows[$indexer->getTypeId()])
-                    ? $this->memoryTablesMinRows[$indexer->getTypeId()]
-                    : $this->memoryTablesMinRows['default'];
-
+                $indexer->getTableStrategy()->setUseIdxTable(false);
                 $connection = $indexer->getConnection();
+
                 $batches = $this->batchProvider->getBatches(
                     $connection,
                     $entityMetadata->getEntityTable(),
                     $entityMetadata->getIdentifierField(),
-                    $this->batchSizeCalculator->estimateBatchSize($connection, $memoryTableMinRows)
+                    $this->batchSizeCalculator->estimateBatchSize($connection, $indexer->getTypeId())
                 );
 
                 foreach ($batches as $batch) {
@@ -146,9 +133,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
                     }
                 }
             }
-            $this->_defaultIndexerResource->commit();
         } catch (\Exception $e) {
-            $this->_defaultIndexerResource->rollBack();
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }
@@ -160,27 +145,5 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
     protected function getIndexerDefaultTable()
     {
         return $this->_defaultIndexerResource->getMainTable();
-    }
-
-    /**
-     * Remove price index data
-     *
-     * Remove all price data from index table for current website
-     * @return void
-     */
-    private function emptyPriceIndexTable()
-    {
-        $select = $this->_connection->select()->from(
-            ['index_price' => $this->_defaultIndexerResource->getMainTable()],
-            null
-        )->joinLeft(
-            ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()],
-            'index_price.entity_id = ip_tmp.entity_id AND index_price.website_id = ip_tmp.website_id',
-            []
-        )->where(
-            'ip_tmp.entity_id IS NULL'
-        );
-        $sql = $select->deleteFromSelect('index_price');
-        $this->_connection->query($sql);
     }
 }
