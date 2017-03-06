@@ -6,14 +6,10 @@
 
 namespace Magento\Swatches\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Config\Test\TestStep\SetupConfigurationStep;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Mtf\Util\Command\Cli\Indexer;
 
 /**
  * Assert swatches visibility in category page.
@@ -79,5 +75,4 @@ class AssertSwatchesVisibilityInCategory extends AbstractConstraint
     {
         return 'Swatches visibility is correct.';
     }
-
 }
