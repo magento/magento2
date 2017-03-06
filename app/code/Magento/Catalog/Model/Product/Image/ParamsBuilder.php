@@ -83,7 +83,7 @@ class ParamsBuilder
         $height = isset($imageArguments['height']) ? $imageArguments['height'] : null;
 
         $frame = !empty($imageArguments['frame'])
-            ? $imageArguments ['frame']
+            ? $imageArguments['frame']
             : $this->keepFrame;
 
         $constrain = !empty($imageArguments['constrain'])
