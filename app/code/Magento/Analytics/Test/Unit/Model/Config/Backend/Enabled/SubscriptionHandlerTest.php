@@ -7,6 +7,7 @@
 namespace Magento\Analytics\Test\Unit\Model\Config\Backend\Enabled;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Config\Backend\CollectionTime;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Model\NotificationTime;
@@ -98,7 +99,7 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int|null $value null means that $value was not changed
      * @param bool $isTokenExist
-     * 
+     *
      * @dataProvider processDataProvider
      */
     public function testProcess($value, $isTokenExist)
@@ -107,17 +108,20 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('isValueChanged')
             ->willReturn(is_int($value));
+        $this->configValueMock
+            ->expects(is_int($value) ? $this->once() : $this->never())
+            ->method('getData')
+            ->with('value')
+            ->willReturn($value);
+        $this->configWriterMock
+            ->expects(($value === 0) ? $this->once() : $this->never())
+            ->method('delete')
+            ->with(CollectionTime::CRON_SCHEDULE_PATH);
         $this->tokenMock
             ->expects(is_int($value) ? $this->once() : $this->never())
             ->method('isTokenExist')
             ->willReturn($isTokenExist);
         if (is_int($value) && !$isTokenExist) {
-            $this->configValueMock
-                ->expects($this->once())
-                ->method('getData')
-                ->with('value')
-                ->willReturn($value);
-
             if ($value === 1) {
                 $this->addProcessWithEnabledTrueAsserts();
             } elseif ($value === 0) {
@@ -173,11 +177,11 @@ class SubscriptionHandlerTest extends \PHPUnit_Framework_TestCase
     public function processDataProvider()
     {
         return [
-            [null, true],
-            [null, false],
-            [0, true],
-            [1, true],
-            [0, false],
+            'Config value has not changed and token exist' => [null, true],
+            'Config value has not changed and token doesn\'t exist' => [null, false],
+            'Config value is "No" and token exist' => [0, true],
+            'Config value is "Yes" and token exist' => [1, true],
+            'Config value is "No" and token doesn\'t exist' => [0, false],
         ];
     }
 }
