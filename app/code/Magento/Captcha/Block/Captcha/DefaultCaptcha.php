@@ -7,8 +7,6 @@ namespace Magento\Captcha\Block\Captcha;
 
 /**
  * Captcha block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class DefaultCaptcha extends \Magento\Framework\View\Element\Template
 {

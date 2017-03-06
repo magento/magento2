@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Captcha block for adminhtml area
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Captcha\Block\Adminhtml\Captcha;
 
+/**
+ * Captcha block for adminhtml area
+ */
 class DefaultCaptcha extends \Magento\Captcha\Block\Captcha\DefaultCaptcha
 {
     /**

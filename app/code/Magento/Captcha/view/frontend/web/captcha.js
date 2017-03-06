@@ -9,6 +9,9 @@ define([
 ], function ($) {
     'use strict';
 
+    /**
+     * @api
+     */
     $.widget('mage.captcha', {
         options: {
             refreshClass: 'refreshing',
@@ -26,7 +29,7 @@ define([
         },
 
         /**
-         * Method triggeres an AJAX request to refresh the CAPTCHA image
+         * Method triggers an AJAX request to refresh the CAPTCHA image
          */
         refresh: function () {
             var imageLoader = this.options.imageLoader;
