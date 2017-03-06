@@ -393,9 +393,9 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Fedex\Model\Carrier::getTracking
-     * @param string $shipTimestamp
+     * @param string $shipTimeStamp
      * @param string $expectedDate
-     * @param string $expectedDate
+     * @param string $expectedTime
      * @dataProvider shipDateDataProvider
      */
     public function testGetTracking($shipTimeStamp, $expectedDate, $expectedTime)
@@ -480,9 +480,9 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Fedex\Model\Carrier::getTracking
-     * @param string $shipTimestamp
+     * @param string $shipTimeStamp
      * @param string $expectedDate
-     * @param string $expectedDate
+     * @param string $expectedTime
      * @dataProvider shipDateDataProvider
      */
     public function testGetTrackingWithEvents($shipTimeStamp, $expectedDate, $expectedTime)

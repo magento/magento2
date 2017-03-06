@@ -1731,19 +1731,15 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             return false;
         }
         $formats = [\DateTime::ATOM, 'Y-m-d\TH:i:s'];
-        $tz = date_default_timezone_get();
-
         foreach ($formats as $format) {
             // set UTC timezone for a case if timestamp does not contain any timezone
-            date_default_timezone_set('UTC');
-            $dateTime = \DateTime::createFromFormat($format, $timestamp);
+            $utcTimezone = new \DateTimeZone('UTC');
+            $dateTime = \DateTime::createFromFormat($format, $timestamp, $utcTimezone);
             if ($dateTime !== false) {
-                date_default_timezone_set($tz);
                 return $dateTime;
             }
         }
 
-        date_default_timezone_set($tz);
         return false;
     }
 }
