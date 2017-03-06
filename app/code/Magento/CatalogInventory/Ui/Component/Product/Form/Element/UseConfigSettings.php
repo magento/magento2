@@ -5,14 +5,35 @@
  */
 namespace Magento\CatalogInventory\Ui\Component\Product\Form\Element;
 
-use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Framework\Data\ValueSourceInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\Form\Element\Checkbox;
 
 /**
  * Class UseConfigSettings sets default value from configuration
  */
 class UseConfigSettings extends Checkbox
 {
+    /** @var Json */
+    private $serializer;
+
+    /**
+     * @param ContextInterface $context
+     * @param array $components
+     * @param array $data
+     * @param Json|null $serializer
+     */
+    public function __construct(
+        ContextInterface $context,
+        $components = [],
+        array $data = [],
+        Json $serializer = null
+    ) {
+        parent::__construct($context, $components, $data);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+    }
+
     /**
      * Prepare component configuration
      *
@@ -27,8 +48,8 @@ class UseConfigSettings extends Checkbox
             && $config['valueFromConfig'] instanceof ValueSourceInterface
         ) {
             $keyInConfiguration = $config['valueFromConfig']->getValue($config['keyInConfiguration']);
-            if (!empty($config['unserialized']) && strpos($keyInConfiguration, 'a:') === 0) {
-                $config['valueFromConfig'] = unserialize($keyInConfiguration);
+            if (!empty($config['unserialized']) && in_array($keyInConfiguration[0], ['{', '['])) {
+                $config['valueFromConfig'] = $this->serializer->unserialize($keyInConfiguration);
             } else {
                 $config['valueFromConfig'] = $keyInConfiguration;
             }

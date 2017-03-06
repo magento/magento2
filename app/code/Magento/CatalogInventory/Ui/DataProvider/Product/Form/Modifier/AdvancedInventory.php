@@ -9,6 +9,7 @@ use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
@@ -46,21 +47,29 @@ class AdvancedInventory extends AbstractModifier
     private $meta = [];
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param LocatorInterface $locator
      * @param StockRegistryInterface $stockRegistry
      * @param ArrayManager $arrayManager
      * @param StockConfigurationInterface $stockConfiguration
+     * @param Json|null $serializer
      */
     public function __construct(
         LocatorInterface $locator,
         StockRegistryInterface $stockRegistry,
         ArrayManager $arrayManager,
-        StockConfigurationInterface $stockConfiguration
+        StockConfigurationInterface $stockConfiguration,
+        Json $serializer = null
     ) {
         $this->locator = $locator;
         $this->stockRegistry = $stockRegistry;
         $this->arrayManager = $arrayManager;
         $this->stockConfiguration = $stockConfiguration;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -92,9 +101,9 @@ class AdvancedInventory extends AbstractModifier
             $minSaleQtyData = null;
             $defaultConfigValue = $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY);
 
-            if (strpos($defaultConfigValue, 'a:') === 0) {
+            if (in_array($defaultConfigValue[0], ['{', '['])) {
                 // Set data source for dynamicRows Minimum Qty Allowed in Shopping Cart
-                $minSaleQtyValue = unserialize($defaultConfigValue);
+                $minSaleQtyValue = $this->serializer->unserialize($defaultConfigValue);
 
                 foreach ($minSaleQtyValue as $group => $qty) {
                     $minSaleQtyData[] = [
