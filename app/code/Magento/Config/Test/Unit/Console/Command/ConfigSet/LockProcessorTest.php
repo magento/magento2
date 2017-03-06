@@ -164,7 +164,7 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('saveConfig')
             ->with(
                 [
-                    ConfigFilePool::APP_CONFIG => [
+                    ConfigFilePool::APP_ENV => [
                         'system' => [
                             'default' => [
                                 'test' => [
@@ -234,7 +234,7 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('saveConfig')
             ->with(
                 [
-                    ConfigFilePool::APP_CONFIG => [
+                    ConfigFilePool::APP_ENV => [
                         'system' => [
                             'default' => [
                                 'test' => [

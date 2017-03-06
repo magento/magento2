@@ -122,7 +122,7 @@ class LockProcessor implements ConfigSetProcessorInterface
             $backendModel->beforeSave();
 
             $this->deploymentConfigWriter->saveConfig(
-                [ConfigFilePool::APP_CONFIG => $this->arrayManager->set($configPath, [], $backendModel->getValue())],
+                [ConfigFilePool::APP_ENV => $this->arrayManager->set($configPath, [], $backendModel->getValue())],
                 false
             );
 
