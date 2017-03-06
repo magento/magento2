@@ -88,15 +88,14 @@ class MoveCategoryEntityTest extends Injectable
         // Preconditions:
         $parentCategory->persist();
         $childCategory->persist();
-        $movedCategory = $childCategory;
+        $resultCategory = $childCategory;
 
         if (!empty($moveLevel)) {
             for ($nestingIterator = 1; $nestingIterator < $moveLevel; $nestingIterator++) {
                 $childCategory = $childCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
             }
+            $resultCategory = $this->getMovedCategoryTree($resultCategory, $parentCategory, $childCategory);
         }
-
-        $newCategory = $this->getMovedCategoryTree($movedCategory, $parentCategory, $childCategory);
 
         // Steps:
         $this->catalogCategoryIndex->open();
@@ -108,7 +107,7 @@ class MoveCategoryEntityTest extends Injectable
         $this->catalogCategoryEdit->getModalBlock()->acceptWarning();
 
         return [
-            'category' => $newCategory,
+            'category' => $resultCategory,
             'parentCategory' => $parentCategory,
             'childCategory' => $childCategory,
         ];
