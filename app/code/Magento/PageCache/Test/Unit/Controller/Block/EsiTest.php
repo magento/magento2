@@ -83,7 +83,7 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $block = 'block';
         $handles = ['handle1', 'handle2'];
         $html = 'some-html';
-        $mapData = [['blocks', '', json_encode([$block])], ['handles', '', json_encode($handles)]];
+        $mapData = [['blocks', '', json_encode([$block])], ['handles', '', base64_encode(json_encode($handles))]];
 
         $blockInstance1 = $this->getMock(
             $blockClass,

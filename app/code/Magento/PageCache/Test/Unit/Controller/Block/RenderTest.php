@@ -151,7 +151,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->at(11))
             ->method('getParam')
             ->with($this->equalTo('handles'), $this->equalTo(''))
-            ->will($this->returnValue(json_encode($handles)));
+            ->will($this->returnValue(base64_encode(json_encode($handles))));
         $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
         $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->layoutMock));
         $this->layoutMock->expects($this->at(0))
