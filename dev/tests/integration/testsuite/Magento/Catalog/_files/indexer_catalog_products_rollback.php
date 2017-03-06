@@ -27,5 +27,3 @@ foreach (['simple 01', 'simple 02', 'simple 03'] as $sku) {
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
-
-require 'indexer_catalog_category_rollback.php';
