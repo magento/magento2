@@ -68,6 +68,6 @@ foreach ($data['options']['option'] as $optionData) {
 $attribute = $objectManager->create(
     \Magento\Catalog\Api\Data\ProductAttributeInterface::class,
     ['data' => $data]
-    );
+);
 $attribute->setOptions($options);
 $attribute->save();
