@@ -30,10 +30,12 @@ class SalableProcessor
     }
 
     /**
-     * Adds filtering collection by attribute status to filter only enabled products from product collection.
-     * Joins stock status index table to filter only in stock products.
+     * This method adds several additional checks for a children products availability.
+     * Children products should be enabled and available in stock to be sales.
+     * It also adds the specific flag to the collection to prevent the case
+     * when filter already added and therefore may break the collection.
      *
-     * Adds is_in_stock filter to products collection and cashes it.
+     * Adds filters to the collection to help determine is product available for sale.
      *
      * @param Collection $collection
      * @return Collection
