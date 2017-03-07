@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock\Status;
+use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
@@ -171,6 +172,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $stockRegistry;
 
     /**
+     * @var SalableProcessor
+     */
+    private $salableCriteria;
+
+    /**
      * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -191,6 +197,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      *
+     * @param \Magento\Framework\Cache\FrontendInterface $cache
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param StockRegistryInterface $stockRegistry
+     * @param SalableProcessor $salableCriteria
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -213,7 +223,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Framework\Cache\FrontendInterface $cache = null,
         \Magento\Customer\Model\Session $customerSession = null,
-        StockRegistryInterface $stockRegistry = null
+        StockRegistryInterface $stockRegistry = null,
+        SalableProcessor $salableCriteria = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -238,6 +249,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         );
         $this->stockRegistry = $stockRegistry ?: ObjectManager::getInstance()
             ->get(StockRegistryInterface::class);
+        $this->salableCriteria = $salableCriteria ?: ObjectManager::getInstance()->get(SalableProcessor::class);
     }
 
     /**
@@ -809,10 +821,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $salable = parent::isSalable($product);
 
         if ($salable !== false) {
-            if (!is_null($product)) {
-                $this->setStoreFilter($product->getStoreId(), $product);
-            }
-            $salable = count($this->getSalableUsedProducts($product)) > 0;
+            $collection = $this->getUsedProductCollection($product);
+            $collection->addStoreFilter($this->getStoreFilter($product));
+            $collection = $this->salableCriteria->process($collection);
+            $salable = 0 !== $collection->getSize();
         }
 
         return $salable;

@@ -252,12 +252,24 @@ class Full
      */
     protected function getProductIdsFromParents(array $entityIds)
     {
+        /** @var \Magento\Framework\EntityManager\MetadataPool $metadataPool */
+        $metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
+        $metadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $fieldForParent = $metadata->getLinkField();
+
         return $this->connection
             ->select()
-            ->from($this->getTable('catalog_product_relation'), 'parent_id')
+            ->from(['relation' => $this->getTable('catalog_product_relation')], [])
             ->distinct(true)
             ->where('child_id IN (?)', $entityIds)
             ->where('parent_id NOT IN (?)', $entityIds)
+            ->join(
+                ['cpe' => $this->getTable('catalog_product_entity')],
+                'relation.parent_id = cpe.' . $fieldForParent,
+                ['cpe.entity_id']
+            )
             ->query()
             ->fetchAll(\Zend_Db::FETCH_COLUMN);
     }
