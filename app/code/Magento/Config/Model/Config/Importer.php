@@ -17,7 +17,10 @@ use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
- * @inheritdoc
+ * Processes data from 'system' section of configuration.
+ * Do not physically imports data into database, but invokes backend models of configs.
+ *
+ * {@inheritdoc}
  */
 class Importer implements ImporterInterface
 {
@@ -127,7 +130,7 @@ class Importer implements ImporterInterface
             $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($changedData) {
                 $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
 
-                // Invoke saving new values.
+                // Invoke saving of new values.
                 $this->invokeSaveAll($changedData);
             });
         } finally {

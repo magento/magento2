@@ -164,7 +164,7 @@ class ArrayUtils
 
             $result = array_merge(
                 $result,
-                $this->flatten($value, $path ? $path . $separator . $key : $key)
+                $this->flatten($value, $path ? $path . $separator . $key : $key, $separator)
             );
         }
 
