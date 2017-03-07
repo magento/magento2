@@ -7,6 +7,7 @@ namespace Magento\Deploy\Console\Command\App\ConfigImport;
 
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\RuntimeException;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Deploy\Model\DeploymentConfig\Validator;
@@ -112,11 +113,14 @@ class Importer
                 if (!$this->configValidator->isValid($section)) {
                     /** @var ImporterInterface $importer */
                     $importer = $this->importerFactory->create($importerClassName);
-                    $messages = $importer->import((array) $this->deploymentConfig->getConfigData($section));
+                    $messages = $importer->import((array)$this->deploymentConfig->getConfigData($section));
                     $output->writeln($messages);
                     $this->configHash->regenerate($section);
                 }
             }
+        } catch (LocalizedException $exception) {
+            $this->logger->error($exception);
+            $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));
         } catch (\Exception $exception) {
             $this->logger->error($exception);
             throw new RuntimeException(__('Import is failed. Please see the log report.'), $exception);

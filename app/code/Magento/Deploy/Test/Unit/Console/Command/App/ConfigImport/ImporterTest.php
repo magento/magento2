@@ -58,9 +58,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
      */
     private $importer;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->importerFactoryMock = $this->getMockBuilder(ImporterFactory::class)
@@ -94,9 +91,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testImport()
     {
         $configData = ['some data'];
@@ -141,15 +135,36 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Import is failed. Please see the log report.
      */
     public function testImportWithException()
     {
-        $exception = new LocalizedException(__('Some error'));
+        $exception = new \Exception('Some error');
         $this->outputMock->expects($this->never())
             ->method('writeln');
+        $this->configHashMock->expects($this->never())
+            ->method('regenerate');
+        $this->configValidatorMock->expects($this->never())
+            ->method('isValid');
+        $this->deploymentConfigMock->expects($this->never())
+            ->method('getConfigData');
+        $this->configImporterPoolMock->expects($this->once())
+            ->method('getImporters')
+            ->willThrowException($exception);
+        $this->loggerMock->expects($this->once())
+            ->method('error')
+            ->with($exception);
+
+        $this->importer->import($this->outputMock);
+    }
+
+    public function testImportWithLocalizedException()
+    {
+        $exception = new LocalizedException(__('Some error'));
+        $this->outputMock->expects($this->once())
+            ->method('writeln')
+            ->with('<error>Some error</error>');
         $this->configHashMock->expects($this->never())
             ->method('regenerate');
         $this->configValidatorMock->expects($this->never())
@@ -169,7 +184,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $importers
      * @param bool $isValid
-     * @return void
      * @dataProvider importNothingToImportDataProvider
      */
     public function testImportNothingToImport(array $importers, $isValid)
