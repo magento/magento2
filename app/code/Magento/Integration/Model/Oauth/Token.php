@@ -41,6 +41,7 @@ use Magento\Integration\Model\ResourceModel\Oauth\Token\Collection as TokenColle
  * @method int getAuthorized()
  * @method Token setAuthorized() setAuthorized(int $authorized)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Token extends \Magento\Framework\Model\AbstractModel
 {

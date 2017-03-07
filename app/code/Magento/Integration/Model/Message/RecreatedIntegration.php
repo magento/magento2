@@ -14,7 +14,6 @@ use Magento\Integration\Api\IntegrationServiceInterface;
 
 /**
  * Class RecreatedIntegration to display message when a config-based integration needs to be reactivated
- *
  */
 class RecreatedIntegration implements \Magento\Framework\Notification\MessageInterface
 {
@@ -74,6 +73,7 @@ class RecreatedIntegration implements \Magento\Framework\Notification\MessageInt
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Retrieve unique message identity
      *
@@ -107,5 +107,6 @@ class RecreatedIntegration implements \Magento\Framework\Notification\MessageInt
     {
         return self::SEVERITY_MAJOR;
     }
+
     //@codeCoverageIgnoreEnd
 }

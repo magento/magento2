@@ -12,6 +12,9 @@ define([
 ], function ($, alert) {
     'use strict';
 
+    /**
+     * @api
+     */
     $.widget('mage.integration', {
         /**
          * Options common to all instances of this widget.
