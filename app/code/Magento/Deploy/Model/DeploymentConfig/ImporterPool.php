@@ -130,9 +130,8 @@ class ImporterPool
     {
         if (!$this->sortedImporters) {
             $sortedImporters = [];
-            $importers = $this->sort($this->importers);
 
-            foreach ($importers as $section => $importer) {
+            foreach ($this->sort($this->importers) as $section => $importer) {
                 if (empty($importer['class'])) {
                     throw new ConfigurationMismatchException(__('Parameter "class" must be present.'));
                 }

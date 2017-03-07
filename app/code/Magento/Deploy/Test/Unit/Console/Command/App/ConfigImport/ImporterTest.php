@@ -143,7 +143,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Import is failed
+     * @expectedExceptionMessage Import is failed. Please see the log report.
      */
     public function testImportWithException()
     {

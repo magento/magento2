@@ -54,7 +54,7 @@ class DataCollectorTest extends \PHPUnit_Framework_TestCase
             ->method('getConfigData')
             ->willReturnMap([['first', 'some data']]);
 
-        $this->assertSame(['first' => 'some data'], $this->dataCollector->getConfig());
+        $this->assertSame(['first' => 'some data', 'second' => null], $this->dataCollector->getConfig());
     }
 
     /**

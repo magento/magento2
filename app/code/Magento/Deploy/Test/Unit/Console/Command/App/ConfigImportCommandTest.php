@@ -8,9 +8,8 @@ namespace Magento\Deploy\Test\Unit\Console\Command\App;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
 use Magento\Framework\Console\Cli;
-use Magento\Deploy\Model\DeploymentConfig\ImportFailedException;
+use Magento\Framework\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\App\DeploymentConfig\Writer;
 
 class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,11 +17,6 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
      * @var Importer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $importerMock;
-
-    /**
-     * @var Writer|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $writerMock;
 
     /**
      * @var CommandTester
@@ -37,14 +31,8 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $this->importerMock = $this->getMockBuilder(Importer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->writerMock = $this->getMockBuilder(Writer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
-        $configImportCommand = new ConfigImportCommand(
-            $this->importerMock,
-            $this->writerMock
-        );
+        $configImportCommand = new ConfigImportCommand($this->importerMock);
 
         $this->commandTester = new CommandTester($configImportCommand);
     }
@@ -54,9 +42,6 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $this->writerMock->expects($this->once())
-            ->method('checkIfWritable')
-            ->willReturn(true);
         $this->importerMock->expects($this->once())
             ->method('import');
 
@@ -66,29 +51,11 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testExecuteWithoutWritePermissions()
-    {
-        $this->writerMock->expects($this->once())
-            ->method('checkIfWritable')
-            ->willReturn(false);
-        $this->importerMock->expects($this->never())
-            ->method('import');
-
-        $this->assertSame(Cli::RETURN_FAILURE, $this->commandTester->execute([]));
-        $this->assertContains('Deployment configuration file is not writable.', $this->commandTester->getDisplay());
-    }
-
-    /**
-     * @return void
-     */
     public function testExecuteWithException()
     {
-        $this->writerMock->expects($this->once())
-            ->method('checkIfWritable')
-            ->willReturn(true);
         $this->importerMock->expects($this->once())
             ->method('import')
-            ->willThrowException(new ImportFailedException(__('Some error')));
+            ->willThrowException(new RuntimeException(__('Some error')));
 
         $this->assertSame(Cli::RETURN_FAILURE, $this->commandTester->execute([]));
         $this->assertContains('Some error', $this->commandTester->getDisplay());
