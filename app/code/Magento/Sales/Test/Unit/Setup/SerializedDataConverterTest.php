@@ -25,7 +25,7 @@ class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SerializedDataConverter
      */
-    protected $serializedDataConverter;
+    private $serializedDataConverter;
 
     protected function setUp()
     {
