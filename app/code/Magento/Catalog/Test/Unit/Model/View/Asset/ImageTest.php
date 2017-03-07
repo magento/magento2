@@ -135,8 +135,8 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $viewHelper->expects(self::once())
             ->method('getDefaultPlaceholderUrl')
-            ->with(self::identicalTo($miscParams['image_type'])
-            )->willReturn($url);
+            ->with(self::identicalTo($miscParams['image_type']))
+            ->willReturn($url);
         $imageModel = new Image(
             $this->mediaConfig,
             $this->imageContext,
