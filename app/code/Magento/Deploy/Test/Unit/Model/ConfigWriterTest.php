@@ -65,7 +65,7 @@ class ConfigWriterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($config);
         $this->writerMock->expects($this->once())
             ->method('saveConfig')
-            ->with([ConfigFilePool::APP_CONFIG => $config]);
+            ->with([ConfigFilePool::APP_ENV => $config]);
 
         $this->model->save($values, 'scope', 'scope_code');
     }
@@ -89,7 +89,7 @@ class ConfigWriterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($config);
         $this->writerMock->expects($this->once())
             ->method('saveConfig')
-            ->with([ConfigFilePool::APP_CONFIG => $config]);
+            ->with([ConfigFilePool::APP_ENV => $config]);
 
         $this->model->save($values);
     }
