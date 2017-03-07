@@ -15,7 +15,7 @@ class SalableProcessorTest extends \PHPUnit_Framework_TestCase
     const STOCK_FLAG = 'has_stock_status_filter';
 
     /** @var ObjectManager */
-    protected $objectManager;
+    private $objectManager;
 
     /** @var \Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor */
     protected $model;
@@ -45,7 +45,7 @@ class SalableProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcess()
     {
         $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
-            ->setMethods(['addAttributeToFilter'/*, 'hasFlag'*/])
+            ->setMethods(['addAttributeToFilter'])
             ->disableOriginalConstructor()
             ->getMock();
 

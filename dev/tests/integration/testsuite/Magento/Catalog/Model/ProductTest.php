@@ -289,9 +289,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue((bool)$this->_model->isSaleable());
         $this->assertTrue((bool)$this->_model->isAvailable());
         $this->assertTrue($this->_model->isInStock());
-        $this->_model
-            ->setStatus(0)
-            ->unsetData('salable');
+        $this->_model->setStatus(0);
         $this->assertFalse((bool)$this->_model->isSalable());
         $this->assertFalse((bool)$this->_model->isSaleable());
         $this->assertFalse((bool)$this->_model->isAvailable());

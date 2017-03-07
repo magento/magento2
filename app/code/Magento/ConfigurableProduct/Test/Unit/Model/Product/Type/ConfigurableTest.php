@@ -106,7 +106,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SalableProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $salableCriteria;
+    private $salableProcessor;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -186,7 +186,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->salableCriteria = $this->getMock(
+        $this->salableProcessor = $this->getMock(
             SalableProcessor::class,
             ['process'],
             [],
@@ -212,13 +212,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'cache' => $this->cache,
                 'catalogConfig' => $this->catalogConfig,
                 'stockRegistry' => $this->stockRegistry,
-                'salableCriteria' => $this->salableCriteria,
+                'salableProcessor' => $this->salableProcessor,
+                'metadataPool' => $this->metadataPool
             ]
         );
-        $refClass = new \ReflectionClass(Configurable::class);
-        $refProperty = $refClass->getProperty('metadataPool');
-        $refProperty->setAccessible(true);
-        $refProperty->setValue($this->_model, $this->metadataPool);
     }
 
     public function testHasWeightTrue()
@@ -654,7 +651,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getSize')
             ->willReturn(1);
 
-        $this->salableCriteria
+        $this->salableProcessor
             ->expects($this->once())
             ->method('process')
             ->with($productCollection)

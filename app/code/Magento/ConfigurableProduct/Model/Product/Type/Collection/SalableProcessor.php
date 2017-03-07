@@ -10,6 +10,10 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
 
+/**
+ * Class SalableProcessor
+ * Add is_in_stock filter to products collection and cashes it
+ */
 class SalableProcessor
 {
     /**

@@ -1616,6 +1616,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if ($this->_catalogProduct->getSkipSaleableCheck()) {
             return true;
         }
+        if (($this->getOrigData('status') != $this->getData('status'))
+            || $this->isStockStatusChanged()) {
+            $this->unsetData('salable');
+        }
+
         if ($this->hasData('salable')) {
             return $this->getData('salable');
         }

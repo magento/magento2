@@ -174,10 +174,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * @var SalableProcessor
      */
-    private $salableCriteria;
+    private $salableProcessor;
 
     /**
-     * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -200,7 +199,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Customer\Model\Session $customerSession
      * @param StockRegistryInterface $stockRegistry
-     * @param SalableProcessor $salableCriteria
+     * @param SalableProcessor $salableProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -224,7 +223,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\Cache\FrontendInterface $cache = null,
         \Magento\Customer\Model\Session $customerSession = null,
         StockRegistryInterface $stockRegistry = null,
-        SalableProcessor $salableCriteria = null
+        SalableProcessor $salableProcessor = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -249,7 +248,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         );
         $this->stockRegistry = $stockRegistry ?: ObjectManager::getInstance()
             ->get(StockRegistryInterface::class);
-        $this->salableCriteria = $salableCriteria ?: ObjectManager::getInstance()->get(SalableProcessor::class);
+        $this->salableProcessor = $salableProcessor ?: ObjectManager::getInstance()->get(SalableProcessor::class);
     }
 
     /**
@@ -823,7 +822,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         if ($salable !== false) {
             $collection = $this->getUsedProductCollection($product);
             $collection->addStoreFilter($this->getStoreFilter($product));
-            $collection = $this->salableCriteria->process($collection);
+            $collection = $this->salableProcessor->process($collection);
             $salable = 0 !== $collection->getSize();
         }
 
