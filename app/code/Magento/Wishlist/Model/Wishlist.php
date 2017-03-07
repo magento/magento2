@@ -402,8 +402,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
 
         if ($buyRequest instanceof \Magento\Framework\DataObject) {
             $_buyRequest = $buyRequest;
-        } elseif (is_string($buyRequest)) {
-            $_buyRequest = new \Magento\Framework\DataObject(unserialize($buyRequest));
         } elseif (is_array($buyRequest)) {
             $_buyRequest = new \Magento\Framework\DataObject($buyRequest);
         } else {
