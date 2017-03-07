@@ -8,8 +8,10 @@ namespace Magento\ConfigurableProduct\Test\TestCase;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
+use Magento\Config\Test\TestStep\SetupConfigurationStep;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Test Coverage for CreateConfigurableProductEntity
@@ -59,16 +61,28 @@ class CreateConfigurableProductEntityTest extends Injectable
     protected $productNew;
 
     /**
+     * Factory for creation SetupConfigurationStep.
+     *
+     * @var TestStepFactory
+     */
+    protected $testStepFactory;
+
+    /**
      * Injection data.
      *
      * @param CatalogProductIndex $productIndex
      * @param CatalogProductNew $productNew
+     * @param TestStepFactory $testStepFactory
      * @return void
      */
-    public function __inject(CatalogProductIndex $productIndex, CatalogProductNew $productNew)
-    {
+    public function __inject(
+        CatalogProductIndex $productIndex,
+        CatalogProductNew $productNew,
+        TestStepFactory $testStepFactory
+    ) {
         $this->productIndex = $productIndex;
         $this->productNew = $productNew;
+        $this->testStepFactory = $testStepFactory;
     }
 
     /**
@@ -77,12 +91,31 @@ class CreateConfigurableProductEntityTest extends Injectable
      * @param ConfigurableProduct $product
      * @return void
      */
-    public function test(ConfigurableProduct $product)
+    public function test(ConfigurableProduct $product, $displayOutOfStockProducts = false)
     {
+        //Preconditions
+        if ($displayOutOfStockProducts) {
+            $this->testStepFactory->create(
+                SetupConfigurationStep::class,
+                ['configData' => 'display_out_of_stock_products', 'flushCache' => true]
+            )->run();
+        }
+
         // Steps
         $this->productIndex->open();
         $this->productIndex->getGridPageActionBlock()->addProduct('configurable');
         $this->productNew->getProductForm()->fill($product);
         $this->productNew->getFormPageActions()->save($product);
+    }
+
+    /**
+     * Revert Display Out Of Stock Products configuration.
+     */
+    public function teatDown()
+    {
+        $this->testStepFactory->create(
+            SetupConfigurationStep::class,
+            ['configData' => 'display_out_of_stock_products', 'flushCache' => true]
+        )->cleanUp();
     }
 }
