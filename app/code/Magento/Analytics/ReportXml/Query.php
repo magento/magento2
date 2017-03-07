@@ -30,20 +30,28 @@ class Query implements \JsonSerializable
     private $connectionName;
 
     /**
+     * @var array
+     */
+    private $config;
+
+    /**
      * Query constructor.
      *
      * @param Select $select
      * @param SelectHydrator $selectHydrator
      * @param string $connectionName
+     * @param array $config
      */
     public function __construct(
         Select $select,
         SelectHydrator $selectHydrator,
-        $connectionName
+        $connectionName,
+        $config
     ) {
         $this->select = $select;
         $this->connectionName = $connectionName;
         $this->selectHydrator = $selectHydrator;
+        $this->config = $config;
     }
 
     /**
@@ -63,6 +71,14 @@ class Query implements \JsonSerializable
     }
 
     /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
      * Specify data which should be serialized to JSON
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,
@@ -73,7 +89,8 @@ class Query implements \JsonSerializable
     {
         return [
             'connectionName' => $this->getConnectionName(),
-            'select_parts' => $this->selectHydrator->extract($this->getSelect())
+            'select_parts' => $this->selectHydrator->extract($this->getSelect()),
+            'config' => $this->getConfig()
         ];
     }
 }
