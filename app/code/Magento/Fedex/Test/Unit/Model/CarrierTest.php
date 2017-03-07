@@ -52,7 +52,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Carrier|MockObject
      */
-    private $model;
+    private $carrier;
 
     /**
      * @var ScopeConfigInterface|MockObject
@@ -85,8 +85,15 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     private $result;
 
     /**
-     * @inheritdoc
+     * @var \SoapClient|MockObject
      */
+    private $soapClientMock;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json|MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->helper = new ObjectManager($this);
@@ -94,7 +101,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scope->expects(static::any())
+        $this->scope->expects($this->any())
             ->method('getValue')
             ->willReturnCallback([$this, 'scopeConfigGetValue']);
 
@@ -144,8 +151,12 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = $this->getMockBuilder(Carrier::class)
-            ->setMethods(['_getCachedQuotes', '_debug'])
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->carrier = $this->getMockBuilder(Carrier::class)
+            ->setMethods(['_createSoapClient'])
             ->setConstructorArgs(
                 [
                     'scopeConfig' => $this->scope,
@@ -166,14 +177,18 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                     'storeManager' => $storeManager,
                     'configReader' => $reader,
                     'productCollectionFactory' => $collectionFactory,
+                    'data' => [],
+                    'serializer' => $this->serializer,
                 ]
-            )
+            )->getMock();
+        $this->soapClientMock = $this->getMockBuilder(\SoapClient::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getRates', 'track'])
             ->getMock();
+        $this->carrier->method('_createSoapClient')
+            ->willReturn($this->soapClientMock);
     }
 
-    /**
-     * @covers \Magento\Fedex\Model\Carrier::setRequest
-     */
     public function testSetRequestWithoutCity()
     {
         $request = $this->getMockBuilder(RateRequest::class)
@@ -183,22 +198,19 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $request->expects($this->once())
             ->method('getDestCity')
             ->willReturn(null);
-        $this->model->setRequest($request);
+        $this->carrier->setRequest($request);
     }
 
-    /**
-     * @covers \Magento\Fedex\Model\Carrier::setRequest
-     */
     public function testSetRequestWithCity()
     {
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDestCity'])
             ->getMock();
-        $request->expects(static::exactly(2))
+        $request->expects($this->exactly(2))
             ->method('getDestCity')
             ->willReturn('Small Town');
-        $this->model->setRequest($request);
+        $this->carrier->setRequest($request);
     }
 
     /**
@@ -223,15 +235,15 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      * @param float $amount
      * @param string $rateType
      * @param float $expected
+     * @param int $callNum
      * @dataProvider collectRatesDataProvider
      */
-    public function testCollectRatesRateAmountOriginBased($amount, $rateType, $expected)
+    public function testCollectRatesRateAmountOriginBased($amount, $rateType, $expected, $callNum = 1)
     {
-        $this->scope->expects(static::any())
+        $this->scope->expects($this->any())
             ->method('isSetFlag')
             ->willReturn(true);
 
-        // @codingStandardsIgnoreStart
         $netAmount = new \stdClass();
         $netAmount->Amount = $amount;
 
@@ -249,17 +261,21 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $response = new \stdClass();
         $response->HighestSeverity = 'SUCCESS';
         $response->RateReplyDetails = $rate;
-        // @codingStandardsIgnoreEnd
 
-        $this->model->expects(static::any())
-            ->method('_getCachedQuotes')
-            ->willReturn(serialize($response));
+        $this->serializer->method('serialize')
+            ->willReturn('CollectRateString' . $amount);
+
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        foreach ($this->model->collectRates($request)->getAllRates() as $allRates) {
-            $this->assertEquals($expected, $allRates->getData('cost'));
+        $this->soapClientMock->expects($this->exactly($callNum))
+            ->method('getRates')
+            ->willReturn($response);
+
+        $allRates1 = $this->carrier->collectRates($request)->getAllRates();
+        foreach ($allRates1 as $rate) {
+            $this->assertEquals($expected, $rate->getData('cost'));
         }
     }
 
@@ -271,34 +287,42 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [10.0, 'RATED_ACCOUNT_PACKAGE', 10],
+            [10.0, 'RATED_ACCOUNT_PACKAGE', 10, 0],
             [11.50, 'PAYOR_ACCOUNT_PACKAGE', 11.5],
+            [11.50, 'PAYOR_ACCOUNT_PACKAGE', 11.5, 0],
             [100.01, 'RATED_ACCOUNT_SHIPMENT', 100.01],
+            [100.01, 'RATED_ACCOUNT_SHIPMENT', 100.01, 0],
             [32.2, 'PAYOR_ACCOUNT_SHIPMENT', 32.2],
+            [32.2, 'PAYOR_ACCOUNT_SHIPMENT', 32.2, 0],
             [15.0, 'RATED_LIST_PACKAGE', 15],
+            [15.0, 'RATED_LIST_PACKAGE', 15, 0],
             [123.25, 'PAYOR_LIST_PACKAGE', 123.25],
+            [123.25, 'PAYOR_LIST_PACKAGE', 123.25, 0],
             [12.12, 'RATED_LIST_SHIPMENT', 12.12],
+            [12.12, 'RATED_LIST_SHIPMENT', 12.12, 0],
             [38.9, 'PAYOR_LIST_SHIPMENT', 38.9],
+            [38.9, 'PAYOR_LIST_SHIPMENT', 38.9, 0],
         ];
     }
 
     public function testCollectRatesErrorMessage()
     {
-        $this->scope->expects(static::once())
+        $this->scope->expects($this->once())
             ->method('isSetFlag')
             ->willReturn(false);
 
-        $this->error->expects(static::once())
+        $this->error->expects($this->once())
             ->method('setCarrier')
             ->with('fedex');
-        $this->error->expects(static::once())
+        $this->error->expects($this->once())
             ->method('setCarrierTitle');
-        $this->error->expects(static::once())
+        $this->error->expects($this->once())
             ->method('setErrorMessage');
 
         $request = new RateRequest();
         $request->setPackageWeight(1);
 
-        static::assertSame($this->error, $this->model->collectRates($request));
+        $this->assertSame($this->error, $this->carrier->collectRates($request));
     }
 
     /**
@@ -312,12 +336,12 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $refClass = new \ReflectionClass(Carrier::class);
         $property = $refClass->getProperty('_debugReplacePrivateDataKeys');
         $property->setAccessible(true);
-        $property->setValue($this->model, $maskFields);
+        $property->setValue($this->carrier, $maskFields);
 
         $refMethod = $refClass->getMethod('filterDebugData');
         $refMethod->setAccessible(true);
-        $result = $refMethod->invoke($this->model, $data);
-        static::assertEquals($expected, $result);
+        $result = $refMethod->invoke($this->carrier, $data);
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -356,9 +380,6 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @covers \Magento\Fedex\Model\Carrier::getTracking
-     */
     public function testGetTrackingErrorResponse()
     {
         $tracking = '123456789012';
@@ -371,30 +392,27 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $response->Notifications->Message = $errorMessage;
         // @codingStandardsIgnoreEnd
 
-        $this->model->expects(static::once())
-            ->method('_getCachedQuotes')
-            ->willReturn(serialize($response));
-
         $error = $this->helper->getObject(Error::class);
-        $this->trackErrorFactory->expects(static::once())
+        $this->trackErrorFactory->expects($this->once())
             ->method('create')
             ->willReturn($error);
 
-        $this->model->getTracking($tracking);
-        $tracks = $this->model->getResult()->getAllTrackings();
+        $this->carrier->getTracking($tracking);
+        $tracks = $this->carrier->getResult()->getAllTrackings();
 
-        static::assertEquals(1, count($tracks));
+        $this->assertEquals(1, count($tracks));
 
         /** @var Error $current */
         $current = $tracks[0];
-        static::assertInstanceOf(Error::class, $current);
-        static::assertEquals(__($errorMessage), $current->getErrorMessage());
+        $this->assertInstanceOf(Error::class, $current);
+        $this->assertEquals(__($errorMessage), $current->getErrorMessage());
     }
 
     /**
-     * @covers \Magento\Fedex\Model\Carrier::getTracking
+     * @param int $callNum
+     * @dataProvider getTrackingDataProvider
      */
-    public function testGetTracking()
+    public function testGetTracking($callNum)
     {
         $tracking = '123456789012';
 
@@ -426,20 +444,21 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $response->CompletedTrackDetails->TrackDetails = [$trackDetails];
         // @codingStandardsIgnoreEnd
 
-        $this->model->expects(static::once())
-            ->method('_getCachedQuotes')
-            ->willReturn(serialize($response));
+        $this->soapClientMock->expects($this->exactly($callNum))
+            ->method('track')
+            ->willReturn($response);
+
+        $this->serializer->method('serialize')
+            ->willReturn('TrackingString');
 
         $status = $this->helper->getObject(Status::class);
-        $this->statusFactory->expects(static::once())
-            ->method('create')
+        $this->statusFactory->method('create')
             ->willReturn($status);
 
-        $this->model->getTracking($tracking);
-        $tracks = $this->model->getResult()->getAllTrackings();
-        static::assertEquals(1, count($tracks));
+        $tracks1 = $this->carrier->getTracking($tracking)->getAllTrackings();
+        $this->assertEquals(1, count($tracks1));
 
-        $current = $tracks[0];
+        $current = $tracks1[0];
         $fields = [
             'signedby',
             'status',
@@ -451,18 +470,27 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'weight',
         ];
         array_walk($fields, function ($field) use ($current) {
-            static::assertNotEmpty($current[$field]);
+            $this->assertNotEmpty($current[$field]);
         });
 
-        static::assertEquals('2016-08-10', $current['deliverydate']);
-        static::assertEquals('10:20:26', $current['deliverytime']);
-        static::assertEquals('2016-08-05', $current['shippeddate']);
+        $this->assertEquals('2016-08-10', $current['deliverydate']);
+        $this->assertEquals('10:20:26', $current['deliverytime']);
+        $this->assertEquals('2016-08-05', $current['shippeddate']);
+    }
+
+    public function getTrackingDataProvider()
+    {
+        return [
+            [1],
+            [0],
+        ];
     }
 
     /**
-     * @covers \Magento\Fedex\Model\Carrier::getTracking
+     * @param int $callNum
+     * @dataProvider getTrackingDataProvider
      */
-    public function testGetTrackingWithEvents()
+    public function testGetTrackingWithEvents($callNum)
     {
         $tracking = '123456789012';
 
@@ -486,30 +514,32 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $response->CompletedTrackDetails->TrackDetails = $trackDetails;
         // @codingStandardsIgnoreEnd
 
-        $this->model->expects(static::once())
-            ->method('_getCachedQuotes')
-            ->willReturn(serialize($response));
+        $this->soapClientMock->expects($this->exactly($callNum))
+            ->method('track')
+            ->willReturn($response);
+
+        $this->serializer->method('serialize')
+            ->willReturn('TrackingWithEventsString');
 
         $status = $this->helper->getObject(Status::class);
-        $this->statusFactory->expects(static::once())
-            ->method('create')
+        $this->statusFactory->method('create')
             ->willReturn($status);
 
-        $this->model->getTracking($tracking);
-        $tracks = $this->model->getResult()->getAllTrackings();
-        static::assertEquals(1, count($tracks));
+        $this->carrier->getTracking($tracking);
+        $tracks = $this->carrier->getResult()->getAllTrackings();
+        $this->assertEquals(1, count($tracks));
 
         $current = $tracks[0];
-        static::assertNotEmpty($current['progressdetail']);
-        static::assertEquals(1, count($current['progressdetail']));
+        $this->assertNotEmpty($current['progressdetail']);
+        $this->assertEquals(1, count($current['progressdetail']));
 
         $event = $current['progressdetail'][0];
         $fields = ['activity', 'deliverydate', 'deliverytime', 'deliverylocation'];
         array_walk($fields, function ($field) use ($event) {
-            static::assertNotEmpty($event[$field]);
+            $this->assertNotEmpty($event[$field]);
         });
-        static::assertEquals('2016-08-05', $event['deliverydate']);
-        static::assertEquals('19:14:53', $event['deliverytime']);
+        $this->assertEquals('2016-08-05', $event['deliverydate']);
+        $this->assertEquals('19:14:53', $event['deliverytime']);
     }
 
     /**
@@ -526,7 +556,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->errorFactory->expects(static::any())
+        $this->errorFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->error);
     }
@@ -545,7 +575,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $rateFactory->expects(static::any())
+        $rateFactory->expects($this->any())
             ->method('create')
             ->willReturn($rate);
 
@@ -562,7 +592,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getData'])
             ->getMock();
-        $country->expects(static::any())
+        $country->expects($this->any())
             ->method('load')
             ->willReturnSelf();
 
@@ -570,7 +600,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $countryFactory->expects(static::any())
+        $countryFactory->expects($this->any())
             ->method('create')
             ->willReturn($country);
 
@@ -588,7 +618,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->result = $this->helper->getObject(Result::class);
-        $resultFactory->expects(static::any())
+        $resultFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->result);
 
@@ -606,7 +636,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getBaseCurrencyCode'])
             ->getMock();
         $storeManager = $this->getMock(StoreManagerInterface::class);
-        $storeManager->expects(static::any())
+        $storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($store);
 
@@ -628,7 +658,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $rateMethodFactory->expects(static::any())
+        $rateMethodFactory->expects($this->any())
             ->method('create')
             ->willReturn($rateMethod);
 
