@@ -57,7 +57,10 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/shipping'
+            template: 'Magento_Checkout/shipping',
+            shippingFormTemplate: 'Magento_Checkout/shipping-address/form',
+            shippingMethodListTemplate: 'Magento_Checkout/shipping-address/shipping-method-list',
+            shippingMethodItemTemplate: 'Magento_Checkout/shipping-address/shipping-method-item'
         },
         visible: ko.observable(!quote.isVirtual()),
         errorValidationMessage: ko.observable(false),

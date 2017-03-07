@@ -8,6 +8,7 @@ namespace Magento\Paypal\Model\Express;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Checkout\Model\Type\Onepage;
+use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Express\Checkout;
@@ -85,6 +86,60 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $this->apiTypeFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->api));
+    }
+
+    /**
+     * Verify that api has set customer email.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/quote_express.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testCheckoutStartWithBillingAddress()
+    {
+        $quote = $this->_getFixtureQuote();
+        $paypalConfig = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $apiTypeFactory = $this->getMockBuilder(Factory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $paypalInfo = $this->getMockBuilder(Info::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $checkoutModel = $this->_objectManager->create(
+            Checkout::class,
+            [
+                'params' => ['quote' => $quote, 'config' => $paypalConfig],
+                'apiTypeFactory' => $apiTypeFactory,
+                'paypalInfo' => $paypalInfo
+            ]
+        );
+
+        $api = $this->getMockBuilder(Nvp::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['callSetExpressCheckout'])
+            ->getMock();
+
+        $api->expects($this->any())
+            ->method('callSetExpressCheckout')
+            ->will($this->returnValue(null));
+
+        $apiTypeFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($api));
+
+        $checkoutModel->start(
+            'return',
+            'cancel',
+            false
+        );
+
+        $this->assertEquals('test@com.com', $api->getBillingAddress()->getEmail());
     }
 
     /**
@@ -170,7 +225,9 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
             Checkout::class,
             [
                 'params' => [
-                    'config' => $this->getMock(\Magento\Paypal\Model\Config::class, [], [], '', false),
+                    'config' => $this->getMockBuilder(Config::class)
+                        ->disableOriginalConstructor()
+                        ->getMock(),
                     'quote' => $quote,
                 ]
             ]
@@ -213,7 +270,6 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $this->checkoutModel->returnFromPaypal('token');
 
         $billingAddress = $quote->getBillingAddress();
-
         $this->assertContains('exported', $billingAddress->getFirstname());
         $this->assertEquals('note', $billingAddress->getCustomerNote());
 
@@ -339,7 +395,74 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Prepare fixture for exported address
+     * Verify that guest customer quota has set type of checkout.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/quote_payment_express.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testGuestReturnFromPaypal()
+    {
+        $quote = $this->_getFixtureQuote();
+        $paypalConfig = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $apiTypeFactory = $this->getMockBuilder(Factory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $paypalInfo = $this->getMockBuilder(Info::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['importToPayment'])
+            ->getMock();
+
+        $checkoutModel = $this->_objectManager->create(
+            Checkout::class,
+            [
+                'params' => ['quote' => $quote, 'config' => $paypalConfig],
+                'apiTypeFactory' => $apiTypeFactory,
+                'paypalInfo' => $paypalInfo
+            ]
+        );
+
+        $api = $this->getMockBuilder(Nvp::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['call', 'getExportedShippingAddress', 'getExportedBillingAddress'])
+            ->getMock();
+
+        $api->expects($this->any())
+            ->method('call')
+            ->will($this->returnValue([]));
+
+        $apiTypeFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($api));
+
+        $exportedBillingAddress = $this->_getExportedAddressFixture($quote->getBillingAddress()->getData());
+        $api->expects($this->any())
+            ->method('getExportedBillingAddress')
+            ->will($this->returnValue($exportedBillingAddress));
+
+        $exportedShippingAddress = $this->_getExportedAddressFixture($quote->getShippingAddress()->getData());
+        $api->expects($this->any())
+            ->method('getExportedShippingAddress')
+            ->will($this->returnValue($exportedShippingAddress));
+
+        $paypalInfo->expects($this->once())
+            ->method('importToPayment')
+            ->with($api, $quote->getPayment());
+
+        $quote->getPayment()->setAdditionalInformation(Checkout::PAYMENT_INFO_BUTTON, 1);
+
+        $checkoutModel->returnFromPaypal('token');
+
+        $this->assertEquals(Onepage::METHOD_GUEST, $quote->getCheckoutMethod());
+    }
+
+    /**
+     * Prepare fixture for exported address.
      *
      * @param array $addressData
      * @return \Magento\Framework\DataObject
@@ -353,13 +476,17 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
                 $result[$key] = 'exported' . $addressData[$key];
             }
         }
+
         $fixture = new \Magento\Framework\DataObject($result);
         $fixture->setExportedKeys($addressDataKeys);
         $fixture->setData('note', 'note');
+
         return $fixture;
     }
 
     /**
+     * Gets quote.
+     *
      * @return Quote
      */
     protected function _getFixtureQuote()
