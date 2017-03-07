@@ -18,7 +18,7 @@ class AssertAdvancedReportingPage extends AbstractConstraint
      *
      * @var BrowserInterface
      */
-    protected $browser;
+    private $browser;
 
     /**
      * Assert Advanced Reporting Sign Up page is opened by link.
@@ -31,9 +31,12 @@ class AssertAdvancedReportingPage extends AbstractConstraint
     {
         $this->browser = $browser;
         $this->browser->selectWindow();
-        \PHPUnit_Framework_Assert::assertEquals(
-            $advancedReportingLink,
-            $this->browser->getUrl(),
+        \PHPUnit_Framework_Assert::assertTrue(
+            $this->browser->waitUntil(
+                function () use ($advancedReportingLink) {
+                    return ($this->browser->getUrl() === $advancedReportingLink) ? true : null;
+                }
+            ),
             'Advanced Reporting Sign Up page was not opened by link.'
         );
     }
