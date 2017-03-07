@@ -7,7 +7,6 @@ namespace Magento\Deploy\Test\Unit\Console\Command\App\ConfigImport;
 
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
 use Magento\Deploy\Model\DeploymentConfig\Validator;
@@ -135,36 +134,14 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Import is failed. Please see the log report.
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Import is failed: Some error
      */
     public function testImportWithException()
     {
         $exception = new \Exception('Some error');
         $this->outputMock->expects($this->never())
             ->method('writeln');
-        $this->configHashMock->expects($this->never())
-            ->method('regenerate');
-        $this->configValidatorMock->expects($this->never())
-            ->method('isValid');
-        $this->deploymentConfigMock->expects($this->never())
-            ->method('getConfigData');
-        $this->configImporterPoolMock->expects($this->once())
-            ->method('getImporters')
-            ->willThrowException($exception);
-        $this->loggerMock->expects($this->once())
-            ->method('error')
-            ->with($exception);
-
-        $this->importer->import($this->outputMock);
-    }
-
-    public function testImportWithLocalizedException()
-    {
-        $exception = new LocalizedException(__('Some error'));
-        $this->outputMock->expects($this->once())
-            ->method('writeln')
-            ->with('<error>Some error</error>');
         $this->configHashMock->expects($this->never())
             ->method('regenerate');
         $this->configValidatorMock->expects($this->never())
