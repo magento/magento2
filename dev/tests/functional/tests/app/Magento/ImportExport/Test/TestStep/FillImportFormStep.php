@@ -31,13 +31,6 @@ class FillImportFormStep implements TestStepInterface
     private $import;
 
     /**
-     * Csv as array.
-     *
-     * @var array
-     */
-    private $csv;
-
-    /**
      * @param AdminImportIndex $adminImportIndex
      * @param ImportData $import
      * @param TestStepFactory $stepFactory
@@ -73,7 +66,7 @@ class FillImportFormStep implements TestStepInterface
         $file = $this->import->getDataFieldConfig('import_file')['source'];
 
         return [
-            'products' => $file->getProducts(),
+            'entities' => $file->getEntities(),
             'import' => $this->import
         ];
     }

@@ -16,6 +16,13 @@ use Magento\Mtf\Fixture\FixtureFactory;
 class CreateCustomStoreStep implements TestStepInterface
 {
     /**
+     * Website code mapping.
+     */
+    private $codeMapping =[
+        'base' => 'Main Website[USD]'
+    ];
+
+    /**
      * Factory for Test Steps.
      *
      * @var TestStepFactory
@@ -64,7 +71,7 @@ class CreateCustomStoreStep implements TestStepInterface
     /**
      * Fill import form.
      *
-     * @return array
+     * @return void
      */
     public function run()
     {
@@ -73,7 +80,7 @@ class CreateCustomStoreStep implements TestStepInterface
             ['configData' => 'price_scope_website']
         )->run();
 
-        $products = $this->import->getDataFieldConfig('import_file')['source']->getProducts();
+        $products = $this->import->getDataFieldConfig('import_file')['source']->getEntities();
         foreach ($products as $product) {
             $websites = $product->getDataFieldConfig('website_ids')['source']->getWebsites();
 
@@ -108,19 +115,16 @@ class CreateCustomStoreStep implements TestStepInterface
      * Return refactored csv data with custom store.
      *
      * @param array $products
-     * @return array
+     * @return void
      */
     public function getCsv(array $products)
     {
-
-        $mapping['base'] = 'Main Website[USD]';
-
         foreach ($products as $product) {
             $website = $product->getDataFieldConfig('website_ids')['source']->getWebsites()[0];
-            $mapping[$website->getCode()] = $website->getName() . "[{$this->currency}]";
+            $this->codeMapping[$website->getCode()] = $website->getName() . "[{$this->currency}]";
         }
 
         $csv = $this->import->getDataFieldConfig('import_file')['source']->getCsv();
-        $this->import->getDataFieldConfig('import_file')['source']->setCsv(strtr($csv, $mapping));
+        $this->import->getDataFieldConfig('import_file')['source']->setCsv(strtr($csv, $this->codeMapping));
     }
 }

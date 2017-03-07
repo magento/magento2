@@ -73,9 +73,7 @@ class AssertImportAdvancedPricing extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $resultArrays['pageData'],
             $resultArrays['csvData'],
-            'Wrong validation result is displayed.'
-            . "\nExpected: " . print_r($resultArrays['csvData'])
-            . "\nActual: " . print_r($resultArrays['pageData'])
+            'Tier prices from page and csv are not match.'
         );
     }
 
@@ -86,7 +84,7 @@ class AssertImportAdvancedPricing extends AbstractConstraint
      */
     public function preparePrices()
     {
-        $products = $this->import->getDataFieldConfig('import_file')['source']->getProducts();
+        $products = $this->import->getDataFieldConfig('import_file')['source']->getEntities();
 
         // Prepare tier prices data from backend.
         $resultProductArray = [];
@@ -97,10 +95,13 @@ class AssertImportAdvancedPricing extends AbstractConstraint
             $tierPrices = $advancedPricing->getTierPriceForm()->getFieldsData();
 
             $productSku = $product->getSku();
+
             foreach ($tierPrices as $tierPrice) {
                 $resultProductArray[$productSku][] = $tierPrice;
             }
-            $resultProductArray[$productSku] = array_reverse($resultProductArray[$productSku]);
+            if (isset($resultProductArray[$productSku])) {
+                $resultProductArray[$productSku]= array_reverse($resultProductArray[$productSku]);
+            }
         }
 
         // Prepare tier prices data from csv file.

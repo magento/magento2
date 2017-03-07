@@ -51,32 +51,8 @@ class CsvTemplate implements TemplateInterface
             throw new \Exception('File "' . $filename . '" does not exist.');
         }
 
-        $data = include $filename;
-
-        $placeholders = [];
-        if (!empty($this->config['placeholders'])) {
-            $placeholders = $this->config['placeholders'];
-        }
-
         $fh = fopen('php://temp', 'rw');
-        fputcsv($fh, array_keys($data['product_0']['tier_price_0']));
-
-        foreach ($placeholders as $productKey => $tierPrices) {
-            foreach ($tierPrices as $tierPriceKey => $tierPriceValue) {
-                $row = array_map(
-                    function ($value) use ($placeholders, $productKey, $tierPriceKey, $tierPriceValue) {
-                        if (is_string($value) && isset($placeholders[$productKey][$tierPriceKey])) {
-                            return strtr($value, $tierPriceValue);
-                        }
-                        return $value;
-                    },
-                    $data[$productKey][$tierPriceKey]
-                );
-                fputcsv($fh, $row);
-
-            }
-        }
-
+        $fh = $this->addProductsData($fh);
         rewind($fh);
         $this->csv = stream_get_contents($fh);
         fclose($fh);
@@ -94,6 +70,42 @@ class CsvTemplate implements TemplateInterface
             crc32(time()),
             basename($this->config['filename'])
         );
+    }
+
+    /*
+     * Add product data to stream content.
+     */
+    /**
+     * @param resource $stream
+     * @return resource
+     */
+    private function addProductsData($stream)
+    {
+        $filename = MTF_TESTS_PATH . $this->config['filename'] . '.php';
+        $entitiesData = include $filename;
+
+        $placeholders = [];
+        if (!empty($this->config['placeholders'])) {
+            $placeholders = $this->config['placeholders'];
+        }
+
+        fputcsv($stream, array_keys($entitiesData['entity_0']['data_0']));
+        foreach ($placeholders as $entityKey => $entityData) {
+            foreach ($entityData as $dataKey => $dataValue) {
+                $row = array_map(
+                    function ($value) use ($placeholders, $entityKey, $dataKey, $dataValue) {
+                        if (is_string($value) && isset($placeholders[$entityKey][$dataKey])) {
+                            return strtr($value, $dataValue);
+                        }
+                        return $value;
+                    },
+                    $entitiesData[$entityKey][$dataKey]
+                );
+                fputcsv($stream, $row);
+
+            }
+        }
+        return $stream;
     }
 
     /**

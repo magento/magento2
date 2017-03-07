@@ -19,6 +19,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 5. Perform assertions.
  *
  * @group ImportExport
+ * @ZephyrId MAGETWO-46154, MAGETWO-46156, MAGETWO-46157, MAGETWO-46159
  */
 class ImportDataTest extends Scenario
 {

@@ -7,8 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ImportExport\Test\TestCase\ImportDataTest" summary="Import tier prices">
-        <variation name="ImportProductsVariation1" ticketId="MAGETWO-47724" summary="Add/Update products">
-            <data name="expectedMessage" xsi:type="string">Checked rows: 2, checked entities: 0, invalid rows: 0, total errors: 0</data>
+        <variation name="ImportProductsVariation1" ticketId="MAGETWO-46154" summary="Add/Update products">
             <data name="createStore" xsi:type="boolean">false</data>
             <data name="import/data" xsi:type="array">
                 <item name="entity" xsi:type="string">Advanced Pricing</item>
@@ -18,22 +17,19 @@
                 <item name="import_field_separator" xsi:type="string">,</item>
                 <item name="import_multiple_value_separator" xsi:type="string">,</item>
                 <item name="import_file" xsi:type="array">
-                    <item name="products" xsi:type="array">
+                    <item name="entities" xsi:type="array">
                         <item name="0" xsi:type="string">catalogProductSimple::default</item>
                     </item>
                     <item name="template" xsi:type="array">
-                        <item name="filename"
-                              xsi:type="string">Magento/AdvancedPricingImportExport/Test/_files/template/pricing/advanced_price_variation_1</item>
+                        <item name="filename" xsi:type="string">Magento/AdvancedPricingImportExport/Test/_files/template/pricing/advanced_price_variation_1</item>
                         <item name="count" xsi:type="number">2</item>
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricingCheckData" />
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportSuccessMessage" />
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
         </variation>
-        <variation name="ImportProductsVariation2" ticketId="MAGETWO-47724" summary="Add/Update products">
-            <data name="expectedMessage" xsi:type="string">Checked rows: 1, checked entities: 0, invalid rows: 0, total errors: 0</data>
+        <variation name="ImportProductsVariation2" ticketId="MAGETWO-46156" summary="Replace products">
             <data name="createStore" xsi:type="boolean">false</data>
             <data name="import/data" xsi:type="array">
                 <item name="entity" xsi:type="string">Advanced Pricing</item>
@@ -43,22 +39,19 @@
                 <item name="import_field_separator" xsi:type="string">,</item>
                 <item name="import_multiple_value_separator" xsi:type="string">,</item>
                 <item name="import_file" xsi:type="array">
-                    <item name="products" xsi:type="array">
+                    <item name="entities" xsi:type="array">
                         <item name="0" xsi:type="string">catalogProductSimple::simple_with_tier_price_and_qty_10</item>
                     </item>
                     <item name="template" xsi:type="array">
-                        <item name="filename"
-                              xsi:type="string">Magento/AdvancedPricingImportExport/Test/_files/template/pricing/advanced_price_variation_2</item>
+                        <item name="filename" xsi:type="string">Magento/AdvancedPricingImportExport/Test/_files/template/pricing/advanced_price_variation_2</item>
                         <item name="count" xsi:type="number">1</item>
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricingCheckData" />
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportSuccessMessage" />
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
         </variation>
-        <variation name="ImportProductsVariation3" ticketId="MAGETWO-47724" summary="Add/Update products">
-            <data name="expectedMessage" xsi:type="string">Checked rows: 1, checked entities: 0, invalid rows: 0, total errors: 0</data>
+        <variation name="ImportProductsVariation3" ticketId="MAGETWO-46157" summary="Delete products">
             <data name="createStore" xsi:type="boolean">false</data>
             <data name="import/data" xsi:type="array">
                 <item name="entity" xsi:type="string">Advanced Pricing</item>
@@ -68,22 +61,19 @@
                 <item name="import_field_separator" xsi:type="string">,</item>
                 <item name="import_multiple_value_separator" xsi:type="string">,</item>
                 <item name="import_file" xsi:type="array">
-                    <item name="products" xsi:type="array">
-                        <item name="0" xsi:type="string">catalogProductSimple::simple_with_one_tier_price</item>
+                    <item name="entities" xsi:type="array">
+                        <item name="0" xsi:type="string">catalogProductSimple::simple_with_one_fixed_tier_price</item>
                     </item>
                     <item name="template" xsi:type="array">
-                        <item name="filename"
-                              xsi:type="string">Magento/AdvancedPricingImportExport/Test/_files/template/pricing/advanced_price_variation_3</item>
+                        <item name="filename" xsi:type="string">Magento/AdvancedPricingImportExport/Test/_files/template/pricing/advanced_price_variation_3</item>
                         <item name="count" xsi:type="number">1</item>
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricingCheckData" />
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportSuccessMessage" />
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
         </variation>
-        <variation name="ImportProductsVariation4" ticketId="MAGETWO-47724" summary="Add/Update products">
-            <data name="expectedMessage" xsi:type="string">Checked rows: 2, checked entities: 0, invalid rows: 0, total errors: 0</data>
+        <variation name="ImportProductsVariation4" ticketId="MAGETWO-46159" summary="Replace product in two websites">
             <data name="createStore" xsi:type="boolean">true</data>
             <data name="import/data" xsi:type="array">
                 <item name="entity" xsi:type="string">Advanced Pricing</item>
@@ -93,17 +83,15 @@
                 <item name="import_field_separator" xsi:type="string">,</item>
                 <item name="import_multiple_value_separator" xsi:type="string">,</item>
                 <item name="import_file" xsi:type="array">
-                    <item name="products" xsi:type="array">
+                    <item name="entities" xsi:type="array">
                         <item name="0" xsi:type="string">catalogProductSimple::default_in_custom_website</item>
                     </item>
                     <item name="template" xsi:type="array">
-                        <item name="filename"
-                              xsi:type="string">Magento/AdvancedPricingImportExport/Test/_files/template/pricing/advanced_price_variation_4</item>
+                        <item name="filename" xsi:type="string">Magento/AdvancedPricingImportExport/Test/_files/template/pricing/advanced_price_variation_4</item>
                         <item name="count" xsi:type="number">2</item>
                     </item>
                 </item>
             </data>
-            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricingCheckData" />
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportSuccessMessage" />
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
         </variation>

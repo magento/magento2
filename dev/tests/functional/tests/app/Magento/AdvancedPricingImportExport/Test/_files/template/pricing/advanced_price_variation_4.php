@@ -5,9 +5,9 @@
  */
 
 return [
-    'product_0' =>
+    'entity_0' =>
         [
-            'tier_price_0' =>
+            'data_0' =>
                 [
                     'sku' => '%sku%',
                     'tier_price_website' => '%code%',
@@ -16,7 +16,7 @@ return [
                     'tier_price' => '5.00',
                     'tier_price_value_type' => 'Fixed',
                 ],
-            'tier_price_1' =>
+            'data_1' =>
                 [
                     'sku' => '%sku%',
                     'tier_price_website' => 'base',

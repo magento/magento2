@@ -27,8 +27,7 @@ class AssertImportSuccessMessage extends AbstractConstraint
      */
     public function processAssert(AdminImportIndex $adminImportIndex)
     {
-        $adminImportIndex->getImportResult()->clickImportButton();
-        $validationMessage = $adminImportIndex->getImportResult()->getImportResultMessage();
+        $validationMessage = $adminImportIndex->getMessagesBlock()->getImportResultMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $validationMessage,

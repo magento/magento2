@@ -30,18 +30,11 @@ class OptionTier extends AbstractOptions
     protected $customerGroup = '//*[contains(@name, "[cust_group]")]';
 
     /**
-     * Locator for Customer Group Price Rows element.
+     * Locator for Products Tier Price Rows.
      *
      * @var string
      */
     private $tierPriceRows = ".//*[@data-index='tier_price']/tbody/tr";
-
-    /**
-     * Locator for value type of tier price element.
-     *
-     * @var string
-     */
-    private $valueTypePrice = "[name$='[value_type]']";
 
     /**
      * Fill product form 'Tier price'.
@@ -81,7 +74,7 @@ class OptionTier extends AbstractOptions
     }
 
     /**
-     * Get data of the container.
+     * Get tier price rows data.
      *
      * @param array|null $fields
      * @param SimpleElement|null $element
@@ -95,7 +88,7 @@ class OptionTier extends AbstractOptions
         if (null !== $rows) {
             foreach ($rows as $row) {
                 $data = $this->dataMapping($fields);
-                if ($row->find($this->valueTypePrice)->getValue() == "fixed") {
+                if ($row->find($data['value_type']['selector'])->getValue() == "fixed") {
                     unset($data['percentage_value']);
                 }
                 $fieldsData[] = $this->_getData($data, $row);

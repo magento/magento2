@@ -46,11 +46,11 @@ class File extends DataSource
     private $fixtureFactory;
 
     /**
-     * Products fixtures.
+     * Entities fixtures.
      *
      * @var FixtureInterface[]
      */
-    private $products;
+    private $entities;
 
     /**
      * Object manager.
@@ -105,10 +105,10 @@ class File extends DataSource
 
         $placeholders = [];
         if (!isset($this->products)
-            && isset($this->value['products'])
-            && is_array($this->value['products'])
+            && isset($this->value['entities'])
+            && is_array($this->value['entities'])
         ) {
-            $this->products = $this->createProducts();
+            $this->entities = $this->createEntities();
 
             $placeholders = $this->getPlaceHolders();
         }
@@ -142,13 +142,23 @@ class File extends DataSource
     }
 
     /**
-     * Get products fixtures.
+     * Get entities fixtures.
      *
      * @return FixtureInterface[]
      */
-    public function getProducts()
+    public function getEntities()
     {
-        return $this->products ?: [];
+        return $this->entities ?: [];
+    }
+
+    /**
+     * Get fixture data.
+     *
+     * @return array|null
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 
     /**
@@ -156,20 +166,20 @@ class File extends DataSource
      *
      * @return FixtureInterface[]
      */
-    private function createProducts()
+    private function createEntities()
     {
-        $products = [];
-        foreach ($this->value['products'] as $key => $productDataSet) {
+        $entities = [];
+        foreach ($this->value['entities'] as $key => $productDataSet) {
             list($fixtureCode, $dataset) = explode('::', $productDataSet);
 
             /** @var FixtureInterface[] $products */
-            $products[$key] = $this->fixtureFactory->createByCode(trim($fixtureCode), ['dataset' => trim($dataset)]);
-            if ($products[$key]->hasData('id') === false) {
-                $products[$key]->persist();
+            $entities[$key] = $this->fixtureFactory->createByCode(trim($fixtureCode), ['dataset' => trim($dataset)]);
+            if ($entities[$key]->hasData('id') === false) {
+                $entities[$key]->persist();
             }
         }
 
-        return $products;
+        return $entities;
     }
 
     /**
@@ -180,16 +190,16 @@ class File extends DataSource
     private function getPlaceHolders()
     {
         $key = 0;
-        foreach ($this->products as $product) {
-            $productData = $product->getData();
-            $productData['code'] = $product->getDataFieldConfig('website_ids')['source']->getWebsites()[0]->getCode();
-            foreach ($this->csvTemplate['product_' . $key] as $tierKey => $tier) {
+        foreach ($this->entities as $entity) {
+            $entityData = $entity->getData();
+            $entityData['code'] = $entity->getDataFieldConfig('website_ids')['source']->getWebsites()[0]->getCode();
+            foreach ($this->csvTemplate['entity_' . $key] as $tierKey => $tier) {
                 $values = implode('', array_values($tier));
                 preg_match_all('/\%(.*)\%/U', $values, $indexes);
 
                 foreach ($indexes[1] as $index) {
-                    if (isset($productData[$index])) {
-                        $placeholders['product_' . $key][$tierKey]["%{$index}%"] = $productData[$index];
+                    if (isset($entityData[$index])) {
+                        $placeholders['entity_' . $key][$tierKey]["%{$index}%"] = $entityData[$index];
                     }
                 }
 

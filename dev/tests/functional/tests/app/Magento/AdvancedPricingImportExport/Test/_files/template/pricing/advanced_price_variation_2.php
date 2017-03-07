@@ -5,9 +5,9 @@
  */
 
 return [
-    'product_0' =>
+    'entity_0' =>
         [
-            'tier_price_0' =>
+            'data_0' =>
                 [
                     'sku' => '%sku%',
                     'tier_price_website' => "All Websites [USD]",

@@ -1230,7 +1230,7 @@
             </field>
         </dataset>
 
-        <dataset name="simple_with_one_tier_price">
+        <dataset name="simple_with_one_fixed_tier_price">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
