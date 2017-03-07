@@ -143,7 +143,7 @@ class Importer
             }
         } catch (\Exception $exception) {
             $this->logger->error($exception);
-            throw new RuntimeException(__('Import is failed. Please see the log report.'), $exception);
+            throw new RuntimeException(__('Import is failed: %1', $exception->getMessage()), $exception);
         }
     }
 }

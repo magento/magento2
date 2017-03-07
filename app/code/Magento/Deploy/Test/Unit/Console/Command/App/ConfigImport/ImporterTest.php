@@ -7,7 +7,6 @@ namespace Magento\Deploy\Test\Unit\Console\Command\App\ConfigImport;
 
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
 use Magento\Deploy\Model\DeploymentConfig\Validator;
@@ -58,9 +57,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
      */
     private $importer;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->importerFactoryMock = $this->getMockBuilder(ImporterFactory::class)
@@ -94,9 +90,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testImport()
     {
         $configData = ['some data'];
@@ -141,13 +134,12 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Import is failed. Please see the log report.
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Import is failed: Some error
      */
     public function testImportWithException()
     {
-        $exception = new LocalizedException(__('Some error'));
+        $exception = new \Exception('Some error');
         $this->outputMock->expects($this->never())
             ->method('writeln');
         $this->configHashMock->expects($this->never())
@@ -169,7 +161,6 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $importers
      * @param bool $isValid
-     * @return void
      * @dataProvider importNothingToImportDataProvider
      */
     public function testImportNothingToImport(array $importers, $isValid)
