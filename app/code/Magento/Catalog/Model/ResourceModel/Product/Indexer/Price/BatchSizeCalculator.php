@@ -33,7 +33,7 @@ class BatchSizeCalculator
      * Composite object for batch size calculators
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param $indexerTypeId
+     * @param string $indexerTypeId
      * @return int
      */
     public function estimateBatchSize(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $indexerTypeId)
