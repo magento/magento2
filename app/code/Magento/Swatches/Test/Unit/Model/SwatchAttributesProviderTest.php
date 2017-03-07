@@ -16,7 +16,7 @@ class SwatchAttributesProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SwatchAttributesProvider
      */
-    private $swatchAttributesProvider;
+    protected $swatchAttributesProvider;
 
     /**
      * @var Configurable

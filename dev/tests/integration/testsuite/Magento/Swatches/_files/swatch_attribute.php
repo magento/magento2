@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 
 /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
@@ -63,7 +67,7 @@ foreach ($data['options']['option'] as $optionData) {
 
 $attribute = $objectManager->create(
     \Magento\Catalog\Api\Data\ProductAttributeInterface::class,
-    ['data' => $data])
-    ;
+    ['data' => $data]
+    );
 $attribute->setOptions($options);
 $attribute->save();
