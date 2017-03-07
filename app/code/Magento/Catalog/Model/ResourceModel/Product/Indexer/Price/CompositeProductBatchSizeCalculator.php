@@ -63,9 +63,15 @@ class CompositeProductBatchSizeCalculator implements \Magento\Framework\Indexer\
      */
     private function calculateMemorySize(\Magento\Framework\DB\Adapter\AdapterInterface $connection)
     {
+        $websitesCount = $this->websiteManagement->getCount();
+
+        /** @var \Magento\Customer\Model\ResourceModel\Group\Collection $collection */
+        $collection = $this->collectionFactory->create();
+        $customerGroupCount = $collection->getSize();
+
         $relationSelect = $connection->select();
         $relationSelect->from(
-            ['relation' => $connection->getTableName('catalog_product_relation')],
+            ['relation' => $collection->getResource()->getTable('catalog_product_relation')],
             ['count' => new \Zend_Db_Expr('count(relation.child_id)')]
         );
         $relationSelect->group('parent_id');
@@ -75,13 +81,7 @@ class CompositeProductBatchSizeCalculator implements \Magento\Framework\Indexer\
             ['max_value' => $relationSelect],
             ['count' => new \Zend_Db_Expr('MAX(count)')]
         );
-
         $maxRelatedProductCount = $connection->fetchOne($maxSelect);
-        $websitesCount = $this->websiteManagement->getCount();
-
-        /** @var \Magento\Customer\Model\ResourceModel\Group\Collection $collection */
-        $collection = $this->collectionFactory->create();
-        $customerGroupCount = $collection->getSize();
 
         /**
          * Calculate memory size for largest composite product in database.
