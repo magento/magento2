@@ -111,10 +111,6 @@ class Importer implements ImporterInterface
         $this->flagResource->load($flag, static::FLAG_CODE, 'flag_code');
         $currentData = $flag->getFlagData() ?: [];
 
-        if ($data === $currentData) {
-            return [];
-        }
-
         $changedData = array_replace_recursive(
             $this->arrayUtils->recursiveDiff($currentData, $data),
             $this->arrayUtils->recursiveDiff($data, $currentData)
