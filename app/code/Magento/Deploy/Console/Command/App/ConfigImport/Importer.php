@@ -137,7 +137,7 @@ class Importer
                     continue;
                 }
 
-                $messages = $importer->import($this->deploymentConfig->getConfigData($section));
+                $messages = $importer->import((array)$this->deploymentConfig->getConfigData($section));
                 $output->writeln($messages);
                 $this->configHash->regenerate($section);
             }
