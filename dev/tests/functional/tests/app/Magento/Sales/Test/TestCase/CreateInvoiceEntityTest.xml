@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CreateInvoiceEntityTest" summary="Create Invoice for Offline Payment Methods" ticketId="MAGETWO-28209">
         <variation name="CreateInvoiceEntityTestVariation1">
+            <data name="issue" xsi:type="string">MAGETWO-65405: [FT] Magento\Sales\Test\TestCase\CreateInvoiceEntityTest fails on Jenkins</data>
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/price/dataset" xsi:type="string">full_invoice</data>
             <data name="order/data/total_qty_ordered/0" xsi:type="string">1</data>
