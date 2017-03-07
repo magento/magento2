@@ -8,6 +8,7 @@ namespace Magento\Deploy\Console\Command\App;
 use Magento\Framework\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
@@ -25,6 +26,11 @@ class ConfigImportCommand extends Command
      * Command name.
      */
     const COMMAND_NAME = 'app:config:import';
+
+    /**
+     * Input option name.
+     */
+    const INPUT_OPTION_FORCE = 'force';
 
     /**
      * Configuration importer.
@@ -51,6 +57,13 @@ class ConfigImportCommand extends Command
         $this->setName(self::COMMAND_NAME)
             ->setDescription('Import data from shared configuration files to appropriate data storage');
 
+        $this->addOption(
+            self::INPUT_OPTION_FORCE,
+            'f',
+            InputOption::VALUE_NONE,
+            'Run import process without any confirmations'
+        );
+
         parent::configure();
     }
 
@@ -61,7 +74,7 @@ class ConfigImportCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $this->importer->import($output);
+            $this->importer->import($input, $output);
         } catch (RuntimeException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 

@@ -5,6 +5,7 @@
  */
 namespace Magento\Deploy\Console\Command\App\ConfigImport;
 
+use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\RuntimeException;
@@ -12,6 +13,7 @@ use Psr\Log\LoggerInterface as Logger;
 use Magento\Deploy\Model\DeploymentConfig\Validator;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
 
@@ -63,12 +65,20 @@ class Importer
     private $logger;
 
     /**
+     * Asks questions in interactive mode of cli commands.
+     *
+     * @var QuestionPerformer
+     */
+    private $questionPerformer;
+
+    /**
      * @param Validator $configValidator the manager of deployment configuration hash
      * @param ImporterPool $configImporterPool the pool of all deployment configuration importers
      * @param ImporterFactory $importerFactory the factory for creation of importer instance
      * @param DeploymentConfig $deploymentConfig the application deployment configuration
      * @param Hash $configHash the hash updater of config data
      * @param Logger $logger the logger
+     * @param QuestionPerformer $questionPerformer The question performer for cli command
      */
     public function __construct(
         Validator $configValidator,
@@ -76,7 +86,8 @@ class Importer
         ImporterFactory $importerFactory,
         DeploymentConfig $deploymentConfig,
         Hash $configHash,
-        Logger $logger
+        Logger $logger,
+        QuestionPerformer $questionPerformer
     ) {
         $this->configValidator = $configValidator;
         $this->configImporterPool = $configImporterPool;
@@ -84,16 +95,18 @@ class Importer
         $this->deploymentConfig = $deploymentConfig;
         $this->configHash = $configHash;
         $this->logger = $logger;
+        $this->questionPerformer = $questionPerformer;
     }
 
     /**
      * Runs importing of config data from deployment configuration files.
      *
-     * @param OutputInterface $output the CLI output
+     * @param OutputInterface $output The CLI output
+     * @param InputInterface $input The CLI input
      * @return void
      * @throws RuntimeException is thrown when import has failed
      */
-    public function import(OutputInterface $output)
+    public function import(InputInterface $input, OutputInterface $output)
     {
         try {
             $importers = $this->configImporterPool->getImporters();
@@ -109,13 +122,24 @@ class Importer
              * @var string $importerClassName
              */
             foreach ($importers as $section => $importerClassName) {
-                if (!$this->configValidator->isValid($section)) {
-                    /** @var ImporterInterface $importer */
-                    $importer = $this->importerFactory->create($importerClassName);
-                    $messages = $importer->import((array) $this->deploymentConfig->getConfigData($section));
-                    $output->writeln($messages);
-                    $this->configHash->regenerate($section);
+                if ($this->configValidator->isValid($section)) {
+                    continue;
                 }
+
+                /** @var ImporterInterface $importer */
+                $importer = $this->importerFactory->create($importerClassName);
+
+                if (
+                    !$input->getOption(ConfigImportCommand::INPUT_OPTION_FORCE)
+                    && !empty($warnings = $importer->getWarningMessages())
+                    && !$this->questionPerformer->execute($warnings, $input, $output)
+                ) {
+                    continue;
+                }
+
+                $messages = $importer->import($this->deploymentConfig->getConfigData($section));
+                $output->writeln($messages);
+                $this->configHash->regenerate($section);
             }
         } catch (\Exception $exception) {
             $this->logger->error($exception);
