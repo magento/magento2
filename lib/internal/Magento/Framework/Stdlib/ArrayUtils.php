@@ -170,4 +170,35 @@ class ArrayUtils
 
         return $result;
     }
+
+    /**
+     * Search for array differences recursively.
+     *
+     * @param array $array1 The first array
+     * @param array $array2 The second array
+     * @return array Diff array
+     */
+    public function recursiveDiff(array $array1, array $array2)
+    {
+        $diff = [];
+
+        foreach ($array1 as $key => $value) {
+            if (array_key_exists($key, $array2)) {
+                if (is_array($value)) {
+                    $aRecursiveDiff = $this->recursiveDiff($value, $array2[$key]);
+                    if (count($aRecursiveDiff)) {
+                        $diff[$key] = $aRecursiveDiff;
+                    }
+                } else {
+                    if ($value != $array2[$key]) {
+                        $diff[$key] = $value;
+                    }
+                }
+            } else {
+                $diff[$key] = $value;
+            }
+        }
+
+        return $diff;
+    }
 }

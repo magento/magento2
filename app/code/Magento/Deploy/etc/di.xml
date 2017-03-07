@@ -47,11 +47,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Deploy\Model\DeploymentConfig\ImporterPool">
-        <arguments>
-            <argument name="importers" xsi:type="array">
-                <item name="system" xsi:type="string">Magento\Deploy\Model\Config\Importer</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

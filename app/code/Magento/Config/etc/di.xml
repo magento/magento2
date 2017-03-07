@@ -228,4 +228,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Deploy\Model\DeploymentConfig\ImporterPool">
+        <arguments>
+            <argument name="importers" xsi:type="array">
+                <item name="system" xsi:type="string">Magento\Config\Model\Config\Importer</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
