@@ -11,8 +11,8 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
 
 /**
- * Class SalableProcessor
- * Add is_in_stock filter to products collection and cashes it
+ * This class is responsible for adding additional filters for products collection
+ * to check if the product from this collection available to buy.
  */
 class SalableProcessor
 {
@@ -30,6 +30,11 @@ class SalableProcessor
     }
 
     /**
+     * Adds filtering collection by attribute status to filter only enabled products from product collection.
+     * Joins stock status index table to filter only in stock products.
+     *
+     * Adds is_in_stock filter to products collection and cashes it.
+     *
      * @param Collection $collection
      * @return Collection
      */
