@@ -111,7 +111,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $checkoutModel = $this->_objectManager->create(
+        $checkoutModel = $this->objectManager->create(
             Checkout::class,
             [
                 'params' => ['quote' => $quote, 'config' => $paypalConfig],
@@ -418,7 +418,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['importToPayment'])
             ->getMock();
 
-        $checkoutModel = $this->_objectManager->create(
+        $checkoutModel = $this->objectManager->create(
             Checkout::class,
             [
                 'params' => ['quote' => $quote, 'config' => $paypalConfig],
@@ -491,8 +491,8 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getFixtureQuote()
     {
-        /** @var \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection */
-        $quoteCollection = $this->objectManager->create(\Magento\Quote\Model\ResourceModel\Quote\Collection::class);
+        /** @var Collection $quoteCollection */
+        $quoteCollection = $this->objectManager->create(Collection::class);
 
         return $quoteCollection->getLastItem();
     }
