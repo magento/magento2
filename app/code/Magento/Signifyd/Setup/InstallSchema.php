@@ -92,5 +92,15 @@ class InstallSchema implements InstallSchemaInterface
         );
 
         $connection->createTable($table);
+
+        $connection->addColumn(
+            $setup->getTable('sales_order_grid'),
+            'signifyd_guarantee_status',
+            [
+                'type' => Table::TYPE_TEXT,
+                'length' => 32,
+                'comment' => 'Signifyd Guarantee Disposition Status'
+            ]
+        );
     }
 }
