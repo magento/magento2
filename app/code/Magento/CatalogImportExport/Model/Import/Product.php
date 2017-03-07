@@ -406,11 +406,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     ];
 
     /**
-     * Column names that holds images files names
+     * Column names that holds images files names.
+     *
+     * Note: the order of array items has a value in order to properly set 'position' value
+     * of media gallery items.
      *
      * @var string[]
      */
-    protected $_imagesArrayKeys = ['_media_image', 'image', 'small_image', 'thumbnail', 'swatch_image'];
+    protected $_imagesArrayKeys = ['image', 'small_image', 'thumbnail', 'swatch_image', '_media_image'];
 
     /**
      * Permanent entity columns.
@@ -1605,8 +1608,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     );
                 }
                 $rowData[self::COL_MEDIA_IMAGE] = [];
+                /*
+                 * Note: to avoid problems with undefined sorting, the value of media gallery items positions
+                 * must be unique in scope of one product.
+                 */
+                $position = 0;
                 foreach ($rowImages as $column => $columnImages) {
-                    foreach ($columnImages as $position => $columnImage) {
+                    foreach ($columnImages as $columnImageKey => $columnImage) {
                         if (!isset($uploadedImages[$columnImage])) {
                             $uploadedFile = $this->uploadMediaFiles(trim($columnImage), true);
                             if ($uploadedFile) {
@@ -1634,10 +1642,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             if ($column == self::COL_MEDIA_IMAGE) {
                                 $rowData[$column][] = $uploadedFile;
                             }
+                            $label = isset($rowLabels[$column][$columnImageKey]) ?
+                                $rowLabels[$column][$columnImageKey] : '';
                             $mediaGallery[$rowSku][] = [
                                 'attribute_id' => $this->getMediaGalleryAttributeId(),
-                                'label' => isset($rowLabels[$column][$position]) ? $rowLabels[$column][$position] : '',
-                                'position' => $position + 1,
+                                'label' => $label,
+                                'position' => ++$position,
                                 'disabled' => isset($disabledImages[$columnImage]) ? '1' : '0',
                                 'value' => $uploadedFile,
                             ];
