@@ -101,8 +101,8 @@ class Importer
     /**
      * Runs importing of config data from deployment configuration files.
      *
-     * @param OutputInterface $output The CLI output
      * @param InputInterface $input The CLI input
+     * @param OutputInterface $output The CLI output
      * @return void
      * @throws RuntimeException is thrown when import has failed
      */
