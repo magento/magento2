@@ -240,6 +240,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             'angle' => null,
             'quality' => 80,
         ];
+        $url = 'http://magento.com/media/catalog/product/cache//beff4985b56e3afdbeabfc89641a4582/somefile.png';
         $this->paramsBuilder->expects(self::once())
             ->method('build')
             ->willReturn($miscParams);
@@ -248,8 +249,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/somefile.png';
         $this->mediaDirectory->expects($this->any())->method('getAbsolutePath')
             ->will($this->returnValue($absolutePath));
-        $this->imageAsset->method('getUrl')
-            ->willReturn('http://magento.com/media/catalog/product/cache//beff4985b56e3afdbeabfc89641a4582/somefile.png');
+        $this->imageAsset->method('getUrl')->willReturn($url);
         $this->viewAssetImageFactory->expects($this->any())
             ->method('create')
             ->with(
