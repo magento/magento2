@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Magento_SampleData" setup_version="2.0.0">
+        <sequence>
+            <module name="Magento_UrlRewrite"/>
+        </sequence>
     </module>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -563,7 +563,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
             }
         }
 
-        if (sizeof($attributesData) == 1) {
+        if (is_array($attributesData) && sizeof($attributesData) == 1) {
             $_data = each($attributesData);
             $attributesData = $_data[1];
         }

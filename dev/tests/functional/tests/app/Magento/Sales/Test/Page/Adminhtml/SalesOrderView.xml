@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -13,7 +13,6 @@
         <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper" strategy="css selector" />
         <block name="itemsOrderedBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\View\Items" locator="#sales_order_view_tabs_order_info_content .edit-order-table" strategy="css selector" />
         <block name="orderTotalsBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Totals" locator=".order-totals" strategy="css selector" />
-        <block name="orderHistoryBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\History" locator=".order-comments-history" strategy="css selector" />
         <block name="informationBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\View\Info" locator=".order-account-information" strategy="css selector" />
         <block name="orderInfoBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info" locator="[data-ui-id='sales-order-tabs-tab-content-order-info']" strategy="css selector" />
         <block name="orderInvoiceGrid" class="Magento\Sales\Test\Block\Adminhtml\Invoice\Grid" locator="//div[contains(@data-bind, 'sales_order_view_invoice_grid.sales_order_view_invoice_grid')]" strategy="xpath" />

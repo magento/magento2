@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,7 +13,7 @@
         <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
         <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
         <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
-        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress"/>
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
         <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
         <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod" />
         <step name="selectPaymentMethod" module="Magento_Checkout" next="continueToPaypalInContext" />
@@ -59,7 +59,7 @@
         <step name="selectPaymentMethod" module="Magento_Checkout" next="continueToPaypal" />
         <step name="continueToPaypal" module="Magento_Paypal" next="continuePaypalCheckout" />
         <step name="continuePaypalCheckout" module="Magento_Paypal" next="getPlacedOrderId" />
-        <step name="getPlacedOrderId" module="Magento_Paypal" />
+        <step name="getPlacedOrderId" module="Magento_Checkout" />
     </scenario>
     <scenario name="ConflictResolutionTest" firstStep="checkExpressConfig">
         <step name="checkExpressConfig" module="Magento_Paypal" next="checkBraintreeConfig" />
@@ -84,5 +84,59 @@
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="saveCreditCardOnBackend" />
         <step name="saveCreditCardOnBackend" module="Magento_Vault" next="submitOrderNegative" />
         <step name="submitOrderNegative" module="Magento_Sales" />
+    </scenario>
+    <scenario name="OnePageCheckoutHostedProTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="placeOrderWithHostedPro" />
+        <step name="placeOrderWithHostedPro" module="Magento_Paypal" next="getPlacedOrderId" />
+        <step name="getPlacedOrderId" module="Magento_Checkout" />
+    </scenario>
+    <scenario name="CloseSalesWithHostedProTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress"/>
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="placeOrderWithHostedPro" />
+        <step name="placeOrderWithHostedPro" module="Magento_Paypal" next="getPlacedOrderId" />
+        <step name="getPlacedOrderId" module="Magento_Checkout" next="createInvoice" />
+        <step name="createInvoice" module="Magento_Sales" next="createShipment" />
+        <step name="createShipment" module="Magento_Sales" />
+    </scenario>
+    <scenario name="OnePageCheckoutPaymentsAdvancedTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="placeOrderWithPaymentsAdvanced" />
+        <step name="placeOrderWithPaymentsAdvanced" module="Magento_Paypal" next="getPlacedOrderId" />
+        <step name="getPlacedOrderId" module="Magento_Checkout" />
+    </scenario>
+    <scenario name="OnePageCheckoutPayflowLinkTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout" />
+        <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod" />
+        <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillShippingAddress" />
+        <step name="fillShippingAddress" module="Magento_Checkout" next="fillShippingMethod" />
+        <step name="fillShippingMethod" module="Magento_Checkout" next="placeOrderWithPayflowLink" />
+        <step name="placeOrderWithPayflowLink" module="Magento_Paypal" next="getPlacedOrderId" />
+        <step name="getPlacedOrderId" module="Magento_Checkout" />
     </scenario>
 </config>

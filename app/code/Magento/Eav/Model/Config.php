@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
@@ -93,6 +93,11 @@ class Config
      * @var \Magento\Framework\Validator\UniversalFactory
      */
     protected $_universalFactory;
+
+    /**
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
+     */
+    private $attributeProto = [];
 
     /**
      * @var SerializerInterface
@@ -454,8 +459,8 @@ class Config
         if (!$attribute) {
             // TODO: refactor wrong method usage in: addAttributeToSelect, joinAttribute
             $entityType = $this->getEntityType($entityType);
-            /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-            $attribute = $this->_universalFactory->create($entityType->getAttributeModel());
+            $attribute = $this->createAttribute($entityType->getAttributeModel());
+
             $attribute->setAttributeCode($code);
             $entity = $entityType->getEntity();
             if ($entity && in_array($attribute->getAttributeCode(), $entity->getDefaultAttributes())) {
@@ -471,6 +476,21 @@ class Config
         }
         \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
         return $attribute;
+    }
+
+    /**
+     * Create attribute from prototype
+     *
+     * @param string $model
+     * @return Entity\Attribute\AbstractAttribute
+     */
+    private function createAttribute($model)
+    {
+        if (!isset($this->attributeProto[$model])) {
+            /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+            $this->attributeProto[$model] = $this->_universalFactory->create($model);
+        }
+        return clone $this->attributeProto[$model];
     }
 
     /**
@@ -565,7 +585,7 @@ class Config
             $model = $entityType->getAttributeModel();
         }
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-        $attribute = $this->_universalFactory->create($model)->setData($attributeData);
+        $attribute = $this->createAttribute($model)->setData($attributeData);
         $this->_addAttributeReference(
             $attributeData['attribute_id'],
             $attributeData['attribute_code'],

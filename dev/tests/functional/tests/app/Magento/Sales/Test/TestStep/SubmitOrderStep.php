@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,21 +61,20 @@ class SubmitOrderStep implements TestStepInterface
     private $products;
 
     /**
-     * @constructor
      * @param OrderCreateIndex $orderCreateIndex
      * @param SalesOrderView $salesOrderView
      * @param FixtureFactory $fixtureFactory
      * @param Customer $customer
-     * @param Address $billingAddress
      * @param \Magento\Mtf\Fixture\FixtureInterface[] $products
+     * @param Address|null $billingAddress
      */
     public function __construct(
         OrderCreateIndex $orderCreateIndex,
         SalesOrderView $salesOrderView,
         FixtureFactory $fixtureFactory,
         Customer $customer,
-        Address $billingAddress,
-        array $products
+        array $products,
+        Address $billingAddress = null
     ) {
         $this->orderCreateIndex = $orderCreateIndex;
         $this->salesOrderView = $salesOrderView;

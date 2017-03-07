@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="analytics" translate="label" type="text" sortOrder="1150" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Business Intelligence</label>
+            <tab>general</tab>
+            <resource>Magento_Analytics::analytics_settings</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>General</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Send the system and transaction data to Magento Analytics service</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <backend_model>Magento\Analytics\Model\Config\Backend\Enabled</backend_model>
+                    <config_path>analytics/subscription/enabled</config_path>
+                </field>
+                <field id="label" type="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\SubscriptionStatusLabel</frontend_model>
+                </field>
+                <field id="vertical" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Vertical</label>
+                    <source_model>Magento\Analytics\Model\Config\Source\Vertical</source_model>
+                    <backend_model>Magento\Analytics\Model\Config\Backend\Vertical</backend_model>
+                </field>
+                <group id="cron" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Cron configuration</label>
+                    <field id="collection_time" translate="label" type="time" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Time</label>
+                        <backend_model>Magento\Analytics\Model\Config\Backend\CollectionTime</backend_model>
+                    </field>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

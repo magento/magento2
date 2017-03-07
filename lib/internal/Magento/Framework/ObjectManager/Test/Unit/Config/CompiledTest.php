@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
@@ -21,17 +21,23 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
      */
     private $serializerMock;
 
+    /**
+     * @var \Magento\Framework\ObjectManager\Config\Compiled
+     */
+    private $compiled;
+
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->serializerMock = $this->getMock(SerializerInterface::class);
-    }
 
-    public function testExtend()
-    {
         $initialData = [
             'arguments' => [
-                'type1' => 'initial serialized configuration for type1'
+                'type1' => 'initial serialized configuration for type1',
+                'class_with_no_arguments_serialized' => null,
+                'class_with_arguments_serialized' => 'serialized arguments',
+                'class_with_arguments_unserialized' => ['unserialized', 'arguments'],
+                'class_with_no_arguments_unserialized' => [],
             ],
             'instanceTypes' => [
                 'instanceType1' => 'instanceTypeValue1',
@@ -42,6 +48,19 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                 'preference2' => 'preferenceValue2'
             ]
         ];
+
+        $this->compiled = $this->objectManager->getObject(
+            Compiled::class,
+            [
+                'data' => $initialData,
+                'serializer' => $this->serializerMock
+            ]
+        );
+    }
+
+    public function testExtend()
+    {
+
         $configuration = [
             'arguments' => [
                 'type1' => 'serialized configuration for type1',
@@ -72,6 +91,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             'preference1' => 'newPreferenceValue1',
             'preference2' => 'preferenceValue2'
         ];
+
         $this->serializerMock->expects($this->at(0))
             ->method('unserialize')
             ->with($configuration['arguments']['type1'])
@@ -80,18 +100,65 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             ->method('unserialize')
             ->with($configuration['arguments']['type2'])
             ->willReturn($expectedArguments['type2']);
-        $compiled = $this->objectManager->getObject(
-            Compiled::class,
-            [
-                'data' => $initialData,
-                'serializer' => $this->serializerMock
-            ]
-        );
-        $compiled->extend($configuration);
+
+        $this->compiled->extend($configuration);
         foreach ($expectedArguments as $type => $arguments) {
-            $this->assertEquals($arguments, $compiled->getArguments($type));
+            $this->assertEquals($arguments, $this->compiled->getArguments($type));
         }
-        $this->assertEquals($expectedVirtualTypes, $compiled->getVirtualTypes());
-        $this->assertEquals($expectedPreferences, $compiled->getPreferences());
+        $this->assertEquals($expectedVirtualTypes, $this->compiled->getVirtualTypes());
+        $this->assertEquals($expectedPreferences, $this->compiled->getPreferences());
+    }
+
+    /**
+     * Arguments defined in array, have not previously been unserialized
+     */
+    public function testGetArgumentsSerialized()
+    {
+        $unserializedArguments = ['unserialized', 'arguments'];
+
+        // method called twice but after one unserialization, unserialized version should be stored
+        $this->serializerMock->expects($this->once())->method('unserialize')
+            ->with('serialized arguments')
+            ->willReturn($unserializedArguments);
+
+        $this->assertSame($unserializedArguments, $this->compiled->getArguments('class_with_arguments_serialized'));
+        $this->assertSame($unserializedArguments, $this->compiled->getArguments('class_with_arguments_serialized'));
+    }
+
+    /**
+     * Arguments defined in array, have not previously been unserialized
+     */
+    public function testGetArgumentsSerializedEmpty()
+    {
+        $this->serializerMock->expects($this->never())->method('unserialize');
+        $this->assertSame([], $this->compiled->getArguments('class_with_no_arguments_serialized'));
+    }
+
+    /**
+     * Arguments defined in array, have previously been unserialized
+     */
+    public function testGetArgumentsUnserialized()
+    {
+        $unserializedArguments = ['unserialized', 'arguments'];
+        $this->serializerMock->expects($this->never())->method('unserialize');
+        $this->assertSame($unserializedArguments, $this->compiled->getArguments('class_with_arguments_unserialized'));
+    }
+
+    /**
+     * Arguments are defined but empty
+     */
+    public function testGetArgumentsUnserializedEmpty()
+    {
+        $this->serializerMock->expects($this->never())->method('unserialize');
+        $this->assertSame([], $this->compiled->getArguments('class_with_no_arguments_unserialized'));
+    }
+
+    /**
+     * Arguments not defined in array
+     */
+    public function testGetArgumentsNotDefined()
+    {
+        $this->serializerMock->expects($this->never())->method('unserialize');
+        $this->assertSame(null, $this->compiled->getArguments('class_not_stored_in_config'));
     }
 }

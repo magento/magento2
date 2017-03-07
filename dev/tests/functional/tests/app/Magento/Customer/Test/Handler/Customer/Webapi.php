@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,6 +44,35 @@ class Webapi extends AbstractWebapi implements CustomerInterface
     ];
 
     /**
+     * Attributes that has a setter while creating customer using web api.
+     *
+     * @var array
+     */
+    protected $basicAttributes = [
+        'id',
+        'confirmation',
+        'created_at',
+        'updated_at',
+        'created_in',
+        'dob',
+        'email',
+        'firstname',
+        'gender',
+        'group_id',
+        'lastname',
+        'middlename',
+        'prefix',
+        'store_id',
+        'suffix',
+        'taxvat',
+        'website_id',
+        'default_billing',
+        'default_shipping',
+        'addresses',
+        'disable_auto_group_change',
+    ];
+
+    /**
      * Create customer via Web API.
      *
      * @param FixtureInterface|null $customer
@@ -79,10 +108,13 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         $data['customer'] = $this->replaceMappingData($customer->getData());
         $data['customer']['group_id'] = $this->getCustomerGroup($customer);
         $data['password'] = $data['customer']['password'];
+        if ($customer->hasData('website_id')) {
+            $data['customer']['website_id'] = $this->getCustomerWebsite($customer);
+        }
         unset($data['customer']['password']);
         unset($data['customer']['password_confirmation']);
         $data = $this->prepareAddressData($data);
-
+        $data = $this->prepareExtensionAttributes($data);
         return $data;
     }
 
@@ -181,5 +213,34 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         }
 
         return $addressData;
+    }
+
+    /**
+     * Prepare customer website data.
+     *
+     * @param Customer $customer
+     * @return int
+     */
+    private function getCustomerWebsite(Customer $customer)
+    {
+        return $customer->getDataFieldConfig('website_id')['source']->getWebsite()->getWebsiteId();
+    }
+
+    /**
+     * Prepare extension attributes for the customer.
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function prepareExtensionAttributes($data)
+    {
+        foreach ($data['customer'] as $fieldName => $fieldValue) {
+            if (!in_array($fieldName, $this->basicAttributes)) {
+                $data['customer']['extension_attributes'][$fieldName] = $fieldValue;
+                unset($data['customer'][$fieldName]);
+            }
+        }
+
+        return $data;
     }
 }

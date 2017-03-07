@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,11 +33,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->addUniqueKeyToCategoryProductTable($setup);
         }
 
-        if (version_compare($context->getVersion(), '2.1.0', '<')) {
+        if (version_compare($context->getVersion(), '2.1.4', '<')) {
             $this->addPercentageValueColumn($setup);
-        }
-
-        if (version_compare($context->getVersion(), '2.1.1', '<')) {
             $tables = [
                 'catalog_product_index_price_cfg_opt_agr_idx',
                 'catalog_product_index_price_cfg_opt_agr_tmp',
@@ -59,10 +56,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ['type' => 'integer', 'nullable' => false]
                 );
             }
-        }
-
-        if (version_compare($context->getVersion(), '2.1.2', '<')) {
             $this->addSourceEntityIdToProductEavIndex($setup);
+            $this->recreateCatalogCategoryProductIndexTmpTable($setup);
         }
 
         $setup->endSetup();
@@ -89,25 +84,27 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $connection = $setup->getConnection();
         foreach ($tables as $tableName) {
             $tableName = $setup->getTable($tableName);
-            $connection->addColumn(
-                $tableName,
-                'source_id',
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                    'unsigned' => true,
-                    'nullable' => false,
-                    'default' => 0,
-                    'comment' => 'Original entity Id for attribute value',
-                ]
-            );
-            $connection->dropIndex($tableName, $connection->getPrimaryKeyName($tableName));
-            $primaryKeyFields = ['entity_id', 'attribute_id', 'store_id', 'value', 'source_id'];
-            $setup->getConnection()->addIndex(
-                $tableName,
-                $connection->getIndexName($tableName, $primaryKeyFields),
-                $primaryKeyFields,
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY
-            );
+            if (!$connection->tableColumnExists($tableName, 'source_id')) {
+                $connection->addColumn(
+                    $tableName,
+                    'source_id',
+                    [
+                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                        'unsigned' => true,
+                        'nullable' => false,
+                        'default' => 0,
+                        'comment' => 'Original entity Id for attribute value',
+                    ]
+                );
+                $connection->dropIndex($tableName, $connection->getPrimaryKeyName($tableName));
+                $primaryKeyFields = ['entity_id', 'attribute_id', 'store_id', 'value', 'source_id'];
+                $setup->getConnection()->addIndex(
+                    $tableName,
+                    $connection->getIndexName($tableName, $primaryKeyFields),
+                    $primaryKeyFields,
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY
+                );
+            }
         }
     }
 
@@ -363,16 +360,90 @@ class UpgradeSchema implements UpgradeSchemaInterface
     private function addPercentageValueColumn(SchemaSetupInterface $setup)
     {
         $connection = $setup->getConnection();
-        $connection->addColumn(
-            $setup->getTable('catalog_product_entity_tier_price'),
-            'percentage_value',
-            [
-                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-                'nullable' => true,
-                'length' => '5,2',
-                'comment' => 'Percentage value',
-                'after' => 'value'
-            ]
-        );
+        $tableName = $setup->getTable('catalog_product_entity_tier_price');
+
+        if (!$connection->tableColumnExists($tableName, 'percentage_value')) {
+            $connection->addColumn(
+                $tableName,
+                'percentage_value',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                    'nullable' => true,
+                    'length' => '5,2',
+                    'comment' => 'Percentage value',
+                    'after' => 'value'
+                ]
+            );
+        }
+    }
+
+    /**
+     * Drop and recreate catalog_category_product_index_tmp table
+     *
+     * Before this update the catalog_category_product_index_tmp table was created without usage of PK
+     * and with engine=MEMORY. Such structure of catalog_category_product_index_tmp table causes
+     * issues with MySQL DB replication.
+     *
+     * To avoid replication issues this method drops catalog_category_product_index_tmp table
+     * and creates new one with PK and engine=InnoDB
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function recreateCatalogCategoryProductIndexTmpTable(SchemaSetupInterface $setup)
+    {
+        $tableName = $setup->getTable('catalog_category_product_index_tmp');
+
+        // Drop catalog_category_product_index_tmp table
+        $setup->getConnection()->dropTable($tableName);
+
+        // Create catalog_category_product_index_tmp table with PK and engine=InnoDB
+        $table = $setup->getConnection()
+            ->newTable($tableName)
+            ->addColumn(
+                'category_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                'Category ID'
+            )
+            ->addColumn(
+                'product_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                'Product ID'
+            )
+            ->addColumn(
+                'position',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['nullable' => false, 'default' => '0'],
+                'Position'
+            )
+            ->addColumn(
+                'is_parent',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Is Parent'
+            )
+            ->addColumn(
+                'store_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'],
+                'Store ID'
+            )
+            ->addColumn(
+                'visibility',
+                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Visibility'
+            )
+            ->setComment('Catalog Category Product Indexer temporary table');
+
+        $setup->getConnection()->createTable($table);
     }
 }

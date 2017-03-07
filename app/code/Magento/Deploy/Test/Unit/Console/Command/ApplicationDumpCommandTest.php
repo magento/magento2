@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Test\Unit\Console\Command;
@@ -12,6 +12,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 
 /**
  * Test command for dump application state
@@ -39,12 +40,20 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
     private $source;
 
     /**
+     * @var Hash|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configHashMock;
+
+    /**
      * @var ApplicationDumpCommand
      */
     private $command;
 
     public function setUp()
     {
+        $this->configHashMock = $this->getMockBuilder(Hash::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->input = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
         $this->output = $this->getMockBuilder(OutputInterface::class)
@@ -56,10 +65,11 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->command = new ApplicationDumpCommand($this->writer, [[
-            'namespace' => 'system',
-            'source' => $this->source
-        ]]);
+        $this->command = new ApplicationDumpCommand(
+            $this->writer,
+            [['namespace' => 'system', 'source' => $this->source]],
+            $this->configHashMock
+        );
     }
 
     public function testExport()
@@ -68,6 +78,8 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
             'system' => ['systemDATA']
         ];
         $data = [ConfigFilePool::APP_CONFIG => $dump];
+        $this->configHashMock->expects($this->once())
+            ->method('regenerate');
         $this->source
             ->expects($this->once())
             ->method('get')

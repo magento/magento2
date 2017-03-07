@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@
 namespace Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product\Attribute\Backend\Price;
 use Magento\Customer\Api\GroupManagementInterface;
 
@@ -59,6 +60,7 @@ abstract class AbstractGroupPrice extends Price
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param GroupManagementInterface $groupManagement
+     * @param ScopeOverriddenValue|null $scopeOverriddenValue
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -67,11 +69,19 @@ abstract class AbstractGroupPrice extends Price
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_catalogProductType = $catalogProductType;
         $this->_groupManagement = $groupManagement;
-        parent::__construct($currencyFactory, $storeManager, $catalogData, $config, $localeFormat);
+        parent::__construct(
+            $currencyFactory,
+            $storeManager,
+            $catalogData,
+            $config,
+            $localeFormat,
+            $scopeOverriddenValue
+        );
     }
 
     /**

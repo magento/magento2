@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -1015,7 +1015,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _initSkus()
     {
         $this->skuProcessor->setTypeModels($this->_productTypeModels);
-        $this->_oldSku = $this->skuProcessor->getOldSkus();
+        $this->_oldSku = $this->skuProcessor->reloadOldSkus()->getOldSkus();
         return $this;
     }
 
@@ -1249,7 +1249,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $linkId = $this->_connection->fetchOne(
                     $this->_connection->select()
                         ->from($this->getResource()->getTable('catalog_product_entity'))
-                        ->where('sku = ?', $sku)
+                        ->where('sku = ?', (string)$sku)
                         ->columns($this->getProductEntityLinkField())
                 );
 

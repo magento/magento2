@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Console\Command\App;
 
-use Magento\Framework\App\Config\Reader\Source\SourceInterface;
+use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Command for dump application state
@@ -24,23 +26,31 @@ class ApplicationDumpCommand extends Command
     private $writer;
 
     /**
-     * @var SourceInterface[]
+     * @var ConfigSourceInterface[]
      */
     private $sources;
+
+    /**
+     * @var Hash
+     */
+    private $configHash;
 
     /**
      * ApplicationDumpCommand constructor.
      *
      * @param Writer $writer
      * @param array $sources
+     * @param Hash $configHash
      */
     public function __construct(
         Writer $writer,
-        array $sources
+        array $sources,
+        Hash $configHash = null
     ) {
         parent::__construct();
         $this->writer = $writer;
         $this->sources = $sources;
+        $this->configHash = $configHash ?: ObjectManager::getInstance()->get(Hash::class);
     }
 
     /**
@@ -64,20 +74,32 @@ class ApplicationDumpCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dump = [];
+        $comments = [];
         foreach ($this->sources as $sourceData) {
-            /** @var SourceInterface $source */
+            /** @var ConfigSourceInterface $source */
             $source = $sourceData['source'];
             $namespace = $sourceData['namespace'];
             $dump[$namespace] = $source->get();
+            if (!empty($sourceData['comment'])) {
+                $comments[$namespace] = is_string($sourceData['comment'])
+                    ? $sourceData['comment']
+                    : $sourceData['comment']->get();
+            }
+        }
+        $this->writer->saveConfig(
+            [ConfigFilePool::APP_CONFIG => $dump],
+            true,
+            null,
+            $comments
+        );
+        if (!empty($comments)) {
+            $output->writeln($comments);
         }
 
-        $this->writer
-            ->saveConfig(
-                [ConfigFilePool::APP_CONFIG => $dump],
-                true,
-                ConfigFilePool::LOCAL
-            );
+        // Generate and save new hash of deployment configuration.
+        $this->configHash->regenerate();
+
         $output->writeln('<info>Done.</info>');
-        return  Cli::RETURN_SUCCESS;
+        return Cli::RETURN_SUCCESS;
     }
 }

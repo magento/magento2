@@ -1,8 +1,9 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/* global FORM_KEY */
 define([
     'jquery',
     'mage/template',
@@ -83,8 +84,6 @@ define([
          * @private
          */
         _orderSave: function () {
-            // jscs:ignore disallowTrailingWhitespace
-            /*eslint no-undef:0*/
             var postData = {
                 'form_key': FORM_KEY,
                 'cc_type': this.ccType()
@@ -96,7 +95,7 @@ define([
                 context: this,
                 data: postData,
                 dataType: 'json',
-                //eslint-disable-line lines-around-comment
+
                 /**
                  * Success callback
                  * @param {Object} response
@@ -108,6 +107,8 @@ define([
                         this._processErrors(response);
                     }
                 },
+
+                /** @inheritdoc */
                 complete: function () {
                     $('body').trigger('processStop');
                 }

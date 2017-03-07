@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -2195,16 +2195,22 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $linkField = $this->getProductEntityMetadata()->getLinkField();
         $items = $this->getItems();
 
-        $select->where('entity.' . $linkField . ' IN (?)', array_map(function ($item) {
-            return $item->getId();
-        }, $items));
-
+        $select->where(
+            'entity.' . $linkField . ' IN (?)',
+            array_map(
+                function ($item) use ($linkField) {
+                    return $item->getData($linkField);
+                },
+                $items
+            )
+        );
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $mediaGalleries[$row[$linkField]][] = $row;
         }
 
         foreach ($items as $item) {
-            $mediaEntries = isset($mediaGalleries[$item->getId()]) ? $mediaGalleries[$item->getId()] : [];
+            $mediaEntries = isset($mediaGalleries[$item->getData($linkField)]) ?
+                $mediaGalleries[$item->getData($linkField)] : [];
             $this->getGalleryReadHandler()->addMediaDataToProduct($item, $mediaEntries);
         }
 

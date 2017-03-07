@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\ObjectManager\ConfigLoader;
@@ -45,7 +45,7 @@ class Compiled implements ConfigLoaderInterface
      */
     public static function getFilePath($area)
     {
-        $diPath = DirectoryList::getDefaultConfig()[DirectoryList::DI][DirectoryList::PATH];
+        $diPath = DirectoryList::getDefaultConfig()[DirectoryList::GENERATED_METADATA][DirectoryList::PATH];
         return BP . '/' . $diPath . '/' . $area . '.ser';
     }
 

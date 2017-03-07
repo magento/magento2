@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -12,6 +12,16 @@
         </arguments>
     </type>
     <type name="Magento\Braintree\Test\Constraint\AssertTransactionIsPresentInSettlementReport">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Braintree\Test\Constraint\AssertDeviceDataIsPresentInBraintreeRequest">
+        <arguments>
+            <argument name="severity" xsi:type="string">S1</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Braintree\Test\Constraint\AssertCreditCardJsValidationMessagesArePresent">
         <arguments>
             <argument name="severity" xsi:type="string">S1</argument>
         </arguments>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ use Magento\Mtf\Client\Locator;
 class Shipping extends Form
 {
     /**
-     * CSS Selector for "New Address" button
+     * CSS Selector for "New Address" button.
      *
      * @var string
      */
@@ -68,6 +68,65 @@ class Shipping extends Form
      * @var string
      */
     private $selectedShippingAddressBlock = '.selected-item';
+
+    /**
+     * Email instructions selector.
+     *
+     * @var string
+     */
+    private $emailInstructions = '#customer-email-fieldset .note span';
+
+    /**
+     * Email tooltip button selector.
+     *
+     * @var string
+     */
+    private $emailTooltipButton = '#customer-email-fieldset .field-tooltip-action';
+
+    /**
+     * Email tooltip content selector.
+     *
+     * @var string
+     */
+    private $emailTooltipContent = '#customer-email-fieldset .field-tooltip-content';
+
+    /**
+     * Email error selector.
+     *
+     * @var string
+     */
+    private $emailError = '#customer-email-error';
+
+    /**
+     * Get email error.
+     *
+     * @return string
+     */
+    public function getEmailError()
+    {
+        return $this->_rootElement->find($this->emailError)->getText();
+    }
+
+    /**
+     * Get email tooltip.
+     *
+     * @return string
+     */
+    public function getEmailTooltip()
+    {
+        $this->_rootElement->find($this->emailTooltipButton)->click();
+        return $this->_rootElement->find($this->emailTooltipContent)->getText();
+    }
+
+    /**
+     * Get email instructions.
+     *
+     * @return string
+     */
+    public function getEmailInstructions()
+    {
+        return $this->_rootElement->find($this->emailInstructions)->getText();
+    }
 
     /**
      * Click on "New Address" button.

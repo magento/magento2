@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,6 +40,13 @@ class ConfigurableOptions extends CustomOptions
      * @var string
      */
     private $tierPricesSelector = '.prices-tier li';
+
+    /**
+     * Locator for configurable option element.
+     *
+     * @var string
+     */
+    private $configurableOptionElement = '#product-options-wrapper > * > .configurable';
 
     /**
      * Get configurable product options
@@ -187,5 +194,23 @@ class ConfigurableOptions extends CustomOptions
             $optionTitle = $attributesData[$attribute]['options'][$option]['label'];
             $this->selectOption($attributeTitle, $optionTitle);
         }
+    }
+
+    /**
+     * Get present options
+     *
+     * @return array
+     */
+    public function getPresentOptions()
+    {
+        $options = [];
+
+        $optionElements = $this->_rootElement->getElements($this->configurableOptionElement);
+        foreach ($optionElements as $optionElement) {
+            $title = $optionElement->find($this->title)->getText();
+            $options[$title] = $optionElement;
+        }
+
+        return $options;
     }
 }

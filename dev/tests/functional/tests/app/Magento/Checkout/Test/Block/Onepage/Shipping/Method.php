@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,6 +20,13 @@ class Method extends Block
      * @var string
      */
     protected $shippingMethod = './/tbody//tr[td[contains(., "%s")] and td[contains(., "%s")]]//input';
+
+    /**
+     * Shipping method amount selector.
+     *
+     * @var string
+     */
+    private $shippingMethodAmount = './/tr[td[contains(., "%s")] and td[contains(., "%s")]]//span[@class="price"]';
 
     /**
      * Continue checkout button.
@@ -107,5 +114,17 @@ class Method extends Block
                 return $element->isVisible() == false ? true : null;
             }
         );
+    }
+
+    /**
+     * Get shipping method amount.
+     *
+     * @param array $method
+     * @return string
+     */
+    public function getShippingMethodAmount(array $method)
+    {
+        $selector = sprintf($this->shippingMethodAmount, $method['shipping_method'], $method['shipping_service']);
+        return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
     }
 }

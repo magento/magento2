@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
@@ -185,5 +185,63 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->with($this->rule);
         $this->assertEquals($this->model->delete($this->rule), $this->model);
+    }
+
+    /**
+     * Check that can parse JSON string correctly.
+     *
+     * @param string $testString
+     * @param array $expects
+     * @dataProvider dataProviderForProductAttributes
+     */
+    public function testGetProductAttributes($testString, $expects)
+    {
+        $result = $this->model->getProductAttributes($testString);
+        $this->assertEquals($expects, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForProductAttributes()
+    {
+        return [
+            [
+                json_encode([
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                    'attribute' => 'some_attribute',
+                ]),
+                [
+                    'some_attribute',
+                ]
+            ],
+            [
+                json_encode([
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                        'attribute' => 'some_attribute',
+                    ],
+                    [
+                        'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                        'attribute' => 'some_attribute2',
+                    ],
+                ]),
+                [
+                    'some_attribute',
+                    'some_attribute2',
+                ]
+            ],
+            [
+                json_encode([
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                    'attribute' => 'some_attribute',
+                ]),
+                []
+            ],
+            [
+                json_encode([]),
+                []
+            ],
+        ];
     }
 }

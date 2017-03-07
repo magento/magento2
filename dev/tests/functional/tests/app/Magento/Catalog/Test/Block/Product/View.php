@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -207,6 +207,33 @@ class View extends AbstractConfigureBlock
      * @var string
      */
     private $videoContainer = 'div.fotorama-video-container';
+
+    /**
+     * Threshold message selector.
+     *
+     * @var string
+     */
+    private $thresholdMessage = '.availability.only';
+
+    /**
+     * Checks if threshold message is displayed.
+     *
+     * @return bool
+     */
+    public function isThresholdMessageDisplayed()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->isVisible();
+    }
+
+    /**
+     * Gets threshold message.
+     *
+     * @return string
+     */
+    public function getThresholdMessage()
+    {
+        return $this->_rootElement->find($this->thresholdMessage)->getText();
+    }
 
     /**
      * Get block price.

@@ -21,7 +21,8 @@
     },
     "suggest": {
         "magento/module-fedex": "100.2.*",
-        "magento/module-ups": "100.2.*"
+        "magento/module-ups": "100.2.*",
+        "magento/module-config": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",
