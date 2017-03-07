@@ -100,6 +100,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     private $stockRegistry;
 
     /**
+     * @var \Magento\Catalog\Api\Data\ProductInterfaceFactory
+     */
+    private $productFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -171,6 +176,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->productFactory = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterfaceFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->_model = $this->_objectHelper->getObject(
             Configurable::class,
             [
@@ -189,6 +199,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'cache' => $this->cache,
                 'catalogConfig' => $this->catalogConfig,
                 'stockRegistry' => $this->stockRegistry,
+                'productFactory' => $this->productFactory
             ]
         );
         $refClass = new \ReflectionClass(Configurable::class);
@@ -428,13 +439,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->willReturn(serialize($ids));
 
-        $objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        \Magento\Framework\App\ObjectManager::setInstance($objectManager);
-
-        $objectManager->expects($this->once())
+        $this->productFactory->expects($this->once())
             ->method('create')
             ->willReturn($product);
 
