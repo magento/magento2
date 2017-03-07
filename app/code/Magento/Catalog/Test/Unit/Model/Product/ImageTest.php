@@ -132,6 +132,17 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->viewAssetImageFactory = $this->getMockBuilder(ImageFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->viewAssetPlaceholderFactory = $this->getMockBuilder(PlaceholderFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $this->image = new \Magento\Catalog\Model\Product\Image(
             $context,
             $this->registry,
@@ -142,8 +153,14 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->factory,
             $this->repository,
             $this->fileSystem,
-            $this->scopeConfigInterface
+            $this->scopeConfigInterface,
+            null,
+            null,
+            [],
+            $this->viewAssetImageFactory,
+            $this->viewAssetPlaceholderFactory
         );
+
         //Settings for backward compatible property
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->imageAsset = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
@@ -152,26 +169,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->image,
             'imageAsset',
             $this->imageAsset
-        );
-
-        $this->viewAssetImageFactory = $this->getMockBuilder(ImageFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->image,
-            'viewAssetImageFactory',
-            $this->viewAssetImageFactory
-        );
-
-        $this->viewAssetPlaceholderFactory = $this->getMockBuilder(PlaceholderFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->image,
-            'viewAssetPlaceholderFactory',
-            $this->viewAssetPlaceholderFactory
         );
     }
 
