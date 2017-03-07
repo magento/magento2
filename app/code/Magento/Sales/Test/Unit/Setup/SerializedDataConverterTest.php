@@ -31,6 +31,15 @@ class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->serializeMock = $this->getMock(Serialize::class, ['unserialize'], [], '', false);
+        $this->jsonMock = $this->getMock(Json::class, ['serialize'], [], '', false);
+        $this->model = new \Magento\Sales\Setup\SerializedDataConverter($this->serializeMock, $this->jsonMock);
+    }
+
+    /**
+     * Init serializer mock with default serialize and unserialize callbacks
+     */
+    protected function initSerializerMock()
+    {
         $this->serializeMock->expects($this->any())
             ->method('unserialize')
             ->will(
@@ -40,7 +49,6 @@ class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
                     }
                 )
             );
-        $this->jsonMock = $this->getMock(Json::class, ['serialize'], [], '', false);
         $this->jsonMock->expects($this->any())
             ->method('serialize')
             ->will(
@@ -50,9 +58,6 @@ class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
                     }
                 )
             );
-
-        $this->model = new \Magento\Sales\Setup\SerializedDataConverter($this->serializeMock, $this->jsonMock);
-
     }
 
     /**
@@ -63,7 +68,35 @@ class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvert($serialized, $expectedJson)
     {
+        $this->initSerializerMock();
         $this->assertEquals($expectedJson, $this->model->convert($serialized));
+    }
+
+    /**
+     * @param string $serialized
+     * @param string $expectedJson
+     *
+     * @dataProvider convertDataProvider
+     *
+     * @expectedException \Magento\Framework\DB\DataConverter\DataConversionException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function testConvertCorruptedData($serialized, $expectedJson)
+    {
+        $this->initSerializerMock();
+        $serialized = substr($serialized, 0, 50);
+        $this->model->convert($serialized);
+    }
+
+    /**
+     * Test skipping deserialization and json_encoding of valid JSON encoded string
+     */
+    public function testSkipJsonDataConversion()
+    {
+        $serialized = '[]';
+        $this->serializeMock->expects($this->never())->method('unserialize');
+        $this->jsonMock->expects($this->never())->method('serialize');
+        $this->model->convert($serialized);
     }
 
     /**

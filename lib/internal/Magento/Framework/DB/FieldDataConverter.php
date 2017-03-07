@@ -7,10 +7,10 @@ namespace Magento\Framework\DB;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
 use Magento\Framework\DB\Select\QueryModifierInterface;
-use Magento\Framework\DB\Select;
 
 /**
  * Convert field data from one representation to another
@@ -57,6 +57,7 @@ class FieldDataConverter
      * @param string $identifier
      * @param string $field
      * @param QueryModifierInterface|null $queryModifier
+     * @throws FieldDataConversionException
      * @return void
      */
     public function convert(
@@ -76,9 +77,28 @@ class FieldDataConverter
         foreach ($iterator as $selectByRange) {
             $rows = $connection->fetchAll($selectByRange);
             foreach ($rows as $row) {
-                $bind = [$field => $this->dataConverter->convert($row[$field])];
-                $where = [$identifier . ' = ?' => (int) $row[$identifier]];
-                $connection->update($table, $bind, $where);
+                try {
+                    $convertedValue = $this->dataConverter->convert($row[$field]);
+                    if ($row[$field] === $convertedValue) {
+                        // skip for data rows that have been already converted
+                        continue;
+                    }
+                    $bind = [$field => $convertedValue];
+                    $where = [$identifier . ' = ?' => (int) $row[$identifier]];
+                    $connection->update($table, $bind, $where);
+                } catch (DataConversionException $e) {
+                    throw new \Magento\Framework\DB\FieldDataConversionException(
+                        sprintf(
+                            \Magento\Framework\DB\FieldDataConversionException::MESSAGE_PATTERN,
+                            $field,
+                            $table,
+                            $identifier,
+                            $row[$identifier],
+                            get_class($this->dataConverter),
+                            $e->getMessage()
+                        )
+                    );
+                }
             }
         }
     }

@@ -15,6 +15,8 @@ interface DataConverterInterface
      *
      * @param string $value
      * @return string
+     *
+     * @throws DataConversionException
      */
     public function convert($value);
 }
