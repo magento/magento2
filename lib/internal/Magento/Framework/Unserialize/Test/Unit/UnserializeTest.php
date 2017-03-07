@@ -17,8 +17,21 @@ class UnserializeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $serializer = $this->getMockBuilder(Serialize::class)
+            ->setMethods(['serialize', 'unserialize'])
+            ->getMock();
+        $serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(function($parameter){
+                return serialize($parameter);
+            });
+        $serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(function($parameter){
+                return unserialize($parameter);
+            });
         $this->unserialize = new \Magento\Framework\Unserialize\Unserialize(
-            new Serialize()
+            $serializer
         );
     }
 
