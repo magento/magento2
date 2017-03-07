@@ -91,8 +91,8 @@ class DataObject implements \ArrayAccess
      * If the provided key is an array, the merge will be done against the
      * entire dataset.
      *
-     * @param string $key
-     * @param array $value
+     * @param string|array $key
+     * @param array|null $value
      *
      * @return $this
      */
