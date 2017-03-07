@@ -6,6 +6,7 @@
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product;
@@ -171,6 +172,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $stockRegistry;
 
     /**
+     * @var ProductInterfaceFactory
+     */
+    private $productFactory;
+
+    /**
      * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -190,6 +196,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param \Magento\Framework\Cache\FrontendInterface $cache,
+     * @param \Magento\Customer\Model\Session $customerSession,
+     * @param StockRegistryInterface $stockRegistry,
+     * @param ProductInterfaceFactory $productFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -213,7 +223,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Framework\Cache\FrontendInterface $cache = null,
         \Magento\Customer\Model\Session $customerSession = null,
-        StockRegistryInterface $stockRegistry = null
+        StockRegistryInterface $stockRegistry = null,
+        ProductInterfaceFactory $productFactory = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -225,6 +236,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->cache = $cache;
         $this->customerSession = $customerSession;
+        $this->productFactory = $productFactory ?: ObjectManager::getInstance()
+            ->get(ProductInterfaceFactory::class);
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -578,7 +591,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             if (!empty($data)) {
                 $usedProducts = [];
                 foreach ($data as $item) {
-                    $productItem = ObjectManager::getInstance()->create(ProductInterface::class);
+                    $productItem = $this->productFactory->create();
                     $productItem->setData($item);
 
                     $usedProducts[] = $productItem;
