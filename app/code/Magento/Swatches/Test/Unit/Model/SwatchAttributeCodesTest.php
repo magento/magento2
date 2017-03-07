@@ -25,19 +25,19 @@ class SwatchAttributeCodesTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SwatchAttributeCodes
      */
-    protected $swatchAttributeCodesModel;
+    private $swatchAttributeCodesModel;
 
     /**
      * @var CacheInterface
      */
-    protected $cache;
+    private $cache;
 
     /**
      * @var ResourceConnection;
      */
-    protected $resourceConnection;
+    private $resourceConnection;
 
-    protected $swatchAttributesCodes = [
+    private $swatchAttributesCodes = [
         10 => 'text_swatch',
         11 => 'image_swatch'
     ];

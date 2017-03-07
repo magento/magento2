@@ -5,7 +5,6 @@
  */
 namespace Magento\Swatches\Model;
 
-use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
@@ -51,8 +50,8 @@ class SwatchAttributeCodes
     public function __construct(
         CacheInterface $cache,
         ResourceConnection $resourceConnection,
-        $cacheKey = 'swatch-attribute-list',
-        array $cacheTags = [Attribute::CACHE_TAG]
+        $cacheKey,
+        array $cacheTags
     ) {
         $this->cache = $cache;
         $this->resourceConnection = $resourceConnection;

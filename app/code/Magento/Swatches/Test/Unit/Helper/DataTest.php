@@ -47,7 +47,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $productRepoMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Swatches\Model\SwatchAttributesProvider */
-    protected $swatchAttributesProviderMock;
+    private $swatchAttributesProviderMock;
 
     protected function setUp()
     {

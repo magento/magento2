@@ -16,22 +16,22 @@ class SwatchAttributesProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SwatchAttributesProvider
      */
-    protected $swatchAttributesProvider;
+    private $swatchAttributesProvider;
 
     /**
      * @var Configurable
      */
-    protected $typeConfigurableMock;
+    private $typeConfigurableMock;
 
     /**
      * @var SwatchAttributeCodes
      */
-    protected $swatchAttributeCodesMock;
+    private $swatchAttributeCodesMock;
 
     /**
      * @var \Magento\Catalog\Model\Product
      */
-    protected $productMock;
+    private $productMock;
 
     protected function setUp()
     {

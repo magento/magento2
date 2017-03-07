@@ -25,7 +25,7 @@ class SwatchAttributesProvider
     private $swatchAttributeCodes;
 
     /**
-     * @var Attribute[]
+     * @var [productId => Attribute[]]
      */
     private $attributesPerProduct;
 

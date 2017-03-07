@@ -73,4 +73,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Swatches\Model\SwatchAttributeCodes">
+        <arguments>
+            <argument name="cacheKey" xsi:type="string">swatch-attribute-list</argument>
+            <argument name="cacheTags" xsi:type="array">
+                <item name="0" xsi:type="const">Magento\Eav\Model\Entity\Attribute::CACHE_TAG</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
