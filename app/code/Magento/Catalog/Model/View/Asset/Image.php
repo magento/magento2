@@ -7,10 +7,12 @@
 namespace Magento\Catalog\Model\View\Asset;
 
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Catalog\Helper\Image as ImageHelper;
 
 /**
  * A locally available image file asset that can be referred with a file path
@@ -52,6 +54,11 @@ class Image implements LocalInterface
     private $encryptor;
 
     /**
+     * @var ImageHelper
+     */
+    private $viewHelper;
+
+    /**
      * Image constructor.
      *
      * @param ConfigInterface $mediaConfig
@@ -79,6 +86,10 @@ class Image implements LocalInterface
      */
     public function getUrl()
     {
+        if (!$this->getFilePath()) {
+            return $this->getDefaultPlaceHolderUrl();
+        }
+
         return $this->context->getBaseUrl() . $this->getRelativePath(DIRECTORY_SEPARATOR);
     }
 
@@ -173,6 +184,27 @@ class Image implements LocalInterface
     private function getMiscPath()
     {
         return $this->encryptor->hash(implode('_', $this->miscParams), Encryptor::HASH_VERSION_MD5);
+    }
+
+    /**
+     * @return ImageHelper
+     */
+    private function getViewHelper()
+    {
+        if (!$this->viewHelper) {
+            $this->viewHelper = ObjectManager::getInstance()->get(ImageHelper::class);
+        }
+        return $this->viewHelper;
+    }
+
+    /**
+     * Return default placeholder URL
+     *
+     * @return string
+     */
+    private function getDefaultPlaceHolderUrl()
+    {
+        return $this->getViewHelper()->getDefaultPlaceholderUrl($this->miscParams['image_type']);
     }
 
     /**

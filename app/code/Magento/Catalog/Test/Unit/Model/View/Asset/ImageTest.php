@@ -8,6 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\View\Asset;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Catalog\Model\View\Asset\Image;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\ContextInterface;
 
 /**
@@ -119,6 +120,38 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $absolutePath . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $hashPath . $filePath,
             $imageModel->getUrl()
         );
+    }
+
+    /**
+     * Test retrieve URL pointing to a resource with default placeholder url.
+     */
+    public function testGetUrlWithDefaultPlaceHolder()
+    {
+        $filePath = '';
+        $url = 'testUrl';
+        $miscParams = $this->getPathDataProvider()[1][1];
+        $viewHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $viewHelper->expects(self::once())
+            ->method('getDefaultPlaceholderUrl')
+            ->with(self::identicalTo($miscParams['image_type'])
+            )->willReturn($url);
+        $imageModel = new Image(
+            $this->mediaConfig,
+            $this->imageContext,
+            $this->encryptor,
+            $filePath,
+            $miscParams
+        );
+        $objectManager = new ObjectManager($this);
+        $objectManager->setBackwardCompatibleProperty(
+            $imageModel,
+            'viewHelper',
+            $viewHelper
+        );
+
+        self::assertEquals($url, $imageModel->getUrl());
     }
 
     public function getPathDataProvider()
