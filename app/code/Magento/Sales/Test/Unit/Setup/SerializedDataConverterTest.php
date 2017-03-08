@@ -193,4 +193,31 @@ class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
             ->method('serialize');
         $this->serializedDataConverter->convert($serialized);
     }
+
+    public function testConvertVaultTokenMetadata()
+    {
+        $serializedData = 'serialized data';
+        $unserializedData = [
+            'token_metadata' => [
+                'customer_id' => 1,
+                'public_hash' => 'someHash'
+            ]
+        ];
+        $convertedUnserializedData = [
+            'customer_id' => 1,
+            'public_hash' => 'someHash'
+        ];
+        $jsonEncodedData = 'json encoded data';
+
+        $this->serializeMock->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedData)
+            ->willReturn($unserializedData);
+        $this->jsonMock->expects($this->once())
+            ->method('serialize')
+            ->with($convertedUnserializedData)
+            ->willReturn($jsonEncodedData);
+
+        $this->assertEquals($jsonEncodedData, $this->serializedDataConverter->convert($serializedData));
+    }
 }

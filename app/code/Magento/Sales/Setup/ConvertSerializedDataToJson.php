@@ -49,7 +49,7 @@ class ConvertSerializedDataToJson
             'table' => 'sales_order_payment',
             'identifier' => 'entity_id',
             'title' => 'additional_information',
-            'data_converter' => SerializedToJson::class
+            'data_converter' => SerializedDataConverter::class
         ],
         [
             'table' => 'sales_payment_transaction',
