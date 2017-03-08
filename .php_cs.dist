@@ -8,7 +8,7 @@
  * Pre-commit hook installation:
  * vendor/bin/static-review.php hook:install dev/tools/Magento/Tools/StaticReview/pre-commit .git/hooks/pre-commit
  */
-$finder = Symfony\CS\Finder\DefaultFinder::create()
+$finder = PhpCsFixer\Finder::create()
     ->name('*.phtml')
     ->exclude('dev/tests/functional/generated')
     ->exclude('dev/tests/functional/var')
@@ -24,29 +24,27 @@ $finder = Symfony\CS\Finder\DefaultFinder::create()
     ->exclude('setup/vendor')
     ->exclude('var');
 
-return Symfony\CS\Config\Config::create()
-    ->finder($finder)
-    ->level(Symfony\CS\FixerInterface::PSR2_LEVEL)
-    ->fixers([
-        'double_arrow_multiline_whitespaces',
-        'duplicate_semicolon',
-        'extra_empty_lines',
-        'include',
-        'join_function',
-        'namespace_no_leading_whitespace',
-        'new_with_braces',
-        'object_operator',
-        'operators_spaces',
-        'remove_leading_slash_use',
-        'remove_lines_between_uses',
-        'single_array_no_trailing_comma',
-        'spaces_before_semicolon',
-        'standardize_not_equal',
-        'ternary_spaces',
-        'unused_use',
-        'whitespacy_lines',
-        'concat_with_spaces',
-        'multiline_spaces_before_semicolon',
-        'ordered_use',
-        'short_array_syntax',
+return PhpCsFixer\Config::create()
+    ->setFinder($finder)
+    ->setRules([
+        '@PSR2' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'concat_space' => ['spacing' => 'one'],
+        'include' => true,
+        'new_with_braces' => true,
+        'no_empty_statement' => true,
+        'no_extra_consecutive_blank_lines' => ['use'],
+        'no_extra_consecutive_blank_lines' => true,
+        'no_leading_import_slash' => true,
+        'no_leading_namespace_whitespace' => true,
+        'no_multiline_whitespace_around_double_arrow' => true,
+        'no_multiline_whitespace_before_semicolons' => true,
+        'no_singleline_whitespace_before_semicolons' => true,
+        'no_trailing_comma_in_singleline_array' => true,
+        'no_unused_imports' => true,
+        'no_whitespace_in_blank_line' => true,
+        'object_operator_without_whitespace' => true,
+        'ordered_imports' => true,
+        'standardize_not_equals' => true,
+        'ternary_operator_spaces' => true,
     ]);
