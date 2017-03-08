@@ -199,13 +199,13 @@ class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
         $serializedData = 'serialized data';
         $unserializedData = [
             'token_metadata' => [
-                \Magento\Vault\Api\Data\PaymentTokenInterface::CUSTOMER_ID => 1,
-                \Magento\Vault\Api\Data\PaymentTokenInterface::PUBLIC_HASH => 'someHash'
+                'customer_id' => 1,
+                'public_hash' => 'someHash'
             ]
         ];
         $convertedUnserializedData = [
-            \Magento\Vault\Api\Data\PaymentTokenInterface::CUSTOMER_ID => 1,
-            \Magento\Vault\Api\Data\PaymentTokenInterface::PUBLIC_HASH => 'someHash'
+            'customer_id' => 1,
+            'public_hash' => 'someHash'
         ];
         $jsonEncodedData = 'json encoded data';
 

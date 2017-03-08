@@ -8,7 +8,6 @@ namespace Magento\Sales\Setup;
 
 use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
-use Magento\Vault\Api\Data\PaymentTokenInterface;
 
 /**
  * Serializer used to update nested serialized data in product_options and additional_information fields.
@@ -42,10 +41,8 @@ class SerializedDataConverter extends SerializedToJson
             );
         }
         if (isset($valueUnserialized['token_metadata'])) {
-            $valueUnserialized[PaymentTokenInterface::CUSTOMER_ID] =
-                $valueUnserialized['token_metadata'][PaymentTokenInterface::CUSTOMER_ID];
-            $valueUnserialized[PaymentTokenInterface::PUBLIC_HASH] =
-                $valueUnserialized['token_metadata'][PaymentTokenInterface::PUBLIC_HASH];
+            $valueUnserialized['customer_id'] = $valueUnserialized['token_metadata']['customer_id'];
+            $valueUnserialized['public_hash'] = $valueUnserialized['token_metadata']['public_hash'];
             unset($valueUnserialized['token_metadata']);
         }
 
