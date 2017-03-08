@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Link\Product;
 
-use \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
-use \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

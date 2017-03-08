@@ -5,18 +5,18 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Customer\Model\Data\AttributeMetadata;
 use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
 use Magento\Customer\Api\Data\OptionInterface;
-use Magento\Customer\Model\Data\Option;
 use Magento\Customer\Api\Data\OptionInterfaceFactory;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
-use Magento\Customer\Model\Data\ValidationRule;
 use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
+use Magento\Customer\Model\Data\AttributeMetadata;
+use Magento\Customer\Model\Data\Option;
+use Magento\Customer\Model\Data\ValidationRule;
 use Magento\Customer\Model\Metadata\AttributeMetadataHydrator;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

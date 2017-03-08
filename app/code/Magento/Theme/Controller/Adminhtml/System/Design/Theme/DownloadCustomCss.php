@@ -6,8 +6,8 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResponseInterface;
 
 class DownloadCustomCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
 {

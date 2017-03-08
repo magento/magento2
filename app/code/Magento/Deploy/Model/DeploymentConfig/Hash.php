@@ -5,11 +5,11 @@
  */
 namespace Magento\Deploy\Model\DeploymentConfig;
 
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Saves and Retrieves deployment configuration hash.

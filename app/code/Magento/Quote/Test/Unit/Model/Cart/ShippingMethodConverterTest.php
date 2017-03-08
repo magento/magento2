@@ -9,7 +9,7 @@
 
 namespace Magento\Quote\Test\Unit\Model\Cart;
 
-use \Magento\Quote\Model\Cart\ShippingMethodConverter;
+use Magento\Quote\Model\Cart\ShippingMethodConverter;
 
 class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
 {

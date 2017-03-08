@@ -5,13 +5,13 @@
  */
 namespace Magento\Theme\Model\Design\Config;
 
+use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
 use Magento\Theme\Model\ResourceModel\Design\Config\Collection;
 use Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
-use Magento\Config\Model\Config\Reader\Source\Deployed\SettingChecker;
-use Magento\Framework\App\RequestInterface;
 
 class DataProvider extends AbstractDataProvider
 {

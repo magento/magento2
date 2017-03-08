@@ -8,7 +8,6 @@
 
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Exception\NoSuchEntityException;
 

@@ -6,9 +6,9 @@
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\FlagManager;
-use Magento\Framework\FlagFactory;
-use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\Flag;
+use Magento\Framework\Flag\FlagResource;
+use Magento\Framework\FlagFactory;
 
 /**
  * Class FlagManagerTest

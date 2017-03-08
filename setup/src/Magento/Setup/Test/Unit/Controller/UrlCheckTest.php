@@ -5,11 +5,11 @@
  */
 namespace Magento\Setup\Test\Unit\Controller;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Setup\Controller\UrlCheck;
 use Zend\Stdlib\RequestInterface;
 use Zend\View\Model\JsonModel;
-use Magento\Framework\Validator\Url as UrlValidator;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class UrlCheckTest extends \PHPUnit_Framework_TestCase
 {

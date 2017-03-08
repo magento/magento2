@@ -28,10 +28,10 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $this->view ->expects($this->once())
+        $this->view->expects($this->once())
             ->method('loadLayout')
             ->with('overlay_popup');
-        $this->view ->expects($this->once())
+        $this->view->expects($this->once())
             ->method('renderLayout');
 
         $this->controller->execute();

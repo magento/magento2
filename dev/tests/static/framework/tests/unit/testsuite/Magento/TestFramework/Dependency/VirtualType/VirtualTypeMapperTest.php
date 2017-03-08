@@ -95,7 +95,6 @@ class VirtualTypeMapperTest extends \PHPUnit_Framework_TestCase
             $expectedVirtualTypesDependencies,
             $mapper->loadMap($diFilesPath)
         );
-
     }
 
     /**
@@ -116,7 +115,6 @@ class VirtualTypeMapperTest extends \PHPUnit_Framework_TestCase
                 self::assertEquals($baseType, $mapper->getType($virtualType, $scope));
             }
         }
-
     }
 
     /**
@@ -135,7 +133,7 @@ class VirtualTypeMapperTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-            
+
             /**
              * expectation is the same for global area,
              * but extended for adminhtml as it contains own virtual types definitions

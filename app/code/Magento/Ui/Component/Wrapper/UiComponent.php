@@ -6,9 +6,9 @@
 namespace Magento\Ui\Component\Wrapper;
 
 use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\Element\UiComponent\ContainerInterface;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Framework\View\Element\UiComponent\ContainerInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Class UiComponent

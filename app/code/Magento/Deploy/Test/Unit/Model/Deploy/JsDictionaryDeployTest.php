@@ -5,14 +5,14 @@
  */
 namespace Magento\Deploy\Test\Unit\Model\Deploy;
 
-use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Deploy\Model\Deploy\JsDictionaryDeploy;
+use Magento\Framework\App\View\Asset\Publisher;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\Js\Config as TranslationJsConfig;
 use Magento\Framework\TranslateInterface;
-use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Asset\LocalInterface as Asset;
-use Magento\Framework\App\View\Asset\Publisher;
-use Magento\Deploy\Model\Deploy\JsDictionaryDeploy;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Asset\Repository;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class JsDictionaryDeployTest extends \PHPUnit_Framework_TestCase
 {

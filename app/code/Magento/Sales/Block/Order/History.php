@@ -5,8 +5,8 @@
  */
 namespace Magento\Sales\Block\Order;
 
-use \Magento\Framework\App\ObjectManager;
-use \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 
 /**
  * Sales order history block

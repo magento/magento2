@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Ui\AllowedProductTypes;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Ui\AllowedProductTypes;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AllowedProductTypesTest extends \PHPUnit_Framework_TestCase
 {

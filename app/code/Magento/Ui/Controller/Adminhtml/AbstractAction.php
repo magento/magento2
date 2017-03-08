@@ -7,8 +7,8 @@ namespace Magento\Ui\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Ui\Controller\UiActionInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Controller\UiActionInterface;
 
 /**
  * Class Render

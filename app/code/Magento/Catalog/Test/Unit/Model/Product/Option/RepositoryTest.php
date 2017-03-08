@@ -7,9 +7,9 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
-use \Magento\Catalog\Model\Product\Option\Repository;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
-use \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory;
+use Magento\Catalog\Model\Product\Option\Repository;
+use Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

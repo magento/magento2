@@ -7,8 +7,8 @@
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price;
 
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
 
 class Grouped extends DefaultPrice implements GroupedInterface
 {

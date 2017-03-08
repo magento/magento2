@@ -5,11 +5,11 @@
  */
 namespace Magento\Developer\Test\Unit\Model\Config\Backend;
 
-use Magento\Framework\App\State;
-use Magento\Framework\Model\Context;
 use Magento\Developer\Model\Config\Backend\WorkflowType;
-use Magento\Framework\App\State\CleanupFiles;
 use Magento\Developer\Model\Config\Source\WorkflowType as SourceWorkflowType;
+use Magento\Framework\App\State;
+use Magento\Framework\App\State\CleanupFiles;
+use Magento\Framework\Model\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class WorkflowTypeTest extends \PHPUnit_Framework_TestCase

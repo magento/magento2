@@ -136,7 +136,7 @@ class FileRecorderTest extends \PHPUnit_Framework_TestCase
 
         $hashLength = 64;
         $fileRelativePathPattern = '#' . preg_quote($this->fileSubdirectoryPath, '#')
-            . '.{' . $hashLength . '}/' . preg_quote($this->encodedFileName, '#') .'#';
+            . '.{' . $hashLength . '}/' . preg_quote($this->encodedFileName, '#') . '#';
         $this->directoryMock
             ->expects($this->once())
             ->method('writeFile')

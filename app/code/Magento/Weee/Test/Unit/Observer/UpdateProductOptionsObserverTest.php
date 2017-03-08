@@ -7,8 +7,8 @@
 namespace Magento\Weee\Test\Unit\Observer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 use Magento\Tax\Model\Config as TaxConfig;
+use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
 class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
 {

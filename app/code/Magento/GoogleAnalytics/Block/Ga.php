@@ -82,7 +82,7 @@ class Ga extends \Magento\Framework\View\Element\Template
 
         $anonymizeIp = "";
         if ($this->_googleAnalyticsData->isAnonymizedIpActive()) {
-          $anonymizeIp = "\nga('set', 'anonymizeIp', true);";
+            $anonymizeIp = "\nga('set', 'anonymizeIp', true);";
         }
 
         return "\nga('create', '" . $this->escapeHtmlAttr($accountId, false)

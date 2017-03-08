@@ -6,8 +6,8 @@
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
 use Magento\Framework\ObjectManager\Config\Compiled;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 
 class CompiledTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,7 +60,6 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
 
     public function testExtend()
     {
-
         $configuration = [
             'arguments' => [
                 'type1' => 'serialized configuration for type1',

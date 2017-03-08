@@ -37,7 +37,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * @var string
      */
     protected $_blockGroup = 'Magento_Backend';
-    
+
     /**
      *  @var string
      */

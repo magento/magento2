@@ -5,8 +5,8 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class SectionTest extends \PHPUnit_Framework_TestCase
 {

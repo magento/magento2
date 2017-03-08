@@ -6,9 +6,9 @@
 
 namespace Magento\Variable\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Variable\Test\Fixture\SystemVariable;
 use Magento\Variable\Test\Page\Adminhtml\SystemVariableIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertCustomVariableNotInGrid

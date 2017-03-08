@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Container;
 
-use \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity;
+use Magento\Sales\Model\Order\Email\Container\InvoiceIdentity;
 
 class InvoiceIdentityTest extends \PHPUnit_Framework_TestCase
 {

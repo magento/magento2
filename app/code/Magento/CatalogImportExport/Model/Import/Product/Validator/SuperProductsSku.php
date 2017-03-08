@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
-use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 class SuperProductsSku extends AbstractImportValidator implements RowValidatorInterface
@@ -48,6 +47,5 @@ class SuperProductsSku extends AbstractImportValidator implements RowValidatorIn
             return false;
         }
         return true;
-
     }
 }

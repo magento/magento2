@@ -6,8 +6,8 @@
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\TemporaryTableService;
 use Magento\Framework\DB\Select;
+use Magento\Framework\DB\TemporaryTableService;
 use Magento\UrlRewrite\Model\MergeDataProvider;
 
 /**

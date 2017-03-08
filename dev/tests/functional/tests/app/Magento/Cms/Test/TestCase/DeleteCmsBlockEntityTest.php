@@ -6,12 +6,12 @@
 
 namespace Magento\Cms\Test\TestCase;
 
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Cms\Test\Fixture\CmsBlock;
 use Magento\Cms\Test\Page\Adminhtml\CmsBlockIndex;
 use Magento\Cms\Test\Page\Adminhtml\CmsBlockNew;
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Catalog\Test\Fixture\Category;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

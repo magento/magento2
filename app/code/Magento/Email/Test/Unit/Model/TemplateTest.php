@@ -8,7 +8,6 @@ namespace Magento\Email\Test\Unit\Model;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Filter\Template as FilterTemplate;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Store\Model\ScopeInterface;
 

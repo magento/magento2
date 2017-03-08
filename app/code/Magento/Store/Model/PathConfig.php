@@ -24,7 +24,6 @@ class PathConfig implements \Magento\Framework\App\Router\PathConfigInterface
         \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         StoreManagerInterface $storeManager
     ) {
-
         $this->scopeConfig = $scopeConfig;
         $this->urlSecurityInfo = $urlSecurityInfo;
         $this->storeManager = $storeManager;

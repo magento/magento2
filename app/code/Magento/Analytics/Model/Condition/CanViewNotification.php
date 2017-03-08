@@ -6,8 +6,8 @@
 
 namespace Magento\Analytics\Model\Condition;
 
-use Magento\Backend\Model\View\Layout\ConditionInterface;
 use Magento\Analytics\Model\NotificationTime;
+use Magento\Backend\Model\View\Layout\ConditionInterface;
 use Magento\Framework\Intl\DateTimeFactory;
 
 /**

@@ -6,9 +6,9 @@
 
 namespace Magento\SalesRule\Test\TestStep;
 
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteEdit;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
-use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Delete all Sales Rule on backend.

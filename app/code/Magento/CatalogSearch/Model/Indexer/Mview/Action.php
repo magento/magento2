@@ -6,8 +6,8 @@
 namespace Magento\CatalogSearch\Model\Indexer\Mview;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\Framework\Mview\ActionInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
+use Magento\Framework\Mview\ActionInterface;
 
 class Action implements ActionInterface
 {

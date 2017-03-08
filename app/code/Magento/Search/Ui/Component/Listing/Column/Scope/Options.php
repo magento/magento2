@@ -5,8 +5,8 @@
  */
 namespace Magento\Search\Ui\Component\Listing\Column\Scope;
 
-use Magento\Framework\Escaper;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Escaper;
 use Magento\Store\Model\System\Store as SystemStore;
 
 /**
@@ -117,6 +117,5 @@ class Options implements OptionSourceInterface
             $this->currentOptions[$name]['label'] = $name;
             $this->currentOptions[$name]['value'] = array_values($groups);
         }
-
     }
 }

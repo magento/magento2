@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogSearch\Model\Indexer\Scope;
 
-
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -14,5 +13,4 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class UnknownStateException extends LocalizedException
 {
-
 }

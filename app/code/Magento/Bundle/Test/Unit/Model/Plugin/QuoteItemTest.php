@@ -5,10 +5,10 @@
  */
 namespace Magento\Bundle\Test\Unit\Model\Plugin;
 
+use Magento\Catalog\Model\Product;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Quote\Model\Quote\Item\ToOrderItem;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Quote\Model\Quote\Item\AbstractItem;
-use Magento\Catalog\Model\Product;
 
 class QuoteItemTest extends \PHPUnit_Framework_TestCase
 {

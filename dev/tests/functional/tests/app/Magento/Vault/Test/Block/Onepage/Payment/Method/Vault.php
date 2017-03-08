@@ -6,8 +6,8 @@
 
 namespace Magento\Vault\Test\Block\Onepage\Payment\Method;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Checkout\Test\Block\Onepage\Payment\Method;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Checkout payment method vault block.

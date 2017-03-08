@@ -6,9 +6,9 @@
 namespace Magento\Theme\Model\Theme;
 
 use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\View\Design\Theme\ThemePackage;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
-use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 
 /**

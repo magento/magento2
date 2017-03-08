@@ -8,13 +8,13 @@
 
 namespace Magento\Test\Php;
 
+use Magento\Framework\App\Utility\Files;
 use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
 use PHPMD\TextUI\Command;
 use PHPUnit_Framework_TestCase;
-use Magento\Framework\App\Utility\Files;
 
 /**
  * Set of tests for static code analysis, e.g. code style, code complexity, copy paste detecting, etc.
@@ -50,7 +50,8 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    private static function getBaseFilesFolder() {
+    private static function getBaseFilesFolder()
+    {
         return __DIR__;
     }
 
@@ -59,7 +60,8 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    private static function getChangedFilesBaseDir() {
+    private static function getChangedFilesBaseDir()
+    {
         return __DIR__ . '/..';
     }
 
@@ -147,7 +149,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     {
         if (empty($allowedFileTypes)) {
             $fileHasAllowedType = function () {
-               return true;
+                return true;
             };
         } else {
             $fileHasAllowedType = function ($file) use ($allowedFileTypes) {
@@ -291,7 +293,6 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         if (!$codeMessDetector->canRun()) {
             $this->markTestSkipped('PHP Mess Detector is not available.');
         }
-
 
         $result = $codeMessDetector->run(self::getWhitelist(['php']));
 

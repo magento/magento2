@@ -6,8 +6,8 @@
 
 namespace Magento\Wishlist\Test\Constraint;
 
-use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 
 /**
  * Assert that customer's Wish List section on Order Create backend page is empty.

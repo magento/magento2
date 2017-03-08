@@ -6,9 +6,9 @@
 
 namespace Magento\Mtf\Client\Element;
 
-use Magento\Mtf\ObjectManager;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Typified element class for conditions.

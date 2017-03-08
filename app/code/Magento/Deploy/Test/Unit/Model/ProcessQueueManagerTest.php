@@ -6,10 +6,10 @@
 namespace Magento\Deploy\Test\Unit\Model;
 
 use Magento\Deploy\Model\ProcessManager;
+use Magento\Deploy\Model\ProcessTask;
+use Magento\Deploy\Model\ProcessTaskFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Deploy\Model\ProcessTaskFactory;
-use Magento\Deploy\Model\ProcessTask;
 
 class ProcessQueueManagerTest extends \PHPUnit_Framework_TestCase
 {

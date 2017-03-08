@@ -1094,10 +1094,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (!is_object($response) || empty($response->HighestSeverity)) {
             $this->appendTrackingError($trackingValue, __('Invalid response from carrier'));
             return;
-        } else if (in_array($response->HighestSeverity, self::$trackingErrors)) {
+        } elseif (in_array($response->HighestSeverity, self::$trackingErrors)) {
             $this->appendTrackingError($trackingValue, (string) $response->Notifications->Message);
             return;
-        } else if (empty($response->CompletedTrackDetails) || empty($response->CompletedTrackDetails->TrackDetails)) {
+        } elseif (empty($response->CompletedTrackDetails) || empty($response->CompletedTrackDetails->TrackDetails)) {
             $this->appendTrackingError($trackingValue, __('No available tracking items'));
             return;
         }

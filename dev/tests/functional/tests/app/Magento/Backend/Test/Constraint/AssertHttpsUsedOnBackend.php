@@ -6,9 +6,9 @@
 
 namespace Magento\Backend\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that https protocol is used all over the Admin panel.

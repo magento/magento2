@@ -9,7 +9,6 @@ namespace Magento\LayeredNavigation\Block\Navigation;
 
 use Magento\Catalog\Model\Layer\Filter\FilterInterface;
 use Magento\Framework\View\Element\Template;
-use Magento\LayeredNavigation\Block\Navigation\FilterRendererInterface;
 
 class FilterRenderer extends Template implements FilterRendererInterface
 {

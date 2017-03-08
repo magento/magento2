@@ -8,13 +8,13 @@
 
 namespace Magento\Tax\Test\Unit\Model\Sales\Total\Quote;
 
-use \Magento\Tax\Model\Sales\Total\Quote\Tax;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test class for \Magento\Tax\Model\Sales\Total\Quote\Tax
  */
 use Magento\Tax\Model\Calculation;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Model\Sales\Total\Quote\Tax;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -723,7 +723,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ],
             'item_id' => '1',
             'item_type' => 'product',
-            'associated_item_id' => NULL,
+            'associated_item_id' => null,
             'process' => 0,
         ];
 

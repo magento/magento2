@@ -7,9 +7,9 @@
  */
 namespace Magento\Framework\App;
 
+use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config\ConfigTypeInterface;
 
 /**
  * Class Config
@@ -67,7 +67,7 @@ class Config implements ScopeConfigInterface
         if ($scope !== 'default') {
             if (is_numeric($scopeCode) || $scopeCode === null) {
                 $scopeCode = $this->scopeCodeResolver->resolve($scope, $scopeCode);
-            } else if ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
+            } elseif ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
                 $scopeCode = $scopeCode->getCode();
             }
             if ($scopeCode) {
@@ -128,7 +128,7 @@ class Config implements ScopeConfigInterface
         if (isset($this->types[$configType])) {
             $result = $this->types[$configType]->get($path);
         }
-        
+
         return $result !== null ? $result : $default;
     }
 }

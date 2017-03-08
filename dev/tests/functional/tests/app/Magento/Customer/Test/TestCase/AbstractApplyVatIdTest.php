@@ -7,10 +7,10 @@
 namespace Magento\Customer\Test\TestCase;
 
 use Magento\Config\Test\Fixture\ConfigData;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Abstract class for setting up VAT ID configuration.

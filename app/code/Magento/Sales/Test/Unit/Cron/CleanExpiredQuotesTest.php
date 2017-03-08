@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Cron;
 
-use \Magento\Sales\Cron\CleanExpiredQuotes;
+use Magento\Sales\Cron\CleanExpiredQuotes;
 
 /**
  * Tests Magento\Sales\Cron\CleanExpiredQuotes

@@ -6,8 +6,8 @@
 
 namespace Magento\Backend\Test\TestCase;
 
-use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 use Magento\Backend\Test\Page\AdminAuthLogin;
+use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\TestCase\Injectable;
 

@@ -41,7 +41,7 @@ class Table
 
     // Capable to support long date-time before 1970
     const TYPE_TEXT = 'text';
-    
+
     // A real blob, stored as binary inside DB
     const TYPE_BLOB = 'blob';
 

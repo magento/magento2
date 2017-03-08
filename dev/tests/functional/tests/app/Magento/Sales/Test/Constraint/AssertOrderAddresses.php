@@ -5,9 +5,9 @@
  */
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Customer\Test\Fixture\Address;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Assert that Order Billing and Shipping addresses are correct on order page in backend.
@@ -29,7 +29,6 @@ class AssertOrderAddresses extends AbstractConstraint
         Address $shippingAddress,
         Address $billingAddress
     ) {
-
         $selectedShippingAddress = $this->objectManager->create(
             \Magento\Customer\Test\Block\Address\Renderer::class,
             ['address' => $shippingAddress, 'type' => 'html']

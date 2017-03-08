@@ -7,8 +7,8 @@
 namespace Magento\CatalogWidget\Block\Product;
 
 use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Widget\Block\BlockInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Widget\Block\BlockInterface;
 
 /**
  * Catalog Products List widget block
@@ -369,6 +369,5 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
                 ->get(PriceCurrencyInterface::class);
         }
         return $this->priceCurrency;
-
     }
 }

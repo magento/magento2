@@ -6,7 +6,7 @@
 namespace Magento\Framework\Test\Unit;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use \Magento\Framework\Translate;
+use Magento\Framework\Translate;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

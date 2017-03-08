@@ -5,21 +5,16 @@
  */
 namespace Magento\Webapi\Model\Rest\Swagger;
 
+use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\Authorization;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Controller\Rest;
 use Magento\Webapi\Model\AbstractSchemaGenerator;
 use Magento\Webapi\Model\Config\Converter;
 use Magento\Webapi\Model\Rest\Swagger;
 use Magento\Webapi\Model\Rest\SwaggerFactory;
-use Magento\Framework\Webapi\Authorization;
-use Magento\Framework\Webapi\Exception as WebapiException;
-use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\AuthorizationException;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Phrase;
-use Magento\Framework\App\ProductMetadataInterface;
-use \Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
  * REST Swagger schema generator.
@@ -318,7 +313,6 @@ class Generator extends AbstractSchemaGenerator
                     $description,
                     $bodySchema
                 );
-
             }
         }
 

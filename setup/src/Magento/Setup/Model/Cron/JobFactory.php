@@ -8,12 +8,12 @@ namespace Magento\Setup\Model\Cron;
 use Magento\Backend\Console\Command\CacheDisableCommand;
 use Magento\Backend\Console\Command\CacheEnableCommand;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Console\Command\MaintenanceDisableCommand;
+use Magento\Setup\Console\Command\MaintenanceEnableCommand;
 use Magento\Setup\Console\Command\ModuleDisableCommand;
 use Magento\Setup\Console\Command\ModuleEnableCommand;
 use Magento\Setup\Console\Command\UpgradeCommand;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Magento\Setup\Console\Command\MaintenanceDisableCommand;
-use Magento\Setup\Console\Command\MaintenanceEnableCommand;
 
 /**
  * Factory class to create jobs

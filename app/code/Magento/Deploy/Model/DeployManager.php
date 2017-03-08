@@ -6,11 +6,11 @@
 
 namespace Magento\Deploy\Model;
 
-use Magento\Framework\App\View\Deployment\Version\StorageInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Deploy\Model\Deploy\TemplateMinifier;
 use Magento\Framework\App\State;
+use Magento\Framework\App\View\Deployment\Version\StorageInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -182,7 +182,6 @@ class DeployManager
                 } else {
                     $dependentStrategy[] = $deploymentFunc;
                 }
-
             }
             $processQueueManager->addTaskToQueue($baseStrategy, $dependentStrategy);
         }

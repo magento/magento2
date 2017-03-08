@@ -6,10 +6,8 @@
  */
 namespace Magento\Webapi\Model;
 
-use Magento\Webapi\Controller\Rest;
-use Magento\Webapi\Model\Cache\Type\Webapi;
-use Magento\Webapi\Model\ServiceMetadata;
 use Magento\Framework\Webapi\Authorization;
+use Magento\Webapi\Model\Cache\Type\Webapi;
 
 /**
  * Abstract API schema generator.

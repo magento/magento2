@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product;
 
-use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin as AbstractIndexerPlugin;
 use Magento\Catalog\Model\Product\Action as ProductAction;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin as AbstractIndexerPlugin;
 
 /**
  * Plugin for Magento\Catalog\Model\Product\Action

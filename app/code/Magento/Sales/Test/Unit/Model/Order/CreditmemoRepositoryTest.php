@@ -7,7 +7,7 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use \Magento\Sales\Model\Order\CreditmemoRepository;
+use Magento\Sales\Model\Order\CreditmemoRepository;
 
 /**
  * Class CreditmemoRepositoryTest
@@ -34,7 +34,7 @@ class CreditmemoRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionProcessorMock;
-    
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

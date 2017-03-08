@@ -6,9 +6,9 @@
 
 namespace Magento\Setup\Fixtures;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Indexer\Model\Config;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class Application test

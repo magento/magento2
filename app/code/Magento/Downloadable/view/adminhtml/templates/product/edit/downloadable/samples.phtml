@@ -76,7 +76,7 @@ require([
                 '<input type="hidden" class="__delete__" name="downloadable[sample][<%- data.id %>][is_delete]" value="" />'+
                 '<input type="hidden" name="downloadable[sample][<%- data.id %>][sample_id]" value="<%- data.sample_id %>" />'+
                 '<input type="text" class="required-entry input-text admin__control-text" name="downloadable[sample][<%- data.id %>][title]" value="<%- data.title %>" />'+
-                <?php if($_product->getStoreId()): ?>
+                <?php if ($_product->getStoreId()): ?>
                     '<div class="admin__field admin__field-option">'+
                         '<input type="checkbox" id="downloadable_sample_<%- data.id %>_title" name="downloadable[sample][<%- data.id %>][use_default_title]" value="1" class="admin__control-checkbox" />'+
                         '<label for="downloadable_link_<%- data.id %>_price" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Use Default Value'); ?></span></label>'+

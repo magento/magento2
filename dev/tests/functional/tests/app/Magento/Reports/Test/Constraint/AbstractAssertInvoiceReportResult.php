@@ -6,11 +6,11 @@
 
 namespace Magento\Reports\Test\Constraint;
 
-use Magento\Reports\Test\Page\Adminhtml\SalesInvoiceReport;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\System\Event\EventManagerInterface;
+use Magento\Reports\Test\Page\Adminhtml\SalesInvoiceReport;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Abstract assert for search in invoice report grid.

@@ -86,7 +86,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 [$mainTableAlias => $this->getTable($tableNameAlias)],
                 $cols
             )->where(
-                $mainTableAlias.'.value_id IN(?)',
+                $mainTableAlias . '.value_id IN(?)',
                 $ids
             );
         if (null !== $storeId) {
@@ -135,7 +135,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $select =  $this->createBatchBaseSelect($storeId, $attributeId);
 
         $select = $select->where(
-            'entity.' . $this->metadata->getLinkField() .' = ?',
+            'entity.' . $this->metadata->getLinkField() . ' = ?',
             $entityId
         );
         return $select;

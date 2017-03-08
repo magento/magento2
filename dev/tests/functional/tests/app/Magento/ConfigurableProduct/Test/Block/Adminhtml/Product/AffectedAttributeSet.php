@@ -6,11 +6,10 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product;
 
-use Magento\Mtf\Client\Element;
+use Magento\Mtf\Block\Form as ParentForm;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Block\Form as ParentForm;
 
 /**
  * Choose affected attribute set dialog popup window.

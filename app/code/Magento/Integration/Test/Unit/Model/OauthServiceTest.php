@@ -7,7 +7,6 @@
  */
 namespace Magento\Integration\Test\Unit\Model;
 
-use Magento\Integration\Model\Integration;
 use Magento\Integration\Model\Oauth\Token;
 
 /**
@@ -160,7 +159,6 @@ class OauthServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateAccessTokenAndClearExisting()
     {
-
         $this->_consumerMock->expects(
             $this->any()
         )->method(

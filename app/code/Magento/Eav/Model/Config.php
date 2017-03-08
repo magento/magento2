@@ -6,8 +6,8 @@
 namespace Magento\Eav\Model;
 
 use Magento\Eav\Model\Entity\Type;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

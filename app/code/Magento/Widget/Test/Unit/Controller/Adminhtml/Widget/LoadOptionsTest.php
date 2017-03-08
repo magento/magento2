@@ -5,15 +5,15 @@
  */
 namespace Magento\Widget\Test\Unit\Controller\Adminhtml\Widget;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Widget\Controller\Adminhtml\Widget\LoadOptions;
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\ViewInterface;
 use Magento\Widget\Helper\Conditions as ConditionsHelper;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\App\RequestInterface;
 
 /**
  * Test class for \Magento\Widget\Controller\Adminhtml\Widget\LoadOptions

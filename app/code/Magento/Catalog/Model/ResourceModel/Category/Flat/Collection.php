@@ -6,12 +6,12 @@
 namespace Magento\Catalog\Model\ResourceModel\Category\Flat;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Psr\Log\LoggerInterface as Logger;
 use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Catalog category flat collection

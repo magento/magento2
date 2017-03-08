@@ -84,8 +84,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' =>
-                                '\\' . JoinProcessorInterface::class,
+                            'description' => '\\' . JoinProcessorInterface::class,
                         ],
                     ],
                 ]
@@ -98,8 +97,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' =>
-                                '\\' . CollectionProcessorInterface::class,
+                            'description' => '\\' . CollectionProcessorInterface::class,
                         ],
                     ],
                 ]

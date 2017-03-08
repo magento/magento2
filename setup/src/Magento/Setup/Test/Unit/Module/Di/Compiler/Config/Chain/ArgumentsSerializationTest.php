@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\Compiler\Config\Chain;
 
-use \Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization;
+use Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization;
 
 class ArgumentsSerializationTest extends \PHPUnit_Framework_TestCase
 {

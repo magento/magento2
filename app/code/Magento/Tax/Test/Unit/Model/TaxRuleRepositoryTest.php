@@ -5,8 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Model;
 
-use Magento\Framework\Api\SortOrder;
-use \Magento\Tax\Model\TaxRuleRepository;
+use Magento\Tax\Model\TaxRuleRepository;
 
 /**
  * Class TaxRuleRepositoryTest
@@ -209,7 +208,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
         $collectionMock =
             $this->getMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class, [], [], '', false);
-            $this->getMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class, [], [], '', false);
+        $this->getMock(\Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection::class, [], [], '', false);
 
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')

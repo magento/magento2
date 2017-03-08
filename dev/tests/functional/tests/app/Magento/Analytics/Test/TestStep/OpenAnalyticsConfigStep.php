@@ -6,8 +6,8 @@
 namespace Magento\Analytics\Test\TestStep;
 
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Steps:

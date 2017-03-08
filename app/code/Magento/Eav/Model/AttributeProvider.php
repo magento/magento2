@@ -6,10 +6,10 @@
 
 namespace Magento\Eav\Model;
 
-use Magento\Framework\Model\EntitySnapshot\AttributeProviderInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\EntitySnapshot\AttributeProviderInterface;
 
 /**
  * Class EntitySnapshot

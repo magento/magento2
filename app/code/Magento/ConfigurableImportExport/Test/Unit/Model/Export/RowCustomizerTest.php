@@ -5,12 +5,12 @@
  */
 namespace Magento\ConfigurableImportExport\Test\Unit\Model\Export;
 
-use Magento\ConfigurableImportExport\Model\Export\RowCustomizer as ExportRowCustomizer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\ConfigurableImportExport\Model\Export\RowCustomizer as ExportRowCustomizer;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Model\Import;
 
 class RowCustomizerTest extends \PHPUnit_Framework_TestCase

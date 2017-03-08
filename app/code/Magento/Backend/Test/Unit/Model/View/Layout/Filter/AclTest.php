@@ -5,10 +5,10 @@
  */
 namespace Magento\Backend\Test\Unit\Model\View\Layout\Filter;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\Model\View\Layout\Filter\Acl;
 use Magento\Backend\Model\View\Layout\StructureManager;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AclTest extends \PHPUnit_Framework_TestCase
 {

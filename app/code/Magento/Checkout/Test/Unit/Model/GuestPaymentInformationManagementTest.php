@@ -5,8 +5,6 @@
  */
 namespace Magento\Checkout\Test\Unit\Model;
 
-use Magento\Framework\Exception\CouldNotSaveException;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

@@ -5,10 +5,10 @@
  */
 namespace Magento\Deploy\Model\DeploymentConfig;
 
-use Magento\Framework\Exception\ConfigurationMismatchException;
-use Magento\Framework\Phrase;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
+use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
 
 /**
  * Pool of all deployment configuration importers.

@@ -123,7 +123,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->sampleMock->expects($this->once())->method('setSampleFile')->with($fileName);
         $this->sampleMock->expects($this->once())->method('setSortOrder')->with(1);
         $this->service->setData($data);
-        
+
         $this->service->build($this->sampleMock);
     }
 }

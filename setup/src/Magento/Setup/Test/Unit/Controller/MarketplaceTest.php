@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Marketplace;
+use Magento\Setup\Controller\Marketplace;
 
 class MarketplaceTest extends \PHPUnit_Framework_TestCase
 {
@@ -56,7 +56,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('checkCredentials')
-            ->will($this->throwException(new \Exception));
+            ->will($this->throwException(new \Exception()));
         $this->packagesAuth->expects($this->never())->method('saveAuthJson');
         $jsonModel = $this->controller->saveAuthJsonAction();
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
@@ -88,7 +88,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('getAuthJsonData')
-            ->will($this->throwException(new \Exception));
+            ->will($this->throwException(new \Exception()));
         $jsonModel = $this->controller->checkAuthAction();
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -116,7 +116,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('removeCredentials')
-            ->will($this->throwException(new \Exception));
+            ->will($this->throwException(new \Exception()));
         $jsonModel = $this->controller->removeCredentialsAction();
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();

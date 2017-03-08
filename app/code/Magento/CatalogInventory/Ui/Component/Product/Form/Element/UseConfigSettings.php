@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogInventory\Ui\Component\Product\Form\Element;
 
-use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Framework\Data\ValueSourceInterface;
+use Magento\Ui\Component\Form\Element\Checkbox;
 
 /**
  * Class UseConfigSettings sets default value from configuration

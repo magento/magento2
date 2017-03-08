@@ -5,9 +5,9 @@
  */
 namespace Magento\Marketplace\Model;
 
+use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Marketplace\Helper\Cache;
-use Magento\Backend\Model\UrlInterface;
 
 class Partners
 {

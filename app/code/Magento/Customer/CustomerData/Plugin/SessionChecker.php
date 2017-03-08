@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\CustomerData\Plugin;
 
-use \Magento\Framework\Session\SessionManager;
+use Magento\Framework\Session\SessionManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 

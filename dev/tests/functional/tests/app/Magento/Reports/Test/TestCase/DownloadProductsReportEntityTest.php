@@ -8,10 +8,10 @@ namespace Magento\Reports\Test\TestCase;
 
 use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Downloadable\Test\Page\DownloadableCustomerProducts;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Preconditions:

@@ -7,12 +7,12 @@
 
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Api\Data\AddressInterface;
-use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
+use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Model\GuestCart\GuestShippingMethodManagement;
+use Magento\Quote\Model\QuoteIdMask;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class GuestShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
 {

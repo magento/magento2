@@ -32,14 +32,14 @@ class VariationMatrixTest extends \PHPUnit_Framework_TestCase
                 130 => [
                     'value' => '3',
                     'label' => 'red',
-                    'price' => ['value_index' => '3', 'pricing_value' => '', 'is_percent' => '0', 'include' => '1',],
+                    'price' => ['value_index' => '3', 'pricing_value' => '', 'is_percent' => '0', 'include' => '1'],
                 ],
             ],
             [
                 130 => [
                     'value' => '4',
                     'label' => 'blue',
-                    'price' => ['value_index' => '4', 'pricing_value' => '', 'is_percent' => '0', 'include' => '1',],
+                    'price' => ['value_index' => '4', 'pricing_value' => '', 'is_percent' => '0', 'include' => '1'],
                 ],
             ],
         ];
@@ -61,7 +61,7 @@ class VariationMatrixTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'attribute_id' => '130',
-                'options' => [['value' => '3', 'label' => 'red',], ['value' => '4', 'label' => 'blue',],],
+                'options' => [['value' => '3', 'label' => 'red'], ['value' => '4', 'label' => 'blue']],
             ],
         ];
 

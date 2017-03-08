@@ -7,9 +7,9 @@ namespace Magento\Theme\Model\Source;
 
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Theme\Model\ResourceModel\Theme;
 use Magento\Theme\Model\ResourceModel\ThemeFactory;
-use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
 /**
  * Class InitialThemeSource.

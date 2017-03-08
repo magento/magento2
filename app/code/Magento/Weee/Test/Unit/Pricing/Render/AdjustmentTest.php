@@ -6,7 +6,7 @@
 
 namespace Magento\Weee\Test\Unit\Pricing\Render;
 
-use \Magento\Weee\Pricing\Render\Adjustment;
+use Magento\Weee\Pricing\Render\Adjustment;
 
 /**
  * Class AdjustmentTest for testing Adjustment class

@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\Module\Test\Unit\Plugin;
 
-use \Magento\Framework\Module\Plugin\DbStatusValidator;
-
 use Magento\Framework\Module\DbVersionInfo;
+
+use Magento\Framework\Module\Plugin\DbStatusValidator;
 
 class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
 {

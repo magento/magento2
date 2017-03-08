@@ -8,7 +8,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Action;
 
-use \Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Action;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 

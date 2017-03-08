@@ -7,12 +7,12 @@
 namespace Magento\Setup\Fixtures;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Setup\Model\DataGenerator;
-use Magento\Catalog\Model\Product\Visibility;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
 use Magento\Setup\Model\FixtureGenerator\ConfigurableProductGenerator;
 use Magento\Setup\Model\FixtureGenerator\ProductGenerator;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -392,7 +392,7 @@ class ConfigurableProductsFixture extends Fixture
     public function printInfo(OutputInterface $output)
     {
         if (!$this->fixtureModel->getValue('configurable_products', [])) {
-            return ;
+            return;
         }
         $configurableProductConfig = $this->getConfigurableProductConfig();
         $generalAmount = array_sum(array_map(
@@ -684,7 +684,6 @@ class ConfigurableProductsFixture extends Fixture
     private function getAdditionalAttributesClosure(array $attributes, $variationCount)
     {
         return function ($attributeSetId, $index, $entityNumber) use ($attributes, $variationCount) {
-
             $variationIndex = $this->getConfigurableVariationIndex($entityNumber, $variationCount) - 1;
             $attributeValues = [];
             $optionsPerAttribute = count($attributes[0]['values']);

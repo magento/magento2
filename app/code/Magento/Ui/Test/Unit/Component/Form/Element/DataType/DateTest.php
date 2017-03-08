@@ -5,12 +5,12 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Form\Element\DataType;
 
-use Magento\Ui\Component\Form\Element\DataType\Date;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Ui\Component\Form\Element\DataType\Date;
 
 class DateTest extends \PHPUnit_Framework_TestCase
 {
@@ -108,7 +108,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('options', $config);
         $this->assertArrayHasKey('dateFormat', $config['options']);
         $this->assertEquals($localeDateFormat, $config['options']['dateFormat']);
-
     }
 
     /**

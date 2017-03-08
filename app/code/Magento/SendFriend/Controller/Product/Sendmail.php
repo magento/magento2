@@ -8,8 +8,8 @@
 
 namespace Magento\SendFriend\Controller\Product;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class Sendmail extends \Magento\SendFriend\Controller\Product
 {

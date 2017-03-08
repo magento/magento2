@@ -7,13 +7,11 @@ namespace Magento\Braintree\Test\Unit\Model\Report;
 
 use Braintree\Transaction;
 use Braintree\Transaction\PayPalDetails;
-use DateTime;
 use Magento\Braintree\Model\Report\Row\TransactionMap;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class TransactionMapTest

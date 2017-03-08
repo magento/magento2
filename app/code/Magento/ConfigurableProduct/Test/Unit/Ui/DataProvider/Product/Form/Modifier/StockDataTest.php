@@ -5,10 +5,10 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\StockData as StockDataModifier;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
 
 class StockDataTest extends \PHPUnit_Framework_TestCase
 {

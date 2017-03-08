@@ -6,16 +6,16 @@
 
 namespace Magento\Deploy\Model\Deploy;
 
+use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
+use Magento\Deploy\Model\DeployStrategyFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Console\Cli;
-use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
 use Magento\Framework\Translate\Js\Config as TranslationJsConfig;
-use Magento\Framework\App\ObjectManager;
-use Magento\Deploy\Model\DeployStrategyFactory;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * To avoid duplication of deploying of all static content per each theme/local, this class uses copying/symlinking

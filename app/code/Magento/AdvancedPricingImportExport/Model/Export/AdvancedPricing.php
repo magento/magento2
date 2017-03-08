@@ -5,10 +5,10 @@
  */
 namespace Magento\AdvancedPricingImportExport\Model\Export;
 
-use Magento\Store\Model\Store;
-use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as ImportAdvancedPricing;
 use Magento\Catalog\Model\Product as CatalogProduct;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Store\Model\Store;
 
 /**
  * Export Advanced Pricing

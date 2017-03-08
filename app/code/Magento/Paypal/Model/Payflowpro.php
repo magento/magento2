@@ -12,7 +12,6 @@ use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
-use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
 use Magento\Quote\Model\Quote;

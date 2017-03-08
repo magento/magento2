@@ -10,8 +10,8 @@ use Magento\Deploy\Model\Deploy\DeployInterface;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
-use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
+use Magento\Framework\View\DesignInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class DeployStrategyProvider

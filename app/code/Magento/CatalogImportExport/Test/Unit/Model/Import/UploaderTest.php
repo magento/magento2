@@ -157,7 +157,6 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testMoveFileUrlDrivePool($fileUrl, $expectedHost, $expectedDriverPool, $expectedScheme)
     {
-
         $driverPool = $this->getMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
         $driverMock = $this->getMock($expectedDriverPool, ['readAll']);
         $driverMock->expects($this->any())->method('isExists')->willReturn(true);

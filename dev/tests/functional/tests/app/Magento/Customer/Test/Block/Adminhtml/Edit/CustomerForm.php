@@ -7,9 +7,9 @@
 namespace Magento\Customer\Test\Block\Adminhtml\Edit;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Customer\Test\Fixture\Address;
 
 /**
  * Form for creation of the customer.

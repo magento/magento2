@@ -7,17 +7,17 @@
  */
 namespace Magento\Test\Integrity\Di;
 
+use Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator;
+use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Interception\Code\InterfaceValidator;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
-use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
-use Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator;
-use Magento\Framework\App\Utility\Files;
 use Magento\TestFramework\Integrity\PluginValidator;
 
 /**
@@ -183,7 +183,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
 
         $files = Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_LIBS);
 
-        $patterns = ['/' . preg_quote($generationPath) . '/',];
+        $patterns = ['/' . preg_quote($generationPath) . '/'];
         $replacements = [''];
 
         $componentRegistrar = new ComponentRegistrar();
@@ -306,10 +306,8 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                 Converter::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Converter::class,
                 Mapper::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\Mapper::class,
                 SearchResults::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\SearchResults::class,
-                ExtensionAttributesInterfaceGenerator::ENTITY_TYPE =>
-                    \Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator::class,
-                ExtensionAttributesGenerator::ENTITY_TYPE =>
-                    \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator::class
+                ExtensionAttributesInterfaceGenerator::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator::class,
+                ExtensionAttributesGenerator::ENTITY_TYPE => \Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator::class
             ]
         );
         $generationAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);

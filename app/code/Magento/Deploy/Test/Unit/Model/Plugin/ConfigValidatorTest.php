@@ -5,8 +5,8 @@
  */
 namespace Magento\Deploy\Test\Unit\Model\Plugin;
 
-use Magento\Deploy\Model\Plugin\ConfigValidator;
 use Magento\Deploy\Model\DeploymentConfig\Validator;
+use Magento\Deploy\Model\Plugin\ConfigValidator;
 use Magento\Framework\App\FrontController;
 use Magento\Framework\App\RequestInterface;
 

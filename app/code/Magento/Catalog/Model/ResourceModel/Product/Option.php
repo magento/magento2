@@ -260,7 +260,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 if ($existInCurrentStore) {
                     if ($isDeleteStoreTitle && (int)$storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
                         $connection->delete($titleTableName, ['option_title_id = ?' => $existInCurrentStore]);
-
                     } elseif ($object->getStoreId() == $storeId) {
                         $data = $this->_prepareDataForTable(
                             new \Magento\Framework\DataObject(['title' => $object->getTitle()]),

@@ -5,10 +5,9 @@
  */
 namespace Magento\Paypal\Test\Unit\Model;
 
-use Magento\Paypal\Model\Payflowlink;
-use Magento\Paypal\Model\Config;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Paypal\Model\Payflowlink;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

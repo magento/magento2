@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Config\Test\Unit\Dom;
 
-use \Magento\Framework\Config\Dom\ArrayNodeConfig;
+use Magento\Framework\Config\Dom\ArrayNodeConfig;
 
 class ArrayNodeConfigTest extends \PHPUnit_Framework_TestCase
 {

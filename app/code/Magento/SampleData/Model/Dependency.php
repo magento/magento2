@@ -7,9 +7,9 @@ namespace Magento\SampleData\Model;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Config\Composer\Package;
 use Magento\Framework\Config\Composer\PackageFactory;
+use Magento\Framework\Filesystem;
 
 /**
  * Sample Data dependency

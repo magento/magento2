@@ -5,7 +5,6 @@
  */
 namespace Magento\Backend\Model\View\Result;
 
-use Magento\Framework\Translate;
 use Magento\Framework\View;
 
 class Page extends View\Result\Page

@@ -6,9 +6,9 @@
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Plugin;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
-use Magento\Sales\Model\Order;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 use Magento\Sales\Model\ResourceModel\Order\Plugin\Authorization;
 
 class AuthorizationTest extends \PHPUnit_Framework_TestCase

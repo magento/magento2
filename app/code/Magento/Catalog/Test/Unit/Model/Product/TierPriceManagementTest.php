@@ -8,7 +8,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-use \Magento\Catalog\Model\Product\TierPriceManagement;
+use Magento\Catalog\Model\Product\TierPriceManagement;
 
 use Magento\Customer\Model\GroupManagement;
 use Magento\Framework\Exception\NoSuchEntityException;

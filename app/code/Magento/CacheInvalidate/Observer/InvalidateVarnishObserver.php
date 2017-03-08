@@ -5,7 +5,6 @@
  */
 namespace Magento\CacheInvalidate\Observer;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ObserverInterface;
 
 class InvalidateVarnishObserver implements ObserverInterface
@@ -65,7 +64,6 @@ class InvalidateVarnishObserver implements ObserverInterface
             if (!empty($tags)) {
                 $this->purgeCache->sendPurgeRequest(implode('|', array_unique($tags)));
             }
-
         }
     }
 

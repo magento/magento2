@@ -5,12 +5,12 @@
  */
 namespace Magento\Theme\Test\Unit\Model\ResourceModel\Design\Config\Scope;
 
-use Magento\Store\Model\ScopeInterface;
-use Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeTreeProviderInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Model\Design\Config\MetadataProviderInterface;
+use Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {

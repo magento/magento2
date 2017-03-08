@@ -5,8 +5,8 @@
  */
 namespace Magento\Sitemap\Test\Unit\Controller\Adminhtml\Sitemap;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class SaveTest extends \PHPUnit_Framework_TestCase
 {

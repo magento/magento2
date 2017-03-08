@@ -9,9 +9,9 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Cms\Model\Wysiwyg as WysiwygModel;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Registry;
 use Magento\Store\Model\StoreFactory;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Framework\Registry;
 
 class Builder
 {

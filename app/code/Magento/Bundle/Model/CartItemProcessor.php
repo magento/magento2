@@ -5,10 +5,10 @@
  */
 namespace Magento\Bundle\Model;
 
-use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
-use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Bundle\Api\Data\BundleOptionInterfaceFactory;
 use Magento\Quote\Api\Data as QuoteApi;
+use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 
 class CartItemProcessor implements CartItemProcessorInterface
 {

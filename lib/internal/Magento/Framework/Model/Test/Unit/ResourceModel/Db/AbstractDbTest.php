@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db;
+
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\Model\AbstractModel;
@@ -571,8 +572,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             ->willReturn($connectionMock);
 
         $idFieldName = 'id_field_name';
-        $model->expects($this->once())->method('_prepareDataForSave')->willReturn([$idFieldName => 'id',]);
-
+        $model->expects($this->once())->method('_prepareDataForSave')->willReturn([$idFieldName => 'id']);
 
         // Test expectations
         //      Only get object's id field name if not PK autoincrement

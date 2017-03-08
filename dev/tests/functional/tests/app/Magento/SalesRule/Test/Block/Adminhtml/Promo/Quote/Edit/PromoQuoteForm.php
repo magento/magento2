@@ -5,9 +5,9 @@
  */
 namespace Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit;
 
-use Magento\Ui\Test\Block\Adminhtml\FormSections;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 
 /**
  * Sales rule edit form.

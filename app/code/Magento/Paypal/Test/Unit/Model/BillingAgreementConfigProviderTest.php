@@ -5,9 +5,9 @@
  */
 namespace Magento\Paypal\Test\Unit\Model;
 
-use Magento\Paypal\Model\BillingAgreementConfigProvider;
-use Magento\Paypal\Model\Billing\AgreementFactory;
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Paypal\Model\Billing\AgreementFactory;
+use Magento\Paypal\Model\BillingAgreementConfigProvider;
 use Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement;
 
 class BillingAgreementConfigProviderTest extends \PHPUnit_Framework_TestCase
@@ -38,7 +38,6 @@ class BillingAgreementConfigProviderTest extends \PHPUnit_Framework_TestCase
             $this->currentCustomerMock,
             $this->agreementFactoryMock
         );
-
     }
 
     public function testGetConfig()

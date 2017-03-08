@@ -5,8 +5,8 @@
  */
 namespace Magento\Analytics\Test\Unit\ReportXml\DB;
 
-use Magento\Analytics\ReportXml\DB\NameResolver;
 use Magento\Analytics\ReportXml\DB\ColumnsResolver;
+use Magento\Analytics\ReportXml\DB\NameResolver;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
 
 /**
@@ -94,8 +94,7 @@ class ColumnsResolverTest extends \PHPUnit_Framework_TestCase
     public function dataProvider()
     {
         return [
-            'TestWithFunction' =>
-                [
+            'TestWithFunction' => [
                     'expression' => "SUM( DISTINCT fn.name)",
                     'attributeData' => ['adata1', 'function' => 'SUM', 'distinct' => true, 'group' => true],
                 ],

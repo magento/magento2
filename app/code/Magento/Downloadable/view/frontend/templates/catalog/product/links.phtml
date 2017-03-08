@@ -14,7 +14,11 @@
     <?php $_linksLength = 0; ?>
     <?php $_isRequired = $block->getLinkSelectionRequired(); ?>
     <legend class="legend links-title"><span><?php /* @escapeNotVerified */ echo $block->getLinksTitle() ?></span></legend><br>
-    <div class="field downloads<?php if ($_isRequired) echo ' required' ?><?php if (!$_linksPurchasedSeparately) echo ' downloads-no-separately' ?>">
+    <div class="field downloads<?php if ($_isRequired) {
+    echo ' required';
+} ?><?php if (!$_linksPurchasedSeparately) {
+    echo ' downloads-no-separately';
+} ?>">
         <label class="label"><span><?php /* @escapeNotVerified */ echo $block->getLinksTitle() ?></span></label>
         <div class="control" id="downloadable-links-list"
              data-mage-init='{"downloadable":{

@@ -6,8 +6,8 @@
 namespace Magento\Backend\Test\TestCase;
 
 use Magento\Backend\Test\Constraint\AssertInterfaceLocaleAvailableOptions;
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Backend\Test\Page\Adminhtml\SystemAccount;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Util\Command\Locales;
 use Magento\User\Test\Page\Adminhtml\UserEdit;
 

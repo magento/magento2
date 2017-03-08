@@ -7,7 +7,6 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Zend\View\Model\JsonModel;
 
 /**
  * Class PackagesAuth, checks, saves and removes auth details related to packages.
@@ -69,7 +68,7 @@ class PackagesAuth
      */
     private function getPackagesJsonUrl()
     {
-        return $this->urlPrefix .  $this->getCredentialBaseUrl() .  '/packages.json';
+        return $this->urlPrefix . $this->getCredentialBaseUrl() . '/packages.json';
     }
 
     /**

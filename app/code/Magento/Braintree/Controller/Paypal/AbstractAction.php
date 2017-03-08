@@ -5,13 +5,13 @@
  */
 namespace Magento\Braintree\Controller\Paypal;
 
+use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
-use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Abstract class AbstractAction

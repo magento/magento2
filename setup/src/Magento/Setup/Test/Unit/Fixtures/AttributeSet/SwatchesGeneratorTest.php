@@ -45,7 +45,6 @@ class SwatchesGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateSwatchData()
     {
-
         $attribute['swatch_input_type'] = Swatch::SWATCH_INPUT_TYPE_VISUAL;
         $attribute['swatchvisual']['value'] = array_reduce(
             range(1, 3),

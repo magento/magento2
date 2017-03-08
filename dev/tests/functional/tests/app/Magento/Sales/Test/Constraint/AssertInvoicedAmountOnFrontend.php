@@ -7,9 +7,9 @@
 namespace Magento\Sales\Test\Constraint;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Sales\Test\Page\CustomerOrderView;
 use Magento\Sales\Test\Page\InvoiceView;
 use Magento\Sales\Test\Page\OrderHistory;
-use Magento\Sales\Test\Page\CustomerOrderView;
 
 /**
  * Class AssertInvoicedAmountOnFrontend

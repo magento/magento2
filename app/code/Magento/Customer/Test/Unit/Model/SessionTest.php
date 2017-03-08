@@ -239,9 +239,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['expectedResult' => true, 'isCustomerIdValid' => true, 'isCustomerEmulated' => false],
-            ['expectedResult' => false, 'isCustomerIdValid' => true, 'isCustomerEmulated' => true,],
-            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => false,],
-            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => true,],
+            ['expectedResult' => false, 'isCustomerIdValid' => true, 'isCustomerEmulated' => true],
+            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => false],
+            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => true],
         ];
     }
 

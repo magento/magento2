@@ -28,13 +28,13 @@ class VaultTokenRendererTest extends \PHPUnit_Framework_TestCase
      * @var ObjectManagerInterface
      */
     private $objectManager;
-    
+
     protected function setUp()
     {
         $bootstrap = Bootstrap::getInstance();
         $bootstrap->loadArea(Area::AREA_FRONTEND);
         $this->objectManager = Bootstrap::getObjectManager();
-        
+
         $this->tokenBlock = $this->objectManager->get(AccountTokens::class);
     }
 

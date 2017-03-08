@@ -5,14 +5,14 @@
  */
 namespace Magento\CatalogInventory\Helper;
 
-use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
-use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
+use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Stock

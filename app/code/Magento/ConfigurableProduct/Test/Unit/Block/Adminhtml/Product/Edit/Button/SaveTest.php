@@ -5,10 +5,10 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Adminhtml\Product\Edit\Button;
 
-use Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Button\Save as SaveButton;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Registry;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Button\Save as SaveButton;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class SaveTest extends \PHPUnit_Framework_TestCase
 {

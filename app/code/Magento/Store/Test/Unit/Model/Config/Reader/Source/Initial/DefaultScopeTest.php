@@ -5,9 +5,9 @@
  */
 namespace Magento\Store\Test\Unit\Model\Config\Reader\Source\Initial;
 
+use Magento\Framework\App\Config\Scope\Converter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\Config\Reader\Source\Initial\DefaultScope;
-use Magento\Framework\App\Config\Scope\Converter;
 
 class DefaultScopeTest extends \PHPUnit_Framework_TestCase
 {

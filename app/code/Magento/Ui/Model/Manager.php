@@ -6,9 +6,11 @@
 namespace Magento\Ui\Model;
 
 use ArrayObject;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\UiComponent\ArrayObjectFactory;
 use Magento\Framework\View\Element\UiComponent\Config\Converter;
 use Magento\Framework\View\Element\UiComponent\Config\DomMergerInterface;
@@ -17,8 +19,6 @@ use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
 use Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition as ComponentDefinition;
 use Magento\Framework\View\Element\UiComponent\Config\ReaderFactory;
 use Magento\Framework\View\Element\UiComponent\Config\UiReaderInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Manager

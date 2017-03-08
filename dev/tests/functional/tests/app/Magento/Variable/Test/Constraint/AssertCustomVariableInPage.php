@@ -7,11 +7,11 @@
 namespace Magento\Variable\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Variable\Test\Fixture\SystemVariable;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Store\Test\Fixture\Store;
+use Magento\Variable\Test\Fixture\SystemVariable;
 
 /**
  * Add created variable to page and assert that Custom Variable is displayed on frontend page.

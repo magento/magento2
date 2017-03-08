@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Text\TextList;
 
-use \Magento\Framework\View\Element\Text\TextList\Link;
+use Magento\Framework\View\Element\Text\TextList\Link;
 
 class LinkTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,7 +6,6 @@
 namespace Magento\Setup\Module\Di\Code\Reader;
 
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Setup\Module\Di\Code\Reader\FileScanner;
 
 class ClassesScanner implements ClassesScannerInterface
 {

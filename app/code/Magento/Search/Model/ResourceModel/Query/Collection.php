@@ -128,7 +128,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setPopularQueryFilter($storeIds = null)
     {
-
         $this->getSelect()->reset(
             \Magento\Framework\DB\Select::FROM
         )->reset(

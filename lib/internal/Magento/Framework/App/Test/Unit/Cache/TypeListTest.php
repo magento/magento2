@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Cache;
 
-use \Magento\Framework\App\Cache\TypeList;
+use Magento\Framework\App\Cache\TypeList;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**

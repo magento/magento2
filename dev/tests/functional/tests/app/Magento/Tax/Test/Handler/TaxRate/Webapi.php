@@ -6,13 +6,12 @@
 
 namespace Magento\Tax\Test\Handler\TaxRate;
 
-use Magento\Tax\Test\Fixture\TaxRate;
 use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Handler\Webapi as AbstractWebapi;
 use Magento\Mtf\System\Event\EventManagerInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
+use Magento\Tax\Test\Fixture\TaxRate;
 
 /**
  * Create Tax Rate via Web API.

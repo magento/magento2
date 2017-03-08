@@ -6,8 +6,8 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that customer login error message is displayed.

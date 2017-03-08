@@ -5,7 +5,6 @@
  */
 namespace Magento\Swatches\Test\Unit\Model\Plugin;
 
-
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
@@ -16,7 +15,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Swatches\Model\Plugin\Configurable|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $pluginModel;
-    
+
     protected function setUp()
     {
         $this->eavConfig = $this->getMock(

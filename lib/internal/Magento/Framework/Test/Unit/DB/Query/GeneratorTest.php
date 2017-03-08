@@ -5,11 +5,11 @@
  */
 namespace Magento\Framework\Test\Unit\DB\Query;
 
-use Magento\Framework\DB\Query\Generator;
+use Magento\Framework\DB\Query\BatchIterator;
 use Magento\Framework\DB\Query\BatchIteratorFactory;
 use Magento\Framework\DB\Query\BatchRangeIteratorFactory;
+use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Query\BatchIterator;
 
 class GeneratorTest extends \PHPUnit_Framework_TestCase
 {

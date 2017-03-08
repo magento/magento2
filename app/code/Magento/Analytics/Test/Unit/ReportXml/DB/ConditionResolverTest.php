@@ -6,8 +6,8 @@
 namespace Magento\Analytics\Test\Unit\ReportXml\DB;
 
 use Magento\Analytics\ReportXml\DB\ConditionResolver;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**

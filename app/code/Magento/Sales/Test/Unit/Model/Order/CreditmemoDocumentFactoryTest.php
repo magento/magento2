@@ -5,19 +5,19 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Framework\EntityManager\HydratorInterface;
+use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
+use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
 use Magento\Sales\Api\Data\CreditmemoCommentInterface;
-use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\CreditmemoItemCreationInterface;
-use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
-use Magento\Framework\EntityManager\HydratorPool;
-use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
 use Magento\Sales\Model\Order\CreditmemoFactory;
-use Magento\Framework\EntityManager\HydratorInterface;
+use Magento\Sales\Model\Order\Invoice;
 
 /**
  * Class CreditmemoDocumentFactoryTest

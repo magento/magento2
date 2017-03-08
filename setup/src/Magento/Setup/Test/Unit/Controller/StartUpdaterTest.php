@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use Magento\Setup\Model\Navigation;
 use Magento\Setup\Controller\StartUpdater;
 
 /**
@@ -72,7 +71,7 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->mvcEvent);
         $this->mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
     }
-    
+
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();

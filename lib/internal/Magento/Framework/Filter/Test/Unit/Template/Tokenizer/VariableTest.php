@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Filter\Test\Unit\Template\Tokenizer;
 
-use \Magento\Framework\Filter\Template\Tokenizer\Variable;
+use Magento\Framework\Filter\Template\Tokenizer\Variable;
 
 class VariableTest extends \PHPUnit_Framework_TestCase
 {

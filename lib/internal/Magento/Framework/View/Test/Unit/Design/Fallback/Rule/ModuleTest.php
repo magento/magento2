@@ -7,7 +7,7 @@ namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
-use \Magento\Framework\View\Design\Fallback\Rule\Module;
+use Magento\Framework\View\Design\Fallback\Rule\Module;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 
 class ModuleTest extends \PHPUnit_Framework_TestCase

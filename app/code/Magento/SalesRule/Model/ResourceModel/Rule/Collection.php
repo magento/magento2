@@ -6,8 +6,8 @@
 
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
-use Magento\Quote\Model\Quote\Address;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Sales Rules resource collection model.

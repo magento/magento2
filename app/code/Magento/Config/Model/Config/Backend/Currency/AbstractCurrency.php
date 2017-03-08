@@ -32,7 +32,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
                 )
             );
         }
-        
+
         return (array)$this->getData('groups/options/fields/allow/value');
     }
 

@@ -6,8 +6,8 @@
 
 namespace Magento\Deploy\Model\Deploy;
 
-use Magento\Framework\View\Template\Html\MinifierInterface;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\View\Template\Html\MinifierInterface;
 
 class TemplateMinifier
 {

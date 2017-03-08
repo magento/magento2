@@ -5,7 +5,7 @@
  */
 namespace Magento\Widget\Test\Unit\Model\Template;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class FilterEmulateTest extends \PHPUnit_Framework_TestCase
 {

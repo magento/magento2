@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer\Product\Save;
 
+use Magento\Catalog\Model\Product;
+use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 use Magento\CatalogRule\Plugin\Indexer\Product\Save\ApplyRulesAfterReindex;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
-use Magento\Catalog\Model\Product;
 
 class ApplyRulesAfterReindexTest extends \PHPUnit_Framework_TestCase
 {

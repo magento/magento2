@@ -6,8 +6,8 @@
 
 namespace Magento\Analytics\ReportXml;
 
-use Magento\Framework\DB\Select;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 
 /**
  * Class SelectHydrator

@@ -5,9 +5,9 @@
  */
 namespace Magento\Backend\Model\View\Layout;
 
-use Magento\Framework\View\Layout\ScheduledStructure;
-use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\View\Layout\ScheduledStructure;
 
 /**
  * Pool of generators for structural elements

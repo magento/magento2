@@ -8,8 +8,6 @@
 
 namespace Magento\Framework\Stdlib\Cookie;
 
-use Magento\Framework\Stdlib\Cookie\PhpCookieReader;
-
 class PhpCookieReaderTest extends \PHPUnit_Framework_TestCase
 {
     /**

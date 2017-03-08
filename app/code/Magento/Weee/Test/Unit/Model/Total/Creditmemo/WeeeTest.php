@@ -144,7 +144,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(
                 $value,
                 $this->creditmemo->getData($key),
-                'Creditmemo data field '.$key.' is incorrect'
+                'Creditmemo data field ' . $key . ' is incorrect'
             );
         }
         //verify invoice item data
@@ -158,7 +158,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     $this->assertEquals(
                         $value,
                         $creditmemoItem->getData($key),
-                        'Creditmemo item field '.$key.' is incorrect'
+                        'Creditmemo item field ' . $key . ' is incorrect'
                     );
                 }
             }

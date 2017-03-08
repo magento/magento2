@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\App\Cache;
 
-use Magento\Framework\App;
-
 /**
  * Cache status manager
  */

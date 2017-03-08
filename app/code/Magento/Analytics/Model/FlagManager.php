@@ -5,9 +5,9 @@
  */
 namespace Magento\Analytics\Model;
 
-use Magento\Framework\FlagFactory;
-use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\Flag;
+use Magento\Framework\Flag\FlagResource;
+use Magento\Framework\FlagFactory;
 
 /**
  * Service that allows to handle a flag object as a scalar value.

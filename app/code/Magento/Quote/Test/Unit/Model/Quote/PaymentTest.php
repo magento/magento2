@@ -7,14 +7,14 @@ namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Checks\Composite;
 use Magento\Payment\Model\Checks\SpecificationFactory;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote;
-use \Magento\Quote\Model\Quote\Payment;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Payment;
 
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {

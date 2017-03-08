@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\DB\Test\Unit\DataConverter;
 
-use Magento\Framework\Serialize\Serializer\Serialize;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class SerializedToJsonTest extends \PHPUnit_Framework_TestCase

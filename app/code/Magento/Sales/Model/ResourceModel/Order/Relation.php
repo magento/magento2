@@ -6,11 +6,11 @@
 
 namespace Magento\Sales\Model\ResourceModel\Order;
 
-use Magento\Sales\Model\ResourceModel\Order\Handler\Address as AddressHandler;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationInterface;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
+use Magento\Sales\Model\ResourceModel\Order\Handler\Address as AddressHandler;
 use Magento\Sales\Model\ResourceModel\Order\Payment as OrderPaymentResource;
 use Magento\Sales\Model\ResourceModel\Order\Status\History as OrderStatusHistoryResource;
-use Magento\Sales\Api\OrderItemRepositoryInterface;
 
 /**
  * Class Relation
@@ -86,7 +86,6 @@ class Relation implements RelationInterface
                 $statusHistory->setParentId($object->getId());
                 $statusHistory->setOrder($object);
                 $this->orderStatusHistoryResource->save($statusHistory);
-
             }
         }
         if (null !== $object->getRelatedObjects()) {

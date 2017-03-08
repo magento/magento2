@@ -24,7 +24,6 @@ class Item extends \Magento\Framework\Api\AbstractExtensibleObject
         return $this->setData('id', $id);
     }
 
-
     /**
      * @return string
      */

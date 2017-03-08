@@ -5,11 +5,11 @@
  */
 namespace Magento\Sales\Model\Order\Address;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Directory\Model\CountryFactory;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\Order\Address;
-use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Directory\Model\CountryFactory;
 
 /**
  * Class Validator

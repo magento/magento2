@@ -10,10 +10,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\AppInterface;
 use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Autoload\Populator;
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\Profiler;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * A bootstrap of Magento application
@@ -180,7 +178,7 @@ class Bootstrap
         $extraDrivers = [];
         if (isset($initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS])) {
             $extraDrivers = $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS];
-        };
+        }
         return new DriverPool($extraDrivers);
     }
 

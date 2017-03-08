@@ -8,7 +8,6 @@
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\Phrase;
 
 class Date implements \Zend_Filter_Interface
 {

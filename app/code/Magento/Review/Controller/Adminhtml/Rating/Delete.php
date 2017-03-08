@@ -5,8 +5,8 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
 
-use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 
 class Delete extends RatingController
 {

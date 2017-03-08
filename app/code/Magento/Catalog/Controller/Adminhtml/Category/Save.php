@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Save
@@ -364,7 +364,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         } else {
             $path = 'catalog/*/edit';
             $params['id'] = $categoryId;
-
         }
         return ['path' => $path, 'params' => $params];
     }

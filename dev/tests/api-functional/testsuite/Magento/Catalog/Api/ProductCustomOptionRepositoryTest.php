@@ -182,7 +182,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             $fixtureOptions[$item['type']] = [
                 'optionData' => $item,
             ];
-        };
+        }
 
         return $fixtureOptions;
     }
@@ -229,7 +229,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             $fixtureOptions[$key] = [
                 'optionData' => $item,
             ];
-        };
+        }
 
         return $fixtureOptions;
     }

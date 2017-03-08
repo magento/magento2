@@ -26,7 +26,7 @@ class ProTest extends \PHPUnit_Framework_TestCase
      */
     protected $pro;
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected  $apiMock;
+    protected $apiMock;
 
     protected function setUp()
     {

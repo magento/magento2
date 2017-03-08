@@ -8,7 +8,6 @@ namespace Magento\Vault\Test\Block;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Fixture\InjectableFixture;
 
 class StoredPayments extends Block
 {

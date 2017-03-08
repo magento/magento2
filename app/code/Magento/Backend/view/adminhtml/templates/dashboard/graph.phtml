@@ -15,8 +15,8 @@
                 onchange="changeDiagramsPeriod(this);" class="admin__control-select">
             <?php foreach ($this->helper('Magento\Backend\Helper\Dashboard\Data')->getDatePeriods() as $value => $label): ?>
                 <?php if (in_array($value, ['custom'])) {
-                    continue;
-                } ?>
+    continue;
+} ?>
                 <option value="<?php /* @escapeNotVerified */ echo $value ?>"
                     <?php if ($block->getRequest()->getParam('period') == $value): ?> selected="selected"<?php endif; ?>
                     ><?php /* @escapeNotVerified */ echo $label ?></option>

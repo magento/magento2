@@ -9,8 +9,8 @@ use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Downloadable\Api\Data\SampleInterface;
 use Magento\Downloadable\Api\SampleRepositoryInterface;
-use Magento\Downloadable\Model\Sample\CreateHandler;
 use Magento\Downloadable\Model\Product\Type;
+use Magento\Downloadable\Model\Sample\CreateHandler;
 
 class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 {

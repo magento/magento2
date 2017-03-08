@@ -7,9 +7,9 @@
 namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model

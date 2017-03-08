@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Mview\Config;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

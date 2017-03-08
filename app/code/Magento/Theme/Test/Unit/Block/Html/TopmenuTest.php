@@ -6,11 +6,11 @@
 
 namespace Magento\Theme\Test\Unit\Block\Html;
 
-use Magento\Theme\Block\Html\Topmenu;
+use Magento\Framework\Data\Tree\NodeFactory;
+use Magento\Framework\Data\TreeFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Framework\Data\TreeFactory;
-use Magento\Framework\Data\Tree\NodeFactory;
+use Magento\Theme\Block\Html\Topmenu;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

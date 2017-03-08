@@ -6,10 +6,10 @@
 
 namespace Magento\Review\Test\Unit\Model;
 
-use \Magento\Catalog\Model\Product;
-use \Magento\Review\Model\Review;
-
+use Magento\Catalog\Model\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
+use Magento\Review\Model\Review;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

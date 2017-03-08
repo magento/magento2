@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\Filter\Test\Unit\DataObject;
 
-use \Magento\Framework\Filter\DataObject\Grid;
-
 use Magento\Framework\DataObject;
+
+use Magento\Framework\Filter\DataObject\Grid;
 
 class GridTest extends \PHPUnit_Framework_TestCase
 {

@@ -7,8 +7,8 @@ namespace Magento\Newsletter\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Subscriber model
@@ -551,7 +551,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                 == $this->customerAccountManagement->getConfirmationStatus($customerId)
             ) {
                 $status = self::STATUS_UNCONFIRMED;
-            } else if ($isConfirmNeed) {
+            } elseif ($isConfirmNeed) {
                 $status = self::STATUS_NOT_ACTIVE;
             }
         } else {
@@ -589,7 +589,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             try {
                 if ($isConfirmNeed) {
                     $this->sendConfirmationRequestEmail();
-                } else if ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
+                } elseif ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
                     $this->sendUnsubscriptionEmail();
                 } elseif ($this->isStatusChanged() && $status == self::STATUS_SUBSCRIBED) {
                     $this->sendConfirmationSuccessEmail();

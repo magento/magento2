@@ -6,7 +6,7 @@
  */
 namespace Magento\Framework\Acl\Test\Unit;
 
-use \Magento\Framework\Acl\Cache;
+use Magento\Framework\Acl\Cache;
 
 class CacheTest extends \PHPUnit_Framework_TestCase
 {

@@ -7,14 +7,13 @@
 namespace Magento\Deploy\Model;
 
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface;
-use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
-use Magento\Framework\App\ObjectManagerFactory;
-use Magento\Framework\App\View\Deployment\Version;
-use Magento\Framework\App\Utility\Files;
-use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Deploy\Model\DeployManagerFactory;
+use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Framework\App\Utility\Files;
+use Magento\Framework\App\View\Deployment\Version;
+use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
+use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * A service for deploying Magento static view files for production mode

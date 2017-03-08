@@ -7,10 +7,9 @@
 namespace Magento\Catalog\Test\Block\Product\View;
 
 use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class CustomOptions

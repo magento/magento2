@@ -148,8 +148,7 @@ class ImageEntryConverterTest extends \PHPUnit_Framework_TestCase
             'label' => '',
             'position' => '4',
             'disabled' => '0',
-            'types' =>
-                [
+            'types' => [
                     0 => 'image',
                     1 => 'swatch_image',
                 ],
@@ -195,8 +194,7 @@ class ImageEntryConverterTest extends \PHPUnit_Framework_TestCase
             'label' => '',
             'position' => '4',
             'disabled' => '0',
-            'types' =>
-                [
+            'types' => [
                     0 => 'image',
                     1 => 'swatch_image',
                 ],

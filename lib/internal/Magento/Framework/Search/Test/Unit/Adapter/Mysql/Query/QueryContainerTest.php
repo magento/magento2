@@ -6,8 +6,8 @@
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query;
 
 use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Search\Request\Query\BoolExpression;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class QueryContainerTest extends \PHPUnit_Framework_TestCase
 {

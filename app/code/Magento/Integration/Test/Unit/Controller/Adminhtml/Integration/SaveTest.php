@@ -8,12 +8,12 @@
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\State\UserLockedException;
-use Magento\Framework\Exception\AuthenticationException;
 
 class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
 {

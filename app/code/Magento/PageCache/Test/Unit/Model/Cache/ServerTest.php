@@ -5,9 +5,9 @@
  */
 namespace Magento\PageCache\Test\Unit\Model\Cache;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\PageCache\Model\Cache\Server;
-use \Zend\Uri\UriFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\PageCache\Model\Cache\Server;
+use Zend\Uri\UriFactory;
 
 class ServerTest extends \PHPUnit_Framework_TestCase
 {

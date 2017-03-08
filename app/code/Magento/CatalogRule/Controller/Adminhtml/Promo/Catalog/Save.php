@@ -7,10 +7,10 @@
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
-use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

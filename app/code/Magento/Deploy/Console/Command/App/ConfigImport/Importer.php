@@ -5,13 +5,13 @@
  */
 namespace Magento\Deploy\Console\Command\App\ConfigImport;
 
-use Magento\Framework\App\DeploymentConfig\ImporterInterface;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
+use Magento\Deploy\Model\DeploymentConfig\Validator;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Deploy\Model\DeploymentConfig\Validator;
-use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**

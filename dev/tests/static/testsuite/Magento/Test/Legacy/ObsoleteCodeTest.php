@@ -10,8 +10,8 @@
  */
 namespace Magento\Test\Legacy;
 
-use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\Utility\AggregateInvoker;
+use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Utility\ChangedFiles;
 
@@ -584,7 +584,6 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                             break;
                         }
                     }
-
                 }
             } else {
                 $result = 1;

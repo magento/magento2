@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Index;
 
-use \Magento\Ui\Controller\Adminhtml\Index\Render;
+use Magento\Ui\Controller\Adminhtml\Index\Render;
 
 /**
  * Class RenderTest

@@ -6,8 +6,8 @@
 
 namespace Magento\User\Test\Constraint;
 
-use Magento\User\Test\Page\Adminhtml\UserIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\User\Test\Page\Adminhtml\UserIndex;
 
 /**
  * Class AssertUserSuccessSaveMessage

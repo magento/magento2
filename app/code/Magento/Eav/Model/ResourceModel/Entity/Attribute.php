@@ -5,13 +5,13 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Entity;
 
-use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Eav\Model\Entity\AttributeCache;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Eav\Model\Config;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * EAV attribute resource model

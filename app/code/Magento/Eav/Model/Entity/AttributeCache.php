@@ -7,9 +7,8 @@
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Cache\StateInterface;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\CacheInterface;
 
 /**
  * Class AttributeCache

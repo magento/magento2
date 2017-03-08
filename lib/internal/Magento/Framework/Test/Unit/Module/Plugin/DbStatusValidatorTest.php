@@ -5,13 +5,13 @@
  */
 namespace Magento\Framework\Test\Unit\Module\Plugin;
 
-use Magento\Framework\Module\Plugin\DbStatusValidator as DbStatusValidatorPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Cache\FrontendInterface as FrontendCacheInterface;
-use Magento\Framework\Module\DbVersionInfo;
 use Magento\Framework\App\FrontController;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Cache\FrontendInterface as FrontendCacheInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\Module\Plugin\DbStatusValidator as DbStatusValidatorPlugin;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
 {

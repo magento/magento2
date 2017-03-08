@@ -6,10 +6,10 @@
 
 namespace Magento\Analytics\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Archive;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Archive;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**

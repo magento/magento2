@@ -6,8 +6,6 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use \Magento\Sales\Model\Order\Payment;
-
 /**
  * Class PaymentTest
  *

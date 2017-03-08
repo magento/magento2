@@ -5,10 +5,10 @@
  */
 namespace Magento\Theme\Ui\Component\Design\Config\SearchRobots;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Form\Field;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class ResetButton extends Field
 {

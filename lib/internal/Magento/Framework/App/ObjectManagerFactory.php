@@ -6,11 +6,11 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager\Environment;
+use Magento\Framework\Code\GeneratedFiles;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
-use Magento\Framework\App\ObjectManager\Environment;
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Code\GeneratedFiles;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

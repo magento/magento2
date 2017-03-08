@@ -5,7 +5,6 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel;
 
-use Magento\SalesRule\Model\ResourceModel\Rule;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\AttributeInterface;
 

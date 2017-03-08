@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form\Gallery;
 
-use Magento\Framework\Filesystem;
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Phrase;
 
 class ContentTest extends \PHPUnit_Framework_TestCase

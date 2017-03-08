@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\DB\DataConverter;
 
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 /**
  * Convert from serialized to JSON format

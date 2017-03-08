@@ -9,8 +9,8 @@
  */
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Utility\Files;
-use \Magento\Framework\App\Bootstrap;
 
 class TestPlacementTest extends \PHPUnit_Framework_TestCase
 {

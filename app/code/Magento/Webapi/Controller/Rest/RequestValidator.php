@@ -6,12 +6,10 @@
 
 namespace Magento\Webapi\Controller\Rest;
 
-use Magento\Framework\Webapi\Rest\Request as RestRequest;
-use Magento\Webapi\Controller\Rest\Router;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\Store;
-use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Webapi\Authorization;
+use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * This class is responsible for validating the request

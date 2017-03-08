@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Console\Command\DbDataUpgradeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 

@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\SystemConfig;
+use Magento\Setup\Controller\SystemConfig;
 
 class SystemConfigTest extends \PHPUnit_Framework_TestCase
 {

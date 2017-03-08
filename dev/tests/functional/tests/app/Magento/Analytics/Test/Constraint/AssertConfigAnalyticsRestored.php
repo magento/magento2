@@ -5,10 +5,10 @@
  */
 namespace Magento\Analytics\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
 use Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert sending data to the Analytics is restored.

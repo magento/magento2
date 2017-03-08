@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
-use \Magento\Catalog\Model\Layer\Category\StateKey;
+use Magento\Catalog\Model\Layer\Category\StateKey;
 
 class StateKeyTest extends \PHPUnit_Framework_TestCase
 {

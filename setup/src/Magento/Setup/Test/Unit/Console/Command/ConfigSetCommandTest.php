@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Console\Command\ConfigSetCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -116,7 +115,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         if ($interactionType) {
             $message = 'You saved the new configuration.' . PHP_EOL;
         } else {
-            $message = 'You made no changes to the configuration.'.PHP_EOL;
+            $message = 'You made no changes to the configuration.' . PHP_EOL;
         }
         $this->assertSame(
             $message,

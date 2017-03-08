@@ -8,8 +8,6 @@
 
 namespace Magento\Backend\Block\Widget;
 
-use Magento\Framework\View\Element\Template;
-
 class Container extends \Magento\Backend\Block\Template implements ContainerInterface
 {
     /**#@+

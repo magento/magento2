@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Unit\Observer;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,6 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
         $priceIncludesTax,
         $displayPriceExcludingTax
     ) {
-
         $frameworkObject= new \Magento\Framework\DataObject();
         $frameworkObject->setAdditionalOptions([]);
 
@@ -64,8 +63,8 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getEvent')
             ->will($this->returnValue($eventObject));
 
-         $objectManager = new ObjectManager($this);
-         $taxObserverObject = $objectManager->getObject(
+        $objectManager = new ObjectManager($this);
+        $taxObserverObject = $objectManager->getObject(
              \Magento\Tax\Observer\UpdateProductOptionsObserver::class,
              [
                  'taxData' => $taxData,
@@ -73,9 +72,9 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
              ]
          );
 
-         $taxObserverObject->execute($observerObject);
+        $taxObserverObject->execute($observerObject);
 
-         $this->assertEquals($expected, $frameworkObject->getAdditionalOptions());
+        $this->assertEquals($expected, $frameworkObject->getAdditionalOptions());
     }
 
     /**
@@ -87,7 +86,7 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
             [
                 'expected' => [
                     'calculationAlgorithm' => 'TOTAL_BASE_CALCULATION',
-                    'optionTemplate' => '<%= data.label %><% if (data.finalPrice.value) '.
+                    'optionTemplate' => '<%= data.label %><% if (data.finalPrice.value) ' .
                         '{ %> +<%= data.finalPrice.formatted %> (Excl. tax: <%= data.basePrice.formatted %>)<% } %>',
                 ],
                 'displayBothPrices' => true,
@@ -97,7 +96,7 @@ class UpdateProductOptionsObserverTest extends \PHPUnit_Framework_TestCase
             [
                 'expected' => [
                     'calculationAlgorithm' => 'TOTAL_BASE_CALCULATION',
-                    'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '.
+                    'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) ' .
                         '{ %> +<%= data.basePrice.formatted %><% } %>',
                 ],
                 'displayBothPrices' => false,

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\PackageInfoFactory;
+use Magento\Framework\Module\PackageInfoFactory;
 
 class PackageInfoFactoryTest extends \PHPUnit_Framework_TestCase
 {

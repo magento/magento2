@@ -8,8 +8,8 @@ namespace Magento\Shipping\Test\Constraint;
 
 use Magento\Sales\Test\Constraint\AbstractAssertOrderOnFrontend;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Sales\Test\Page\OrderHistory;
 use Magento\Sales\Test\Page\CustomerOrderView;
+use Magento\Sales\Test\Page\OrderHistory;
 use Magento\Shipping\Test\Page\ShipmentView;
 
 /**

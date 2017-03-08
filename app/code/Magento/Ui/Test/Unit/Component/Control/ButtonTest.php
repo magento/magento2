@@ -5,11 +5,11 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Control;
 
-use \Magento\Ui\Component\Control\Button;
-
 use Magento\Framework\Escaper;
+
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Ui\Component\Control\Button;
 
 class ButtonTest extends \PHPUnit_Framework_TestCase
 {

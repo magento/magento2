@@ -100,7 +100,6 @@ class PropertiesSortingSniff implements PHP_CodeSniffer_Sniff
      */
     private function validatePropertiesSorting(PHP_CodeSniffer_File $phpcsFile, $stackPtr, array $properties)
     {
-
         $originalProperties = $properties;
         sort($properties);
 

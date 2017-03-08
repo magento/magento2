@@ -6,9 +6,9 @@
 
 namespace Magento\Checkout\Test\Unit\Model\Cart;
 
+use Magento\Checkout\Model\Cart\CheckoutSummaryConfigProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Checkout\Model\Cart\CheckoutSummaryConfigProvider;
 use Magento\Store\Model\ScopeInterface;
 
 class CheckoutSummaryConfigProviderTest extends \PHPUnit_Framework_TestCase

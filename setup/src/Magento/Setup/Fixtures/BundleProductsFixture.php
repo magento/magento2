@@ -119,7 +119,7 @@ class BundleProductsFixture extends Fixture
         }
         $variationSkuClosure = function ($productId, $entityNumber) use ($bundleOptionSuffix, $variationCount) {
             $productIndex = $this->getBundleProductIndex($entityNumber, $variationCount);
-            $variationIndex = $this->getBundleVariationIndex($entityNumber, $variationCount) ;
+            $variationIndex = $this->getBundleVariationIndex($entityNumber, $variationCount);
 
             return sprintf($this->getBundleOptionItemSkuPattern($bundleOptionSuffix), $productIndex, $variationIndex);
         };

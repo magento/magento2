@@ -6,13 +6,13 @@
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
-use Magento\Analytics\Model\FlagManager;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Config\Model\Config;
-use Psr\Log\LoggerInterface;
-use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
-use Magento\Analytics\Model\Connector\UpdateCommand;
 use Magento\Analytics\Model\Connector\Http\ClientInterface;
+use Magento\Analytics\Model\Connector\UpdateCommand;
+use Magento\Analytics\Model\FlagManager;
+use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
+use Magento\Config\Model\Config;
+use Magento\Framework\HTTP\ZendClient;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class SignUpCommandTest

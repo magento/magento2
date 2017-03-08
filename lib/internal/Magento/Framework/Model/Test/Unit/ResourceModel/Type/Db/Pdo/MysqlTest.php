@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Type\Db\Pdo;
 
-use \Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
+use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {

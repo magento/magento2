@@ -5,10 +5,10 @@
  */
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns;
 
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 
 class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
 {

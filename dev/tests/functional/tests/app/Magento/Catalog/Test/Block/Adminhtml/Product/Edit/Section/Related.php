@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section;
 
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Related\Grid;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Ui\Test\Block\Adminhtml\Section;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Related\Grid;
 
 /**
  * Base class for related, crosssell, upsell products.

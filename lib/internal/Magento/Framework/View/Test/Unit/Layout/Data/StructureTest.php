@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Data;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\State;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class StructureTest extends \PHPUnit_Framework_TestCase
 {

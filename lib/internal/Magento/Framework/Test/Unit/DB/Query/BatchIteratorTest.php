@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\Test\Unit\DB\Query;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\BatchIterator;
 use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 
 class BatchIteratorTest extends \PHPUnit_Framework_TestCase
 {

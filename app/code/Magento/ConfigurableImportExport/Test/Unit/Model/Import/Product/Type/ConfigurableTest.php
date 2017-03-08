@@ -6,7 +6,7 @@
 
 namespace Magento\ConfigurableImportExport\Test\Unit\Model\Import\Product\Type;
 
-use \Magento\ConfigurableImportExport;
+use Magento\ConfigurableImportExport;
 
 /**
  * Class ConfigurableTest
@@ -333,8 +333,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             'name' => 'Configurable Product 21',
             'product_websites' => 'website_1',
             'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
-            'configurable_variations' =>
-                'sku=testconf2-attr2val1-testattr3v1,'
+            'configurable_variations' => 'sku=testconf2-attr2val1-testattr3v1,'
                  . 'testattr2=attr2val1,'
                  . 'testattr3=testattr3v1,'
                  . 'display=1|sku=testconf2-attr2val1-testattr3v2,'
@@ -408,8 +407,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'name' => 'Configurable Product 21',
                 'product_websites' => 'website_1',
                 'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
-                'configurable_variations' =>
-                    'sku=testconf2-attr2val1-testattr3v1,'
+                'configurable_variations' => 'sku=testconf2-attr2val1-testattr3v1,'
                      . 'testattr2=attr2val1,'
                      . 'testattr3=testattr3v1,'
                      . 'testattr3=testattr3v2,'
@@ -459,8 +457,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'frontend_label' => 'testattr2',
                 'is_static' => false,
                 'backend_type' => 'select',
-                'apply_to' =>
-                    [],
+                'apply_to' => [],
                 'type' => 'select',
                 'default_value' => null,
                 'options' => [
@@ -485,8 +482,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'apply_to' => [],
                 'type' => 'select',
                 'default_value' => null,
-                'options' =>
-                    [
+                'options' => [
                         'testattr3v1' => '9',
                         'testattr3v2' => '10',
                         'testattr3v3' => '11',
@@ -498,26 +494,16 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     public function testSaveData()
     {
         $this->_entityModel->expects($this->any())->method('getNewSku')->will($this->returnValue([
-            'configurableskuI22' =>
-                [$this->productEntityLinkField => 1, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr3v1' =>
-                [$this->productEntityLinkField => 2, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr30v1' =>
-                [$this->productEntityLinkField => 20, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr3v2' =>
-                [$this->productEntityLinkField => 3, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testSimple' =>
-                [$this->productEntityLinkField => 4, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testSimpleToSkip' =>
-                [$this->productEntityLinkField => 5, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'configurableskuI22withoutLabels' =>
-                [$this->productEntityLinkField => 6, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22withoutVariations' =>
-                [$this->productEntityLinkField => 7, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22Duplicated' =>
-                [$this->productEntityLinkField => 8, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22BadPrice' =>
-                [$this->productEntityLinkField => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22' => [$this->productEntityLinkField => 1, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'testconf2-attr2val1-testattr3v1' => [$this->productEntityLinkField => 2, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testconf2-attr2val1-testattr30v1' => [$this->productEntityLinkField => 20, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testconf2-attr2val1-testattr3v2' => [$this->productEntityLinkField => 3, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testSimple' => [$this->productEntityLinkField => 4, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testSimpleToSkip' => [$this->productEntityLinkField => 5, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'configurableskuI22withoutLabels' => [$this->productEntityLinkField => 6, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22withoutVariations' => [$this->productEntityLinkField => 7, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22Duplicated' => [$this->productEntityLinkField => 8, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+            'configurableskuI22BadPrice' => [$this->productEntityLinkField => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
         ]));
 
         // at(0) is select() call, quoteIdentifier() is invoked at(1) and at(2)
@@ -596,8 +582,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             'name' => 'Configurable Product 21 BadPrice',
             'product_websites' => 'website_1',
             'configurable_variation_labels' => 'testattr2=Select Color, testattr3=Select Size',
-            'configurable_variations' =>
-                'sku=testconf2-attr2val1-testattr3v1,'
+            'configurable_variations' => 'sku=testconf2-attr2val1-testattr3v1,'
                  . 'testattr2=attr2val1_DOESNT_EXIST,'
                  . 'testattr3=testattr3v1,'
                  . 'display=1|sku=testconf2-attr2val1-testattr3v2,'

@@ -5,8 +5,6 @@
  */
 namespace Magento\Directory\Test\Unit\Model;
 
-use Magento\Directory\Model\CurrencyInformationAcquirer;
-
 /**
  * Class CurrencyInformationAcquirerTest
  */
@@ -108,7 +106,7 @@ class CurrencyInformationAcquirerTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $result = $this->model->getCurrencyInfo();
-        
+
         $this->assertEquals($currencyInformation, $result);
         $this->assertEquals('USD', $result->getBaseCurrencyCode());
         $this->assertEquals('$', $result->getBaseCurrencySymbol());

@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\EntityManager\Operation\Update;
 
-use Magento\Framework\EntityManager\TypeResolver;
-use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\EntityManager\Db\UpdateRow;
+use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\EntityManager\TypeResolver;
 
 /**
  * Class UpdateMain

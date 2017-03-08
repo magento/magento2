@@ -5,8 +5,6 @@
  */
 namespace Magento\Config\Model\Config\Export;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-
 /**
  * Class ExcludeList contains list of config fields which should be excluded from config export file
  */
@@ -33,7 +31,7 @@ class ExcludeList
      */
     public function isPresent($path)
     {
-        return !empty($this->configs[$path]) ;
+        return !empty($this->configs[$path]);
     }
 
     /**

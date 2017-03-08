@@ -8,9 +8,9 @@ namespace Magento\Setup\Test\Unit\Fixtures;
 
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Setup\Fixtures\ConfigurableProductsFixture;
 use Magento\Setup\Fixtures\AttributeSet\AttributeSetFixture;
 use Magento\Setup\Fixtures\AttributeSet\Pattern;
+use Magento\Setup\Fixtures\ConfigurableProductsFixture;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

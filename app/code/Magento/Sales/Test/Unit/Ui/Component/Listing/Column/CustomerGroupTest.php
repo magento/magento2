@@ -5,8 +5,8 @@
  */
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Ui\Component\Listing\Column\CustomerGroup;
 
 /**

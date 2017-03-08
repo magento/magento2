@@ -9,8 +9,8 @@
 namespace Magento\Downloadable\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException as CoreException;
+use Magento\Framework\Filesystem;
 
 /**
  * Downloadable Products Download Helper

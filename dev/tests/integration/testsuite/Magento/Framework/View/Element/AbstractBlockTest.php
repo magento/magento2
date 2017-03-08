@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\View\Element;
 
-use Magento\Framework\View\Element\AbstractBlock;
-
 /**
  * @magentoAppIsolation enabled
  */

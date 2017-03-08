@@ -363,8 +363,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'default_billing' => true,
             'default_shipping' => true,
             'code' => 'value',
-            'region' =>
-                [
+            'region' => [
                     'region' => 'region',
                     'region_id' => 'region_id',
                 ],
@@ -650,8 +649,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'default_billing' => false,
             'default_shipping' => false,
             'code' => 'value',
-            'region' =>
-                [
+            'region' => [
                     'region' => 'region',
                     'region_id' => 'region_id',
                 ],

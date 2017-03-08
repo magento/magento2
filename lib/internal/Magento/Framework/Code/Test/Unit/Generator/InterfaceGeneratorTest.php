@@ -129,14 +129,12 @@ class InterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
             'Non public interface method  exception' => [
                 'additionalMethodsData' => ['testMethod2' => ['visibility' => 'protected']],
                 'expectedException' => '\LogicException',
-                'expectedExceptionMessage' =>
-                    "Interface method visibility can only be 'public'. Method name: 'testMethod2'"
+                'expectedExceptionMessage' => "Interface method visibility can only be 'public'. Method name: 'testMethod2'"
             ],
             '"abstract" usage exception' => [
                 'additionalMethodsData' => ['testMethod1' => ['abstract' => true]],
                 'expectedException' => '\LogicException',
-                'expectedExceptionMessage' =>
-                    "'abstract' modifier cannot be used for interface method. Method name: 'testMethod1'"
+                'expectedExceptionMessage' => "'abstract' modifier cannot be used for interface method. Method name: 'testMethod1'"
             ],
         ];
     }

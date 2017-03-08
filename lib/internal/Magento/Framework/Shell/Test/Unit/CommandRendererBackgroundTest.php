@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Shell\Test\Unit;
 
-use \Magento\Framework\Shell\CommandRendererBackground;
+use Magento\Framework\Shell\CommandRendererBackground;
 
 class CommandRendererBackgroundTest extends \PHPUnit_Framework_TestCase
 {

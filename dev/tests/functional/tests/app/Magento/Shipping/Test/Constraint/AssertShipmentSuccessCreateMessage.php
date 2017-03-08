@@ -6,8 +6,8 @@
 
 namespace Magento\Shipping\Test\Constraint;
 
-use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Assert that success message is displayed after shipment has been created

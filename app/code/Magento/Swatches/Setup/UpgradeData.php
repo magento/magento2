@@ -5,18 +5,18 @@
  */
 namespace Magento\Swatches\Setup;
 
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\FieldDataConverterFactory;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Store\Model\Store;
 use Magento\Swatches\Model\Swatch;
 use Zend_Db;
 use Zend_Db_Expr;
-use Magento\Framework\DB\FieldDataConverterFactory;
-use Magento\Framework\DB\DataConverter\SerializedToJson;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Upgrade Data script

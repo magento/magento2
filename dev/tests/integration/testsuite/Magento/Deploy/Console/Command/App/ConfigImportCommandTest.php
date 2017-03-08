@@ -5,17 +5,17 @@
  */
 namespace Magento\Deploy\Console\Command\App;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Console\Cli;
-use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
-use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand\IntegrationTestImporter;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\Filesystem;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

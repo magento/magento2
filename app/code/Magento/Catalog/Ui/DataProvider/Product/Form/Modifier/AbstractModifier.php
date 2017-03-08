@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
 /**
  * Class AbstractModifier

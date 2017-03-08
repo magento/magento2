@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Steps:

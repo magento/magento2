@@ -5,20 +5,20 @@
  */
 namespace Magento\Payment\Model\Method;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Payment\Model\InfoInterface;
-use Magento\Payment\Observer\AbstractDataAssignObserver;
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\Payment\Model\MethodInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Command\CommandManagerInterface;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
-use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
+use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Quote\Api\Data\CartInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Payment method facade. Abstract method adapter
@@ -542,7 +542,6 @@ class Adapter implements MethodInterface
         $command = $this->commandPool->get($commandCode);
 
         return $command->execute($arguments);
-
     }
 
     /**

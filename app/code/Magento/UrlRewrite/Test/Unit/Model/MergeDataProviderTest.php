@@ -5,9 +5,9 @@
  */
 namespace Magento\UrlRewrite\Test\Unit\Model;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\MergeDataProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class MergeDataProviderTest extends \PHPUnit_Framework_TestCase
 {

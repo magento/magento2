@@ -79,7 +79,7 @@ class LessWrapper extends Wrapper
             if (\PHP_CodeSniffer::isInstalledStandard($standard) === false) {
                 // They didn't select a valid coding standard, so help them
                 // out by letting them know which standards are installed.
-                echo 'ERROR: the "'.$standard.'" coding standard is not installed. ';
+                echo 'ERROR: the "' . $standard . '" coding standard is not installed. ';
                 $this->printInstalledStandards();
                 exit(2);
             }
@@ -102,7 +102,7 @@ class LessWrapper extends Wrapper
 
             if ($fileContents === '') {
                 // No files and no content passed in.
-                echo 'ERROR: You must supply at least one file or directory to process.'.PHP_EOL.PHP_EOL;
+                echo 'ERROR: You must supply at least one file or directory to process.' . PHP_EOL . PHP_EOL;
                 $this->printUsage();
                 exit(2);
             }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Image\Test\Unit;
 
-use \Magento\Framework\Image\AdapterFactory;
+use Magento\Framework\Image\AdapterFactory;
 
 class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
 {

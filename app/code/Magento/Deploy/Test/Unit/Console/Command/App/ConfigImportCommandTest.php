@@ -5,8 +5,8 @@
  */
 namespace Magento\Deploy\Test\Unit\Console\Command\App;
 
-use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
+use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Tester\CommandTester;

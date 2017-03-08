@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Mview\View;
 
-use Magento\Framework\App\ResourceConnection;
-
 /**
  * Test Class for \Magento\Framework\Mview\View\Changelog
  */

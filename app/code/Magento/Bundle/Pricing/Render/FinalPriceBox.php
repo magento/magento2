@@ -7,8 +7,8 @@
 namespace Magento\Bundle\Pricing\Render;
 
 use Magento\Bundle\Pricing\Price\FinalPrice;
-use Magento\Catalog\Pricing\Render as CatalogRender;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Catalog\Pricing\Render as CatalogRender;
 
 /**
  * Class for final_price rendering

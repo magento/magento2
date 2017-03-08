@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php $expressions = []; foreach ( $this->main as $item ): ?>
+<?php $expressions = []; foreach ($this->main as $item): ?>
     <?php $expressions[] = '!$state.is(\'' . $item['id'] . '\')';
     ?>
 <?php endforeach; ?>
@@ -17,7 +17,7 @@
 ?>
 
 <div class="menu-wrapper"
-    ng-show="<?php echo implode( '&&', $expressions); ?>"
+    ng-show="<?php echo implode('&&', $expressions); ?>"
     >
 <nav class="admin__menu" ng-controller="mainController">
     <span

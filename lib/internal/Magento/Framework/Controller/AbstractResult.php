@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\Controller;
 
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
+use Magento\Framework\App\ResponseInterface;
 
 abstract class AbstractResult implements ResultInterface
 {
@@ -106,7 +106,7 @@ abstract class AbstractResult implements ResultInterface
         }
         return $this;
     }
-    
+
     /**
      * @param HttpResponseInterface $response
      * @return $this

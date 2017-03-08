@@ -92,14 +92,14 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @var \Magento\Framework\App\Config
      */
     protected $appConfig;
-    
+
     /**
      * Name of http header to check for ssl offloading default value is X-Forwarded-Proto
      *
      * @var string
      */
     protected $sslOffloadHeader;
-    
+
     /**
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
@@ -414,7 +414,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         if ($this->immediateRequestSecure()) {
             return true;
         }
-      
+
         return $this->initialRequestSecure($this->SslOffloadHeader());
     }
 
@@ -564,7 +564,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         }
         return $post;
     }
-
 
     /**
      * Set POST parameters
@@ -725,7 +724,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     {
         if ($checkProxy && $this->getServer('HTTP_CLIENT_IP') != null) {
             $ip = $this->getServer('HTTP_CLIENT_IP');
-        } else if ($checkProxy && $this->getServer('HTTP_X_FORWARDED_FOR') != null) {
+        } elseif ($checkProxy && $this->getServer('HTTP_X_FORWARDED_FOR') != null) {
             $ip = $this->getServer('HTTP_X_FORWARDED_FOR');
         } else {
             $ip = $this->getServer('REMOTE_ADDR');
@@ -780,7 +779,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         $this->requestUri = $requestUri;
         return $this;
     }
-
 
     /**
      * Get base url

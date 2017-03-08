@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\Setup;
+use Magento\Framework\Module\Setup;
 
 class SetupTest extends \PHPUnit_Framework_TestCase
 {

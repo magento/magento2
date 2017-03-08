@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogRule\Test\Unit\Pricing\Price;
 
-use \Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
+use Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**

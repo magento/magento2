@@ -6,12 +6,12 @@
 namespace Magento\Backend\Test\Unit\Model\View\Layout\Filter;
 
 use Magento\Backend\Model\View\Layout\ConditionInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Backend\Model\View\Layout\ConditionPool;
 use Magento\Backend\Model\View\Layout\Filter\Condition;
 use Magento\Backend\Model\View\Layout\StructureManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\View\Layout\ScheduledStructure;
-use Magento\Backend\Model\View\Layout\ConditionPool;
 
 class ConditionTest extends \PHPUnit_Framework_TestCase
 {

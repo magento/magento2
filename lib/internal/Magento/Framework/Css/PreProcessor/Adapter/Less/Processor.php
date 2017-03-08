@@ -5,14 +5,14 @@
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter\Less;
 
-use Magento\Framework\Phrase;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State;
-use Magento\Framework\View\Asset\File;
-use Magento\Framework\View\Asset\Source;
 use Magento\Framework\Css\PreProcessor\File\Temporary;
+use Magento\Framework\Phrase;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\Source;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Processor

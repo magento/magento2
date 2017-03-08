@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-use \Magento\Framework\Data\Form\Element\Date;
+use Magento\Framework\Data\Form\Element\Date;
 
 class DateTest extends \PHPUnit_Framework_TestCase
 {

@@ -85,7 +85,7 @@ class CollectionTime extends Value
             $this->_logger->error($e->getMessage());
             throw new LocalizedException(__('Cron settings can\'t be saved'));
         }
-        
+
         return parent::afterSave();
     }
 }

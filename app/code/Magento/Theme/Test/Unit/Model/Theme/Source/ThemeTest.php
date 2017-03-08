@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Source;
 
-use \Magento\Theme\Model\Theme\Source\Theme;
+use Magento\Theme\Model\Theme\Source\Theme;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {

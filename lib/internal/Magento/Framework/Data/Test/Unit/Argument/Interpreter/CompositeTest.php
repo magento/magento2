@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
-use \Magento\Framework\Data\Argument\Interpreter\Composite;
+use Magento\Framework\Data\Argument\Interpreter\Composite;
 
 class CompositeTest extends \PHPUnit_Framework_TestCase
 {

@@ -7,11 +7,11 @@ namespace Magento\Analytics\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\FlagManager;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Config\Model\Config;
-use Psr\Log\LoggerInterface;
-use Magento\Store\Model\Store;
 use Magento\Analytics\Model\Plugin\BaseUrlConfigPlugin;
+use Magento\Config\Model\Config;
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Store\Model\Store;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class UpdateCommand

@@ -6,9 +6,9 @@
 
 namespace Magento\Ui\Test\TestCase;
 
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Page\PageFactory;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 

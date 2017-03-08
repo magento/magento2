@@ -31,7 +31,7 @@ class Countries extends Select
         parent::__construct($context, $data);
         $this->countryHelper = $countryHelper;
     }
-    
+
     /**
      * Render block HTML
      *
@@ -47,7 +47,7 @@ class Countries extends Select
 
     /**
      * Sets name for input element
-     * 
+     *
      * @param string $value
      * @return $this
      */

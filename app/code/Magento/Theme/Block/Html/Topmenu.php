@@ -5,11 +5,11 @@
  */
 namespace Magento\Theme\Block\Html;
 
-use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\Data\TreeFactory;
 use Magento\Framework\Data\Tree\Node;
 use Magento\Framework\Data\Tree\NodeFactory;
+use Magento\Framework\Data\TreeFactory;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\View\Element\Template;
 
 /**
  * Html page top menu block

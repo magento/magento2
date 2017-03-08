@@ -5,8 +5,8 @@
  */
 namespace Magento\Setup\Fixtures\AttributeSet;
 
-use Magento\Swatches\Model\Swatch;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Swatches\Model\Swatch;
 
 /**
  * Generates data for creating Visual Swatch attributes of "image" and "color" types.
