@@ -41,7 +41,7 @@ define([
          * @param {jQuery} element - Comment holder
          */
         (function lookup(element) {
-            if ($.nodeName(element, "iframe") && $(element).prop('src').indexOf(window.location.hostname) === -1) { 
+            if ($.nodeName(element, 'iframe') && $(element).prop('src').indexOf(window.location.hostname) === -1) {
                 return []; 
             }
             $(element).contents().each(function (index, el) {
