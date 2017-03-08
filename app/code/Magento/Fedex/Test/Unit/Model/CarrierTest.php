@@ -244,6 +244,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->willReturn(true);
 
+        // @codingStandardsIgnoreStart
         $netAmount = new \stdClass();
         $netAmount->Amount = $amount;
 
@@ -261,6 +262,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $response = new \stdClass();
         $response->HighestSeverity = 'SUCCESS';
         $response->RateReplyDetails = $rate;
+        // @codingStandardsIgnoreEnd
 
         $this->serializer->method('serialize')
             ->willReturn('CollectRateString' . $amount);
