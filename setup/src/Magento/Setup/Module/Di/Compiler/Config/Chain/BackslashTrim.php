@@ -57,7 +57,7 @@ class BackslashTrim implements ModificationInterface
         }
 
         foreach ($argument as $key => &$value) {
-            if (in_array($key, ['_i_', '_ins_'])) {
+            if (!is_array($value) && in_array($key, ['_i_', '_ins_'])) {
                 $value = ltrim($value, '\\');
                 continue;
             }

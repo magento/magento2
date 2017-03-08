@@ -62,7 +62,7 @@ class PreferencesResolving implements ModificationInterface
      */
     private function resolvePreferenceRecursive(&$value, &$preferences)
     {
-        return isset($preferences[$value])
+        return !is_array($value) && isset($preferences[$value])
             ? $this->resolvePreferenceRecursive($preferences[$value], $preferences)
             : $value;
     }
