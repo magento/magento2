@@ -193,4 +193,31 @@ class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
             ->method('serialize');
         $this->serializedDataConverter->convert($serialized);
     }
+
+    public function testConvertVaultTokenMetadata()
+    {
+        $serializedData = 'serialized data';
+        $unserializedData = [
+            'token_metadata' => [
+                \Magento\Vault\Api\Data\PaymentTokenInterface::CUSTOMER_ID => 1,
+                \Magento\Vault\Api\Data\PaymentTokenInterface::PUBLIC_HASH => 'someHash'
+            ]
+        ];
+        $convertedUnserializedData = [
+            \Magento\Vault\Api\Data\PaymentTokenInterface::CUSTOMER_ID => 1,
+            \Magento\Vault\Api\Data\PaymentTokenInterface::PUBLIC_HASH => 'someHash'
+        ];
+        $jsonEncodedData = 'json encoded data';
+
+        $this->serializeMock->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedData)
+            ->willReturn($unserializedData);
+        $this->jsonMock->expects($this->once())
+            ->method('serialize')
+            ->with($convertedUnserializedData)
+            ->willReturn($jsonEncodedData);
+
+        $this->assertEquals($jsonEncodedData, $this->serializedDataConverter->convert($serializedData));
+    }
 }
