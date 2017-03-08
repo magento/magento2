@@ -44,8 +44,8 @@ class FileInfoTest extends \PHPUnit_Framework_TestCase
             array_filter($constructorArguments)
         );
 
-        $this->assertSame($path?:'', $fileInfo->getPath());
-        $this->assertSame($initializationVector?:'', $fileInfo->getInitializationVector());
+        $this->assertSame($path ?: '', $fileInfo->getPath());
+        $this->assertSame($initializationVector ?: '', $fileInfo->getInitializationVector());
     }
 
     /**

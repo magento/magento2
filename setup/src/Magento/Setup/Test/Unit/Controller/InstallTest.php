@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Install;
+use Magento\Setup\Controller\Install;
 use Magento\Setup\Model\RequestDataConverter;
 
 /**

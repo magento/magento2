@@ -6,12 +6,12 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
+use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Check whether the attribute filter is displayed on the frontend in Layered navigation.

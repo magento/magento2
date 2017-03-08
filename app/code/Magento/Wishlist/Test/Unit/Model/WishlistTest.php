@@ -5,7 +5,7 @@
  */
 namespace Magento\Wishlist\Test\Unit\Model;
 
-use \Magento\Wishlist\Model\Wishlist;
+use Magento\Wishlist\Model\Wishlist;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

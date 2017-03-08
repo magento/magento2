@@ -6,10 +6,10 @@
 
 namespace Magento\Webapi\Model;
 
-use Magento\Webapi\Model\Cache\Type\Webapi as WebapiCache;
-use Magento\Webapi\Model\Config\Reader;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Webapi\Model\Cache\Type\Webapi as WebapiCache;
+use Magento\Webapi\Model\Config\Reader;
 
 /**
  * Web API Config Model.

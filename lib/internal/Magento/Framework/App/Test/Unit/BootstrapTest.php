@@ -8,11 +8,11 @@
 
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\Bootstrap;
-use \Magento\Framework\App\State;
-use \Magento\Framework\App\MaintenanceMode;
-
+use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\MaintenanceMode;
+
+use Magento\Framework\App\State;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

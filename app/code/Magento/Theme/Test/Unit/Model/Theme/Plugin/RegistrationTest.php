@@ -5,9 +5,9 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Plugin;
 
-use Magento\Theme\Model\Theme\Plugin\Registration;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
+use Magento\Theme\Model\Theme\Plugin\Registration;
 
 class RegistrationTest extends \PHPUnit_Framework_TestCase
 {

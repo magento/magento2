@@ -6,7 +6,7 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use \Magento\Bundle\Api\Data\LinkInterface;
+use Magento\Bundle\Api\Data\LinkInterface;
 
 /**
  * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php

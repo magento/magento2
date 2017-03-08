@@ -5,15 +5,15 @@
  */
 namespace Magento\Analytics\Test\Unit\Cron;
 
-use Magento\Analytics\Model\Connector;
-use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\AdminNotification\Model\Inbox;
 use Magento\AdminNotification\Model\InboxFactory;
 use Magento\AdminNotification\Model\ResourceModel\Inbox as InboxResource;
-use Magento\Analytics\Model\FlagManager;
 use Magento\Analytics\Cron\SignUp;
-use Magento\AdminNotification\Model\Inbox;
+use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
+use Magento\Analytics\Model\Connector;
+use Magento\Analytics\Model\FlagManager;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\Storage\WriterInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

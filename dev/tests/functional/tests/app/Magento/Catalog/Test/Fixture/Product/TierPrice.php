@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Fixture\Product;
 
+use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Repository\RepositoryFactory;
 
 /**

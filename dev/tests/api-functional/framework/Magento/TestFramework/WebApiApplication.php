@@ -5,7 +5,6 @@
  */
 namespace Magento\TestFramework;
 
-
 /**
  * Provides access to the application for the tests
  *

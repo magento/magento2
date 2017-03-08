@@ -5,13 +5,13 @@
  */
 namespace Magento\Webapi\Test\Unit\Model;
 
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Webapi\Model\Config;
-use Magento\Webapi\Model\Cache\Type\Webapi;
-use Magento\Webapi\Model\Config\ClassReflector;
-use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Webapi\Model\ServiceMetadata;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Webapi\Model\Cache\Type\Webapi;
+use Magento\Webapi\Model\Config;
+use Magento\Webapi\Model\Config\ClassReflector;
+use Magento\Webapi\Model\ServiceMetadata;
 
 class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,10 +5,9 @@
  */
 namespace Magento\Eav\Model;
 
-
+use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\CustomAttributesDataInterface;
-use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\EntityManager\MapperInterface;
 use Magento\Framework\EntityManager\MetadataPool;

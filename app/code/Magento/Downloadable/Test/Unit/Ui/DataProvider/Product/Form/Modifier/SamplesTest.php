@@ -5,15 +5,15 @@
  */
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Samples;
-use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data\Samples as SamplesData;
-use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Downloadable\Model\Source\TypeUpload;
-use Magento\Framework\UrlInterface;
+use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Data\Samples as SamplesData;
+use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Samples;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class SamplesTest

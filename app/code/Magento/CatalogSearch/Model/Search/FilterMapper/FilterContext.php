@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
-
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;

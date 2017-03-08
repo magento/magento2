@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Test\Unit;
+
 use Magento\Framework\Url\HostChecker;
 
 /**

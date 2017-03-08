@@ -5,9 +5,9 @@
  */
 namespace Magento\Weee\Helper;
 
+use Magento\Catalog\Model\Product\Type;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
-use Magento\Catalog\Model\Product\Type;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 
 /**
@@ -830,7 +830,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                         if ($priceIncludesTax == false) {
                             $weeeAttribute['amount'] = $weeeAttribute['amount_excl_tax'] + $weeeAttribute['tax_amount'];
                         }
-                    } else if ($priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
+                    } elseif ($priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
                         if ($priceIncludesTax == true) {
                             $weeeAttribute['amount'] = $weeeAttribute['amount_excl_tax'];
                         }

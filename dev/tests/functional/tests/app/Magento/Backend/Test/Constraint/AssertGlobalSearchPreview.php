@@ -40,7 +40,7 @@ class AssertGlobalSearchPreview extends AbstractConstraint
      */
     private function adminSearchAssert($dashboard, $search, $type)
     {
-        $adminSearchPreview = '"' . $search->getQuery() . '" in '. $type;
+        $adminSearchPreview = '"' . $search->getQuery() . '" in ' . $type;
         $isVisibleInResult = $dashboard->getAdminPanelHeader()->isAdminSearchPreviewVisible($adminSearchPreview, $type);
         \PHPUnit_Framework_Assert::assertTrue(
             $isVisibleInResult,

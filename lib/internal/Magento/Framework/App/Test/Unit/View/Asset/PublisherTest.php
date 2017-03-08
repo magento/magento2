@@ -6,11 +6,10 @@
 
 namespace Magento\Framework\App\Test\Unit\View\Asset;
 
-use \Magento\Framework\App\View\Asset\Publisher;
-use \Magento\Framework\App\View\Asset\MaterializationStrategy;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\App\View\Asset\MaterializationStrategy;
+
+use Magento\Framework\App\View\Asset\Publisher;
 
 class PublisherTest extends \PHPUnit_Framework_TestCase
 {

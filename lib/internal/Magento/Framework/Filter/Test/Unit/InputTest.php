@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Filter\Test\Unit;
 
-use \Magento\Framework\Filter\Input;
+use Magento\Framework\Filter\Input;
 
 class InputTest extends \PHPUnit_Framework_TestCase
 {

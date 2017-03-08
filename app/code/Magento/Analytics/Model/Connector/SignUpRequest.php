@@ -7,9 +7,9 @@ namespace Magento\Analytics\Model\Connector;
 
 use Magento\Config\Model\Config;
 use Magento\Framework\HTTP\ZendClient;
-use Zend_Http_Response as HttpResponse;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
+use Zend_Http_Response as HttpResponse;
 
 /**
  * Representation of a 'SignUp' request.

@@ -6,7 +6,7 @@
 
 namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type;
 
-use \Magento\GroupedImportExport;
+use Magento\GroupedImportExport;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -6,11 +6,11 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractAssertForm;
-use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Assert that Category is present on Custom Store and absent on Main Store.
@@ -119,7 +119,7 @@ class AssertCategoryOnCustomStore extends AbstractAssertForm
 
         $this->browser->open($_ENV['app_frontend_url'] . $category->getUrlKey() . '.html');
 
-            \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit_Framework_Assert::assertEquals(
                 $category->getName(),
                 $this->categoryViewPage->getTitleBlock()->getTitle(),
                 'Category ' . $category->getName() . ' is not available on custom store.'

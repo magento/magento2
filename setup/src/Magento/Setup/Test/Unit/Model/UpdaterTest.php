@@ -5,8 +5,6 @@
  */
 namespace Magento\Setup\Test\Unit\Model;
 
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Phrase;
 use Magento\Setup\Model\Updater;
 
 class UpdaterTest extends \PHPUnit_Framework_TestCase

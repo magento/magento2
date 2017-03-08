@@ -88,7 +88,7 @@ class WordsFinder
 
     /**
      * Map of phrase to exclude from the file content
-     * 
+     *
      * @var  array
      */
     private $exclude = [];
@@ -214,7 +214,7 @@ class WordsFinder
                 }
             }
             $whitelist[$path] = $words;
-            
+
             $excludeNodes = $node->xpath('exclude');
             $excludes = [];
             if ($excludeNodes) {
@@ -222,9 +222,9 @@ class WordsFinder
                     $excludes[] = (string)$extractNode;
                 }
             }
-            
+
             if (isset($exclude[$path])) {
-                $exclude[$path] = array_merge($excludes, $exclude[$path]) ;
+                $exclude[$path] = array_merge($excludes, $exclude[$path]);
             } else {
                 $exclude[$path] = $excludes;
             }
@@ -237,7 +237,7 @@ class WordsFinder
             }
             $this->_whitelist[$newPath] = array_unique($newWords);
         }
-        
+
         foreach ($exclude as $newPath => $newWords) {
             if (isset($this->exclude[$newPath])) {
                 $newWords = array_merge($this->exclude[$newPath], $newWords);

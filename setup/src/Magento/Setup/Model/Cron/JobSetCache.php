@@ -7,8 +7,8 @@ namespace Magento\Setup\Model\Cron;
 
 use Magento\Backend\Console\Command\AbstractCacheManageCommand;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 
 class JobSetCache extends AbstractJob
 {

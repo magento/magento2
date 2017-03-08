@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Controller\Product;
+
 use Magento\Framework\Message\MessageInterface;
 
 /**

@@ -228,7 +228,7 @@ class PackageInfo
                 $requiredBy[] = $moduleName;
             }
         }
-       
+
         return $requiredBy;
     }
 

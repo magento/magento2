@@ -7,7 +7,6 @@ namespace Magento\Quote\Model\Quote;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Quote\Api\Data\CartItemInterface;
 
 /**
  * Sales Quote Item Model

@@ -5,10 +5,10 @@
  */
 namespace Magento\Checkout\Block\Checkout;
 
-use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Customer\Model\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Helper\Address as AddressHelper;
+use Magento\Customer\Model\Session;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 
 class AttributeMerger
 {
@@ -385,7 +385,6 @@ class AttributeMerger
             } else {
                 array_push($tailOptions, $countryOption);
             }
-
         }
         return array_merge($headOptions, $tailOptions);
     }

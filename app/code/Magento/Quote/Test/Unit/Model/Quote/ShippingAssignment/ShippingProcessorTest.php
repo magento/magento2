@@ -40,14 +40,14 @@ class ShippingProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['assign'])
             ->getMock();
-        
+
         $this->shippingMethodManagement = $this->getMockBuilder(ShippingMethodManagement::class)
             ->disableOriginalConstructor()
             ->setMethods(['apply'])
             ->getMock();
-        
+
         $objectManager = new ObjectManager($this);
-        
+
         $this->shippingProcessor = $objectManager->getObject(ShippingProcessor::class, [
             'shippingAddressManagement' => $this->shippingAddressManagement,
             'shippingMethodManagement' => $this->shippingMethodManagement
@@ -67,11 +67,11 @@ class ShippingProcessorTest extends \PHPUnit_Framework_TestCase
         $quoteId = 1;
 
         $address = $this->getMockForAbstractClass(AddressInterface::class);
-        
+
         $quote->expects(static::exactly(2))
             ->method('getId')
             ->willReturn($quoteId);
-        
+
         $shipping->expects(static::once())
             ->method('getAddress')
             ->willReturn($address);

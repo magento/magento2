@@ -6,9 +6,9 @@
 namespace Magento\Theme\Model\Theme;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Theme\Model\Theme;
-use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\TestFramework\Helper\CacheCleaner;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\Theme;
 
 class ThemeProviderTest extends \PHPUnit_Framework_TestCase
 {

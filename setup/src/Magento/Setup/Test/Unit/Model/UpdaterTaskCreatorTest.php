@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\ObjectManagerProvider;
-use \Magento\Setup\Model\UpdaterTaskCreator;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\UpdaterTaskCreator;
 
 class UpdaterTaskCreatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -90,15 +90,15 @@ class UpdaterTaskCreatorTest extends \PHPUnit_Framework_TestCase
                 'headerTitle'=>'Uninstall Package1', 'dataOption' => true
             ], 0, false],
             [['type' => 'update',
-                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]],
+                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1']],
                 'headerTitle'=>'Uninstall Package1'
             ], 0, false],
             [['type' => 'enable',
-                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]],
+                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1']],
                 'headerTitle'=>'Uninstall Package1'
             ], 1, true],
             [['type' => 'disable',
-                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]],
+                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1']],
                 'headerTitle'=>'Uninstall Package1'
             ], 1, true],
         ];

@@ -5,8 +5,8 @@
  */
 namespace Magento\Translation\Model\Js;
 
-use Magento\Framework\Translate\Js\Config as FrameworkJsConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Translate\Js\Config as FrameworkJsConfig;
 
 /**
  * Js Translation config

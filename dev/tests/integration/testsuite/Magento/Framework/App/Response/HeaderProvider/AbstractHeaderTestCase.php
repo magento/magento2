@@ -15,10 +15,8 @@ abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\Ab
         parent::setUp();
         $this->_objectManager->configure(
             [
-                'preferences' =>
-                    [
-                        \Magento\Framework\App\Response\Http::class =>
-                            \Magento\Framework\App\Response\Http\Interceptor::class
+                'preferences' => [
+                        \Magento\Framework\App\Response\Http::class => \Magento\Framework\App\Response\Http\Interceptor::class
                     ]
             ]
         );

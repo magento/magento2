@@ -6,7 +6,6 @@
 namespace Magento\Ui\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\View\Element\Template;
 
 class Config
 {

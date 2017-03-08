@@ -7,10 +7,10 @@
 namespace Magento\UrlRewrite\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\Category;
-use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
+use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 
 /**
  * Assert that url rewrite product in grid.
@@ -86,8 +86,7 @@ class AssertUrlRewriteProductInGrid extends AbstractConstraint
                     'store_id' => $storeName
                 ],
                 [
-                    'request_path' =>
-                        $rootCategoryArray[$rootCategoryName]['name'] . '/' . $product->getUrlKey() . '.html',
+                    'request_path' => $rootCategoryArray[$rootCategoryName]['name'] . '/' . $product->getUrlKey() . '.html',
                     'target_path' => $this->getTargetPath($product, $category),
                     'store_id' => $storeName
                 ],
@@ -97,7 +96,6 @@ class AssertUrlRewriteProductInGrid extends AbstractConstraint
                     $urlRewriteIndex->getUrlRedirectGrid()->isRowVisible($filter, true, false),
                     'URL Rewrite with request path \'' . $filter['request_path'] . '\' is absent in grid.'
                 );
-
             }
         }
     }

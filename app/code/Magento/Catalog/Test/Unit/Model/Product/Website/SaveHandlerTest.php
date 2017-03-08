@@ -6,12 +6,11 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Website;
 
-use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
-use Magento\Catalog\Model\Product\Website\SaveHandler;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Website\SaveHandler;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceModel;
+use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;

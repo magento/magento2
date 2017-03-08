@@ -7,15 +7,14 @@
 namespace Magento\Customer\Test\TestCase;
 
 use Magento\Config\Test\Fixture\ConfigData;
-use Magento\Customer\Test\Constraint\AssertChangingWebsiteChangeCountries;
-use Magento\Framework\App\ObjectManager;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew;
+use Magento\Framework\App\ObjectManager;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Steps:

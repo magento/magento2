@@ -8,8 +8,8 @@ namespace Magento\Weee\Pricing;
 
 use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
 use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
 
 /**

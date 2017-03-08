@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Stdlib\Test\Unit;
 
-use \Magento\Framework\Stdlib\ArrayUtils;
+use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
  * Magento\Framework\Stdlib\ArrayUtilsTest test case

@@ -5,11 +5,11 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Aggregation;
 
+use Magento\Catalog\Api\AttributeSetFinderInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface;
-use Magento\CatalogSearch\Model\Adapter\Aggregation\AggregationResolver;
-use Magento\Catalog\Api\AttributeSetFinderInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\CatalogSearch\Model\Adapter\Aggregation\AggregationResolver;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Search\Request\BucketInterface;

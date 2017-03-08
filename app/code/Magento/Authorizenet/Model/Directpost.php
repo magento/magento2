@@ -5,7 +5,6 @@
  */
 namespace Magento\Authorizenet\Model;
 
-use Magento\Authorizenet\Model\TransactionService;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\TransparentInterface;

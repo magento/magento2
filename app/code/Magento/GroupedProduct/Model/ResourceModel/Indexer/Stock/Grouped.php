@@ -11,8 +11,6 @@
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Indexer\Stock;
 
-use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
-
 class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
     /**

@@ -7,10 +7,10 @@
 namespace Magento\GiftMessage\Test\Constraint;
 
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
-use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Assert that message from dataset is displayed on order(s) view page on backend.
@@ -62,7 +62,6 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
 
             $expectedData[] = $giftMessageForm->getData();
             $actualData[] = $salesOrderView->getGiftOptionsBlock()->getData($giftMessageForm);
-
         }
 
         if ($giftMessage->getAllowGiftOptionsForItems() === 'Yes') {

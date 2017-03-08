@@ -6,7 +6,7 @@
 
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
-use \Magento\Authorization\Model\UserContextInterface;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Test Magento\Webapi\Controller\Rest\ParamsOverrider

@@ -5,13 +5,12 @@
  */
 namespace Magento\Paypal\Model\Payflow\Service\Request;
 
-use Magento\Framework\Math\Random;
 use Magento\Framework\DataObject;
+use Magento\Framework\Math\Random;
 use Magento\Framework\UrlInterface;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Quote\Model\Quote;
-use Magento\Sales\Model\Order\Payment;
 
 /**
  * Class SecureToken
@@ -43,7 +42,6 @@ class SecureToken
         Random $mathRandom,
         Transparent $transparent
     ) {
-
         $this->url = $url;
         $this->mathRandom = $mathRandom;
         $this->transparent = $transparent;

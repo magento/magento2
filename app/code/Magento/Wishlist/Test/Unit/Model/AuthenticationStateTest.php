@@ -6,7 +6,7 @@
  */
 namespace Magento\Wishlist\Test\Unit\Model;
 
-use \Magento\Wishlist\Model\AuthenticationState;
+use Magento\Wishlist\Model\AuthenticationState;
 
 class AuthenticationStateTest extends \PHPUnit_Framework_TestCase
 {

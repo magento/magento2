@@ -184,8 +184,7 @@ class BasePriceStorageTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $sku = 'sku_1';
         $idsBySku = [
-            'sku_1' =>
-                [
+            'sku_1' => [
                     1 => [
                         $this->basePriceInterface
                     ]

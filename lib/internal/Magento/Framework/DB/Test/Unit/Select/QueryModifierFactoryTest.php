@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Select;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\DB\Select\InQueryModifier;
+use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class QueryModifierFactoryTest extends \PHPUnit_Framework_TestCase
 {

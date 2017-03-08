@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
-
 /**
  * Class SearchResultTest
  */

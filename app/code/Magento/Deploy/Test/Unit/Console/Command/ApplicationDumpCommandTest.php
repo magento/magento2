@@ -6,13 +6,13 @@
 namespace Magento\Deploy\Test\Unit\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ApplicationDumpCommand;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\Config\Reader\Source\SourceInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
 
 /**
  * Test command for dump application state

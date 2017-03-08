@@ -6,17 +6,15 @@
 namespace Magento\Sales\Model;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Sales\Model\ResourceModel\Order as Resource;
-use Magento\Sales\Model\ResourceModel\Metadata;
-use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
-use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
-use Magento\Sales\Api\Data\OrderExtensionInterface;
-use Magento\Sales\Api\Data\OrderExtensionFactory;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\Data\ShippingAssignmentInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Api\Data\OrderExtensionFactory;
+use Magento\Sales\Api\Data\OrderExtensionInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
+use Magento\Sales\Api\Data\ShippingAssignmentInterface;
+use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
+use Magento\Sales\Model\ResourceModel\Metadata;
 
 /**
  * Repository class for @see OrderInterface

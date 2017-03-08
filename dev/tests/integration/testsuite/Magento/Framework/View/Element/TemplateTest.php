@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Element;
 
-use \Magento\Framework\App\Area;
+use Magento\Framework\App\Area;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {

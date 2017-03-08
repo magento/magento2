@@ -8,9 +8,8 @@
 
 namespace Magento\CatalogUrlRewrite\Model;
 
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Model\OptionProvider;
-
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * @magentoAppArea adminhtml
@@ -153,6 +152,5 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                 'Expected: ' . var_export($row, true) . "\nIn Actual: " . var_export($actual, true)
             );
         }
-
     }
 }

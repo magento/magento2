@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
-use \Magento\Checkout\Block\Cart\AbstractCart;
+use Magento\Checkout\Block\Cart\AbstractCart;
 
 class AbstractCartTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,8 +6,8 @@
 namespace Magento\Analytics\ReportXml;
 
 use Magento\Analytics\ReportXml\DB\SelectBuilderFactory;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class QueryFactory

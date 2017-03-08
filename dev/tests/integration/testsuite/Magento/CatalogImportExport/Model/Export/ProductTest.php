@@ -122,7 +122,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Verify that all stock item attribute values are exported (aren't equal to empty string)
-     * 
+     *
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      * @covers \Magento\CatalogImportExport\Model\Export\Product::export

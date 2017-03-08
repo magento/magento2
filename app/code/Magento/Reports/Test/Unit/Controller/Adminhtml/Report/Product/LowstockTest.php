@@ -6,9 +6,9 @@
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Product;
 
-use Magento\Reports\Controller\Adminhtml\Report\Product\Lowstock;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
+use Magento\Reports\Controller\Adminhtml\Report\Product\Lowstock;
 
 class LowstockTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
 {

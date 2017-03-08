@@ -7,9 +7,9 @@
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Class AttributeLoader

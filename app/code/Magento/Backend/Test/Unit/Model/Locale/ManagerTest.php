@@ -28,7 +28,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Auth\Session
      */
     protected $_authSession;
-    
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\ConfigInterface
      */
@@ -45,14 +45,14 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        
+
         $this->_backendConfig = $this->getMockForAbstractClass(
             \Magento\Backend\App\ConfigInterface::class,
             [],
             '',
             false
         );
-        
+
         $userMock = new \Magento\Framework\DataObject();
 
         $this->_authSession->expects($this->any())->method('getUser')->will($this->returnValue($userMock));

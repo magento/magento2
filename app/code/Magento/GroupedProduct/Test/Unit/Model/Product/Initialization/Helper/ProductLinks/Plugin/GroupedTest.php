@@ -6,8 +6,8 @@
  */
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Initialization\Helper\ProductLinks\Plugin;
 
-use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\Catalog\Model\Product\Type;
+use Magento\GroupedProduct\Model\Product\Type\Grouped;
 
 /**
  * Class GroupedTest

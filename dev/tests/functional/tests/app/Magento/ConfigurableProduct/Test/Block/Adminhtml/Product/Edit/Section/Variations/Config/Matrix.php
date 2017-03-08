@@ -6,11 +6,11 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config;
 
-use Magento\Mtf\Client\ElementInterface;
-use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Template;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Matrix row form.

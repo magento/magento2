@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Test\Unit\Plugin\Model\Product\Action;
 
-use Magento\Catalog\Model\Product;
-
 class UpdateAttributesFlushCacheTest extends \PHPUnit_Framework_TestCase
 {
     /**

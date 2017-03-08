@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Model\AdminOrder;
 
-use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class EmailSender

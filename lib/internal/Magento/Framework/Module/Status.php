@@ -81,7 +81,7 @@ class Status
      * @param string[] $modulesToBeChanged
      * @param string[] $currentlyEnabledModules
      * @param bool $prettyMessage
-     *  
+     *
      * @return string[]
      */
     public function checkConstraints(
@@ -231,7 +231,7 @@ class Status
             $errorMessages[] = "Cannot disable $moduleName because modules depend on it:";
         }
         foreach ($missingDependencies as $errorModule => $path) {
-                $errorMessages[] = "$errorModule: " . implode('->', $path);
+            $errorMessages[] = "$errorModule: " . implode('->', $path);
         }
         return $errorMessages;
     }

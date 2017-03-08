@@ -6,8 +6,8 @@
 namespace Magento\Analytics\Test\Unit\Controller\Adminhtml\BasicTier;
 
 use Magento\Analytics\Controller\Adminhtml\BasicTier\SignUp;
-use Magento\Config\Model\Config;
 use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Config\Model\Config;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 

@@ -6,7 +6,6 @@
 namespace Magento\Framework\Autoload;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Filesystem\FileResolver;
 
 /**

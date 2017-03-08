@@ -6,7 +6,7 @@
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\Area;
-use \Magento\Framework\App\Cron;
+use Magento\Framework\App\Cron;
 
 class CronTest extends \PHPUnit_Framework_TestCase
 {

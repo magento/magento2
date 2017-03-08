@@ -6,8 +6,6 @@
 
 namespace Magento\Swatches\Test\Unit\Block\Adminhtml\Product\Attribute\Edit;
 
-use Magento\Swatches\Model\Swatch;
-
 class FormTest extends \PHPUnit_Framework_TestCase
 {
     /**

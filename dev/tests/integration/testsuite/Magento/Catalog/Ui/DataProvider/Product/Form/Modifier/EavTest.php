@@ -70,7 +70,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
         $this->prepareDataForComparison($actualMeta, $expectedMeta);
         $this->assertEquals($expectedMeta, $actualMeta);
     }
-    
+
     public function testModifyMetaNewProduct()
     {
         $this->objectManager->get(\Magento\Eav\Model\Entity\AttributeCache::class)->clear();
@@ -118,9 +118,9 @@ class EavTest extends \PHPUnit_Framework_TestCase
             }
             if ($item instanceof \Magento\Framework\Phrase) {
                 $item = (string)$item;
-            } else if (is_array($item)) {
+            } elseif (is_array($item)) {
                 $this->prepareDataForComparison($item, $expectedData[$key]);
-            } else if ($key === 'price_id' || $key === 'sortOrder') {
+            } elseif ($key === 'price_id' || $key === 'sortOrder') {
                 $data[$key] = '__placeholder__';
             }
         }

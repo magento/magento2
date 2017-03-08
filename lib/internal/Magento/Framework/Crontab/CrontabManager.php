@@ -5,11 +5,11 @@
  */
 namespace Magento\Framework\Crontab;
 
-use Magento\Framework\ShellInterface;
-use Magento\Framework\Phrase;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Phrase;
+use Magento\Framework\ShellInterface;
 
 /**
  * Manager works with cron tasks
@@ -116,7 +116,7 @@ class CrontabManager implements CrontabManagerInterface
         if ($tasks) {
             $content .= self::TASKS_BLOCK_START . PHP_EOL;
             foreach ($tasks as $task) {
-                $content .=  $task['expression'] . ' ' . PHP_BINARY . ' '. $task['command'] . PHP_EOL;
+                $content .=  $task['expression'] . ' ' . PHP_BINARY . ' ' . $task['command'] . PHP_EOL;
             }
             $content .= self::TASKS_BLOCK_END . PHP_EOL;
         }

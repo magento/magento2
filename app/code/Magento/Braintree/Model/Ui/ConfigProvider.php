@@ -5,10 +5,10 @@
  */
 namespace Magento\Braintree\Model\Ui;
 
-use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
-use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Checkout\Model\ConfigProviderInterface;
 
 /**
  * Class ConfigProvider

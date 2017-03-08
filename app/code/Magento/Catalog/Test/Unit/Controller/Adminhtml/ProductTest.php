@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

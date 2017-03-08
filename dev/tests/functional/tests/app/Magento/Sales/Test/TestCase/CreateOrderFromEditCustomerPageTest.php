@@ -6,21 +6,21 @@
 
 namespace Magento\Sales\Test\TestCase;
 
-use Magento\Sales\Test\Constraint\AssertItemsOrderedSectionContainsProducts;
-use Magento\Mtf\TestCase\Injectable;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
-use Magento\Store\Test\Fixture\Store;
-use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
-use Magento\Wishlist\Test\Constraint\AssertCustomerWishlistOnBackendIsEmpty;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Sales\Test\Constraint\AssertCartSectionIsEmptyOnBackendOrderPage;
-use Magento\Wishlist\Test\Constraint\AssertProductsIsPresentInCustomerBackendWishlist;
-use Magento\Sales\Test\Constraint\AssertItemsOrderedSectionOnBackendOrderIsEmpty;
 use Magento\Sales\Test\Constraint\AssertCartSectionWithProductsOnBackendOrderPage;
-use Magento\Customer\Test\Fixture\Address;
+use Magento\Sales\Test\Constraint\AssertItemsOrderedSectionContainsProducts;
+use Magento\Sales\Test\Constraint\AssertItemsOrderedSectionOnBackendOrderIsEmpty;
+use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
+use Magento\Store\Test\Fixture\Store;
+use Magento\Wishlist\Test\Constraint\AssertCustomerWishlistOnBackendIsEmpty;
+use Magento\Wishlist\Test\Constraint\AssertProductsIsPresentInCustomerBackendWishlist;
 
 /**
  * Preconditions:

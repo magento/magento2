@@ -5,8 +5,6 @@
  */
 namespace Magento\ImportExport\Model;
 
-use Magento\ImportExport\Model\Import;
-
 /**
  * @magentoDataFixture Magento/ImportExport/_files/import_data.php
  */

@@ -78,7 +78,6 @@ class FileRecorder
         $this->removeOldFile($fileInfo, $directory);
 
         return true;
-        
     }
 
     /**

@@ -318,8 +318,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 'bunch' => [
                     'sku' => 'sku',
                     'name' => 'name',
-                    'bundle_values' =>
-                        'name=Bundle1,'
+                    'bundle_values' => 'name=Bundle1,'
                          . 'type=dropdown,'
                          . 'required=1,'
                          . 'sku=1,'

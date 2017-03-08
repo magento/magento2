@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Reflection\Test\Unit;
 
-use \Magento\Framework\Reflection\AttributeTypeResolver;
+use Magento\Framework\Reflection\AttributeTypeResolver;
 
 class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,15 +5,15 @@
  */
 namespace Magento\Config\Test\Unit\Console\Command\ConfigShow;
 
-use Magento\Framework\App\Config\Value;
-use Magento\Framework\App\Config\ValueFactory;
-use Magento\Config\Model\Config\Structure;
-use Magento\Config\Model\Config\StructureFactory;
-use Magento\Config\Model\Config\Structure\Element\Field;
-use Magento\Framework\Config\ScopeInterface;
-use Magento\Framework\App\Area;
 use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
 use Magento\Config\Model\Config\Backend\Encrypted;
+use Magento\Config\Model\Config\Structure;
+use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\Config\StructureFactory;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\Config\ValueFactory;
+use Magento\Framework\Config\ScopeInterface;
 
 /**
  * Test for ValueProcessor.

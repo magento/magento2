@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Test\TestStep;
 
-use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Class ReorderStep

@@ -94,7 +94,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $messages = array_merge($existingMessages, $messages);
-        
+
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $resultMock */
         $resultMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -342,7 +342,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
 
         $this->dataMock->expects($this->any())
             ->method('jsonDecode')
-            ->willThrowException(new \Zend_Json_Exception);
+            ->willThrowException(new \Zend_Json_Exception());
         $this->dataMock->expects($this->any())
             ->method('jsonEncode')
             ->willReturnCallback(

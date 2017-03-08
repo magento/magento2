@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\File\Collector;
 
-use \Magento\Framework\Css\PreProcessor\File\Collector\Aggregated;
+use Magento\Framework\Css\PreProcessor\File\Collector\Aggregated;
 
 /**
  * Tests Aggregate

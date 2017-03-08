@@ -92,7 +92,7 @@ class ProcessManager
     {
         foreach ($this->processes as $process) {
             if (pcntl_waitpid($process->getPid(), $status) === -1) {
-                throw new \RuntimeException('Error while waiting for process '. $process->getPid());
+                throw new \RuntimeException('Error while waiting for process ' . $process->getPid());
             }
         }
     }

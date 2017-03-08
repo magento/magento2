@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\ObjectManager;
 
-use Magento\Framework\Code\Reader\ClassReaderInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**

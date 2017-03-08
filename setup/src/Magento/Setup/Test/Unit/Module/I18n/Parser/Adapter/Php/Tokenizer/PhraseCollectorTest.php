@@ -5,10 +5,10 @@
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter\Php\Tokenizer;
 
-use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
-use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
+use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
+use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token;
 
 /**
  * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector

@@ -6,8 +6,8 @@
 
 namespace Magento\Analytics\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Steps:

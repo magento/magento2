@@ -5,8 +5,8 @@
  */
 namespace Magento\Wishlist\Test\Unit\Block\Cart\Item\Renderer\Actions;
 
-use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
 use Magento\Wishlist\Helper\Data;
 
 class MoveToWishlistTest extends \PHPUnit_Framework_TestCase

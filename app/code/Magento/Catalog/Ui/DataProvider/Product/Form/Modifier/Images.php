@@ -64,7 +64,7 @@ class Images extends AbstractModifier
                     $data[$modelId][self::DATA_SOURCE_DEFAULT]['media_gallery']['images'][$index]['label'] = "";
                 }
             }
-        };
+        }
 
         return $data;
     }

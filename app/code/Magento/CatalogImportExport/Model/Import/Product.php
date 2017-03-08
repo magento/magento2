@@ -1738,7 +1738,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         )
                     ) {
                         $attrValue = $this->dateTime->formatDate($attrValue, false);
-                    } else if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
+                    } elseif ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
                         $attrValue = $this->dateTime->gmDate(
                             'Y-m-d H:i:s',
                             $this->_localeDate->date($attrValue)->getTimestamp()

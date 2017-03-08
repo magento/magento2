@@ -6,8 +6,8 @@
 
 namespace Magento\Backend\Model\View\Layout;
 
-use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\View\Layout\ScheduledStructure;
 
 /**
  * Interface FilterInterface
@@ -23,7 +23,7 @@ use Magento\Framework\View\Layout\Data\Structure;
  *         </argument>
  *     </arguments>
  * </type>
- * 
+ *
  */
 interface FilterInterface
 {

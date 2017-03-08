@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\ErrorHandler;
+use Magento\Framework\App\ErrorHandler;
 
 class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
 {

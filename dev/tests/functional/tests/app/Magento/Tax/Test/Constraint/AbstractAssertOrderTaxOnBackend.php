@@ -7,11 +7,11 @@
 namespace Magento\Tax\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
+use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Sales\Test\Page\Adminhtml\OrderCreditMemoNew;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceNew;
-use Magento\Sales\Test\Page\Adminhtml\OrderCreditMemoNew;
-use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Checks that prices displayed excluding tax in order are correct on backend.

@@ -5,9 +5,8 @@
  */
 namespace Magento\Framework\Indexer;
 
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface as SaveHandlerInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 class SaveHandlerFactory
 {

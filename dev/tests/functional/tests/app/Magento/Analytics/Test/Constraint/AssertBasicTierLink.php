@@ -5,8 +5,8 @@
  */
 namespace Magento\Analytics\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert Basic Tier Sign Up page is opened by admin menu link

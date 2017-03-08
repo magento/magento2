@@ -7,7 +7,7 @@
 namespace Magento\Setup\Test\Unit\Fixtures;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\Setup\Fixtures\CustomersFixture;
+use Magento\Setup\Fixtures\CustomersFixture;
 
 class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
 {

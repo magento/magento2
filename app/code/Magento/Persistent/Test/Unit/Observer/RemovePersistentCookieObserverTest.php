@@ -9,7 +9,7 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use \Magento\Persistent\Observer\RemovePersistentCookieObserver;
+use Magento\Persistent\Observer\RemovePersistentCookieObserver;
 
 class RemovePersistentCookieObserverTest extends \PHPUnit_Framework_TestCase
 {

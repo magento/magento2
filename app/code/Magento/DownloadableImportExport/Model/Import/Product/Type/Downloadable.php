@@ -8,7 +8,7 @@
 namespace Magento\DownloadableImportExport\Model\Import\Product\Type;
 
 use Magento\Framework\EntityManager\MetadataPool;
-use \Magento\Store\Model\Store;
+use Magento\Store\Model\Store;
 
 /**
  * Class Downloadable

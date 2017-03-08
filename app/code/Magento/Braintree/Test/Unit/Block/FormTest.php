@@ -72,7 +72,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->initCcTypeMock();
         $this->initSessionQuoteMock();
         $this->initGatewayConfigMock();
-        
+
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->paymentDataHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -141,7 +141,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects(static::once())
             ->method('getStore')
             ->willReturn($store);
-        
+
         $store->expects(static::once())
             ->method('getId')
             ->willReturn($storeId);

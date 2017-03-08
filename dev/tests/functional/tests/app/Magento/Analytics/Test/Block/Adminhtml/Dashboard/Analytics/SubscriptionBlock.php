@@ -5,8 +5,8 @@
  */
 namespace Magento\Analytics\Test\Block\Adminhtml\Dashboard\Analytics;
 
-use Magento\Ui\Test\Block\Adminhtml\Modal;
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\Modal;
 
 /**
  * Subscription block.

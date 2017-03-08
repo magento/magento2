@@ -8,7 +8,6 @@ namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Tax\Api\Data\TaxClassInterface;
 
 /**
  * Tax class model

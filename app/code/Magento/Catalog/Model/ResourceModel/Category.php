@@ -12,7 +12,6 @@
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Framework\EntityManager\EntityManager;
-use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

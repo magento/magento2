@@ -14,12 +14,12 @@
 
 <h2><?php echo $this->message ?></h2>
 
-<?php if ( isset( $this->display_exceptions ) && $this->display_exceptions ): ?>
+<?php if (isset($this->display_exceptions) && $this->display_exceptions): ?>
 
-    <?php if ( isset( $this->exception ) && $this->exception instanceof Exception ): ?>
+    <?php if (isset($this->exception) && $this->exception instanceof Exception): ?>
         <hr/>
         <h2>Additional information:</h2>
-        <h3><?php echo get_class( $this->exception ); ?></h3>
+        <h3><?php echo get_class($this->exception); ?></h3>
         <dl>
             <dt>File:</dt>
             <dd>
@@ -28,24 +28,24 @@
 
             <dt>Message:</dt>
             <dd>
-                <pre class="prettyprint linenums"><?php echo $this->escapeHtml( $this->exception->getMessage() ) ?></pre>
+                <pre class="prettyprint linenums"><?php echo $this->escapeHtml($this->exception->getMessage()) ?></pre>
             </dd>
 
             <dt>Stack trace:</dt>
             <dd>
-                <pre class="prettyprint linenums"><?php echo $this->escapeHtml( $this->exception->getTraceAsString() ) ?></pre>
+                <pre class="prettyprint linenums"><?php echo $this->escapeHtml($this->exception->getTraceAsString()) ?></pre>
             </dd>
         </dl>
         <?php
         $e = $this->exception->getPrevious();
-        if ( $e ) :
+        if ($e) :
             ?>
             <hr/>
             <h2>Previous exceptions:</h2>
             <ul class="unstyled">
-                <?php while ( $e ) : ?>
+                <?php while ($e) : ?>
                     <li>
-                        <h3><?php echo get_class( $e ); ?></h3>
+                        <h3><?php echo get_class($e); ?></h3>
                         <dl>
                             <dt>File:</dt>
                             <dd>
@@ -54,12 +54,12 @@
 
                             <dt>Message:</dt>
                             <dd>
-                                <pre class="prettyprint linenums"><?php echo $this->escapeHtml( $e->getMessage() ) ?></pre>
+                                <pre class="prettyprint linenums"><?php echo $this->escapeHtml($e->getMessage()) ?></pre>
                             </dd>
 
                             <dt>Stack trace:</dt>
                             <dd>
-                                <pre class="prettyprint linenums"><?php echo $this->escapeHtml( $e->getTraceAsString() ) ?></pre>
+                                <pre class="prettyprint linenums"><?php echo $this->escapeHtml($e->getTraceAsString()) ?></pre>
                             </dd>
                         </dl>
                     </li>

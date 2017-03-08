@@ -6,8 +6,8 @@
 // @codingStandardsIgnoreStart
 namespace Magento\Framework\Reflection\Test\Unit;
 
-use Zend\Code\Reflection\ClassReflection;
 use Magento\Framework\Exception\SerializationException;
+use Zend\Code\Reflection\ClassReflection;
 
 /**
  * Type processor Test

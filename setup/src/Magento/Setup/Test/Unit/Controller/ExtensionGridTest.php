@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Test\Unit\Controller;
 
-use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Controller\ExtensionGrid;
 use Magento\Setup\Model\Grid\Extension;
 use Magento\Setup\Model\PackagesAuth;

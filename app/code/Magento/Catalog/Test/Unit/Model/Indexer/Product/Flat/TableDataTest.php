@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
 
-use Magento\Framework\App\ResourceConnection;
-
 class TableDataTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -5,12 +5,12 @@
  */
 namespace Magento\Backend\Model\View\Layout;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ConditionPool
- * 
+ *
  * Registry for \Magento\Backend\Model\View\Layout\ConditionInterface
  * @see usage details in \Magento\Backend\Model\View\Layout\ConditionInterface description
  *

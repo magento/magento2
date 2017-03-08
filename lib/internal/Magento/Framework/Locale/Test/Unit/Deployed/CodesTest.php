@@ -6,9 +6,9 @@
 namespace Magento\Framework\Locale\Test\Unit\Deployed;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Locale\Deployed\Codes;
-use Magento\Framework\Filesystem;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\Design\ThemeInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;

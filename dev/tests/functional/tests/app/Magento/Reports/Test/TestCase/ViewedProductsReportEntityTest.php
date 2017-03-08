@@ -6,12 +6,12 @@
 
 namespace Magento\Reports\Test\TestCase;
 
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Reports\Test\Page\Adminhtml\ProductReportView;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Reports\Test\Page\Adminhtml\ProductReportView;
 
 /**
  * Preconditions:

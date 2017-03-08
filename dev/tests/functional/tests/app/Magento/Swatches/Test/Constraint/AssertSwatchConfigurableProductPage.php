@@ -7,9 +7,9 @@
 namespace Magento\Swatches\Test\Constraint;
 
 use Magento\Catalog\Test\Constraint\AssertProductPage;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Assert that product with swatches and regular dropdown redirect can't be add to cart from catalog catergory page.

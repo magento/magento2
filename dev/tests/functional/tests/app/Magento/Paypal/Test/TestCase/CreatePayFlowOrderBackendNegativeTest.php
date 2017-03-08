@@ -24,7 +24,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 9. Click Get Shipping Method and rates.
  * 10. Fill data according dataset.
  * 11. Select payment method Credit Card (PayFlow Pro)
- * 12. Leave empty required fields for credit card 
+ * 12. Leave empty required fields for credit card
  * 13. Click Submit order button
  *
  * @group PayPal

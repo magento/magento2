@@ -5,15 +5,15 @@
  */
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Bundle\Test\Fixture\BundleProduct;
+use Magento\Catalog\Test\Constraint\AssertProductForm;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
+use Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Bundle\Test\Fixture\BundleProduct;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Magento\Catalog\Test\Constraint\AssertProductForm;
-use Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm;
 
 /**
  * Assert that products quantity was increased after order cancel.

@@ -5,12 +5,12 @@
  */
 namespace Magento\Deploy\Console\Command\App;
 
+use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Console\Cli;
-use Magento\Deploy\Console\Command\App\ConfigImport\Importer;
 
 /**
  * Runs the process of importing configuration data from shared source to appropriate application sources.

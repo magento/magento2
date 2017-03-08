@@ -327,7 +327,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      */
     public function getActionClassName($module, $actionPath)
     {
-        $prefix = $this->pathPrefix ? 'Controller\\' . $this->pathPrefix  : 'Controller';
+        $prefix = $this->pathPrefix ? 'Controller\\' . $this->pathPrefix : 'Controller';
         return $this->nameBuilder->buildClassName([$module, $prefix, $actionPath]);
     }
 

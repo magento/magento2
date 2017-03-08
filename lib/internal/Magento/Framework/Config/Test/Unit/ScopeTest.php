@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Config\Test\Unit;
 
-use \Magento\Framework\Config\Scope;
+use Magento\Framework\Config\Scope;
 
 class ScopeTest extends \PHPUnit_Framework_TestCase
 {

@@ -7,10 +7,10 @@
 namespace Magento\Bundle\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Cms\Test\Page\CmsIndex;
 
 /**
  * Assert that option title is correct in different stores on bundle product page.

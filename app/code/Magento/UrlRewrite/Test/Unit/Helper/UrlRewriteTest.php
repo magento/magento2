@@ -5,8 +5,6 @@
  */
 namespace Magento\UrlRewrite\Test\Unit\Helper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 class UrlRewriteTest extends \PHPUnit_Framework_TestCase
 {
     /**

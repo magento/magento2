@@ -5,8 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Export;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\Store\Model\Store;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD)

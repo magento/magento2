@@ -7,13 +7,13 @@
 namespace Magento\Catalog\Model\ProductLink;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductLinkExtensionFactory;
+use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks as LinksInitializer;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class Repository
@@ -163,7 +163,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                     foreach ($item['custom_attributes'] as $option) {
                         $name = $option['attribute_code'];
                         $value = $option['value'];
-                        $setterName = 'set'.ucfirst($name);
+                        $setterName = 'set' . ucfirst($name);
                         // Check if setter exists
                         if (method_exists($productLinkExtension, $setterName)) {
                             call_user_func([$productLinkExtension, $setterName], $value);

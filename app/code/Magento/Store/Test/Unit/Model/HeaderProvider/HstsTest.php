@@ -6,10 +6,10 @@
 
 namespace Magento\Store\Test\Unit\Model\HeaderProvider;
 
-use \Magento\Store\Model\HeaderProvider\Hsts;
-use \Magento\Store\Model\Store;
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\HeaderProvider\Hsts;
+use Magento\Store\Model\Store;
 
 class HstsTest extends \PHPUnit_Framework_TestCase
 {

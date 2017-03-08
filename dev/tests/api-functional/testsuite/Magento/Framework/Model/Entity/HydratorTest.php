@@ -6,10 +6,10 @@
 namespace Magento\Framework\Model\Entity;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\TestFramework\Helper\Customer as CustomerHelper;
-use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\TestFramework\Helper\Customer as CustomerHelper;
 
 class HydratorTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {

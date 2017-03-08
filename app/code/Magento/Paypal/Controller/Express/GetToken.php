@@ -6,14 +6,13 @@
 namespace Magento\Paypal\Controller\Express;
 
 use Magento\Checkout\Helper\Data;
-use Magento\Framework\Webapi\Exception;
-use Magento\Checkout\Model\Type\Onepage;
-use Magento\Paypal\Model\Express\Checkout;
 use Magento\Checkout\Helper\ExpressRedirect;
+use Magento\Checkout\Model\Type\Onepage;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Paypal\Controller\Express\AbstractExpress;
+use Magento\Framework\Webapi\Exception;
+use Magento\Paypal\Model\Express\Checkout;
 
 /**
  * Class GetToken
@@ -99,7 +98,7 @@ class GetToken extends AbstractExpress
                 $quote->getBillingAddress(),
                 $quote->getShippingAddress()
             );
-        } else if (
+        } elseif (
             (!$quoteCheckoutMethod || $quoteCheckoutMethod !== Onepage::METHOD_REGISTER)
                 && !$checkoutHelper->isAllowedGuestCheckout($quote, $quote->getStoreId())
         ) {

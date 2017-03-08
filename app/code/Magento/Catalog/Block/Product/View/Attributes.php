@@ -86,7 +86,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
                 } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
                     $value = $this->priceCurrency->convertAndFormat($value);
                 }
-    
+
                 if ($value instanceof Phrase || (is_string($value) && strlen($value))) {
                     $data[$attribute->getAttributeCode()] = [
                         'label' => __($attribute->getStoreLabel()),

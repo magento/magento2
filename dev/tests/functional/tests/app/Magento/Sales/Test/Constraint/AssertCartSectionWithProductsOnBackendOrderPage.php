@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 
 /**
  * Assert that customer's Shopping Cart section on Order Create backend page contains products.

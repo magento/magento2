@@ -78,7 +78,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         );
         $this->_context->expects($this->once())->method('getRequest')->will($this->returnValue($this->_request));
         $this->_context->expects($this->once())->method('getScopeConfig')->will($this->returnValue($scopeConfig));
-        
+
         $this->_object = new \Magento\Cookie\Helper\Cookie(
             $this->_context,
             $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false, false),

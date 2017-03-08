@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\AddDatabase;
+use Magento\Setup\Controller\AddDatabase;
 
 class AddDatabaseTest extends \PHPUnit_Framework_TestCase
 {

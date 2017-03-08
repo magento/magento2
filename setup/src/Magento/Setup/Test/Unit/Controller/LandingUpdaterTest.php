@@ -6,10 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\LandingUpdater;
-use \Magento\Framework\App\ProductMetadata;
-use \Magento\Framework\Composer\ComposerJsonFinder;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Setup\Controller\LandingUpdater;
 
 class LandingUpdaterTest extends \PHPUnit_Framework_TestCase
 {

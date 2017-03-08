@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Event\Test\Unit;
 
-use \Magento\Framework\Event\ObserverFactory;
+use Magento\Framework\Event\ObserverFactory;
 
 /**
  * Class ConfigTest

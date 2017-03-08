@@ -19,7 +19,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Weee\Model\Attribute\Backend\Weee\Tax
      */
     protected $model;
-        
+
     /**
      * @var ObjectManager
      */

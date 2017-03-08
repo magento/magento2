@@ -5,13 +5,13 @@
  */
 namespace Magento\Customer\Model\Metadata;
 
-use Magento\Framework\App\CacheInterface;
-use Magento\Framework\App\Cache\StateInterface;
+use Magento\Config\App\Config\Type\System;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Eav\Model\Cache\Type;
 use Magento\Eav\Model\Entity\Attribute;
-use Magento\Config\App\Config\Type\System;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Cache for attribute metadata

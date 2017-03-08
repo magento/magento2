@@ -6,17 +6,17 @@
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\FixtureModel;
-use \Magento\Setup\Fixtures\StoresFixture;
-use \Magento\Catalog\Api\Data\CategoryInterface;
-use \Magento\Catalog\Model\CategoryFactory;
-use \Magento\Framework\App\Config\Storage\Writer;
-use \Magento\Framework\Event\ManagerInterface;
-use \Magento\Framework\Locale\Config;
-use \Magento\Store\Api\Data\GroupInterface;
-use \Magento\Store\Api\Data\WebsiteInterface;
-use \Magento\Store\Api\Data\StoreInterface;
-use \Magento\Store\Model\StoreManager;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Framework\App\Config\Storage\Writer;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\Config;
+use Magento\Setup\Fixtures\FixtureModel;
+use Magento\Setup\Fixtures\StoresFixture;
+use Magento\Store\Api\Data\GroupInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManager;
 
 class StoresFixtureTest extends \PHPUnit_Framework_TestCase
 {

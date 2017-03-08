@@ -6,8 +6,8 @@
 
 namespace Magento\Analytics\Test\Unit\Model\ReportXml;
 
-use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Analytics\Model\ReportXml\ModuleIterator;
+use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ModuleIteratorTest extends \PHPUnit_Framework_TestCase

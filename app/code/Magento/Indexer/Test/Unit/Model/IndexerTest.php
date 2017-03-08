@@ -6,7 +6,6 @@
 namespace Magento\Indexer\Test\Unit\Model;
 
 use Magento\Framework\Indexer\StateInterface;
-use Magento\Indexer\Model\Indexer\State;
 
 class IndexerTest extends \PHPUnit_Framework_TestCase
 {

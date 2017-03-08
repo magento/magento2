@@ -6,8 +6,8 @@
 namespace Magento\Analytics\Test\Unit\ReportXml\Config;
 
 use Magento\Analytics\ReportXml\Config\SchemaLocator;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class SchemaLocatorTest

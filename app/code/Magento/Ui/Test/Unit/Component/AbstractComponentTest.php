@@ -5,10 +5,9 @@
  */
 namespace Magento\Ui\Test\Unit\Component;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class AbstractComponentTest extends \PHPUnit_Framework_TestCase
 {

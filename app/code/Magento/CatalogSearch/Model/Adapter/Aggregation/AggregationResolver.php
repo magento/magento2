@@ -34,7 +34,7 @@ class AggregationResolver implements AggregationResolverInterface
      * @var Config
      */
     private $config;
-    
+
     /**
      * AggregationResolver constructor
      *

@@ -21,7 +21,7 @@ $logWriter->setFormatter(new \Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
 $logger = new \Zend_Log($logWriter);
 
 $testFrameworkDir = __DIR__;
-require_once  __DIR__ . '/../../integration/framework/deployTestModules.php';
+require_once __DIR__ . '/../../integration/framework/deployTestModules.php';
 
 /* Bootstrap the application */
 $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());

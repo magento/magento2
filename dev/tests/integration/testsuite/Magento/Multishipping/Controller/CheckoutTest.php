@@ -5,7 +5,7 @@
  */
 namespace Magento\Multishipping\Controller;
 
-use \Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
+use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
 /**
  * Test class for \Magento\Multishipping\Controller\Checkout

@@ -5,9 +5,9 @@
  */
 namespace Magento\Review\Test\Unit\Ui\Component\Listing\Columns;
 
-use Magento\Review\Ui\Component\Listing\Columns\Status;
 use Magento\Catalog\Test\Unit\Ui\Component\Listing\Columns\AbstractColumnTest;
 use Magento\Review\Helper\Data as StatusSource;
+use Magento\Review\Ui\Component\Listing\Columns\Status;
 
 /**
  * Class StatusTest

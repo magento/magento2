@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Cache\Tag\Strategy;
 
-use \Magento\Framework\App\Cache\Tag\Strategy\Identifier;
+use Magento\Framework\App\Cache\Tag\Strategy\Identifier;
 
 class IdentifierTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +17,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->model = new Identifier;
+        $this->model = new Identifier();
     }
 
     public function testGetWithScalar()
@@ -28,7 +28,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTagsWithObject()
     {
-        $this->assertEquals([], $this->model->getTags(new \StdClass));
+        $this->assertEquals([], $this->model->getTags(new \StdClass()));
     }
 
     public function testGetTagsWithIdentityInterface()

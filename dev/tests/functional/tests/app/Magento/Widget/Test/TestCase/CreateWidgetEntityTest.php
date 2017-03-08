@@ -73,7 +73,7 @@ class CreateWidgetEntityTest extends AbstractCreateWidgetEntityTest
             $this->cmsIndex->open();
         }
     }
-    
+
     /**
      * Enable and flush all cache.
      *

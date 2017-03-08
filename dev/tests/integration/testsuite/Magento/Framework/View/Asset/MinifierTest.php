@@ -6,8 +6,8 @@
 namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\State as AppState;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests for minifier
@@ -93,7 +93,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test JS minification library
-     * 
+     *
      * @return void
      */
     public function testJshrinkLibrary()

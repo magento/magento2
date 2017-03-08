@@ -5,8 +5,6 @@
  */
 namespace Magento\Theme\Block\Html;
 
-use Magento\Framework\View\Element\Template;
-
 /**
  * Html page title block
  *

@@ -6,11 +6,11 @@
 
 namespace Magento\Catalog\Setup;
 
-use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Gallery;
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 /**
  * Upgrade the Catalog module DB scheme
@@ -236,7 +236,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         if ($setup->tableExists(Gallery::GALLERY_VALUE_TO_ENTITY_TABLE)) {
             return;
-        };
+        }
 
         /** Add support video media attribute */
         $this->createValueToEntityTable($setup);

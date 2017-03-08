@@ -5,9 +5,9 @@
  */
 namespace Magento\Sales\Model\Order\Email\Container;
 
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\Store;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 abstract class Container implements IdentityInterface
 {

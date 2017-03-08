@@ -6,10 +6,10 @@
 
 namespace Magento\Customer\Model;
 
-use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
 {

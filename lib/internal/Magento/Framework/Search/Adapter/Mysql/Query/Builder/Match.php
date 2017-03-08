@@ -10,9 +10,9 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface;
 use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
+use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
-use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 class Match implements QueryInterface
 {

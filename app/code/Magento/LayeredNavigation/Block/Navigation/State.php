@@ -9,8 +9,6 @@
  */
 namespace Magento\LayeredNavigation\Block\Navigation;
 
-use Magento\Framework\View\Element\Template;
-
 class State extends \Magento\Framework\View\Element\Template
 {
     /**

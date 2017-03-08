@@ -93,12 +93,10 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
         $attributeId = 5;
         $skus = ['sku_1', 'sku_2'];
         $idsBySku = [
-            'sku_1' =>
-                [
+            'sku_1' => [
                     1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
                 ],
-            'sku_2' =>
-                [
+            'sku_2' => [
                     2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
                 ]
         ];
@@ -228,12 +226,10 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
         $attributeId = 5;
         $skus = ['sku_1', 'sku_2'];
         $idsBySku = [
-            'sku_1' =>
-                [
+            'sku_1' => [
                     1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
                 ],
-            'sku_2' =>
-                [
+            'sku_2' => [
                     2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
                 ]
         ];
@@ -278,12 +274,10 @@ class PricePersistenceTest extends \PHPUnit_Framework_TestCase
         $attributeId = 5;
         $skus = ['sku_1', 'sku_2'];
         $idsBySku = [
-            'sku_1' =>
-                [
+            'sku_1' => [
                     1 => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
                 ],
-            'sku_2' =>
-                [
+            'sku_2' => [
                     2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
                 ]
         ];

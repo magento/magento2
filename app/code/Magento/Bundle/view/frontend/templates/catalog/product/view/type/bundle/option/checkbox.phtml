@@ -11,7 +11,7 @@
 <?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox */ ?>
 <?php $_option = $block->getOption() ?>
 <?php $_selections = $_option->getSelections() ?>
-<div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
+<div class="field option <?php echo ($_option->getRequired()) ? ' required' : ''; ?>">
     <label class="label">
         <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
@@ -24,16 +24,21 @@
                        name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                        value="<?php /* @escapeNotVerified */ echo $_selections[0]->getSelectionId() ?>"/>
             <?php else:?>
-                <?php foreach($_selections as $_selection): ?>
+                <?php foreach ($_selections as $_selection): ?>
                     <div class="field choice">
                         <input class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?> checkbox product bundle option change-container-classname"
                                id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"
                                type="checkbox"
-                               <?php if ($_option->getRequired()) /* @escapeNotVerified */ echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $_option->getId() . ']&quot;]:checked\'}"'?>
+                               <?php if ($_option->getRequired()) { /* @escapeNotVerified */ echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $_option->getId() . ']&quot;]:checked\'}"';
+}?>
                                name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][<?php /* @escapeNotVerified */ echo $_selection->getId() ?>]"
                                data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][<?php /* @escapeNotVerified */ echo $_selection->getId() ?>]"
-                               <?php if ($block->isSelected($_selection)) echo ' checked="checked"' ?>
-                               <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>
+                               <?php if ($block->isSelected($_selection)) {
+    echo ' checked="checked"';
+} ?>
+                               <?php if (!$_selection->isSaleable()) {
+    echo ' disabled="disabled"';
+} ?>
                                value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"/>
                         <label class="label"
                                for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>">

@@ -7,8 +7,8 @@
 namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
 
 class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementInterface
 {

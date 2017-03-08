@@ -6,15 +6,15 @@
 
 namespace Magento\Store\Test\Handler\Website;
 
+use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
+use Magento\Mtf\System\Event\EventManagerInterface;
+use Magento\Mtf\Util\Command\Website;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
-use Magento\Mtf\Config\DataInterface;
-use Magento\Mtf\System\Event\EventManagerInterface;
-use Magento\Mtf\Util\Command\Website;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 
 /**

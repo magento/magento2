@@ -6,10 +6,10 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertCategoryIsNotActive
@@ -66,7 +66,6 @@ class AssertCategoryIsNotActive extends AbstractConstraint
 
         return $_ENV['app_frontend_url'] . implode('/', array_reverse($categoryUrlKey)) . '.html';
     }
-
 
     /**
      * Category not find in top menu

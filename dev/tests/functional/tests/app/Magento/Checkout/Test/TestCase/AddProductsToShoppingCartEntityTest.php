@@ -6,13 +6,13 @@
 
 namespace Magento\Checkout\Test\TestCase;
 
+use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
 use Magento\Mtf\Util\Command\Cli\Cache;
 
 /**
@@ -219,7 +219,6 @@ class AddProductsToShoppingCartEntityTest extends Injectable
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true, 'flushCache' => $this->flushCache]
         )->run();
-
     }
 
     /**

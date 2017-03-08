@@ -1,12 +1,12 @@
 <?php
-/** 
+/**
  *
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
- 
+
 class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetOptionWhenOptionsAreSet()

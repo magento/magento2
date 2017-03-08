@@ -6,12 +6,12 @@
 
 namespace Magento\Framework\App\ObjectManager\Environment;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\EnvironmentInterface;
 use Magento\Framework\App\Interception\Cache\CompiledConfig;
-use Magento\Framework\ObjectManager\FactoryInterface;
-use Magento\Framework\App\Area;
-use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
+use Magento\Framework\ObjectManager\FactoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

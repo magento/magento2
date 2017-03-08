@@ -5,8 +5,8 @@
  */
 namespace Magento\Backend\Model;
 
-use Magento\Framework\Url\HostChecker;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Url\HostChecker;
 
 /**
  * Class \Magento\Backend\Model\UrlInterface

@@ -5,9 +5,9 @@
  */
 namespace Magento\Paypal\Block\Express;
 
-use Magento\Paypal\Model\Config;
 use Magento\Catalog\Block as CatalogBlock;
 use Magento\Paypal\Helper\Shortcut\ValidatorInterface;
+use Magento\Paypal\Model\Config;
 
 /**
  * Paypal express checkout shortcut link

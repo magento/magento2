@@ -6,9 +6,8 @@
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response;
 
 use Magento\Framework\DataObject;
-use Magento\Paypal\Model\Payflowpro;
-use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
+use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 
 /**
  * Test class for \Magento\Paypal\Model\Payflow\Service\Response\Transaction

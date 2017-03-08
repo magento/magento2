@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Authorization\Model\ResourceModel;
+
 use Magento\Framework\App\ObjectManager;
 
 /**

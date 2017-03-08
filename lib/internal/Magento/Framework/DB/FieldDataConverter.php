@@ -8,8 +8,8 @@ namespace Magento\Framework\DB;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\DataConverter\DataConversionException;
-use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
+use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select\QueryModifierInterface;
 
 /**

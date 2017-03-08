@@ -10,12 +10,12 @@ namespace Magento\Dhl\Model;
 
 use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\Module\Dir;
-use Magento\Sales\Model\Order\Shipment;
+use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Rate\Result;
-use Magento\Framework\Xml\Security;
 
 /**
  * DHL International (API v1.4)

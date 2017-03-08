@@ -6,20 +6,20 @@
 
 namespace Magento\Deploy\Model\Deploy;
 
+use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\View\Asset\Publisher;
-use Magento\Framework\View\Asset\ContentProcessorException;
-use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
-use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
-use Magento\Framework\View\Design\Theme\ListInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Config\Theme;
-use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
-use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
-use Magento\Framework\View\Asset\Minification;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
+use Magento\Framework\View\Asset\ContentProcessorException;
+use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
+use Magento\Framework\View\Design\Theme\ListInterface;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class which allows deploy by locales
@@ -333,7 +333,6 @@ class LocaleDeploy implements DeployInterface
     private function deployLibFiles($area, $themePath, $locale)
     {
         foreach ($this->filesUtil->getStaticLibraryFiles() as $filePath) {
-
             if ($this->checkSkip($filePath)) {
                 continue;
             }

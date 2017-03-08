@@ -10,13 +10,13 @@
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Payment\Model\InfoInterface;
 
 /**
  * Class PayflowproTest

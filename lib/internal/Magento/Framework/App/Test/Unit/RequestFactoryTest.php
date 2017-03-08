@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\RequestFactory;
+use Magento\Framework\App\RequestFactory;
 
 class RequestFactoryTest extends \PHPUnit_Framework_TestCase
 {

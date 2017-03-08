@@ -5,9 +5,9 @@
  */
 namespace Magento\Customer\Ui\Component\MassAction\Group;
 
+use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 use Magento\Framework\UrlInterface;
 use Zend\Stdlib\JsonSerializable;
-use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
  * Class Options

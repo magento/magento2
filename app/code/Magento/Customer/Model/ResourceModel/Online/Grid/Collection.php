@@ -5,12 +5,11 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Online\Grid;
 
-use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Magento\Customer\Model\Visitor;
-use Magento\Framework\Api;
-use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
+use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Psr\Log\LoggerInterface as Logger;
 
 /**

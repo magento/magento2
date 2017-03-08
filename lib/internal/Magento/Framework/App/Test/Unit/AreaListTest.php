@@ -8,7 +8,7 @@
 
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\AreaList;
+use Magento\Framework\App\AreaList;
 
 class AreaListTest extends \PHPUnit_Framework_TestCase
 {

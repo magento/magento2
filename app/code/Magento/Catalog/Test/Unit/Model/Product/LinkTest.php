@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-use \Magento\Catalog\Model\Product\Link;
+use Magento\Catalog\Model\Product\Link;
 
 class LinkTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,7 +5,6 @@
  */
 namespace Magento\SalesSequence\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\SalesSequence\Model\ResourceModel\Meta;
 
 /**

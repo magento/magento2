@@ -1030,8 +1030,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $selectionIds = $product->getCustomOption('bundle_selection_ids');
         $selectionIds = $this->serializer->unserialize($selectionIds->getValue());
         $buyRequest = $product->getCustomOption('info_buyRequest');
- 	 	$buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest->getValue()));
- 	 	$bundleOption = $buyRequest->getBundleOption();
+        $buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest->getValue()));
+        $bundleOption = $buyRequest->getBundleOption();
 
         if (empty($bundleOption)) {
             throw new \Magento\Framework\Exception\LocalizedException($this->getSpecifyOptionMessage());

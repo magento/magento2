@@ -6,9 +6,8 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\State;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * View asset configuration interface

@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
-use \Magento\Framework\View\Layout\Reader\UiComponent;
+use Magento\Framework\View\Layout\Reader\UiComponent;
 
 class UiComponentTest extends \PHPUnit_Framework_TestCase
 {

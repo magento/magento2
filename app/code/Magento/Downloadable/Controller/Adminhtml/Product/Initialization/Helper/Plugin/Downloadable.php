@@ -5,8 +5,8 @@
  */
 namespace Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
-use Magento\Downloadable\Api\Data\SampleInterfaceFactory as SampleFactory;
 use Magento\Downloadable\Api\Data\LinkInterfaceFactory as LinkFactory;
+use Magento\Downloadable\Api\Data\SampleInterfaceFactory as SampleFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 

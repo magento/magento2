@@ -6,13 +6,13 @@
 namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
-use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Eav\Model\Entity\AttributeCache;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection as AppResource;
-use Magento\Framework\Model\Entity\ScopeResolver;
-use Magento\Framework\Model\Entity\ScopeInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\AttributeInterface;
-use Magento\Eav\Model\Entity\AttributeCache;
+use Magento\Framework\Model\Entity\ScopeInterface;
+use Magento\Framework\Model\Entity\ScopeResolver;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -91,7 +91,6 @@ class ReadHandler implements AttributeInterface
      */
     protected function getAttributes($entityType)
     {
-
         $attributes = $this->attributeCache->getAttributes($entityType);
         if ($attributes) {
             return $attributes;

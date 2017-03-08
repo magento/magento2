@@ -7,9 +7,9 @@
  */
 namespace Magento\Backend\Test\Block\System\Config;
 
-use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Class Form.

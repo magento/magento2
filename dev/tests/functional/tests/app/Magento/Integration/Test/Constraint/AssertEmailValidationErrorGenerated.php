@@ -6,8 +6,8 @@
 
 namespace Magento\Integration\Test\Constraint;
 
-use Magento\Integration\Test\Page\Adminhtml\IntegrationNew;
 use Magento\Integration\Test\Fixture\Integration;
+use Magento\Integration\Test\Page\Adminhtml\IntegrationNew;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**

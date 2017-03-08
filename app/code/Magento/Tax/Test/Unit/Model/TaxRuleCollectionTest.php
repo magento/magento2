@@ -5,15 +5,15 @@
  */
 namespace Magento\Tax\Test\Unit\Model;
 
-use \Magento\Tax\Model\TaxRuleCollection;
- 
+use Magento\Tax\Model\TaxRuleCollection;
+
 class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var TaxRuleCollection
      */
     protected $model;
-    
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -53,7 +53,7 @@ class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $taxRuleMock;
-    
+
     protected function setUp()
     {
         $this->entityFactoryMock = $this->getMock(

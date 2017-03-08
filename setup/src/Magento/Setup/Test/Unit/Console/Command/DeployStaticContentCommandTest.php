@@ -5,11 +5,11 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\State;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\Locale;
 use Magento\Setup\Console\Command\DeployStaticContentCommand;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\Validator\Locale;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\State;
 
 require 'FunctionExistMock.php';
 

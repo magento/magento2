@@ -5,11 +5,11 @@
  */
 namespace Magento\Backend\Model\View\Layout\Filter;
 
+use Magento\Backend\Model\View\Layout\ConditionPool;
 use Magento\Backend\Model\View\Layout\FilterInterface;
 use Magento\Backend\Model\View\Layout\StructureManager;
 use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\View\Layout\ScheduledStructure;
-use Magento\Backend\Model\View\Layout\ConditionPool;
 
 /**
  * Class Condition

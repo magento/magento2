@@ -6,8 +6,8 @@
 namespace Magento\Customer\Test\Unit\Console\Command;
 
 use Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class UpgradeHashAlgorithmCommandTest extends \PHPUnit_Framework_TestCase
 {

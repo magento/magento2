@@ -7,10 +7,10 @@
 namespace Magento\Deploy\Model\Deploy;
 
 use Magento\Framework\App\View\Asset\Publisher;
-use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Translate\Js\Config as TranslationJsConfig;
 use Magento\Framework\TranslateInterface;
-use Magento\Framework\Console\Cli;
+use Magento\Framework\View\Asset\Repository;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**

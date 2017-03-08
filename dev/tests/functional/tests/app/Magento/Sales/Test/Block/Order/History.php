@@ -7,8 +7,8 @@
 namespace Magento\Sales\Test\Block\Order;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Order history block on My Order page.

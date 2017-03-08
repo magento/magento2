@@ -5,11 +5,11 @@
  */
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use \Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Catalog\Model\Product\Option;
-
-use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Catalog\Model\Product\Option\Value;
+
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Framework\Pricing\PriceInfoInterface;
 
 /**
  * Class OptionPriceTest

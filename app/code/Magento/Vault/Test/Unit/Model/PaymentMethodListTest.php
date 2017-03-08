@@ -9,8 +9,8 @@ use Magento\Payment\Api\Data\PaymentMethodInterface;
 use Magento\Payment\Api\PaymentMethodListInterface;
 use Magento\Payment\Model\Method\InstanceFactory;
 use Magento\Payment\Model\MethodInterface;
-use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\Vault\Model\PaymentMethodList;
+use Magento\Vault\Model\VaultPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class PaymentMethodListTest extends \PHPUnit_Framework_TestCase

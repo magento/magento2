@@ -7,8 +7,8 @@
 namespace Magento\CatalogRule\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\ResourceModel\RuleFactory;
 use Magento\CatalogRule\Model\ResourceModel\Rule;
+use Magento\CatalogRule\Model\ResourceModel\RuleFactory;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\Adjustment\Calculator;

@@ -5,9 +5,9 @@
  */
 namespace Magento\ImportExport\Model\Import;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Framework\App\ResourceConnection;
 
 /**
  * Import entity abstract model
@@ -68,10 +68,8 @@ abstract class AbstractEntity
         self::ERROR_CODE_WRONG_QUOTES => "Curly quotes used instead of straight quotes",
         self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
         self::ERROR_EXCEEDED_MAX_LENGTH => 'Attribute %s exceeded max length',
-        self::ERROR_INVALID_ATTRIBUTE_TYPE =>
-            'Value for \'%s\' attribute contains incorrect value',
-        self::ERROR_INVALID_ATTRIBUTE_OPTION =>
-            "Value for %s attribute contains incorrect value, see acceptable values on settings specified for Admin",
+        self::ERROR_INVALID_ATTRIBUTE_TYPE => 'Value for \'%s\' attribute contains incorrect value',
+        self::ERROR_INVALID_ATTRIBUTE_OPTION => "Value for %s attribute contains incorrect value, see acceptable values on settings specified for Admin",
     ];
 
     /**#@-*/

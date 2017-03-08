@@ -5,16 +5,16 @@
  */
 namespace Magento\Deploy\Test\Unit\Model\Deploy;
 
-use Magento\Deploy\Model\Deploy\DeployInterface;
-use Magento\Deploy\Model\Deploy\LocaleQuickDeploy;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
-use Magento\Framework\RequireJs\Config as RequireJsConfig;
-use Magento\Framework\Translate\Js\Config as TranslationJsConfig;
+use Magento\Deploy\Model\Deploy\DeployInterface;
 use Magento\Deploy\Model\Deploy\JsDictionaryDeploy;
+use Magento\Deploy\Model\Deploy\LocaleQuickDeploy;
 use Magento\Deploy\Model\DeployStrategyFactory;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\RequireJs\Config as RequireJsConfig;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\Js\Config as TranslationJsConfig;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
 {
@@ -105,7 +105,7 @@ class LocaleQuickDeployTest extends \PHPUnit_Framework_TestCase
         $this->staticDirectoryMock->expects(self::exactly(2))->method('readRecursively')->willReturnMap(
             [
                 ['adminhtml/Magento/backend/en_US', [$baseFile1, $baseDir]],
-                [RequireJsConfig::DIR_NAME  . '/adminhtml/Magento/backend/en_US', [$baseFile2, $baseDictionary]]
+                [RequireJsConfig::DIR_NAME . '/adminhtml/Magento/backend/en_US', [$baseFile2, $baseDictionary]]
             ]
         );
         $this->staticDirectoryMock->expects(self::exactly(4))->method('isFile')->willReturnMap([

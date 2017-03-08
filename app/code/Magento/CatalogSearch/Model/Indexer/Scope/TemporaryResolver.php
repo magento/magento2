@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogSearch\Model\Indexer\Scope;
 
-
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Search\Request\Dimension;
 

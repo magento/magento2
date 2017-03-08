@@ -5,12 +5,12 @@
  */
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
+use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\SignUpCommand;
 use Magento\Analytics\Model\Connector\SignUpRequest;
-use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\IntegrationManager;
-use Magento\Integration\Model\Oauth\Token as IntegrationToken;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Integration\Model\Oauth\Token as IntegrationToken;
 
 /**
  * Class SignUpCommandTest

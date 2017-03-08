@@ -6,7 +6,6 @@
  */
 namespace Magento\ProductVideo\Helper;
 
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\Context;
 
 /**

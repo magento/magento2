@@ -5,8 +5,6 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 class MviewConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -9,7 +9,6 @@
 namespace Magento\Framework\Model\Test\Unit;
 
 use Magento\Framework\Api\AttributeValue;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -6,11 +6,11 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that invoice is present in the invoices tab of the order with corresponding amount(Grand Total)

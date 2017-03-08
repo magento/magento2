@@ -5,15 +5,15 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
-use \Magento\Catalog\Controller\Adminhtml\Product\Builder;
+use Magento\Catalog\Controller\Adminhtml\Product\Builder;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Cms\Model\Wysiwyg\Config as WysiwygConfig;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreFactory;
 use Psr\Log\LoggerInterface;
-use Magento\Catalog\Model\ProductFactory;
-use Magento\Framework\Registry;
-use Magento\Cms\Model\Wysiwyg\Config as WysiwygConfig;
-use Magento\Framework\App\Request\Http;
 
 /**
  * Class BuilderTest

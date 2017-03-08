@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Model\ResourceModel;
 
-use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 
 /**
  * Customer group resource model

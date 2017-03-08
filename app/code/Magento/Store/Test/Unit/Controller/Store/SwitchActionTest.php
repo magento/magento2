@@ -6,12 +6,10 @@
 namespace Magento\Store\Test\Unit\Controller\Store;
 
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test class for \Magento\Store\Controller\Store\SwitchAction

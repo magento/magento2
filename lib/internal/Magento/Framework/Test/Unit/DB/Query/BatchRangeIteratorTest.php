@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\Test\Unit\DB\Query;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\BatchRangeIterator;
 use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 
 class BatchRangeIteratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -114,7 +114,7 @@ class BatchRangeIteratorTest extends \PHPUnit_Framework_TestCase
         foreach ($this->model as $key) {
             $this->assertEquals($this->selectMock, $key);
             $iterations++;
-        };
+        }
 
         $this->assertEquals(10, $iterations);
     }

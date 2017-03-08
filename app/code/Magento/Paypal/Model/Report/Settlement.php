@@ -9,7 +9,6 @@
 namespace Magento\Paypal\Model\Report;
 
 use DateTime;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
 
 /**
@@ -165,7 +164,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Columns with DateTime data type
-     * 
+     *
      * @var array
      */
     private $dateTimeColumns = ['transaction_initiation_date', 'transaction_completion_date'];
@@ -409,7 +408,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     {
         $bodyItem = [];
         for ($i = 1, $count = count($line); $i < $count; $i++) {
-            if(isset($rowMap[$sectionColumns[$i]])) {
+            if (isset($rowMap[$sectionColumns[$i]])) {
                 if (in_array($rowMap[$sectionColumns[$i]], $this->dateTimeColumns)) {
                     $line[$i] = $this->formatDateTimeColumns($line[$i]);
                 }
@@ -424,7 +423,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Format date columns in UTC
-     * 
+     *
      * @param string $lineItem
      * @return string
      */

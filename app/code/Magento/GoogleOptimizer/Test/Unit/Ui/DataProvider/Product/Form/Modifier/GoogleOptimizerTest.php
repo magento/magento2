@@ -7,13 +7,13 @@ namespace Magento\GoogleOptimizer\Test\Unit\Ui\DataProvider\Product\Form\Modifie
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\GoogleOptimizer\Ui\DataProvider\Product\Form\Modifier\GoogleOptimizer;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Textarea;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
-use Magento\GoogleOptimizer\Ui\DataProvider\Product\Form\Modifier\GoogleOptimizer;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class GoogleOptimizerTest

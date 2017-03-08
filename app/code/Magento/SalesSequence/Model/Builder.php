@@ -5,10 +5,10 @@
  */
 namespace Magento\SalesSequence\Model;
 
-use Magento\Framework\Webapi\Exception;
-use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
+use Magento\Framework\Webapi\Exception;
+use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -104,7 +104,6 @@ class Builder
         $this->logger = $logger;
         $this->data = array_flip($this->pattern);
     }
-
 
     /**
      * @param string $entityType

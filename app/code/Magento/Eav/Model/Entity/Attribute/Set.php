@@ -19,9 +19,9 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

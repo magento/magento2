@@ -145,7 +145,7 @@ class Minification
                 if (trim($exclude) != '') {
                     $this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType][] = trim($exclude);
                 }
-            };
+            }
         }
         return $this->configCache[self::XML_PATH_MINIFICATION_EXCLUDES][$contentType];
     }

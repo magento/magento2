@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form;
 
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\Form\NewCategoryDataProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 class NewCategoryDataProviderTest extends \PHPUnit_Framework_TestCase
 {

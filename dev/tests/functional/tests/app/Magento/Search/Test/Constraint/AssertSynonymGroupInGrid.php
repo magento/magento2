@@ -6,9 +6,9 @@
 
 namespace Magento\Search\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Search\Test\Fixture\SynonymGroup;
 use Magento\Search\Test\Page\Adminhtml\SynonymGroupIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that created Synonym Group can be found in grid.

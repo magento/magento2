@@ -181,7 +181,7 @@ class EntityGenerator
 
         $sql = [];
         foreach ($this->sqlCollector->getSql() as $pattern) {
-            list ($binds, $table) = $pattern;
+            list($binds, $table) = $pattern;
 
             if (!isset($sql[$table])) {
                 $sql[$table] = [];

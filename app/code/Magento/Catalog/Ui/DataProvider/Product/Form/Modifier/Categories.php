@@ -5,15 +5,15 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Helper as DbHelper;
-use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\UrlInterface;
 
 /**
  * Data provider for categories field of product page
@@ -259,13 +259,11 @@ class Categories extends AbstractModifier
                                             'actionName' => 'toggleModal',
                                         ],
                                         [
-                                            'targetName' =>
-                                                'product_form.product_form.create_category_modal.create_category',
+                                            'targetName' => 'product_form.product_form.create_category_modal.create_category',
                                             'actionName' => 'render'
                                         ],
                                         [
-                                            'targetName' =>
-                                                'product_form.product_form.create_category_modal.create_category',
+                                            'targetName' => 'product_form.product_form.create_category_modal.create_category',
                                             'actionName' => 'resetForm'
                                         ]
                                     ],
@@ -347,7 +345,7 @@ class Categories extends AbstractModifier
             $categoryById[$category->getId()]['label'] = $category->getName();
             $categoryById[$category->getParentId()]['optgroup'][] = &$categoryById[$category->getId()];
         }
-        
+
         $this->getCacheManager()->save(
             $this->serializer->serialize($categoryById[CategoryModel::TREE_ROOT_ID]['optgroup']),
             self::CATEGORY_TREE_ID . '_' . $filter,

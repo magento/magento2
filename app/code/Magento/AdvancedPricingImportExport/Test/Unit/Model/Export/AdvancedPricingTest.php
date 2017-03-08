@@ -5,7 +5,7 @@
  */
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Export;
 
-use \Magento\Store\Model\Store;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD)

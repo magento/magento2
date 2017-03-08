@@ -6,9 +6,6 @@
 
 namespace Magento\CatalogSearch\Model\Indexer;
 
-
-use Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface;
-
 /**
  * The proxy class around index switcher which allows to ensure that the IndexSwitcher was actually used
  */

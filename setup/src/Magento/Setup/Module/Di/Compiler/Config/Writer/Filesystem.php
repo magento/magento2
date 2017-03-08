@@ -8,9 +8,9 @@
 namespace Magento\Setup\Module\Di\Compiler\Config\Writer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Setup\Module\Di\Compiler\Config\WriterInterface;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Setup\Module\Di\Compiler\Config\WriterInterface;
 
 class Filesystem implements WriterInterface
 {
@@ -46,7 +46,7 @@ class Filesystem implements WriterInterface
         $this->initialize();
 
         file_put_contents(
-            $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $key  . '.ser',
+            $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $key . '.ser',
             $this->getSerializer()->serialize($config)
         );
     }

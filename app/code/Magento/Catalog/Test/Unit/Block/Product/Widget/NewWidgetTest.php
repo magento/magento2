@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\Widget;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Block\Product\Widget\NewWidget;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

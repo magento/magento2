@@ -113,7 +113,7 @@ class ShowUpdateResultTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        
+
         $this->context->expects($this->any())
             ->method('getEventManager')
             ->willReturn($eventManager);

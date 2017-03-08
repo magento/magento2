@@ -264,7 +264,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertEquals($result['result']['code'], $class->getCode());
         $this->assertEquals($result['result']['rate'], $class->getRate());
 
-        $expectedZipIsRange=$result['result']['zip_is_range'] == 1  ? 1 : 0;
+        $expectedZipIsRange=$result['result']['zip_is_range'] == 1 ? 1 : 0;
         $this->assertEquals($expectedZipIsRange, $class->getZipIsRange() ? 1 : 0);
         if ($expectedZipIsRange) {
             $this->assertEquals($result['result']['zip_from'], $class->getZipFrom());

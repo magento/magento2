@@ -264,7 +264,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
-};
+}
 
 /**
  * Mocking of std function to test validation

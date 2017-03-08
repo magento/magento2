@@ -6,11 +6,11 @@
 
 namespace Magento\Analytics\Model;
 
+use Magento\Config\Model\Config as SystemConfig;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Config\Model\Config as SystemConfig;
-use Magento\Integration\Model\Integration;
 use Magento\Integration\Api\OauthServiceInterface;
+use Magento\Integration\Model\Integration;
 
 /**
  * Class IntegrationManager

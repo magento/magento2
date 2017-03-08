@@ -133,10 +133,10 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
             ->where('t.attribute_id = ?', $specialPriceAttribute->getAttributeId())
             ->where('t.value IS NOT NULL')
             ->where(
-                'special_from.value IS NULL OR ' . $connection->getDatePartSql('special_from.value') .' <= ?',
+                'special_from.value IS NULL OR ' . $connection->getDatePartSql('special_from.value') . ' <= ?',
                 $currentDate
             )->where(
-                'special_to.value IS NULL OR ' . $connection->getDatePartSql('special_to.value') .' >= ?',
+                'special_to.value IS NULL OR ' . $connection->getDatePartSql('special_to.value') . ' >= ?',
                 $currentDate
             )->order('t.value ' . Select::SQL_ASC)
             ->limit(1);

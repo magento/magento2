@@ -7,10 +7,10 @@
 namespace Magento\Catalog\Test\TestCase\Category;
 
 use Magento\Catalog\Test\Fixture\Category;
-use Magento\Mtf\Util\Command\Cli\Indexer;
-use Magento\Mtf\Util\Command\Cli\Cron;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Mtf\Util\Command\Cli\Cron;
+use Magento\Mtf\Util\Command\Cli\Indexer;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Test Flow:

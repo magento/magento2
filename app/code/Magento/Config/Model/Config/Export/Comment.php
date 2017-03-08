@@ -47,7 +47,7 @@ class Comment implements CommentInterface
         $comment = '';
         $fields = $this->source->getExcludedFields();
         foreach ($fields as $path) {
-            $comment .= "\n" . $this->placeholder->generate($path) . ' for ' . $path ;
+            $comment .= "\n" . $this->placeholder->generate($path) . ' for ' . $path;
         }
         if ($comment) {
             $comment = 'The configuration file doesn\'t contain sensitive data for security reasons. '

@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Cache;
 use Magento\Framework\ObjectManagerInterface;
 

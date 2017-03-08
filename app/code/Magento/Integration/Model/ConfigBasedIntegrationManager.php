@@ -5,9 +5,9 @@
  */
 namespace Magento\Integration\Model;
 
-use Magento\Integration\Model\Config\Converter;
 use Magento\Authorization\Model\Acl\AclRetriever;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Integration\Model\Config\Converter;
 
 /**
  * Class to manage integrations installed from config file

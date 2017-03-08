@@ -6,9 +6,9 @@
 
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit;
 
-use \Magento\Ui\Test\Block\Adminhtml\FormSections;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 
 /**
  * Form for creation of a Catalog Price Rule.

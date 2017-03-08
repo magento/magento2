@@ -6,10 +6,10 @@
 
 namespace Magento\Checkout\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Util\Command\Cli\Cache;
 
 /**

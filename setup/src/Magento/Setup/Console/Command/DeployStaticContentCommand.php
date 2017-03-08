@@ -5,21 +5,21 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\App\Utility\Files;
-use Magento\Setup\Model\ObjectManagerProvider;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Validator\Locale;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\State;
 use Magento\Deploy\Console\Command\DeployStaticOptionsInterface as Options;
 use Magento\Deploy\Model\DeployManager;
 use Magento\Framework\App\Cache;
 use Magento\Framework\App\Cache\Type\Dummy as DummyCache;
+use Magento\Framework\App\State;
+use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Validator\Locale;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Deploy static content command
@@ -385,7 +385,7 @@ class DeployStaticContentCommand extends Command
         $this->input = $input;
         $filesUtil = $this->objectManager->create(Files::class);
 
-        list ($deployableLanguages, $deployableAreaThemeMap, $requestedThemes)
+        list($deployableLanguages, $deployableAreaThemeMap, $requestedThemes)
             = $this->prepareDeployableEntities($filesUtil);
 
         $output->writeln('Requested languages: ' . implode(', ', $deployableLanguages));

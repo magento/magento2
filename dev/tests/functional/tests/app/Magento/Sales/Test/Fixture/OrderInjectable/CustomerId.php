@@ -7,8 +7,8 @@
 namespace Magento\Sales\Test\Fixture\OrderInjectable;
 
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\DataSource;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Prepare CustomerId for order list.

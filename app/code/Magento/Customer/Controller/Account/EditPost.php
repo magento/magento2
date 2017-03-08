@@ -6,17 +6,16 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Model\AuthenticationInterface;
-use Magento\Customer\Model\Customer\Mapper;
-use Magento\Customer\Model\EmailNotificationInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\AuthenticationInterface;
+use Magento\Customer\Model\Customer\Mapper;
 use Magento\Customer\Model\CustomerExtractor;
+use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
@@ -101,7 +100,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     private function getAuthentication()
     {
-
         if (!($this->authentication instanceof AuthenticationInterface)) {
             return ObjectManager::getInstance()->get(
                 \Magento\Customer\Model\AuthenticationInterface::class

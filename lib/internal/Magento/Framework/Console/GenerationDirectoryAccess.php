@@ -7,11 +7,11 @@ namespace Magento\Framework\Console;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\WriteFactory;
-use Magento\Framework\Filesystem\Directory\Write;
-use Zend\ServiceManager\ServiceManager;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Check generated/code read and write access
@@ -55,7 +55,7 @@ class GenerationDirectoryAccess
                 || $directoryWrite->isReadable()
             ) {
                 try {
-                    $probeFilePath = $generationDirectoryPath . DIRECTORY_SEPARATOR . uniqid(mt_rand()).'tmp';
+                    $probeFilePath = $generationDirectoryPath . DIRECTORY_SEPARATOR . uniqid(mt_rand()) . 'tmp';
                     $fileWriteFactory->create($probeFilePath, DriverPool::FILE, 'w');
                     $driver->deleteFile($probeFilePath);
                 } catch (\Exception $e) {

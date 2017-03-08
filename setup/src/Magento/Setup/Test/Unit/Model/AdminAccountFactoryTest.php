@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\AdminAccountFactory;
+use Magento\Setup\Model\AdminAccountFactory;
 
 class AdminAccountFactoryTest extends \PHPUnit_Framework_TestCase
 {

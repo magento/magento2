@@ -10,7 +10,6 @@ use Exception;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
-use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\Command\Result\ArrayResultFactory;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;

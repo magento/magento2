@@ -8,13 +8,13 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Response\HttpInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Filesystem;
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

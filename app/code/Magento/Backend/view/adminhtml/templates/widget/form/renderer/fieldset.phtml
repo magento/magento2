@@ -90,7 +90,7 @@ if ($isField) {
         <?php endif; ?>
 
         <?php if ($element->hasAdvanced() && !$isField): ?>
-            <?php echo(!$element->getNoContainer() && $advancedAfter)  ? '</fieldset>' : ''?>
+            <?php echo(!$element->getNoContainer() && $advancedAfter) ? '</fieldset>' : ''?>
             <details data-mage-init='{"details": {}}' class="details admin__collapsible-block-wrapper" id="details<?php /* @escapeNotVerified */ echo $id ?>">
                 <summary class="details-summary admin__collapsible-title" id="details-summary<?php /* @escapeNotVerified */ echo $id ?>">
                     <span><?php /* @escapeNotVerified */ echo $advancedLabel ?></span>

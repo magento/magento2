@@ -5,8 +5,8 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Control;
 
-use Magento\Ui\Component\Control\Link;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Ui\Component\Control\Link;
 
 /**
  * Class LinkTest

@@ -6,11 +6,11 @@
 namespace Magento\SalesRule\Model\ResourceModel;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Rule\Model\ResourceModel\AbstractResource;
 use Magento\Framework\EntityManager\EntityManager;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Rule\Model\ResourceModel\AbstractResource;
 use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**

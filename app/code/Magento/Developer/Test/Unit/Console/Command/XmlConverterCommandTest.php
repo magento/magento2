@@ -7,10 +7,10 @@
 namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Developer\Console\Command\XmlConverterCommand;
-use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Developer\Model\Tools\Formatter;
 use Magento\Framework\DomDocument\DomDocumentFactory;
 use Magento\Framework\XsltProcessor\XsltProcessorFactory;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class XmlConverterCommandTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\Api\Test\Unit\Search;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Api\Search\SearchResult;
 use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\SearchResult;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class SearchResultTest extends \PHPUnit_Framework_TestCase
 {

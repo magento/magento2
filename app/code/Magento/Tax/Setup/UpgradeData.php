@@ -6,9 +6,9 @@
 
 namespace Magento\Tax\Setup;
 
-use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * @codeCoverageIgnore
@@ -43,7 +43,7 @@ class UpgradeData implements UpgradeDataInterface
         $setup->startSetup();
 
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-             //Update the tax_class_id attribute in the 'catalog_eav_attribute' table
+            //Update the tax_class_id attribute in the 'catalog_eav_attribute' table
             $taxSetup->updateAttribute(
                 \Magento\Catalog\Model\Product::ENTITY,
                 'tax_class_id',

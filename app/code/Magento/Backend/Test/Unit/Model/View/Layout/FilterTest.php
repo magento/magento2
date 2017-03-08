@@ -6,8 +6,8 @@
 
 namespace Magento\Backend\Test\Unit\Model\View\Layout;
 
-use Magento\Backend\Model\View\Layout\FilterInterface;
 use Magento\Backend\Model\View\Layout\Filter;
+use Magento\Backend\Model\View\Layout\FilterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\View\Layout\ScheduledStructure;
@@ -47,8 +47,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->filter = $objectManager->getObject(
             Filter::class,
             [
-                'filters' =>
-                    [
+                'filters' => [
                         'filter1' => $this->someFilterMock
                     ]
             ]

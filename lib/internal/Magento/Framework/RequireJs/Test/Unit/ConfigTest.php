@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\RequireJs\Test\Unit;
 
-use \Magento\Framework\RequireJs\Config;
+use Magento\Framework\RequireJs\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

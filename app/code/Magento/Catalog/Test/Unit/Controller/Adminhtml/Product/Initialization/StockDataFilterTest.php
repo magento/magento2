@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
-use \Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 
 /**
  * Class StockDataFilterTest

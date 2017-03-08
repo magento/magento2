@@ -6,8 +6,8 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 class AssertLinkGoToCartPresentInSummaryBlock extends AbstractConstraint
 {

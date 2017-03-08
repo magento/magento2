@@ -6,8 +6,8 @@
 
 namespace Magento\Checkout\Test\TestStep;
 
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 
 /**

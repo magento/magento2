@@ -5,7 +5,7 @@
  */
 namespace Magento\Translation\Test\Unit\Model\Inline;
 
-use \Magento\Translation\Model\Inline\Config;
+use Magento\Translation\Model\Inline\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {

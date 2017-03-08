@@ -22,7 +22,7 @@ class InstallData implements InstallDataInterface
     {
         $installer = $setup->createMigrationSetup();
         $setup->startSetup();
-        
+
         $installer->appendClassAliasReplace(
             'catalogrule',
             'conditions_serialized',
@@ -37,10 +37,9 @@ class InstallData implements InstallDataInterface
             \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
             ['rule_id']
         );
-        
+
         $installer->doUpdateClassAliases();
 
         $setup->endSetup();
-        
     }
 }

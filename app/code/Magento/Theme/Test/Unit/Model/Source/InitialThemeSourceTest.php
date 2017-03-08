@@ -7,13 +7,13 @@ namespace Magento\Theme\Test\Unit\Model\Source;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\Factory as DataObjectFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Theme\Model\ResourceModel\Theme;
 use Magento\Theme\Model\ResourceModel\ThemeFactory;
 use Magento\Theme\Model\Source\InitialThemeSource;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
-use Magento\Framework\DB\Select;
-use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

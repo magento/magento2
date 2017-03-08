@@ -8,12 +8,11 @@
 
 namespace Magento\CatalogInventory\Model;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product\Website as ProductWebsite;
-use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\StockIndexInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Class StockIndex

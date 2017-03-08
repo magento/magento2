@@ -8,8 +8,8 @@
  */
 namespace Magento\Test\Integrity;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Dependency\DbRule;
 use Magento\TestFramework\Dependency\DiRule;
 use Magento\TestFramework\Dependency\LayoutRule;

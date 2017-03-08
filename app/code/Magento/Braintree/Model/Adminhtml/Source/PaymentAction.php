@@ -5,8 +5,8 @@
  */
 namespace Magento\Braintree\Model\Adminhtml\Source;
 
-use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Framework\Option\ArrayInterface;
+use Magento\Payment\Model\Method\AbstractMethod;
 
 /**
  * Class PaymentAction
@@ -15,7 +15,7 @@ class PaymentAction implements ArrayInterface
 {
     /**
      * Possible actions on order place
-     * 
+     *
      * @return array
      */
     public function toOptionArray()

@@ -5,7 +5,7 @@
  */
 namespace Magento\CacheInvalidate\Test\Unit\Model;
 
-use \Zend\Uri\UriFactory;
+use Zend\Uri\UriFactory;
 
 class PurgeCacheTest extends \PHPUnit_Framework_TestCase
 {
@@ -86,7 +86,7 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                [['host' => '127.0.0.1', 'port' => 8080],]
+                [['host' => '127.0.0.1', 'port' => 8080]]
             ],
             [
                 [

@@ -6,9 +6,9 @@
 namespace Magento\Quote\Model\Cart\Totals;
 
 use Magento\Catalog\Helper\Product\ConfigurationPool;
-use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Event\ManagerInterface as EventManager;
 
 /**
  * Cart item totals converter.

@@ -5,11 +5,11 @@
  */
 namespace Magento\Framework\ObjectManager\Config;
 
-use Magento\Framework\ObjectManager\ConfigInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
+use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides object manager configuration when in compiled mode
@@ -85,7 +85,7 @@ class Compiled implements ConfigInterface
         if (array_key_exists($type, $this->arguments)) {
             if (is_string($this->arguments[$type])) {
                 $this->arguments[$type] = $this->getSerializer()->unserialize($this->arguments[$type]);
-            } else if ($this->arguments[$type] === null) {
+            } elseif ($this->arguments[$type] === null) {
                 $this->arguments[$type] = [];
             }
             return $this->arguments[$type];

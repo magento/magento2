@@ -5,7 +5,6 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
-
 class RowBaseCalculator extends AbstractAggregateCalculator
 {
     /**
@@ -19,7 +18,6 @@ class RowBaseCalculator extends AbstractAggregateCalculator
         $round = true,
         $item = null
     ) {
-
         if ($item->getAssociatedItemCode()) {
             // Use delta rounding of the product's instead of the weee's
             $type = $type . $item->getAssociatedItemCode();

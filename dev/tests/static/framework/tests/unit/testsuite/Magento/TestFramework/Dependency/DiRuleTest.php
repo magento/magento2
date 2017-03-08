@@ -17,7 +17,6 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDependencyInfo($module, $contents, array $expected)
     {
-
         $diRule = new DiRule(
             new VirtualTypeMapper(
                 [

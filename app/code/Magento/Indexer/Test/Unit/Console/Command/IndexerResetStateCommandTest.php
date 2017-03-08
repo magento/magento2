@@ -6,8 +6,8 @@
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
-use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Indexer\Console\Command\IndexerResetStateCommand;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
 {

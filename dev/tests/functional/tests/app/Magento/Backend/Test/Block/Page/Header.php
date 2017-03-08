@@ -7,8 +7,8 @@
 namespace Magento\Backend\Test\Block\Page;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\GlobalsearchElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Header block.

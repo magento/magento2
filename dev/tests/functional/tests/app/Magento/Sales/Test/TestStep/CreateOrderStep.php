@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\TestStep;
 
-use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Step for create order.

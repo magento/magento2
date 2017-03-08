@@ -8,7 +8,7 @@
 
 namespace Magento\GroupedProduct\Test\Unit\Model;
 
-use \Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -334,7 +334,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'data' => ['id' => 1]
             ]
         );
-
     }
 
     /**
@@ -373,7 +372,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $reflectionOfExtension = new \ReflectionClass(\Magento\Catalog\Api\Data\ProductLinkExtension::class);
         $method = $reflectionOfExtension->getMethod('setData');
         $method->setAccessible(true);
-        $method->invokeArgs($groupExtension, array('qty', 1));
+        $method->invokeArgs($groupExtension, ['qty', 1]);
 
         $outputGroupLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $outputGroupLink->setProductSku("Simple Product 1");

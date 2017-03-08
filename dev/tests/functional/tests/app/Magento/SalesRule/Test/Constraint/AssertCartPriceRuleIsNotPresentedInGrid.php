@@ -6,9 +6,9 @@
 
 namespace Magento\SalesRule\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert if sales rule is absent in grid.

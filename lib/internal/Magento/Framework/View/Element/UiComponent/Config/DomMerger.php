@@ -6,9 +6,7 @@
 namespace Magento\Framework\View\Element\UiComponent\Config;
 
 use Magento\Framework\Config\Dom;
-use Magento\Framework\Config\Dom\UrnResolver;
-use Magento\Framework\Module\Dir\Reader as DirectoryReader;
-use \Magento\Framework\Config\ValidationStateInterface;
+use Magento\Framework\Config\ValidationStateInterface;
 
 /**
  * Class DomMerger
@@ -208,7 +206,7 @@ class DomMerger implements DomMergerInterface
                             if ($this->isMergeContext($insertedXPath)) {
                                 if ($this->isTextNode($insertedItem) && $this->isTextNode($rootItem)) {
                                     $rootItem->nodeValue = $insertedItem->nodeValue;
-                                } else if (!$this->isContextXPath([$rootItemXPath, $insertedXPath])
+                                } elseif (!$this->isContextXPath([$rootItemXPath, $insertedXPath])
                                     && !$this->hasIdAttribute($rootItem)
                                     && !$this->hasIdAttribute($insertedItem)
                                 ) {

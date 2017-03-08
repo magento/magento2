@@ -6,9 +6,9 @@
 
 namespace Magento\Backend\Test\Constraint;
 
+use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 
 /**
  * Assert that bestsellers tab content on Dashboard successfully refreshed after clicking on Refreshing data button

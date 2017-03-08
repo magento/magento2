@@ -6,10 +6,10 @@
 namespace Magento\Framework\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
+use Magento\Framework\Search\Request\Dimension;
 
 class GridStructure implements IndexStructureInterface
 {

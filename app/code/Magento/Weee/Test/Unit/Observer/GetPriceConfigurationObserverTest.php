@@ -6,7 +6,7 @@
 
 namespace Magento\Weee\Test\Unit\Observer;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
 {
@@ -118,16 +118,14 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                     [
                         [
                             'optionId' => 1,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' => ['amount' => 31.50],
                                     'basePrice' => ['amount' => 33.50],
                                 ],
                         ],
                         [
                             'optionId' => 2,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' =>['amount' => 331.50],
                                     'basePrice' => ['amount' => 333.50],
                                 ],
@@ -138,8 +136,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                     [
                         [
                             'optionId' => 1,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' => ['amount' => 31.50],
                                     'basePrice' => ['amount' => 33.50],
                                     'weeePrice' => ['amount' => 46.5],
@@ -148,8 +145,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                         ],
                         [
                             'optionId' => 2,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' =>['amount' => 331.50],
                                     'basePrice' => ['amount' => 333.50],
                                     'weeePrice' => ['amount' => 362.5],
@@ -166,8 +162,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                 'testArray' => [
                     [
                         [
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' => ['amount' => 31.50],
                                 ],
                             'somekey' => 0,
@@ -175,8 +170,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                         [
                             [
                                 [
-                                    'prices' =>
-                                        [
+                                    'prices' => [
                                             'finalPrice' =>['amount' => 321.50],
                                         ],
                                 ],
@@ -188,8 +182,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                 'expectedArray' => [
                     [
                         [
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'finalPrice' => ['amount' => 31.50],
                                     'weeePrice' => ['amount' => 31.50],
                                 ],
@@ -198,8 +191,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                         [
                             [
                                 [
-                                    'prices' =>
-                                        [
+                                    'prices' => [
                                             'finalPrice' =>['amount' => 321.50],
                                             'weeePrice' => ['amount' => 321.50],
                                         ],
@@ -217,8 +209,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                     [
                         [
                             'optionId' => 1,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'basePrice' => ['amount' => 10],
                                     'finalPrice' => ['amount' => 11],
                                 ],
@@ -229,8 +220,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit_Framework_TestCase
                     [
                         [
                             'optionId' => 1,
-                            'prices' =>
-                                [
+                            'prices' => [
                                     'basePrice' => ['amount' => 10],
                                     'finalPrice' => ['amount' => 11],
                                     'weeePrice' => ['amount' => 11],

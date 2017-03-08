@@ -6,8 +6,8 @@
 
 namespace Magento\User\Test\Fixture\User;
 
-use Magento\Mtf\ObjectManager;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Current password source.

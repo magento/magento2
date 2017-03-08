@@ -6,7 +6,6 @@
 namespace Magento\Framework\App\Test\Unit\Config\Storage;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ScopeInterface;
 
 class WriterTest extends \PHPUnit_Framework_TestCase
 {

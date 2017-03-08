@@ -13,10 +13,10 @@ namespace {
 
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
     // @codingStandardsIgnoreEnd
-    use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
     use Magento\Framework\Exception\InputException;
-    use Magento\Framework\Stdlib\Cookie\FailureToSendException;
     use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
+    use Magento\Framework\Stdlib\Cookie\FailureToSendException;
+    use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
     /**
      * Test PhpCookieManager
@@ -49,7 +49,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         /**
          * Mapping from constant names to functions that handle the assertions.
          */
-        static $functionTestAssertionMapping = [
+        public static $functionTestAssertionMapping = [
             self::DELETE_COOKIE_NAME => 'self::assertDeleteCookie',
             self::DELETE_COOKIE_NAME_NO_METADATA => 'self::assertDeleteCookieWithNoMetadata',
             self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS => 'self::assertSensitiveCookieWithNoMetaDataHttps',

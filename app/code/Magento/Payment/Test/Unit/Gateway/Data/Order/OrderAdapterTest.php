@@ -5,9 +5,9 @@
  */
 namespace Magento\Payment\Test\Unit\Gateway\Data\Order;
 
+use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Payment\Gateway\Data\Order\OrderAdapter;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 
 /**
  * Class OrderAdapterTest

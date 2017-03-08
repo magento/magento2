@@ -5,13 +5,12 @@
  */
 namespace Magento\Paypal\Model\Express;
 
+use Magento\Checkout\Model\Type\Onepage;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\Paypal\Model\Api\Type\Factory;
 use Magento\Paypal\Model\Config;
-use Magento\Paypal\Model\Express\Checkout;
 use Magento\Paypal\Model\Info;
 use Magento\Quote\Model\Quote;
-use Magento\Checkout\Model\Type\Onepage;
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 

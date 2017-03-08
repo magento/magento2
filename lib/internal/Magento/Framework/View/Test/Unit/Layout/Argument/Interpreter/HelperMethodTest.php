@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
-use \Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod;
+use Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod;
 
 class HelperMethodTest extends \PHPUnit_Framework_TestCase
 {

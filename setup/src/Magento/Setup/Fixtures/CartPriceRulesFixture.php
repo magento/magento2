@@ -231,7 +231,7 @@ class CartPriceRulesFixture extends Fixture
                 'type'      => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                 'attribute' => 'category_ids',
                 'operator'  => '==',
-                'value'     => $categoriesArray[($ruleId / 4 ) % count($categoriesArray)][0],
+                'value'     => $categoriesArray[($ruleId / 4) % count($categoriesArray)][0],
             ];
 
             $subtotal = [0, 5, 10, 15];

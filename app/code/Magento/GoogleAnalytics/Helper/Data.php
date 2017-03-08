@@ -43,9 +43,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param null|string|bool|int|Store $store
      * @return bool
      */
-    public function isAnonymizedIpActive($store = null) {
+    public function isAnonymizedIpActive($store = null)
+    {
         $anonymize = $this->scopeConfig->getValue(self::XML_PATH_ANONYMIZE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
         return $anonymize;
     }
-
 }

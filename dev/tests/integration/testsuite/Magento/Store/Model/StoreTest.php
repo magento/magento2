@@ -404,7 +404,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store web/secure/offloader_header SSL_OFFLOADED
-     * @magentoConfigFixture current_store web/secure/base_url 
+     * @magentoConfigFixture current_store web/secure/base_url
      */
     public function testIsCurrentlySecureNoSecureBaseUrl()
     {

@@ -62,7 +62,7 @@ class ConfigOptionsListCollectorTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $result = $object->collectOptionsLists();
-        
+
         $backendOptions = new \Magento\Backend\Setup\ConfigOptionsList();
         $expected = [
             'setup' => $setupOptions,
@@ -70,6 +70,5 @@ class ConfigOptionsListCollectorTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals($expected, $result);
-
     }
 }

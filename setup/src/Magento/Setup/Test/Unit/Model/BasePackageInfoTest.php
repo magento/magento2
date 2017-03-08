@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\BasePackageInfo;
+use Magento\Setup\Model\BasePackageInfo;
 
 /**
  * Tests BasePackageInfo
@@ -81,8 +81,7 @@ class BasePackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->readerMock->expects($this->once())->method('isReadable')->willReturn(true);
         $jsonData = json_encode(
             [
-                BasePackageInfo::COMPOSER_KEY_EXTRA =>
-                [
+                BasePackageInfo::COMPOSER_KEY_EXTRA => [
                     __FILE__,
                     __FILE__
                 ]
@@ -101,10 +100,8 @@ class BasePackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->readerMock->expects($this->once())->method('isReadable')->willReturn(true);
         $jsonData = json_encode(
             [
-                BasePackageInfo::COMPOSER_KEY_EXTRA =>
-                [
-                    BasePackageInfo::COMPOSER_KEY_MAP =>
-                    [
+                BasePackageInfo::COMPOSER_KEY_EXTRA => [
+                    BasePackageInfo::COMPOSER_KEY_MAP => [
                         [
                             __FILE__,
                             __FILE__

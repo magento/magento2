@@ -7,10 +7,10 @@
 namespace Magento\Setup\Test\Unit\Fixtures;
 
 use Magento\Catalog\Model\CategoryFactory;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\Setup\Fixtures\CategoriesFixture;
+use Magento\Setup\Fixtures\CategoriesFixture;
 use Magento\Setup\Fixtures\FixtureModel;
 
 class CategoriesFixtureTest extends \PHPUnit_Framework_TestCase

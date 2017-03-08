@@ -7,8 +7,6 @@
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
-use Magento\Framework\Phrase;
-
 class DateTime extends Date
 {
     /**

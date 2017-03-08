@@ -757,7 +757,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      */
     protected function prepareEmailMock($occurrenceNumber, $templateId, $sender, $customerId, $newEmail = null)
     {
-
         $area = \Magento\Framework\App\Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();

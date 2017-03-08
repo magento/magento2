@@ -244,10 +244,8 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $taxContainer = new \Magento\Framework\DataObject(
             [
-                'base_discount_tax_compensation_amount' =>
-                    $values['base_discount_tax_compensation_amount'],
-                'base_shipping_discount_tax_compensation_amnt' =>
-                    $values['base_shipping_discount_tax_compensation_amnt'],
+                'base_discount_tax_compensation_amount' => $values['base_discount_tax_compensation_amount'],
+                'base_shipping_discount_tax_compensation_amnt' => $values['base_shipping_discount_tax_compensation_amnt'],
             ]
         );
         $expectedSubtotal = $values['base_subtotal'];

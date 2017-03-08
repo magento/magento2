@@ -6,7 +6,6 @@
 namespace Magento\Sales\Model\ResourceModel;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Sales\Model\ResourceModel\AbstractGrid;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**

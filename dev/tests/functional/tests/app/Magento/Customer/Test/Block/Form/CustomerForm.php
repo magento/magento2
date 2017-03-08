@@ -6,11 +6,11 @@
 
 namespace Magento\Customer\Test\Block\Form;
 
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Customer account edit form.
@@ -139,7 +139,7 @@ class CustomerForm extends Form
             $mapping['change_email']['selector'],
             $mapping['change_email']['strategy'],
             'checkbox'
-        )->setValue($value ?  "Yes" : "No");
+        )->setValue($value ? "Yes" : "No");
     }
 
     /**
@@ -155,7 +155,7 @@ class CustomerForm extends Form
             $mapping['change_password']['selector'],
             $mapping['change_password']['strategy'],
             'checkbox'
-        )->setValue($value ?  "Yes" : "No");
+        )->setValue($value ? "Yes" : "No");
     }
 
     /**

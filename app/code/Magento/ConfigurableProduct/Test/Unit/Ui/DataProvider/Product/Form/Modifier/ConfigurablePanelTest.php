@@ -5,11 +5,11 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePanel as ConfigurablePanelModifier;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
 
 class ConfigurablePanelTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Observer\Frontend;
 
-use \Magento\Sales\Observer\Frontend\RestoreCustomerGroupId;
+use Magento\Sales\Observer\Frontend\RestoreCustomerGroupId;
 
 /**
  * Tests Magento\Sales\Observer\Frontend\RestoreCustomerGroupIdTest

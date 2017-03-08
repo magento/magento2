@@ -6,7 +6,7 @@
 
 namespace Magento\Payment\Test\Unit\Model\Config\Source;
 
-use \Magento\Payment\Model\Config\Source\Allspecificcountries;
+use Magento\Payment\Model\Config\Source\Allspecificcountries;
 
 class AllspecificcountriesTest extends \PHPUnit_Framework_TestCase
 {

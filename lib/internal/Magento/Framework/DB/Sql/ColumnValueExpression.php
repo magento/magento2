@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\DB\Sql;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-
 /**
  * Class Column Value Expression
  *

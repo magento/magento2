@@ -117,7 +117,7 @@ class BaseUrlConfigPluginTest extends \PHPUnit_Framework_TestCase
                 BaseUrlConfigPlugin::UPDATE_CRON_STRING_PATH,
                 '0 * * * *'
             );
-        
+
         $this->assertEquals(
             $this->configValueMock,
             $this->plugin->afterAfterSave($this->configValueMock, $this->configValueMock)

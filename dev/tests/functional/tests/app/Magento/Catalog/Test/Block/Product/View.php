@@ -8,9 +8,9 @@ namespace Magento\Catalog\Test\Block\Product;
 
 use Magento\Catalog\Test\Block\AbstractConfigureBlock;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Checkout\Test\Block\Cart\Sidebar;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Checkout\Test\Block\Cart\Sidebar;
 
 /**
  * Product view block on the product page.

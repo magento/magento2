@@ -6,11 +6,11 @@
 
 namespace Magento\Checkout\Test\TestStep;
 
-use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
-use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Selecting checkout method.

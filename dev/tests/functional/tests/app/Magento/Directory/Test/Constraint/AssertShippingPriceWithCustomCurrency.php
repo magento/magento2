@@ -6,12 +6,12 @@
 
 namespace Magento\Directory\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Checkout\Test\Page\CheckoutOnepage;
-use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Checkout\Test\Page\CheckoutOnepage;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Assert that shipping amount is correct in not base currency.

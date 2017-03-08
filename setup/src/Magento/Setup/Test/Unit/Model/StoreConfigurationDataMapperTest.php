@@ -6,12 +6,11 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\StoreConfigurationDataMapper;
-
 use Magento\Backend\Model\Url;
+
 use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\Currency;
-use Magento\Setup\Module\Setup;
+use Magento\Setup\Model\StoreConfigurationDataMapper;
 use Magento\Store\Model\Store;
 
 class StoreConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
@@ -35,8 +34,7 @@ class StoreConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
     public function getConfigDataDataProvider()
     {
         return [
-            'valid' =>
-            [
+            'valid' => [
                 [
                     StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
                     StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
@@ -88,8 +86,7 @@ class StoreConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
                     Url::XML_PATH_USE_SECURE_KEY => '1',
                 ],
             ],
-            'no trailing slash' =>
-            [
+            'no trailing slash' => [
                 [
                     StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
                     StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1',
@@ -115,8 +112,7 @@ class StoreConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
                     Url::XML_PATH_USE_SECURE_KEY => '1',
                 ],
             ],
-            'no trailing slash, alphabet url' =>
-                [
+            'no trailing slash, alphabet url' => [
                     [
                         StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
                         StoreConfigurationDataMapper::KEY_BASE_URL => 'http://example.com',

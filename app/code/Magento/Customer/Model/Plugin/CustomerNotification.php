@@ -5,14 +5,13 @@
  */
 namespace Magento\Customer\Model\Plugin;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\State;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 
 class CustomerNotification
 {
@@ -38,7 +37,7 @@ class CustomerNotification
 
     /**
      * CustomerNotification constructor.
-     * 
+     *
      * @param Session $session
      * @param NotificationStorage $notificationStorage
      * @param State $state

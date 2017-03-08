@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Api\Data;
 
-use \Magento\Downloadable\Api\Data\File\ContentInterface;
+use Magento\Downloadable\Api\Data\File\ContentInterface;
 
 /**
  * @codeCoverageIgnore

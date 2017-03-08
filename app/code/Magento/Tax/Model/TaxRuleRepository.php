@@ -8,13 +8,13 @@ namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Api\Data\TaxRuleInterface;
-use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory;
+use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Model\Calculation\RuleFactory;
 use Magento\Tax\Model\Calculation\TaxRuleRegistry;
 use Magento\Tax\Model\ResourceModel\Calculation\Rule as ResourceRule;

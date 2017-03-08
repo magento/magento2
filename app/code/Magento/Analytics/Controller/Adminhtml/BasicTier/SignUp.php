@@ -6,8 +6,8 @@
 namespace Magento\Analytics\Controller\Adminhtml\BasicTier;
 
 use Magento\Backend\App\Action;
-use Magento\Config\Model\Config;
 use Magento\Backend\App\Action\Context;
+use Magento\Config\Model\Config;
 
 /**
  * Class SignUp

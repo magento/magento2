@@ -6,8 +6,7 @@
 return [
     [],
     [
-        'children' =>
-            [
+        'children' => [
                 [
                     'id' => 'Magento_Customer::manageParent',
                     'title' => 'Magento Webapi',

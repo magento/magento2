@@ -76,7 +76,6 @@ class CollectionTimeTest extends \PHPUnit_Framework_TestCase
             Value::class,
             $this->collectionTime->afterSave()
         );
-
     }
 
     /**

@@ -261,7 +261,7 @@ class AssertCategoryPage extends AbstractConstraint
             $errorMessage[] = 'Wrong page URL.'
                 . "\nExpected: " . $categoryUrl
                 . "\nActual: " . $this->browser->getUrl();
-        };
+        }
 
         if (isset($categoryData['meta_title'])) {
             $actual = $this->browser->getTitle();
@@ -269,7 +269,7 @@ class AssertCategoryPage extends AbstractConstraint
                 $errorMessage[] = 'Wrong page title.'
                     . "\nExpected: " . $categoryData['meta_title']
                     . "\nActual: " . $actual;
-            };
+            }
         }
 
         return $errorMessage;

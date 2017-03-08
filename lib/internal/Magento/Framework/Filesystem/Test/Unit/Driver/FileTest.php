@@ -30,7 +30,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $file = new File();
         $this->assertEquals($expected, $file->getAbsolutePath($basePath, $path));
     }
-    
+
     public function dataProviderForTestGetAbsolutePath()
     {
         return [

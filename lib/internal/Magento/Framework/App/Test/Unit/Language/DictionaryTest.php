@@ -7,7 +7,6 @@
 namespace Magento\Framework\App\Test\Unit\Language;
 
 use Magento\Framework\App\Language\Dictionary;
-use Magento\Framework\Filesystem\DriverPool;
 
 class DictionaryTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,8 +6,6 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Filesystem;
-
 /**
  * Class PhpInformation
  *

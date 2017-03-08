@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Module;
 
-use \Magento\Setup\Module\ConnectionFactory;
+use Magento\Setup\Module\ConnectionFactory;
 
 class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 {

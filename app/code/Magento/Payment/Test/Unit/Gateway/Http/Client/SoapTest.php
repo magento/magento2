@@ -64,7 +64,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             'result' => []
         ];
-        $soapResult = new \StdClass;
+        $soapResult = new \StdClass();
 
         $this->logger->expects(static::at(0))
             ->method('debug')
@@ -117,7 +117,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         $this->client->expects(static::once())
             ->method('__soapCall')
             ->with('soapMethod', [['body']])
-            ->willThrowException(new \Exception);
+            ->willThrowException(new \Exception());
         $this->client->expects(static::once())
             ->method('__getLastRequest')
             ->willReturn('RequestTrace');

@@ -41,7 +41,7 @@ class License extends AbstractActionController
     public function indexAction()
     {
         $contents = $this->license->getContents();
-        $view = new ViewModel;
+        $view = new ViewModel();
         if ($contents === false) {
             $view->setTemplate('error/404');
             $view->setVariable('message', 'Cannot find license file.');

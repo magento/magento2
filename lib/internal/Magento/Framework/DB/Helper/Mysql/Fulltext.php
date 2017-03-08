@@ -51,7 +51,7 @@ class Fulltext
     {
         $this->connection = $resource->getConnection();
     }
-    
+
     /**
      * Method for FULLTEXT search in Mysql, will generated MATCH ($columns) AGAINST ('$expression' $mode)
      *
