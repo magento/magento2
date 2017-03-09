@@ -10,6 +10,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as ResourceWishlist;
 use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Wishlist model
@@ -119,6 +121,11 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     protected $productRepository;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -135,6 +142,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @param ProductRepositoryInterface $productRepository
      * @param bool $useCurrentWebsite
      * @param array $data
+     * @param Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -153,7 +161,8 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         \Magento\Framework\Stdlib\DateTime $dateTime,
         ProductRepositoryInterface $productRepository,
         $useCurrentWebsite = true,
-        array $data = []
+        array $data = [],
+        Json $serializer = null
     ) {
         $this->_useCurrentWebsite = $useCurrentWebsite;
         $this->_catalogProduct = $catalogProduct;
@@ -165,6 +174,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         $this->_productFactory = $productFactory;
         $this->mathRandom = $mathRandom;
         $this->dateTime = $dateTime;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->productRepository = $productRepository;
     }
@@ -402,6 +412,10 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
 
         if ($buyRequest instanceof \Magento\Framework\DataObject) {
             $_buyRequest = $buyRequest;
+        } elseif (is_string($buyRequest)) {
+            $_buyRequest = new \Magento\Framework\DataObject(
+                $this->serializer->unserialize($buyRequest)
+            );
         } elseif (is_array($buyRequest)) {
             $_buyRequest = new \Magento\Framework\DataObject($buyRequest);
         } else {
