@@ -33,7 +33,7 @@ class Filter extends Grid
      *
      * @var string
      */
-    protected $attribute = '[name="export_filter[%s]"]';
+    private $attribute = '[name="export_filter[%s]"]';
 
     /**
      * Locator for "Continue" button.
@@ -46,7 +46,7 @@ class Filter extends Grid
      * Return row with given attribute label.
      *
      * @param string $attributeLabel
-     * @return SimpleElement
+     * @return \Magento\Mtf\Client\Element\SimpleElement
      */
     public function getGridRow($attributeLabel)
     {

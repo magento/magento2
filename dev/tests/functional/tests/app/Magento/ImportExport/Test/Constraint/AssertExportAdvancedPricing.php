@@ -21,7 +21,7 @@ class AssertExportAdvancedPricing extends AbstractConstraint
      * @param Export $export
      * @param array $products
      * @param array $exportedFields
-     * @param array|null $advancedPricingAttributes
+     * @param array $advancedPricingAttributes
      * @return void
      */
     public function processAssert(
@@ -43,7 +43,7 @@ class AssertExportAdvancedPricing extends AbstractConstraint
                     $product,
                     $exportData
                 ),
-                "A product with name '" . $product->getName() . "' was not found in exported file."
+                'A product with name ' . $product->getName() . ' was not found in exported file.'
             );
         }
     }
@@ -65,7 +65,7 @@ class AssertExportAdvancedPricing extends AbstractConstraint
      * @param InjectableFixture $product
      * @param Data $exportData
      * @param string $quantifiers
-     * @return void
+     * @return bool
      */
     public function isProductDataInFile(
         array $fields,

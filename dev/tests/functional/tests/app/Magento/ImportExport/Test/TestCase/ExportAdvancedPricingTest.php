@@ -44,6 +44,13 @@ class ExportAdvancedPricingTest extends Injectable
     private $fixtureFactory;
 
     /**
+     * Admin export index page.
+     *
+     * @var AdminExportIndex
+     */
+    private $adminExportIndex;
+
+    /**
      * Configuration data.
      *
      * @var string
@@ -82,17 +89,17 @@ class ExportAdvancedPricingTest extends Injectable
      * Runs Export Advance Pricing test.
      *
      * @param array $exportData
-     * @param string|null $deleteExistingProducts
+     * @param bool $deleteExistingProducts
      * @param array $products
      * @param string $configData
      * @param Store $store
      * @param array $advancedPricingAttributes
-     * @param array|null $currencies
+     * @param array $currencies
      * @return array
      */
     public function test(
         array $exportData,
-        $deleteExistingProducts = null,
+        $deleteExistingProducts = false,
         array $products = [],
         $configData = null,
         Store $store = null,
@@ -108,23 +115,24 @@ class ExportAdvancedPricingTest extends Injectable
             )->run();
         }
 
-        if ($deleteExistingProducts != null) {
+        if ($deleteExistingProducts) {
             $this->catalogProductIndex->open();
             $this->catalogProductIndex->getProductGrid()->removeAllProducts();
         }
 
-        if ($store !== null) {
+        if ($store) {
             $store->persist();
         }
 
         if (!empty($products)) {
+            $createdProducts = [];
             foreach ($products as $product) {
                 $data = [
                     'website_ids' => [
                         ['store' => $store]
                     ]
                 ];
-                if ($store !== null) {
+                if ($store) {
                     $data['tier_price'] = [
                         'data' => [
                             'website' => $store->getDataFieldConfig('group_id')['source']
@@ -146,7 +154,7 @@ class ExportAdvancedPricingTest extends Injectable
             $products = $createdProducts;
         }
 
-        if ($store !== null) {
+        if ($store) {
             $websites = $createdProducts[0]->getDataFieldConfig('website_ids')['source']->getWebsites();
             $configFixture = $this->fixtureFactory->createByCode(
                 'configData',

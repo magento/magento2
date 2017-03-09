@@ -476,8 +476,8 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
                 } else {
                     if ($this->website !== null) {
                         unset($this->priceData['website']['data']);
-                        $this->priceData['website']['data'][$this->website->getCode()] = $this->
-                        website->getData('website_id');
+                        $this->priceData['website']['data'][$this->website->getCode()]
+                            = $this->website->getData('website_id');
                     }
 
                     $field[$data['name']] = $this->priceData[$key]['data'][$field[$key]];
