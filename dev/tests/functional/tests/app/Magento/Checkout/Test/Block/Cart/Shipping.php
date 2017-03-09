@@ -122,6 +122,11 @@ class Shipping extends Form
                 $this->openEstimateShippingAndTax();
             }
             $element = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
+
+            if (!empty($element->getAttribute('checked'))) {
+                return;
+            }
+
             if (!$element->isDisabled()) {
                 $element->click();
             } else {

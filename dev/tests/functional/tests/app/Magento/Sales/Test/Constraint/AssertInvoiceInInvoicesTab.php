@@ -37,7 +37,7 @@ class AssertInvoiceInInvoicesTab extends AbstractConstraint
         $salesOrderView->getOrderForm()->openTab('invoices');
         /** @var Grid $grid */
         $grid = $salesOrderView->getOrderInvoiceGrid();
-        $amount = $order->getPrice();
+        $amount = $order->getPrice()['invoice'];
         foreach ($ids['invoiceIds'] as $key => $invoiceId) {
             $filter = [
                 'id' => $invoiceId,
