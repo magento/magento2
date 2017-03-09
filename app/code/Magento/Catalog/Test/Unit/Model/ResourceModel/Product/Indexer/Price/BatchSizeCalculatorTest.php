@@ -14,22 +14,22 @@ class BatchSizeCalculatorTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Indexer\BatchSizeCalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\BatchSizeManagementInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $calculatorMock;
+    private $estimatorMock;
 
     /**
      * @var int
      */
-    private $memoryTablesMinRows;
+    private $batchRowsCount;
 
     protected function setUp()
     {
-        $this->calculatorMock = $this->getMock(\Magento\Framework\Indexer\BatchSizeCalculatorInterface::class);
-        $this->memoryTablesMinRows = 200;
+        $this->estimatorMock = $this->getMock(\Magento\Framework\Indexer\BatchSizeManagementInterface::class);
+        $this->batchRowsCount = 200;
         $this->model = new \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator(
-            ['default' => $this->memoryTablesMinRows],
-            ['default' => $this->calculatorMock]
+            ['default' => $this->batchRowsCount],
+            ['default' => $this->estimatorMock]
         );
     }
 
@@ -39,9 +39,9 @@ class BatchSizeCalculatorTest extends \PHPUnit_Framework_TestCase
         $typeId = 'default';
         $batchSize = 100500;
 
-        $this->calculatorMock->expects($this->once())
-            ->method('estimateBatchSize')
-            ->with($connectionMock, $this->memoryTablesMinRows)
+        $this->estimatorMock->expects($this->once())
+            ->method('ensureBatchSize')
+            ->with($connectionMock, $this->batchRowsCount)
             ->willReturn($batchSize);
 
         $this->model->estimateBatchSize($connectionMock, $typeId);

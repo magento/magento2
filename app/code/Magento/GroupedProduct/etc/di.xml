@@ -91,8 +91,11 @@
                 type="Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Price\Grouped"/>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
         <arguments>
-            <argument name="calculators" xsi:type="array">
-                <item name="grouped" xsi:type="object">\Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductBatchSizeCalculator</item>
+            <argument name="batchRowsCount" xsi:type="array">
+                <item name="grouped" xsi:type="number">100000</item>
+            </argument>
+            <argument name="estimators" xsi:type="array">
+                <item name="grouped" xsi:type="object">Magento\Catalog\Model\Indexer\CompositeProductBatchSizeManagement</item>
             </argument>
         </arguments>
     </type>

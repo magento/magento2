@@ -11,22 +11,22 @@ class BatchSizeCalculator
     /**
      * @var array
      */
-    private $memoryTablesMinRows;
+    private $batchRowsCount;
 
     /**
-     * @var \Magento\Framework\Indexer\BatchSizeCalculatorInterface[]
+     * @var \Magento\Framework\Indexer\BatchSizeManagementInterface[]
      */
-    private $calculators;
+    private $estimators;
 
     /**
      * BatchSizeCalculator constructor.
-     * @param array $memoryTablesMinRows
-     * @param array $calculators
+     * @param array $batchRowsCount
+     * @param array $estimators
      */
-    public function __construct(array $memoryTablesMinRows, array $calculators)
+    public function __construct(array $batchRowsCount, array $estimators)
     {
-        $this->memoryTablesMinRows = $memoryTablesMinRows;
-        $this->calculators = $calculators;
+        $this->batchRowsCount = $batchRowsCount;
+        $this->estimators = $estimators;
     }
 
     /**
@@ -38,15 +38,17 @@ class BatchSizeCalculator
      */
     public function estimateBatchSize(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $indexerTypeId)
     {
-        $memoryTableMinRows = isset($this->memoryTablesMinRows[$indexerTypeId])
-            ? $this->memoryTablesMinRows[$indexerTypeId]
-            : $this->memoryTablesMinRows['default'];
+        $batchRowsCount = isset($this->batchRowsCount[$indexerTypeId])
+            ? $this->batchRowsCount[$indexerTypeId]
+            : $this->batchRowsCount['default'];
 
-        /** @var \Magento\Framework\Indexer\BatchSizeCalculatorInterface $calculator */
-        $calculator = isset($this->calculators[$indexerTypeId])
-            ? $this->calculators[$indexerTypeId]
-            : $this->calculators['default'];
+        /** @var \Magento\Framework\Indexer\BatchSizeManagementInterface $calculator */
+        $calculator = isset($this->estimators[$indexerTypeId])
+            ? $this->estimators[$indexerTypeId]
+            : $this->estimators['default'];
 
-        return $calculator->estimateBatchSize($connection, $memoryTableMinRows);
+        $calculator->ensureBatchSize($connection, $batchRowsCount);
+
+        return $batchRowsCount;
     }
 }
