@@ -202,11 +202,6 @@
             <argument name="default" xsi:type="string">frontend</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Acl\Cache">
-        <arguments>
-            <argument name="cacheKey" xsi:type="string">global_acl_resources</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\App\Config\Initial\Converter">
         <arguments>
             <argument name="nodeMap" xsi:type="array">
