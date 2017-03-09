@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer;
+namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer\Price;
 
 class IndexTableRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\IndexTableRowSizeEstimator
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableRowSizeEstimator
      */
     private $model;
 
@@ -33,7 +33,7 @@ class IndexTableRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = new \Magento\Catalog\Model\ResourceModel\Product\Indexer\IndexTableRowSizeEstimator(
+        $this->model = new \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableRowSizeEstimator(
             $this->websiteManagementMock,
             $this->collectionFactoryMock
         );

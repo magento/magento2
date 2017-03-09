@@ -922,13 +922,18 @@
                 <item name="default" xsi:type="number">200000</item>
             </argument>
             <argument name="estimators" xsi:type="array">
-                <item name="default" xsi:type="object">\Magento\Framework\Indexer\BatchSizeManagement</item>
+                <item name="default" xsi:type="object">Magento\Catalog\Model\Indexer\Price\BatchSizeManagement</item>
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Catalog\Model\Indexer\CompositeProductBatchSizeManagement" type="\Magento\Framework\Indexer\BatchSizeManagement">
+    <virtualType name="Magento\Catalog\Model\Indexer\Price\CompositeProductBatchSizeManagement" type="\Magento\Framework\Indexer\BatchSizeManagement">
         <arguments>
             <argument name="rowSizeEstimator" xsi:type="object" shared="false">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductRowSizeEstimator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Model\Indexer\Price\BatchSizeManagement" type="\Magento\Framework\Indexer\BatchSizeManagement">
+        <arguments>
+            <argument name="rowSizeEstimator" xsi:type="object" shared="false">\Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableRowSizeEstimator</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource" type="Magento\Indexer\Model\ResourceModel\FrontendResource">
@@ -941,11 +946,6 @@
     <type name="Magento\Catalog\Model\ResourceModel\Layer\Filter\Price">
         <arguments>
             <argument name="indexerFrontendResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Indexer\BatchSizeManagement">
-        <arguments>
-            <argument name="rowSizeEstimator" xsi:type="object" shared="false">\Magento\Catalog\Model\ResourceModel\Product\Indexer\IndexTableRowSizeEstimator</argument>
         </arguments>
     </type>
 </config>

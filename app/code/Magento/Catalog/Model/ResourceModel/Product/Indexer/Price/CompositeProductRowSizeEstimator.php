@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\IndexTableRowSizeEstimator;
 use Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface;
 
 class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
