@@ -162,7 +162,7 @@ class InitialThemeSourceTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(
                 [
-                    'Magento/backend' => [
+                    'adminhtml/Magento/backend' => [
                         'parent_id' => null,
                         'theme_path' => 'Magento/backend',
                         'theme_title' => 'Magento 2 backend',
@@ -171,7 +171,7 @@ class InitialThemeSourceTest extends \PHPUnit_Framework_TestCase
                         'type' => '0',
                         'code' => 'Magento/backend',
                     ],
-                    'Magento/blank' => [
+                    'frontend/Magento/blank' => [
                         'parent_id' => null,
                         'theme_path' => 'Magento/blank',
                         'theme_title' => 'Magento Blank',
@@ -180,7 +180,7 @@ class InitialThemeSourceTest extends \PHPUnit_Framework_TestCase
                         'type' => '0',
                         'code' => 'Magento/blank',
                     ],
-                    'Magento/luma' => [
+                    'frontend/Magento/luma' => [
                         'parent_id' => 'Magento/blank',
                         'theme_path' => 'Magento/luma',
                         'theme_title' => 'Magento Luma',
