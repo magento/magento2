@@ -6,25 +6,28 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
-class CompositeProductRowSizeEstimator implements \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\IndexTableRowSizeEstimator;
+use Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface;
+
+class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\IndexTableRowSizeEstimator
+     * @var IndexTableRowSizeEstimator
      */
     private $indexTableRowSizeEstimator;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
+     * @var DefaultPrice
      */
     private $indexerResource;
 
     /**
      * @param DefaultPrice $indexerResource
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Indexer\IndexTableRowSizeEstimator $indexTableRowSizeEstimator
+     * @param IndexTableRowSizeEstimator $indexTableRowSizeEstimator
      */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $indexerResource,
-        \Magento\Catalog\Model\ResourceModel\Product\Indexer\IndexTableRowSizeEstimator $indexTableRowSizeEstimator
+        DefaultPrice $indexerResource,
+        IndexTableRowSizeEstimator $indexTableRowSizeEstimator
     ) {
         $this->indexerResource = $indexerResource;
         $this->indexTableRowSizeEstimator = $indexTableRowSizeEstimator;
