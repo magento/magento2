@@ -96,4 +96,25 @@ class Grid extends DataGrid
         $baseImage = $this->_rootElement->find($this->baseImage);
         return $baseImage->isVisible() ? $baseImage->getAttribute('src') : '';
     }
+
+    /**
+     * Remove all previously created products.
+     *
+     * @return void
+     */
+    public function removeAllProducts()
+    {
+        $this->waitLoader();
+        if ($this->browser->find($this->noRecords)->isVisible()) {
+            return;
+        }
+        $this->selectMassAction('Select All');
+        $this->selectAction('Delete');
+        $element = $this->browser->find($this->alertModal);
+        $modal = $this->blockFactory->create(
+            \Magento\Ui\Test\Block\Adminhtml\Modal::class,
+            ['element' => $element]
+        );
+        $modal->acceptAlert();
+    }
 }

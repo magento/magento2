@@ -27,4 +27,51 @@ class Filter extends Grid
             'selector' => 'input[name="attribute_code"]',
         ],
     ];
+
+    /**
+     * Locator for export attribute.
+     *
+     * @var string
+     */
+    protected $attribute = '[name="export_filter[%s]"]';
+
+    /**
+     * Locator for "Continue" button.
+     *
+     * @var string
+     */
+    private $continueButton = 'button.action-.scalable';
+
+    /**
+     * Return row with given attribute label.
+     *
+     * @param string $attributeLabel
+     * @return SimpleElement
+     */
+    public function getGridRow($attributeLabel)
+    {
+        return $this->search(['frontend_label' => $attributeLabel]);
+    }
+
+    /**
+     * Click on "Continue" button.
+     *
+     * @return void
+     */
+    public function clickContinue()
+    {
+        $this->_rootElement->find($this->continueButton)->click();
+    }
+
+    /**
+     * Set attribute entity value.
+     *
+     * @param string $attribute
+     * @param string $value
+     * @return void
+     */
+    public function setAttributeValue($attribute, $value)
+    {
+        $this->_rootElement->find(sprintf($this->attribute, $attribute))->setValue($value);
+    }
 }

@@ -40,7 +40,7 @@ class Export implements ExportInterface
      * @param ObjectManagerInterface $objectManager
      * @param string $type [optional]
      */
-    public function __construct(ObjectManagerInterface $objectManager, $type = 'product')
+    public function __construct(ObjectManagerInterface $objectManager, $type = 'advancedPricing')
     {
         $this->objectManager = $objectManager;
         $this->reader = $this->getReader($type);

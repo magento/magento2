@@ -27,6 +27,13 @@ class TierPrice extends DataSource
     private $customerGroups;
 
     /**
+     * Website fixture.
+     *
+     * @var \Magento\Store\Test\Fixture\Website
+     */
+    private $website;
+
+    /**
      * Repository Factory instance.
      *
      * @var RepositoryFactory
@@ -80,6 +87,13 @@ class TierPrice extends DataSource
             throw new \Exception("Data must be set");
         }
         $this->data = $this->repositoryFactory->get($this->params['repository'])->get($this->fixtureData['dataset']);
+        if (!empty($this->fixtureData['data']['website'])) {
+            $this->website = $this->fixtureData['data']['website'];
+            $this->fixtureData['data']['website'] = $this->website->getCode();
+            foreach ($this->data as $key => $data) {
+                $this->data[$key] = array_merge($data, $this->fixtureData['data']);
+            }
+        }
         foreach ($this->data as $key => $item) {
             /** @var CustomerGroup $customerGroup */
             $customerGroup = $this->fixtureFactory->createByCode(
@@ -104,5 +118,15 @@ class TierPrice extends DataSource
     public function getCustomerGroups()
     {
         return $this->customerGroups;
+    }
+
+    /**
+     * Return website fixture.
+     *
+     * @return \Magento\Store\Test\Fixture\Website
+     */
+    public function getWebsite()
+    {
+        return $this->website;
     }
 }
