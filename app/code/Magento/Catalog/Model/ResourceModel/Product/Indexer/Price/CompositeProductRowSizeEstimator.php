@@ -14,19 +14,19 @@ class CompositeProductRowSizeEstimator implements \Magento\Framework\Indexer\Ind
     private $indexTableRowSizeEstimator;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
      */
-    private $resourceConnection;
+    private $indexerResource;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+     * @param DefaultPrice $indexerResource
      * @param \Magento\Indexer\Model\IndexTableRowSizeEstimator $indexTableRowSizeEstimator
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resourceConnection,
+        \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice $indexerResource,
         \Magento\Indexer\Model\IndexTableRowSizeEstimator $indexTableRowSizeEstimator
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->indexerResource = $indexerResource;
         $this->indexTableRowSizeEstimator = $indexTableRowSizeEstimator;
     }
 
@@ -37,10 +37,10 @@ class CompositeProductRowSizeEstimator implements \Magento\Framework\Indexer\Ind
      */
     public function estimateRowSize()
     {
-        $connection = $this->resourceConnection->getConnection();
+        $connection = $this->indexerResource->getConnection();
         $relationSelect = $connection->select();
         $relationSelect->from(
-            ['relation' => $connection->getTableName('catalog_product_relation')],
+            ['relation' => $this->indexerResource->getTable('catalog_product_relation')],
             ['count' => new \Zend_Db_Expr('count(relation.child_id)')]
         );
         $relationSelect->group('parent_id');
