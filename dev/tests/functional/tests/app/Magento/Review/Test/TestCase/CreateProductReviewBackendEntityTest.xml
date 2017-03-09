@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Review\Test\TestCase\CreateProductReviewBackendEntityTest" summary="Create Backend Product Review" ticketId="MAGETWO-26476">
         <variation name="CreateProductReviewBackendEntityTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="review/data/entity_id/dataset" xsi:type="string">catalogProductSimple::default</data>
             <data name="review/data/status_id" xsi:type="string">Approved</data>
             <data name="review/data/select_stores/0" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
@@ -21,6 +22,7 @@
             <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
         </variation>
         <variation name="CreateProductReviewBackendEntityTestVariation2">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="review/data/entity_id/dataset" xsi:type="string">catalogProductSimple::default</data>
             <data name="review/data/status_id" xsi:type="string">Pending</data>
             <data name="review/data/select_stores/0" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
@@ -34,6 +36,7 @@
             <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage" />
         </variation>
         <variation name="CreateProductReviewBackendEntityTestVariation3">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="review/data/entity_id/dataset" xsi:type="string">catalogProductSimple::default</data>
             <data name="review/data/status_id" xsi:type="string">Not Approved</data>
             <data name="review/data/select_stores/0" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
