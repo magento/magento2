@@ -264,13 +264,13 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     public function invalidateIndexDataProvider()
     {
         return [
-            'Update on save' => [
-                '$expectedStatus' =>  \Magento\Framework\Indexer\StateInterface::STATUS_INVALID,
-                '$schedule' => false,
-            ],
             'Update by schedule' => [
                 '$expectedStatus' => \Magento\Framework\Indexer\StateInterface::STATUS_VALID,
                 '$schedule' => true,
+            ],
+            'Update on save' => [
+                '$expectedStatus' =>  \Magento\Framework\Indexer\StateInterface::STATUS_INVALID,
+                '$schedule' => false,
             ]
         ];
     }
