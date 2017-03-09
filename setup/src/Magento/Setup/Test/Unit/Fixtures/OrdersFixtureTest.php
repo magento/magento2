@@ -164,7 +164,8 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $productMock = $this->getMock(
-            \Magento\Catalog\Model\Product::class, ['load', 'getSku', 'getName'],
+            \Magento\Catalog\Model\Product::class,
+            ['load', 'getSku', 'getName'],
             [],
             '',
             false
@@ -181,9 +182,13 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
 
         $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
 
-        $collectionMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class
-            , [], [], '',
-            false);
+        $collectionMock = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
+            [],
+            [],
+            '',
+            false
+        );
         $collectionMock->expects($this->once())
             ->method('getSelect')
             ->willReturn($selectMock);
