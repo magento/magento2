@@ -7,7 +7,9 @@ namespace Magento\Config\Test\Unit\Model\Config;
 
 use Magento\Config\Model\Config\Importer;
 use Magento\Config\Model\ValueBuilder;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Flag;
@@ -70,6 +72,11 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     private $scopeMock;
 
     /**
+     * @var Value|Mock
+     */
+    private $valueMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -87,6 +94,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->valueBuilderMock = $this->getMockBuilder(ValueBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->valueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
@@ -117,6 +127,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $data = [];
         $currentData = ['current' => '2'];
 
+        $reflection = new \ReflectionClass($this->model);
+        $closure = $reflection->getMethod('invokeSaveAll')->getClosure($this->model);
+
         $this->flagResourceMock->expects($this->once())
             ->method('load')
             ->with($this->flagMock, Importer::FLAG_CODE, 'flag_code');
@@ -129,7 +142,74 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
                 [$data, $currentData, []],
                 [$currentData, $data, []]
             ]);
+        $this->scopeMock->expects($this->once())
+            ->method('getCurrentScope')
+            ->willReturn('oldScope');
+        $this->stateMock->expects($this->once())
+            ->method('emulateAreaCode')
+            ->with(Area::AREA_ADMINHTML, $closure);
+        $this->scopeMock->expects($this->once())
+            ->method('setCurrentScope')
+            ->with('oldScope');
+        $this->flagMock->expects($this->once())
+            ->method('setFlagData')
+            ->with($data);
+        $this->flagResourceMock->expects($this->once())
+            ->method('save')
+            ->with($this->flagMock);
 
         $this->model->import($data);
+    }
+
+    public function testInvokeSaveAll()
+    {
+        $reflection = new \ReflectionClass($this->model);
+        $closure = $reflection->getMethod('invokeSaveAll')->getClosure($this->model);
+        $data = [
+            'default' => ['web' => ['unsecure' => ['base_url' => 'http://magento2.local/']]],
+            'websites' => ['base' => ['web' => ['unsecure' => ['base_url' => 'http://magento2.local/']]]],
+        ];
+
+        $this->valueMock->expects($this->exactly(2))
+            ->method('setData')
+            ->with('force_changed_value', true);
+        $this->valueMock->expects($this->exactly(2))
+            ->method('beforeSave');
+        $this->valueMock->expects($this->exactly(2))
+            ->method('afterSave');
+
+        $value1 = clone $this->valueMock;
+        $value2 = clone $this->valueMock;
+
+        $this->arrayUtilsMock->expects($this->exactly(2))
+            ->method('flatten')
+            ->willReturnMap([
+                [
+                    ['web' => ['unsecure' => ['base_url' => 'http://magento2.local/']]],
+                    '',
+                    '/',
+                    ['web/unsecure/base_url' => 'http://magento2.local/']
+                ],
+                [
+                    ['base' => ['web' => ['unsecure' => ['base_url' => 'http://magento23.local/']]]],
+                    '',
+                    '/',
+                    ['base/web/unsecure/base_url' => 'http://magento23.local/']
+                ]
+            ]);
+        $this->scopeConfigMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturnMap([
+                ['web/unsecure/base_url', 'default', null, 'http://magento2.local/'],
+                ['web/unsecure/base_url', 'websites', 'base', 'http://magento23.local/']
+            ]);
+        $this->valueBuilderMock->expects($this->exactly(2))
+            ->method('build')
+            ->willReturnMap([
+                ['web/unsecure/base_url', 'http://magento2.local/', 'default', null, $value1],
+                ['web/unsecure/base_url', 'http://magento23.local/', 'websites', 'base', $value2]
+            ]);
+
+        $this->assertSame(null, $closure($data));
     }
 }
