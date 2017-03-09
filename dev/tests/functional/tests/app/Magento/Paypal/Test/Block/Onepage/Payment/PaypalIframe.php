@@ -3,7 +3,6 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Paypal\Test\Block\Onepage\Payment;
 
 use Magento\Checkout\Test\Block\Onepage\Payment\Method;
@@ -51,6 +50,13 @@ class PaypalIframe extends Method
     protected $formBlockCc;
 
     /**
+     * CSS selector for loader block in iframe.
+     *
+     * @var string
+     */
+    protected $loader = '#lightBoxDiv';
+
+    /**
      * Fill credit card data in PayPal iframe form.
      *
      * @param FixtureInterface $creditCard
@@ -65,7 +71,29 @@ class PaypalIframe extends Method
         );
         $formBlock->fill($creditCard, $iframeRootElement);
         $iframeRootElement->find($this->payNowButton)->click();
+
+        $this->waitSubmitForm($iframeRootElement);
+
         $this->browser->switchToFrame();
+    }
+
+    /**
+     * Wait form submit for that payment.
+     *
+     * @param ElementInterface $iframeRootElement
+     * @return void
+     */
+    protected function waitSubmitForm(ElementInterface $iframeRootElement)
+    {
+        $loaderElement = $iframeRootElement->find($this->loader);
+
+        $loaderElement->waitUntil(function () use ($loaderElement) {
+            return $loaderElement->isVisible() ? true : null;
+        });
+
+        $loaderElement->waitUntil(function () use ($loaderElement) {
+            return !$loaderElement->isVisible() ? true : null;
+        });
     }
 
     /**
