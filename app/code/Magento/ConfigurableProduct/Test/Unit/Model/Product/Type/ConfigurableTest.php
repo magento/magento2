@@ -104,6 +104,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     private $stockRegistry;
 
     /**
+     * @var \Magento\Catalog\Api\Data\ProductInterfaceFactory
+     */
+    private $productFactory;
+
+    /**
      * @var SalableProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     private $salableProcessor;
@@ -186,6 +191,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->productFactory = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterfaceFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->salableProcessor = $this->getMock(
             SalableProcessor::class,
             ['process'],
@@ -212,8 +222,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'cache' => $this->cache,
                 'catalogConfig' => $this->catalogConfig,
                 'stockRegistry' => $this->stockRegistry,
+                'productFactory' => $this->productFactory,
                 'salableProcessor' => $this->salableProcessor,
-                'metadataPool' => $this->metadataPool
+                'metadataPool' => $this->metadataPool,
             ]
         );
     }
@@ -412,6 +423,41 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->_productCollectionFactory->expects($this->any())->method('create')
             ->will($this->returnValue($productCollection));
         $this->_model->getUsedProducts($product);
+    }
+
+    public function testGetUsedProductsNotEmptyData()
+    {
+        $ids = [5];
+
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->setMethods(
+                [
+                    'getStoreId',
+                    'getData',
+                    'hasData',
+                ]
+            )->disableOriginalConstructor()
+            ->getMock();
+
+        $product->expects($this->once())->method('hasData')
+            ->willReturn(false);
+        $product->expects($this->any())->method('getData')
+            ->willReturnOnConsecutiveCalls(
+                $ids[0],
+                $ids
+            );
+
+        $this->cache->expects($this->once())
+            ->method('load')
+            ->willReturn(serialize($ids));
+
+        $this->productFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($product);
+
+        $usedProducts = $this->_model->getUsedProducts($product);
+
+        self::assertEquals($ids, $usedProducts);
     }
 
     /**
