@@ -6,7 +6,7 @@
 
 namespace Magento\Analytics\ReportXml\DB;
 
-use Magento\Framework\DB\Sql\JsonSerializableExpression;
+use Magento\Framework\DB\Sql\ColumnValueExpression;
 
 /**
  * Class ColumnsResolver
@@ -53,7 +53,7 @@ class ColumnsResolver
                 if (isset($attributeData['distinct']) && $attributeData['distinct'] == true) {
                     $prefix = ' DISTINCT ';
                 }
-                $expression = new JsonSerializableExpression(
+                $expression = new ColumnValueExpression(
                     strtoupper($attributeData['function']) . '(' . $prefix . $tableAlias . '.' . $columnName . ')'
                 );
             } else {

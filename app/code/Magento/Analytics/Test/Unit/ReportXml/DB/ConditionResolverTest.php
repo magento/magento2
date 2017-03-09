@@ -9,6 +9,7 @@ use Magento\Analytics\ReportXml\DB\ConditionResolver;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Sql\MagentoDbExpression;
 
 /**
  * Class ConditionResolverTest
@@ -80,7 +81,7 @@ class ConditionResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->selectBuilderMock->expects($this->any())
             ->method('getColumns')
-            ->willReturn(['price' => new \Zend_Db_Expr("(n.price = 400)")]);
+            ->willReturn(['price' => new MagentoDbExpression("(n.price = 400)")]);
 
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
