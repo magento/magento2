@@ -56,9 +56,4 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\Indexer\BatchSizeManagementInterface" type="Magento\Framework\Indexer\BatchSizeManagement" />
-    <type name="Magento\Framework\Indexer\BatchSizeManagement">
-        <arguments>
-            <argument name="rowSizeEstimator" xsi:type="object" shared="false">Magento\Indexer\Model\IndexTableRowSizeEstimator</argument>
-        </arguments>
-    </type>
 </config>

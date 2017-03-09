@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Indexer\Model;
+namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
 
 class IndexTableRowSizeEstimator implements \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface
 {
