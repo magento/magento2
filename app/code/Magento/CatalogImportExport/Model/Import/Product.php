@@ -2108,7 +2108,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveStockItem()
     {
-        $indexer = $this->indexerRegistry->get('catalog_product_category');
         /** @var $stockResource \Magento\CatalogInventory\Model\ResourceModel\Stock\Item */
         $stockResource = $this->_stockResItemFac->create();
         $entityTable = $stockResource->getMainTable();
@@ -2164,11 +2163,23 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $this->_connection->insertOnDuplicate($entityTable, array_values($stockData));
             }
 
-            if ($productIdsToReindex) {
-                $indexer->reindexList($productIdsToReindex);
-            }
+            $this->reindexProducts($productIdsToReindex);
         }
         return $this;
+    }
+
+    /**
+     * Initiate product reindex by product ids
+     *
+     * @param array $productIdsToReindex
+     * @return void
+     */
+    private function reindexProducts($productIdsToReindex = [])
+    {
+        $indexer = $this->indexerRegistry->get('catalog_product_category');
+        if (is_array($productIdsToReindex) && count($productIdsToReindex) > 0 && !$indexer->isScheduled()) {
+            $indexer->reindexList($productIdsToReindex);
+        }
     }
 
     /**
