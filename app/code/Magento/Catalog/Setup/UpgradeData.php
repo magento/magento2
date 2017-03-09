@@ -7,7 +7,6 @@ namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
-use Magento\Eav\Model\Entity\AttributeCache;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -36,25 +35,15 @@ class UpgradeData implements UpgradeDataInterface
     private $eavSetupFactory;
 
     /**
-     * @var AttributeCache
-     */
-    private $attributeCache;
-
-    /**
      * Init
      *
      * @param CategorySetupFactory $categorySetupFactory
      * @param EavSetupFactory $eavSetupFactory
-     * @param AttributeCache $attributeCache
      */
-    public function __construct(
-        CategorySetupFactory $categorySetupFactory,
-        EavSetupFactory $eavSetupFactory,
-        AttributeCache $attributeCache
-    ) {
+    public function __construct(CategorySetupFactory $categorySetupFactory, EavSetupFactory $eavSetupFactory)
+    {
         $this->categorySetupFactory = $categorySetupFactory;
         $this->eavSetupFactory = $eavSetupFactory;
-        $this->attributeCache = $attributeCache;
     }
 
     /**
@@ -148,24 +137,19 @@ class UpgradeData implements UpgradeDataInterface
         }
 
         if (version_compare($context->getVersion(), '2.0.4') < 0) {
-            $mediaBackendType = 'static';
-            $mediaBackendModel = null;
             /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
             $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
             $categorySetup->updateAttribute(
                 'catalog_product',
                 'media_gallery',
                 'backend_type',
-                $mediaBackendType
+                'static'
             );
             $categorySetup->updateAttribute(
                 'catalog_product',
                 'media_gallery',
-                'backend_model',
-                $mediaBackendModel
+                'backend_model'
             );
-
-            $this->changeMediaGalleryAttributeInCache($mediaBackendType, $mediaBackendModel);
         }
 
         if (version_compare($context->getVersion(), '2.0.5', '<')) {
@@ -424,27 +408,6 @@ class UpgradeData implements UpgradeDataInterface
                 \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
             );
 
-        }
-    }
-
-    /**
-     * @param string $mediaBackendType
-     * @param string $mediaBackendModel
-     * @return void
-     */
-    private function changeMediaGalleryAttributeInCache($mediaBackendType, $mediaBackendModel)
-    {
-        // need to do, because media_gallery has backend model in cache.
-        $catalogProductAttributes = $this->attributeCache->getAttributes('catalog_product', '0-0');
-
-        if (is_array($catalogProductAttributes)) {
-            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $catalogProductAttribute */
-            foreach ($catalogProductAttributes as $catalogProductAttribute) {
-                if ($catalogProductAttribute->getAttributeCode() == 'media_gallery') {
-                    $catalogProductAttribute->setBackendModel($mediaBackendModel);
-                    $catalogProductAttribute->setBackendType($mediaBackendType);
-                }
-            }
         }
     }
 }
