@@ -86,7 +86,7 @@ class DevTestsRunCommand extends Command
             list($dir, $options) = $this->commands[$key];
             $dirName = realpath(BP . '/dev/tests/' . $dir);
             chdir($dirName);
-            $command = 'php '. BP . '/' . $vendorDir . '/phpunit/phpunit/phpunit ' . $options;
+            $command = PHP_BINARY . ' ' . BP . '/' . $vendorDir . '/phpunit/phpunit/phpunit ' . $options;
             $message = $dirName . '> ' . $command;
             $output->writeln(['', str_pad("---- {$message} ", 70, '-'), '']);
             passthru($command, $returnVal);

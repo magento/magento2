@@ -120,6 +120,9 @@ class Form extends Block
     private function getTabUrl($tabName)
     {
         $tabIndex = 'index/section/' . $tabName;
+        if (strpos($this->baseUrl, $tabIndex) !== false) {
+            return $this->baseUrl;
+        }
         if (strpos($this->baseUrl, '/key/') !== false) {
             /*
              * Slashes are concatenated to cover case when string 'index' presented in domain name
