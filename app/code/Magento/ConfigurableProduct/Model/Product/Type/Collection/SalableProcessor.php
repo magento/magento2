@@ -30,12 +30,12 @@ class SalableProcessor
     }
 
     /**
+     * Adds filters to the collection to help determine if product is available for sale.
+     *
      * This method adds several additional checks for a children products availability.
-     * Children products should be enabled and available in stock to be sales.
+     * Children products should be enabled and available in stock to be sold.
      * It also adds the specific flag to the collection to prevent the case
      * when filter already added and therefore may break the collection.
-     *
-     * Adds filters to the collection to help determine is product available for sale.
      *
      * @param Collection $collection
      * @return Collection
