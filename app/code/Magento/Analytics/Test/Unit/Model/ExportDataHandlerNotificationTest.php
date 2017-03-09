@@ -6,7 +6,7 @@
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\Connector;
-use Magento\Analytics\Model\ExportDataHandlerInterface;
+use Magento\Analytics\Model\ExportDataHandler;
 use Magento\Analytics\Model\ExportDataHandlerNotification;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -61,7 +61,7 @@ class ExportDataHandlerNotificationTest extends \PHPUnit_Framework_TestCase
      */
     private function createExportDataHandlerMock()
     {
-        return $this->getMockBuilder(ExportDataHandlerInterface::class)->getMockForAbstractClass();
+        return $this->getMockBuilder(ExportDataHandler::class)->disableOriginalConstructor()->getMock();
     }
 
     /**
