@@ -26,7 +26,7 @@
                 <item name="isClosed" xsi:type="string">No</item>
                 <item name="transactionType" xsi:type="string">Authorization</item>
             </data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test severity:S0</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />

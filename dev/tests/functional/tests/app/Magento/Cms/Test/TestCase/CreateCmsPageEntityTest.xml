@@ -20,6 +20,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
         </variation>
         <variation name="CreateCmsPageEntityTestVariation2" summary="Create page for default store view">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/is_active" xsi:type="string">Yes</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
@@ -30,6 +31,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPageForm" />
         </variation>
         <variation name="CreateCmsPageEntityTestVariation3" summary="Create page with widget and system variable">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/is_active" xsi:type="string">Yes</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
@@ -44,6 +46,7 @@
             <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagePreview" />
         </variation>
         <variation name="CreateCmsPageEntityTestVariation4" summary="Create disabled page">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="fixtureType" xsi:type="string">cmsPage</data>
             <data name="data/title" xsi:type="string">NewCmsPage%isolation%</data>
             <data name="data/identifier" xsi:type="string">identifier-%isolation%</data>

@@ -18,6 +18,7 @@
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleIsNotPresentedInGrid" />
         </variation>
         <variation name="DeleteSalesRuleEntityTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="salesRule/dataset" xsi:type="string">inactive_sales_rule</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessDeleteMessage" />
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleIsNotPresentedInGrid" />

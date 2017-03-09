@@ -42,6 +42,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation3">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create product with default sets samples and links</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
@@ -80,6 +81,7 @@
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation5">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create product without category</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
@@ -152,6 +154,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation9">
+            <data name="issue" xsi:type="string">MAGETWO-60789: API wrong custom attributes order</data>
             <data name="description" xsi:type="string">Create product with import custom options</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
@@ -175,6 +178,7 @@
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation10">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create product with three links</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
@@ -198,6 +202,7 @@
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableLinksData" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation11">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create product with three links without description</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
