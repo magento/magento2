@@ -22,7 +22,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $setup->startSetup();
 
-        if (version_compare($context->getVersion(), '2.0.1', '<')) {
+        if (version_compare($context->getVersion(), '2.2.0', '<')) {
             $this->addTableSuffixColumn($setup);
         }
         $setup->endSetup();

@@ -46,10 +46,6 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             'Failed to check maximal price on product'
         );
         $this->assertEquals($expectedResults['indexerMinimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
-        //This verification is skipped due to MAGETWO-64406, so in some cases 'indexerMaximumPrice' key was commented.
-        if (isset($expectedResults['indexerMaximumPrice'])) {
-            $this->assertEquals($expectedResults['indexerMaximumPrice'], $priceInfoFromIndexer->getMaxPrice());
-        }
     }
 
     /**
@@ -85,11 +81,6 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             'Failed to check maximal price on product'
         );
         $this->assertEquals($expectedResults['indexerMinimalPrice'], $priceInfoFromIndexer->getMinimalPrice());
-
-        //This verification is skipped due to MAGETWO-64406, so in some cases 'indexerMaximumPrice' key was commented.
-        if (isset($expectedResults['indexerMaximumPrice'])) {
-            $this->assertEquals($expectedResults['indexerMaximumPrice'], $priceInfoFromIndexer->getMaxPrice());
-        }
     }
 
     /**
@@ -107,8 +98,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 120,
                     // 110 + 10 (sum of simple price)
                     'maximalPrice' => 120,
-                    'indexerMinimalPrice' => 120,
-                    'indexerMaximumPrice' => 120
+                    'indexerMinimalPrice' => 120
                 ]
             ],
 
@@ -119,8 +109,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 120,
                     //  110 + (3 * 10) + (2 * 10) + 10
                     'maximalPrice' => 170,
-                    'indexerMinimalPrice' => 120,
-                    'indexerMaximumPrice' => 170
+                    'indexerMinimalPrice' => 120
                 ]
             ],
 
@@ -131,8 +120,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 120,
                     // 110 + 60
                     'maximalPrice' => 170,
-                    'indexerMinimalPrice' => 120,
-                    'indexerMaximumPrice' => 170
+                    'indexerMinimalPrice' => 120
                 ]
             ],
 
@@ -143,8 +131,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
                     'minimalPrice' => 120,
                     // 110 + 30
                     'maximalPrice' => 140,
-                    'indexerMinimalPrice' => 120,
-                    'indexerMaximumPrice' => 140
+                    'indexerMinimalPrice' => 120
                 ]
             ],
 
@@ -162,8 +149,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
 
                     // 110 + 1 * 20 + 100
                     'maximalPrice' => 230,
-                    'indexerMinimalPrice' => 130,
-                    //'indexerMaximumPrice' => 230
+                    'indexerMinimalPrice' => 130
                 ]
             ],
 
@@ -181,8 +167,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
 
                     // 110 + 110 * 0.2 + 110 * 1
                     'maximalPrice' => 242,
-                    'indexerMinimalPrice' => 132,
-                    //'indexerMaximumPrice' => 242
+                    'indexerMinimalPrice' => 132
                 ]
             ],
 
@@ -200,8 +185,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
 
                     // 110 + 1 * 20 + 110 * 1
                     'maximalPrice' => 240,
-                    'indexerMinimalPrice' => 130,
-                    //'indexerMaximumPrice' => 240
+                    'indexerMinimalPrice' => 130
                 ]
             ],
 
@@ -219,8 +203,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
 
                     // 110 + 110 * 0.2 + 100
                     'maximalPrice' => 232,
-                    'indexerMinimalPrice' => 132,
-                    //'indexerMaximumPrice' => 232
+                    'indexerMinimalPrice' => 132
                 ]
             ],
         ];

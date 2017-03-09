@@ -916,13 +916,26 @@
         </arguments>
     </type>
     <preference for="Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface" type="Magento\Catalog\Pricing\Price\MinimalTierPriceCalculator" />
-    <type name="Magento\Catalog\Model\Indexer\Product\Price\Action\Full">
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
         <arguments>
-            <argument name="memoryTablesMinRows" xsi:type="array">
-                <item name="default" xsi:type="number">200</item>
+            <argument name="batchRowsCount" xsi:type="array">
+                <item name="default" xsi:type="number">200000</item>
+            </argument>
+            <argument name="estimators" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Catalog\Model\Indexer\Price\BatchSizeManagement</item>
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\Model\Indexer\Price\CompositeProductBatchSizeManagement" type="\Magento\Framework\Indexer\BatchSizeManagement">
+        <arguments>
+            <argument name="rowSizeEstimator" xsi:type="object" shared="false">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductRowSizeEstimator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Model\Indexer\Price\BatchSizeManagement" type="\Magento\Framework\Indexer\BatchSizeManagement">
+        <arguments>
+            <argument name="rowSizeEstimator" xsi:type="object" shared="false">\Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableRowSizeEstimator</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource" type="Magento\Indexer\Model\ResourceModel\FrontendResource">
         <arguments>
             <argument name="indexerId" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID</argument>

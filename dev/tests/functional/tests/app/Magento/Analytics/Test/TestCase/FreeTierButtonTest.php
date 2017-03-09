@@ -14,7 +14,7 @@ use Magento\Backend\Test\Page\Adminhtml\Dashboard;
  * 2. Click on page actions button.
  * 3. Perform asserts.
  *
- * @ZephyrId MAGETWO-34874
+ * @ZephyrId MAGETWO-63715
  */
 class FreeTierButtonTest extends Injectable
 {

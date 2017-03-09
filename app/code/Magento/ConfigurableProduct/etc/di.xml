@@ -171,9 +171,14 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Indexer\Stock\Configurable">
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
         <arguments>
-            <argument name="indexerStockFrontendResource" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource</argument>
+            <argument name="batchRowsCount" xsi:type="array">
+                <item name="configurable" xsi:type="number">100000</item>
+            </argument>
+            <argument name="estimators" xsi:type="array">
+                <item name="configurable" xsi:type="object">Magento\Catalog\Model\Indexer\Price\CompositeProductBatchSizeManagement</item>
+            </argument>
         </arguments>
     </type>
 </config>
