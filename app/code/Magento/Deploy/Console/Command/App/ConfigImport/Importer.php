@@ -129,15 +129,16 @@ class Importer
                 /** @var ImporterInterface $importer */
                 $importer = $this->importerFactory->create($importerClassName);
 
+                $configData = (array)$this->deploymentConfig->getConfigData($section);
                 if (
                     !$input->getOption(ConfigImportCommand::INPUT_OPTION_FORCE)
-                    && !empty($warnings = $importer->getWarningMessages())
+                    && !empty($warnings = $importer->getWarningMessages($configData))
                     && !$this->questionPerformer->execute($warnings, $input, $output)
                 ) {
                     continue;
                 }
 
-                $messages = $importer->import((array)$this->deploymentConfig->getConfigData($section));
+                $messages = $importer->import($configData);
                 $output->writeln($messages);
                 $this->configHash->regenerate($section);
             }
