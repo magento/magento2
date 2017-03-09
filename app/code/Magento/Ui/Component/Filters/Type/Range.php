@@ -53,7 +53,7 @@ class Range extends AbstractFilter
      */
     protected function applyFilterByType($type, $value)
     {
-        if (!empty($value) && $value !== '0') {
+        if (is_numeric($value)) {
             $filter = $this->filterBuilder->setConditionType($type)
                 ->setField($this->getName())
                 ->setValue($value)

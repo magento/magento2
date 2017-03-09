@@ -17,7 +17,7 @@ class AssertCustomerLoginErrorMessage extends AbstractConstraint
     /**
      * Customer login error message.
      */
-    const ERROR_MESSAGE = 'Invalid login or password.';
+    const ERROR_MESSAGE = 'You did not sign in correctly or your account is temporarily disabled.';
 
     /**
      * Assert that customer login error message is displayed.

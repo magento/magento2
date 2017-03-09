@@ -9,7 +9,7 @@
     <wrapper>order[account]</wrapper>
     <fields>
         <group_id>
-            <input>select</input>>
+            <input>select</input>
         </group_id>
         <email />
     </fields>
