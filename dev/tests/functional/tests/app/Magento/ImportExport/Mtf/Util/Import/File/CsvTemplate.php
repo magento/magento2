@@ -72,10 +72,9 @@ class CsvTemplate implements TemplateInterface
         );
     }
 
-    /*
-     * Replace placeholders in csv content.
-     */
     /**
+     * Replace placeholders in csv content.
+     *
      * @param resource $stream
      * @return resource
      */

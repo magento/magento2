@@ -33,6 +33,6 @@ class Messages extends \Magento\Backend\Test\Block\Messages
     {
         $this->waitForElementNotVisible($this->loader);
 
-        return (string) $this->_rootElement->find($this->importResultMessage)->getText();
+        return $this->_rootElement->find($this->importResultMessage)->getText();
     }
 }
