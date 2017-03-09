@@ -8,9 +8,12 @@ namespace Magento\Setup\Test\Unit\Fixtures;
 
 use \Magento\Setup\Fixtures\OrdersFixture;
 
+/**
+ * Class OrdersFixtureTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
      */
@@ -160,7 +163,12 @@ class OrdersFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->willReturnSelf();
 
-        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, ['load', 'getSku', 'getName'], [], '', false);
+        $productMock = $this->getMock(
+            \Magento\Catalog\Model\Product::class, ['load', 'getSku', 'getName'],
+            [],
+            '',
+            false
+        );
         $productMock->expects($this->exactly(2))
             ->method('load')
             ->willReturnSelf();
