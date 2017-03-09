@@ -56,7 +56,7 @@ class Synchronization
         } catch (\Exception $e) {
         }
         if ($storage->getId()) {
-            /** @var Write $file */
+            /** @var \Magento\Framework\Filesystem\File\WriteInterface $file */
             $file = $this->mediaDirectory->openFile($relativeFileName, 'w');
             try {
                 $file->lock();
