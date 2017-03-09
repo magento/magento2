@@ -10,7 +10,7 @@ use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 
 /**
- * Serializer used to update nested serialized data in product_options and additional_information fields.
+ * Serializer used to update nested serialized data in product_options field.
  */
 class SerializedDataConverter extends SerializedToJson
 {
@@ -40,12 +40,6 @@ class SerializedDataConverter extends SerializedToJson
                 $valueUnserialized['bundle_selection_attributes']
             );
         }
-        if (isset($valueUnserialized['token_metadata'])) {
-            $valueUnserialized['customer_id'] = $valueUnserialized['token_metadata']['customer_id'];
-            $valueUnserialized['public_hash'] = $valueUnserialized['token_metadata']['public_hash'];
-            unset($valueUnserialized['token_metadata']);
-        }
-
         return $this->encodeJson($valueUnserialized);
     }
 }
