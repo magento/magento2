@@ -157,7 +157,7 @@ class ArrayUtils
 
         foreach ($data as $key => $value) {
             if (!is_array($value)) {
-                $result[$path . $separator . $key] = $value;
+                $result[$path ? $path . $separator . $key : $key] = $value;
 
                 continue;
             }
@@ -174,23 +174,23 @@ class ArrayUtils
     /**
      * Search for array differences recursively.
      *
-     * @param array $array1 The first array
-     * @param array $array2 The second array
+     * @param array $originalArray The array to compare from
+     * @param array $newArray The array to compare with
      * @return array Diff array
      */
-    public function recursiveDiff(array $array1, array $array2)
+    public function recursiveDiff(array $originalArray, array $newArray)
     {
         $diff = [];
 
-        foreach ($array1 as $key => $value) {
-            if (array_key_exists($key, $array2)) {
+        foreach ($originalArray as $key => $value) {
+            if (array_key_exists($key, $newArray)) {
                 if (is_array($value)) {
-                    $aRecursiveDiff = $this->recursiveDiff($value, $array2[$key]);
-                    if (count($aRecursiveDiff)) {
-                        $diff[$key] = $aRecursiveDiff;
+                    $valueDiff = $this->recursiveDiff($value, $newArray[$key]);
+                    if (count($valueDiff)) {
+                        $diff[$key] = $valueDiff;
                     }
                 } else {
-                    if ($value != $array2[$key]) {
+                    if ($value != $newArray[$key]) {
                         $diff[$key] = $value;
                     }
                 }

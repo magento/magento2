@@ -12,20 +12,22 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\FlagFactory;
 use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
- * Processes data from 'system' section of configuration.
+ * Processes data from specific section of configuration.
  * Do not physically imports data into database, but invokes backend models of configs.
  *
  * {@inheritdoc}
+ * @see \Magento\Deploy\Console\Command\App\ConfigImport\Importer
  */
 class Importer implements ImporterInterface
 {
     /**
-     * Code for storing the flag with current file config.
+     * Code of the flag to retrieve previously imported file config.
      */
     const FLAG_CODE = 'system_config_snapshot';
 
@@ -44,7 +46,7 @@ class Importer implements ImporterInterface
     private $flagResource;
 
     /**
-     * The value builder.
+     * Builder which creates value object according to their backend models.
      *
      * @var ValueBuilder
      */
@@ -58,7 +60,7 @@ class Importer implements ImporterInterface
     private $arrayUtils;
 
     /**
-     * The scope config.
+     * The application config storage.
      *
      * @var ScopeConfigInterface
      */
@@ -72,7 +74,7 @@ class Importer implements ImporterInterface
     private $state;
 
     /**
-     * The application scope.
+     * The application scope to run.
      *
      * @var ScopeInterface
      */
@@ -82,9 +84,9 @@ class Importer implements ImporterInterface
      * @param FlagFactory $flagFactory The flag factory
      * @param FlagResource $flagResource The flag resource
      * @param ArrayUtils $arrayUtils An array utils
-     * @param ValueBuilder $valueBuilder The value builder
-     * @param ScopeConfigInterface $scopeConfig The scope config
-     * @param State $state The application state
+     * @param ValueBuilder $valueBuilder Builder which creates value object according to their backend models
+     * @param ScopeConfigInterface $scopeConfig The application config storage.
+     * @param State $state The application scope to run
      * @param ScopeInterface $scope The application scope
      */
     public function __construct(
@@ -106,39 +108,49 @@ class Importer implements ImporterInterface
     }
 
     /**
-     * @inheritdoc
+     * Invokes saving of configurations.
+     *
+     * If configuration from previous import already exists in flag snapshot,
+     * compares to new one and invokes saving only for changed configurations.
+     *
+     * {@inheritdoc}
      */
     public function import(array $data)
     {
-        $flag = $this->flagFactory->create(['data' => ['flag_code' => static::FLAG_CODE]]);
-        $this->flagResource->load($flag, static::FLAG_CODE, 'flag_code');
-        $currentData = $flag->getFlagData() ?: [];
-
-        $changedData = array_replace_recursive(
-            $this->arrayUtils->recursiveDiff($currentData, $data),
-            $this->arrayUtils->recursiveDiff($data, $currentData)
-        );
-
-        // Re-init config with new data.
-        if ($this->scopeConfig instanceof Config) {
-            $this->scopeConfig->clean();
-        }
-
         $currentScope = $this->scope->getCurrentScope();
 
         try {
+            $flag = $this->flagFactory->create(['data' => ['flag_code' => static::FLAG_CODE]]);
+            $this->flagResource->load($flag, static::FLAG_CODE, 'flag_code');
+            $currentData = $flag->getFlagData() ?: [];
+
+            $changedData = array_replace_recursive(
+                $this->arrayUtils->recursiveDiff($currentData, $data),
+                $this->arrayUtils->recursiveDiff($data, $currentData)
+            );
+
+            /**
+             * Re-init config with new data.
+             * This is required to load latest effective configuration value.
+             */
+            if ($this->scopeConfig instanceof Config) {
+                $this->scopeConfig->clean();
+            }
+
             $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($changedData) {
                 $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
 
                 // Invoke saving of new values.
                 $this->invokeSaveAll($changedData);
             });
+
+            $flag->setFlagData($data);
+            $this->flagResource->save($flag);
+        } catch (\Exception $e) {
+            throw new InvalidTransitionException(__('%1', $e->getMessage()), $e);
         } finally {
             $this->scope->setCurrentScope($currentScope);
         }
-
-        $flag->setFlagData($data);
-        $this->flagResource->save($flag);
 
         return ['System config was imported'];
     }

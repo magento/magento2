@@ -131,6 +131,32 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
                 ],
                 'test',
                 '+',
+            ],
+            [
+                [
+                    'default' => ['unsecure' => 'http://magento2.local/'],
+                ],
+                [
+                    'test/default/unsecure' => 'http://magento2.local/',
+                ],
+                'test',
+                '/',
+            ],
+            [
+                [
+                    'unsecure' => 'http://magento2.local/',
+                ],
+                [
+                    'unsecure' => 'http://magento2.local/',
+                ],
+                '',
+                '/',
+            ],
+            [
+                [],
+                [],
+                '',
+                '/',
             ]
         ];
     }
@@ -138,14 +164,14 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests recursive diff between arrays.
      *
-     * @param array $array1
-     * @param array $array2
+     * @param array $originalArray
+     * @param array $newArray
      * @param $expected
      * @dataProvider recursiveDiffDataProvider
      */
-    public function testRecursiveDiff(array $array1, array $array2, $expected)
+    public function testRecursiveDiff(array $originalArray, array $newArray, $expected)
     {
-        $this->assertSame($expected, $this->_arrayUtils->recursiveDiff($array1, $array2));
+        $this->assertSame($expected, $this->_arrayUtils->recursiveDiff($originalArray, $newArray));
     }
 
     /**

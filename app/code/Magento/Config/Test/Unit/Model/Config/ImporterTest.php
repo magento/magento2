@@ -161,6 +161,37 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->model->import($data);
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
+     * @expectedExceptionMessage Some error
+     */
+    public function testImportWithException()
+    {
+        $data = [];
+        $currentData = ['current' => '2'];
+
+        $this->flagResourceMock->expects($this->once())
+            ->method('load')
+            ->with($this->flagMock, Importer::FLAG_CODE, 'flag_code');
+        $this->flagMock->expects($this->once())
+            ->method('getFlagData')
+            ->willReturn($currentData);
+        $this->arrayUtilsMock->expects($this->exactly(2))
+            ->method('recursiveDiff')
+            ->willReturnMap([
+                [$data, $currentData, []],
+                [$currentData, $data, []]
+            ]);
+        $this->scopeMock->expects($this->once())
+            ->method('getCurrentScope')
+            ->willReturn('oldScope');
+        $this->stateMock->expects($this->once())
+            ->method('emulateAreaCode')
+            ->willThrowException(new \Exception('Some error'));
+
+        $this->model->import($data);
+    }
+
     public function testInvokeSaveAll()
     {
         $reflection = new \ReflectionClass($this->model);
