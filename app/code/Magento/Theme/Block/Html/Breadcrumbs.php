@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Html;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\View\Element\Template;
 
 /**
  * Html page breadcrumbs block
@@ -39,6 +41,26 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
     protected $_cacheKeyInfo;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @param Template\Context $context
+     * @param array $data
+     * @param SerializerInterface|null $serializer
+     */
+    public function __construct(
+        Template\Context $context,
+        array $data = [],
+        SerializerInterface $serializer = null
+    ) {
+        parent::__construct($context, $data);
+        $this->serializer =
+            $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(SerializerInterface::class);
+    }
+
+    /**
      * Add crumb
      *
      * @param string $crumbName
@@ -71,8 +93,8 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
     {
         if ($this->_cacheKeyInfo === null) {
             $this->_cacheKeyInfo = parent::getCacheKeyInfo() + [
-                'crumbs' => base64_encode(serialize($this->_crumbs)),
-                'name' => $this->getNameInLayout(),
+                'crumbs' => base64_encode($this->serializer->serialize($this->_crumbs)),
+                'name' => $this->getNameInLayout()
             ];
         }
         return $this->_cacheKeyInfo;
