@@ -57,6 +57,5 @@ class ClickCheckDataStep implements TestStepInterface
     {
         $this->adminImportIndex->getFormPageActions()->clickCheckData();
         $this->assert->processAssert($this->adminImportIndex, $this->import);
-
     }
 }

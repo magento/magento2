@@ -18,6 +18,13 @@ use Magento\Mtf\Util\Generate\File\Generator;
 class File extends DataSource
 {
     /**
+     * Website code mapping.
+     */
+    private $codeMapping =[
+        'base' => 'Main Website[USD]'
+    ];
+
+    /**
      * Fixture data.
      *
      * @var array
@@ -67,6 +74,13 @@ class File extends DataSource
     private $csv;
 
     /**
+     * Placeholders.
+     *
+     * @var array
+     */
+    private $placeholders;
+
+    /**
      * @param ObjectManager $objectManager
      * @param FixtureFactory $fixtureFactory
      * @param Generator $generator
@@ -103,14 +117,13 @@ class File extends DataSource
 
         $this->csvTemplate = include $filename;
 
-        $placeholders = [];
+        $this->placeholders = [];
         if (!isset($this->products)
             && isset($this->value['entities'])
             && is_array($this->value['entities'])
         ) {
             $this->entities = $this->createEntities();
-
-            $placeholders = $this->getPlaceHolders();
+            $this->preparePlaceHolders();
         }
 
         if (isset($this->value['template']) && is_array($this->value['template'])) {
@@ -120,7 +133,7 @@ class File extends DataSource
                     'config' => array_merge(
                         $this->value['template'],
                         [
-                            'placeholders' => $placeholders
+                            'placeholders' => $this->placeholders
                         ]
                     )
                 ]
@@ -169,8 +182,8 @@ class File extends DataSource
     private function createEntities()
     {
         $entities = [];
-        foreach ($this->value['entities'] as $key => $productDataSet) {
-            list($fixtureCode, $dataset) = explode('::', $productDataSet);
+        foreach ($this->value['entities'] as $key => $entityDataSet) {
+            list($fixtureCode, $dataset) = explode('::', $entityDataSet);
 
             /** @var FixtureInterface[] $products */
             $entities[$key] = $this->fixtureFactory->createByCode(trim($fixtureCode), ['dataset' => trim($dataset)]);
@@ -187,12 +200,16 @@ class File extends DataSource
      *
      * @return array
      */
-    private function getPlaceHolders()
+    private function preparePlaceHolders()
     {
         $key = 0;
         foreach ($this->entities as $entity) {
+            $currency = (isset($this->value['template']['websiteCurrency']))
+                ? $this->value['template']['websiteCurrency']
+                : null;
+            $website = $entity->getDataFieldConfig('website_ids')['source']->getWebsites()[0];
             $entityData = $entity->getData();
-            $entityData['code'] = $entity->getDataFieldConfig('website_ids')['source']->getWebsites()[0]->getCode();
+            $entityData['code'] = $website->getCode();
             foreach ($this->csvTemplate['entity_' . $key] as $tierKey => $tier) {
                 $values = implode('', array_values($tier));
                 preg_match_all('/\%(.*)\%/U', $values, $indexes);
@@ -201,13 +218,14 @@ class File extends DataSource
                     if (isset($entityData[$index])) {
                         $placeholders['entity_' . $key][$tierKey]["%{$index}%"] = $entityData[$index];
                     }
+                    $placeholders['entity_' . $key][$tierKey][$entityData['code']] = $website->getName() . $currency;
                 }
-
             }
+
             $key++;
         }
 
-        return $placeholders;
+        $this->placeholders = $placeholders;
     }
 
     /**
@@ -217,17 +235,17 @@ class File extends DataSource
      */
     public function getCsv()
     {
-        return $this->csv;
-    }
-
-    /**
-     * Return csv as array.
-     *
-     * @param $csv
-     * @return void
-     */
-    public function setCsv($csv)
-    {
-        $this->csv = $csv;
+        foreach ($this->placeholders as $placeholderData) {
+            foreach ($placeholderData as $data) {
+                $csvContent = strtr($this->csv, $data);
+            }
+        }
+        $csvContent = strtr($csvContent, $this->codeMapping);
+        return array_map(
+            function ($value) {
+                return explode(',', str_replace('"', '', $value));
+            },
+            str_getcsv($csvContent, "\n")
+        );
     }
 }

@@ -29,7 +29,7 @@ class ClickImportDataStep implements TestStepInterface
     }
 
     /**
-     * Click "Check Data" button.
+     * Click "Import" button.
      *
      * @return void
      */

@@ -52,7 +52,7 @@ class CsvTemplate implements TemplateInterface
         }
 
         $fh = fopen('php://temp', 'rw');
-        $fh = $this->addProductsData($fh);
+        $fh = $this->addEntitiesData($fh);
         rewind($fh);
         $this->csv = stream_get_contents($fh);
         fclose($fh);
@@ -73,13 +73,13 @@ class CsvTemplate implements TemplateInterface
     }
 
     /*
-     * Add product data to stream content.
+     * Replace placeholders in csv content.
      */
     /**
      * @param resource $stream
      * @return resource
      */
-    private function addProductsData($stream)
+    private function addEntitiesData($stream)
     {
         $filename = MTF_TESTS_PATH . $this->config['filename'] . '.php';
         $entitiesData = include $filename;
@@ -102,7 +102,6 @@ class CsvTemplate implements TemplateInterface
                     $entitiesData[$entityKey][$dataKey]
                 );
                 fputcsv($stream, $row);
-
             }
         }
         return $stream;

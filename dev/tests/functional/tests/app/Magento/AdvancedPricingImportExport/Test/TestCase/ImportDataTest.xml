@@ -89,6 +89,7 @@
                     <item name="template" xsi:type="array">
                         <item name="filename" xsi:type="string">Magento/AdvancedPricingImportExport/Test/_files/template/pricing/advanced_price_variation_4</item>
                         <item name="count" xsi:type="number">2</item>
+                        <item name="websiteCurrency" xsi:type="string">[EUR]</item>
                     </item>
                 </item>
             </data>

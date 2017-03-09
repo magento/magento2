@@ -68,7 +68,7 @@ class AssertImportAdvancedPricing extends AbstractConstraint
         $this->fixtureFactory = $fixtureFactory;
         $this->import = $import;
 
-        $resultArrays = $this->preparePrices();
+        $resultArrays = $this->getPreparePrices();
 
         \PHPUnit_Framework_Assert::assertEquals(
             $resultArrays['pageData'],
@@ -82,11 +82,11 @@ class AssertImportAdvancedPricing extends AbstractConstraint
      *
      * @return array
      */
-    public function preparePrices()
+    private function getPreparePrices()
     {
         $products = $this->import->getDataFieldConfig('import_file')['source']->getEntities();
 
-        // Prepare tier prices data from backend.
+        // Prepare tier prices data from page form.
         $resultProductArray = [];
         foreach ($products as $product) {
             $this->catalogProductEdit->open(['id' => $product->getId()]);
@@ -114,19 +114,13 @@ class AssertImportAdvancedPricing extends AbstractConstraint
     }
 
     /**
-     * Prepare assert data.
+     * Prepare array from csv file.
      *
      * @return array
      */
     private function getResultCsv()
     {
-        $rowStreamContent = $this->import->getDataFieldConfig('import_file')['source']->getCsv();
-        $csvData = array_map(
-            function ($value) {
-                return explode(',', str_replace('"', '', $value));
-            },
-            str_getcsv($rowStreamContent, "\n")
-        );
+        $csvData = $this->import->getDataFieldConfig('import_file')['source']->getCsv();
 
         $csvKeys = [];
         foreach (array_shift($csvData) as $csvKey) {

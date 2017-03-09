@@ -108,23 +108,5 @@ class CreateCustomStoreStep implements TestStepInterface
             );
             $configFixture->persist();
         }
-        $this->prepareCsv($products);
-    }
-
-    /**
-     * Return refactored csv data with custom store.
-     *
-     * @param array $products
-     * @return void
-     */
-    public function prepareCsv(array $products)
-    {
-        foreach ($products as $product) {
-            $website = $product->getDataFieldConfig('website_ids')['source']->getWebsites()[0];
-            $this->codeMapping[$website->getCode()] = $website->getName() . "[{$this->currency}]";
-        }
-
-        $csv = $this->import->getDataFieldConfig('import_file')['source']->getCsv();
-        $this->import->getDataFieldConfig('import_file')['source']->setCsv(strtr($csv, $this->codeMapping));
     }
 }

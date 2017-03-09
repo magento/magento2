@@ -16,7 +16,7 @@ use Magento\ImportExport\Test\Fixture\ImportData;
 class AssertImportAdvancedPricingCheckData extends AbstractConstraint
 {
     /**
-     * Success validation result message
+     * Success validation result message.
      */
     const RESULT_MESSAGE = 'Checked rows: %s, checked entities: %s, invalid rows: 0, total errors: 0';
 
@@ -25,11 +25,13 @@ class AssertImportAdvancedPricingCheckData extends AbstractConstraint
      *
      * @param AdminImportIndex $adminImportIndex
      * @param ImportData $import
+     * @return void
      */
     public function processAssert(AdminImportIndex $adminImportIndex, ImportData $import)
     {
         $rowsCount = $import->getDataFieldConfig('import_file')['source']->getValue()['template']['count'];
         $entitiesCount = count($import->getDataFieldConfig('import_file')['source']->getEntities());
+        $entitiesCount = 0;
 
         $message = $adminImportIndex->getMessagesBlock()->getNoticeMessage();
         \PHPUnit_Framework_Assert::assertEquals(
