@@ -415,9 +415,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $usedProductAttributes = [];
             $usedAttributes = [];
             foreach ($this->getConfigurableAttributes($product) as $attribute) {
-                if (is_a($attribute->getProductAttribute(),
-                    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-                ) {
+                $issetProductAttribute = is_a(
+                    $attribute->getProductAttribute(),
+                    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
+                );
+                if ($issetProductAttribute) {
                     $id = $attribute->getProductAttribute()->getId();
                     $usedProductAttributes[$id] = $attribute->getProductAttribute();
                     $usedAttributes[$id] = $attribute;
@@ -680,7 +682,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         )->setProductFilter(
             $product
         );
-        if (!is_null($this->getStoreFilter($product))) {
+        if ($this->getStoreFilter($product)) {
             $collection->addStoreFilter($this->getStoreFilter($product));
         }
 
