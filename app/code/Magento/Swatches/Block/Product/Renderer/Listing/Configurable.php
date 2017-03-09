@@ -22,6 +22,22 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
     }
 
     /**
+     * Produce and return block's html output.
+     *
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        $output = '';
+        if ($this->isProductHasSwatchAttribute) {
+            $output = parent::_toHtml();
+        }
+
+        return $output;
+    }
+
+    /**
+     * @deprecated
      * @return string
      */
     protected function getHtmlOutput()
