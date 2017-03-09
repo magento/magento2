@@ -462,6 +462,27 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * Retrieves group code.
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->getData('code');
+    }
+
+    /**
+     * Set group code.
+     *
+     * @param string $code
+     * @return self
+     */
+    public function setCode($code)
+    {
+        return $this->setData('code', $code);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getExtensionAttributes()
@@ -476,16 +497,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Store\Api\Data\GroupExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * Retrieve scope code
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return '';
     }
 
     /**
