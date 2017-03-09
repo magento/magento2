@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
             <tr>
                 <td colspan="<?php echo count($block->getColumns())+$_colspan; ?>" class="col-actions-add">
                     <button id="addToEndBtn<?php /* @escapeNotVerified */ echo $_htmlId; ?>" class="action-add" title="<?php /* @escapeNotVerified */ echo __('Add'); ?>" type="button">
-                        <span><?php /* @escapeNotVerified */ echo $block->getAddButtonLabel(); ?><?php /* @escapeNotVerified */ echo __('Add'); ?></span>
+                        <span><?php /* @escapeNotVerified */ echo $block->getAddButtonLabel(); ?></span>
                     </button>
                 </td>
             </tr>

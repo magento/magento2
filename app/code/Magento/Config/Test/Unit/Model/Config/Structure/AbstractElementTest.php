@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AbstractElementTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,8 +26,15 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
      */
     protected $moduleManagerMock;
 
+    /**
+     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $elementVisibilityMock;
+
     protected function setUp()
     {
+        $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
+            ->getMockForAbstractClass();
         $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $this->moduleManagerMock = $this->getMock(
             \Magento\Framework\Module\Manager::class,
@@ -41,6 +50,14 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->storeManagerMock,
                 'moduleManager' => $this->moduleManagerMock,
             ]
+        );
+
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->_model,
+            'elementVisibility',
+            $this->elementVisibilityMock,
+            \Magento\Config\Model\Config\Structure\AbstractElement::class
         );
     }
 
@@ -190,7 +207,14 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
             'default'
         );
         $this->assertFalse($this->_model->isVisible());
+    }
 
+    public function testIsVisibleVisibilityIsHiddenTrue()
+    {
+        $this->elementVisibilityMock->expects($this->once())
+            ->method('isHidden')
+            ->willReturn(true);
+        $this->assertFalse($this->_model->isVisible());
     }
 
     public function testGetClass()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
@@ -81,7 +81,7 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 
             $content .= $rate->toString($template) . "\n";
         }
-        return $this->fileFactory->create(\tax_rates.csv::class, $content, DirectoryList::VAR_DIR);
+        return $this->fileFactory->create('tax_rates.csv', $content, DirectoryList::VAR_DIR);
     }
 
     /**

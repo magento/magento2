@@ -1,12 +1,18 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Express;
 
+use Magento\Paypal\Model\Api\Nvp;
+use Magento\Paypal\Model\Api\Type\Factory;
+use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\Express\Checkout;
+use Magento\Paypal\Model\Info;
 use Magento\Quote\Model\Quote;
 use Magento\Checkout\Model\Type\Onepage;
+use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -32,9 +38,63 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Verify that api has set customer email.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/quote_express.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testCheckoutStartWithBillingAddress()
+    {
+        $quote = $this->_getFixtureQuote();
+        $paypalConfig = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $apiTypeFactory = $this->getMockBuilder(Factory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $paypalInfo = $this->getMockBuilder(Info::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $checkoutModel = $this->_objectManager->create(
+            Checkout::class,
+            [
+                'params' => ['quote' => $quote, 'config' => $paypalConfig],
+                'apiTypeFactory' => $apiTypeFactory,
+                'paypalInfo' => $paypalInfo
+            ]
+        );
+
+        $api = $this->getMockBuilder(Nvp::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['callSetExpressCheckout'])
+            ->getMock();
+
+        $api->expects($this->any())
+            ->method('callSetExpressCheckout')
+            ->will($this->returnValue(null));
+
+        $apiTypeFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($api));
+
+        $checkoutModel->start(
+            'return',
+            'cancel',
+            false
+        );
+
+        $this->assertEquals('test@com.com', $api->getBillingAddress()->getEmail());
+    }
+
+    /**
      * Verify that an order placed with an existing customer can re-use the customer addresses.
      *
-     * @magentoDataFixture Magento/Paypal/_files/quote_payment_express_with_customer.php
+     * @magentoDataFixture Magento/Paypal/_files/quote_express_with_customer.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
@@ -74,7 +134,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify that after placing the order, addresses are associated with the order and the quote is a guest quote.
      *
-     * @magentoDataFixture Magento/Paypal/_files/quote_payment_express.php
+     * @magentoDataFixture Magento/Paypal/_files/quote_express.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
@@ -111,10 +171,12 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     protected function _getCheckout(Quote $quote)
     {
         return $this->_objectManager->create(
-            \Magento\Paypal\Model\Express\Checkout::class,
+            Checkout::class,
             [
                 'params' => [
-                    'config' => $this->getMock(\Magento\Paypal\Model\Config::class, [], [], '', false),
+                    'config' => $this->getMockBuilder(Config::class)
+                        ->disableOriginalConstructor()
+                        ->getMock(),
                     'quote' => $quote,
                 ]
             ]
@@ -131,27 +193,41 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     public function testReturnFromPaypal()
     {
         $quote = $this->_getFixtureQuote();
-        $paypalConfigMock = $this->getMock(\Magento\Paypal\Model\Config::class, [], [], '', false);
-        $apiTypeFactory = $this->getMock(\Magento\Paypal\Model\Api\Type\Factory::class, [], [], '', false);
-        $paypalInfo = $this->getMock(\Magento\Paypal\Model\Info::class, [], [], '', false);
+        $paypalConfig = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $apiTypeFactory = $this->getMockBuilder(Factory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $paypalInfo = $this->getMockBuilder(Info::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['importToPayment'])
+            ->getMock();
+
         $checkoutModel = $this->_objectManager->create(
-            \Magento\Paypal\Model\Express\Checkout::class,
+            Checkout::class,
             [
-                'params' => ['quote' => $quote, 'config' => $paypalConfigMock],
+                'params' => ['quote' => $quote, 'config' => $paypalConfig],
                 'apiTypeFactory' => $apiTypeFactory,
                 'paypalInfo' => $paypalInfo
             ]
         );
 
-        $api = $this->getMock(
-            \Magento\Paypal\Model\Api\Nvp::class,
-            ['call', 'getExportedShippingAddress', 'getExportedBillingAddress'],
-            [],
-            '',
-            false
-        );
-        $api->expects($this->any())->method('call')->will($this->returnValue([]));
-        $apiTypeFactory->expects($this->any())->method('create')->will($this->returnValue($api));
+        $api = $this->getMockBuilder(Nvp::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['call', 'getExportedShippingAddress', 'getExportedBillingAddress'])
+            ->getMock();
+
+        $api->expects($this->any())
+            ->method('call')
+            ->will($this->returnValue([]));
+
+        $apiTypeFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($api));
 
         $exportedBillingAddress = $this->_getExportedAddressFixture($quote->getBillingAddress()->getData());
         $api->expects($this->any())
@@ -166,11 +242,9 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $paypalInfo->expects($this->once())->method('importToPayment')->with($api, $quote->getPayment());
 
         $quote->getPayment()->setAdditionalInformation(Checkout::PAYMENT_INFO_BUTTON, 1);
-
         $checkoutModel->returnFromPaypal('token');
 
         $billingAddress = $quote->getBillingAddress();
-
         $this->assertContains('exported', $billingAddress->getFirstname());
         $this->assertEquals('note', $billingAddress->getCustomerNote());
 
@@ -192,7 +266,74 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Prepare fixture for exported address
+     * Verify that guest customer quota has set type of checkout.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/quote_payment_express.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testGuestReturnFromPaypal()
+    {
+        $quote = $this->_getFixtureQuote();
+        $paypalConfig = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $apiTypeFactory = $this->getMockBuilder(Factory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $paypalInfo = $this->getMockBuilder(Info::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['importToPayment'])
+            ->getMock();
+
+        $checkoutModel = $this->_objectManager->create(
+            Checkout::class,
+            [
+                'params' => ['quote' => $quote, 'config' => $paypalConfig],
+                'apiTypeFactory' => $apiTypeFactory,
+                'paypalInfo' => $paypalInfo
+            ]
+        );
+
+        $api = $this->getMockBuilder(Nvp::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['call', 'getExportedShippingAddress', 'getExportedBillingAddress'])
+            ->getMock();
+
+        $api->expects($this->any())
+            ->method('call')
+            ->will($this->returnValue([]));
+
+        $apiTypeFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($api));
+
+        $exportedBillingAddress = $this->_getExportedAddressFixture($quote->getBillingAddress()->getData());
+        $api->expects($this->any())
+            ->method('getExportedBillingAddress')
+            ->will($this->returnValue($exportedBillingAddress));
+
+        $exportedShippingAddress = $this->_getExportedAddressFixture($quote->getShippingAddress()->getData());
+        $api->expects($this->any())
+            ->method('getExportedShippingAddress')
+            ->will($this->returnValue($exportedShippingAddress));
+
+        $paypalInfo->expects($this->once())
+            ->method('importToPayment')
+            ->with($api, $quote->getPayment());
+
+        $quote->getPayment()->setAdditionalInformation(Checkout::PAYMENT_INFO_BUTTON, 1);
+
+        $checkoutModel->returnFromPaypal('token');
+
+        $this->assertEquals(Onepage::METHOD_GUEST, $quote->getCheckoutMethod());
+    }
+
+    /**
+     * Prepare fixture for exported address.
      *
      * @param array $addressData
      * @return \Magento\Framework\DataObject
@@ -206,19 +347,23 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
                 $result[$key] = 'exported' . $addressData[$key];
             }
         }
+
         $fixture = new \Magento\Framework\DataObject($result);
         $fixture->setExportedKeys($addressDataKeys);
         $fixture->setData('note', 'note');
+
         return $fixture;
     }
 
     /**
+     * Gets quote.
+     *
      * @return Quote
      */
     protected function _getFixtureQuote()
     {
-        /** @var \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection */
-        $quoteCollection = $this->_objectManager->create(\Magento\Quote\Model\ResourceModel\Quote\Collection::class);
+        /** @var Collection $quoteCollection */
+        $quoteCollection = $this->_objectManager->create(Collection::class);
 
         return $quoteCollection->getLastItem();
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -1289,7 +1289,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function isCaptureFinal($amountToCapture)
     {
-        $total = $this->getOrder()->getTotalDue();
+        $total = $this->getOrder()->getBaseTotalDue();
         return $this->formatAmount($total, true) == $this->formatAmount($amountToCapture, true);
     }
 

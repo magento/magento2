@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
@@ -99,7 +99,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * Find entities by criteria
      *
      * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
-     * @return OrderInterface[]
+     * @return \Magento\Sales\Api\Data\OrderSearchResultInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {

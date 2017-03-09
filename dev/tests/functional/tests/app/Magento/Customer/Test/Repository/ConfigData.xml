@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -54,6 +54,15 @@
 
         <dataset name="enable_VAT_on_frontend_rollback">
             <field name="customer/create_account/auto_group_assign" xsi:type="array">
+                <item name="scope" xsi:type="string">customer</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="string">0</item>
+            </field>
+        </dataset>
+
+        <dataset name="password_autocomplete_off">
+            <field name="customer/password/autocomplete_on_storefront" xsi:type="array">
                 <item name="scope" xsi:type="string">customer</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">No</item>

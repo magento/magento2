@@ -1,12 +1,13 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="Dashboard" area="Adminhtml" mca="admin/dashboard" module="Magento_Backend">
+        <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator="#messages" strategy="css selector" />
         <block name="adminPanelHeader" class="Magento\Backend\Test\Block\Page\Header" locator=".page-header" strategy="css selector" />
         <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper" strategy="css selector" />
         <block name="mainBlock" class="Magento\Backend\Test\Block\Page\Main" locator=".dashboard-main" strategy="css selector" />

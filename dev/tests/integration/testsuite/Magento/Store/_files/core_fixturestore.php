@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,3 +25,5 @@ if (!$store->load($storeCode)->getId()) {
     /* Refresh stores memory cache */
     Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
 }
+
+//if test using this fixture relies on full text functionality it is required to explicitly perform re-indexation

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -49,6 +49,19 @@
             <data name="welcomeText" xsi:type="string">Den gesamten Shop durchsuchen</data>
             <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreInGrid" />
+        </variation>
+        <variation name="CreateStoreEntityTestVariation5" summary="Check the absence of delete button" ticketId="MAGETWO-17475">
+            <data name="store/dataset" xsi:type="string">custom_store</data>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreSuccessSaveMessage" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreForm" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreNoDeleteButton" />
+        </variation>
+        <variation name="CreateDisabledStoreView" summary="Create disabled store view" ticketId="MAGETWO-17475">
+            <data name="store/data/group_id/dataset" xsi:type="string">custom_new_group</data>
+            <data name="store/data/name" xsi:type="string">store_name_%isolation%</data>
+            <data name="store/data/code" xsi:type="string">storecode_%isolation%</data>
+            <data name="store/data/is_active" xsi:type="string">Disabled</data>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreDisabledErrorSaveMessage" />
         </variation>
     </testCase>
 </config>

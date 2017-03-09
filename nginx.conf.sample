@@ -108,7 +108,7 @@ location /static/ {
         expires +1y;
 
         if (!-f $request_filename) {
-            rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+            rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
         }
     }
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
@@ -117,11 +117,11 @@ location /static/ {
         expires    off;
 
         if (!-f $request_filename) {
-           rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+           rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
         }
     }
     if (!-f $request_filename) {
-        rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
+        rewrite ^/static/?(.*)$ /static.php?resource=$1 last;
     }
     add_header X-Frame-Options "SAMEORIGIN";
 }

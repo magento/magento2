@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -68,16 +68,32 @@ class CategoryIds extends MultisuggestElement
     /**
      * Set category value.
      *
-     * @param array|string $value
+     * @param array|string $values
      * @return void
      */
-    public function setValue($value)
+    public function setValue($values)
     {
         // Align Category ids select element to the center of the browser for created categories
         if ($this->browser->find($this->pageFooter)->isVisible()) {
             $this->browser->find($this->pageFooter)->hover();
             $this->browser->find($this->advancedInventoryButton)->hover();
         }
-        parent::setValue($value);
+        $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
+
+        $this->clear();
+        foreach ((array)$values as $value) {
+            if (!$this->isChoice($value)) {
+                if ($value == '') {
+                    continue;
+                }
+                $this->keys([$value]);
+                $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
+                $searchedItem->click();
+                $closeButton = $this->find($this->closeButton);
+                if ($closeButton->isVisible()) {
+                    $closeButton->click();
+                }
+            }
+        }
     }
 }

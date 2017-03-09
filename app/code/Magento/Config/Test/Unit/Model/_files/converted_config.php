@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -29,6 +29,7 @@ return [
                             'children' => [
                                 'field_2' => [
                                     'id' => 'field_2',
+                                    'config_path' => 'section/group/field2',
                                     'translate' => 'label',
                                     'showInWebsite' => '1',
                                     'type' => 'text',
@@ -133,6 +134,7 @@ return [
                                 ],
                                 'field_4' => [
                                     'id' => 'field_4',
+                                    'config_path' => 'section/group/field4',
                                     'translate' => 'label',
                                     'showInWebsite' => '1',
                                     'type' => 'text',

@@ -36,7 +36,8 @@
         "serve-static": "^1.7.1",
         "strip-json-comments": "^1.0.2",
         "time-grunt": "^1.0.0",
-        "underscore": "^1.7.0"
+        "underscore": "^1.7.0",
+        "squirejs": "0.2.1"
     },
     "engines": {
         "node": ">=0.10.0"

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -107,7 +107,36 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
             throw new \Exception("Product creation by webapi handler was not successful! Response: {$encodedResponse}");
         }
 
+        $this->updateProduct($fixture);
         return $this->parseResponse($response);
+    }
+
+    /**
+     * Update product info per website.
+     *
+     * @param FixtureInterface $fixture
+     * @return void
+     * @throws \Exception
+     */
+    private function updateProduct(FixtureInterface $fixture)
+    {
+        if (isset($fixture->getData()['website_data'])) {
+            $websiteData = $fixture->getData()['website_data'];
+            foreach ($fixture->getDataFieldConfig('website_ids')['source']->getStores() as $key => $store) {
+                $url = $_ENV['app_frontend_url'] . 'rest/' . $store->getCode() . '/V1/products/' . $fixture->getSku();
+                $this->webapiTransport->write($url, ['product' => $websiteData[$key]], CurlInterface::PUT);
+                $encodedResponse = $this->webapiTransport->read();
+                $response = json_decode($encodedResponse, true);
+                $this->webapiTransport->close();
+
+                if (!isset($response['id'])) {
+                    $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
+                    throw new \Exception(
+                        "Product update by webapi handler was not successful! Response: {$encodedResponse}"
+                    );
+                }
+            }
+        }
     }
 
     /**

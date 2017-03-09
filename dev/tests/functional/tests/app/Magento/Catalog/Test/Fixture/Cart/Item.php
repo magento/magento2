@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,6 @@ namespace Magento\Catalog\Test\Fixture\Cart;
 
 use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Data for verify cart item block on checkout page.
@@ -21,15 +20,31 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 class Item extends DataSource
 {
     /**
-     * @constructor
+     * Product fixture.
+     *
+     * @var FixtureInterface
+     */
+    protected $product;
+
+    /**
      * @param FixtureInterface $product
      */
     public function __construct(FixtureInterface $product)
     {
-        /** @var CatalogProductSimple $product */
-        $checkoutData = $product->getCheckoutData();
+        $this->product = $product;
+    }
+
+    /**
+     * Return prepared dataset.
+     *
+     * @param null|string $key
+     * @return array
+     */
+    public function getData($key = null)
+    {
+        $checkoutData = $this->product->getCheckoutData();
         $cartItem = isset($checkoutData['cartItem']) ? $checkoutData['cartItem'] : [];
-        $customOptions = $product->hasData('custom_options') ? $product->getCustomOptions() : [];
+        $customOptions = $this->product->hasData('custom_options') ? $this->product->getCustomOptions() : [];
         $checkoutCustomOptions = isset($checkoutData['options']['custom_options'])
             ? $checkoutData['options']['custom_options']
             : [];
@@ -52,9 +67,12 @@ class Item extends DataSource
             ? $cartItem['options'] + $checkoutCustomOptions
             : $checkoutCustomOptions;
         $cartItem['qty'] = isset($checkoutData['qty'])
-                ? $checkoutData['qty']
-                : 1;
-
+            ? $checkoutData['qty']
+            : 1;
+        $cartItem['sku'] = $this->product->getSku();
+        $cartItem['name'] = $this->product->getName();
         $this->data = $cartItem;
+
+        return parent::getData($key);
     }
 }

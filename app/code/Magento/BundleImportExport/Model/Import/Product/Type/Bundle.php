@@ -3,13 +3,12 @@
 /**
  * Import entity of bundle product type
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
 use \Magento\Bundle\Model\Product\Price as BundlePrice;
-use \Magento\BundleImportExport\Model\Export\RowCustomizer;
 use \Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
@@ -54,20 +53,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * Selection price type percent.
      */
     const SELECTION_PRICE_TYPE_PERCENT = 1;
-
-    /**
-     * Instance of database adapter.
-     *
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected $connection;
-
-    /**
-     * Instance of application resource.
-     *
-     * @var \Magento\Framework\App\ResourceConnection
-     */
-    protected $_resource;
 
     /**
      * Array of cached options.
@@ -143,23 +128,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         'checkbox'  => 'checkbox',
         'multiselect' => 'multi',
     ];
-
-    /**
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param array $params
-     */
-    public function __construct(
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
-        \Magento\Framework\App\ResourceConnection $resource,
-        array $params
-    ) {
-        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
-        $this->_resource = $resource;
-        $this->connection = $resource->getConnection(\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION);
-    }
 
     /**
      * Parse selections.

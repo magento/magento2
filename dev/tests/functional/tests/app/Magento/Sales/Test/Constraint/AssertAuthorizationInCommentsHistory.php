@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -16,12 +16,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertAuthorizationInCommentsHistory extends AbstractConstraint
 {
     /**
-     * Message about authorized amount in order.
+     * Pattern of message about authorized amount in order.
      */
-    const AUTHORIZED_AMOUNT = 'Authorized amount of $';
+    const AUTHORIZED_AMOUNT_PATTERN = '/(IPN "Pending" )*Authorized amount of \w*\W{1,2}%s. Transaction ID: "[\w\-]*"/';
 
     /**
-     * Assert that comment about authorized amount exist in Comments History section on order page in Admin.
+     * Assert that comment about authorized amount exists in Comments History section on order page in Admin.
      *
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
@@ -38,11 +38,13 @@ class AssertAuthorizationInCommentsHistory extends AbstractConstraint
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
 
-        $actualAuthorizedAmount = $salesOrderView->getOrderHistoryBlock()->getAuthorizedAmount();
+        /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info $infoTab */
+        $infoTab = $salesOrderView->getOrderForm()->openTab('info')->getTab('info');
+        $latestComment = $infoTab->getCommentsHistoryBlock()->getLatestComment();
 
-        \PHPUnit_Framework_Assert::assertContains(
-            self::AUTHORIZED_AMOUNT . $prices['grandTotal'],
-            $actualAuthorizedAmount,
+        \PHPUnit_Framework_Assert::assertRegExp(
+            sprintf(self::AUTHORIZED_AMOUNT_PATTERN, $prices['grandTotal']),
+            $latestComment['comment'],
             'Incorrect authorized amount value for the order #' . $orderId
         );
     }

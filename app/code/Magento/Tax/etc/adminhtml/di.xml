@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -10,6 +10,15 @@
         <arguments>
             <argument name="messages" xsi:type="array">
                 <item name="tax" xsi:type="string">Magento\Tax\Model\System\Message\Notifications</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Tax\Model\System\Message\Notifications">
+        <arguments>
+            <argument name="notifications" xsi:type="array">
+                <item name="roundingErrors" xsi:type="object">Magento\Tax\Model\System\Message\Notification\RoundingErrors</item>
+                <item name="discountErrors" xsi:type="object">Magento\Tax\Model\System\Message\Notification\DiscountErrors</item>
+                <item name="applyDiscountOnPrices" xsi:type="object">Magento\Tax\Model\System\Message\Notification\ApplyDiscountOnPrices</item>
             </argument>
         </arguments>
     </type>

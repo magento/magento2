@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code;
@@ -112,7 +112,7 @@ class Generator
             $this->tryToLoadSourceClass($className, $generator);
             if (!($file = $generator->generate())) {
                 $errors = $generator->getErrors();
-                throw new \RuntimeException(implode(' ', $errors));
+                throw new \RuntimeException(implode(' ', $errors) . ' in [' . $className . ']');
             }
             if (!$this->definedClasses->isClassLoadableFromMemory($className)) {
                 $this->_ioObject->includeFile($file);
