@@ -12,9 +12,11 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
 
 /**
- * Builds instance \Magento\Framework\App\Config\Value with defined properties.
+ * Creates a prepared instance of Value.
+ *
+ * @see Value
  */
-class ValueBuilder
+class PreparedValueFactory
 {
     /**
      * The deployment configuration reader.
@@ -55,15 +57,15 @@ class ValueBuilder
 
     /**
      * Returns instance Value with defined properties.
-     * @see Value
      *
      * @param string $path The configuration path in format group/section/field_name
      * @param string $value The configuration value
      * @param string $scope The configuration scope (default, website, or store)
      * @param string $scopeCode The scope code
      * @return Value
+     * @see Value
      */
-    public function build($path, $value, $scope, $scopeCode)
+    public function create($path, $value, $scope, $scopeCode)
     {
         /** @var Structure $structure */
         $structure = $this->structureFactory->create();

@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Model\Config;
 
-use Magento\Config\Model\ValueBuilder;
+use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -48,9 +48,9 @@ class Importer implements ImporterInterface
     /**
      * Builder which creates value object according to their backend models.
      *
-     * @var ValueBuilder
+     * @var PreparedValueFactory
      */
-    private $valueBuilder;
+    private $valueFactory;
 
     /**
      * An array utils.
@@ -84,7 +84,7 @@ class Importer implements ImporterInterface
      * @param FlagFactory $flagFactory The flag factory
      * @param FlagResource $flagResource The flag resource
      * @param ArrayUtils $arrayUtils An array utils
-     * @param ValueBuilder $valueBuilder Builder which creates value object according to their backend models
+     * @param PreparedValueFactory $valueBuilder Builder which creates value object according to their backend models
      * @param ScopeConfigInterface $scopeConfig The application config storage.
      * @param State $state The application scope to run
      * @param ScopeInterface $scope The application scope
@@ -93,7 +93,7 @@ class Importer implements ImporterInterface
         FlagFactory $flagFactory,
         FlagResource $flagResource,
         ArrayUtils $arrayUtils,
-        ValueBuilder $valueBuilder,
+        PreparedValueFactory $valueBuilder,
         ScopeConfigInterface $scopeConfig,
         State $state,
         ScopeInterface $scope
@@ -101,7 +101,7 @@ class Importer implements ImporterInterface
         $this->flagFactory = $flagFactory;
         $this->flagResource = $flagResource;
         $this->arrayUtils = $arrayUtils;
-        $this->valueBuilder = $valueBuilder;
+        $this->valueFactory = $valueBuilder;
         $this->scopeConfig = $scopeConfig;
         $this->state = $state;
         $this->scope = $scope;
@@ -195,7 +195,7 @@ class Importer implements ImporterInterface
     private function invokeSave($path, $scope, $scopeCode = null)
     {
         $value = $this->scopeConfig->getValue($path, $scope, $scopeCode);
-        $backendModel = $this->valueBuilder->build($path, $value, $scope, $scopeCode);
+        $backendModel = $this->valueFactory->create($path, $value, $scope, $scopeCode);
 
         $backendModel->setData('force_changed_value', true);
         $backendModel->beforeSave();

@@ -6,7 +6,7 @@
 namespace Magento\Config\Test\Unit\Model\Config;
 
 use Magento\Config\Model\Config\Importer;
-use Magento\Config\Model\ValueBuilder;
+use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
@@ -52,9 +52,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     private $arrayUtilsMock;
 
     /**
-     * @var ValueBuilder|Mock
+     * @var PreparedValueFactory|Mock
      */
-    private $valueBuilderMock;
+    private $valueFactoryMock;
 
     /**
      * @var ScopeConfigInterface|Mock
@@ -93,7 +93,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->arrayUtilsMock = $this->getMockBuilder(ArrayUtils::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->valueBuilderMock = $this->getMockBuilder(ValueBuilder::class)
+        $this->valueFactoryMock = $this->getMockBuilder(PreparedValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->valueMock = $this->getMockBuilder(Value::class)
@@ -115,7 +115,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             $this->flagFactoryMock,
             $this->flagResourceMock,
             $this->arrayUtilsMock,
-            $this->valueBuilderMock,
+            $this->valueFactoryMock,
             $this->scopeConfigMock,
             $this->stateMock,
             $this->scopeMock
@@ -234,8 +234,8 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
                 ['web/unsecure/base_url', 'default', null, 'http://magento2.local/'],
                 ['web/unsecure/base_url', 'websites', 'base', 'http://magento23.local/']
             ]);
-        $this->valueBuilderMock->expects($this->exactly(2))
-            ->method('build')
+        $this->valueFactoryMock->expects($this->exactly(2))
+            ->method('create')
             ->willReturnMap([
                 ['web/unsecure/base_url', 'http://magento2.local/', 'default', null, $value1],
                 ['web/unsecure/base_url', 'http://magento23.local/', 'websites', 'base', $value2]

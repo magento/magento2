@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Model;
 
-use Magento\Config\Model\ValueBuilder;
+use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Config\Model\Config\StructureFactory;
@@ -16,7 +16,7 @@ use Magento\Config\Model\Config\Structure\Element\Field;
 /**
  * @inheritdoc
  */
-class ValueBuilderTest extends \PHPUnit_Framework_TestCase
+class PreparedValueFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
@@ -49,7 +49,7 @@ class ValueBuilderTest extends \PHPUnit_Framework_TestCase
     private $fieldMock;
 
     /**
-     * @var ValueBuilder
+     * @var PreparedValueFactory
      */
     private $valueBuilder;
 
@@ -80,7 +80,7 @@ class ValueBuilderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setPath', 'setScope', 'setScopeId', 'setValue'])
             ->getMock();
 
-        $this->valueBuilder = new ValueBuilder(
+        $this->valueBuilder = new PreparedValueFactory(
             $this->deploymentConfigMock,
             $this->structureFactoryMock,
             $this->valueFactoryMock
@@ -92,9 +92,9 @@ class ValueBuilderTest extends \PHPUnit_Framework_TestCase
      * @param array $structureGetElement
      * @param array $field
      * @param array $valueFactory
-     * @dataProvider buildDataProvider
+     * @dataProvider createDataProvider
      */
-    public function testBuild(
+    public function testCreate(
         array $deploymentConfigIsAvailable,
         array $structureGetElement,
         array $field,
@@ -145,11 +145,11 @@ class ValueBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             Value::class,
-            $this->valueBuilder->build($path, $value, $scope, $scopeCode)
+            $this->valueBuilder->create($path, $value, $scope, $scopeCode)
         );
     }
 
-    public function buildDataProvider()
+    public function createDataProvider()
     {
         return [
             [
