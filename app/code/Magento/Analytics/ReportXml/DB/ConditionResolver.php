@@ -7,7 +7,7 @@
 namespace Magento\Analytics\ReportXml\DB;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Sql\MagentoDbExpression;
+use Magento\Framework\DB\Sql\Expression;
 
 /**
  * Class ConditionResolver
@@ -88,7 +88,7 @@ class ConditionResolver
                 $value = $this->getConnection()->quote($argument);
                 break;
             case "variable":
-                $value = new MagentoDbExpression($argument);
+                $value = new Expression($argument);
                 break;
             case "identifier":
                 $value = $this->getConnection()->quoteIdentifier(
@@ -112,7 +112,7 @@ class ConditionResolver
     {
         $columns = $selectBuilder->getColumns();
         if (isset($columns[$condition['attribute']])
-            && $columns[$condition['attribute']] instanceof MagentoDbExpression
+            && $columns[$condition['attribute']] instanceof Expression
         ) {
             $expression = $columns[$condition['attribute']];
         } else {

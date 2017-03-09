@@ -8,9 +8,9 @@ namespace Magento\Framework\DB\Sql;
 /**
  * Class Column Value Expression
  *
- * Just a wrapper over MagentoDbExpression for implementing the specific type of expression.
+ * Just a wrapper over Expression for implementing the specific type of expression.
  * @api
  */
-class ColumnValueExpression extends MagentoDbExpression
+class ColumnValueExpression extends Expression
 {
 }

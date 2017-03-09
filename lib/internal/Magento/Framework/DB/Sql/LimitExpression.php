@@ -8,7 +8,7 @@ namespace Magento\Framework\DB\Sql;
 /**
  * Class LimitExpression
  */
-class LimitExpression extends MagentoDbExpression
+class LimitExpression extends Expression
 {
     /**
      * @var string

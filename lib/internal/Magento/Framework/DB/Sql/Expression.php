@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\DB\Sql;
 
+use Zend\Stdlib\JsonSerializable;
+
 /**
  * Class is wrapper over Zend_Db_Expr for implement JsonSerializable interface.
  */
-class MagentoDbExpression extends \Zend_Db_Expr implements MagentoDbExpressionInterface
+class Expression extends \Zend_Db_Expr implements ExpressionInterface, JsonSerializable
 {
     /**
      * @inheritdoc

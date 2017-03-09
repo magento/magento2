@@ -11,7 +11,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 /**
  * Class Concat
  */
-class ConcatExpression extends MagentoDbExpression
+class ConcatExpression extends Expression
 {
     /**
      * @var AdapterInterface
