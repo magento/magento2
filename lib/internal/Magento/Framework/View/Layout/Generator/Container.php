@@ -24,11 +24,13 @@ class Container implements Layout\GeneratorInterface
      * @var array
      */
     protected $allowedTags = [
+        'aside',
         'dd',
         'div',
         'dl',
         'fieldset',
         'main',
+        'nav',
         'header',
         'footer',
         'ol',
@@ -37,7 +39,6 @@ class Container implements Layout\GeneratorInterface
         'table',
         'tfoot',
         'ul',
-        'nav',
     ];
 
     /**
