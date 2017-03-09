@@ -50,7 +50,7 @@ class SalableProcessor
         $stockFlag = 'has_stock_status_filter';
         if (!$collection->hasFlag($stockFlag)) {
             $stockStatusResource = $this->stockStatusFactory->create();
-            $stockStatusResource->addIsInStockFilterToCollection($collection);
+            $stockStatusResource->addStockDataToCollection($collection, true);
             $collection->setFlag($stockFlag, true);
         }
 

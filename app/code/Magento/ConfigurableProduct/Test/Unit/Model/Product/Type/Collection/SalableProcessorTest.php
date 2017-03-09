@@ -55,12 +55,12 @@ class SalableProcessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $stockStatusResource = $this->getMockBuilder(\Magento\CatalogInventory\Model\ResourceModel\Stock\Status::class)
-            ->setMethods(['addIsInStockFilterToCollection'])
+            ->setMethods(['addStockDataToCollection'])
             ->disableOriginalConstructor()
             ->getMock();
         $stockStatusResource->expects($this->once())
-            ->method('addIsInStockFilterToCollection')
-            ->with($productCollection)
+            ->method('addStockDataToCollection')
+            ->with($productCollection, true)
             ->will($this->returnSelf());
 
         $this->stockStatusFactory
