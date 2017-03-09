@@ -16,6 +16,7 @@ interface BatchSizeManagementInterface
      * Ensure memory size for data in batch.
      *
      * @param AdapterInterface $adapter database adapter.
+     * @param int $batchSize
      * @return void
      */
     public function ensureBatchSize(\Magento\Framework\DB\Adapter\AdapterInterface $adapter, $batchSize);
