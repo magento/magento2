@@ -13,6 +13,9 @@ use Magento\Framework\DB\Sql\JsonSerializableExpression;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Class SelectHydratorTest
+ */
 class SelectHydratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -39,11 +42,6 @@ class SelectHydratorTest extends \PHPUnit_Framework_TestCase
      * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManagerMock;
-
-    /**
-     * @var JsonSerializableExpression|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $expressionMock;
 
     /**
      * @var ObjectManagerHelper
@@ -173,30 +171,19 @@ class SelectHydratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider recreateWithExpressionDataProvider
      * @param array $selectParts
-     * @param array $parts
-     * @param array $partValues
-     * @param array $mocks
+     * @param array $expectedParts
+     * @param \PHPUnit_Framework_MockObject_MockObject[] $expressionMocks
      */
-    public function testRecreateWithExpression($selectParts, $parts, $partValues, $mocks = [])
-    {
-        /** data provider executes in isolation so all mocks have to be set in the test */
-        foreach ($mocks as $mockName => $mockObject) {
-            $this->{$mockName} = $mockObject;
-        }
-
-        $checkClassName = function ($value) {
-            return is_string($value);
-        };
-
-        $checkArguments = function ($value) {
-            return is_array($value);
-        };
-
+    public function testRecreateWithExpression(
+        array $selectParts,
+        array $expectedParts,
+        array $expressionMocks
+    ) {
         $this->objectManagerMock
-            ->expects($this->once())
+            ->expects($this->exactly(count($expressionMocks)))
             ->method('create')
-            ->with($this->callback($checkClassName), $this->callback($checkArguments))
-            ->willReturn($this->expressionMock);
+            ->with($this->isType('string'), $this->isType('array'))
+            ->willReturnOnConsecutiveCalls(...$expressionMocks);
         $this->resourceConnectionMock
             ->expects($this->once())
             ->method('getConnection')
@@ -207,10 +194,11 @@ class SelectHydratorTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->with()
             ->willReturn($this->selectMock);
-        foreach ($parts as $key => $part) {
-            $this->selectMock->expects($this->at($key))
+        foreach (array_keys($selectParts) as $key => $partName) {
+            $this->selectMock
+                ->expects($this->at($key))
                 ->method('setPart')
-                ->with($part, $partValues[$key]);
+                ->with($partName, $expectedParts[$partName]);
         }
 
         $this->assertSame($this->selectMock, $this->selectHydrator->recreate($selectParts));
@@ -246,21 +234,22 @@ class SelectHydratorTest extends \PHPUnit_Framework_TestCase
                         ],
                     ]
                 ],
-                'Parts names' => [Select::COLUMNS],
-                'Assembled parts' => [[
-                    [
-                        'table_name',
-                        'field_name',
-                        'alias',
-                    ],
-                    [
-                        'table_name',
-                        $expressionMock,
-                        'alias_2',
-                    ],
-                ]],
-                'Mocks' => [
-                    'expressionMock' => $expressionMock
+                'expectedParts' => [
+                    Select::COLUMNS => [
+                        [
+                            'table_name',
+                            'field_name',
+                            'alias',
+                        ],
+                        [
+                            'table_name',
+                            $expressionMock,
+                            'alias_2',
+                        ],
+                    ]
+                ],
+                'expectedExpressions' => [
+                    $expressionMock
                 ]
             ],
         ];
