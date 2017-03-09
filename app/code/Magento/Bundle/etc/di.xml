@@ -137,10 +137,13 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Indexer\Product\Price\Action\Full">
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BatchSizeCalculator">
         <arguments>
-            <argument name="memoryTablesMinRows" xsi:type="array">
-                <item name="bundle" xsi:type="number">136</item>
+            <argument name="batchRowsCount" xsi:type="array">
+                <item name="bundle" xsi:type="number">100000</item>
+            </argument>
+            <argument name="estimators" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Catalog\Model\Indexer\CompositeProductBatchSizeManagement</item>
             </argument>
         </arguments>
     </type>
