@@ -42,7 +42,7 @@ define([
          */
         (function lookup(element) {
             if ($.nodeName(element, 'iframe') && $(element).prop('src').indexOf(window.location.hostname) === -1) {
-                return []; 
+                return [];
             }
             $(element).contents().each(function (index, el) {
                 var hostName, iFrameHostName;
