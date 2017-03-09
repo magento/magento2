@@ -110,6 +110,7 @@
                 <item name="33" xsi:type="string">payment/braintree/active</item>
                 <item name="34" xsi:type="string">payment/braintree_paypal/title</item>
                 <item name="35" xsi:type="string">payment/braintree_paypal/active</item>
+                <item name="36" xsi:type="string">analytics/general/vertical</item>
             </argument>
         </arguments>
     </type>
