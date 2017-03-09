@@ -31,9 +31,6 @@ class AssertImportAdvancedPricingCheckData extends AbstractConstraint
         $rowsCount = $import->getDataFieldConfig('import_file')['source']->getValue()['template']['count'];
         $entitiesCount = count($import->getDataFieldConfig('import_file')['source']->getEntities());
 
-        $rowsCount = 2;
-        $entitiesCount = 0;
-
         $message = $adminImportIndex->getMessagesBlock()->getNoticeMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             sprintf(self::RESULT_MESSAGE, $rowsCount, $entitiesCount),

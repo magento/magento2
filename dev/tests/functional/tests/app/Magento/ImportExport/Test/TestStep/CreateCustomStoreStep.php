@@ -108,7 +108,7 @@ class CreateCustomStoreStep implements TestStepInterface
             );
             $configFixture->persist();
         }
-        $this->getCsv($products);
+        $this->prepareCsv($products);
     }
 
     /**
@@ -117,7 +117,7 @@ class CreateCustomStoreStep implements TestStepInterface
      * @param array $products
      * @return void
      */
-    public function getCsv(array $products)
+    public function prepareCsv(array $products)
     {
         foreach ($products as $product) {
             $website = $product->getDataFieldConfig('website_ids')['source']->getWebsites()[0];
