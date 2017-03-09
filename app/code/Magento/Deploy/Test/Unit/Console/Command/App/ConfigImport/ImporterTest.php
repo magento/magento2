@@ -18,6 +18,9 @@ use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
 use Magento\Deploy\Console\Command\App\ConfigImport\QuestionPerformer;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ImporterTest extends \PHPUnit_Framework_TestCase
 {
     /**

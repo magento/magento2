@@ -91,7 +91,6 @@ class Importer implements ImporterInterface
         /** @var ThemeDbCollection $collection */
         $collection = $this->themeCollectionFactory->create();
 
-
         /**
          * Removes themes if they are not present in configuration files
          * @var Data $theme
@@ -106,7 +105,7 @@ class Importer implements ImporterInterface
         foreach ($data as $themePath => $themeData) {
             /** @var Data $theme */
             $theme = $this->themeRegistration->getThemeFromDb($themePath);
-            if (!$theme->getId()) {
+            if (!$theme->getId() && $themePath === $themeData['area'] . '/' . $themeData['theme_path']) {
                 $theme->setData($themeData);
                 $theme->setType(ThemeInterface::TYPE_VIRTUAL);
                 $this->themeResourceModel->save($theme);
