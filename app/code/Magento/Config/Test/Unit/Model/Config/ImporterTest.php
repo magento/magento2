@@ -158,7 +158,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->flagMock);
 
-        $this->model->import($data);
+        $this->assertSame(['System config was processed'], $this->model->import($data));
     }
 
     /**
@@ -188,6 +188,9 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $this->stateMock->expects($this->once())
             ->method('emulateAreaCode')
             ->willThrowException(new \Exception('Some error'));
+        $this->scopeMock->expects($this->once())
+            ->method('setCurrentScope')
+            ->with('oldScope');
 
         $this->model->import($data);
     }

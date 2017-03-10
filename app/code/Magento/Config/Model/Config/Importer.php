@@ -27,7 +27,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
 class Importer implements ImporterInterface
 {
     /**
-     * Code of the flag to retrieve previously imported file config.
+     * Code of the flag to retrieve previously imported config data.
      */
     const FLAG_CODE = 'system_config_snapshot';
 
@@ -108,10 +108,8 @@ class Importer implements ImporterInterface
     }
 
     /**
-     * Invokes saving of configurations.
-     *
-     * If configuration from previous import already exists in flag snapshot,
-     * compares to new one and invokes saving only for changed configurations.
+     * Invokes saving of configurations when data was not imported before
+     * or current value is different from previously imported.
      *
      * {@inheritdoc}
      */
@@ -152,7 +150,7 @@ class Importer implements ImporterInterface
             $this->scope->setCurrentScope($currentScope);
         }
 
-        return ['System config was imported'];
+        return ['System config was processed'];
     }
 
     /**
@@ -164,6 +162,8 @@ class Importer implements ImporterInterface
     private function invokeSaveAll(array $data)
     {
         $invokeSave = function (array $scopeData, $scope, $scopeCode = null) {
+            $scopeData = array_keys($this->arrayUtils->flatten($scopeData));
+
             foreach ($scopeData as $path) {
                 $this->invokeSave($path, $scope, $scopeCode);
             }
@@ -171,13 +171,9 @@ class Importer implements ImporterInterface
 
         foreach ($data as $scope => $scopeData) {
             if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-                $scopeData = array_keys($this->arrayUtils->flatten($scopeData));
-
                 $invokeSave($scopeData, $scope);
             } else {
                 foreach ($scopeData as $scopeCode => $scopeCodeData) {
-                    $scopeCodeData = array_keys($this->arrayUtils->flatten($scopeCodeData));
-
                     $invokeSave($scopeCodeData, $scope, $scopeCode);
                 }
             }
