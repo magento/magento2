@@ -83,6 +83,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\View\TemplateEnginePool|\PHPUnit_Framework_MockObject_MockObject */
     private $templateEnginePool;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
