@@ -8,6 +8,7 @@ namespace Magento\Analytics\Test\Unit\ReportXml\DB;
 use Magento\Analytics\ReportXml\DB\NameResolver;
 use Magento\Analytics\ReportXml\DB\ColumnsResolver;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
+use Magento\Framework\DB\Sql\ColumnValueExpression;
 
 /**
  * Class ColumnsResolverTest
@@ -51,12 +52,12 @@ class ColumnsResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider dataProvider
+     * @dataProvider getColumnsDataProvider
      */
     public function testGetColumns($expression, $attributeData)
     {
         $columnAlias = 'fn';
-        $expr = new \Zend_Db_Expr($expression);
+        $expr = new ColumnValueExpression($expression);
         $expectedResult = [$columnAlias => $expr];
         $columns = [$columnAlias => 'name'];
         $entityConfig['attribute'] = ['attribute1' => $attributeData];
@@ -91,7 +92,10 @@ class ColumnsResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function dataProvider()
+    /**
+     * @return array
+     */
+    public function getColumnsDataProvider()
     {
         return [
             'TestWithFunction' =>
