@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest" summary="OnePageCheckout within Offline Payment Methods" ticketId="MAGETWO-27485">
         <variation name="OnePageCheckoutTestVariation1" summary="Checkout as UK guest with virtual product using coupon for not logged in customers">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="products" xsi:type="string">catalogProductVirtual::default</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
             <data name="customer/dataset" xsi:type="string">customer_UK_1_default_billing_address</data>
@@ -26,6 +27,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
         <variation name="OnePageCheckoutTestVariation2" summary="US customer during checkout using coupon for all customer groups">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="products" xsi:type="string">catalogProductSimple::default</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
             <data name="customer/dataset" xsi:type="string">default</data>

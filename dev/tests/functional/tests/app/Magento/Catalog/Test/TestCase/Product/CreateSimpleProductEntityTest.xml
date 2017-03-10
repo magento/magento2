@@ -312,6 +312,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation18">
+            <data name="issue" xsi:type="string">MAGETWO-60789: API wrong custom attributes order</data>
             <data name="description" xsi:type="string">Create product wit suite of custom options</data>
             <data name="product/data/url_key" xsi:type="string">simple-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Simple Product %isolation%</data>
@@ -394,6 +395,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddToCartButtonAbsent" />
         </variation>
         <variation name="CreateSimpleProductEntityTestVariation23" summary="Create Simple Product with Creating New Category (Required Fields Only)" ticketId="MAGETWO-13345">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/data/category_ids/new_category" xsi:type="string">yes</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/url_key" xsi:type="string">simple%isolation%</data>

@@ -17,7 +17,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
         </variation>
         <variation name="CreateVirtualProductEntityTestVariation2" summary="Create product with tier price">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, stable:no</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
@@ -71,6 +71,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPageWithCustomer" />
         </variation>
         <variation name="CreateVirtualProductEntityTestVariation5">
+            <data name="issue" xsi:type="string">MAGETWO-60789: API wrong custom attributes order</data>
             <data name="description" xsi:type="string">Create product with custom options suite and import options</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>

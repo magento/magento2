@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Review\Test\TestCase\ManageProductReviewFromCustomerPageTest" summary="Manage Product Review from Customer Page" ticketId="MAGETWO-27625">
         <variation name="ManageProductReviewFromCustomerPageTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="review/data/status_id" xsi:type="string">Approved</data>
             <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>
             <data name="review/data/title" xsi:type="string">title_upd_%isolation%</data>
@@ -17,6 +18,7 @@
             <constraint name="Magento\Review\Test\Constraint\AssertProductReviewOnProductPage" />
         </variation>
         <variation name="ManageProductReviewFromCustomerPageTestVariation2">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="review/data/status_id" xsi:type="string">Not Approved</data>
             <data name="review/data/nickname" xsi:type="string">name_upd_%isolation%</data>
             <data name="review/data/title" xsi:type="string">title_upd_%isolation%</data>

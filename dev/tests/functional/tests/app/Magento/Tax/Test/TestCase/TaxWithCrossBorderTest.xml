@@ -8,11 +8,13 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Tax\Test\TestCase\TaxWithCrossBorderTest" summary="Apply Cross Border Taxes for Simple Product" ticketId="MAGETWO-29052">
         <variation name="TaxWithCrossBorderTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/dataset" xsi:type="string">with_one_custom_option_and_category</data>
             <data name="configData" xsi:type="string">cross_border_enabled_price_incl_tax, display_excluding_including_tax</data>
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxWithCrossBorderApplied" />
         </variation>
         <variation name="TaxWithCrossBorderTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/dataset" xsi:type="string">product_with_category</data>
             <data name="salesRule/dataset" xsi:type="string">cart_rule</data>
             <data name="configData" xsi:type="string">cross_border_enabled_price_incl_tax, display_excluding_including_tax</data>

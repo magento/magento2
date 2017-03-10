@@ -47,6 +47,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation3">
+            <data name="issue" xsi:type="string">MAGETWO-62229: There is no Price on product page when product is out of stock</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">185.00</data>
@@ -67,6 +68,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation4">
+            <data name="issue" xsi:type="string">MAGETWO-62229: There is no Price on product page when product is out of stock</data>
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -82,6 +84,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation5">
+            <data name="issue" xsi:type="string">MAGETWO-62229: There is no Price on product page when product is out of stock</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">5.00</data>
@@ -116,6 +119,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation7">
+            <data name="issue" xsi:type="string">MAGETWO-62229: There is no Price on product page when product is out of stock</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
@@ -133,6 +137,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation8">
+            <data name="issue" xsi:type="string">MAGETWO-62229: There is no Price on product page when product is out of stock</data>
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">5.00</data>
@@ -168,6 +173,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateVirtualProductEntityTestVariation10">
+            <data name="issue" xsi:type="string">MAGETWO-62229: There is no Price on product page when product is out of stock</data>
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
