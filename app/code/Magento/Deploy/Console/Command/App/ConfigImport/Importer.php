@@ -131,7 +131,7 @@ class Importer
                 $data = $this->deploymentConfig->getConfigData($section);
 
                 if (
-                    !$input->getOption(ConfigImportCommand::INPUT_OPTION_FORCE)
+                    !$input->getOption('no-interaction')
                     && !empty($warnings = $importer->getWarningMessages($data))
                     && !$this->questionPerformer->execute($warnings, $input, $output)
                 ) {

@@ -28,11 +28,6 @@ class ConfigImportCommand extends Command
     const COMMAND_NAME = 'app:config:import';
 
     /**
-     * Input option name.
-     */
-    const INPUT_OPTION_FORCE = 'force';
-
-    /**
      * Configuration importer.
      *
      * @var Importer
@@ -56,13 +51,6 @@ class ConfigImportCommand extends Command
     {
         $this->setName(self::COMMAND_NAME)
             ->setDescription('Import data from shared configuration files to appropriate data storage');
-
-        $this->addOption(
-            self::INPUT_OPTION_FORCE,
-            'f',
-            InputOption::VALUE_NONE,
-            'Run import process without any confirmations'
-        );
 
         parent::configure();
     }

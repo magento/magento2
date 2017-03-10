@@ -55,6 +55,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->themecollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->themeRegistrationMock = $this->getMockBuilder(Registration::class)

@@ -146,7 +146,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
 
         $this->inputMock->expects($this->any())
             ->method('getOption')
-            ->with(ConfigImportCommand::INPUT_OPTION_FORCE)
+            ->with('no-interaction')
             ->willReturn($isForce);
         $importerMock->expects($this->any())
             ->method('getWarningMessages')
