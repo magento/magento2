@@ -47,8 +47,6 @@ class ImageGenerator
      */
     public function generate($data)
     {
-        echo PHP_EOL, "Generating images...", PHP_EOL;
-
         $binaryData = '';
         $data = str_split(sha1($data), 2);
         foreach ($data as $item) {
