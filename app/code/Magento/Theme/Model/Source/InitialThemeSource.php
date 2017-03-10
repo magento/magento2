@@ -94,7 +94,7 @@ class InitialThemeSource implements ConfigSourceInterface
 
             foreach ($rawThemes as $themeRow) {
                 unset($themeRow['theme_id'], $themeRow['preview_image']);
-                $themePath = $themeRow['area'] . '/' . $themeRow['code'];
+                $themePath = $themeRow['area'] . '/' . $themeRow['theme_path'];
                 $themes[$themePath] = $themeRow;
 
                 if (isset($rawThemes[$themeRow['parent_id']]['code'])) {
