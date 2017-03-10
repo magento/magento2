@@ -18,7 +18,7 @@ use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\Validation\RefundOrderInterface;
-use Magento\Sales\Model\Order\PaymentAdapterInterface;
+use Magento\Sales\Model\Order\RefundAdapterInterface;
 use Magento\Sales\Model\Order\Creditmemo\NotifierInterface;
 use Magento\Sales\Model\RefundOrder;
 use Magento\Sales\Model\ValidatorResultInterface;
@@ -48,9 +48,9 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
     private $creditmemoDocumentFactoryMock;
 
     /**
-     * @var PaymentAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RefundAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $paymentAdapterMock;
+    private $refundAdapterMock;
 
     /**
      * @var OrderStateResolverInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -136,7 +136,7 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
         $this->refundOrderValidatorMock = $this->getMockBuilder(RefundOrderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->paymentAdapterMock = $this->getMockBuilder(PaymentAdapterInterface::class)
+        $this->refundAdapterMock = $this->getMockBuilder(RefundAdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderStateResolverMock = $this->getMockBuilder(OrderStateResolverInterface::class)
@@ -182,7 +182,7 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
             $this->orderStateResolverMock,
             $this->orderRepositoryMock,
             $this->creditmemoRepositoryMock,
-            $this->paymentAdapterMock,
+            $this->refundAdapterMock,
             $this->creditmemoDocumentFactoryMock,
             $this->refundOrderValidatorMock,
             $this->notifierMock,
@@ -233,7 +233,7 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
         $hasMessages = false;
         $this->validationMessagesMock->expects($this->once())
             ->method('hasMessages')->willReturn($hasMessages);
-        $this->paymentAdapterMock->expects($this->once())
+        $this->refundAdapterMock->expects($this->once())
             ->method('refund')
             ->with($this->creditmemoMock, $this->orderMock)
             ->willReturn($this->orderMock);
@@ -387,7 +387,7 @@ class RefundOrderTest extends \PHPUnit_Framework_TestCase
         $this->validationMessagesMock->expects($this->once())
             ->method('hasMessages')->willReturn($hasMessages);
         $e = new \Exception();
-        $this->paymentAdapterMock->expects($this->once())
+        $this->refundAdapterMock->expects($this->once())
             ->method('refund')
             ->with($this->creditmemoMock, $this->orderMock)
             ->willThrowException($e);
