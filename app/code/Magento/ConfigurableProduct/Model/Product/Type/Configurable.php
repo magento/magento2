@@ -693,7 +693,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         )->setProductFilter(
             $product
         );
-        if ($this->getStoreFilter($product)) {
+        if ($this->getStoreFilter($product) !== null) {
             $collection->addStoreFilter($this->getStoreFilter($product));
         }
 
