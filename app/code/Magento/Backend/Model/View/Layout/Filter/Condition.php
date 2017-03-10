@@ -7,9 +7,9 @@ namespace Magento\Backend\Model\View\Layout\Filter;
 
 use Magento\Backend\Model\View\Layout\FilterInterface;
 use Magento\Backend\Model\View\Layout\StructureManager;
+use Magento\Backend\Model\View\Layout\VisibilityConditionFactory;
 use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\View\Layout\ScheduledStructure;
-use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class Condition
@@ -26,23 +26,28 @@ class Condition implements FilterInterface
     private $structureManager;
 
     /**
-     * @var ObjectManagerInterface
+     * @var VisibilityConditionFactory
      */
-    private $objectManager;
+    private $visibilityConditionFactory;
+
+    /**
+     * @var array The names of attributes which could be used in visibility conditions
+     */
+    private $conditionAttributes = ['aclResource', 'ifconfig'];
 
 
     /**
      * Condition constructor.
      *
      * @param StructureManager $structureManager
-     * @param ObjectManagerInterface $objectManager
+     * @param VisibilityConditionFactory $visibilityConditionFactory
      */
     public function __construct(
         StructureManager $structureManager,
-        ObjectManagerInterface $objectManager
+        VisibilityConditionFactory $visibilityConditionFactory
     ) {
         $this->structureManager = $structureManager;
-        $this->objectManager = $objectManager;
+        $this->visibilityConditionFactory = $visibilityConditionFactory;
     }
 
     /**
@@ -57,10 +62,19 @@ class Condition implements FilterInterface
         foreach ($scheduledStructure->getElements() as $name => $data) {
             list(, $data) = $data;
             if (isset($data['attributes']['visibilityCondition']) && $data['attributes']['visibilityCondition']) {
-                $condition = $this->objectManager->create(
+                $condition = $this->visibilityConditionFactory->create(
                     $data['attributes']['visibilityCondition']
                 );
-                if (!$condition->validate($name, $data['attributes'])) {
+                $attributes = array_filter(
+                    $data['attributes'],
+                    function ($key) {
+                        return in_array($key, $this->conditionAttributes);
+                    },
+                    ARRAY_FILTER_USE_KEY
+                );
+                $attributes['name'] = $name;
+                
+                if (!$condition->isVisible($attributes)) {
                     $this->structureManager->removeElement($scheduledStructure, $structure, $name);
                 }
             }

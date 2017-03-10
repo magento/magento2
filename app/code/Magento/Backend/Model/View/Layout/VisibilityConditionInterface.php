@@ -6,7 +6,7 @@
 namespace Magento\Backend\Model\View\Layout;
 
 /**
- * Class ConditionInterface
+ * Class VisibilityConditionInterface
  *
  * Introduces family of visibility conditions for layout elements at the backend.
  * By using this interface a developer can specify dynamic rule for ui component visibility.
@@ -17,16 +17,15 @@ namespace Magento\Backend\Model\View\Layout;
  *
  * "visibilityCondition" just another optional attribute of ui component declaration
  */
-interface ConditionInterface
+interface VisibilityConditionInterface
 {
     /**
      * Validate logical condition for ui component
      * If validation passed block will be displayed
      *
-     * @param string $elementName
-     * @param array $arguments
+     * @param array $arguments Arguments which allowed by condition filter.
      *
      * @return bool
      */
-    public function validate($elementName, array $arguments);
+    public function isVisible(array $arguments);
 }

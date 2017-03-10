@@ -5,7 +5,8 @@
  */
 namespace Magento\Backend\Test\Unit\Model\View\Layout\Filter;
 
-use Magento\Backend\Model\View\Layout\ConditionInterface;
+use Magento\Backend\Model\View\Layout\VisibilityConditionFactory;
+use Magento\Backend\Model\View\Layout\VisibilityConditionInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\Model\View\Layout\Filter\Condition;
@@ -33,10 +34,10 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $objectManagerMock;
+    private $visibilityConditionFactoryMock;
 
     /**
-     * @var ConditionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var VisibilityConditionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $conditionMock;
 
@@ -54,9 +55,10 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->scheduledStructureMock = $this->getMockBuilder(ScheduledStructure::class)
             ->getMock();
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->conditionMock = $this->getMockBuilder(ConditionInterface::class)
+        $this->visibilityConditionFactoryMock = $this->getMockBuilder(VisibilityConditionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->conditionMock = $this->getMockBuilder(VisibilityConditionInterface::class)
             ->getMock();
         $objectManager = new ObjectManager($this);
 
@@ -64,7 +66,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
             Condition::class,
             [
                 'structureManager' => $this->structureManagerMock,
-                'objectManager' => $this->objectManagerMock
+                'visibilityConditionFactory' => $this->visibilityConditionFactoryMock
             ]
         );
     }
@@ -115,7 +117,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
         $this->scheduledStructureMock->expects($this->once())
             ->method('getElements')
             ->willReturn($this->getStructureData());
-        $this->objectManagerMock->expects($this->exactly(2))
+        $this->visibilityConditionFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->withConsecutive(
                 ['TestConditionClassName1'],
@@ -126,10 +128,10 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
                 $this->conditionMock
             );
         $this->conditionMock->expects($this->at(0))
-            ->method('validate')
+            ->method('isVisible')
             ->willReturn(false);
         $this->conditionMock->expects($this->at(1))
-            ->method('validate')
+            ->method('isVisible')
             ->willReturn(true);
         $this->structureManagerMock->expects($this->once())
             ->method('removeElement')

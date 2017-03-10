@@ -6,7 +6,7 @@
 
 namespace Magento\Analytics\Model\Condition;
 
-use Magento\Backend\Model\View\Layout\ConditionInterface;
+use Magento\Backend\Model\View\Layout\VisibilityConditionInterface;
 use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\Intl\DateTimeFactory;
 
@@ -16,7 +16,7 @@ use Magento\Framework\Intl\DateTimeFactory;
  * Dynamic validator for UI signUp notification form, manage Ui component visibility.
  * Return true if last notification was shipped seven days ago.
  */
-class CanViewNotification implements ConditionInterface
+class CanViewNotification implements VisibilityConditionInterface
 {
     /**
      * Time interval in seconds
@@ -52,12 +52,11 @@ class CanViewNotification implements ConditionInterface
     /**
      * Validate is notification popup can be shown
      *
-     * @param string $elementName
      * @param array $arguments
      *
      * @return bool
      */
-    public function validate($elementName, array $arguments)
+    public function isVisible(array $arguments)
     {
         $lastNotificationTime = $this->notificationTime->getLastTimeNotification();
         if (!$lastNotificationTime) {
