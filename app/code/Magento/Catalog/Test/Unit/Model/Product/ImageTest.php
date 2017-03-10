@@ -249,7 +249,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             'angle' => null,
             'quality' => 80,
         ];
-        $url = 'http://magento.com/media/catalog/product/cache//beff4985b56e3afdbeabfc89641a4582/somefile.png';
         $this->paramsBuilder->expects(self::once())
             ->method('build')
             ->willReturn($miscParams);
