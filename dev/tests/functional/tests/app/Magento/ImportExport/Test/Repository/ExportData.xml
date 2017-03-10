@@ -11,5 +11,10 @@
             <field name="entity" xsi:type="string">Products</field>
             <field name="behavior" xsi:type="string">CSV</field>
         </dataset>
+
+        <dataset name="csv_customer_addresses">
+            <field name="entity" xsi:type="string">Customer Addresses</field>
+            <field name="file_format" xsi:type="string">CSV</field>
+        </dataset>
     </repository>
 </config>
