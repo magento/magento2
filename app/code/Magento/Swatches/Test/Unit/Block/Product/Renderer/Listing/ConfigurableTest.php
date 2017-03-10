@@ -10,6 +10,7 @@ use Magento\Swatches\Model\SwatchAttributesProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,8 +93,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->swatchHelper = $this->getMock(\Magento\Swatches\Helper\Data::class, [], [], '', false);
         $this->swatchMediaHelper = $this->getMock(\Magento\Swatches\Helper\Media::class, [], [], '', false);
         $this->catalogProduct = $this->getMock(\Magento\Catalog\Helper\Product::class, [], [], '', false);
-        $this->currentCustomer = $this->getMock(\Magento\Customer\Helper\Session\CurrentCustomer::class, [], [], '', false);
-        $this->priceCurrency = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class, [], [], '', false);
+        $this->currentCustomer = $this->getMock(
+            \Magento\Customer\Helper\Session\CurrentCustomer::class, [], [], '', false
+        );
+        $this->priceCurrency = $this->getMock(
+            \Magento\Framework\Pricing\PriceCurrencyInterface::class, [], [], '', false
+        );
         $this->configurableAttributeData = $this->getMock(
             \Magento\ConfigurableProduct\Model\ConfigurableAttributeData::class,
             [],
@@ -102,8 +107,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->typeInstance = $this->getMock(\Magento\Catalog\Model\Product\Type\AbstractType::class, [], [], '', false);
-        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class, [], [], '', false);
+        $this->typeInstance = $this->getMock(
+            \Magento\Catalog\Model\Product\Type\AbstractType::class, [], [], '', false
+        );
+        $this->scopeConfig = $this->getMock(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class, [], [], '', false
+        );
         $this->imageHelper = $this->getMock(\Magento\Catalog\Helper\Image::class, [], [], '', false);
         $this->urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
 
@@ -272,7 +281,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->willReturn($simpleProducts);
         $this->product->expects($this->any())->method('getTypeInstance')->willReturn($configurableType);
 
-        $productAttribute1 = $this->getMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class, [], [], '', false);
+        $productAttribute1 = $this->getMock(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class, [], [], '', false
+        );
         $productAttribute1->expects($this->any())->method('getId')->willReturn(1);
         $productAttribute1->expects($this->any())->method('getAttributeCode')->willReturn('code');
 
