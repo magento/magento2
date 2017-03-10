@@ -25,6 +25,32 @@ class Messages extends \Magento\Backend\Test\Block\Messages
     private $loader = '[data-role="loader"]';
 
     /**
+     * Get error message.
+     *
+     * @return string
+     */
+    public function getErrorMessage()
+    {
+        if (!$this->_rootElement->find($this->errorMessage)->isVisible()) {
+            return false;
+        }
+        return parent::getErrorMessage();
+    }
+
+    /**
+     * Get notice message.
+     *
+     * @return array
+     */
+    public function getNoticeMessage()
+    {
+        if (!$this->_rootElement->find($this->noticeMessage)->isVisible()) {
+            return false;
+        }
+        return parent::getNoticeMessage();
+    }
+
+    /**
      * Get import result message.
      *
      * @return string

@@ -34,21 +34,22 @@ class FillImportFormStep implements TestStepInterface
      * @param AdminImportIndex $adminImportIndex
      * @param ImportData $import
      * @param TestStepFactory $stepFactory
-     * @param bool $createStore
+     * @param bool $changeCurrency
      */
     public function __construct(
         AdminImportIndex $adminImportIndex,
         ImportData $import,
         TestStepFactory $stepFactory,
-        $createStore
+        $changeCurrency
     ) {
         $this->adminImportIndex = $adminImportIndex;
         $this->import = $import;
 
-        if ($createStore === true) {
+        if ($changeCurrency === true) {
+            $currency = $import->getDataFieldConfig('import_file')['source']->getValue()['template']['websiteCurrency'];
             $stepFactory->create(
-                CreateCustomStoreStep::class,
-                ['import' => $this->import]
+                ChangeCurrencyOnCustomWebsiteStep::class,
+                ['import' => $this->import, 'currency' => $currency]
             )->run();
         }
     }

@@ -139,7 +139,7 @@ class File extends DataSource
                 ]
             );
             $this->data = $this->generator->generate($csvTemplate);
-            $this->csv = $csvTemplate->getCsv();
+            $this->convertCsvToArray($csvTemplate->getCsv());
 
             return parent::getData($key);
         }
@@ -202,11 +202,12 @@ class File extends DataSource
      */
     private function preparePlaceHolders()
     {
+        $placeholders = [];
         $key = 0;
         foreach ($this->entities as $entity) {
             $currency = (isset($this->value['template']['websiteCurrency']))
-                ? $this->value['template']['websiteCurrency']
-                : null;
+                ? "[{$this->value['template']['websiteCurrency']}]"
+                : '[USD]';
             $website = $entity->getDataFieldConfig('website_ids')['source']->getWebsites()[0];
             $entityData = $entity->getData();
             $entityData['code'] = $website->getCode();
@@ -224,28 +225,38 @@ class File extends DataSource
 
             $key++;
         }
-
         $this->placeholders = $placeholders;
     }
 
     /**
-     * Return csv as array.
+     * Convert csv to array.
      *
-     * @return string
+     * @param string $csvContent
+     * @return array
      */
-    public function getCsv()
+    public function convertCsvToArray($csvContent)
     {
         foreach ($this->placeholders as $placeholderData) {
             foreach ($placeholderData as $data) {
-                $csvContent = strtr($this->csv, $data);
+                $csvContent = strtr($csvContent, $data);
             }
         }
         $csvContent = strtr($csvContent, $this->codeMapping);
-        return array_map(
+        $this->csv = array_map(
             function ($value) {
                 return explode(',', str_replace('"', '', $value));
             },
             str_getcsv($csvContent, "\n")
         );
+    }
+
+    /**
+     * Return csv as array.
+     *
+     * @return array
+     */
+    public function getCsv()
+    {
+        return $this->csv;
     }
 }

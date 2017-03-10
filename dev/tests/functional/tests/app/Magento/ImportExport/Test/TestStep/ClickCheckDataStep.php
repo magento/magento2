@@ -25,7 +25,7 @@ class ClickCheckDataStep implements TestStepInterface
     /**
      * Assert that validation result message is correct.
      *
-     * @var AssertImportAdvancedPricingCheckData
+     * @var assert
      */
     private $assert;
 

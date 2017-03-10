@@ -31,7 +31,7 @@ class AssertImportAdvancedPricing extends AbstractConstraint
     ];
 
     /**
-     * Edit page on backend
+     * Edit page on backend.
      *
      * @var CatalogProductEdit
      */
@@ -95,7 +95,6 @@ class AssertImportAdvancedPricing extends AbstractConstraint
             $tierPrices = $advancedPricing->getTierPriceForm()->getFieldsData();
 
             $productSku = $product->getSku();
-
             foreach ($tierPrices as $tierPrice) {
                 $resultProductArray[$productSku][] = $tierPrice;
             }

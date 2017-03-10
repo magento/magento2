@@ -13,15 +13,8 @@ use Magento\Mtf\Fixture\FixtureFactory;
 /**
  * Create custom store step.
  */
-class CreateCustomStoreStep implements TestStepInterface
+class ChangeCurrencyOnCustomWebsiteStep implements TestStepInterface
 {
-    /**
-     * Website code mapping.
-     */
-    private $codeMapping =[
-        'base' => 'Main Website[USD]'
-    ];
-
     /**
      * Factory for Test Steps.
      *
@@ -60,7 +53,7 @@ class CreateCustomStoreStep implements TestStepInterface
         TestStepFactory $stepFactory,
         FixtureFactory $fixtureFactory,
         ImportData $import,
-        $currency = 'EUR'
+        $currency = 'USD'
     ) {
         $this->stepFactory = $stepFactory;
         $this->fixtureFactory = $fixtureFactory;
