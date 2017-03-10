@@ -932,7 +932,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
         return getimagesize($image);
     }
 
-
     /**
      * Retrieve misc params based on all image attributes
      *
