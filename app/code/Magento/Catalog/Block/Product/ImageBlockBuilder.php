@@ -150,8 +150,8 @@ class ImageBlockBuilder
                 'height' => $height,
                 'label' => $label,
                 'ratio' => ($width && $height) ? $height / $width : 1,
-                'resized_image_width' => $resizedInfo['width'],
-                'resized_image_height' => $resizedInfo['height'],
+                'resized_image_width' => empty($resizedInfo['width']) ? $width : $resizedInfo['width'],
+                'resized_image_height' => empty($resizedInfo['height']) ? $width : $resizedInfo['height'],
             ],
         ];
 
