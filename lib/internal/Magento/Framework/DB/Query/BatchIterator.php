@@ -11,7 +11,7 @@ use Magento\Framework\DB\Select;
 /**
  * Query batch iterator
  */
-class BatchIterator implements \Iterator
+class BatchIterator implements BatchIteratorInterface
 {
     /**
      * @var int

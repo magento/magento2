@@ -82,13 +82,15 @@ class Compiled implements ConfigInterface
      */
     public function getArguments($type)
     {
-        if (isset($this->arguments[$type])) {
+        if (array_key_exists($type, $this->arguments)) {
             if (is_string($this->arguments[$type])) {
                 $this->arguments[$type] = $this->getSerializer()->unserialize($this->arguments[$type]);
+            } else if ($this->arguments[$type] === null) {
+                $this->arguments[$type] = [];
             }
             return $this->arguments[$type];
         } else {
-            return [['_i_' => \Magento\Framework\ObjectManagerInterface::class]];
+            return null;
         }
     }
 

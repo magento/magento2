@@ -340,10 +340,10 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             );
         }
-        
+
         if (version_compare($context->getVersion(), '2.0.7') < 0) {
             /** @var EavSetup $eavSetup */
-            $eavSetup= $this->eavSetupFactory->create(['setup' => $setup]);
+            $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
 
             $eavSetup->updateAttribute(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,

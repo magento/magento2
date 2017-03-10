@@ -30,6 +30,7 @@
             <field code="is_searchable" locked="true" />
         </attribute>
         <attribute code="category_ids">
+            <field code="is_global" locked="true" />
             <field code="is_searchable" locked="true" />
             <field code="used_for_sort_by" locked="true" />
             <field code="is_used_in_grid" locked="true" />

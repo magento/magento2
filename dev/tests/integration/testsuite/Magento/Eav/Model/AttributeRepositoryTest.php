@@ -63,7 +63,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $searchCriteria = $searchCriteriaBuilder->create();
 
-        $searchResult = $this->repository->getList('order', $searchCriteria);
+        $searchResult = $this->repository->getList('test', $searchCriteria);
 
         $this->assertEquals(3, $searchResult->getTotalCount());
 

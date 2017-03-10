@@ -13,6 +13,21 @@ use Magento\Config\App\Config\Type\System;
 class SubscriptionStatusProvider
 {
     /**
+     * Represents an enabled subscription state.
+     */
+    const ENABLED = "Enabled";
+
+    /**
+     * Represents a pending subscription state.
+     */
+    const PENDING = "Pending";
+
+    /**
+     * Represents a disabled subscription state.
+     */
+    const DISABLED = "Disabled";
+
+    /**
      * @var System
      */
     private $systemConfig;
@@ -45,16 +60,50 @@ class SubscriptionStatusProvider
      */
     public function getStatus()
     {
-        $status = "Disabled";
+        $checkboxState = $this->systemConfig->get('default/analytics/subscription/enabled');
+        return $this->resolveStatus($checkboxState);
+    }
 
-        if ($this->systemConfig->get('default/analytics/subscription/enabled')) {
-            $status = "Enabled";
+    /**
+     * Resolves subscription status depending on
+     * subscription config value (enabled, disabled).
+     *
+     * @param bool $isSubscriptionEnabled
+     *
+     * @return string
+     */
+    private function resolveStatus($isSubscriptionEnabled)
+    {
+        if (!$isSubscriptionEnabled) {
+            return static::DISABLED;
+        }
 
-            if (!$this->analyticsToken->isTokenExist()) {
-                $status = "Pending";
-            }
+        $status = static::PENDING;
+
+        if ($this->analyticsToken->isTokenExist()) {
+            $status = static::ENABLED;
         }
 
         return $status;
+    }
+
+    /**
+     * Retrieve status for subscription that enabled in config.
+     *
+     * @return string
+     */
+    public function getStatusForEnabledSubscription()
+    {
+        return $this->resolveStatus(true);
+    }
+
+    /**
+     * Retrieve status for subscription that disabled in config.
+     *
+     * @return string
+     */
+    public function getStatusForDisabledSubscription()
+    {
+        return $this->resolveStatus(false);
     }
 }

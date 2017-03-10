@@ -16,7 +16,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Importing configurable products
- * @package Magento\ConfigurableImportExport\Model\Import\Product\Type
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
