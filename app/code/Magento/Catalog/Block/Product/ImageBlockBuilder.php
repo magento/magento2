@@ -8,12 +8,19 @@ namespace Magento\Catalog\Block\Product;
 use Magento\Catalog\Model\View\Asset\ImageFactory as AssetImageFactory;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
+use Magento\Framework\App\CacheInterface;
+use Magento\Catalog\Model\View\Asset\Image as AssetImage;
 
 /**
  * Used to build product image blocks in product list blocks.
  */
 class ImageBlockBuilder
 {
+    /**
+     * @var string
+     */
+    private $cachePrefix = 'IMG_INFO';
+
     /**
      * @var ConfigInterface
      */
@@ -35,21 +42,51 @@ class ImageBlockBuilder
     private $imageParamsBuilder;
 
     /**
+     * @var CacheInterface
+     */
+    private $cache;
+
+    /**
      * @param ConfigInterface $presentationConfig
      * @param AssetImageFactory $viewAssetImageFactory
      * @param ImageFactory $imageBlockFactory
      * @param ParamsBuilder $imageParamsBuilder
+     * @param CacheInterface $cache
      */
     public function __construct(
         ConfigInterface $presentationConfig,
         AssetImageFactory $viewAssetImageFactory,
         ImageFactory $imageBlockFactory,
-        ParamsBuilder $imageParamsBuilder
+        ParamsBuilder $imageParamsBuilder,
+        CacheInterface $cache
     ) {
         $this->presentationConfig = $presentationConfig->getViewConfig();
         $this->viewAssetImageFactory = $viewAssetImageFactory;
         $this->imageBlockFactory = $imageBlockFactory;
         $this->imageParamsBuilder = $imageParamsBuilder;
+        $this->cache = $cache;
+    }
+
+    /**
+     * Get image size
+     *
+     * @param AssetImage $imageAsset
+     * @return array
+     */
+    private function getImageSize(AssetImage $imageAsset)
+    {
+        $key = $this->cachePrefix . $imageAsset->getPath();
+        $size = $this->cache->load($key);
+        if (!$size) {
+            $size = getimagesize($imageAsset->getPath());
+            $this->cache->save(
+                serialize(['width' => $size[0], 'height' => $size[1]]),
+                $key
+            );
+        } else {
+            $size = unserialize($size);
+        }
+        return $size;
     }
 
     /**
@@ -99,10 +136,10 @@ class ImageBlockBuilder
         $height = $image['image_height'];
 
         try {
-            $resizedInfo = getimagesize($imageAsset->getPath());
+            $resizedInfo = $this->getImageSize($imageAsset);
         } catch (\Exception $e) {
-            $resizedInfo[0] = $width;
-            $resizedInfo[1] = $height;
+            $resizedInfo['width'] = $width;
+            $resizedInfo['height'] = $height;
         }
 
         $data = [
@@ -112,9 +149,9 @@ class ImageBlockBuilder
                 'width' => $width,
                 'height' => $height,
                 'label' => $label,
-                'ratio' =>  ($width && $height) ? $height/$width : 1,
-                'resized_image_width' => !empty($resizedInfo[0]) ? $resizedInfo[0] : $resizedInfo[0],
-                'resized_image_height' => !empty($resizedInfo[1]) ? $resizedInfo[1] : $resizedInfo[1],
+                'ratio' => ($width && $height) ? $height / $width : 1,
+                'resized_image_width' => $resizedInfo['width'],
+                'resized_image_height' => $resizedInfo['height'],
             ],
         ];
 

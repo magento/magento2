@@ -27,6 +27,11 @@ use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 class Image extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * @var string
+     */
+    private $cachePrefix = 'IMG_INFO';
+
+    /**
      * @var int
      */
     protected $_width;
@@ -662,6 +667,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Save image file
      * @return $this
      */
     public function saveFile()
@@ -672,7 +678,21 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $filename = $this->getBaseFile() ? $this->imageAsset->getPath() : null;
         $this->getImageProcessor()->save($filename);
         $this->_coreFileStorageDatabase->saveFile($filename);
+        $this->saveImageSize();
+
         return $this;
+    }
+
+    /**
+     * Save size to cache
+     * @return void
+     */
+    private function saveImageSize()
+    {
+        $this->_cacheManager->save(
+            serialize(['width' => $this->getWidth(), 'height' => $this->getHeight()]),
+            $this->cachePrefix . $this->imageAsset->getPath()
+        );
     }
 
     /**

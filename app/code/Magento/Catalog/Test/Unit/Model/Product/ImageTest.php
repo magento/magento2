@@ -175,11 +175,20 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         //Settings for backward compatible property
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->imageAsset = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
+            ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->image,
             'imageAsset',
             $this->imageAsset
+        );
+        $cacheManager = $this->getMockBuilder(\Magento\Framework\App\CacheInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->image,
+            '_cacheManager',
+            $cacheManager
         );
     }
 
@@ -370,7 +379,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $this->image->setImageProcessor($imageProcessor);
         $this->coreFileHelper->expects($this->once())->method('saveFile')->will($this->returnValue(true));
-
+        $this->imageAsset->expects($this->any())
+            ->method('getPath')
+            ->willReturn('specific_path');
         $this->image->saveFile();
     }
 
