@@ -11,7 +11,7 @@
             <data name="configData" xsi:type="string">default_cookie_lifetime_60_seconds</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="sessionLifetimeInSeconds" xsi:type="number">60</data>
-            <constraint name="Magento\Cms\Test\Constraint\AssertAutorizationLinkIsVisibleOnStoreFront"/>
+            <constraint name="Magento\Cms\Test\Constraint\AssertAuthorizationLinkIsVisibleOnStoreFront"/>
         </variation>
         <variation name="ExpireAdminSession" summary="Expire Admin Session" ticketId="MAGETWO-47723">
             <data name="configData" xsi:type="string">admin_session_lifetime_60_seconds</data>

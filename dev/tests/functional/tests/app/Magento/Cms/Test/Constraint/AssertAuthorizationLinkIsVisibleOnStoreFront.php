@@ -12,7 +12,7 @@ use Magento\Cms\Test\Page\CmsIndex;
 /**
  * Assert that authorization link is visible on the Store Front.
  */
-class AssertAutorizationLinkIsVisibleOnStoreFront extends AbstractConstraint
+class AssertAuthorizationLinkIsVisibleOnStoreFront extends AbstractConstraint
 {
     /**
      * Assert that authorization link is visible on the Store Front.
