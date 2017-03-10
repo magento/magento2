@@ -612,7 +612,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         foreach (array_keys($relatedIndexers) as $indexerId) {
             try {
                 $indexer = $this->indexerRegistry->get($indexerId);
-                $indexer->invalidate();
+                if (!$indexer->isScheduled()) {
+                    $indexer->invalidate();
+                }
             } catch (\InvalidArgumentException $e) {
             }
         }
