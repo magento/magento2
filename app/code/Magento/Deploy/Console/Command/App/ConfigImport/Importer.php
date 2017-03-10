@@ -114,7 +114,7 @@ class Importer
                 $output->writeln('<info>Nothing to import.</info>');
                 return;
             } else {
-                $output->writeln('<info>Start import:</info>');
+                $output->writeln('<info>Import was started.</info>');
             }
 
             /**

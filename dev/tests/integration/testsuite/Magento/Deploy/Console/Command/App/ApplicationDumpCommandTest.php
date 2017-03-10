@@ -161,7 +161,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
                 'type' => '0',
                 'code' => 'Magento/backend',
             ],
-            $config['themes']['Magento/backend']
+            $config['themes']['adminhtml/Magento/backend']
         );
         $this->assertEquals(
             [
@@ -173,7 +173,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
                 'type' => '0',
                 'code' => 'Magento/blank',
             ],
-            $config['themes']['Magento/blank']
+            $config['themes']['frontend/Magento/blank']
         );
         $this->assertEquals(
             [
@@ -185,7 +185,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
                 'type' => '0',
                 'code' => 'Magento/luma',
             ],
-            $config['themes']['Magento/luma']
+            $config['themes']['frontend/Magento/luma']
         );
     }
 

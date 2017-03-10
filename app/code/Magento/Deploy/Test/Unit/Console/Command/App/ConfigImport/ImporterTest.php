@@ -122,8 +122,8 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     public function testImport($isForce, $doImport, $skipImport, array $warningMessages)
     {
         $configData = ['some data'];
-        $messages = ['Import has done'];
-        $expectsMessages = ['Import has done'];
+        $messages = ['The import is complete'];
+        $expectsMessages = ['The import is complete'];
         $importerClassName = 'someImporterClassName';
         $importers = ['someSection' => $importerClassName];
         $importerMock = $this->getMockBuilder(ImporterInterface::class)
@@ -162,7 +162,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         if ($skipImport) {
             $this->outputMock->expects($this->once())
                 ->method('writeln')
-                ->with('<info>Start import:</info>');
+                ->with('<info>Import was started.</info>');
             $importerMock->expects($this->never())
                 ->method('import');
             $this->configHashMock->expects($this->never())
@@ -170,7 +170,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->outputMock->expects($this->at(0))
                 ->method('writeln')
-                ->with('<info>Start import:</info>');
+                ->with('<info>Import was started.</info>');
             $this->outputMock->expects($this->at(1))
                 ->method('writeln')
                 ->with($expectsMessages);
