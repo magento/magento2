@@ -12,12 +12,12 @@ use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\Util\Command\File\Export;
 
 /**
- * Assert that exported file with advanced pricing options contains product data.
+ * Assert that exported file contains customer addresses data.
  */
 class AssertExportCustomerAddresses extends AbstractConstraint
 {
     /**
-     * Assert that exported file with advanced pricing options contains product data.
+     * Assert that exported file contains customer addresses data.
      *
      * @param Export $export
      * @param array $exportedFields
@@ -55,7 +55,7 @@ class AssertExportCustomerAddresses extends AbstractConstraint
     }
 
     /**
-     * Get product data from exported file.
+     * Get customer address data from exported file.
      *
      * @param array $fields
      * @param Customer $customer
@@ -64,7 +64,7 @@ class AssertExportCustomerAddresses extends AbstractConstraint
      * @param string $quantifiers
      * @return bool
      */
-    public function isAddressDataInFile(
+    private function isAddressDataInFile(
         array $fields,
         Customer $customer,
         Address $address,
@@ -78,9 +78,6 @@ class AssertExportCustomerAddresses extends AbstractConstraint
         }
         $regexp .= '/' . $quantifiers;
         preg_match($regexp, $exportData->getContent(), $matches);
-        if (empty($matches)) {
-            return false;
-        }
-        return true;
+        return !empty($matches);
     }
 }
