@@ -95,13 +95,16 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $firstThemeMock->expects($this->atLeastOnce())
             ->method('getFullPath')
             ->willReturn('frontend/Magento/luma');
-        $firstThemeMock->expects($this->once())
+        $firstThemeMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(1);
         /** @var Data|\PHPUnit_Framework_MockObject_MockObject $secondThemeMock */
         $secondThemeMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $secondThemeMock->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn(2);
         $secondThemeMock->expects($this->once())
             ->method('getFullPath')
             ->willReturn('frontend/Magento/blank');
@@ -110,12 +113,12 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setType', 'setData', 'getId'])
             ->getMock();
-        $thirdThemeMock->expects($this->once())
+        $thirdThemeMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(null);
         $thirdThemeMock->expects($this->once())
             ->method('setData')
-            ->with(['area' => 'adminhtml', 'theme_path' => 'Magento/admin'])
+            ->with(['area' => 'frontend', 'theme_path' => 'Magento/test', 'parent_id' => '2'])
             ->willReturnSelf();
         $thirdThemeMock->expects($this->once())
             ->method('setType')
@@ -139,7 +142,8 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('getThemeFromDb')
             ->willReturnMap([
                 ['frontend/Magento/luma', $firstThemeMock],
-                ['adminhtml/Magento/admin', $thirdThemeMock],
+                ['frontend/Magento/blank', $secondThemeMock],
+                ['frontend/Magento/test', $thirdThemeMock],
             ]);
         $this->themeResourceModelMock->expects($this->once())
             ->method('save')
@@ -147,8 +151,16 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $result = $this->importer->import([
-            'frontend/Magento/luma' => ['area' => 'frontend', 'theme_path' => 'Magento/luma'],
-            'adminhtml/Magento/admin' => ['area' => 'adminhtml', 'theme_path' => 'Magento/admin'],
+            'frontend/Magento/luma' => [
+                'area' => 'frontend',
+                'parent_id' => 'Magento/blank',
+                'theme_path' => 'Magento/luma',
+            ],
+            'frontend/Magento/test' => [
+                'area' => 'frontend',
+                'parent_id' => 'Magento/blank',
+                'theme_path' => 'Magento/test',
+            ],
         ]);
 
         $this->assertSame(

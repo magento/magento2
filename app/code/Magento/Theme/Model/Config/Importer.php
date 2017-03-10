@@ -104,9 +104,12 @@ class Importer implements ImporterInterface
 
             // Creates virtual theme if its code is absent on filesystem
             foreach ($data as $themePath => $themeData) {
+                $themeData = $this->resolveThemeParentId($themeData);
+
                 /** @var Data $theme */
                 $theme = $this->themeRegistration->getThemeFromDb($themePath);
-                if (!$theme->getId() && $themePath === $themeData['area'] . '/' . $themeData['theme_path']) {
+                $pathCheck = $themeData['area'] . '/' . $themeData['theme_path'];
+                if (!$theme->getId() && $themeData['parent_id'] && $themePath === $pathCheck) {
                     $theme->setData($themeData);
                     $theme->setType(ThemeInterface::TYPE_VIRTUAL);
                     $this->themeResourceModel->save($theme);
@@ -119,6 +122,26 @@ class Importer implements ImporterInterface
         $messages[] = '<info>Theme import was finished.</info>';
 
         return $messages;
+    }
+
+    /**
+     * Resolves theme parent id by theme code.
+     *
+     * @param array $themeData The array of theme data
+     * @return array The array of theme data with resolved parent id
+     */
+    private function resolveThemeParentId(array $themeData)
+    {
+        if (empty($themeData['parent_id'])) {
+            return $themeData;
+        }
+
+        $parentPath = $themeData['area'] . '/' . $themeData['parent_id'];
+        $parentTheme = $this->themeRegistration->getThemeFromDb($parentPath);
+
+        $themeData['parent_id'] = $parentTheme->getId() ?: null;
+
+        return $themeData;
     }
 
     /**
