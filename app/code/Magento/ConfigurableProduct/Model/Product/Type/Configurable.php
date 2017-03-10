@@ -428,7 +428,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $usedProductAttributes = [];
             $usedAttributes = [];
             foreach ($this->getConfigurableAttributes($product) as $attribute) {
-                if (!is_null($attribute->getProductAttribute())) {
+                if ($attribute->getProductAttribute() !== null) {
                     $id = $attribute->getProductAttribute()->getId();
                     $usedProductAttributes[$id] = $attribute->getProductAttribute();
                     $usedAttributes[$id] = $attribute;
