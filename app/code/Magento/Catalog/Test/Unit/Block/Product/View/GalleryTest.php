@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
+use Magento\Catalog\Block\Product\ImageBlockBuilder;
+use Magento\Framework\App\ObjectManager;
+
 class GalleryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -48,6 +51,15 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $objectManager = $this->getMockBuilder(ObjectManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $imageBlockBuilder = $this->getMockBuilder(ImageBlockBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManager->expects($this->once())->method('get')->willReturn($imageBlockBuilder);
+        ObjectManager::setInstance($objectManager);
 
         $this->model = new \Magento\Catalog\Block\Product\View\Gallery(
             $this->context,
