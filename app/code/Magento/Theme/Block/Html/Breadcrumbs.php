@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Html;
+
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Template;
 
