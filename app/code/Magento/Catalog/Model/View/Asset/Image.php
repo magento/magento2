@@ -7,12 +7,11 @@
 namespace Magento\Catalog\Model\View\Asset;
 
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Framework\View\Asset\Repository;
 
 /**
  * A locally available image file asset that can be referred with a file path
@@ -21,6 +20,11 @@ use Magento\Catalog\Helper\Image as ImageHelper;
  */
 class Image implements LocalInterface
 {
+    /**
+     * @var string
+     */
+    private $placeholder = 'Magento_Catalog::images/product/placeholder/%s.jpg';
+
     /**
      * @var string
      */
@@ -54,9 +58,9 @@ class Image implements LocalInterface
     private $encryptor;
 
     /**
-     * @var ImageHelper
+     * @var Repository
      */
-    private $viewHelper;
+    private $assetRepo;
 
     /**
      * Image constructor.
@@ -65,6 +69,7 @@ class Image implements LocalInterface
      * @param ContextInterface $context
      * @param EncryptorInterface $encryptor
      * @param string $filePath
+     * @param Repository $assetRepo
      * @param array $miscParams
      */
     public function __construct(
@@ -72,6 +77,7 @@ class Image implements LocalInterface
         ContextInterface $context,
         EncryptorInterface $encryptor,
         $filePath,
+        Repository $assetRepo,
         array $miscParams = []
     ) {
         $this->mediaConfig = $mediaConfig;
@@ -79,6 +85,7 @@ class Image implements LocalInterface
         $this->filePath = $filePath;
         $this->miscParams = $miscParams;
         $this->encryptor = $encryptor;
+        $this->assetRepo = $assetRepo;
     }
 
     /**
@@ -106,6 +113,10 @@ class Image implements LocalInterface
      */
     public function getPath()
     {
+        if (!$this->getFilePath()) {
+            $asset = $this->assetRepo->createAsset($this->getPlaceHolder());
+            return $asset->getSourceFile();
+        }
         return $this->getRelativePath($this->context->getPath());
     }
 
@@ -187,14 +198,13 @@ class Image implements LocalInterface
     }
 
     /**
-     * @return ImageHelper
+     * Get placeholder for asset creation
+     *
+     * @return string
      */
-    private function getViewHelper()
+    private function getPlaceHolder()
     {
-        if (!$this->viewHelper) {
-            $this->viewHelper = ObjectManager::getInstance()->get(ImageHelper::class);
-        }
-        return $this->viewHelper;
+        return sprintf($this->placeholder, $this->miscParams['image_type']);
     }
 
     /**
@@ -204,7 +214,7 @@ class Image implements LocalInterface
      */
     private function getDefaultPlaceHolderUrl()
     {
-        return $this->getViewHelper()->getDefaultPlaceholderUrl($this->miscParams['image_type']);
+        return $this->assetRepo->getUrl($this->getPlaceHolder());
     }
 
     /**

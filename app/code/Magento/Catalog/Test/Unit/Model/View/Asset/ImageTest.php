@@ -8,7 +8,6 @@ namespace Magento\Catalog\Test\Unit\Model\View\Asset;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Catalog\Model\View\Asset\Image;
 use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\ContextInterface;
 
 /**
@@ -36,16 +35,25 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     protected $imageContext;
 
+    /**
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $assetRepo;
+
     protected function setUp()
     {
         $this->mediaConfig = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
         $this->encryptor = $this->getMockBuilder(EncryptorInterface::class)->getMockForAbstractClass();
         $this->imageContext = $this->getMockBuilder(ContextInterface::class)->getMockForAbstractClass();
+        $this->assetRepo = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = new Image(
             $this->mediaConfig,
             $this->imageContext,
             $this->encryptor,
-            '/somefile.png'
+            '/somefile.png',
+            $this->assetRepo
         );
     }
 
@@ -86,6 +94,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->imageContext,
             $this->encryptor,
             $filePath,
+            $this->assetRepo,
             $miscParams
         );
         $absolutePath = '/var/www/html/magento2ce/pub/media/catalog/product';
@@ -110,6 +119,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->imageContext,
             $this->encryptor,
             $filePath,
+            $this->assetRepo,
             $miscParams
         );
         $absolutePath = 'http://localhost/pub/media/catalog/product';
@@ -130,25 +140,17 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $filePath = '';
         $url = 'testUrl';
         $miscParams = $this->getPathDataProvider()[1][1];
-        $viewHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $viewHelper->expects(self::once())
-            ->method('getDefaultPlaceholderUrl')
-            ->with(self::identicalTo($miscParams['image_type']))
+        $this->assetRepo->expects(self::once())
+            ->method('getUrl')
+            ->with(self::identicalTo('Magento_Catalog::images/product/placeholder/thumbnail.jpg'))
             ->willReturn($url);
         $imageModel = new Image(
             $this->mediaConfig,
             $this->imageContext,
             $this->encryptor,
             $filePath,
+            $this->assetRepo,
             $miscParams
-        );
-        $objectManager = new ObjectManager($this);
-        $objectManager->setBackwardCompatibleProperty(
-            $imageModel,
-            'viewHelper',
-            $viewHelper
         );
 
         self::assertEquals($url, $imageModel->getUrl());
