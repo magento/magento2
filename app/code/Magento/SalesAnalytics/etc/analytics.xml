@@ -15,4 +15,22 @@
             </reportProvider>
         </providers>
     </file>
+    <file name="order_items">
+        <providers>
+            <reportProvider class="Magento\Analytics\ReportXml\ReportProvider" name="order_items">
+                <parameters>
+                    <name>order_items</name>
+                </parameters>
+            </reportProvider>
+        </providers>
+    </file>
+    <file name="order_addresses">
+        <providers>
+            <reportProvider class="Magento\Analytics\ReportXml\ReportProvider" name="order_addresses">
+                <parameters>
+                    <name>order_addresses</name>
+                </parameters>
+            </reportProvider>
+        </providers>
+    </file>
 </config>
