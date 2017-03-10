@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ProductVideo\Test\TestCase\AddProductVideoTest" summary="Add Video to PCF" ticketId="MAGETWO-43672">
         <variation name="AddProductVideoEntityTestVariation1" summary="Add youtube video with all available fields filled in">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/dataset" xsi:type="string">product_with_video_youtube</data>
             <data name="configData" xsi:type="string">youtube_api_key,play_if_base</data>
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoCategoryView" />
@@ -15,6 +16,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
         </variation>
         <variation name="AddProductVideoEntityTestVariation2" summary="Add vimeo video with all available fields filled in">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="product/dataset" xsi:type="string">product_with_video_vimeo</data>
             <data name="configData" xsi:type="string">play_if_base</data>
             <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoCategoryView" />

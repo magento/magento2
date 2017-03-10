@@ -102,6 +102,7 @@ class DataGrid extends Grid
      */
     protected $rowById = ".//tr[td//input[@data-action='select-row' and @value='%s']]";
 
+    // @codingStandardsIgnoreStart
     /**
      * Column header number.
      *
@@ -114,7 +115,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $cellByHeader = "//td[%s+1]";
+    private $cellByHeader = "//td[count(//th[span[.='%s']][not(ancestor::*[@class='sticky-header'])]/preceding-sibling::th)+1]";
 
     // @codingStandardsIgnoreStart
     /**

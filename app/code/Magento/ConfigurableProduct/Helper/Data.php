@@ -50,8 +50,8 @@ class Data
         if ($images instanceof \Magento\Framework\Data\Collection) {
             /** @var $image Image */
             foreach ($images as $image) {
-
-                $smallImageUrl = $this->getImageUrlBuilder()->getUrl($image->getFile(), 'product_page_image_small');
+                $smallImageUrl = $this->getImageUrlBuilder()
+                    ->getUrl($image->getFile(), 'product_page_image_small');
                 $image->setData('small_image_url', $smallImageUrl);
 
                 $mediumImageUrl = $this->getImageUrlBuilder()

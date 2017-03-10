@@ -23,6 +23,7 @@ use Magento\Framework\Pricing\Render\RendererPool;
  *
  * @method bool getUseLinkForAsLowAs()
  * @method bool getDisplayMinimalPrice()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FinalPriceBox extends BasePriceBox
 {
@@ -110,7 +111,7 @@ class FinalPriceBox extends BasePriceBox
         }
 
         $product = $this->getSaleableItem();
-        
+
         return $msrpPriceType->canApplyMsrp($product) && $msrpPriceType->isMinimalPriceLessMsrp($product);
     }
 
@@ -184,7 +185,7 @@ class FinalPriceBox extends BasePriceBox
      */
     public function getCacheKey()
     {
-         return parent::getCacheKey() . ($this->getData('list_category_page') ? '-list-category-page': '');
+        return parent::getCacheKey() . ($this->getData('list_category_page') ? '-list-category-page': '');
     }
 
     /**
@@ -196,6 +197,7 @@ class FinalPriceBox extends BasePriceBox
     {
         $cacheKeys = parent::getCacheKeyInfo();
         $cacheKeys['display_minimal_price'] = $this->getDisplayMinimalPrice();
+        $cacheKeys['is_product_list'] = $this->isProductList();
         return $cacheKeys;
     }
 
@@ -209,5 +211,17 @@ class FinalPriceBox extends BasePriceBox
             $this->moduleManager = ObjectManager::getInstance()->get(Manager::class);
         }
         return $this->moduleManager;
+    }
+
+    /**
+     * Get flag that price rendering should be done for the list of products
+     * By default (if flag is not set) is false
+     *
+     * @return bool
+     */
+    public function isProductList()
+    {
+        $isProductList = $this->getData('is_product_list');
+        return $isProductList === true;
     }
 }

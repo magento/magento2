@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Reports\Test\TestCase\SalesCouponReportEntityTest" summary="Sales Coupon Report" ticketId="MAGETWO-28190">
         <variation name="SalesCouponReportEntityTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="order/dataset" xsi:type="string">with_coupon</data>
             <data name="viewsReport/report_type" xsi:type="string">Order Created</data>
             <data name="viewsReport/period_type" xsi:type="string">Year</data>
@@ -19,6 +20,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertCouponReportResult" />
         </variation>
         <variation name="SalesCouponReportEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="order/dataset" xsi:type="string">with_coupon</data>
             <data name="viewsReport/report_type" xsi:type="string">Order Created</data>
             <data name="viewsReport/period_type" xsi:type="string">Month</data>
@@ -31,6 +33,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertCouponReportResult" />
         </variation>
         <variation name="SalesCouponReportEntityTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="order/dataset" xsi:type="string">with_coupon</data>
             <data name="viewsReport/report_type" xsi:type="string">Order Updated</data>
             <data name="viewsReport/period_type" xsi:type="string">Day</data>
@@ -43,6 +46,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertCouponReportResult" />
         </variation>
         <variation name="SalesCouponReportEntityTestVariation4">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="order/dataset" xsi:type="string">with_coupon</data>
             <data name="viewsReport/report_type" xsi:type="string">Order Updated</data>
             <data name="viewsReport/period_type" xsi:type="string">Day</data>

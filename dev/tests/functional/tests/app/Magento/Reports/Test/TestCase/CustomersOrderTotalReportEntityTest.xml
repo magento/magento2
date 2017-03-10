@@ -18,6 +18,7 @@
             <constraint name="Magento\Reports\Test\Constraint\AssertCustomerOrderTotalReportResult" />
         </variation>
         <variation name="CustomersOrderTotalReportEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="orders" xsi:type="string">default,virtual_product</data>
             <data name="report/report_from" xsi:type="string">m/d/Y -1 month</data>
             <data name="report/report_to" xsi:type="string">m/d/Y +1 month</data>

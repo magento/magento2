@@ -205,6 +205,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Catalog\Model\View\Asset\ImageFactory $assetImageFactory
+     * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory $assetPlaceholderFactory
      * @param ParamsBuilder $paramsBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -223,6 +225,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
+        \Magento\Catalog\Model\View\Asset\ImageFactory $assetImageFactory = null,
+        \Magento\Catalog\Model\View\Asset\PlaceholderFactory $assetPlaceholderFactory = null,
         ParamsBuilder $paramsBuilder = null
     ) {
         $this->_storeManager = $storeManager;
@@ -234,6 +238,18 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $this->_assetRepo = $assetRepo;
         $this->_viewFileSystem = $viewFileSystem;
         $this->_scopeConfig = $scopeConfig;
+        $this->viewAssetImageFactory = $assetImageFactory;
+        if ($this->viewAssetImageFactory == null) {
+            $this->viewAssetImageFactory = ObjectManager::getInstance()->get(
+                \Magento\Catalog\Model\View\Asset\ImageFactory::class
+            );
+        }
+        $this->viewAssetPlaceholderFactory = $assetPlaceholderFactory;
+        if ($this->viewAssetPlaceholderFactory == null) {
+            $this->viewAssetPlaceholderFactory = ObjectManager::getInstance()->get(
+                \Magento\Catalog\Model\View\Asset\PlaceholderFactory::class
+            );
+        }
         $this->paramsBuilder = $paramsBuilder ?: ObjectManager::getInstance()->get(ParamsBuilder::class);
     }
 
@@ -470,7 +486,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     {
         $this->_isBaseFilePlaceholder = false;
 
-        $this->imageAsset = $this->getViewAssetImageFactory()->create(
+        $this->imageAsset = $this->viewAssetImageFactory->create(
             [
                 'miscParams' => $this->getMiscParams(),
                 'filePath' => $file,
@@ -480,7 +496,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
             || !$this->_checkMemory($this->imageAsset->getSourceFile())
         ) {
             $this->_isBaseFilePlaceholder = true;
-            $this->imageAsset = $this->getViewAssetPlaceholderFactory()->create(
+            $this->imageAsset = $this->viewAssetPlaceholderFactory->create(
                 [
                     'type' => $this->getDestinationSubdir(),
                 ]
@@ -892,40 +908,10 @@ class Image extends \Magento\Framework\Model\AbstractModel
         } else {
             $image = $this->imageAsset->getPath();
         }
+
         return getimagesize($image);
     }
 
-    /**
-     * Get assets ImageFactory object
-     *
-     * @return \Magento\Catalog\Model\View\Asset\ImageFactory
-     */
-    private function getViewAssetImageFactory()
-    {
-        if ($this->viewAssetImageFactory == null) {
-            $this->viewAssetImageFactory = ObjectManager::getInstance()->get(
-                \Magento\Catalog\Model\View\Asset\ImageFactory::class
-            );
-        }
-
-        return $this->viewAssetImageFactory;
-    }
-
-    /**
-     * Get assets PlaceholderFactory object
-     *
-     * @return \Magento\Catalog\Model\View\Asset\PlaceholderFactory
-     */
-    private function getViewAssetPlaceholderFactory()
-    {
-        if ($this->viewAssetPlaceholderFactory == null) {
-            $this->viewAssetPlaceholderFactory = ObjectManager::getInstance()->get(
-                \Magento\Catalog\Model\View\Asset\PlaceholderFactory::class
-            );
-        }
-
-        return $this->viewAssetPlaceholderFactory;
-    }
 
     /**
      * Retrieve misc params based on all image attributes

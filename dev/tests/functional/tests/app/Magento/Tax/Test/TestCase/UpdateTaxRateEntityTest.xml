@@ -44,6 +44,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation4">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="initialTaxRate/dataset" xsi:type="string">withZipRange</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">No</data>
@@ -67,6 +68,7 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation6">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="initialTaxRate/dataset" xsi:type="string">withZipRange</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">No</data>

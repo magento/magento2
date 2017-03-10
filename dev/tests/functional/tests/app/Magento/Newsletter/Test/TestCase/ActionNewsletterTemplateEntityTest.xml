@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Newsletter\Test\TestCase\ActionNewsletterTemplateEntityTest" summary="Newsletter Template Actions" ticketId="MAGETWO-27043">
         <variation name="ActionNewsletterTemplateEntityTestVariation1">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="newsletter/dataset" xsi:type="string">default</data>
             <data name="action" xsi:type="string">Preview</data>
             <constraint name="Magento\Newsletter\Test\Constraint\AssertNewsletterPreview" />
