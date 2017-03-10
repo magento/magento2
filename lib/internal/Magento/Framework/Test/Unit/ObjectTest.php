@@ -83,6 +83,28 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests \Magento\Framework\DataObject->mergeData
+     */
+    public function testMergeData()
+    {
+        $data = ['key1' => ['key4' => 5, 'key5' => ['changed' => 'no']], 'key2' => 'value2', 'key3' => 3];
+        $this->_object->setData($data);
+        $this->assertEquals($data, $this->_object->getData());
+
+        $newData = ['key1' => ['key5' => ['changed' => 'yes'] ]];
+        $this->_object->mergeData($newData);
+        $this->assertEquals('yes', $this->_object->getData('key1/key5/changed'));
+        $this->assertEquals('5', $this->_object->getData('key1/key4'));
+        $this->assertEquals('value2', $this->_object->getData('key2'));
+
+        $newData = ['key5' => ['changed' => 'again'] ];
+        $this->_object->mergeData('key1', $newData);
+        $this->assertEquals('again', $this->_object->getData('key1/key5/changed'));
+        $this->assertEquals('5', $this->_object->getData('key1/key4'));
+        $this->assertEquals('value2', $this->_object->getData('key2'));
+    }
+
+    /**
      * Tests \Magento\Framework\DataObject->unsetData()
      */
     public function testUnsetData()

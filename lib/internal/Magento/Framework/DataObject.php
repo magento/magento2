@@ -79,6 +79,76 @@ class DataObject implements \ArrayAccess
     }
 
     /**
+     * Deeply merge array data, instead of replacing it.
+     *
+     * If a key already has array data in it, it is common to want to merge the
+     * data in the arrays, with the newer array overwriting any conflicting keys,
+     * instead of the entire array being replaced.
+     *
+     * If the key does not exist in the DataObject, or the current value of the
+     * key is not an array, the usual setData handling will be applied.
+     *
+     * If the provided key is an array, the merge will be done against the
+     * entire dataset.
+     *
+     * @param string|array $key
+     * @param array|null $value
+     *
+     * @return $this
+     */
+    public function mergeData($key, array $value = null)
+    {
+        if (is_array($key)) {
+            $this->_data = $this->deepArrayMerge(
+                $this->_data,
+                $key
+            );
+        } else if (is_array($value) && isset($this->_data[$key]) && is_array($this->_data[$key])) {
+            $this->_data[$key] = $this->deepArrayMerge(
+                $this->_data[$key],
+                $value
+            );
+        } else {
+            $this->setData($key, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Recursively merge two arrays, replacing any conflicting keys with the
+     * value from the new array.
+     *
+     * Using references avoids copying the entire array. This method has no side
+     * effects on the provided arrays.
+     *
+     * This is a slightly refactored version of the deep recursive merge
+     * function found in the PHP documentation.
+     *
+     * @see http://php.net/manual/en/function.array-merge-recursive.php#92195
+     * @param array $original
+     * @param array $new
+     * @return array
+     */
+    protected function deepArrayMerge(array &$original, array &$new)
+    {
+        $merged = $original;
+
+        foreach ($new as $key => &$value) {
+            if (isset($merged[$key]) && is_array($value) && is_array($merged[$key])) {
+                $merged[$key] = $this->deepArrayMerge(
+                    $merged[$key],
+                    $value
+                );
+            } else {
+                $merged[$key] = $value;
+            }
+        }
+
+        return $merged;
+    }
+
+    /**
      * Unset data from the object.
      *
      * @param null|string|array $key
