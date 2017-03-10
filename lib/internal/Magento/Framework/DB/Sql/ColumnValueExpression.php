@@ -5,15 +5,12 @@
  */
 namespace Magento\Framework\DB\Sql;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-
 /**
  * Class Column Value Expression
  *
- * Just a wrapper over Zend_Db_Expr to eliminate direct dependency on it
+ * Just a wrapper over Expression for implementing the specific type of expression.
  * @api
  */
-class ColumnValueExpression extends \Zend_Db_Expr
+class ColumnValueExpression extends Expression
 {
 }
