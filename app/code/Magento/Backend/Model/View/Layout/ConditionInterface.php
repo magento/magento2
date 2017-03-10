@@ -23,7 +23,10 @@ interface ConditionInterface
      * Validate logical condition for ui component
      * If validation passed block will be displayed
      *
+     * @param string $elementName
+     * @param array $arguments
+     *
      * @return bool
      */
-    public function validate();
+    public function validate($elementName, array $arguments);
 }

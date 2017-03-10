@@ -57,14 +57,10 @@ class Condition implements FilterInterface
         foreach ($scheduledStructure->getElements() as $name => $data) {
             list(, $data) = $data;
             if (isset($data['attributes']['visibilityCondition']) && $data['attributes']['visibilityCondition']) {
-//                $dataProvider = null;
-//                if (isset($data['attributes']['visibilityDataProvider'])) {
-//                    $dataProvider = $data['attributes']['visibilityDataProvider'];
-//                }
                 $condition = $this->objectManager->create(
                     $data['attributes']['visibilityCondition']
                 );
-                if (!$condition->validate()) {
+                if (!$condition->validate($name, $data['attributes'])) {
                     $this->structureManager->removeElement($scheduledStructure, $structure, $name);
                 }
             }

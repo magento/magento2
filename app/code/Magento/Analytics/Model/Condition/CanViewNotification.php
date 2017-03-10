@@ -52,9 +52,12 @@ class CanViewNotification implements ConditionInterface
     /**
      * Validate is notification popup can be shown
      *
+     * @param string $elementName
+     * @param array $arguments
+     *
      * @return bool
      */
-    public function validate()
+    public function validate($elementName, array $arguments)
     {
         $lastNotificationTime = $this->notificationTime->getLastTimeNotification();
         if (!$lastNotificationTime) {
