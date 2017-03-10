@@ -163,20 +163,22 @@ class Importer implements ImporterInterface
      */
     private function invokeSaveAll(array $data)
     {
+        $invokeSave = function (array $scopeData, $scope, $scopeCode = null) {
+            foreach ($scopeData as $path) {
+                $this->invokeSave($path, $scope, $scopeCode);
+            }
+        };
+
         foreach ($data as $scope => $scopeData) {
             if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
                 $scopeData = array_keys($this->arrayUtils->flatten($scopeData));
 
-                foreach ($scopeData as $path) {
-                    $this->invokeSave($path, $scope);
-                }
+                $invokeSave($scopeData, $scope);
             } else {
                 foreach ($scopeData as $scopeCode => $scopeCodeData) {
                     $scopeCodeData = array_keys($this->arrayUtils->flatten($scopeCodeData));
 
-                    foreach ($scopeCodeData as $path) {
-                        $this->invokeSave($path, $scope, $scopeCode);
-                    }
+                    $invokeSave($scopeCodeData, $scope, $scopeCode);
                 }
             }
         }
@@ -197,8 +199,10 @@ class Importer implements ImporterInterface
         $value = $this->scopeConfig->getValue($path, $scope, $scopeCode);
         $backendModel = $this->valueFactory->create($path, $value, $scope, $scopeCode);
 
-        $backendModel->setData('force_changed_value', true);
-        $backendModel->beforeSave();
-        $backendModel->afterSave();
+        if ($backendModel instanceof Config\Value) {
+            $backendModel->setData('force_changed_value', true);
+            $backendModel->beforeSave();
+            $backendModel->afterSave();
+        }
     }
 }
