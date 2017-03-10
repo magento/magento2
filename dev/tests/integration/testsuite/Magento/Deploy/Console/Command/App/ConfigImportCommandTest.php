@@ -120,11 +120,14 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
             file_get_contents(__DIR__ . '/../../../_files/config.php')
         );
+        /** @var ConfigImportCommand $command */
         $command = $this->objectManager->create(ConfigImportCommand::class);
+        $application = $this->objectManager->create(\Symfony\Component\Console\Application::class);
+        $command->setApplication($application);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
-        $this->assertContains('Start import', $commandTester->getDisplay());
+        $this->assertContains('Import was started.', $commandTester->getDisplay());
         $this->assertContains(
             "Integration second test data is imported!\nIntegration test data is imported!",
             $commandTester->getDisplay()
