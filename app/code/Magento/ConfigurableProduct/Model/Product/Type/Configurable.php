@@ -428,11 +428,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $usedProductAttributes = [];
             $usedAttributes = [];
             foreach ($this->getConfigurableAttributes($product) as $attribute) {
-                $issetProductAttribute = is_a(
-                    $attribute->getProductAttribute(),
-                    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
-                );
-                if ($issetProductAttribute) {
+                if (!is_null($attribute->getProductAttribute())) {
                     $id = $attribute->getProductAttribute()->getId();
                     $usedProductAttributes[$id] = $attribute->getProductAttribute();
                     $usedAttributes[$id] = $attribute;
@@ -676,7 +672,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected function getGalleryReadHandler()
     {
-        if (!$this->productGalleryReadHandler) {
+        if ($this->productGalleryReadHandler === null) {
             $this->productGalleryReadHandler = ObjectManager::getInstance()
                 ->get(GalleryReadHandler::class);
         }

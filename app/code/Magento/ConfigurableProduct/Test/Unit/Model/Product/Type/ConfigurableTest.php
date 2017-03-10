@@ -199,7 +199,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->salableProcessor = $this->getMock(
             SalableProcessor::class,
-            ['process'],
+            [],
             [],
             '',
             false

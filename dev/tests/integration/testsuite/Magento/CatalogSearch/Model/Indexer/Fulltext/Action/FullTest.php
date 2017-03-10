@@ -42,6 +42,10 @@ class FullTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($storeIndexDataSimple, $storeIndexDataExpected);
     }
 
+    /**
+     * @param string $sku
+     * @return int
+     */
     private function getIdBySku($sku)
     {
         /** @var Product $product */
