@@ -68,6 +68,13 @@ class CreateConfigurableProductEntityTest extends Injectable
     protected $testStepFactory;
 
     /**
+     * Configuration data holder.
+     *
+     * @var string
+     */
+    protected $configData = null;
+
+    /**
      * Injection data.
      *
      * @param CatalogProductIndex $productIndex
@@ -89,17 +96,17 @@ class CreateConfigurableProductEntityTest extends Injectable
      * Test create catalog Configurable product run.
      *
      * @param ConfigurableProduct $product
+     * @param string|null $configData
      * @return void
      */
-    public function test(ConfigurableProduct $product, $displayOutOfStockProducts = false)
+    public function test(ConfigurableProduct $product, $configData = null)
     {
         //Preconditions
-        if ($displayOutOfStockProducts) {
-            $this->testStepFactory->create(
-                SetupConfigurationStep::class,
-                ['configData' => 'display_out_of_stock_products', 'flushCache' => true]
-            )->run();
-        }
+        $this->configData = $configData;
+        $this->testStepFactory->create(
+            SetupConfigurationStep::class,
+            ['configData' => $this->configData, 'flushCache' => true]
+        )->run();
 
         // Steps
         $this->productIndex->open();
@@ -115,7 +122,7 @@ class CreateConfigurableProductEntityTest extends Injectable
     {
         $this->testStepFactory->create(
             SetupConfigurationStep::class,
-            ['configData' => 'display_out_of_stock_products', 'flushCache' => true]
+            ['configData' => $this->configData, 'flushCache' => true]
         )->cleanUp();
     }
 }
