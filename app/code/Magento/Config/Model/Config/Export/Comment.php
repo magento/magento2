@@ -9,6 +9,7 @@ use Magento\Config\App\Config\Source\DumpConfigSourceInterface;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\App\Config\CommentInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Comment. Is used to retrieve comment for config dump file
@@ -26,15 +27,23 @@ class Comment implements CommentInterface
     private $source;
 
     /**
+     * @var DefinitionConfigFieldList
+     */
+    private $definitionList;
+
+    /**
      * @param PlaceholderFactory $placeholderFactory
      * @param DumpConfigSourceInterface $source
+     * @param DefinitionConfigFieldList|null $definitionConfigFieldList
      */
     public function __construct(
         PlaceholderFactory $placeholderFactory,
-        DumpConfigSourceInterface $source
+        DumpConfigSourceInterface $source,
+        DefinitionConfigFieldList $definitionConfigFieldList = null
     ) {
         $this->placeholder = $placeholderFactory->create(PlaceholderFactory::TYPE_ENVIRONMENT);
         $this->source = $source;
+        $this->definitionList = $definitionConfigFieldList ?: ObjectManager::getInstance()->get(DefinitionConfigFieldList::class);
     }
 
     /**
@@ -47,7 +56,9 @@ class Comment implements CommentInterface
         $comment = '';
         $fields = $this->source->getExcludedFields();
         foreach ($fields as $path) {
-            $comment .= "\n" . $this->placeholder->generate($path) . ' for ' . $path ;
+            if ($this->definitionList->belongsTo($path, DefinitionConfigFieldList::SENSITIVE_FIELDS)) {
+                $comment .= "\n" . $this->placeholder->generate($path) . ' for ' . $path;
+            }
         }
         if ($comment) {
             $comment = 'The configuration file doesn\'t contain sensitive data for security reasons. '

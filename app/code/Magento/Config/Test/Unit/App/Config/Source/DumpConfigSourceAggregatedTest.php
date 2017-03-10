@@ -6,6 +6,7 @@
 namespace Magento\Config\Test\Unit\App\Config\Source;
 
 use Magento\Config\App\Config\Source\DumpConfigSourceAggregated;
+use Magento\Config\Model\Config\Export\DefinitionConfigFieldList;
 use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 
@@ -31,6 +32,11 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
      */
     private $excludeListMock;
 
+    /**
+     * @var DefinitionConfigFieldList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $definitionConfigFieldListMock;
+
     public function setUp()
     {
         $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
@@ -38,6 +44,9 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
         $this->sourceMockTwo = $this->getMockBuilder(ConfigSourceInterface::class)
             ->getMockForAbstractClass();
         $this->excludeListMock = $this->getMockBuilder(ExcludeList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->definitionConfigFieldListMock = $this->getMockBuilder(DefinitionConfigFieldList::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -53,7 +62,11 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
 
         ];
 
-        $this->model = new DumpConfigSourceAggregated($this->excludeListMock, $sources);
+        $this->model = new DumpConfigSourceAggregated(
+            $this->excludeListMock,
+            $sources,
+            $this->definitionConfigFieldListMock
+        );
     }
 
     public function testGet()
@@ -67,7 +80,11 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
                     ],
                     'secure' => [
                         'base_url' => 'https://test.local',
-                    ]
+                    ],
+                    'some_key1' => [
+                        'some_key11' => 'someValue11',
+                        'some_key12' => 'someValue12'
+                    ],
                 ]
             ],
             'test' => [
@@ -94,7 +111,18 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap([
                 ['web/unsecure/base_url', false],
                 ['web/secure/base_url', true],
-                ['test1/test2/test/3', false]
+                ['test1/test2/test/3', false],
+                ['web/some_key1/some_key11', false],
+                ['web/some_key1/some_key12', true],
+            ]);
+        $this->definitionConfigFieldListMock->expects($this->any())
+            ->method('isPresent')
+            ->willReturnMap([
+                ['web/unsecure/base_url', false],
+                ['web/secure/base_url', true],
+                ['test1/test2/test/3', false],
+                ['web/some_key1/some_key11', true],
+                ['web/some_key1/some_key12', false],
             ]);
 
         $this->assertEquals(
@@ -114,7 +142,8 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
                         'unsecure' => [
                             'base_url' => 'http://test.local',
                         ],
-                        'secure' => []
+                        'secure' => [],
+                        'some_key1' => [],
                     ]
                 ],
             ],
@@ -133,7 +162,11 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
                     ],
                     'secure' => [
                         'base_url' => 'https://test.local',
-                    ]
+                    ],
+                    'some_key1' => [
+                        'some_key11' => 'someValue11',
+                        'some_key12' => 'someValue12'
+                    ],
                 ]
             ],
             'test' => [
@@ -160,11 +193,26 @@ class DumpConfigSourceAggregatedTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap([
                 ['web/unsecure/base_url', false],
                 ['web/secure/base_url', true],
-                ['test1/test2/test/3', false]
+                ['test1/test2/test/3', false],
+                ['web/some_key1/some_key11', false],
+                ['web/some_key1/some_key12', true],
+            ]);
+        $this->definitionConfigFieldListMock->expects($this->any())
+            ->method('isPresent')
+            ->willReturnMap([
+                ['web/unsecure/base_url', false],
+                ['web/secure/base_url', true],
+                ['test1/test2/test/3', false],
+                ['web/some_key1/some_key11', true],
+                ['web/some_key1/some_key12', false],
             ]);
 
         $this->assertEquals(
-            ['web/secure/base_url'],
+            [
+                'web/secure/base_url',
+                'web/some_key1/some_key11',
+                'web/some_key1/some_key12'
+            ],
             $this->model->getExcludedFields()
         );
     }

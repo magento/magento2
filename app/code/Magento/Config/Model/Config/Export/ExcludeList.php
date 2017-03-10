@@ -5,10 +5,11 @@
  */
 namespace Magento\Config\Model\Config\Export;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-
 /**
- * Class ExcludeList contains list of config fields which should be excluded from config export file
+ * Class ExcludeList contains list of config fields which should be excluded from config export file.
+ *
+ * @deprecated
+ * @see \Magento\Config\Model\Config\Export\DefinitionConfigFieldList
  */
 class ExcludeList
 {
@@ -30,16 +31,18 @@ class ExcludeList
      *
      * @param string $path
      * @return bool
+     * @deprecated
      */
     public function isPresent($path)
     {
-        return !empty($this->configs[$path]) ;
+        return !empty($this->configs[$path]);
     }
 
     /**
      * Retrieves all excluded field paths for export
      *
      * @return array
+     * @deprecated
      */
     public function get()
     {

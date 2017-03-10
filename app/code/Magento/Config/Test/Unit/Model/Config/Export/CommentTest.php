@@ -7,6 +7,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Export;
 
 use Magento\Config\Model\Config\Export\Comment;
 use Magento\Config\App\Config\Source\DumpConfigSourceInterface;
+use Magento\Config\Model\Config\Export\DefinitionConfigFieldList;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -22,6 +23,11 @@ class CommentTest extends \PHPUnit_Framework_TestCase
      * @var PlaceholderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $placeholderMock;
+
+    /**
+     * @var DefinitionConfigFieldList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $definitionConfigFieldListMock;
 
     /**
      * @var Comment
@@ -49,11 +55,17 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->definitionConfigFieldListMock = $this->getMockBuilder(DefinitionConfigFieldList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+
         $this->model = $objectManager->getObject(
             Comment::class,
             [
                 'placeholderFactory' => $placeholderFactoryMock,
-                'source' => $this->configSourceMock
+                'source' => $this->configSourceMock,
+                'definitionConfigFieldList' => $this->definitionConfigFieldListMock,
             ]
         );
     }
@@ -63,6 +75,10 @@ class CommentTest extends \PHPUnit_Framework_TestCase
         $this->configSourceMock->expects($this->once())
             ->method('getExcludedFields')
             ->willReturn([]);
+        $this->definitionConfigFieldListMock->expects($this->never())
+            ->method('belongsTo');
+        $this->placeholderMock->expects($this->never())
+            ->method('generate');
         $this->assertEmpty($this->model->get());
     }
 
@@ -77,6 +93,10 @@ class CommentTest extends \PHPUnit_Framework_TestCase
         $this->configSourceMock->expects($this->once())
             ->method('getExcludedFields')
             ->willReturn([$path]);
+
+        $this->definitionConfigFieldListMock->expects($this->once())
+            ->method('belongsTo')
+            ->willReturn(true);
 
         $this->placeholderMock->expects($this->once())
             ->method('generate')

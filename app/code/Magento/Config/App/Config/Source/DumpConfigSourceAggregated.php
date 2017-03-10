@@ -5,9 +5,11 @@
  */
 namespace Magento\Config\App\Config\Source;
 
+use Magento\Config\Model\Config\Export\DefinitionConfigFieldList;
 use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class DumpConfigSourceAggregated aggregates configurations from all available sources
@@ -18,6 +20,11 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * @var ExcludeList
      */
     private $excludeList;
+
+    /**
+     * @var DefinitionConfigFieldList
+     */
+    private $definitionConfigFieldList;
 
     /**
      * @var ConfigSourceInterface[]
@@ -37,11 +44,13 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     /**
      * @param ExcludeList $excludeList
      * @param array $sources
+     * @param DefinitionConfigFieldList|null $definitionConfigFieldList
      */
-    public function __construct(ExcludeList $excludeList, array $sources = [])
+    public function __construct(ExcludeList $excludeList, array $sources = [], DefinitionConfigFieldList $definitionConfigFieldList = null)
     {
         $this->excludeList = $excludeList;
         $this->sources = $sources;
+        $this->definitionConfigFieldList = $definitionConfigFieldList ?: ObjectManager::getInstance()->get(DefinitionConfigFieldList::class);
     }
 
     /**
@@ -89,7 +98,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
             if (
                 $filteredPath
                 && !is_array($data[$subKey])
-                && $this->excludeList->isPresent($filteredPath)
+                && ($this->excludeList->isPresent($filteredPath) || $this->definitionConfigFieldList->isPresent($filteredPath))
             ) {
                 $this->excludedFields[$newPath] = $filteredPath;
 
