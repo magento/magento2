@@ -8,6 +8,11 @@ namespace Magento\Catalog\Test\Unit\Block\Product\View;
 use Magento\Catalog\Block\Product\ImageBlockBuilder;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Image gallery test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GalleryTest extends \PHPUnit_Framework_TestCase
 {
     /**
