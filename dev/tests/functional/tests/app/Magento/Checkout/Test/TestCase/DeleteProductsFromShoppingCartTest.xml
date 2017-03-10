@@ -36,6 +36,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
         </variation>
         <variation name="DeleteProductsFromShoppingCartTestVariation8">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProduct::with_two_separately_links, groupedProduct::three_simple_products, configurableProduct::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
         </variation>

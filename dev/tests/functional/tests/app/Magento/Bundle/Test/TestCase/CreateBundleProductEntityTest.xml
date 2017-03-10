@@ -97,6 +97,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation5">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create fixed bundle with all types options</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">BundleProduct %isolation%</data>
@@ -187,6 +188,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertTierPriceOnBundleProductPage" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation8">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create dynamic bundle with special price</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
@@ -236,6 +238,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType" />
         </variation>
         <variation name="CreateBundleProductEntityTestVariation11">
+            <data name="issue" xsi:type="string">MAGETWO-60789: API wrong custom attributes order</data>
             <data name="description" xsi:type="string">Create fixed product with checkout first option</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>

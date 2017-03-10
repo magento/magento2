@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Downloadable\Test\TestCase\UpdateDownloadableProductEntityTest" summary="Update Downloadable Product" ticketId="MAGETWO-24775">
         <variation name="UpdateDownloadableProductEntityTestVariation1">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">55</data>
@@ -29,6 +30,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSearchableBySku" />
         </variation>
         <variation name="UpdateDownloadableProductEntityTestVariation2">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">100</data>
@@ -45,6 +47,7 @@
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
         </variation>
         <variation name="UpdateDownloadableProductEntityTestVariation3">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">9999</data>
@@ -61,6 +64,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
         </variation>
         <variation name="UpdateDownloadableProductEntityTestVariation4">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">48</data>
@@ -78,6 +82,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="UpdateDownloadableProductEntityTestVariation5">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">54</data>
@@ -101,6 +106,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
         </variation>
         <variation name="UpdateDownloadableProductEntityTestVariation6">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">43</data>

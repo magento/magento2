@@ -5,9 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
-use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Stdlib\DateTime;
 use Magento\ImportExport\Model\Import;
 
 /**
@@ -398,7 +396,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'data' => $this->data
             ]
         );
-        $reflection = new \ReflectionClass('\Magento\CatalogImportExport\Model\Import\Product');
+        $reflection = new \ReflectionClass(\Magento\CatalogImportExport\Model\Import\Product::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->importProduct, $metadataPoolMock);
@@ -410,7 +408,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     protected function _objectConstructor()
     {
         $this->optionFactory = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\Product\OptionFactory',
+            \Magento\CatalogImportExport\Model\Import\Product\OptionFactory::class,
             ['create'],
             [],
             '',
@@ -1682,5 +1680,90 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $importProduct->method('getErrorAggregator')->willReturn($errorAggregator);
 
         return $importProduct;
+    }
+
+    /**
+     * Test indexer not run reindexList in update by schedule mode.
+     *
+     * @return void
+     */
+    public function testStockItemReindexListNotCall()
+    {
+        $indexer = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $stockResource = $this->getMockBuilder(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $stock = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $stockItem = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
+            ->setMethods(['getData'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->indexerRegistry->expects($this->once())
+            ->method('get')
+            ->with('catalog_product_category')
+            ->willReturn($indexer);
+
+        $this->_stockResItemFac->expects($this->once())
+            ->method('create')
+            ->willReturn($stockResource);
+
+        $stockResource->expects($this->once())
+            ->method('getMainTable')
+            ->willReturn('mainTable');
+
+        $this->_dataSourceModel->expects($this->atLeastOnce())
+            ->method('getNextBunch')
+            ->willReturnOnConsecutiveCalls(
+                [
+                    0 => [
+                        'sku' => 'product_dynamic',
+                        'product_type' => 'simple',
+                        '_attribute_set' => 'attributeSet1'
+                    ]
+                ],
+                []
+            );
+
+        $this->validator->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
+
+        $this->skuProcessor->expects($this->atLeastOnce())
+            ->method('getNewSku')
+            ->willReturn([
+                'sku' => 'product_dynamic_3326',
+                'type_id' => 'simple',
+                'attr_set_code' => 'attributeSet1',
+                'entity_id' => 1
+            ]);
+
+        $this->stockRegistry->expects($this->once())
+            ->method('getStock')
+            ->willReturn($stock);
+
+        $this->stockRegistry->expects($this->once())
+            ->method('getStockItem')
+            ->willReturn($stockItem);
+
+        $stockItem->expects($this->once())
+            ->method('getData')
+            ->willReturn([]);
+
+        $indexer->expects($this->once())
+            ->method('isScheduled')
+            ->willReturn(true);
+
+        $indexer->expects($this->never())
+            ->method('reindexList');
+
+        $this->invokeMethod($this->importProduct, '_saveStockItem');
     }
 }
