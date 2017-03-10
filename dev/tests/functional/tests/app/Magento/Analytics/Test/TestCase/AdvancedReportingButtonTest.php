@@ -11,12 +11,12 @@ use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 /**
  * Steps:
  * 1. Log in to backend.
- * 2. Click on page actions button.
+ * 2. Click on Advanced Reporting link.
  * 3. Perform asserts.
  *
  * @ZephyrId MAGETWO-63715
  */
-class FreeTierButtonTest extends Injectable
+class AdvancedReportingButtonTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
@@ -31,6 +31,6 @@ class FreeTierButtonTest extends Injectable
     public function test(Dashboard $dashboard)
     {
         $dashboard->open();
-        $dashboard->getPageActionsBlock()->click();
+        $dashboard->getAdvancedReportingBlock()->click();
     }
 }
