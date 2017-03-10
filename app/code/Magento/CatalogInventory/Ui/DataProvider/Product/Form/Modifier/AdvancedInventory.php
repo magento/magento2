@@ -98,21 +98,19 @@ class AdvancedInventory extends AbstractModifier
         }
 
         if (!empty($this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY))) {
-            $minSaleQtyData = null;
-            $defaultConfigValue = $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY);
+            $minSaleQtyData = $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY);
 
-            if (in_array(substr($defaultConfigValue, 0, 1), ['{', '['])) {
+            if (is_string($minSaleQtyData)) {
                 // Set data source for dynamicRows Minimum Qty Allowed in Shopping Cart
-                $minSaleQtyValue = $this->serializer->unserialize($defaultConfigValue);
-
-                foreach ($minSaleQtyValue as $group => $qty) {
-                    $minSaleQtyData[] = [
-                        StockItemInterface::CUSTOMER_GROUP_ID => $group,
-                        StockItemInterface::MIN_SALE_QTY => $qty
-                    ];
+                $unserializedMinSaleQty = $this->serializer->unserialize($minSaleQtyData);
+                if (is_array($unserializedMinSaleQty) && json_last_error() === JSON_ERROR_NONE) {
+                    $minSaleQtyData = array_map(function ($group, $qty) {
+                        return [
+                            StockItemInterface::CUSTOMER_GROUP_ID => $group,
+                            StockItemInterface::MIN_SALE_QTY => $qty
+                        ];
+                    }, array_keys($unserializedMinSaleQty), array_values($unserializedMinSaleQty));
                 }
-            } else {
-                $minSaleQtyData = $defaultConfigValue;
             }
 
             $path = $modelId . '/' . self::DATA_SOURCE_DEFAULT . '/stock_data/min_qty_allowed_in_shopping_cart';
