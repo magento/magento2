@@ -457,10 +457,10 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->statusFactory->method('create')
             ->willReturn($status);
 
-        $tracks1 = $this->carrier->getTracking($tracking)->getAllTrackings();
-        $this->assertEquals(1, count($tracks1));
+        $tracks = $this->carrier->getTracking($tracking)->getAllTrackings();
+        $this->assertEquals(1, count($tracks));
 
-        $current = $tracks1[0];
+        $current = $tracks[0];
         $fields = [
             'signedby',
             'status',
