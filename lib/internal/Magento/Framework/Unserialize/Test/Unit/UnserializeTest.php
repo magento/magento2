@@ -22,12 +22,12 @@ class UnserializeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $serializer->expects($this->any())
             ->method('serialize')
-            ->willReturnCallback(function($parameter){
+            ->willReturnCallback(function ($parameter) {
                 return serialize($parameter);
             });
         $serializer->expects($this->any())
             ->method('unserialize')
-            ->willReturnCallback(function($parameter){
+            ->willReturnCallback(function ($parameter) {
                 return unserialize($parameter);
             });
         $this->unserialize = new \Magento\Framework\Unserialize\Unserialize(
