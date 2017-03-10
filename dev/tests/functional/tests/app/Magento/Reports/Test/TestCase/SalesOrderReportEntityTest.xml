@@ -19,6 +19,7 @@
             <data name="salesReport/show_actual_columns" xsi:type="string">Yes</data>
             <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportIntervalResult" />
             <constraint name="Magento\Reports\Test\Constraint\AssertSalesReportTotalResult" />
+            <constraint name="Magento\Reports\Test\Constraint\AssertReportStatisticsNoticeMessage" />
         </variation>
         <variation name="SalesOrderReportEntityTestVariation2">
             <data name="tag" xsi:type="string">stable:no</data>
