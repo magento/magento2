@@ -16,20 +16,21 @@ use Magento\Framework\App\ResourceConnection;
  */
 class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
+
     /**
-     * @var \Magento\Framework\Indexer\BatchSizeCalculatorInterface
+     * Row count in minimal batch
      */
-    private $batchSizeCalculator;
+    const BATCH_SIZE = 340;
+
+    /**
+     * @var \Magento\Framework\Indexer\BatchSizeManagementInterface
+     */
+    private $batchSizeManagement;
 
     /**
      * @var \Magento\Framework\Indexer\BatchProviderInterface
      */
     private $batchProvider;
-
-    /**
-     * @var int
-     */
-    private $memoryTablesMinRows;
 
     /**
      * @var \Magento\Indexer\Model\Indexer\StateFactory
@@ -46,22 +47,20 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
      * @param QueryGenerator|null $queryGenerator
-     * @param \Magento\Framework\Indexer\BatchSizeCalculatorInterface|null $batchSizeCalculator
+     * @param \Magento\Framework\Indexer\BatchSizeManagementInterface|null $batchSizeManagement
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
-     * @param array $memoryTablesMinRows
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $config,
         QueryGenerator $queryGenerator = null,
-        \Magento\Framework\Indexer\BatchSizeCalculatorInterface $batchSizeCalculator = null,
+        \Magento\Framework\Indexer\BatchSizeManagementInterface $batchSizeManagement = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
-        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
-        array $memoryTablesMinRows = []
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null
     ) {
         parent::__construct(
             $resource,
@@ -70,8 +69,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $queryGenerator
         );
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->batchSizeCalculator = $batchSizeCalculator ?: $objectManager->get(
-            \Magento\Framework\Indexer\BatchSizeCalculatorInterface::class
+        $this->batchSizeManagement = $batchSizeManagement ?: $objectManager->get(
+            \Magento\Framework\Indexer\BatchSizeManagementInterface::class
         );
         $this->batchProvider = $batchProvider ?: $objectManager->get(
             \Magento\Framework\Indexer\BatchProviderInterface::class
@@ -82,7 +81,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->indexerStateFactory = $stateFactory ?: $objectManager->get(
             \Magento\Indexer\Model\Indexer\StateFactory::class
         );
-        $this->memoryTablesMinRows = $memoryTablesMinRows;
     }
 
     /**
@@ -218,11 +216,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     {
         $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $columns = array_keys($this->connection->describeTable($this->getMainTmpTable()));
+        $this->batchSizeManagement->ensureBatchSize($this->connection, self::BATCH_SIZE);
         $batches = $this->batchProvider->getBatches(
             $this->connection,
             $entityMetadata->getEntityTable(),
             $entityMetadata->getIdentifierField(),
-            $this->batchSizeCalculator->estimateBatchSize($this->connection, $this->memoryTablesMinRows['default'])
+            self::BATCH_SIZE
         );
         foreach ($batches as $batch) {
             $select = $this->connection->select();
