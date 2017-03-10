@@ -15,7 +15,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 /**
  * Class for the handling of a new data collection for MBI.
  */
-class ExportDataHandler
+class ExportDataHandler implements ExportDataHandlerInterface
 {
     /**
      * Subdirectory path for all temporary files.
@@ -84,9 +84,7 @@ class ExportDataHandler
     }
 
     /**
-     * Execute collecting new data for MBI.
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function prepareExportData()
     {

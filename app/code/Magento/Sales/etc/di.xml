@@ -75,6 +75,7 @@
     <preference for="Magento\Sales\Model\Order\Invoice\NotifierInterface" type="Magento\Sales\Model\Order\Invoice\Notifier"/>
     <preference for="Magento\Sales\Model\Order\Shipment\NotifierInterface" type="Magento\Sales\Model\Order\Shipment\Notifier"/>
     <preference for="Magento\Sales\Model\Order\PaymentAdapterInterface" type="Magento\Sales\Model\Order\PaymentAdapter"/>
+    <preference for="Magento\Sales\Model\Order\RefundAdapterInterface" type="Magento\Sales\Model\Order\RefundAdapter"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Manager"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Builder"/>
     <preference for="Magento\Sales\Model\Order\Shipment\OrderRegistrarInterface" type="Magento\Sales\Model\Order\Shipment\OrderRegistrar"/>
