@@ -1,7 +1,7 @@
 <!--- Provide a general summary of the Pull Request in the Title above -->
 
 ### Description
-<!--- Provide a more detailed information about  the proposed changes-->
+<!--- Provide a description of the changes proposed in the pull request -->
 
 ### Fixed Issues (if relevant)
 <!--- Provide a list of fixed issues in the format magento/magetno2#<issue_number>, if relevant  -->
