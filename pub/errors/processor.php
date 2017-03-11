@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Error;
+
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**

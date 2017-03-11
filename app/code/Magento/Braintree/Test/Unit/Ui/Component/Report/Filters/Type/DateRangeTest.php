@@ -181,12 +181,12 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Gets Filter mock
-     * 
+     *
      * @param string $name
      * @param string $expectedType
      * @param string $expectedDate
      * @param int $i
-     * 
+     *
      * @return Filter|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getFilterMock($name, $expectedType, $expectedDate, &$i)

@@ -54,5 +54,5 @@ function setCustomErrorHandler()
                 );
             }
         }
-   );
+    );
 }

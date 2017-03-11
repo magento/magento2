@@ -15,6 +15,7 @@ use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 class DiRule implements RuleInterface
 {
     /**
+
      * @var VirtualTypeMapper
      */
     private $mapper;
@@ -81,7 +82,6 @@ class DiRule implements RuleInterface
         foreach ($this->fetchPossibleDependencies($contents) as $type => $deps) {
             foreach ($deps as $dep) {
                 $dep = $this->mapper->getType($dep, $scope);
-
                 if (preg_match($this->getPattern(), $dep, $matches)) {
                     $referenceModule = str_replace('_', '\\', $matches['module']);
                     if ($currentModule === $referenceModule) {
@@ -106,7 +106,6 @@ class DiRule implements RuleInterface
     {
         $doc = new DOMDocument();
         $doc->loadXML($contents);
-
         return [
             RuleInterface::TYPE_SOFT => $this->getSoftDependencies($doc),
             RuleInterface::TYPE_HARD => $this->getHardDependencies($doc)
@@ -122,7 +121,7 @@ class DiRule implements RuleInterface
         $result = [];
         foreach (self::$tagNameMap as $tagName => $attributeNames) {
             $nodes = $doc->getElementsByTagName($tagName);
-            /** @var \DOMElement $node */
+        /** @var \DOMElement $node */
             foreach ($nodes as $node) {
                 foreach ($attributeNames as $attributeName) {
                     $result[] = $node->getAttribute($attributeName);
@@ -142,7 +141,7 @@ class DiRule implements RuleInterface
         $result = [];
         $xpath = new DOMXPath($doc);
         $textNodes = $xpath->query('//*[@xsi:type="object"]');
-        /** @var \DOMElement $node */
+/** @var \DOMElement $node */
         foreach ($textNodes as $node) {
             $result[] = $node->nodeValue;
         }

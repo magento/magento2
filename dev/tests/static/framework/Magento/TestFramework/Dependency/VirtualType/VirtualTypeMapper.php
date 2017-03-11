@@ -13,6 +13,7 @@ use Magento\Framework\App\Utility\Files;
 class VirtualTypeMapper
 {
     /**
+
      * @var array
      */
     private $map = [];
@@ -47,7 +48,6 @@ class VirtualTypeMapper
             array_unshift($scopes, $scope);
         }
         $scopes[] = self::$mainScope;
-
         foreach ($scopes as $scp) {
             if (isset($this->map[$scp][$name])) {
                 return $this->map[$scp][$name];
@@ -91,9 +91,8 @@ class VirtualTypeMapper
             $scope = $this->getScopeFromFile($file);
             $doc = new DOMDocument();
             $doc->loadXML(file_get_contents($file));
-
             $nodes = $doc->getElementsByTagName('virtualType');
-            /** @var \DOMElement $node */
+/** @var \DOMElement $node */
             foreach ($nodes as $node) {
                 $name = $node->getAttribute('name');
                 $type = $node->getAttribute('type');

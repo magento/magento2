@@ -47,7 +47,8 @@ class ResetButton extends Field
     private function getRobotsDefaultCustomInstructions()
     {
         return trim((string)$this->scopeConfig->getValue(
-            self::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            self::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         ));
     }
 

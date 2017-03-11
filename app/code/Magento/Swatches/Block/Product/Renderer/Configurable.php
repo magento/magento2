@@ -244,8 +244,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function addAdditionalMediaData(array $swatch, $optionId, array $attributeDataArray)
     {
-        if (
-            isset($attributeDataArray['use_product_image_for_swatch'])
+        if (isset($attributeDataArray['use_product_image_for_swatch'])
             && $attributeDataArray['use_product_image_for_swatch']
         ) {
             $variationMedia = $this->getVariationMedia($attributeDataArray['attribute_code'], $optionId);

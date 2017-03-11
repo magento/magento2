@@ -615,8 +615,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     {
         if (is_array($option)) {
             $option = $this->_itemOptionFactory->create()->setData($option)->setItem($this);
-        } elseif (
-            $option instanceof \Magento\Framework\DataObject &&
+        } elseif ($option instanceof \Magento\Framework\DataObject &&
             !$option instanceof \Magento\Quote\Model\Quote\Item\Option
         ) {
             $option = $this->_itemOptionFactory->create()->setData(

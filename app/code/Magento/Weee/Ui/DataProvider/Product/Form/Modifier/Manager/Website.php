@@ -59,8 +59,7 @@ class Website
             ]
         ];
 
-        if (
-            $this->storeManager->hasSingleStore()
+        if ($this->storeManager->hasSingleStore()
             || ($eavAttribute->getEntityAttribute() && $eavAttribute->getEntityAttribute()->isScopeGlobal()
             )
         ) {

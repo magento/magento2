@@ -10,6 +10,7 @@ use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 class DiRuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
+
      * @param string $module
      * @param string $contents
      * @param array $expected
@@ -18,22 +19,14 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
     public function testGetDependencyInfo($module, $contents, array $expected)
     {
 
-        $diRule = new DiRule(
-            new VirtualTypeMapper(
-                [
+        $diRule = new DiRule(new VirtualTypeMapper([
                     'scope' => [
                         'someVirtualType1' => 'Magento\AnotherModule\Some\Class1',
                         'someVirtualType2' => 'Magento\AnotherModule\Some\Class2'
                     ]
-                ]
-            )
-        );
-
+                ]));
         $file = '/some/path/scope/di.xml';
-        static::assertEquals(
-            $expected,
-            $diRule->getDependencyInfo($module, null, $file, $contents)
-        );
+        static::assertEquals($expected, $diRule->getDependencyInfo($module, null, $file, $contents));
     }
 
     /**

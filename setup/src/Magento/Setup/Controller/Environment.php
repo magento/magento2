@@ -223,7 +223,6 @@ class Environment extends AbstractActionController
         if (!$updaterCheck['success']) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
             $data['updaterErrorMessage'] = 'Error from Updater Application Cron Script:<br/>' . $updaterCheck['error'];
-
         }
         if (isset($setupCheck['notice'])) {
             $data['setupNoticeMessage'] = 'Notice from Setup Application Cron Script:<br/>' . $setupCheck['notice'];
