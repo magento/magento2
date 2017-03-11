@@ -32,7 +32,6 @@ class SortOrder extends AbstractSimpleObject
         }
     }
 
-
     /**
      * Get sorting field.
      *

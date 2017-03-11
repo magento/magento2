@@ -729,5 +729,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

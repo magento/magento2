@@ -568,7 +568,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         return $post;
     }
 
-
     /**
      * Set POST parameters
      *
@@ -783,7 +782,6 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         $this->requestUri = $requestUri;
         return $this;
     }
-
 
     /**
      * Get base url

@@ -258,7 +258,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('toFlatArray')
             ->willReturn(['group_id' => 1]);
 
-
         $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $quoteMock->expects($this->any())->method('getCustomer')->will($this->returnValue($customerMock));
         $quoteMock->expects($this->once())

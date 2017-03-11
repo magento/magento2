@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Layout;
 
-
 /**
  * Pool of generators for structural elements
  */

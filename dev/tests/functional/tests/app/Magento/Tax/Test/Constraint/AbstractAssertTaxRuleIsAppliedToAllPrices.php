@@ -144,7 +144,6 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
         $this->cmsIndex->getTopmenu()->selectCategoryByName($productCategory);
     }
 
-
     /**
      * Get cart prices.
      *

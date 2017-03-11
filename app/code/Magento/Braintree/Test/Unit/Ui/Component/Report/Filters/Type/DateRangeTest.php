@@ -39,7 +39,6 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
      */
     private $filterModifierMock;
 
-
     /**
      * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
      */

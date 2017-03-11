@@ -27,7 +27,6 @@ class InstallData implements InstallDataInterface
      */
     protected $quoteSetupFactory;
 
-
     /**
      * @param SalesSetupFactory $salesSetupFactory
      * @param QuoteSetupFactory $quoteSetupFactory

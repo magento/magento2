@@ -5,7 +5,6 @@
  */
 namespace Magento\Cms\Test\Unit\Ui\Component\Listing;
 
-
 use Magento\Cms\Ui\Component\DataProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Authorization;

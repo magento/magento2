@@ -218,7 +218,6 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('PHP Mess Detector is not available.');
         }
 
-
         $result = $codeMessDetector->run(self::getWhitelist(['php']));
 
         $output = "";

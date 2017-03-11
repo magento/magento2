@@ -263,7 +263,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param boolean $scope
      * @return $this
      */
-
     public function setMessagesScope($scope)
     {
         $this->getResource()->setMessagesScope($scope);

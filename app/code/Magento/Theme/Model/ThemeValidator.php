@@ -38,7 +38,6 @@ class ThemeValidator
      */
     private $configData;
 
-
     /**
      * @param StoreManagerInterface $storeManager
      * @param ThemeProviderInterface $themeProvider

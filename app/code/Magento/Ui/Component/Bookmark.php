@@ -51,7 +51,6 @@ class Bookmark extends AbstractComponent
         $this->bookmarkManagement = $bookmarkManagement;
     }
 
-
     /**
      * Get component name
      *
