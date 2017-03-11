@@ -10,7 +10,6 @@ use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 class DiRuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
-
      * @param string $module
      * @param string $contents
      * @param array $expected

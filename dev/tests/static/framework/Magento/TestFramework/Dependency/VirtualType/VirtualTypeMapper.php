@@ -13,7 +13,6 @@ use Magento\Framework\App\Utility\Files;
 class VirtualTypeMapper
 {
     /**
-
      * @var array
      */
     private $map = [];
