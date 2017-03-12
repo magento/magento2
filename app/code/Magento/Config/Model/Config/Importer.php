@@ -161,20 +161,12 @@ class Importer implements ImporterInterface
      */
     private function invokeSaveAll(array $data)
     {
-        $invokeSave = function (array $scopeData, $scope, $scopeCode = null) {
-            $scopeData = array_keys($this->arrayUtils->flatten($scopeData));
-
-            foreach ($scopeData as $path) {
-                $this->invokeSave($path, $scope, $scopeCode);
-            }
-        };
-
         foreach ($data as $scope => $scopeData) {
             if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-                $invokeSave($scopeData, $scope);
+                $this->invokeSave($scopeData, $scope);
             } else {
                 foreach ($scopeData as $scopeCode => $scopeCodeData) {
-                    $invokeSave($scopeCodeData, $scope, $scopeCode);
+                    $this->invokeSave($scopeCodeData, $scope, $scopeCode);
                 }
             }
         }
@@ -185,20 +177,37 @@ class Importer implements ImporterInterface
      * This is a temporary solution until Magento reworks
      * backend models for configurations.
      *
-     * @param string $path The configuration path in format group/section/field_name
+     * Example of $scopeData argument:
+     *
+     * ```php
+     *  [
+     *      'web' => [
+     *          'unsecure' => [
+     *              'base_url' => "http://magento2.local/"
+     *          ]
+     *      ]
+     *  ];
+     * ```
+     *
+     * @param array $scopeData The data for specific scope
      * @param string $scope The configuration scope (default, website, or store)
      * @param string $scopeCode The scope code
      * @return void
      */
-    private function invokeSave($path, $scope, $scopeCode = null)
+    private function invokeSave(array $scopeData, $scope, $scopeCode = null)
     {
-        $value = $this->scopeConfig->getValue($path, $scope, $scopeCode);
-        $backendModel = $this->valueFactory->create($path, $value, $scope, $scopeCode);
+        $scopeData = array_keys($this->arrayUtils->flatten($scopeData));
 
-        if ($backendModel instanceof Config\Value) {
-            $backendModel->setData('force_changed_value', true);
-            $backendModel->beforeSave();
-            $backendModel->afterSave();
+        foreach ($scopeData as $path) {
+            $value = $this->scopeConfig->getValue($path, $scope, $scopeCode);
+            $backendModel = $this->valueFactory->create($path, $value, $scope, $scopeCode);
+
+            if ($backendModel instanceof Config\Value) {
+                $backendModel->setData('force_changed_value', true);
+                $backendModel->beforeSave();
+                $backendModel->afterSave();
+            }
         }
+
     }
 }
