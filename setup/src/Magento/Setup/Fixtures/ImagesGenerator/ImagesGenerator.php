@@ -7,7 +7,7 @@ namespace Magento\Setup\Fixtures\ImagesGenerator;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ImageGenerator
+class ImagesGenerator
 {
     /**
      * @var \Magento\Framework\Filesystem
@@ -20,49 +20,45 @@ class ImageGenerator
     private $mediaConfig;
 
     /**
-     * @var array
-     */
-    private $config;
-
-    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param array $config
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        array $config
+        \Magento\Catalog\Model\Product\Media\Config $mediaConfig
     ) {
         $this->filesystem = $filesystem;
         $this->mediaConfig = $mediaConfig;
-        $this->config = $config;
     }
 
     /**
      * Generates image from $data and puts its to /tmp folder
      *
-     * @param string $data
+     * @param string $config
      * @return string $imagePath
      */
-    public function generate($data)
+    public function generate($config)
     {
         $binaryData = '';
-        $data = str_split(sha1($data), 2);
+        $data = str_split(sha1($config['image-name']), 2);
         foreach ($data as $item) {
             $binaryData .= base_convert($item, 16, 2);
         }
         $binaryData = str_split($binaryData, 1);
 
-        $image = imagecreate($this->config['image-width'], $this->config['image-height']);
+        $image = imagecreate($config['image-width'], $config['image-height']);
         $bgColor = imagecolorallocate($image, 240, 240, 240);
         $fgColor = imagecolorallocate($image, mt_rand(0, 230), mt_rand(0, 230), mt_rand(0, 230));
         $colors = [$fgColor, $bgColor];
-        imagefilledrectangle($image, 0, 0, $this->config['image-width'], $this->config['image-height'], $bgColor);
+        imagefilledrectangle($image, 0, 0, $config['image-width'], $config['image-height'], $bgColor);
 
-        for ($row = 10; $row < 100; $row += 18) {
-            for ($col = 0; $col < 90; $col += 18) {
-                next($binaryData);
+        for ($row = 10; $row < $config['image-height']; $row += 18) {
+            for ($col = 0; $col < $config['image-width']; $col += 18) {
+                if (next($binaryData) === false) {
+                    reset($binaryData);
+                }
+
                 imagefilledrectangle($image, $row, $col, $row + 18, $col + 18, $colors[current($binaryData)]);
             }
         }
@@ -72,7 +68,7 @@ class ImageGenerator
         $mediaDirectory->create($relativePathToMedia);
 
         $absolutePathToMedia = $mediaDirectory->getAbsolutePath($this->mediaConfig->getBaseTmpMediaPath());
-        $imagePath = $absolutePathToMedia . DIRECTORY_SEPARATOR . $this->config['image-name'];
+        $imagePath = $absolutePathToMedia . DIRECTORY_SEPARATOR . $config['image-name'];
         imagejpeg($image, $imagePath, 100);
 
         return $imagePath;

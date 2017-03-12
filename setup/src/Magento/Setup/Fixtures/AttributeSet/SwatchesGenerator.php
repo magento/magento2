@@ -40,22 +40,22 @@ class SwatchesGenerator
     private $swatchHelper;
 
     /**
-     * @var \Magento\Setup\Fixtures\ImagesGenerator\ImageGeneratorFactory
+     * @var \Magento\Setup\Fixtures\ImagesGenerator\ImagesGeneratorFactory
      */
     private $imagesGeneratorFactory;
 
     /**
-     * @var \Magento\Setup\Fixtures\ImagesGenerator\ImageGenerator
+     * @var \Magento\Setup\Fixtures\ImagesGenerator\ImagesGenerator
      */
     private $imagesGenerator;
 
     /**
      * @param \Magento\Swatches\Helper\Media $swatchHelper
-     * @param \Magento\Setup\Fixtures\ImagesGenerator\ImageGeneratorFactory $imagesGeneratorFactory
+     * @param \Magento\Setup\Fixtures\ImagesGenerator\ImagesGeneratorFactory $imagesGeneratorFactory
      */
     public function __construct(
         \Magento\Swatches\Helper\Media $swatchHelper,
-        \Magento\Setup\Fixtures\ImagesGenerator\ImageGeneratorFactory $imagesGeneratorFactory
+        \Magento\Setup\Fixtures\ImagesGenerator\ImagesGeneratorFactory $imagesGeneratorFactory
     ) {
         $this->swatchHelper = $swatchHelper;
         $this->imagesGeneratorFactory = $imagesGeneratorFactory;
@@ -126,17 +126,17 @@ class SwatchesGenerator
     private function generateSwatchImage($data)
     {
         if ($this->imagesGenerator === null) {
-            $this->imagesGenerator = $this->imagesGeneratorFactory->create([
-                'config' => [
-                    'image-width' => self::GENERATED_SWATCH_WIDTH,
-                    'image-height' => self::GENERATED_SWATCH_HEIGHT,
-                    'image-name' => self::GENERATED_SWATCH_TMP_NAME
-                ]
-            ]);
+            $this->imagesGenerator = $this->imagesGeneratorFactory->create();
         }
 
-        $this->imagesGenerator->generate($data);
-        $imagePath = substr($this->swatchHelper->moveImageFromTmp(self::GENERATED_SWATCH_TMP_NAME), 1);
+        $imageName = md5($data) . '.jpg';
+        $this->imagesGenerator->generate([
+            'image-width' => self::GENERATED_SWATCH_WIDTH,
+            'image-height' => self::GENERATED_SWATCH_HEIGHT,
+            'image-name' => $imageName
+        ]);
+
+        $imagePath = substr($this->swatchHelper->moveImageFromTmp($imageName), 1);
         $this->swatchHelper->generateSwatchVariations($imagePath);
 
         return $imagePath;

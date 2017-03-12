@@ -85,20 +85,6 @@ class SimpleProductTemplateGenerator implements TemplateEntityGeneratorInterface
                     'is_qty_decimal' => 0,
                     'is_in_stock' => 1
                 ],
-                'media_gallery' => [
-                    'images' => [
-                        'ds12edsdq' => [
-                            'file' => "/n/a/naz.jpg",
-                            'media_type' => "image",
-                            'entity_id' => "1013",
-                            'label' => "",
-                            'position' => "1",
-                            'disabled' => "0",
-                            'position_default' => "1",
-                            'disabled_default' => "0",
-                        ]
-                    ]
-                ],
             ]
         ]);
 
