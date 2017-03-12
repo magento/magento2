@@ -156,15 +156,17 @@ class ArrayUtils
         $result = [];
 
         foreach ($data as $key => $value) {
+            $fullPath = $path ? $path . $separator . $key : $key;
+
             if (!is_array($value)) {
-                $result[$path ? $path . $separator . $key : $key] = $value;
+                $result[$fullPath] = $value;
 
                 continue;
             }
 
             $result = array_merge(
                 $result,
-                $this->flatten($value, $path ? $path . $separator . $key : $key, $separator)
+                $this->flatten($value, $fullPath, $separator)
             );
         }
 
