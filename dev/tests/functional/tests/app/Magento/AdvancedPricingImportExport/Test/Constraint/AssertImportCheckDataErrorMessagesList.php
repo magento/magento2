@@ -22,7 +22,7 @@ class AssertImportCheckDataErrorMessagesList extends AbstractConstraint
      */
     public function processAssert(array $patterns, AdminImportIndex $adminImportIndex)
     {
-        $messages = $adminImportIndex->getImportResult()->getErrorsList();
+        $messages = $adminImportIndex->getMessagesBlock()->getErrorsList();
 
         \PHPUnit_Framework_Assert::assertNotFalse($messages, 'Errors messages block is absent.');
         \PHPUnit_Framework_Assert::assertNotEmpty($messages, 'Errors messages is absent.');

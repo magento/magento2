@@ -18,11 +18,27 @@ use Magento\Mtf\Util\Generate\File\Generator;
 class File extends DataSource
 {
     /**
+     * Website code mapping.
+     *
+     * @var array
+     */
+    private $codeMapping =[
+        'base' => 'Main Website[USD]'
+    ];
+
+    /**
      * Fixture data.
      *
      * @var array
      */
     private $value;
+
+    /**
+     * Template of csv file.
+     *
+     * @var array
+     */
+    private $csvTemplate;
 
     /**
      * Generator for the uploaded file.
@@ -39,11 +55,11 @@ class File extends DataSource
     private $fixtureFactory;
 
     /**
-     * Products fixtures.
+     * Entities fixtures.
      *
      * @var FixtureInterface[]
      */
-    private $products;
+    private $entities;
 
     /**
      * Object manager.
@@ -51,6 +67,20 @@ class File extends DataSource
      * @var ObjectManager
      */
     private $objectManager;
+
+    /**
+     * Csv as array.
+     *
+     * @var array
+     */
+    private $csv;
+
+    /**
+     * Placeholders.
+     *
+     * @var array
+     */
+    private $placeholders;
 
     /**
      * @param ObjectManager $objectManager
@@ -82,32 +112,36 @@ class File extends DataSource
             return parent::getData($key);
         }
 
-        $placeholders = [];
-        if (!isset($this->products)
-            && isset($this->value['products'])
-            && is_array($this->value['products'])
-        ) {
-            $this->products = $this->createProducts();
+        $filename = MTF_TESTS_PATH . $this->value['template']['filename'] . '.php';
+        if (!file_exists($filename)) {
+            throw new \Exception("CSV file '{$filename}'' not found on the server.");
+        }
 
-            foreach ($this->products as $product) {
-                $placeholders[] = ['%sku%' => $product->getData('sku')];
-            }
+        $this->csvTemplate = include $filename;
+
+        $this->placeholders = [];
+        if (!isset($this->products)
+            && isset($this->value['entities'])
+            && is_array($this->value['entities'])
+        ) {
+            $this->entities = $this->createEntities();
+            $this->preparePlaceHolders();
         }
 
         if (isset($this->value['template']) && is_array($this->value['template'])) {
-            $this->data = $this->generator->generate(
-                $this->objectManager->create(
-                    CsvTemplate::class,
-                    [
-                        'config' => array_merge(
-                            $this->value['template'],
-                            [
-                                'placeholders' => $placeholders
-                            ]
-                        )
-                    ]
-                )
+            $csvTemplate = $this->objectManager->create(
+                CsvTemplate::class,
+                [
+                    'config' => array_merge(
+                        $this->value['template'],
+                        [
+                            'placeholders' => $this->placeholders
+                        ]
+                    )
+                ]
             );
+            $this->data = $this->generator->generate($csvTemplate);
+            $this->convertCsvToArray($csvTemplate->getCsv());
 
             return parent::getData($key);
         }
@@ -123,13 +157,23 @@ class File extends DataSource
     }
 
     /**
-     * Get products fixtures.
+     * Get entities fixtures.
      *
      * @return FixtureInterface[]
      */
-    public function getProducts()
+    public function getEntities()
     {
-        return $this->products ?: [];
+        return $this->entities ?: [];
+    }
+
+    /**
+     * Get fixture data.
+     *
+     * @return array|null
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 
     /**
@@ -137,19 +181,84 @@ class File extends DataSource
      *
      * @return FixtureInterface[]
      */
-    private function createProducts()
+    private function createEntities()
     {
-        $products = [];
-        foreach ($this->value['products'] as $key => $productDataSet) {
-            list($fixtureCode, $dataset) = explode('::', $productDataSet);
+        $entities = [];
+        foreach ($this->value['entities'] as $key => $entityDataSet) {
+            list($fixtureCode, $dataset) = explode('::', $entityDataSet);
 
             /** @var FixtureInterface[] $products */
-            $products[$key] = $this->fixtureFactory->createByCode(trim($fixtureCode), ['dataset' => trim($dataset)]);
-            if ($products[$key]->hasData('id') === false) {
-                $products[$key]->persist();
+            $entities[$key] = $this->fixtureFactory->createByCode(trim($fixtureCode), ['dataset' => trim($dataset)]);
+            if ($entities[$key]->hasData('id') === false) {
+                $entities[$key]->persist();
             }
         }
 
-        return $products;
+        return $entities;
+    }
+
+    /**
+     * Create placeholders for products.
+     *
+     * @return array
+     */
+    private function preparePlaceHolders()
+    {
+        $placeholders = [];
+        $key = 0;
+        foreach ($this->entities as $entity) {
+            $currency = (isset($this->value['template']['websiteCurrency']))
+                ? "[{$this->value['template']['websiteCurrency']}]"
+                : '[USD]';
+            $website = $entity->getDataFieldConfig('website_ids')['source']->getWebsites()[0];
+            $entityData = $entity->getData();
+            $entityData['code'] = $website->getCode();
+            foreach ($this->csvTemplate['entity_' . $key] as $tierKey => $tier) {
+                $values = implode('', array_values($tier));
+                preg_match_all('/\%(.*)\%/U', $values, $indexes);
+
+                foreach ($indexes[1] as $index) {
+                    if (isset($entityData[$index])) {
+                        $placeholders['entity_' . $key][$tierKey]["%{$index}%"] = $entityData[$index];
+                    }
+                    $placeholders['entity_' . $key][$tierKey][$entityData['code']] = $website->getName() . $currency;
+                }
+            }
+
+            $key++;
+        }
+        $this->placeholders = $placeholders;
+    }
+
+    /**
+     * Convert csv to array.
+     *
+     * @param string $csvContent
+     * @return array
+     */
+    public function convertCsvToArray($csvContent)
+    {
+        foreach ($this->placeholders as $placeholderData) {
+            foreach ($placeholderData as $data) {
+                $csvContent = strtr($csvContent, $data);
+            }
+        }
+        $csvContent = strtr($csvContent, $this->codeMapping);
+        $this->csv = array_map(
+            function ($value) {
+                return explode(',', str_replace('"', '', $value));
+            },
+            str_getcsv($csvContent, "\n")
+        );
+    }
+
+    /**
+     * Return csv as array.
+     *
+     * @return array
+     */
+    public function getCsv()
+    {
+        return $this->csv;
     }
 }
