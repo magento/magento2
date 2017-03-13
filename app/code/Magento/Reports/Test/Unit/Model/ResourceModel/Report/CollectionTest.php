@@ -181,6 +181,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Format datetime.
+     *
+     * Force Standard Time to eliminate DateTime "Daylight Saving Time problem"
+     * https://bugs.php.net/bug.php?id=71913&edit=1
+     *
      * @return string
      */
     public function formatDateTime()
@@ -196,6 +201,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             new \DateTimeZone('America/Los_Angeles')
         );
 
-        return $formatter->format($dateStart);
+        return $formatter->format($dateStart)  . ' ST';
     }
 }
