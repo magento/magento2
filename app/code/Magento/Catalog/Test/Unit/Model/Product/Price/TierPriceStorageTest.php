@@ -52,70 +52,40 @@ class TierPriceStorageTest extends \PHPUnit_Framework_TestCase
     private $tierPriceStorage;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\InvalidSkuChecker|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $invalidSkuChecker;
-
-    /**
      * {@inheritdoc}
      */
     protected function setUp()
     {
-        $this->tierPricePersistence = $this->getMock(
-            \Magento\Catalog\Model\Product\Price\TierPricePersistence::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->tierPricePersistence = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product\Price\TierPricePersistence::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->tierPricePersistence->expects($this->any())
             ->method('getEntityLinkField')
             ->willReturn('row_id');
-        $this->tierPriceValidator = $this->getMock(
-            \Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->tierPriceFactory = $this->getMock(
-            \Magento\Catalog\Model\Product\Price\TierPriceFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->priceIndexer = $this->getMock(
-            \Magento\Catalog\Model\Indexer\Product\Price::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->productIdLocator = $this->getMock(
-            \Magento\Catalog\Model\ProductIdLocatorInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->config = $this->getMock(
-            \Magento\PageCache\Model\Config::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->typeList = $this->getMock(
-            \Magento\Framework\App\Cache\TypeListInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->invalidSkuChecker = $this->getMockBuilder(\Magento\Catalog\Model\Product\Price\InvalidSkuChecker::class)
+        $this->tierPriceValidator = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
+        $this->tierPriceFactory = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product\Price\TierPriceFactory::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->priceIndexer = $this->getMockBuilder(\Magento\Catalog\Model\Indexer\Product\Price::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productIdLocator = $this->getMockBuilder(\Magento\Catalog\Model\ProductIdLocatorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->config = $this->getMockBuilder(\Magento\PageCache\Model\Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->typeList = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeListInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->tierPriceStorage = $objectManager->getObject(
@@ -127,7 +97,6 @@ class TierPriceStorageTest extends \PHPUnit_Framework_TestCase
                 'priceIndexer' => $this->priceIndexer,
                 'productIdLocator' => $this->productIdLocator,
                 'config' => $this->config,
-                'invalidSkuChecker' => $this->invalidSkuChecker,
                 'typeList' => $this->typeList,
             ]
         );
@@ -135,11 +104,17 @@ class TierPriceStorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get method.
+     *
      * @return void
      */
     public function testGet()
     {
         $skus = ['simple', 'virtual'];
+        $this->tierPriceValidator
+            ->expects($this->once())
+            ->method('validateSkus')
+            ->with($skus)
+            ->willReturn($skus);
         $this->productIdLocator->expects($this->atLeastOnce())
             ->method('retrieveProductIdsBySkus')
             ->with(['simple', 'virtual'])
@@ -171,8 +146,7 @@ class TierPriceStorageTest extends \PHPUnit_Framework_TestCase
                 ]
             );
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\TierPriceInterface::class)->getMockForAbstractClass();
-        $this->tierPriceFactory->expects($this->at(0))->method('create')->willReturn($price);
-        $this->tierPriceFactory->expects($this->at(1))->method('create')->willReturn($price);
+        $this->tierPriceFactory->expects($this->atLeastOnce())->method('create')->willReturn($price);
         $prices = $this->tierPriceStorage->get($skus);
         $this->assertNotEmpty($prices);
         $this->assertEquals(2, count($prices));
@@ -180,6 +154,7 @@ class TierPriceStorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test update method.
+     *
      * @return void
      */
     public function testUpdate()
@@ -227,18 +202,19 @@ class TierPriceStorageTest extends \PHPUnit_Framework_TestCase
         $this->priceIndexer->expects($this->atLeastOnce())->method('execute');
         $this->config->expects($this->atLeastOnce())->method('isEnabled')->willReturn(true);
         $this->typeList->expects($this->atLeastOnce())->method('invalidate');
-        $price->method('getSku')->willReturn('simple');
+        $price->expects($this->atLeastOnce())->method('getSku')->willReturn('simple');
         $this->assertEmpty($this->tierPriceStorage->update([$price]));
     }
 
     /**
      * Test replace method.
+     *
      * @return void
      */
     public function testReplace()
     {
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\TierPriceInterface::class)->getMockForAbstractClass();
-        $price->method('getSku')->willReturn('virtual');
+        $price->expects($this->atLeastOnce())->method('getSku')->willReturn('virtual');
         $result = $this->getMockBuilder(\Magento\Catalog\Model\Product\Price\Validation\Result::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -271,12 +247,13 @@ class TierPriceStorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test delete method.
+     *
      * @return void
      */
     public function testDelete()
     {
         $price = $this->getMockBuilder(\Magento\Catalog\Api\Data\TierPriceInterface::class)->getMockForAbstractClass();
-        $price->method('getSku')->willReturn('simple');
+        $price->expects($this->atLeastOnce())->method('getSku')->willReturn('simple');
         $result = $this->getMockBuilder(\Magento\Catalog\Model\Product\Price\Validation\Result::class)
             ->disableOriginalConstructor()
             ->getMock();

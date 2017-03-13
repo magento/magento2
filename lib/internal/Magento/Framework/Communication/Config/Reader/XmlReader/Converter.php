@@ -19,7 +19,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * @deprecated
-     * @see ConfigParser::SERVICE_METHOD_NAME_PATTERN
+     * @see ConfigParser::parseServiceMethod
      */
     const SERVICE_METHOD_NAME_PATTERN = '/^([a-zA-Z\\\\]+)::([a-zA-Z]+)$/';
 

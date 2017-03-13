@@ -409,9 +409,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Column names that holds images files names
      *
+     * Note: the order of array items has a value in order to properly set 'position' value
+     * of media gallery items.
+     *
      * @var string[]
      */
-    protected $_imagesArrayKeys = ['_media_image', 'image', 'small_image', 'thumbnail', 'swatch_image'];
+    protected $_imagesArrayKeys = ['image', 'small_image', 'thumbnail', 'swatch_image', '_media_image'];
 
     /**
      * Permanent entity columns.
@@ -1015,7 +1018,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _initSkus()
     {
         $this->skuProcessor->setTypeModels($this->_productTypeModels);
-        $this->_oldSku = $this->skuProcessor->getOldSkus();
+        $this->_oldSku = $this->skuProcessor->reloadOldSkus()->getOldSkus();
         return $this;
     }
 
@@ -1249,7 +1252,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $linkId = $this->_connection->fetchOne(
                     $this->_connection->select()
                         ->from($this->getResource()->getTable('catalog_product_entity'))
-                        ->where('sku = ?', $sku)
+                        ->where('sku = ?', (string)$sku)
                         ->columns($this->getProductEntityLinkField())
                 );
 
@@ -1333,8 +1336,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $entityTable,
                 array_merge($this->getNewSkuFieldsForSelect(), $this->getOldSkuFieldsForSelect())
             )->where(
-                'sku IN (?)',
-                array_keys($entityRowsIn)
+                $this->_connection->quoteInto('sku IN (?)', array_keys($entityRowsIn))
             );
             $newProducts = $this->_connection->fetchAll($select);
             foreach ($newProducts as $data) {
@@ -1627,8 +1629,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     );
                 }
                 $rowData[self::COL_MEDIA_IMAGE] = [];
+
+                /*
+                 * Note: to avoid problems with undefined sorting, the value of media gallery items positions
+                 * must be unique in scope of one product.
+                 */
+                $position = 0;
                 foreach ($rowImages as $column => $columnImages) {
-                    foreach ($columnImages as $position => $columnImage) {
+                    foreach ($columnImages as $columnImageKey => $columnImage) {
                         if (!isset($uploadedImages[$columnImage])) {
                             $uploadedFile = $this->uploadMediaFiles($columnImage, true);
                             if ($uploadedFile) {
@@ -1652,11 +1660,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                         if ($uploadedFile && !isset($mediaGallery[$rowSku][$uploadedFile])) {
                             if (isset($existingImages[$rowSku][$uploadedFile])) {
-                                if (isset($rowLabels[$column][$position])
-                                    && $rowLabels[$column][$position] != $existingImages[$rowSku][$uploadedFile]['label']
+                                if (isset($rowLabels[$column][$columnImageKey])
+                                    && $rowLabels[$column][$columnImageKey] != $existingImages[$rowSku][$uploadedFile]['label']
                                 ) {
                                     $labelsForUpdate[] = [
-                                        'label' => $rowLabels[$column][$position],
+                                        'label' => $rowLabels[$column][$columnImageKey],
                                         'imageData' => $existingImages[$rowSku][$uploadedFile]
                                     ];
                                 }
@@ -1666,8 +1674,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 }
                                 $mediaGallery[$rowSku][$uploadedFile] = [
                                     'attribute_id' => $this->getMediaGalleryAttributeId(),
-                                    'label' => isset($rowLabels[$column][$position]) ? $rowLabels[$column][$position] : '',
-                                    'position' => $position + 1,
+                                    'label' => isset($rowLabels[$column][$columnImageKey]) ? $rowLabels[$column][$columnImageKey] : '',
+                                    'position' => ++$position,
                                     'disabled' => isset($disabledImages[$columnImage]) ? '1' : '0',
                                     'value' => $uploadedFile,
                                 ];
