@@ -39,11 +39,11 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      */
     public function getPrice($product)
     {
-        if ( !empty( $product ) ) {
+        if (!empty($product)) {
             $simpleProductOption = $product->getCustomOption('simple_product');
-            if ( !empty( $simpleProductOption ) ) {
+            if (!empty($simpleProductOption)) {
                 $simpleProduct = $simpleProductOption->getProduct();
-                if ( !empty( $simpleProduct ) ) {
+                if (!empty($simpleProduct)) {
                     return $simpleProduct->getPrice();
                 }
             }
