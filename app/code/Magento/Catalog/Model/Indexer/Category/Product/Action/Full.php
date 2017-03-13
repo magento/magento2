@@ -20,7 +20,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     /**
      * Row count in minimal batch
      */
-    const BATCH_SIZE = 340;
+    const BATCH_SIZE = 170;
 
     /**
      * @var \Magento\Framework\Indexer\BatchSizeManagementInterface
