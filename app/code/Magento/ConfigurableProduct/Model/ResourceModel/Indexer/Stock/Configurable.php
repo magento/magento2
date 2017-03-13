@@ -57,7 +57,8 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
     {
         $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
-        $idxTable = $usePrimaryTable ? $this->indexerStockFrontendResource->getMainTable() : $this->getIdxTable();
+        $table = $this->isFull ? $this->getMainTable() : $this->indexerStockFrontendResource->getMainTable();
+        $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
         $select = parent::_getStockStatusSelect($entityIds, $usePrimaryTable);
         $linkField = $metadata->getLinkField();
         $select->reset(

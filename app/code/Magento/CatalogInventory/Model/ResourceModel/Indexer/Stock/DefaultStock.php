@@ -19,6 +19,11 @@ use Magento\Framework\App\ObjectManager;
 class DefaultStock extends AbstractIndexer implements StockInterface
 {
     /**
+     * @var bool
+     */
+    protected $isFull;
+
+    /**
      * Current Product Type Id
      *
      * @var string
@@ -125,6 +130,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     public function reindexEntity($entityIds)
     {
+        $this->isFull = false;
         $this->_updateIndex($entityIds);
         return $this;
     }
@@ -254,6 +260,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     public function reindexBatch(array $entityIds)
     {
+        $this->isFull = true;
         $this->tableStrategy->setUseIdxTable(false);
         $this->_prepareIndexTable($entityIds);
         return $this;

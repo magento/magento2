@@ -55,7 +55,8 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
         $connection = $this->getConnection();
-        $idxTable = $usePrimaryTable ? $this->indexerStockFrontendResource->getMainTable() : $this->getIdxTable();
+        $table = $this->isFull ? $this->getMainTable() : $this->indexerStockFrontendResource->getMainTable();
+        $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
         $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $select = parent::_getStockStatusSelect($entityIds, $usePrimaryTable);
         $select->reset(

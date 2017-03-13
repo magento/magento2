@@ -14,7 +14,7 @@ use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Indexer\BatchSizeCalculatorInterface as BatchCalculator;
+use Magento\Framework\Indexer\BatchSizeManagementInterface as BatchSizeManagement;
 use Magento\Framework\Indexer\BatchProviderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -35,9 +35,9 @@ class Full extends AbstractAction
     private $metadataPool;
 
     /**
-     * @var BatchCalculator
+     * @var BatchSizeManagement
      */
-    private $batchSizeCalculator;
+    private $batchSizeManagement;
 
     /**
      * @var BatchProviderInterface
@@ -47,7 +47,7 @@ class Full extends AbstractAction
     /**
      * @var array
      */
-    private $memoryTablesMinRows;
+    private $batchRowsCount;
 
     /**
      * @param ResourceConnection $resource
@@ -57,9 +57,9 @@ class Full extends AbstractAction
      * @param EventManager $eventManager
      * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
      * @param MetadataPool|null $metadataPool
-     * @param BatchCalculator|null $batchSizeCalculator
+     * @param BatchSizeManagement|null $batchSizeManagement
      * @param BatchProviderInterface|null $batchProvider
-     * @param array $memoryTablesMinRows
+     * @param array $batchRowsCount
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -71,9 +71,9 @@ class Full extends AbstractAction
         EventManager $eventManager,
         FrontendResource $indexerStockFrontendResource = null,
         MetadataPool $metadataPool = null,
-        BatchCalculator $batchSizeCalculator = null,
+        BatchSizeManagement $batchSizeManagement = null,
         BatchProviderInterface $batchProvider = null,
-        array $memoryTablesMinRows = []
+        array $batchRowsCount = []
     ) {
         parent::__construct(
             $resource,
@@ -86,8 +86,9 @@ class Full extends AbstractAction
 
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         $this->batchProvider = $batchProvider ?: ObjectManager::getInstance()->get(BatchProviderInterface::class);
-        $this->batchSizeCalculator = $batchSizeCalculator ?: ObjectManager::getInstance()->get(BatchCalculator::class);
-        $this->memoryTablesMinRows = $memoryTablesMinRows;
+        $this->batchSizeManagement = $batchSizeManagement ?:
+            ObjectManager::getInstance()->get(\Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement::class);
+        $this->batchRowsCount = $batchRowsCount;
     }
 
     /**
@@ -113,15 +114,16 @@ class Full extends AbstractAction
                 $connection = $indexer->getConnection();
                 $tableName = $indexer->getMainTable();
 
-                $memoryTableMinRows = isset($this->memoryTablesMinRows[$indexer->getTypeId()])
-                    ? $this->memoryTablesMinRows[$indexer->getTypeId()]
-                    : $this->memoryTablesMinRows['default'];
+                $batchRowCount = isset($this->batchRowsCount[$indexer->getTypeId()])
+                    ? $this->batchRowsCount[$indexer->getTypeId()]
+                    : $this->batchRowsCount['default'];
 
+                $this->batchSizeManagement->ensureBatchSize($connection, $batchRowCount);
                 $batches = $this->batchProvider->getBatches(
                     $connection,
                     $entityMetadata->getEntityTable(),
                     $entityMetadata->getIdentifierField(),
-                    $this->batchSizeCalculator->estimateBatchSize($connection, $memoryTableMinRows)
+                    $batchRowCount
                 );
 
                 foreach ($batches as $batch) {

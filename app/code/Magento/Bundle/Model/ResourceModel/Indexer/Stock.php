@@ -65,7 +65,8 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
     {
         $this->_cleanBundleOptionStockData();
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
-        $idxTable = $usePrimaryTable ? $this->indexerStockFrontendResource->getMainTable() : $this->getIdxTable();
+        $table = $this->isFull ? $this->getMainTable() : $this->indexerStockFrontendResource->getMainTable();
+        $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
         $connection = $this->getConnection();
         $select = $connection->select()->from(
             ['product' => $this->getTable('catalog_product_entity')],

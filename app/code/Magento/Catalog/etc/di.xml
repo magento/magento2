@@ -926,14 +926,14 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Catalog\Model\Indexer\Price\CompositeProductBatchSizeManagement" type="\Magento\Framework\Indexer\BatchSizeManagement">
+    <virtualType name="Magento\Catalog\Model\Indexer\Price\CompositeProductBatchSizeManagement" type="Magento\Framework\Indexer\BatchSizeManagement">
         <arguments>
             <argument name="rowSizeEstimator" xsi:type="object" shared="false">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductRowSizeEstimator</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Catalog\Model\Indexer\Price\BatchSizeManagement" type="\Magento\Framework\Indexer\BatchSizeManagement">
+    <virtualType name="Magento\Catalog\Model\Indexer\Price\BatchSizeManagement" type="Magento\Framework\Indexer\BatchSizeManagement">
         <arguments>
-            <argument name="rowSizeEstimator" xsi:type="object" shared="false">\Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableRowSizeEstimator</argument>
+            <argument name="rowSizeEstimator" xsi:type="object" shared="false">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableRowSizeEstimator</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource" type="Magento\Indexer\Model\ResourceModel\FrontendResource">
