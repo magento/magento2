@@ -5,8 +5,10 @@
  */
 namespace Magento\Store\Model\Config\Importer\Process;
 
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Registry;
 use Magento\Store\Model\Config\Importer\DataDifferenceFactory;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\Store\Model\GroupRepository;
 use Magento\Store\Model\StoreRepository;
@@ -90,74 +92,89 @@ class Delete implements ProcessInterface
     }
 
     /**
-     * @param $data
-     * @return boolean
+     * @inheritdoc
      */
     public function run(array $data)
     {
-        $this->registry->register('isSecureArea', true);
-
-        // Remove records that not exists in import configuration
-        // First we need to remove groups and stores and then websites
-        foreach (['groups', 'stores', 'websites'] as $scope) {
-            $dataDifference = $this->dataDifferenceFactory->create($scope);
-            $itemsToDelete = $dataDifference->getItemsToDelete($data[$scope]);
-
-            if (empty($itemsToDelete)) {
-                continue;
+        try {
+            if (!$this->registry->registry('isSecureArea')) {
+                $this->registry->register('isSecureArea', true);
             }
 
-            try {
-                if ($scope == 'websites') {
-                    $this->deleteWebsites($itemsToDelete);
-                } else {
-                    if ($scope == 'stores') {
-                        $this->deleteStores($itemsToDelete);
-                    } else {
-                        if ($scope == 'groups') {
-                            $this->deleteGroups($itemsToDelete);
-                        }
-                    }
+            /**
+             * Remove records that not exists in import configuration.
+             * First must be removed groups and stores, then websites.
+             */
+            $entities = [
+                ScopeInterface::SCOPE_GROUPS,
+                ScopeInterface::SCOPE_STORES,
+                ScopeInterface::SCOPE_WEBSITES
+            ];
+
+            foreach ($entities as $scope) {
+                $dataDifference = $this->dataDifferenceFactory->create($scope);
+                $items = $dataDifference->getItemsToDelete($data[$scope]);
+
+                if (!$items) {
+                    continue;
                 }
-            } catch (\Exception $e) {
-                return false;
+
+                switch ($scope) {
+                    case ScopeInterface::SCOPE_WEBSITES:
+                        $this->deleteWebsites($items);
+                        break;
+                    case ScopeInterface::SCOPE_STORES:
+                        $this->deleteStores($items);
+                        break;
+                    case ScopeInterface::SCOPE_GROUPS:
+                        $this->deleteGroups($items);
+                }
             }
+        } catch (\Exception $e) {
+            throw new RuntimeException(__('%1', $e->getMessage()), $e);
         }
-
-        return true;
     }
 
     /**
-     * @param array $itemsToDelete
+     * Deletes websites from application.
+     *
+     * @param array $items The websites to delete
      * @return void
      */
-    private function deleteWebsites(array $itemsToDelete)
+    private function deleteWebsites(array $items)
     {
-        foreach ($itemsToDelete as $websiteCode => $websiteData) {
-            $website = $this->websiteRepository->get($websiteCode);
-            $this->websiteResource->delete($website);
+        foreach ($items as $websiteCode => $websiteData) {
+            $this->websiteResource->delete(
+                $this->websiteRepository->get($websiteCode)
+            );
         }
     }
 
     /**
-     * @param array $itemsToDelete
+     * Deletes stores from application.
+     *
+     * @param array $items The stores to delete
      * @return void
      */
-    private function deleteStores(array $itemsToDelete)
+    private function deleteStores(array $items)
     {
-        foreach ($itemsToDelete as $storeCode => $storeData) {
-            $store = $this->storeRepository->get($storeCode);
-            $this->storeResource->delete($store);
+        foreach ($items as $storeCode => $storeData) {
+            $this->storeResource->delete(
+                $this->storeRepository->get($storeCode)
+            );
         }
     }
 
     /**
-     * @param array $itemsToDelete
+     * Deletes groups from application.
+     *
+     * @param array $itemsToDelete The groups to delete
      * @return void
      */
     private function deleteGroups(array $itemsToDelete)
     {
         $groups = $this->groupRepository->getList();
+
         foreach ($itemsToDelete as $groupCode => $groupData) {
             /** @var \Magento\Store\Model\Group $group */
             foreach ($groups as $group) {

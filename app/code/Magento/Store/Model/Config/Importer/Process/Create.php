@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model\Config\Importer\Process;
 
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Store\Model\Config\Importer\DataDifferenceFactory;
 use Magento\Store\Model\GroupFactory;
@@ -15,6 +16,9 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\WebsiteFactory;
 
+/**
+ * @inheritdoc
+ */
 class Create implements ProcessInterface
 {
     /**
@@ -84,41 +88,47 @@ class Create implements ProcessInterface
      */
     public function run(array $data)
     {
-        foreach (['websites', 'groups', 'stores'] as $scope) {
-            $dataDifference = $this->dataDifferenceFactory->create($scope);
-            $itemsToCreate = $dataDifference->getItemsToCreate($data[$scope]);
+        try {
+            $entities = [
+                ScopeInterface::SCOPE_WEBSITES,
+                ScopeInterface::SCOPE_GROUPS,
+                ScopeInterface::SCOPE_STORES,
+            ];
 
-            if (empty($itemsToCreate)) {
-                continue;
-            }
+            foreach ($entities as $scope) {
+                $dataDifference = $this->dataDifferenceFactory->create($scope);
+                $itemsToCreate = $dataDifference->getItemsToCreate($data[$scope]);
 
-            try {
+                if (!$itemsToCreate) {
+                    continue;
+                }
+
                 switch ($scope) {
                     case ScopeInterface::SCOPE_WEBSITES:
                         $this->createWebsites($itemsToCreate);
                         break;
-                    case 'groups':
+                    case ScopeInterface::SCOPE_GROUPS:
                         $this->createGroups($itemsToCreate, $data);
                         break;
                     case ScopeInterface::SCOPE_STORES:
                         $this->createStores($itemsToCreate);
                         break;
                 }
-            } catch (\Exception $e) {
-                throw new RuntimeException(__('%1', $e->getMessage()), $e);
             }
+        } catch (\Exception $e) {
+            throw new RuntimeException(__('%1', $e->getMessage()), $e);
         }
-
-        return true;
     }
 
     /**
-     * @param array $itemsToCreate
-     * @throws
+     * Creates websites from the data.
+     *
+     * @param array $items Websites to create
+     * @return void
      */
-    private function createWebsites(array $itemsToCreate)
+    private function createWebsites(array $items)
     {
-        foreach ($itemsToCreate as $websiteData) {
+        foreach ($items as $websiteData) {
             unset($websiteData['website_id']);
             $website = $this->websiteFactory->create();
             $website->setData($websiteData);
@@ -127,33 +137,67 @@ class Create implements ProcessInterface
     }
 
     /**
-     * @param array $itemsToCreate
-     * @param array $data
+     * Creates groups from the data.
+     *
+     * @param array $items Groups to create
+     * @param array $data The all available data
+     * @return void
      * @throws \Exception
      */
-    private function createGroups(array $itemsToCreate, array $data)
+    private function createGroups(array $items, array $data)
     {
-        foreach ($itemsToCreate as $groupData) {
+        foreach ($items as $groupData) {
             $websiteId = $groupData['website_id'];
 
-            // Find Website Code from $data array
-            // $websiteCode = $data['websites']
-            // Load Website By Code
-            // Set Website Id to group
-
             unset($groupData['group_id'], $groupData['website_id']);
-            $group = $this->websiteFactory->create();
+
+            $website = $this->detectWebsiteByCodeId(
+                $data,
+                $websiteId
+            );
+
+            $group = $this->groupFactory->create();
             $group->setData($groupData);
+            $group->setWebsite($website);
+
             $this->groupResource->save($group);
         }
     }
 
     /**
-     * @param $itemsToCreate
+     * Searches through given websites and compares with current websites.
+     * Return found website.
+     *
+     * @param array $data
+     * @param string $websiteId
+     * @return \Magento\Store\Model\Website
+     * @throws NotFoundException
      */
-    private function createStores(array $itemsToCreate)
+    private function detectWebsiteByCodeId(array $data, $websiteId)
     {
-        foreach ($itemsToCreate as $storeData) {
+        foreach ($data['websites'] as $websiteData) {
+            if ($websiteId == $websiteData['website_id']) {
+                $website = $this->websiteFactory->create();
+                $this->websiteResource->load($website, $website['code'], 'code');
+
+                return $website;
+            }
+        }
+
+        throw new NotFoundException(__('Website was not found'));
+    }
+
+    /**
+     * Creates stores from the given data.
+     *
+     * @param array $items Stores to create
+     * @return void
+     */
+    private function createStores(array $items)
+    {
+        foreach ($items as $storeData) {
+            unset($storeData['store_id']);
+
             $store = $this->storeFactory->create();
             $store->setData($storeData);
 

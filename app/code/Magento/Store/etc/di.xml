@@ -395,6 +395,7 @@
             <argument name="processors" xsi:type="array">
                 <item name="create" xsi:type="string">Magento\Store\Model\Config\Importer\Process\Create</item>
                 <item name="delete" xsi:type="string">Magento\Store\Model\Config\Importer\Process\Delete</item>
+                <item name="update" xsi:type="string">Magento\Store\Model\Config\Importer\Process\Update</item>
             </argument>
         </arguments>
     </type>

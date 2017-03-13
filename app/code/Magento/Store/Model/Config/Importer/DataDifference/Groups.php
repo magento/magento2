@@ -7,7 +7,11 @@ namespace Magento\Store\Model\Config\Importer\DataDifference;
 
 use Magento\Store\App\Config\Source\RuntimeConfigSource;
 use Magento\Store\Model\Config\Importer\DataDifferenceInterface;
+use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @inheritdoc
+ */
 class Groups implements DataDifferenceInterface
 {
     /**
@@ -18,52 +22,53 @@ class Groups implements DataDifferenceInterface
     /**
      * @param RuntimeConfigSource $runtimeConfigSource
      */
-    public function __construct(
-        RuntimeConfigSource $runtimeConfigSource
-    ) {
+    public function __construct(RuntimeConfigSource $runtimeConfigSource)
+    {
         $this->runtimeConfigSource = $runtimeConfigSource;
     }
 
     /**
-     * @param array $newData
-     * @return array
+     * @inheritdoc
      */
     public function getItemsToDelete(array $newData)
     {
         $newData = $this->changeDataKeyToCode($newData);
-        $runtimeGroupsData = $this->changeDataKeyToCode($this->runtimeConfigSource->get('groups'));
+        $runtimeGroupsData = $this->changeDataKeyToCode(
+            $this->runtimeConfigSource->get(ScopeInterface::SCOPE_GROUPS)
+        );
 
         return array_diff_key($runtimeGroupsData, $newData);
     }
 
     /**
-     * @param array $newData
-     * @return array
+     * @inheritdoc
      */
     public function getItemsToCreate(array $newData)
     {
         $newData = $this->changeDataKeyToCode($newData);
-        $runtimeGroupsData = $this->changeDataKeyToCode($this->runtimeConfigSource->get('groups'));
+        $runtimeGroupsData = $this->changeDataKeyToCode(
+            $this->runtimeConfigSource->get(ScopeInterface::SCOPE_GROUPS)
+        );
 
         return array_diff_key($newData, $runtimeGroupsData);
     }
 
     /**
-     * @param array $newData
-     * @return array
+     * @inheritdoc
      */
     public function getItemsToUpdate(array $newData)
     {
         $groupsToUpdate = [];
         $newData = $this->changeDataKeyToCode($newData);
-        $runtimeGroupsData = $this->changeDataKeyToCode($this->runtimeConfigSource->get('groups'));
+        $runtimeGroupsData = $this->changeDataKeyToCode(
+            $this->runtimeConfigSource->get(ScopeInterface::SCOPE_GROUPS)
+        );
 
         foreach ($runtimeGroupsData as $groupCode => $groupData) {
             if (
-                isset($newData[$groupCode])
-                && !empty(array_diff($groupData, $newData[$groupCode]))
+                isset($newData[$groupCode]) && array_diff($groupData, $newData[$groupCode])
             ) {
-                $groupsToUpdate[$groupCode] = $groupData;
+                $groupsToUpdate[$groupCode] = array_replace($groupData, $newData[$groupCode]);
             }
         }
 

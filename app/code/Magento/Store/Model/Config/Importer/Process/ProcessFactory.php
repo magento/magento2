@@ -15,6 +15,7 @@ class ProcessFactory
      */
     const TYPE_CREATE = 'create';
     const TYPE_DELETE = 'delete';
+    const TYPE_UPDATE = 'update';
     /**#@-*/
 
     /**
