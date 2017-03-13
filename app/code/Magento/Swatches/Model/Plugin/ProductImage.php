@@ -5,6 +5,15 @@
  */
 namespace Magento\Swatches\Model\Plugin;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Swatches\Model\ProductSubstitute;
+use Magento\Swatches\Helper\Data;
+use Magento\Eav\Model\Config;
+use Magento\Framework\App\Request\Http;
+use Magento\Catalog\Block\Product\AbstractProduct;
+use Magento\Catalog\Model\Product as ProductModel;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+
 /**
  * Class ProductImage replace original configurable product with first child
  */
@@ -20,79 +29,72 @@ class ProductImage
     /**
      * Data helper to get child product image
      *
-     * @var \Magento\Swatches\Helper\Data $productHelper
+     * @var Data $productHelper
      */
     protected $swatchHelperData;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var Http
      */
     protected $request;
 
     /**
-     * @param \Magento\Swatches\Helper\Data $swatchesHelperData
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\App\Request\Http $request
+     * @var ProductSubstitute
+     */
+    private $productSubstitute;
+
+    /**
+     * @param Data $swatchesHelperData
+     * @param Config $eavConfig
+     * @param Http $request
+     * @param ProductSubstitute|null $productSubstitute
      */
     public function __construct (
-        \Magento\Swatches\Helper\Data $swatchesHelperData,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\Request\Http $request
+        Data $swatchesHelperData,
+        Config $eavConfig,
+        Http $request,
+        ProductSubstitute $productSubstitute = null
     ) {
         $this->swatchHelperData = $swatchesHelperData;
         $this->eavConfig = $eavConfig;
         $this->request = $request;
+        $this->productSubstitute = $productSubstitute ?: ObjectManager::getInstance()->get(ProductSubstitute::class);
     }
 
     /**
      * Replace original configurable product with first child
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @param \Magento\Catalog\Block\Product\AbstractProduct $subject
-     * @param \Magento\Catalog\Model\Product $product
+     * @param AbstractProduct $subject
+     * @param ProductModel $product
      * @param string $location
      * @param array $attributes
      * @return array
      */
     public function beforeGetImage(
-        \Magento\Catalog\Block\Product\AbstractProduct $subject,
-        \Magento\Catalog\Model\Product $product,
+        AbstractProduct $subject,
+        ProductModel $product,
         $location,
         array $attributes = []
     ) {
-        if ($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
-            && ($location == self::CATEGORY_PAGE_GRID_LOCATION || $location == self::CATEGORY_PAGE_LIST_LOCATION)) {
-            $request = $this->request->getParams();
-            if (is_array($request)) {
-                $filterArray = $this->getFilterArray($request);
-                if (!empty($filterArray)) {
-                    $product = $this->loadSimpleVariation($product, $filterArray);
-                }
-            }
-        }
-        return [$product, $location, $attributes];
+        return $this->productSubstitute->replace($product, $location, $attributes);
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $parentProduct
+     * @param ProductModel $parentProduct
      * @param array $filterArray
-     * @return bool|\Magento\Catalog\Model\Product
+     * @return bool|Product
+     * @deprecated
+     * @see ProductSubstitute::loadSimpleVariation()
      */
-    protected function loadSimpleVariation(\Magento\Catalog\Model\Product $parentProduct, array $filterArray)
+    protected function loadSimpleVariation(ProductModel $parentProduct, array $filterArray)
     {
-        $childProduct = $this->swatchHelperData->loadVariationByFallback($parentProduct, $filterArray);
-        if ($childProduct && !$childProduct->getImage()) {
-            $childProduct = $this->swatchHelperData->loadFirstVariationWithImage($parentProduct, $filterArray);
-        }
-        if (!$childProduct) {
-            $childProduct = $parentProduct;
-        }
-        return $childProduct;
+        return $this->productSubstitute->loadSimpleVariation($parentProduct, $filterArray);
     }
 
     /**
@@ -100,42 +102,24 @@ class ProductImage
      *
      * @param array $request
      * @return array
+     * @deprecated
+     * @see ProductSubstitute::getFilterArray()
      */
     protected function getFilterArray(array $request)
     {
-        $filterArray = [];
-        $attributeCodes = $this->eavConfig->getEntityAttributeCodes(\Magento\Catalog\Model\Product::ENTITY);
-        foreach ($request as $code => $value) {
-            if (in_array($code, $attributeCodes)) {
-                $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $code);
-                if ($attribute->getId() && $this->canReplaceImageWithSwatch($attribute)) {
-                    $filterArray[$code] = $value;
-                }
-            }
-        }
-        return $filterArray;
+        return $this->productSubstitute->getFilterArray($request);
     }
 
     /**
      * Check if we can replace original image with swatch image on catalog/category/list page
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @param Attribute $attribute
      * @return bool
+     * @deprecated
+     * @see ProductSubstitute::canReplaceImageWithSwatch()
      */
     protected function canReplaceImageWithSwatch($attribute)
     {
-        $result = true;
-        if (!$this->swatchHelperData->isSwatchAttribute($attribute)) {
-            $result = false;
-        }
-
-        if (!$attribute->getUsedInProductListing()
-            || !$attribute->getIsFilterable()
-            || !$attribute->getData('update_product_preview_image')
-        ) {
-            $result = false;
-        }
-
-        return $result;
+        return $this->productSubstitute->canReplaceImageWithSwatch($attribute);
     }
 }

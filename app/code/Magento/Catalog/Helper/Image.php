@@ -200,9 +200,7 @@ class Image extends AbstractHelper
 
         // Set 'keep frame' flag
         $frame = $this->getFrame();
-        if (!empty($frame)) {
-            $this->_getModel()->setKeepFrame($frame);
-        }
+        $this->_getModel()->setKeepFrame($frame);
 
         // Set 'constrain only' flag
         $constrain = $this->getAttribute('constrain');
@@ -825,10 +823,10 @@ class Image extends AbstractHelper
     public function getFrame()
     {
         $frame = $this->getAttribute('frame');
-        if (empty($frame)) {
+        if ($frame === null) {
             $frame = $this->getConfigView()->getVarValue('Magento_Catalog', 'product_image_white_borders');
         }
-        return $frame;
+        return (bool)$frame;
     }
 
     /**
