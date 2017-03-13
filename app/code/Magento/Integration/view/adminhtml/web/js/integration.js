@@ -3,6 +3,11 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * jQuery plugin is added.
+ *
+ * @api
+ */
 define([
     'jquery',
     'Magento_Ui/js/modal/alert',
@@ -12,9 +17,6 @@ define([
 ], function ($, alert) {
     'use strict';
 
-    /**
-     * @api
-     */
     $.widget('mage.integration', {
         /**
          * Options common to all instances of this widget.
