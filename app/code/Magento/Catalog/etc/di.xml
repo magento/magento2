@@ -927,7 +927,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Catalog\Model\Indexer\CompositeProductBatchSizeManagement" type="\Magento\Framework\Indexer\BatchSizeManagement">
+    <virtualType name="Magento\Catalog\Model\Indexer\CompositeProductBatchSizeManagement" type="Magento\Framework\Indexer\BatchSizeManagement">
         <arguments>
             <argument name="rowSizeEstimator" xsi:type="object" shared="false">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductRowSizeEstimator</argument>
         </arguments>
