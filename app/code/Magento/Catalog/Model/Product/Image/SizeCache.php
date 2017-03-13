@@ -24,6 +24,10 @@ class SizeCache
      */
     protected $cacheManager;
 
+    /**
+     * SizeCache constructor.
+     * @param CacheInterface $cacheManager
+     */
     public function __construct(
         CacheInterface $cacheManager
     ) {
