@@ -8,19 +8,14 @@ namespace Magento\Catalog\Block\Product;
 use Magento\Catalog\Model\View\Asset\ImageFactory as AssetImageFactory;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
-use Magento\Framework\App\CacheInterface;
 use Magento\Catalog\Model\View\Asset\Image as AssetImage;
+use Magento\Catalog\Model\Product\Image\SizeCache;
 
 /**
  * Used to build product image blocks in product list blocks.
  */
 class ImageBlockBuilder
 {
-    /**
-     * @var string
-     */
-    private $cachePrefix = 'IMG_INFO';
-
     /**
      * @var ConfigInterface
      */
@@ -42,29 +37,29 @@ class ImageBlockBuilder
     private $imageParamsBuilder;
 
     /**
-     * @var CacheInterface
+     * @var SizeCache
      */
-    private $cache;
+    private $sizeCache;
 
     /**
      * @param ConfigInterface $presentationConfig
      * @param AssetImageFactory $viewAssetImageFactory
      * @param ImageFactory $imageBlockFactory
      * @param ParamsBuilder $imageParamsBuilder
-     * @param CacheInterface $cache
+     * @param SizeCache $sizeCache
      */
     public function __construct(
         ConfigInterface $presentationConfig,
         AssetImageFactory $viewAssetImageFactory,
         ImageFactory $imageBlockFactory,
         ParamsBuilder $imageParamsBuilder,
-        CacheInterface $cache
+        SizeCache $sizeCache
     ) {
         $this->presentationConfig = $presentationConfig->getViewConfig();
         $this->viewAssetImageFactory = $viewAssetImageFactory;
         $this->imageBlockFactory = $imageBlockFactory;
         $this->imageParamsBuilder = $imageParamsBuilder;
-        $this->cache = $cache;
+        $this->sizeCache = $sizeCache;
     }
 
     /**
@@ -75,17 +70,14 @@ class ImageBlockBuilder
      */
     private function getImageSize(AssetImage $imageAsset)
     {
-        $key = $this->cachePrefix . $imageAsset->getPath();
-        $size = $this->cache->load($key);
+        $imagePath = $imageAsset->getPath();
+        $size = $this->sizeCache->load($imagePath);
         if (!$size) {
-            $size = getimagesize($imageAsset->getPath());
-            $this->cache->save(
-                serialize(['width' => $size[0], 'height' => $size[1]]),
-                $key
-            );
-        } else {
-            $size = unserialize($size);
+            $size = getimagesize($imagePath);
+            $this->sizeCache->save($size[0], $size[1], $imagePath);
+            $size = ['width' => $size[0], 'height' => $size[1]];
         }
+
         return $size;
     }
 

@@ -13,6 +13,7 @@ use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Asset\ContextInterface;
+use Magento\Catalog\Model\Product\Image\SizeCache;
 
 /**
  * Class ImageTest
@@ -101,6 +102,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     protected $paramsBuilder;
 
+    /**
+     * @var SizeCache|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $sizeCache;
+
     protected function setUp()
     {
         $this->context = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
@@ -153,6 +159,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->sizeCache = $this->getMockBuilder(SizeCache::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->image = new \Magento\Catalog\Model\Product\Image(
             $context,
             $this->registry,
@@ -169,7 +179,8 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             [],
             $this->viewAssetImageFactory,
             $this->viewAssetPlaceholderFactory,
-            $this->paramsBuilder
+            $this->paramsBuilder,
+            $this->sizeCache
         );
 
         //Settings for backward compatible property
@@ -181,14 +192,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->image,
             'imageAsset',
             $this->imageAsset
-        );
-        $cacheManager = $this->getMockBuilder(\Magento\Framework\App\CacheInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->image,
-            '_cacheManager',
-            $cacheManager
         );
     }
 
