@@ -7,15 +7,15 @@ namespace Magento\Deploy\Console\Command\App;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Store\Model\GroupFactory;
+use Magento\Store\Model\StoreFactory;
+use Magento\Store\Model\WebsiteFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Deploy\Console\Command\App\ConfigImportCommand\IntegrationTestImporter;
-use Magento\Deploy\Console\Command\App\ConfigImportCommand\IntegrationTestSecondImporter;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 
 /**
@@ -58,42 +58,44 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $config;
 
+    /**
+     * @var array
+     */
+    private $envConfig;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->objectManager->configure([
-            ImporterPool::class => [
-                'arguments' => [
-                    'importers' => [
-                        'integrationTestImporter' => [
-                            'class' => IntegrationTestImporter::class,
-                            'sortOrder' => 20
-                        ],
-                        'integrationTestSecondImporter' => [
-                            'class' => IntegrationTestSecondImporter::class,
-                        ]
-                    ]
-                ]
-            ]
-        ]);
         $this->reader = $this->objectManager->get(DeploymentConfig\Reader::class);
         $this->writer = $this->objectManager->get(DeploymentConfig\Writer::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
         $this->hash = $this->objectManager->get(Hash::class);
 
+        // Snapshot of configuration.
         $this->config = $this->loadConfig();
+        $this->envConfig = $this->loadEnvConfig();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function tearDown()
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
             "<?php\n return array();\n"
         );
-        /** @var DeploymentConfig\Writer $writer */
-        $writer = $this->objectManager->get(DeploymentConfig\Writer::class);
-        $writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
+        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
+            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
+            "<?php\n return array();\n"
+        );
+
+        $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => $this->config]);
+        $this->writer->saveConfig([ConfigFilePool::APP_ENV => $this->envConfig]);
     }
 
     /**
@@ -101,10 +103,15 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteNothingImport()
     {
+        $this->writer->saveConfig([
+            ConfigFilePool::APP_CONFIG => []
+        ]);
         $this->assertEmpty($this->hash->get());
         $command = $this->objectManager->create(ConfigImportCommand::class);
         $commandTester = new CommandTester($command);
-        $commandTester->execute([]);
+        $commandTester->execute([
+            '--' . ConfigImportCommand::INPUT_OPTION_FORCE => true
+        ]);
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
         $this->assertContains('Nothing to import.', $commandTester->getDisplay());
         $this->assertEmpty($this->hash->get());
@@ -113,24 +120,73 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      */
-    public function testExecuteWithImport()
+    public function testImportStores()
     {
         $this->assertEmpty($this->hash->get());
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
-            file_get_contents(__DIR__ . '/../../../_files/config.php')
-        );
+        $this->writer->saveConfig([
+            ConfigFilePool::APP_CONFIG => require __DIR__ . '/../../../_files/scopes/config_with_stores.php'
+        ]);
         $command = $this->objectManager->create(ConfigImportCommand::class);
         $commandTester = new CommandTester($command);
-        $commandTester->execute([]);
+        $commandTester->execute([
+            '--' . ConfigImportCommand::INPUT_OPTION_FORCE => true
+        ]);
+
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
         $this->assertContains('Start import', $commandTester->getDisplay());
-        $this->assertContains(
-            "Integration second test data is imported!\nIntegration test data is imported!",
-            $commandTester->getDisplay()
+        $this->assertContains('Stores were processed', $commandTester->getDisplay());
+
+        /** @var StoreFactory $storeFactory */
+        $storeFactory = $this->objectManager->get(StoreFactory::class);
+        /** @var WebsiteFactory $websiteFactory */
+        $websiteFactory = $this->objectManager->get(WebsiteFactory::class);
+        /** @var GroupFactory $groupFactory */
+        $groupFactory = $this->objectManager->get(GroupFactory::class);
+
+        $store = $storeFactory->create()->load('test', 'code');
+        $this->assertSame($store->getSortOrder(), '23');
+        $this->assertSame($store->getName(), 'Test Store view');
+
+        $website = $websiteFactory->create()->load('test', 'code');
+        $this->assertSame($website->getName(), 'Main Test');
+
+        $group = $groupFactory->create()->load('test_website_store', 'code');
+        $this->assertSame($group->getName(), 'Test Website Store');
+
+        $this->writer->saveConfig([
+            ConfigFilePool::APP_CONFIG => require __DIR__ . '/../../../_files/scopes/config_with_changed_stores.php'
+        ]);
+
+        $commandTester->execute([
+            '--' . ConfigImportCommand::INPUT_OPTION_FORCE => true
+        ]);
+
+        $store = $storeFactory->create()->load('test', 'code');
+        $this->assertSame($store->getSortOrder(), '23');
+        $this->assertSame($store->getName(), 'Changed Test Store view');
+
+        $website = $websiteFactory->create()->load('test', 'code');
+        $this->assertSame($website->getName(), 'Changed Main Test');
+
+        $group = $groupFactory->create()->load('test_website_store', 'code');
+        $this->assertSame($group->getName(), 'Changed Test Website Store');
+
+        $this->writer->saveConfig(
+            [ConfigFilePool::APP_CONFIG => require __DIR__ . '/../../../_files/scopes/config_with_removed_stores.php'],
+            true
         );
-        $this->assertArrayHasKey('integrationTestImporter', $this->hash->get());
-        $this->assertArrayHasKey('integrationTestSecondImporter', $this->hash->get());
+
+        $commandTester->execute([
+            '--' . ConfigImportCommand::INPUT_OPTION_FORCE => true
+        ]);
+
+        $store = $storeFactory->create()->load('test', 'code');
+        $website = $websiteFactory->create()->load('test', 'code');
+        $group = $groupFactory->create()->load('test_website_store', 'code');
+
+        $this->assertSame($store->getId(), null);
+        $this->assertSame($website->getId(), null);
+        $this->assertSame($group->getId(), null);
     }
 
     /**
@@ -139,5 +195,13 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
     private function loadConfig()
     {
         return $this->reader->load(ConfigFilePool::APP_CONFIG);
+    }
+
+    /**
+     * @return array
+     */
+    private function loadEnvConfig()
+    {
+        return $this->reader->load(ConfigFilePool::APP_ENV);
     }
 }
