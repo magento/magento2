@@ -59,7 +59,7 @@ class Addresses extends Tab
      *
      * @var string
      */
-    protected $customerAddress = '//*[contains(@class, "address-list-item")][%d]';
+    protected $customerAddress = '//*[contains(@class, "address-list-item")][%d + 1]';
 
     /**
      * Magento loader.
@@ -158,20 +158,24 @@ class Addresses extends Tab
      * Get data from Customer addresses.
      *
      * @param FixtureInterface|FixtureInterface[]|null $address
+     * @param bool $throwException
      * @return array
      * @throws \Exception
      */
-    public function getDataAddresses($address = null)
+    public function getDataAddresses($address = null, $throwException = true)
     {
         $data = [];
-        $addresses = is_array($address) ? $address : [1 => $address];
+        $addresses = is_array($address) ? $address : [0 => $address];
 
         foreach ($addresses as $addressNumber => $address) {
             $isHasData = (null === $address) || $address->hasData();
             $isVisibleCustomerAddress = $this->isVisibleCustomerAddress($addressNumber);
 
             if ($isHasData && !$isVisibleCustomerAddress) {
-                throw new \Exception("Invalid argument: can't get data from customer address #{$addressNumber}");
+                if ($throwException) {
+                    throw new \Exception("Invalid argument: can't get data from customer address #{$addressNumber}");
+                }
+                break;
             }
 
             if (!$isHasData && !$isVisibleCustomerAddress) {

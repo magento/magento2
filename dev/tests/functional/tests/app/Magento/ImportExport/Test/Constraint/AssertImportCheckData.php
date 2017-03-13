@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\AdvancedPricingImportExport\Test\Constraint;
+namespace Magento\ImportExport\Test\Constraint;
 
 use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -13,7 +13,7 @@ use Magento\ImportExport\Test\Fixture\ImportData;
 /**
  * Check message after check data click.
  */
-class AssertImportAdvancedPricingCheckData extends AbstractConstraint
+class AssertImportCheckData extends AbstractConstraint
 {
     /**
      * Success validation result message.

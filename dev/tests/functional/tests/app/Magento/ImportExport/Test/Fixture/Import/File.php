@@ -19,8 +19,6 @@ class File extends DataSource
 {
     /**
      * Website code mapping.
-     *
-     * @var array
      */
     private $codeMapping =[
         'base' => 'Main Website[USD]'
@@ -210,18 +208,21 @@ class File extends DataSource
             $currency = (isset($this->value['template']['websiteCurrency']))
                 ? "[{$this->value['template']['websiteCurrency']}]"
                 : '[USD]';
-            $website = $entity->getDataFieldConfig('website_ids')['source']->getWebsites()[0];
             $entityData = $entity->getData();
-            $entityData['code'] = $website->getCode();
+            if (isset($entityData['website_ids'])) {
+                $website = $entity->getDataFieldConfig('website_ids')['source']->getWebsites()[0];
+                $entityData['code'] = $website->getCode();
+            }
             foreach ($this->csvTemplate['entity_' . $key] as $tierKey => $tier) {
                 $values = implode('', array_values($tier));
                 preg_match_all('/\%(.*)\%/U', $values, $indexes);
-
                 foreach ($indexes[1] as $index) {
                     if (isset($entityData[$index])) {
                         $placeholders['entity_' . $key][$tierKey]["%{$index}%"] = $entityData[$index];
                     }
-                    $placeholders['entity_' . $key][$tierKey][$entityData['code']] = $website->getName() . $currency;
+                    if (isset($website)) {
+                        $placeholders['entity_' . $key][$tierKey][$entityData['code']] = $website->getName().$currency;
+                    }
                 }
             }
 

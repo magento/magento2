@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Test\TestStep;
 
-use Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricingCheckData as AssertImportCheckData;
+use Magento\ImportExport\Test\Constraint\AssertImportCheckData;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\ImportExport\Test\Fixture\ImportData;
