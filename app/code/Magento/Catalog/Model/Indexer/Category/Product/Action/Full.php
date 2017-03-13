@@ -250,7 +250,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function getMainTable()
     {
-        $table = parent::getMainTable();
+        $table = self::MAIN_INDEX_TABLE;
         $indexerState = $this->indexerStateFactory->create()->loadByIndexer(
             \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
         );
