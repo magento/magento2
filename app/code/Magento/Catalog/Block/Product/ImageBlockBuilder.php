@@ -67,6 +67,7 @@ class ImageBlockBuilder
      *
      * @param AssetImage $imageAsset
      * @return array
+     * @throws \Exception
      */
     private function getImageSize(AssetImage $imageAsset)
     {
@@ -74,6 +75,9 @@ class ImageBlockBuilder
         $size = $this->sizeCache->load($imagePath);
         if (!$size) {
             $size = getimagesize($imagePath);
+            if (!$size) {
+                throw new \Exception('An error occurred while reading file: ' . $imagePath);
+            }
             $this->sizeCache->save($size[0], $size[1], $imagePath);
             $size = ['width' => $size[0], 'height' => $size[1]];
         }

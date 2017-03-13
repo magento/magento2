@@ -26,8 +26,7 @@ class SizeCache
 
     public function __construct(
         CacheInterface $cacheManager
-    )
-    {
+    ) {
         $this->cacheManager = $cacheManager;
     }
 
