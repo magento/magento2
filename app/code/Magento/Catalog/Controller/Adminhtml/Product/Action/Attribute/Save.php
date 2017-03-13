@@ -50,7 +50,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
     protected $_stockIndexerProcessor;
-    
+
     /**
      * Stock Stock registry
      *
@@ -96,7 +96,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        Action\Context $context,        
+        Action\Context $context,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper,
