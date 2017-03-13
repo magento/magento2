@@ -20,6 +20,7 @@ class SizeCacheTest extends \PHPUnit_Framework_TestCase
      * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cacheManager;
+
     /**
      * @var SizeCache
      */
