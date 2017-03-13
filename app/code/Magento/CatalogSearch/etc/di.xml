@@ -12,7 +12,7 @@
     <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider" />
     <preference for="Magento\Framework\Search\Adapter\OptionsInterface" type="Magento\CatalogSearch\Model\Adapter\Options" />
     <preference for="Magento\CatalogSearch\Model\Search\FilterMapper\FilterStrategyInterface" type="Magento\CatalogSearch\Model\Search\FilterMapper\FilterContext"/>
-    <preference for="\Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface" type="\Magento\CatalogSearch\Model\Indexer\IndexSwitcherProxy"/>
+    <preference for="Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface" type="Magento\CatalogSearch\Model\Indexer\IndexSwitcherProxy"/>
     <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
         <arguments>
             <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
@@ -69,7 +69,7 @@
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Attribute">
         <plugin name="catalogsearchFulltextIndexerAttribute" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute"/>
-        <plugin name="catalogsearchAttributeSearchWeightCache" type="\Magento\CatalogSearch\Model\Attribute\SearchWeight"/>
+        <plugin name="catalogsearchAttributeSearchWeightCache" type="Magento\CatalogSearch\Model\Attribute\SearchWeight"/>
     </type>
     <type name="Magento\Framework\Search\EntityMetadata" />
     <virtualType name="Magento\Framework\Search\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">
@@ -258,22 +258,22 @@
             </argument>
         </arguments>
     </type>
-    <type name="\Magento\CatalogSearch\Model\Indexer\IndexerHandler">
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandler">
         <arguments>
             <argument name="indexScopeResolver" xsi:type="object">\Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy</argument>
         </arguments>
     </type>
-    <type name="\Magento\CatalogSearch\Model\Indexer\IndexStructure">
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexStructure">
         <arguments>
             <argument name="indexScopeResolver" xsi:type="object">\Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy</argument>
         </arguments>
     </type>
-    <type name="\Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher">
+    <type name="Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher">
         <arguments>
             <argument name="indexScopeResolver" xsi:type="object">\Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy</argument>
         </arguments>
     </type>
-    <type name="\Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy">
+    <type name="Magento\CatalogSearch\Model\Indexer\Scope\ScopeProxy">
         <arguments>
             <argument name="states" xsi:type="array">
                 <item name="use_temporary_table" xsi:type="string">\Magento\CatalogSearch\Model\Indexer\Scope\TemporaryResolver</item>
