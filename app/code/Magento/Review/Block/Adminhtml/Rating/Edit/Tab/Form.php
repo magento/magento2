@@ -242,7 +242,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if (!isset($this->fieldset[$formId])) {
             if (!$this->getForm()->getElement($formId)) {
                 $this->fieldset[$formId] = $this->getForm()->addFieldset($formId, $config);
-            } elseif ($this->getForm()->getElement($formId));
+            } elseif ($this->getForm()->getElement($formId)) {
+            }
         }
     }
 

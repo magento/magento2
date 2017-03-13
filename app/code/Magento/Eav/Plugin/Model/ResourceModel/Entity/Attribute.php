@@ -82,7 +82,7 @@ class Attribute
 
     /**
      * Check if cache is enabled
-     * 
+     *
      * @return bool
      */
     private function isCacheEnabled()

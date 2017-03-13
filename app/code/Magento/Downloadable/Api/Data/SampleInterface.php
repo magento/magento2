@@ -13,7 +13,6 @@ use \Magento\Downloadable\Api\Data\File\ContentInterface;
  */
 interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-
     /**
      * Product sample id
      *

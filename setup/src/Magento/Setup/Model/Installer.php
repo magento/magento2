@@ -859,7 +859,7 @@ class Installer
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
             $handlerType = 'schema-recurring';
-        } else if ($type === 'data') {
+        } elseif ($type === 'data') {
             $this->log->log('Data post-updates:');
             $handlerType = 'data-recurring';
         }

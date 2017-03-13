@@ -55,7 +55,6 @@ class WorkflowType extends \Magento\Framework\App\Config\Value
         if ($this->isValueChanged()
             && $this->_appState->getMode() == \Magento\Framework\App\State::MODE_PRODUCTION
             && $this->getValue() == \Magento\Developer\Model\Config\Source\WorkflowType::CLIENT_SIDE_COMPILATION) {
-
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Client side compilation doesn\'t work in production mode')
             );

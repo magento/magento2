@@ -35,6 +35,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     private $icon = [];
 
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     * @param CcConfig $ccConfig
+     * @param null $methodCode
+     * @param string $pathPattern
+     */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         CcConfig $ccConfig,

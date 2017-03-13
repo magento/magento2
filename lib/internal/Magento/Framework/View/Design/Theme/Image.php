@@ -112,6 +112,7 @@ class Image
         $this->imageParams = $imageParams;
         $this->theme = $theme;
     }
+
     // @codingStandardsIgnoreEnd
 
     /**

@@ -719,6 +719,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         return $this->setData(self::KEY_CUSTOMER_NOTE_NOTIFY, $customerNoteNotify);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -841,7 +842,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
-     * @deprecated 
+     * @deprecated
      * @return $this
      */
     public function loadByCustomer($customer)

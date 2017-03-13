@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Model\Indexer\Design\Config;
 
-
 use Magento\Framework\Indexer\FieldsetInterface;
 use Magento\Theme\Model\Design\Config\MetadataProviderInterface;
 

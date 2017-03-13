@@ -28,12 +28,19 @@ class ConfigProvider implements ConfigProviderInterface
      */
     private $resolver;
 
+    /**
+     * @param Config $config
+     * @param ResolverInterface $resolver
+     */
     public function __construct(Config $config, ResolverInterface $resolver)
     {
         $this->config = $config;
         $this->resolver = $resolver;
     }
 
+    /**
+     * @return array
+     */
     public function getConfig()
     {
         return [

@@ -389,7 +389,6 @@ class UpgradeData implements UpgradeDataInterface
                 ['is_html_allowed_on_front' => 0],
                 $setup->getConnection()->quoteInto('attribute_id = ?', $attribute['attribute_id'])
             );
-
     }
 
     /**
@@ -407,7 +406,6 @@ class UpgradeData implements UpgradeDataInterface
                 'is_global',
                 \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
             );
-
         }
     }
 }

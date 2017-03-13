@@ -11,7 +11,6 @@ namespace Magento\Downloadable\Api\Data;
  */
 interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-
     /**
      * @return int|null Sample(or link) id
      */

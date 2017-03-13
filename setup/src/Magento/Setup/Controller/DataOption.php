@@ -24,7 +24,7 @@ class DataOption extends AbstractActionController
 
     /**
      * Constructor
-     * 
+     *
      * @param UninstallCollector $uninstallCollector
      */
     public function __construct(UninstallCollector $uninstallCollector)
