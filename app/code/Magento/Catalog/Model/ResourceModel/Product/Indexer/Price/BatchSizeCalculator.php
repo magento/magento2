@@ -6,6 +6,9 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
+/**
+ * Ensure that size of index MEMORY table is enough for configured rows count in batch.
+ */
 class BatchSizeCalculator
 {
     /**
