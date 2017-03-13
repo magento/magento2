@@ -21,11 +21,11 @@ use Magento\Customer\Test\Page\CustomerAccountEdit;
  * 3. Create customer.
  *
  * Test Flow:
- * 1. Log in customer.
+ * 1. Log in to Store Front.
  * 2. Open customer account edit page.
  * 2. Update email with incorrect password 3 or more times.
  * 3. Update email with incorrect password and captcha(111) 3 or more times.
- * 5. Perform asserts
+ * 5. Perform asserts.
  *
  * @group Captcha
  * @ZephyrId MAGETWO-49049
@@ -79,7 +79,7 @@ class CaptchaEditCustomerTest extends Injectable
     }
 
     /**
-     * Test creation for check captcha and lockout customer on the account edit page.
+     * Test for checking captcha on the customer account edit page and customer is locked.
      *
      * @param Customer $customer
      * @param Customer $initCustomer
