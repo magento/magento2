@@ -14,7 +14,10 @@ use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\ResourceModel\Group;
 use Magento\Store\Model\ResourceModel\Store;
 
-class Remove
+/**
+ * @inheritdoc
+ */
+class Delete implements ProcessInterface
 {
     /**
      * @var DataDifferenceFactory
@@ -90,7 +93,7 @@ class Remove
      * @param $data
      * @return boolean
      */
-    public function run($data)
+    public function run(array $data)
     {
         $this->registry->register('isSecureArea', true);
 
@@ -107,10 +110,14 @@ class Remove
             try {
                 if ($scope == 'websites') {
                     $this->deleteWebsites($itemsToDelete);
-                } else if ($scope == 'stores') {
-                    $this->deleteStores($itemsToDelete);
-                } else if ($scope == 'groups') {
-                    $this->deleteGroups($itemsToDelete);
+                } else {
+                    if ($scope == 'stores') {
+                        $this->deleteStores($itemsToDelete);
+                    } else {
+                        if ($scope == 'groups') {
+                            $this->deleteGroups($itemsToDelete);
+                        }
+                    }
                 }
             } catch (\Exception $e) {
                 return false;

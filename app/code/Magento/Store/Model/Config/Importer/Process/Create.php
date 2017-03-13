@@ -5,15 +5,17 @@
  */
 namespace Magento\Store\Model\Config\Importer\Process;
 
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Store\Model\Config\Importer\DataDifferenceFactory;
 use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\ResourceModel\Group;
 use Magento\Store\Model\ResourceModel\Store;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\WebsiteFactory;
 
-class Create
+class Create implements ProcessInterface
 {
     /**
      * @var DataDifferenceFactory
@@ -78,10 +80,9 @@ class Create
     }
 
     /**
-     * @param $data
-     * @return boolean
+     * @inheritdoc
      */
-    public function run($data)
+    public function run(array $data)
     {
         foreach (['websites', 'groups', 'stores'] as $scope) {
             $dataDifference = $this->dataDifferenceFactory->create($scope);
@@ -92,15 +93,19 @@ class Create
             }
 
             try {
-                if ($scope == 'websites') {
-                    $this->createWebsites($itemsToCreate);
-                } elseif ($scope == 'groups') {
-                    $this->createGroups($itemsToCreate, $data);
-                } elseif ($scope == 'stores') {
-                    $this->createStores($itemsToCreate);
+                switch ($scope) {
+                    case ScopeInterface::SCOPE_WEBSITES:
+                        $this->createWebsites($itemsToCreate);
+                        break;
+                    case 'groups':
+                        $this->createGroups($itemsToCreate, $data);
+                        break;
+                    case ScopeInterface::SCOPE_STORES:
+                        $this->createStores($itemsToCreate);
+                        break;
                 }
             } catch (\Exception $e) {
-                return false;
+                throw new RuntimeException(__('%1', $e->getMessage()), $e);
             }
         }
 
@@ -146,7 +151,13 @@ class Create
     /**
      * @param $itemsToCreate
      */
-    private function createStores($itemsToCreate)
+    private function createStores(array $itemsToCreate)
     {
+        foreach ($itemsToCreate as $storeData) {
+            $store = $this->storeFactory->create();
+            $store->setData($storeData);
+
+            $this->storeResource->save($store);
+        }
     }
 }

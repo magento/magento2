@@ -8,8 +8,7 @@ namespace Magento\Store\Model\Config;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Store\App\Config\Source\RuntimeConfigSource;
 use Magento\Store\Model\Config\Importer\DataDifferenceFactory;
-use Magento\Store\Model\Config\Importer\Process\Create;
-use Magento\Store\Model\Config\Importer\Process\Remove;
+use Magento\Store\Model\Config\Importer\Process\ProcessFactory;
 
 /**
  * Imports stores, websites and groups from configuration files.
@@ -27,31 +26,23 @@ class Importer implements ImporterInterface
     private $dataDifferenceFactory;
 
     /**
-     * @var Remove
+     * @var ProcessFactory
      */
-    private $removeProcess;
-
-    /**
-     * @var Create
-     */
-    private $createProcess;
+    private $processFactory;
 
     /**
      * @param RuntimeConfigSource $runtimeConfigSource
      * @param DataDifferenceFactory $dataDifferenceFactory
-     * @param Remove $removeProcess
-     * @param Create $createProcess
+     * @param ProcessFactory $processFactory
      */
     public function __construct(
         RuntimeConfigSource $runtimeConfigSource,
         DataDifferenceFactory $dataDifferenceFactory,
-        Remove $removeProcess,
-        Create $createProcess
+        ProcessFactory $processFactory
     ) {
         $this->runtimeConfigSource = $runtimeConfigSource;
         $this->dataDifferenceFactory = $dataDifferenceFactory;
-        $this->removeProcess = $removeProcess;
-        $this->createProcess = $createProcess;
+        $this->processFactory = $processFactory;
     }
 
     /**
@@ -60,10 +51,10 @@ class Importer implements ImporterInterface
     public function import(array $data)
     {
         // Remove records
-        $this->removeProcess->run($data);
+        $this->processFactory->create(ProcessFactory::TYPE_CREATE)->run($data);
 
         // Create new records
-        $this->createProcess->run($data);
+        $this->processFactory->create(ProcessFactory::TYPE_DELETE)->run($data);
 
         // Update changed records
     }
@@ -79,7 +70,7 @@ class Importer implements ImporterInterface
             $dataDifference = $this->dataDifferenceFactory->create($scope);
 
             $itemsToDelete = $dataDifference->getItemsToDelete($scopeData);
-            if (count($itemsToDelete)) {
+            if ($itemsToDelete) {
                 $messages[] = sprintf(
                     'Next %s will be deleted: %s',
                     ucfirst($scope),
@@ -88,7 +79,7 @@ class Importer implements ImporterInterface
             }
 
             $itemsToUpdate = $dataDifference->getItemsToUpdate($scopeData);
-            if (count($itemsToUpdate)) {
+            if ($itemsToUpdate) {
                 $messages[] = sprintf(
                     'Next %s will be updated: %s',
                     ucfirst($scope),
@@ -97,7 +88,7 @@ class Importer implements ImporterInterface
             }
 
             $itemsToCreate = $dataDifference->getItemsToCreate($scopeData);
-            if (count($itemsToCreate)) {
+            if ($itemsToCreate) {
                 $messages[] = sprintf(
                     'Next %s will be created: %s',
                     ucfirst($scope),
