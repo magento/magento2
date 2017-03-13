@@ -9,12 +9,12 @@ use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Verify that admin user chose to accept subscription in Analytics pop-up.
+ * Verify that admin user chose to enable Advanced Reporting on Analytics pop-up.
  */
 class AssertAcceptSubscriptionPopup extends AbstractConstraint
 {
     /**
-     * Verify that admin user chose to accept subscription in Analytics pop-up.
+     * Verify that admin user chose to enable Advanced Reporting on Analytics pop-up.
      *
      * @param Dashboard $dashboard
      * @return void
@@ -23,10 +23,10 @@ class AssertAcceptSubscriptionPopup extends AbstractConstraint
     {
         $dashboard->open();
         $dashboard->getSubscriptionBlock()->enableCheckbox();
-        $dashboard->getModalBlock()->acceptWarning();
+        $dashboard->getSubscriptionBlock()->acceptAdvancedReporting();
         \PHPUnit_Framework_Assert::assertFalse(
             $dashboard->getSubscriptionBlock()->isVisible(),
-            'Subscription pop-up was not accepted'
+            'Advanced Reporting was not enabled'
         );
     }
 
@@ -37,6 +37,6 @@ class AssertAcceptSubscriptionPopup extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Subscription pop-up was accepted';
+        return 'Advanced Reporting was enabled';
     }
 }

@@ -9,12 +9,12 @@ use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Verify that admin user chose to skip subscription in Analytics pop-up.
+ * Verify that admin user chose to skip Advanced Reporting on Analytics pop-up.
  */
 class AssertSkipSubscriptionPopup extends AbstractConstraint
 {
     /**
-     * Verify that admin user chose to skip subscription in Analytics pop-up.
+     * Verify that admin user chose to skip Advanced Reporting on Analytics pop-up.
      *
      * @param Dashboard $dashboard
      * @return void
@@ -23,10 +23,10 @@ class AssertSkipSubscriptionPopup extends AbstractConstraint
     {
         $dashboard->open();
         $dashboard->getSubscriptionBlock()->disableCheckbox();
-        $dashboard->getModalBlock()->dismissWarning();
+        $dashboard->getSubscriptionBlock()->skipAdvancedReporting();
         \PHPUnit_Framework_Assert::assertFalse(
             $dashboard->getSubscriptionBlock()->isVisible(),
-            'Subscription pop-up was not skipped'
+            'Advanced Reporting was not skipped'
         );
     }
 
@@ -37,6 +37,6 @@ class AssertSkipSubscriptionPopup extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Subscription pop-up was skipped';
+        return 'Advanced Reporting was skipped';
     }
 }

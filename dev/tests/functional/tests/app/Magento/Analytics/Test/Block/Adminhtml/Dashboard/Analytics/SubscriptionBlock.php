@@ -18,7 +18,28 @@ class SubscriptionBlock extends Modal
      *
      * @var string
      */
-    private $checkbox = '.admin__control-checkbox';
+    private $checkbox = '[name="analytics_subscription_checkbox"]';
+
+    /**
+     * "Enable Advanced Reporting" button
+     *
+     * @var string
+     */
+    private $acceptReportingButton = '[data-index="analytics_subscription_button_accept"]';
+
+    /**
+     * "Disable Advanced Reporting" button
+     *
+     * @var string
+     */
+    private $declineReportingButton = '[data-index="analytics_subscription_button_decline"]';
+
+    /**
+     * "Remind me later" button
+     *
+     * @var string
+     */
+    private $skipReportingButton = '[data-index="analytics_subscription_button_postpone"]';
 
     /**
      * Enable checkbox in modal window.
@@ -38,5 +59,41 @@ class SubscriptionBlock extends Modal
     public function disableCheckbox()
     {
         $this->_rootElement->find($this->checkbox, Locator::SELECTOR_CSS, 'checkbox')->setValue('No');
+    }
+
+    /**
+     * Click 'Enable Advanced Reporting' button on a subscription popup.
+     *
+     * @return void
+     */
+    public function acceptAdvancedReporting()
+    {
+        $this->waitModalAnimationFinished();
+        $this->_rootElement->find($this->acceptReportingButton)->click();
+        $this->waitForElementNotVisible($this->loadingMask);
+    }
+
+    /**
+     * Click 'Disable Advanced Reporting' button on a subscription popup.
+     *
+     * @return void
+     */
+    public function declineAdvancedReporting()
+    {
+        $this->waitModalAnimationFinished();
+        $this->_rootElement->find($this->declineReportingButton)->click();
+        $this->waitForElementNotVisible($this->loadingMask);
+    }
+
+    /**
+     * Click 'Remind me later' button on a subscription popup.
+     *
+     * @return void
+     */
+    public function skipAdvancedReporting()
+    {
+        $this->waitModalAnimationFinished();
+        $this->_rootElement->find($this->skipReportingButton)->click();
+        $this->waitForElementNotVisible($this->loadingMask);
     }
 }
