@@ -3,18 +3,13 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Catalog product link model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Image as MagentoImage;
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
+use Magento\Catalog\Model\Product\Image\SizeCache;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -26,11 +21,6 @@ use Magento\Catalog\Model\Product\Image\ParamsBuilder;
  */
 class Image extends \Magento\Framework\Model\AbstractModel
 {
-    /**
-     * @var string
-     */
-    private $cachePrefix = 'IMG_INFO';
-
     /**
      * @var int
      */
@@ -197,6 +187,11 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private $paramsBuilder;
 
     /**
+     * @var SizeCache
+     */
+    private $sizeCache;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -213,6 +208,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Catalog\Model\View\Asset\ImageFactory $assetImageFactory
      * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory $assetPlaceholderFactory
      * @param ParamsBuilder $paramsBuilder
+     * @param SizeCache $sizeCache
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -232,7 +228,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
         array $data = [],
         \Magento\Catalog\Model\View\Asset\ImageFactory $assetImageFactory = null,
         \Magento\Catalog\Model\View\Asset\PlaceholderFactory $assetPlaceholderFactory = null,
-        ParamsBuilder $paramsBuilder = null
+        ParamsBuilder $paramsBuilder = null,
+        SizeCache $sizeCache = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
@@ -256,6 +253,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
             );
         }
         $this->paramsBuilder = $paramsBuilder ?: ObjectManager::getInstance()->get(ParamsBuilder::class);
+        $this->sizeCache = $sizeCache ?: ObjectManager::getInstance()->get(SizeCache::class);
     }
 
     /**
@@ -678,21 +676,13 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $filename = $this->getBaseFile() ? $this->imageAsset->getPath() : null;
         $this->getImageProcessor()->save($filename);
         $this->_coreFileStorageDatabase->saveFile($filename);
-        $this->saveImageSize();
+        $this->sizeCache->save(
+            $this->getWidth(),
+            $this->getHeight(),
+            $this->imageAsset->getPath()
+        );
 
         return $this;
-    }
-
-    /**
-     * Save size to cache
-     * @return void
-     */
-    private function saveImageSize()
-    {
-        $this->_cacheManager->save(
-            serialize(['width' => $this->getWidth(), 'height' => $this->getHeight()]),
-            $this->cachePrefix . $this->imageAsset->getPath()
-        );
     }
 
     /**
