@@ -6,10 +6,14 @@
 
 namespace Magento\Framework\Indexer;
 
+/**
+ * Calculate memory size for entity according different dimensions.
+ * @api
+ */
 interface IndexTableRowSizeEstimatorInterface
 {
     /**
-     * Calculate memory size for product row.
+     * Calculate memory size for entity row.
      *
      * @return float
      */
