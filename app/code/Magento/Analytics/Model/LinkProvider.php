@@ -52,7 +52,7 @@ class LinkProvider implements LinkProviderInterface
     public function get()
     {
         $fileInfo = $this->fileInfoManager->load();
-        if ($fileInfo->getPath() === null || $fileInfo->getInitializationVector() === null) {
+        if (!$fileInfo->getPath() || !$fileInfo->getInitializationVector()) {
             throw new Exception(__('File is not ready yet.'), 0, Exception::HTTP_NOT_FOUND);
         }
         $link = $this->linkInterfaceFactory->create();

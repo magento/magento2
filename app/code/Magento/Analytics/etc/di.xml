@@ -12,11 +12,13 @@
     <preference for="Magento\Analytics\Api\LinkProviderInterface" type="Magento\Analytics\Model\LinkProvider" />
     <preference for="Magento\Analytics\Api\Data\LinkInterface" type="Magento\Analytics\Model\Link" />
     <preference for="Magento\Analytics\Model\Connector\Http\ClientInterface" type="Magento\Analytics\Model\Connector\Http\Client\Curl" />
+    <preference for="Magento\Analytics\Model\ExportDataHandlerInterface" type="Magento\Analytics\Model\ExportDataHandlerNotification" />
     <type name="Magento\Analytics\Model\Connector">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="signUp" xsi:type="string">Magento\Analytics\Model\Connector\SignUpCommand</item>
                 <item name="update" xsi:type="string">Magento\Analytics\Model\Connector\UpdateCommand</item>
+                <item name="notifyDataChanged" xsi:type="string">Magento\Analytics\Model\Connector\NotifyDataChangedCommand</item>
             </argument>
         </arguments>
     </type>
@@ -110,6 +112,7 @@
                 <item name="33" xsi:type="string">payment/braintree/active</item>
                 <item name="34" xsi:type="string">payment/braintree_paypal/title</item>
                 <item name="35" xsi:type="string">payment/braintree_paypal/active</item>
+                <item name="36" xsi:type="string">analytics/general/vertical</item>
             </argument>
         </arguments>
     </type>
