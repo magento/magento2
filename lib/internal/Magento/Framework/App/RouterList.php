@@ -29,7 +29,6 @@ class RouterList implements RouterListInterface
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $routerList)
     {
         $this->objectManager = $objectManager;
-        $this->routerList = $routerList;
         $this->routerList = array_filter(
             $routerList,
             function ($item) {
