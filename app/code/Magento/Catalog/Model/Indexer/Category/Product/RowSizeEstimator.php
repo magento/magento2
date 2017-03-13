@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\IndexTableRowSizeEstimator;
 use Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface;
 
 /**
@@ -15,16 +14,10 @@ use Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface;
  */
 class RowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 {
-
     /**
      * Amount of memory for index data row.
      */
     const ROW_MEMORY_SIZE = 100;
-
-    /**
-     * @var IndexTableRowSizeEstimator
-     */
-    private $indexTableRowSizeEstimator;
 
     /**
      * @var \Magento\Framework\App\ResourceConnection
@@ -33,14 +26,11 @@ class RowSizeEstimator implements IndexTableRowSizeEstimatorInterface
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
-     * @param IndexTableRowSizeEstimator $indexTableRowSizeEstimator
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resourceConnection,
-        IndexTableRowSizeEstimator $indexTableRowSizeEstimator
+        \Magento\Framework\App\ResourceConnection $resourceConnection
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->indexTableRowSizeEstimator = $indexTableRowSizeEstimator;
     }
 
     /**

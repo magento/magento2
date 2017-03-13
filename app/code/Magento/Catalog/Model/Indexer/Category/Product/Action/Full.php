@@ -69,7 +69,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
-        int $batchSize = null
+        $batchSize = null
     ) {
         parent::__construct(
             $resource,
