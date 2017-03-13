@@ -7,6 +7,8 @@ namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Product View block
@@ -63,6 +65,11 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     protected $productRepository;
 
     /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
+    private $productFactory;
+
+    /**
      * @param Context $context
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -74,6 +81,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * @param ProductRepositoryInterface|\Magento\Framework\Pricing\PriceCurrencyInterface $productRepository
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @codingStandardsIgnoreStart
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -88,7 +96,8 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         \Magento\Customer\Model\Session $customerSession,
         ProductRepositoryInterface $productRepository,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        array $data = []
+        array $data = [],
+        \Magento\Catalog\Model\ProductFactory $productFactory = null
     ) {
         $this->_productHelper = $productHelper;
         $this->urlEncoder = $urlEncoder;
@@ -99,6 +108,8 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         $this->customerSession = $customerSession;
         $this->productRepository = $productRepository;
         $this->priceCurrency = $priceCurrency;
+        $this->productFactory = $productFactory
+            ?: ObjectManager::getInstance()->get(ProductFactory::class);
         parent::__construct(
             $context,
             $data
@@ -127,7 +138,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     {
         $this->getLayout()->createBlock(\Magento\Catalog\Block\Breadcrumbs::class);
         $product = $this->getProduct();
-        if (!$product) {
+        if (!$product->getId()) {
             return parent::_prepareLayout();
         }
 
@@ -170,11 +181,19 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      */
     public function getProduct()
     {
-        if (!$this->_coreRegistry->registry('product') && $this->getProductId()) {
+        $product = $this->_coreRegistry->registry('product');
+        if (!$product && $this->getProductId()) {
             $product = $this->productRepository->getById($this->getProductId());
             $this->_coreRegistry->register('product', $product);
         }
-        return $this->_coreRegistry->registry('product');
+
+        // fallback so we can return \Magento\Catalog\Model\Product
+        if (!$product) {
+            // dummy, don't save it in the registry!
+            $product = $this->productFactory->create();
+        }
+
+        return $product;
     }
 
     /**
