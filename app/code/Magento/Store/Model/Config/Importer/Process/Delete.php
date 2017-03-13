@@ -143,7 +143,9 @@ class Delete implements ProcessInterface
      */
     private function deleteWebsites(array $items)
     {
-        foreach ($items as $websiteCode => $websiteData) {
+        $items = array_keys($items);
+
+        foreach ($items as $websiteCode) {
             $this->websiteResource->delete(
                 $this->websiteRepository->get($websiteCode)
             );
@@ -158,7 +160,9 @@ class Delete implements ProcessInterface
      */
     private function deleteStores(array $items)
     {
-        foreach ($items as $storeCode => $storeData) {
+        $items = array_keys($items);
+
+        foreach ($items as $storeCode) {
             $this->storeResource->delete(
                 $this->storeRepository->get($storeCode)
             );
@@ -168,14 +172,15 @@ class Delete implements ProcessInterface
     /**
      * Deletes groups from application.
      *
-     * @param array $itemsToDelete The groups to delete
+     * @param array $items The groups to delete
      * @return void
      */
-    private function deleteGroups(array $itemsToDelete)
+    private function deleteGroups(array $items)
     {
         $groups = $this->groupRepository->getList();
+        $items = array_keys($items);
 
-        foreach ($itemsToDelete as $groupCode => $groupData) {
+        foreach ($items as $groupCode) {
             /** @var \Magento\Store\Model\Group $group */
             foreach ($groups as $group) {
                 if ($group->getCode() == $groupCode) {

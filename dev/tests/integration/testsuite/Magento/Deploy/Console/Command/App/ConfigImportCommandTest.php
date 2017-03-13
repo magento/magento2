@@ -143,15 +143,18 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         /** @var GroupFactory $groupFactory */
         $groupFactory = $this->objectManager->get(GroupFactory::class);
 
-        $store = $storeFactory->create()->load('test', 'code');
-        $this->assertSame($store->getSortOrder(), '23');
-        $this->assertSame($store->getName(), 'Test Store view');
-
         $website = $websiteFactory->create()->load('test', 'code');
-        $this->assertSame($website->getName(), 'Main Test');
+        $this->assertSame($website->getName(), 'Test Website');
 
         $group = $groupFactory->create()->load('test_website_store', 'code');
         $this->assertSame($group->getName(), 'Test Website Store');
+        $this->assertSame($group->getWebsiteId(), $website->getId());
+
+        $store = $storeFactory->create()->load('test', 'code');
+        $this->assertSame($store->getSortOrder(), '23');
+        $this->assertSame($store->getName(), 'Test Store view');
+        $this->assertSame($store->getGroupId(), $group->getId());
+        $this->assertSame($store->getWebsiteId(), $website->getId());
 
         $this->writer->saveConfig([
             ConfigFilePool::APP_CONFIG => require __DIR__ . '/../../../_files/scopes/config_with_changed_stores.php'
