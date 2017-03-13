@@ -18,9 +18,9 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 {
 
     /**
-     * Row count in minimal batch
+     * Row count to process in a batch
      */
-    const BATCH_SIZE = 170;
+    const DEFAULT_BATCH_SIZE = 100000;
 
     /**
      * @var \Magento\Framework\Indexer\BatchSizeManagementInterface
@@ -43,6 +43,13 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected $metadataPool;
 
     /**
+     * Row count to process in a batch
+     *
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
@@ -51,6 +58,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param \Magento\Framework\Indexer\BatchProviderInterface|null $batchProvider
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
+     * @param int|null $batchSize
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
@@ -60,7 +68,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         \Magento\Framework\Indexer\BatchSizeManagementInterface $batchSizeManagement = null,
         \Magento\Framework\Indexer\BatchProviderInterface $batchProvider = null,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
-        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null
+        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
+        int $batchSize = null
     ) {
         parent::__construct(
             $resource,
@@ -81,6 +90,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->indexerStateFactory = $stateFactory ?: $objectManager->get(
             \Magento\Indexer\Model\Indexer\StateFactory::class
         );
+        $this->batchSize = $batchSize ?: self::DEFAULT_BATCH_SIZE;
     }
 
     /**
@@ -216,12 +226,12 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     {
         $entityMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $columns = array_keys($this->connection->describeTable($this->getMainTmpTable()));
-        $this->batchSizeManagement->ensureBatchSize($this->connection, self::BATCH_SIZE);
+        $this->batchSizeManagement->ensureBatchSize($this->connection, $this->batchSize);
         $batches = $this->batchProvider->getBatches(
             $this->connection,
             $entityMetadata->getEntityTable(),
             $entityMetadata->getIdentifierField(),
-            self::BATCH_SIZE
+            $this->batchSize
         );
         foreach ($batches as $batch) {
             $select = $this->connection->select();
