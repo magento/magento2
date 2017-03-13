@@ -120,11 +120,11 @@ class Importer implements ImporterInterface
         try {
             $flag = $this->flagFactory->create(['data' => ['flag_code' => static::FLAG_CODE]]);
             $this->flagResource->load($flag, static::FLAG_CODE, 'flag_code');
-            $currentData = $flag->getFlagData() ?: [];
+            $previouslyProcessedData = $flag->getFlagData() ?: [];
 
             $changedData = array_replace_recursive(
-                $this->arrayUtils->recursiveDiff($currentData, $data),
-                $this->arrayUtils->recursiveDiff($data, $currentData)
+                $this->arrayUtils->recursiveDiff($previouslyProcessedData, $data),
+                $this->arrayUtils->recursiveDiff($data, $previouslyProcessedData)
             );
 
             /**

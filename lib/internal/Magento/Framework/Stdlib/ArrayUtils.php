@@ -154,9 +154,10 @@ class ArrayUtils
     public function flatten(array $data, $path = '', $separator = '/')
     {
         $result = [];
+        $path = $path ? $path . $separator : '';
 
         foreach ($data as $key => $value) {
-            $fullPath = $path ? $path . $separator . $key : $key;
+            $fullPath = $path . $key;
 
             if (!is_array($value)) {
                 $result[$fullPath] = $value;
