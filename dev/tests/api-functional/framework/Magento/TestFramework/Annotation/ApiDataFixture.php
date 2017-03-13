@@ -64,7 +64,7 @@ class ApiDataFixture
         $this->_revertFixtures();
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get(\Magento\Eav\Model\Entity\AttributeCache::class)->clear();
+        $objectManager->get(\Magento\Customer\Model\Metadata\AttributeMetadataCache::class)->clean();
     }
 
     /**

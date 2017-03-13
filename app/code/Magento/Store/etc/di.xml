@@ -55,7 +55,7 @@
     </type>
     <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store" />
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig" />
-    <type name="\Magento\Framework\App\Action\AbstractAction">
+    <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
         <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\Design" sortOrder="30"/>
     </type>
@@ -370,6 +370,14 @@
                     <item name="source" xsi:type="object">scopesConfigSourceAggregated</item>
                     <item name="namespace" xsi:type="const">Magento\Store\App\Config\Type\Scopes::CONFIG_TYPE</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="commandStoreList" xsi:type="object">Magento\Store\Console\Command\StoreListCommand</item>
+                <item name="commandWebsiteList" xsi:type="object">Magento\Store\Console\Command\WebsiteListCommand</item>
             </argument>
         </arguments>
     </type>
