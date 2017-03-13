@@ -5,6 +5,7 @@
  */
 namespace Magento\Analytics\Model;
 
+use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Config\App\Config\Type\System;
 
 /**
@@ -16,6 +17,11 @@ class SubscriptionStatusProvider
      * Represents an enabled subscription state.
      */
     const ENABLED = "Enabled";
+
+    /**
+     * Represents a failed subscription state.
+     */
+    const FAILED = "Failed";
 
     /**
      * Represents a pending subscription state.
@@ -38,15 +44,23 @@ class SubscriptionStatusProvider
     private $analyticsToken;
 
     /**
+     * @var FlagManager
+     */
+    private $flagManager;
+
+    /**
      * @param System $systemConfig
      * @param AnalyticsToken $analyticsToken
+     * @param FlagManager $flagManager
      */
     public function __construct(
         System $systemConfig,
-        AnalyticsToken $analyticsToken
+        AnalyticsToken $analyticsToken,
+        FlagManager $flagManager
     ) {
         $this->systemConfig = $systemConfig;
         $this->analyticsToken = $analyticsToken;
+        $this->flagManager = $flagManager;
     }
 
     /**
@@ -61,30 +75,7 @@ class SubscriptionStatusProvider
     public function getStatus()
     {
         $checkboxState = $this->systemConfig->get('default/analytics/subscription/enabled');
-        return $this->resolveStatus($checkboxState);
-    }
-
-    /**
-     * Resolves subscription status depending on
-     * subscription config value (enabled, disabled).
-     *
-     * @param bool $isSubscriptionEnabled
-     *
-     * @return string
-     */
-    private function resolveStatus($isSubscriptionEnabled)
-    {
-        if (!$isSubscriptionEnabled) {
-            return static::DISABLED;
-        }
-
-        $status = static::PENDING;
-
-        if ($this->analyticsToken->isTokenExist()) {
-            $status = static::ENABLED;
-        }
-
-        return $status;
+        return $checkboxState ? $this->getStatusForEnabledSubscription() : $this->getStatusForDisabledSubscription();
     }
 
     /**
@@ -94,7 +85,17 @@ class SubscriptionStatusProvider
      */
     public function getStatusForEnabledSubscription()
     {
-        return $this->resolveStatus(true);
+        $attemptsCount = $this->flagManager->getFlagData(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
+
+        $status = static::ENABLED;
+        if (!$this->analyticsToken->isTokenExist()) {
+            $status = static::PENDING;
+            if ($attemptsCount === null) {
+                $status = static::FAILED;
+            }
+        }
+
+        return $status;
     }
 
     /**
@@ -104,6 +105,6 @@ class SubscriptionStatusProvider
      */
     public function getStatusForDisabledSubscription()
     {
-        return $this->resolveStatus(false);
+        return static::DISABLED;
     }
 }
