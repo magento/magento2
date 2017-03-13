@@ -16,6 +16,8 @@ use Magento\Framework\Exception\LocalizedException;
  * <job name="consumerConsumerName" instance="Magento\MessageQueue\Model\ConsumerRunner" method="consumerName">
  * </code>
  * Where <i>consumerName</i> should be a valid name of consumer registered in some queue.xml
+ *
+ * @api
  */
 class ConsumerRunner
 {
