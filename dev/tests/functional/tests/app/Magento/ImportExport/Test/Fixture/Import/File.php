@@ -19,6 +19,8 @@ class File extends DataSource
 {
     /**
      * Website code mapping.
+     *
+     * @var array
      */
     private $codeMapping =[
         'base' => 'Main Website[USD]'

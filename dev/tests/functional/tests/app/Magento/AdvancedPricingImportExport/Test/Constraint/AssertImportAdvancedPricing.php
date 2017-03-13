@@ -19,7 +19,7 @@ class AssertImportAdvancedPricing extends AbstractConstraint
     /**
      * Array keys mapping for csv file.
      *
-     * @param array
+     * @var array
      */
     private $mappingData = [
         'sku' => 'sku',
