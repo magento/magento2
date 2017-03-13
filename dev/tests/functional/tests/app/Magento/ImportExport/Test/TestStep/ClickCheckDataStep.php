@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Test\TestStep;
 
-use Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricingCheckData as Assert;
+use Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricingCheckData as AssertImportCheckData;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\ImportExport\Test\Fixture\ImportData;
@@ -25,7 +25,7 @@ class ClickCheckDataStep implements TestStepInterface
     /**
      * Assert that validation result message is correct.
      *
-     * @var assert
+     * @var AssertImportCheckData
      */
     private $assert;
 
@@ -38,10 +38,10 @@ class ClickCheckDataStep implements TestStepInterface
 
     /**
      * @param AdminImportIndex $adminImportIndex
-     * @param Assert $assert
+     * @param AssertImportCheckData $assert
      * @param ImportData $import
      */
-    public function __construct(AdminImportIndex $adminImportIndex, Assert $assert, ImportData $import)
+    public function __construct(AdminImportIndex $adminImportIndex, AssertImportCheckData $assert, ImportData $import)
     {
         $this->adminImportIndex = $adminImportIndex;
         $this->assert = $assert;

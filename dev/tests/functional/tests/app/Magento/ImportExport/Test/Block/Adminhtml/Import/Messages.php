@@ -27,7 +27,7 @@ class Messages extends \Magento\Backend\Test\Block\Messages
     /**
      * Get error message.
      *
-     * @return string
+     * @return bool|string
      */
     public function getErrorMessage()
     {
@@ -40,7 +40,7 @@ class Messages extends \Magento\Backend\Test\Block\Messages
     /**
      * Get notice message.
      *
-     * @return array
+     * @return bool|string
      */
     public function getNoticeMessage()
     {
