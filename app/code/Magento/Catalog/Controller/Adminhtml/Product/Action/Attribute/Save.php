@@ -15,6 +15,19 @@ use Magento\Backend\App\Action;
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
 {
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    protected $localeDate;
+    
+    /**
+     * Eav config
+     *
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $_eavConfig;
+
+    
+    /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
      */
     protected $_productFlatIndexerProcessor;
@@ -32,46 +45,80 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     protected $_catalogProduct;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory
-     */
-    protected $stockItemFactory;
-
-    /**
      * Stock Indexer
      *
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
     protected $_stockIndexerProcessor;
-
+    
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * Stock Stock registry
+     *
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     */
+    protected $stockRegistry;
+    
+     /**
+     * Stock Stock item repository
+     *
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     */
+    protected $stockItemRepository;
+    
+    /**
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
+     */
+    protected $stockConfiguration;
+    
+    /**
+     * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory
+     */
+    protected $stockItemFactory;
+    
+    /**
+     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface
      */
     protected $dataObjectHelper;
 
     /**
      * @param Action\Context $context
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate     * 
+     * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param \Magento\Catalog\Helper\Product $catalogProduct
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        Action\Context $context,
+        Action\Context $context,        
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper,
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
         \Magento\Catalog\Helper\Product $catalogProduct,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
+        $this->localeDate = $localeDate;
+        $this->eavConfig = $eavConfig;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
         $this->_stockIndexerProcessor = $stockIndexerProcessor;
         $this->_catalogProduct = $catalogProduct;
+        $this->stockRegistry = $stockRegistry;
+        $this->stockItemRepository = $stockItemRepository;
+        $this->stockConfiguration = $stockConfiguration;
         $this->stockItemFactory = $stockItemFactory;
         parent::__construct($context, $attributeHelper);
         $this->dataObjectHelper = $dataObjectHelper;
@@ -98,8 +145,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $websiteAddData = $this->getRequest()->getParam('add_website_ids', []);
 
         /* Prepare inventory data item options (use config settings) */
-        $options = $this->_objectManager->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class)
-            ->getConfigItemOptions();
+        $options = $this->stockConfiguration->getConfigItemOptions();
         foreach ($options as $option) {
             if (isset($inventoryData[$option]) && !isset($inventoryData['use_config_' . $option])) {
                 $inventoryData['use_config_' . $option] = 0;
@@ -109,12 +155,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         try {
             $storeId = $this->attributeHelper->getSelectedStoreId();
             if ($attributesData) {
-                $dateFormat = $this->_objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
-                    ->getDateFormat(\IntlDateFormatter::SHORT);
-
+                $dateFormat = $this->localeDate->getDateFormat(\IntlDateFormatter::SHORT);
                 foreach ($attributesData as $attributeCode => $value) {
-                    $attribute = $this->_objectManager->get(\Magento\Eav\Model\Config::class)
-                        ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
+                    $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
                     if (!$attribute->getAttributeId()) {
                         unset($attributesData[$attributeCode]);
                         continue;
@@ -149,15 +192,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             }
 
             if ($inventoryData) {
-                // TODO why use ObjectManager?
-                /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
-                $stockRegistry = $this->_objectManager
-                    ->create(\Magento\CatalogInventory\Api\StockRegistryInterface::class);
-                /** @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository */
-                $stockItemRepository = $this->_objectManager
-                    ->create(\Magento\CatalogInventory\Api\StockItemRepositoryInterface::class);
                 foreach ($this->attributeHelper->getProductIds() as $productId) {
-                    $stockItemDo = $stockRegistry->getStockItem(
+                    $stockItemDo = $this->stockRegistry->getStockItem(
                         $productId,
                         $this->attributeHelper->getStoreWebsiteId($storeId)
                     );
@@ -172,7 +208,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                         \Magento\CatalogInventory\Api\Data\StockItemInterface::class
                     );
                     $stockItemDo->setItemId($stockItemId);
-                    $stockItemRepository->save($stockItemDo);
+                    $this->stockItemRepository->save($stockItemDo);
                 }
                 $this->_stockIndexerProcessor->reindexList($this->attributeHelper->getProductIds());
             }
