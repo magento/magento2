@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\MessageQueue;
 
+/**
+ * Interface for interaction with message queue.
+ *
+ * @api
+ */
 interface QueueInterface
 {
     /**

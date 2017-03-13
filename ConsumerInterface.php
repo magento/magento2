@@ -7,6 +7,8 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Consumers will connect to a queue, read messages, and invoke a method to process the message contents.
+ *
+ * @api
  */
 interface ConsumerInterface
 {

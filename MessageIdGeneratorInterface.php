@@ -7,6 +7,8 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Used to generate unique id for queue message.
+ *
+ * @api
  */
 interface MessageIdGeneratorInterface
 {

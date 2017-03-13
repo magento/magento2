@@ -10,6 +10,8 @@ use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
 
 /**
  * Consumer config interface provides access data declared in etc/queue_consumer.xml
+ *
+ * @api
  */
 interface ConfigInterface
 {

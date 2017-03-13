@@ -7,6 +7,8 @@ namespace Magento\Framework\MessageQueue\Bulk;
 
 /**
  * Interface for bulk exchange.
+ *
+ * @api
  */
 interface ExchangeInterface
 {

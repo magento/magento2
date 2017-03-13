@@ -7,6 +7,8 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Interface message Exchange
+ *
+ * @api
  */
 interface ExchangeInterface
 {

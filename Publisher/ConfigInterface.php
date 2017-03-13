@@ -10,6 +10,8 @@ use Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItemInterface
 
 /**
  * Publisher config interface provides access data declared in etc/queue_publisher.xml
+ *
+ * @api
  */
 interface ConfigInterface
 {

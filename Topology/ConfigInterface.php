@@ -11,6 +11,8 @@ use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemInterface;
 
 /**
  * Topology config interface provides access data declared in etc/queue_topology.xml
+ *
+ * @api
  */
 interface ConfigInterface
 {
