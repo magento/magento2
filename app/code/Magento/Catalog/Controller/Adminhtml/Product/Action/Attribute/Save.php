@@ -52,16 +52,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     protected $_stockIndexerProcessor;
 
     /**
-     * Stock Stock registry
-     *
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
     protected $stockRegistry;
     
      /**
-     * Stock Stock item repository
-     *
-     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface
      */
     protected $stockItemRepository;
     
@@ -76,7 +72,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     protected $stockItemFactory;
     
     /**
-     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface
+     * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
 
