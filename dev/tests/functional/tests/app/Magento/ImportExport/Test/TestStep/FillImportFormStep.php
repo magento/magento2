@@ -34,13 +34,13 @@ class FillImportFormStep implements TestStepInterface
      * @param AdminImportIndex $adminImportIndex
      * @param ImportData $import
      * @param TestStepFactory $stepFactory
-     * @param bool $changeCurrency
+     * @param bool|null $changeCurrency
      */
     public function __construct(
         AdminImportIndex $adminImportIndex,
         ImportData $import,
         TestStepFactory $stepFactory,
-        $changeCurrency
+        $changeCurrency = false
     ) {
         $this->adminImportIndex = $adminImportIndex;
         $this->import = $import;

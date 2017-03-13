@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\ImportExport\Test\TestCase\ImportDataTest" summary="Import tier prices">
         <variation name="ImportProductsVariation1" ticketId="MAGETWO-46154" summary="Add/Update product tier prices">
-            <data name="changeCurrency" xsi:type="boolean">false</data>
             <data name="import/data" xsi:type="array">
                 <item name="entity" xsi:type="string">Advanced Pricing</item>
                 <item name="behavior" xsi:type="string">Add/Update</item>
@@ -30,7 +29,6 @@
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
         </variation>
         <variation name="ImportProductsVariation2" ticketId="MAGETWO-46156" summary="Replace product tier prices">
-            <data name="changeCurrency" xsi:type="boolean">false</data>
             <data name="import/data" xsi:type="array">
                 <item name="entity" xsi:type="string">Advanced Pricing</item>
                 <item name="behavior" xsi:type="string">Replace</item>
@@ -52,7 +50,6 @@
             <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertImportAdvancedPricing" />
         </variation>
         <variation name="ImportProductsVariation3" ticketId="MAGETWO-46157" summary="Delete product tier prices">
-            <data name="changeCurrency" xsi:type="boolean">false</data>
             <data name="import/data" xsi:type="array">
                 <item name="entity" xsi:type="string">Advanced Pricing</item>
                 <item name="behavior" xsi:type="string">Delete</item>

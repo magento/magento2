@@ -79,6 +79,7 @@ class OptionTier extends AbstractOptions
      * @param array|null $fields
      * @param SimpleElement|null $element
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldsData($fields = null, SimpleElement $element = null)
     {
