@@ -132,4 +132,35 @@ define([
             ).toEqual(false);
         });
     });
+
+    describe('Testing UK Mobile number validation', function () {
+        it('Valid UK Mobile Number', function () {
+            var element = $('<input id="telephone" type="text" value="07400123456" />');
+
+            expect($.validator.methods.mobileUK.call(
+                $.validator.prototype, element.val(), element.get(0)
+            )).toBeTruthy();
+        });
+        it('Invalid UK Mobile Number', function () {
+            var element = $('<input id="telephone" type="text" value="06400123456" />');
+
+            expect($.validator.methods.mobileUK.call(
+                $.validator.prototype, element.val(), element.get(0)
+            )).toBeFalsy();
+        });
+        it('Valid UK Mobile Number (International)', function () {
+            var element = $('<input id="telephone" type="text" value="+447400123456" />');
+
+            expect($.validator.methods.mobileUK.call(
+                $.validator.prototype, element.val(), element.get(0)
+            )).toBeTruthy();
+        });
+        it('Invalid UK Mobile Number', function () {
+            var element = $('<input id="telephone" type="text" value="+446400123456" />');
+
+            expect($.validator.methods.mobileUK.call(
+                $.validator.prototype, element.val(), element.get(0)
+            )).toBeFalsy();
+        });
+    });
 });
