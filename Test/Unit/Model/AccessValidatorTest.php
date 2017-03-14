@@ -6,7 +6,6 @@
 
 namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
-
 class AccessValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
