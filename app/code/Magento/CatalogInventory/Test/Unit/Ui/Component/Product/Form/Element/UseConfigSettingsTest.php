@@ -29,8 +29,10 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
     private $serializerMock;
 
     /**
-     * @return void
+     * @var UseConfigSettings
      */
+    private $useConfigSettings;
+
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -50,24 +52,30 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
             ->method('getProcessor')
             ->willReturn($processorMock);
         $this->serializerMock = $this->getMock(Json::class);
+        $this->useConfigSettings = $this->objectManagerHelper->getObject(
+            UseConfigSettings::class,
+            [
+                'context' => $this->contextMock,
+                'serializer' => $this->serializerMock
+            ]
+        );
     }
 
-    /**
-     * @return void
-     */
     public function testPrepare()
     {
         $config = ['valueFromConfig' => 123];
-        $element = $this->getTestedElement($config);
-        $element->prepare();
-        $this->assertEquals($config, $element->getData('config'));
+        $this->useConfigSettings->setData('config', $config);
+        $this->useConfigSettings->prepare();
+        $this->assertEquals($config, $this->useConfigSettings->getData('config'));
     }
 
     /**
-     * @return void
+     * @param array $expectedResult
+     * @param string|int $sourceValue
+     * @param int $serializedCallCount
      * @dataProvider prepareSourceDataProvider
      */
-    public function testPrepareSource($expectedResult, $sourceValue, $serializedCallCount = 0)
+    public function testPrepareSource(array $expectedResult, $sourceValue, $serializedCallCount = 0)
     {
         /** @var ValueSourceInterface|\PHPUnit_Framework_MockObject_MockObject $source */
         $source = $this->getMock(ValueSourceInterface::class);
@@ -82,10 +90,10 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($expectedResult['valueFromConfig']);
 
         $config = array_replace($expectedResult, ['valueFromConfig' => $source]);
-        $element = $this->getTestedElement($config);
-        $element->prepare();
+        $this->useConfigSettings->setData('config', $config);
+        $this->useConfigSettings->prepare();
 
-        $this->assertEquals($expectedResult, $element->getData('config'));
+        $this->assertEquals($expectedResult, $this->useConfigSettings->getData('config'));
     }
 
     public function prepareSourceDataProvider()
@@ -108,21 +116,5 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
                 'serialziedCallCount' => 1
             ]
         ];
-    }
-
-    /**
-     * @param array $config
-     * @return UseConfigSettings|object
-     */
-    private function getTestedElement(array $config = [])
-    {
-        return $this->objectManagerHelper->getObject(
-            UseConfigSettings::class,
-            [
-                'context' => $this->contextMock,
-                'data' => ['config' => $config],
-                'serializer' => $this->serializerMock
-            ]
-        );
     }
 }

@@ -67,6 +67,7 @@ class PurgeCache
                     '1.1',
                     $headers
                 );
+                $socketAdapter->read();
                 $socketAdapter->close();
             } catch (\Exception $e) {
                 $this->logger->critical($e->getMessage(), compact('server', 'tagsPattern'));

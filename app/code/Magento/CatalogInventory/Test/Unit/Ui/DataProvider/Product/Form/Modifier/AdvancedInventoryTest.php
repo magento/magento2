@@ -88,6 +88,11 @@ class AdvancedInventoryTest extends AbstractModifierTest
     }
 
     /**
+     * @param int $modelId
+     * @param int $someData
+     * @param int|string $defaultConfigValue
+     * @param null|array $unserializedValue
+     * @param int $serializeCallCount
      * @dataProvider modifyDataProvider
      */
     public function testModifyData(

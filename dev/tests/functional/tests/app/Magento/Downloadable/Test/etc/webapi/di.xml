@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Downloadable\Test\Handler\DownloadableProduct\DownloadableProductInterface" type="\Magento\Downloadable\Test\Handler\DownloadableProduct\Webapi" />
+    <preference for="Magento\Downloadable\Test\Handler\DownloadableProduct\DownloadableProductInterface" type="Magento\Downloadable\Test\Handler\DownloadableProduct\Webapi" />
 </config>
