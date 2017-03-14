@@ -15,6 +15,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class AbstractAction
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAction

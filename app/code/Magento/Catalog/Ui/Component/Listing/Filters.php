@@ -11,8 +11,6 @@ use Magento\Framework\View\Element\UiComponent\ObserverInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
- *
- *
  * @api
  */
 class Filters implements ObserverInterface

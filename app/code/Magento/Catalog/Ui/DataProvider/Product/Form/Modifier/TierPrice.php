@@ -16,6 +16,8 @@ use Magento\Ui\Component\Form\Field;
 
 /**
  * Tier prices modifier adds price type option to tier prices.
+ *
+ * @api
  */
 class TierPrice extends AbstractModifier
 {

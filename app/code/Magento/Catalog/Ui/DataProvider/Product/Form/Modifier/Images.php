@@ -9,6 +9,8 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 
 /**
  * Class Images customizes Images panel
+ *
+ * @api
  */
 class Images extends AbstractModifier
 {

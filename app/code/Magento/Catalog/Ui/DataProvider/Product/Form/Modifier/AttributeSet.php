@@ -14,6 +14,8 @@ use Magento\Ui\Component\Form\Field;
 
 /**
  * Add "Attribute Set" to first fieldset
+ *
+ * @api
  */
 class AttributeSet extends AbstractModifier
 {

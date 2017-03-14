@@ -35,6 +35,8 @@ use Magento\Framework\Locale\CurrencyInterface;
 /**
  * Class Eav
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */

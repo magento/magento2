@@ -12,6 +12,8 @@ use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Data provider for main panel of product page
+ *
+ * @api
  */
 class General extends AbstractModifier
 {

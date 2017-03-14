@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product;
 
+/**
+ * @api
+ */
 class Category extends \Magento\Catalog\Model\Indexer\Category\Product
 {
     /**

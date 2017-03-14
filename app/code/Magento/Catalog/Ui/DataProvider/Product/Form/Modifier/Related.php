@@ -26,6 +26,9 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Class Related
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Related extends AbstractModifier
