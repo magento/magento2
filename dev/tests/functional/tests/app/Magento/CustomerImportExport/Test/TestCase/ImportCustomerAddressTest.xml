@@ -17,7 +17,7 @@
                 <item name="import_multiple_value_separator" xsi:type="string">,</item>
                 <item name="import_file" xsi:type="array">
                     <item name="entities" xsi:type="array">
-                        <item name="0" xsi:type="string">customer::default_customer_without_email</item>
+                        <item name="0" xsi:type="string">customer::johndoe_with_addresses</item>
                     </item>
                     <item name="template" xsi:type="array">
                         <item name="filename"

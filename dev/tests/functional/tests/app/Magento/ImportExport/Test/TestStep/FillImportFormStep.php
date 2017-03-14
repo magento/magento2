@@ -21,14 +21,14 @@ class FillImportFormStep implements TestStepInterface
      *
      * @var AdminImportIndex
      */
-    protected $adminImportIndex;
+    private $adminImportIndex;
 
     /**
      * Import fixture.
      *
      * @var ImportData
      */
-    protected $import;
+    private $import;
 
     /**
      * @param AdminImportIndex $adminImportIndex

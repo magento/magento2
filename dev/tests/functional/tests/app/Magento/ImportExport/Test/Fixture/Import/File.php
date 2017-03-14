@@ -19,6 +19,8 @@ class File extends DataSource
 {
     /**
      * Website code mapping.
+     *
+     * @var array
      */
     private $codeMapping =[
         'base' => 'Main Website[USD]'
@@ -221,7 +223,8 @@ class File extends DataSource
                         $placeholders['entity_' . $key][$tierKey]["%{$index}%"] = $entityData[$index];
                     }
                     if (isset($website)) {
-                        $placeholders['entity_' . $key][$tierKey][$entityData['code']] = $website->getName().$currency;
+                        $placeholders['entity_' . $key][$tierKey][$entityData['code']] =
+                            $website->getName() . $currency;
                     }
                 }
             }

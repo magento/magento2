@@ -5,28 +5,41 @@
  */
 namespace Magento\CustomerImportExport\Test\TestStep;
 
-use Magento\ImportExport\Test\TestStep\FillImportFormStep;
+use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\ImportExport\Test\Fixture\Import\File;
 use Magento\ImportExport\Test\Fixture\ImportData;
 use Magento\ImportExport\Test\Page\Adminhtml\AdminImportIndex;
-use Magento\Mtf\TestStep\TestStepFactory;
 
 /**
  * Fill custom import form.
  */
-class FillCustomImportFormStep extends FillImportFormStep
+class FillCustomImportFormStep implements TestStepInterface
 {
+    /**
+     * Import index page.
+     *
+     * @var AdminImportIndex
+     */
+    private $adminImportIndex;
+
+    /**
+     * Import fixture.
+     *
+     * @var ImportData
+     */
+    private $import;
+
+
     /**
      * @param AdminImportIndex $adminImportIndex
      * @param ImportData $import
-     * @param TestStepFactory $stepFactory
      */
     public function __construct(
         AdminImportIndex $adminImportIndex,
-        ImportData $import,
-        TestStepFactory $stepFactory
+        ImportData $import
     ) {
-        parent::__construct($adminImportIndex, $import, $stepFactory, false);
+        $this->adminImportIndex = $adminImportIndex;
+        $this->import = $import;
     }
 
     /**

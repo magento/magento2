@@ -12,7 +12,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 
 /**
- * Check imported customer addresses are correct.
+ * Assert addresses from csv import file and page are match.
  */
 class AssertImportCustomerAddresses extends AbstractConstraint
 {
@@ -96,7 +96,9 @@ class AssertImportCustomerAddresses extends AbstractConstraint
      */
     private function getPrepareAddresses()
     {
-        $addressTemplate = $this->fixtureFactory->createByCode('address', ['dataset' => 'US_address_1_without_email']);
+        $addressTemplate = ($this->import->getBehavior() !== 'Delete Entities')
+            ? $this->fixtureFactory->createByCode('address', ['dataset' => 'US_address_1_without_email'])
+            : null;
         $customers = $this->import->getDataFieldConfig('import_file')['source']->getEntities();
         $customerForm = $this->customerIndexEdit->getCustomerForm();
 
@@ -105,8 +107,9 @@ class AssertImportCustomerAddresses extends AbstractConstraint
         foreach ($customers as $customer) {
             $this->customerIndexEdit->open(['id' => $customer->getId()]);
             $customerForm->openTab('addresses');
-            if (!empty($address = $customerForm->getTab('addresses')->getDataAddresses($addressTemplate, false))) {
-                $resultAddressesArray[] = $address[0];
+            $address = $customerForm->getTab('addresses')->getDataAddresses($addressTemplate)[0];
+            if (!empty($address)) {
+                $resultAddressesArray[] = $address;
             }
         }
 
@@ -135,16 +138,29 @@ class AssertImportCustomerAddresses extends AbstractConstraint
         $resultCsvData = [];
         foreach ($csvData as $csvRowData) {
             $csvRowData = array_combine($csvKeys, $csvRowData);
-            foreach (array_keys(array_diff_key($csvRowData, array_flip($this->mappingKeys))) as $key) {
-                unset($csvRowData[$key]);
-            };
-
+            $csvRowData = $this->deleteDirtData($csvRowData);
             if (isset($this->mappingCountries[$csvRowData['country_id']])) {
                 $csvRowData['country_id'] = $this->mappingCountries[$csvRowData['country_id']];
             };
             $resultCsvData[] = $csvRowData;
         }
         return $resultCsvData;
+    }
+
+    /**
+     * Delete waste data from array.
+     *
+     * @param array $csvData
+     * @return array
+     */
+    private function deleteDirtData(array $csvData)
+    {
+        $necessaryData = array_flip($this->mappingKeys);
+        $wasteKeys = array_keys(array_diff_key($csvData, $necessaryData));
+        foreach ($wasteKeys as $key) {
+            unset($csvData[$key]);
+        };
+        return $csvData;
     }
 
     /**

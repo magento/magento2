@@ -158,24 +158,20 @@ class Addresses extends Tab
      * Get data from Customer addresses.
      *
      * @param FixtureInterface|FixtureInterface[]|null $address
-     * @param bool $throwException
      * @return array
      * @throws \Exception
      */
-    public function getDataAddresses($address = null, $throwException = true)
+    public function getDataAddresses($address = null)
     {
         $data = [];
         $addresses = is_array($address) ? $address : [0 => $address];
 
         foreach ($addresses as $addressNumber => $address) {
-            $isHasData = (null === $address) || $address->hasData();
+            $isHasData = (null === $address) ? false : $address->hasData();
             $isVisibleCustomerAddress = $this->isVisibleCustomerAddress($addressNumber);
 
             if ($isHasData && !$isVisibleCustomerAddress) {
-                if ($throwException) {
-                    throw new \Exception("Invalid argument: can't get data from customer address #{$addressNumber}");
-                }
-                break;
+                throw new \Exception("Invalid argument: can't get data from customer address #{$addressNumber}");
             }
 
             if (!$isHasData && !$isVisibleCustomerAddress) {
