@@ -97,21 +97,21 @@ class Create implements ProcessInterface
 
             foreach ($entities as $scope) {
                 $dataDifference = $this->dataDifferenceFactory->create($scope);
-                $itemsToCreate = $dataDifference->getItemsToCreate($data[$scope]);
+                $items = $dataDifference->getItemsToCreate($data[$scope]);
 
-                if (!$itemsToCreate) {
+                if (!$items) {
                     continue;
                 }
 
                 switch ($scope) {
                     case ScopeInterface::SCOPE_WEBSITES:
-                        $this->createWebsites($itemsToCreate);
+                        $this->createWebsites($items);
                         break;
                     case ScopeInterface::SCOPE_GROUPS:
-                        $this->createGroups($itemsToCreate, $data);
+                        $this->createGroups($items, $data);
                         break;
                     case ScopeInterface::SCOPE_STORES:
-                        $this->createStores($itemsToCreate);
+                        $this->createStores($items, $data);
                         break;
                 }
             }
@@ -151,7 +151,7 @@ class Create implements ProcessInterface
 
             unset($groupData['group_id'], $groupData['website_id']);
 
-            $website = $this->detectWebsiteByCodeId(
+            $website = $this->detectWebsiteById(
                 $data,
                 $websiteId
             );
@@ -165,20 +165,51 @@ class Create implements ProcessInterface
     }
 
     /**
-     * Searches through given websites and compares with current websites.
-     * Return found website.
+     * Creates stores from the given data.
      *
-     * @param array $data
-     * @param string $websiteId
-     * @return \Magento\Store\Model\Website
-     * @throws NotFoundException
+     * @param array $items Stores to create
+     * @param array $data The all available data
+     * @return void
      */
-    private function detectWebsiteByCodeId(array $data, $websiteId)
+    private function createStores(array $items, array $data)
     {
-        foreach ($data['websites'] as $websiteData) {
+        foreach ($items as $storeData) {
+            $groupId = $storeData['group_id'];
+
+            unset(
+                $storeData['store_id'],
+                $storeData['website_id'],
+                $storeData['group_id']
+            );
+
+            $group = $this->detectGroupById(
+                $data,
+                $groupId
+            );
+
+            $store = $this->storeFactory->create();
+            $store->setData($storeData);
+            $store->setGroup($group);
+
+            $this->storeResource->save($store);
+        }
+    }
+
+    /**
+     * Searches through given websites and compares with current websites.
+     * Returns found website.
+     *
+     * @param array $data The data to be searched in
+     * @param string $websiteId The website id
+     * @return \Magento\Store\Model\Website
+     * @throws NotFoundException If website was not detected
+     */
+    private function detectWebsiteById(array $data, $websiteId)
+    {
+        foreach ($data[ScopeInterface::SCOPE_WEBSITES] as $websiteData) {
             if ($websiteId == $websiteData['website_id']) {
                 $website = $this->websiteFactory->create();
-                $this->websiteResource->load($website, $website['code'], 'code');
+                $this->websiteResource->load($website, $websiteData['code'], 'code');
 
                 return $website;
             }
@@ -188,20 +219,25 @@ class Create implements ProcessInterface
     }
 
     /**
-     * Creates stores from the given data.
+     * Searches through given groups and compares with current websites.
+     * Returns found group.
      *
-     * @param array $items Stores to create
-     * @return void
+     * @param array $data The data to be searched in
+     * @param string $groupId The group id
+     * @return \Magento\Store\Model\Group
+     * @throws NotFoundException If group was not detected
      */
-    private function createStores(array $items)
+    private function detectGroupById(array $data, $groupId)
     {
-        foreach ($items as $storeData) {
-            unset($storeData['store_id']);
+        foreach ($data[ScopeInterface::SCOPE_GROUPS] as $groupData) {
+            if ($groupId == $groupData['group_id']) {
+                $group = $this->groupFactory->create();
+                $this->groupResource->load($group, $groupData['code'], 'code');
 
-            $store = $this->storeFactory->create();
-            $store->setData($storeData);
-
-            $this->storeResource->save($store);
+                return $group;
+            }
         }
+
+        throw new NotFoundException(__('Group was not found'));
     }
 }

@@ -148,7 +148,11 @@ class Update implements ProcessInterface
     private function updateStores(array $data)
     {
         foreach ($data as $code => $storeData) {
-            unset($storeData['store_id']);
+            unset(
+                $storeData['store_id'],
+                $storeData['website_id'],
+                $storeData['group_id']
+            );
 
             $store = $this->storeFactory->create();
             $this->storeResource->load($store, $code, 'code');
@@ -168,7 +172,7 @@ class Update implements ProcessInterface
     private function updateGroups(array $data)
     {
         foreach ($data as $code => $groupData) {
-            unset($groupData['group_id']);
+            unset($groupData['group_id'], $groupData['website_id']);
 
             $group = $this->groupFactory->create();
             $this->groupResource->load($group, $code, 'code');

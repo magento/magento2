@@ -118,7 +118,7 @@ class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->validateSystemSection($config);
         $this->validateThemesSection($config);
-        $this->assertSame([], $this->hash->get());
+        $this->assertNotEmpty($this->hash->get());
     }
 
     /**
