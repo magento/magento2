@@ -12,7 +12,7 @@ $commandList = [
 
 if (isset($_GET['command'])) {
     $command = urldecode($_GET['command']);
-    if (in_array($command, $commandList)) {
+    if (in_array(explode(' ', $command)[0], $commandList)) {
         exec('php -f ../../../../bin/magento ' . $command);
     }
 } else {
