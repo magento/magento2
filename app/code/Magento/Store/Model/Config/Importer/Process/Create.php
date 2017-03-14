@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model\Config\Importer\Process;
 
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
@@ -57,7 +58,13 @@ class Create implements ProcessInterface
     private $storeFactory;
 
     /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * @param DataDifferenceCalculator $dataDifferenceCalculator
+     * @param ManagerInterface $eventManager
      * @param WebsiteFactory $websiteFactory
      * @param GroupFactory $groupFactory
      * @param StoreFactory $storeFactory
@@ -67,6 +74,7 @@ class Create implements ProcessInterface
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
+        ManagerInterface $eventManager,
         WebsiteFactory $websiteFactory,
         GroupFactory $groupFactory,
         StoreFactory $storeFactory,
@@ -81,6 +89,7 @@ class Create implements ProcessInterface
         $this->websiteResource = $websiteResource;
         $this->storeResource = $storeResource;
         $this->groupResource = $groupResource;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -166,6 +175,7 @@ class Create implements ProcessInterface
             $group->setWebsite($website);
 
             $this->groupResource->save($group);
+            $this->eventManager->dispatch('store_group_save', ['group' => $group]);
         }
     }
 
@@ -197,6 +207,7 @@ class Create implements ProcessInterface
             $store->setGroup($group);
 
             $this->storeResource->save($store);
+            $this->eventManager->dispatch('store_add', ['store' => $store]);
         }
     }
 

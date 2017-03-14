@@ -5,12 +5,14 @@
  */
 namespace Magento\Store\Model\Config;
 
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Process\ProcessFactory;
-use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\ResourceModel\Website;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Imports stores, websites and groups from configuration files.
@@ -34,28 +36,48 @@ class Importer implements ImporterInterface
     /**
      * The manager for operations with store.
      *
-     * @var StoreManager
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
+     * The resource of transaction.
+     *
+     * @var Website
+     */
+    private $resource;
+
+    /**
+     * The application cache manager.
+     *
+     * @var CacheInterface
+     */
+    private $cacheManager;
+
+    /**
      * @param DataDifferenceCalculator $dataDifferenceCalculator The factory for data difference calculators
      * @param ProcessFactory $processFactory The factory for processes
-     * @param StoreManager $storeManager The manager for operations with store
+     * @param StoreManagerInterface $storeManager The manager for operations with store
+     * @param CacheInterface $cacheManager The application cache manager
+     * @param Website $resource The resource of transaction
      */
     public function __construct(
         DataDifferenceCalculator $dataDifferenceCalculator,
         ProcessFactory $processFactory,
-        StoreManager $storeManager
+        StoreManagerInterface $storeManager,
+        CacheInterface $cacheManager,
+        Website $resource
     ) {
         $this->dataDifferenceCalculator = $dataDifferenceCalculator;
         $this->processFactory = $processFactory;
         $this->storeManager = $storeManager;
+        $this->cacheManager = $cacheManager;
+        $this->resource = $resource;
     }
 
     /**
      * Imports the store data into the application.
-     * After the import it flushes the store cached state.
+     * After the import it flushes the store caches.
      *
      * {@inheritdoc}
      */
@@ -68,13 +90,20 @@ class Importer implements ImporterInterface
                 ProcessFactory::TYPE_UPDATE
             ];
 
+            $this->resource->getConnection()->beginTransaction();
+
             foreach ($actions as $action) {
                 $this->processFactory->create($action)->run($data);
             }
 
-            $this->storeManager->reinitStores();
+            $this->resource->getConnection()->commit();
         } catch (LocalizedException $exception) {
+            $this->resource->getConnection()->rollBack();
+
             throw new InvalidTransitionException(__('%1', $exception->getMessage()), $exception);
+        } finally {
+            $this->storeManager->reinitStores();
+            $this->cacheManager->clean();
         }
 
         return ['Stores were processed'];

@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\Model\Config\Importer\Process;
 
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Registry;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
@@ -61,8 +62,14 @@ class Delete implements ProcessInterface
     private $registry;
 
     /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * @param Registry $registry
      * @param DataDifferenceCalculator $dataDifferenceCalculator
+     * @param ManagerInterface $eventManager
      * @param WebsiteRepository $websiteRepository
      * @param StoreRepository $storeRepository
      * @param Group\Collection $groupCollection
@@ -73,6 +80,7 @@ class Delete implements ProcessInterface
     public function __construct(
         Registry $registry,
         DataDifferenceCalculator $dataDifferenceCalculator,
+        ManagerInterface $eventManager,
         WebsiteRepository $websiteRepository,
         StoreRepository $storeRepository,
         Group\Collection $groupCollection,
@@ -82,6 +90,7 @@ class Delete implements ProcessInterface
     ) {
         $this->registry = $registry;
         $this->dataDifferenceCalculator = $dataDifferenceCalculator;
+        $this->eventManager = $eventManager;
         $this->websiteRepository = $websiteRepository;
         $this->storeRepository = $storeRepository;
         $this->groupCollection = $groupCollection;
@@ -130,6 +139,8 @@ class Delete implements ProcessInterface
             }
         } catch (\Exception $e) {
             throw new RuntimeException(__('%1', $e->getMessage()), $e);
+        } finally {
+            $this->registry->unregister('isSecureArea');
         }
     }
 
@@ -161,9 +172,10 @@ class Delete implements ProcessInterface
         $items = array_keys($items);
 
         foreach ($items as $storeCode) {
-            $this->storeResource->delete(
-                $this->storeRepository->get($storeCode)
-            );
+            $store = $this->storeRepository->get($storeCode);
+
+            $this->storeResource->delete($store);
+            $this->eventManager->dispatch('store_delete', ['store' => $store]);
         }
     }
 
