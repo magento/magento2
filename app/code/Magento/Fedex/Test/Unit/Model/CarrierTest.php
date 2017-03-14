@@ -411,20 +411,21 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $callNum
-     * @dataProvider getTrackingDataProvider
+     * @param string $tracking
+     * @param string $shipTimeStamp
+     * @param string $expectedDate
+     * @param string $expectedTime
+     * @dataProvider shipDateDataProvider
      */
-    public function testGetTracking($callNum)
+    public function testGetTracking($tracking, $shipTimeStamp, $expectedDate, $expectedTime, $callNum = 1)
     {
-        $tracking = '123456789012';
-
         // @codingStandardsIgnoreStart
         $response = new \stdClass();
         $response->HighestSeverity = 'SUCCESS';
         $response->CompletedTrackDetails = new \stdClass();
 
         $trackDetails = new \stdClass();
-        $trackDetails->ShipTimestamp = '2016-08-05T14:06:35+00:00';
+        $trackDetails->ShipTimestamp = $shipTimeStamp;
         $trackDetails->DeliverySignatureName = 'signature';
 
         $trackDetails->StatusDetail = new \stdClass();
@@ -432,7 +433,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         $trackDetails->Service = new \stdClass();
         $trackDetails->Service->Description = 'ground';
-        $trackDetails->EstimatedDeliveryTimestamp = '2016-08-10T10:20:26+00:00';
+        $trackDetails->EstimatedDeliveryTimestamp = $shipTimeStamp;
 
         $trackDetails->EstimatedDeliveryAddress = new \stdClass();
         $trackDetails->EstimatedDeliveryAddress->City = 'Culver City';
@@ -451,7 +452,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->willReturn($response);
 
         $this->serializer->method('serialize')
-            ->willReturn('TrackingString');
+            ->willReturn('TrackingString' . $tracking);
 
         $status = $this->helper->getObject(Status::class);
         $this->statusFactory->method('create')
@@ -465,9 +466,6 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'signedby',
             'status',
             'service',
-            'shippeddate',
-            'deliverydate',
-            'deliverytime',
             'deliverylocation',
             'weight',
         ];
@@ -475,26 +473,82 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             $this->assertNotEmpty($current[$field]);
         });
 
-        $this->assertEquals('2016-08-10', $current['deliverydate']);
-        $this->assertEquals('10:20:26', $current['deliverytime']);
-        $this->assertEquals('2016-08-05', $current['shippeddate']);
+        $this->assertEquals($expectedDate, $current['deliverydate']);
+        $this->assertEquals($expectedTime, $current['deliverytime']);
+        $this->assertEquals($expectedDate, $current['shippeddate']);
     }
 
-    public function getTrackingDataProvider()
+    /**
+     * Gets list of variations for testing ship date.
+     *
+     * @return array
+     */
+    public function shipDateDataProvider()
     {
         return [
-            [1],
-            [0],
+            'tracking1' => [
+                'tracking1',
+                'shipTimestamp' => '2016-08-05T14:06:35+01:00',
+                'expectedDate' => '2016-08-05',
+                '13:06:35',
+            ],
+            'tracking1-again' => [
+                'tracking1',
+                'shipTimestamp' => '2016-08-05T02:06:35+03:00',
+                'expectedDate' => '2016-08-05',
+                '13:06:35',
+                0,
+            ],
+            'tracking2' => [
+                'tracking2',
+                'shipTimestamp' => '2016-08-05T02:06:35+03:00',
+                'expectedDate' => '2016-08-04',
+                '23:06:35',
+            ],
+            'tracking3' => [
+                'tracking3',
+                'shipTimestamp' => '2016-08-05T14:06:35',
+                'expectedDate' => '2016-08-05',
+                '14:06:35',
+            ],
+            'tracking4' => [
+                'tracking4',
+                'shipTimestamp' => '2016-08-05 14:06:35',
+                'expectedDate' => null,
+                null,
+            ],
+            'tracking5' => [
+                'tracking5',
+                'shipTimestamp' => '2016-08-05 14:06:35+00:00',
+                'expectedDate' => null,
+                null,
+            ],
+            'tracking6' => [
+                'tracking6',
+                'shipTimestamp' => '2016-08-05',
+                'expectedDate' => null,
+                null,
+            ],
+            'tracking7' => [
+                'tracking7',
+                'shipTimestamp' => '2016/08/05',
+                'expectedDate' => null,
+                null
+            ],
         ];
     }
 
     /**
+     * @param string $tracking
+     * @param string $shipTimeStamp
+     * @param string $expectedDate
+     * @param string $expectedTime
      * @param int $callNum
-     * @dataProvider getTrackingDataProvider
+     * @dataProvider shipDateDataProvider
      */
-    public function testGetTrackingWithEvents($callNum)
+    public function testGetTrackingWithEvents($tracking, $shipTimeStamp, $expectedDate, $expectedTime, $callNum = 1)
     {
-        $tracking = '123456789012';
+        $tracking = $tracking . 'WithEvent';
 
         // @codingStandardsIgnoreStart
         $response = new \stdClass();
@@ -503,7 +557,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         $event = new \stdClass();
         $event->EventDescription = 'Test';
-        $event->Timestamp = '2016-08-05T19:14:53+00:00';
+        $event->Timestamp = $shipTimeStamp;
         $event->Address = new \stdClass();
 
         $event->Address->City = 'Culver City';
@@ -521,7 +575,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             ->willReturn($response);
 
         $this->serializer->method('serialize')
-            ->willReturn('TrackingWithEventsString');
+            ->willReturn('TrackingWithEventsString' . $tracking);
 
         $status = $this->helper->getObject(Status::class);
         $this->statusFactory->method('create')
@@ -536,12 +590,12 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($current['progressdetail']));
 
         $event = $current['progressdetail'][0];
-        $fields = ['activity', 'deliverydate', 'deliverytime', 'deliverylocation'];
+        $fields = ['activity', 'deliverylocation'];
         array_walk($fields, function ($field) use ($event) {
             $this->assertNotEmpty($event[$field]);
         });
-        $this->assertEquals('2016-08-05', $event['deliverydate']);
-        $this->assertEquals('19:14:53', $event['deliverytime']);
+        $this->assertEquals($expectedDate, $event['deliverydate']);
+        $this->assertEquals($expectedTime, $event['deliverytime']);
     }
 
     /**
