@@ -6,6 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="\Magento\Sales\Test\Handler\OrderInjectable\OrderInjectableInterface" type="\Magento\Sales\Test\Handler\OrderInjectable\Curl" />
-    <preference for="\Magento\Sales\Test\Handler\OrderStatus\OrderStatusInterface" type="\Magento\Sales\Test\Handler\OrderStatus\Curl" />
+    <preference for="Magento\Sales\Test\Handler\OrderInjectable\OrderInjectableInterface" type="Magento\Sales\Test\Handler\OrderInjectable\Curl" />
+    <preference for="Magento\Sales\Test\Handler\OrderStatus\OrderStatusInterface" type="Magento\Sales\Test\Handler\OrderStatus\Curl" />
 </config>
