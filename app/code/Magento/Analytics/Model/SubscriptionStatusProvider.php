@@ -88,7 +88,7 @@ class SubscriptionStatusProvider
         $status = static::ENABLED;
         if (!$this->analyticsToken->isTokenExist()) {
             $status = static::PENDING;
-            if ($this->flagManager->getFlagData(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE) <= 0) {
+            if ($this->flagManager->getFlagData(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE) === null) {
                 $status = static::FAILED;
             }
         }
