@@ -486,7 +486,7 @@ abstract class AbstractAction
     /**
      * Retrieve index table that will be used for write operations.
      *
-     * This method is used to during both partial and full reindex to identify the the table.
+     * This method is used during both partial and full reindex to identify the the table.
      *
      * @return string
      */

@@ -394,9 +394,6 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @inheritdoc
-     * Returns main table name in depends of the suffix stored in the 'indexer_state' table
-     *
-     * @return string
      */
     public function getMainTable()
     {
