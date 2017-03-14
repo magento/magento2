@@ -28,13 +28,11 @@ $queueId4 = $queueFactory->create()
     ->load('queue4', Magento\MysqlMq\Model\Queue::KEY_NAME)
     ->getId();
 
-
 $plan = [
     [$messageId1, $queueId1, time() - 1 - 24 * 7 * 60 * 60,
         Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_IN_PROGRESS],
     [$messageId1, $queueId2, time(), Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_IN_PROGRESS],
 ];
-
 
 /** @var \Magento\MysqlMq\Model\MessageStatusFactory $messageStatusFactory */
 $messageStatusFactory = $objectManager->create(\Magento\MysqlMq\Model\MessageStatusFactory::class);
