@@ -13,7 +13,7 @@ interface BulkStatusInterface
 {
     /**
      * Get failed operations by bulk uuid
-     * 
+     *
      * @param string $bulkUuid
      * @param int|null $failureType
      * @return \Magento\Framework\Bulk\OperationInterface[]
@@ -31,7 +31,7 @@ interface BulkStatusInterface
 
     /**
      * Get all bulks created by user
-     * 
+     *
      * @param int $userId
      * @return BulkSummaryInterface[]
      */

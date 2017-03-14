@@ -13,7 +13,7 @@ interface BulkManagementInterface
 {
     /**
      * Schedule new bulk
-     * 
+     *
      * @param string $bulkUuid
      * @param OperationInterface[] $operations
      * @param string $description

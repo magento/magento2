@@ -49,14 +49,14 @@ interface OperationInterface
 
     /**
      * Get bulk uuid
-     * 
+     *
      * @return string
      */
     public function getBulkUuid();
 
     /**
      * Set bulk uuid
-     * 
+     *
      * @param string $bulkId
      * @return $this
      */
@@ -64,14 +64,14 @@ interface OperationInterface
 
     /**
      * Message Queue Topic
-     * 
+     *
      * @return string
      */
     public function getTopicName();
 
     /**
      * Set message queue topic
-     * 
+     *
      * @param string $topic
      * @return $this
      */
@@ -79,14 +79,14 @@ interface OperationInterface
 
     /**
      * Serialized Data
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public function getSerializedData();
 
     /**
      * Set serialized data
-     * 
+     *
      * @param string $serializedData
      * @return $this
      */
@@ -94,16 +94,16 @@ interface OperationInterface
 
     /**
      * Get operation status
-     * 
+     *
      * OPEN | COMPLETE | RETRIABLY_FAILED | NOT_RETRIABLY_FAILED
-     * 
-     * @return int 
+     *
+     * @return int
      */
     public function getStatus();
 
     /**
      * Set status
-     * 
+     *
      * @param int $status
      * @return $this
      */
@@ -111,14 +111,14 @@ interface OperationInterface
 
     /**
      * Get result message
-     * 
+     *
      * @return string
      */
     public function getResultMessage();
 
     /**
      * Set result message
-     * 
+     *
      * @param string $resultMessage
      * @return $this
      */
@@ -126,14 +126,14 @@ interface OperationInterface
 
     /**
      * Get error code
-     * 
+     *
      * @return int
      */
     public function getErrorCode();
 
     /**
      * Set error code
-     * 
+     *
      * @param int $errorCode
      * @return $this
      */
