@@ -164,6 +164,9 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             '--' . ConfigImportCommand::INPUT_OPTION_FORCE => true
         ]);
 
+        $this->assertContains('Start import', $commandTester->getDisplay());
+        $this->assertContains('Stores were processed', $commandTester->getDisplay());
+
         $store = $storeFactory->create()->load('test', 'code');
         $this->assertSame($store->getSortOrder(), '23');
         $this->assertSame($store->getName(), 'Changed Test Store view');
@@ -183,13 +186,14 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
             '--' . ConfigImportCommand::INPUT_OPTION_FORCE => true
         ]);
 
+        $this->assertContains('Start import', $commandTester->getDisplay());
+        $this->assertContains('Stores were processed', $commandTester->getDisplay());
+
         $store = $storeFactory->create()->load('test', 'code');
         $website = $websiteFactory->create()->load('test', 'code');
-        $group = $groupFactory->create()->load('test_website_store', 'code');
 
-//        $this->assertSame($store->getId(), null);
-//        $this->assertSame($website->getId(), null);
-//        $this->assertSame($group->getId(), null);
+        $this->assertSame(null, $store->getId());
+        $this->assertSame(null, $website->getId());
     }
 
     /**

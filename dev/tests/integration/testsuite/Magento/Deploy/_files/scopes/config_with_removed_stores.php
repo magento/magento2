@@ -40,6 +40,14 @@ return [
                 'default_store_id' => '1',
                 'code' => 'main_website_store',
             ],
+            2 => [
+                'group_id' => '2',
+                'website_id' => '2',
+                'name' => 'Changed Test Website Store',
+                'root_category_id' => '2',
+                'default_store_id' => '1',
+                'code' => 'test_website_store',
+            ],
         ],
         'stores' => [
             'admin' => [

@@ -63,8 +63,8 @@ class Importer implements ImporterInterface
     {
         try {
             $actions = [
-                ProcessFactory::TYPE_CREATE,
                 ProcessFactory::TYPE_DELETE,
+                ProcessFactory::TYPE_CREATE,
                 ProcessFactory::TYPE_UPDATE
             ];
 

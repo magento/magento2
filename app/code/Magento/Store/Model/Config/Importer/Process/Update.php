@@ -108,10 +108,10 @@ class Update implements ProcessInterface
                         $this->updateWebsites($items);
                         break;
                     case ScopeInterface::SCOPE_STORES:
-                        $this->updateStores($items);
+                        $this->updateStores($items, $data);
                         break;
                     case ScopeInterface::SCOPE_GROUPS:
-                        $this->updateGroups($items);
+                        $this->updateGroups($items, $data);
                 }
             }
 
@@ -129,7 +129,10 @@ class Update implements ProcessInterface
     private function updateWebsites(array $data)
     {
         foreach ($data as $code => $websiteData) {
-            unset($websiteData['website_id'], $websiteData['code']);
+            unset(
+                $websiteData['website_id'],
+                $websiteData['default_group_id']
+            );
 
             $website = $this->websiteFactory->create();
             $this->websiteResource->load($website, $code, 'code');
@@ -142,12 +145,16 @@ class Update implements ProcessInterface
     /**
      * Updates stores with a new data.
      *
+     * @param array $items The items to update
      * @param array $data The data to be updated
      * @return void
      */
-    private function updateStores(array $data)
+    private function updateStores(array $items, array $data)
     {
-        foreach ($data as $code => $storeData) {
+        foreach ($items as $code => $storeData) {
+            $groupId = $storeData['group_id'];
+            $websiteId = $storeData['website_id'];
+
             unset(
                 $storeData['store_id'],
                 $storeData['website_id'],
@@ -155,9 +162,21 @@ class Update implements ProcessInterface
             );
 
             $store = $this->storeFactory->create();
+            $group = $this->findGroupById($data, $groupId);
+            $website = $this->findWebsiteById($data, $websiteId);
+
             $this->storeResource->load($store, $code, 'code');
 
             $store->setData(array_replace($store->getData(), $storeData));
+
+            if ($website && $website->getId() != $store->getWebsiteId()) {
+                $store->setWebsite($website);
+            }
+
+            if ($group && $group->getId() != $store->getGroupId()) {
+                $store->setGroup($group);
+            }
+
             $this->storeResource->save($store);
         }
     }
@@ -165,39 +184,74 @@ class Update implements ProcessInterface
     /**
      * Updates groups with a new data.
      *
+     * @param array $items The items to update
      * @param array $data The data to be updated
-     * @throws CouldNotSaveException If group can not be saved
+     * @throws CouldNotSaveException If group could not be saved
      * @return void
      */
-    private function updateGroups(array $data)
+    private function updateGroups(array $items, array $data)
     {
-        foreach ($data as $code => $groupData) {
+        foreach ($items as $code => $groupData) {
+            $websiteId = $groupData['website_id'];
+
             unset($groupData['group_id'], $groupData['website_id']);
 
             $group = $this->groupFactory->create();
+            $website = $this->findWebsiteById($data, $websiteId);
+
             $this->groupResource->load($group, $code, 'code');
 
-            if (!empty($groupData['default_store_id'])) {
-                $defaultStoreId = $groupData['default_store_id'];
+            $group->setData(array_replace($group->getData(), $groupData));
 
-                if (
-                    !empty($group->getStores()[$defaultStoreId]) &&
-                    !$group->getStores()[$defaultStoreId]->isActive()
-                ) {
-                    throw new CouldNotSaveException(
-                        __('An inactive store view cannot be saved as default store view')
-                    );
-                }
+            if ($website && $website->getId() != $group->getWebsiteId()) {
+                $group->setWebsite($website);
             }
-
-            $group->setData(
-                array_replace(
-                    $group->getData(),
-                    $groupData
-                )
-            );
 
             $this->groupResource->save($group);
         }
+    }
+
+    /**
+     * Searches through given websites and compares with current websites.
+     * Returns found website.
+     *
+     * @param array $data The data to be searched in
+     * @param string $websiteId The website id
+     * @return \Magento\Store\Model\Website|null
+     */
+    private function findWebsiteById(array $data, $websiteId)
+    {
+        foreach ($data[ScopeInterface::SCOPE_WEBSITES] as $websiteData) {
+            if ($websiteId == $websiteData['website_id']) {
+                $website = $this->websiteFactory->create();
+                $this->websiteResource->load($website, $websiteData['code'], 'code');
+
+                return $website;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Searches through given groups and compares with current websites.
+     * Returns found group.
+     *
+     * @param array $data The data to be searched in
+     * @param string $groupId The group id
+     * @return \Magento\Store\Model\Group|null
+     */
+    private function findGroupById(array $data, $groupId)
+    {
+        foreach ($data[ScopeInterface::SCOPE_GROUPS] as $groupData) {
+            if ($groupId == $groupData['group_id']) {
+                $group = $this->groupFactory->create();
+                $this->groupResource->load($group, $groupData['code'], 'code');
+
+                return $group;
+            }
+        }
+
+        return null;
     }
 }

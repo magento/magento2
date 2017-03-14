@@ -129,7 +129,10 @@ class Create implements ProcessInterface
     private function createWebsites(array $items)
     {
         foreach ($items as $websiteData) {
-            unset($websiteData['website_id']);
+            unset(
+                $websiteData['website_id'],
+                $websiteData['default_group_id']
+            );
             $website = $this->websiteFactory->create();
             $website->setData($websiteData);
             $this->websiteResource->save($website);
@@ -142,14 +145,17 @@ class Create implements ProcessInterface
      * @param array $items Groups to create
      * @param array $data The all available data
      * @return void
-     * @throws \Exception
      */
     private function createGroups(array $items, array $data)
     {
         foreach ($items as $groupData) {
             $websiteId = $groupData['website_id'];
 
-            unset($groupData['group_id'], $groupData['website_id']);
+            unset(
+                $groupData['group_id'],
+                $groupData['website_id'],
+                $groupData['default_store_id']
+            );
 
             $website = $this->detectWebsiteById(
                 $data,
