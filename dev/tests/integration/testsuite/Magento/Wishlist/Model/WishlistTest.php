@@ -63,4 +63,27 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Item::class, $wishlistItem);
         $this->assertEquals($wishlistItem->getQty(), 10);
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid wishlist item configuration.
+     */
+    public function testAddNewItemInvalidWishlistItemConfiguration()
+    {
+        $productSku = 'simple';
+        $customerId = 1;
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku);
+        $this->wishlist->loadByCustomerId($customerId, true);
+        $this->wishlist->addNewItem(
+            $product,
+            '{"qty":2'
+        );
+        $this->wishlist->addNewItem($product);
+    }
 }
