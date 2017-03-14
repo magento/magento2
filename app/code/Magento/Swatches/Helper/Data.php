@@ -320,6 +320,7 @@ class Data
      * @param ModelProduct $product
      * @param string $imageFile
      * @return array
+     * @todo refactor to use imageBuilder which doesn't check file existence
      */
     private function getAllSizeImages(ModelProduct $product, $imageFile)
     {

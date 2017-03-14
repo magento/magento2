@@ -6,12 +6,14 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 use Magento\Catalog\Model\View\Asset\Image\ContextFactory;
 use Magento\Catalog\Model\View\Asset\ImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Asset\ContextInterface;
+use Magento\Catalog\Model\Product\Image\SizeCache;
 
 /**
  * Class ImageTest
@@ -95,6 +97,16 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     protected $viewAssetPlaceholderFactory;
 
+    /**
+     * @var ParamsBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $paramsBuilder;
+
+    /**
+     * @var SizeCache|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $sizeCache;
+
     protected function setUp()
     {
         $this->context = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
@@ -143,6 +155,14 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $this->paramsBuilder = $this->getMockBuilder(ParamsBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->sizeCache = $this->getMockBuilder(SizeCache::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->image = new \Magento\Catalog\Model\Product\Image(
             $context,
             $this->registry,
@@ -158,12 +178,15 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             null,
             [],
             $this->viewAssetImageFactory,
-            $this->viewAssetPlaceholderFactory
+            $this->viewAssetPlaceholderFactory,
+            $this->paramsBuilder,
+            $this->sizeCache
         );
 
         //Settings for backward compatible property
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->imageAsset = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
+            ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->image,
@@ -217,6 +240,21 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGetBaseFile()
     {
+        $miscParams = [
+            'image_type' => null,
+            'image_height' => null,
+            'image_width' => null,
+            'keep_aspect_ratio' => 'proportional',
+            'keep_frame' => 'frame',
+            'keep_transparency' => 'transparency',
+            'constrain_only' => 'doconstrainonly',
+            'background' => 'ffffff',
+            'angle' => null,
+            'quality' => 80,
+        ];
+        $this->paramsBuilder->expects(self::once())
+            ->method('build')
+            ->willReturn($miscParams);
         $this->mediaDirectory->expects($this->any())->method('isFile')->will($this->returnValue(true));
         $this->mediaDirectory->expects($this->any())->method('isExist')->will($this->returnValue(true));
         $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/somefile.png';
@@ -226,18 +264,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(
                 [
-                    'miscParams' => [
-                        'image_type' => null,
-                        'image_height' => null,
-                        'image_width' => null,
-                        'keep_aspect_ratio' => 'proportional',
-                        'keep_frame' => 'frame',
-                        'keep_transparency' => 'transparency',
-                        'constrain_only' => 'doconstrainonly',
-                        'background' => 'ffffff',
-                        'angle' => null,
-                        'quality' => 80,
-                    ],
+                    'miscParams' => $miscParams,
                     'filePath' => '/somefile.png',
                 ]
             )
@@ -247,6 +274,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->imageAsset->expects($this->any())->method('getSourceFile')->willReturn('catalog/product/somefile.png');
         $this->image->setBaseFile('/somefile.png');
         $this->assertEquals('catalog/product/somefile.png', $this->image->getBaseFile());
+        $this->assertEquals(
+            null,
+            $this->image->getNewFile()
+        );
     }
 
     public function testSetBaseNoSelectionFile()
@@ -350,7 +381,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $this->image->setImageProcessor($imageProcessor);
         $this->coreFileHelper->expects($this->once())->method('saveFile')->will($this->returnValue(true));
-
+        $this->imageAsset->expects($this->any())
+            ->method('getPath')
+            ->willReturn('specific_path');
         $this->image->saveFile();
     }
 

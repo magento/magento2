@@ -35,16 +35,25 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     protected $imageContext;
 
+    /**
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $assetRepo;
+
     protected function setUp()
     {
         $this->mediaConfig = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
         $this->encryptor = $this->getMockBuilder(EncryptorInterface::class)->getMockForAbstractClass();
         $this->imageContext = $this->getMockBuilder(ContextInterface::class)->getMockForAbstractClass();
+        $this->assetRepo = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = new Image(
             $this->mediaConfig,
             $this->imageContext,
             $this->encryptor,
-            '/somefile.png'
+            '/somefile.png',
+            $this->assetRepo
         );
     }
 
@@ -85,6 +94,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->imageContext,
             $this->encryptor,
             $filePath,
+            $this->assetRepo,
             $miscParams
         );
         $absolutePath = '/var/www/html/magento2ce/pub/media/catalog/product';
@@ -109,6 +119,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->imageContext,
             $this->encryptor,
             $filePath,
+            $this->assetRepo,
             $miscParams
         );
         $absolutePath = 'http://localhost/pub/media/catalog/product';
@@ -119,6 +130,30 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $absolutePath . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . $hashPath . $filePath,
             $imageModel->getUrl()
         );
+    }
+
+    /**
+     * Test retrieve URL pointing to a resource with default placeholder url.
+     */
+    public function testGetUrlWithDefaultPlaceHolder()
+    {
+        $filePath = '';
+        $url = 'testUrl';
+        $miscParams = $this->getPathDataProvider()[1][1];
+        $this->assetRepo->expects(self::once())
+            ->method('getUrl')
+            ->with(self::identicalTo('Magento_Catalog::images/product/placeholder/thumbnail.jpg'))
+            ->willReturn($url);
+        $imageModel = new Image(
+            $this->mediaConfig,
+            $this->imageContext,
+            $this->encryptor,
+            $filePath,
+            $this->assetRepo,
+            $miscParams
+        );
+
+        self::assertEquals($url, $imageModel->getUrl());
     }
 
     public function getPathDataProvider()
