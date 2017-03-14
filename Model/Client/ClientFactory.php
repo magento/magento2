@@ -21,7 +21,6 @@ class ClientFactory implements ClientFactoryInterface
      */
     private $clientClass;
 
-
     /**
      * @param ObjectManagerInterface $objectManager
      * @param string $clientClass
