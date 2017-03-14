@@ -4227,4 +4227,5 @@ return [
     ['Magento\Framework\Search\Document', 'Magento\Framework\Api\Search\Document'],
     ['Magento\Framework\Search\DocumentField'],
     ['Magento\Quote\Setup\Recurring'],
+    ['Magento\Eav\Model\Entity\Attribute\Backend\Serialized'],
 ];
