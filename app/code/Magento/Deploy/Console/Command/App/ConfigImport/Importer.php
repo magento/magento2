@@ -127,7 +127,7 @@ class Importer
 
                 /** @var ImporterInterface $importer */
                 $importer = $this->importerFactory->create($importerClassName);
-                $data = $this->deploymentConfig->getConfigData($section);
+                $data = (array)$this->deploymentConfig->getConfigData($section);
                 $warnings = $importer->getWarningMessages($data);
 
                 /**
