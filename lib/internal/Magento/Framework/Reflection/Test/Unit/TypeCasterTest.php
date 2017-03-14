@@ -32,14 +32,14 @@ class TypeCasterTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->serializer = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['serialize'])
             ->getMock();
 
         $this->model = $objectManager->getObject(TypeCaster::class, ['serializer' => $this->serializer]);
     }
 
     /**
+     * Checks type casting for different php data types.
+     *
      * @param mixed $origValue
      * @param string $typeToCast
      * @param mixed $expectedValue

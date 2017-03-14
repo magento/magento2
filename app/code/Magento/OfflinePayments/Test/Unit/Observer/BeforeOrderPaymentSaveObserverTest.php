@@ -45,7 +45,6 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new ObjectManager($this);
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethod', 'setAdditionalInformation', 'getMethodInstance'])
             ->getMock();
 
         $this->event = $this->getMockBuilder(Event::class)
@@ -59,7 +58,6 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEvent'])
             ->getMock();
 
         $this->observer->expects(self::once())
@@ -95,6 +93,11 @@ class BeforeOrderPaymentSaveObserverTest extends \PHPUnit_Framework_TestCase
         $this->_model->execute($this->observer);
     }
 
+    /**
+     * Returns list of payment method codes.
+     *
+     * @return array
+     */
     public function dataProviderBeforeOrderPaymentSaveWithInstructions()
     {
         return [

@@ -43,7 +43,7 @@ class TypeCaster
         /**
          * Type caster does not complicated arrays according to restrictions in JSON/SOAP API
          * but interface and class implementations should be processed as is.
-         * The `class_exists()` used to do not break implementations which return array instead
+         * Function `class_exists()` is called to do not break code which return an array instead
          * interface implementation.
          */
         if (is_array($value) && !interface_exists($type) && !class_exists($type)) {
