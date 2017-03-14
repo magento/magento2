@@ -53,13 +53,13 @@ class ImagesGenerator
         $colors = [$fgColor, $bgColor];
         imagefilledrectangle($image, 0, 0, $config['image-width'], $config['image-height'], $bgColor);
 
-        for ($row = 10; $row < $config['image-height']; $row += 18) {
-            for ($col = 0; $col < $config['image-width']; $col += 18) {
+        for ($row = 10; $row < ($config['image-height'] - 10); $row += 10) {
+            for ($col = 10; $col < ($config['image-width'] - 10); $col += 10) {
                 if (next($binaryData) === false) {
                     reset($binaryData);
                 }
 
-                imagefilledrectangle($image, $row, $col, $row + 18, $col + 18, $colors[current($binaryData)]);
+                imagefilledrectangle($image, $row, $col, $row + 10, $col + 10, $colors[current($binaryData)]);
             }
         }
 

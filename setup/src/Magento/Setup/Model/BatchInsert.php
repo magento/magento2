@@ -33,6 +33,11 @@ class BatchInsert
      */
     private $dataStorage;
 
+    /**
+     * @var int
+     */
+    private $currentStorageIndex = 0;
+
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         $insertIntoTable,
@@ -41,28 +46,36 @@ class BatchInsert
         $this->resourceConnection = $resourceConnection;
         $this->insertIntoTable = $insertIntoTable;
         $this->batchSize = $batchSize;
+
+        $this->dataStorage = new \SplFixedArray($batchSize);
     }
 
     public function insert(array $dataToInsert)
     {
-        $this->dataStorage[] = $dataToInsert;
+        $this->dataStorage[$this->currentStorageIndex] = $dataToInsert;
+        $this->currentStorageIndex++;
 
-        if (count($this->dataStorage) >= $this->batchSize) {
+        if ($this->currentStorageIndex >= $this->batchSize) {
             $this->flush();
         }
     }
 
     public function flush()
     {
-        if (count($this->dataStorage) > 0) {
+        if ($this->currentStorageIndex > 0) {
+            if ($this->currentStorageIndex < $this->batchSize) {
+                $this->dataStorage->setSize($this->currentStorageIndex);
+            }
+
             $this->getDbConnection()
                 ->insertArray(
                     $this->insertIntoTable,
                     array_keys(reset($this->dataStorage)),
-                    $this->dataStorage
+                    $this->dataStorage->toArray()
                 );
 
-            $this->dataStorage = [];
+            $this->dataStorage = new \SplFixedArray($this->batchSize);
+            $this->currentStorageIndex = 0;
         }
     }
 

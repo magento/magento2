@@ -63,7 +63,12 @@ class ImagesFixture extends Fixture
     /**
      * @var int
      */
-    private $imagesInsertBatchSize = 3000;
+    private $imagesInsertBatchSize = 1000;
+
+    /**
+     * @var int
+     */
+    private $productsCountCache;
 
     /**
      * @var array
@@ -154,176 +159,95 @@ class ImagesFixture extends Fixture
 
     private function assignImagesToProducts()
     {
-        $imageGenerator = $this->getImagesGenerator();
-        $productsLimit = $this->getProductsIncrement();
+        /** @var \Magento\Setup\Model\BatchInsert $batchInsertCatalogProductEntityVarchar */
+        $batchInsertCatalogProductEntityVarchar = $this->batchInsertFactory->create([
+            'insertIntoTable' => $this->getTable('catalog_product_entity_varchar'),
+            'batchSize' => $this->imagesInsertBatchSize
+        ]);
 
-        for ($offset = 0; $offset <= $this->getProductsCount(); $offset += $productsLimit) {
+        /** @var \Magento\Setup\Model\BatchInsert $batchInsertCatalogProductEntityMediaGalleryValue */
+        $batchInsertCatalogProductEntityMediaGalleryValue = $this->batchInsertFactory->create([
+            'insertIntoTable' => $this->getTable('catalog_product_entity_media_gallery_value'),
+            'batchSize' => $this->imagesInsertBatchSize
+        ]);
+
+        /** @var \Magento\Setup\Model\BatchInsert $batchInsertCatalogProductEntityMediaGalleryValueToEntity */
+        $batchInsertCatalogProductEntityMediaGalleryValueToEntity = $this->batchInsertFactory->create([
+            'insertIntoTable' => $this->getTable('catalog_product_entity_media_gallery_value_to_entity'),
+            'batchSize' => $this->imagesInsertBatchSize
+        ]);
+
+        $imageGenerator = $this->getImagesGenerator(); // to many images can be selected
+
+        foreach ($this->getProductGenerator() as $productEntityId) {
             for ($imageNum = 1; $imageNum <= $this->getImagesPerProduct(); $imageNum++) {
                 $image = $imageGenerator->current();
                 $imageGenerator->next();
 
-                if ($imageNum == 1) {
-                    $attrs = ['image', 'small_image', 'thumbnail', 'swatch_image'];
-                    foreach ($attrs as $attr) {
-                        $columns = [
-                            'entity_id' => 'product_entity.entity_id',
-                            'attribute_id' => $this->expressionFactory->create([
-                                'expression' => $this->getAttributeId($attr)
-                            ]),
-                            'value' => $this->expressionFactory->create([
-                                'expression' => $this->getDbConnection()->quoteInto('?', $image['value'])
-                            ]),
-                            'store_id' => $this->expressionFactory->create([
-                                'expression' => 0
-                            ]),
-                        ];
+                if ($imageNum === 1) {
+                    $attributes = ['image', 'small_image', 'thumbnail', 'swatch_image'];
 
-                        $select = $this->getDbConnection()
-                            ->select()
-                            ->from(['product_entity' => $this->getTable('catalog_product_entity')], [])
-                            ->columns($columns)
-                            ->limit($productsLimit, $offset);
-
-                        $this->getDbConnection()->query(
-                            $select->insertFromSelect(
-                                $this->getTable('catalog_product_entity_varchar'),
-                                array_keys($columns)
-                            )
-                        );
+                    foreach ($attributes as $attr) {
+                        $batchInsertCatalogProductEntityVarchar->insert([
+                            'entity_id' => $productEntityId['entity_id'],
+                            'attribute_id' => $this->getAttributeId($attr),
+                            'value' => $image['value'],
+                            'store_id' => 0,
+                        ]);
                     }
                 }
 
-                $columns = [
-                    'value_id' => $this->expressionFactory->create([
-                        'expression' => $image['value_id']
-                    ]),
-                    'entity_id' => 'product_entity.entity_id'
-                ];
+                $batchInsertCatalogProductEntityMediaGalleryValueToEntity->insert([
+                    'value_id' => $image['value_id'],
+                    'entity_id' => $productEntityId['entity_id']
+                ]);
 
-                $select = $this->getDbConnection()
-                    ->select()
-                    ->from(['product_entity' => $this->getTable('catalog_product_entity')], [])
-                    ->columns($columns)
-                    ->limit($productsLimit, $offset);
+                $batchInsertCatalogProductEntityMediaGalleryValue->insert([
+                    'value_id' => $image['value_id'],
+                    'store_id' => 0,
+                    'entity_id' => $productEntityId['entity_id'],
+                    'position' => $image['value_id'],
+                    'disabled' => 0
+                ]);
+            }
+        }
 
-                $this->getDbConnection()->query(
-                    $select->insertFromSelect(
-                        $this->getTable('catalog_product_entity_media_gallery_value_to_entity'),
-                        array_keys($columns)
-                    )
-                );
+        $batchInsertCatalogProductEntityVarchar->flush();
+        $batchInsertCatalogProductEntityMediaGalleryValue->flush();
+        $batchInsertCatalogProductEntityMediaGalleryValueToEntity->flush();
+    }
 
-                $columns = [
-                    'value_id' => $this->expressionFactory->create([
-                        'expression' => $image['value_id']
-                    ]),
-                    'store_id' => $this->expressionFactory->create([
-                        'expression' => 0
-                    ]),
-                    'entity_id' => 'product_entity.entity_id',
-                    'position' => $this->expressionFactory->create([
-                        'expression' => 1
-                    ]),
-                    'disabled' => $this->expressionFactory->create([
-                        'expression' => 0
-                    ])
-                ];
+    private function getProductGenerator()
+    {
+        $limit = 1000;
+        $offset = 0;
 
-                $select = $this->getDbConnection()
-                    ->select()
-                    ->from(['product_entity' => $this->getTable('catalog_product_entity')], [])
-                    ->columns($columns)
-                    ->limit($productsLimit, $offset);
+        $products = $this->getProducts($limit, $offset);
+        $offset += $limit;
 
-                $this->getDbConnection()->query(
-                    $select->insertFromSelect(
-                        $this->getTable('catalog_product_entity_media_gallery_value'),
-                        array_keys($columns)
-                    )
-                );
+        while (true) {
+            yield current($products);
+
+            if (next($products) === false) {
+                $products = $this->getProducts($limit, $offset);
+                $offset += $limit;
+
+                if (empty($products)) {
+                    break;
+                }
             }
         }
     }
 
-    private function _assignImagesToProducts(array $images)
+    private function getProducts($limit, $offset)
     {
-        $imagesPerProduct = 3;
-        foreach ($images as $image) {
-            $columns = [
-                'value_id' => $this->expressionFactory->create([
-                    'expression' => $image['value_id']
-                ]),
-                'entity_id' => 'product_entity.entity_id'
-            ];
+        $select = $this->getDbConnection()
+            ->select()
+            ->from(['product_entity' => $this->getTable('catalog_product_entity')], [])
+            ->columns(['entity_id'])
+            ->limit($limit, $offset);
 
-            $select = $this->getDbConnection()
-                ->select()
-                ->from(['product_entity' => $this->getTable('catalog_product_entity')], [])
-                ->columns($columns);
-
-            $this->getDbConnection()->query(
-                $select->insertFromSelect(
-                    $this->getTable('catalog_product_entity_media_gallery_value_to_entity'),
-                    array_keys($columns)
-                )
-            );
-
-            $columns = [
-                'value_id' => $this->expressionFactory->create([
-                    'expression' => $image['value_id']
-                ]),
-                'store_id' => $this->expressionFactory->create([
-                    'expression' => 0
-                ]),
-                'entity_id' => 'product_entity.entity_id',
-                'position' => $this->expressionFactory->create([
-                    'expression' => 1
-                ]),
-                'disabled' => $this->expressionFactory->create([
-                    'expression' => 0
-                ])
-            ];
-
-            $select = $this->getDbConnection()
-                ->select()
-                ->from(['product_entity' => $this->getTable('catalog_product_entity')], [])
-                ->columns($columns);
-
-            $this->getDbConnection()->query(
-                $select->insertFromSelect(
-                    $this->getTable('catalog_product_entity_media_gallery_value'),
-                    array_keys($columns)
-                )
-            );
-
-            $attrs = ['image', 'small_image', 'thumbnail', 'swatch_image'];
-            foreach ($attrs as $attr) {
-                $columns = [
-                    'entity_id' => 'product_entity.entity_id',
-                    'attribute_id' => $this->expressionFactory->create([
-                        'expression' => $this->getAttributeId($attr)
-                    ]),
-                    'value' => $this->expressionFactory->create([
-                        'expression' => $this->getDbConnection()->quoteInto('?', $image['value'])
-                    ]),
-                    'store_id' => $this->expressionFactory->create([
-                        'expression' => 0
-                    ]),
-                ];
-
-                $select = $this->getDbConnection()
-                    ->select()
-                    ->from(['product_entity' => $this->getTable('catalog_product_entity')], [])
-                    ->columns($columns);
-
-                $this->getDbConnection()->query(
-                    $select->insertFromSelect(
-                        $this->getTable('catalog_product_entity_varchar'),
-                        array_keys($columns)
-                    )
-                );
-            }
-        }
+        return $this->getDbConnection()->fetchAssoc($select);
     }
 
     private function getImagesGenerator()
@@ -349,31 +273,30 @@ class ImagesFixture extends Fixture
 
     private function getImagesToGenerate()
     {
-        return 10;
+        return 100;
     }
 
     private function getImagesPerProduct()
     {
-        return 2;
+        return 3;
     }
 
     private function getProductsCount()
     {
-        $select = $select = $this->getDbConnection()
-            ->select()
-            ->from(['product_entity' => $this->getTable('catalog_product_entity')], [])
-            ->columns([
-                'count' => $this->expressionFactory->create([
-                    'expression' => 'COUNT(1)'
-                ])
-            ]);
+        if ($this->productsCountCache === null) {
+            $select = $select = $this->getDbConnection()
+                ->select()
+                ->from(['product_entity' => $this->getTable('catalog_product_entity')], [])
+                ->columns([
+                    'count' => $this->expressionFactory->create([
+                        'expression' => 'COUNT(1)'
+                    ])
+                ]);
 
-        return (int) $this->getDbConnection()->fetchOne($select);
-    }
+            $this->productsCountCache = (int) $this->getDbConnection()->fetchOne($select);
+        }
 
-    private function getProductsIncrement()
-    {
-        return floor($this->getProductsCount() / ($this->getImagesToGenerate() / $this->getImagesPerProduct()));
+        return $this->productsCountCache;
     }
 
     private function getAttributeId($attributeCode)
