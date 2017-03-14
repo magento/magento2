@@ -135,7 +135,7 @@ abstract class AbstractAction
     {
         // delete invalid rows
         $select = $this->_connection->select()->from(
-            ['index_price' => $this->getIndexerDefaultTable()],
+            ['index_price' => $this->getIndexTargetTable()],
             null
         )->joinLeft(
             ['ip_tmp' => $this->_defaultIndexerResource->getIdxTable()],
@@ -152,7 +152,7 @@ abstract class AbstractAction
 
         $this->_insertFromTable(
             $this->_defaultIndexerResource->getIdxTable(),
-            $this->getIndexerDefaultTable()
+            $this->getIndexTargetTable()
         );
         return $this;
     }
@@ -471,7 +471,7 @@ abstract class AbstractAction
 
         if ($children) {
             $select = $this->_connection->select()->from(
-                $this->getIndexerDefaultTable()
+                $this->getIndexTargetTable()
             )->where(
                 'entity_id IN(?)',
                 $children
@@ -484,14 +484,13 @@ abstract class AbstractAction
     }
 
     /**
-     * Returns default table name for writing
+     * Retrieve index table that will be used for write operations.
      *
-     * Method support writing to frontend table in case with partial reindex
-     * and case with writing to replica table during full reindex
+     * This method is used to during both partial and full reindex to identify the the table.
      *
      * @return string
      */
-    protected function getIndexerDefaultTable()
+    protected function getIndexTargetTable()
     {
         return $this->indexerFrontendResource->getMainTable();
     }

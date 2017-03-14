@@ -33,7 +33,9 @@ class BatchSizeCalculator
     }
 
     /**
-     * Composite object for batch size calculators
+     * Retrieve batch size for the given indexer.
+     *
+     * Ensure that the database will be able to handle provided batch size correctly.
      *
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param string $indexerTypeId
