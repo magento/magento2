@@ -25,7 +25,7 @@ interface ConfigInterface
 
     /**
      * Get list of all consumers declared in the system.
-     * 
+     *
      * @return ConsumerConfigItemInterface[]
      * @throws \LogicException
      */

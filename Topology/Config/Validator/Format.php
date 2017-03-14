@@ -21,7 +21,6 @@ class Format implements ValidatorInterface
         $requiredBindingFields = ['id', 'destinationType', 'destination', 'disabled', 'topic', 'arguments'];
         $errors = [];
         foreach ($configData as $name => $data) {
-
             $diff = array_diff($requiredFields, array_keys($data));
             foreach ($diff as $field) {
                 $errors[] = sprintf('Missing [%s] field for exchange %s.', $field, $name);

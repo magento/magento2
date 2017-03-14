@@ -14,8 +14,8 @@ use Magento\Framework\MessageQueue\ConsumerInterface;
 
 /**
  * Converts MessageQueue config from \DOMDocument to array
- * 
- * @deprecated 
+ *
+ * @deprecated
  */
 class TopicConfig implements \Magento\Framework\Config\ConverterInterface
 {
@@ -167,7 +167,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
             $pattern = $this->xmlValidator->buildWildcardPattern($wildcardKey);
             foreach (array_keys($topicDefinitions) as $topicName) {
                 if (preg_match($pattern, $topicName)) {
-
                     if (isset($topics[$topicName])) {
                         $topics[$topicName] = array_merge($topics[$topicName], $topics[$wildcardKey]);
                     } else {

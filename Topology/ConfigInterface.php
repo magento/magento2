@@ -27,7 +27,7 @@ interface ConfigInterface
 
     /**
      * Get list of all exchanges declared in the system.
-     * 
+     *
      * @return ExchangeConfigItemInterface[]
      * @throws \LogicException
      */

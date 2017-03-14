@@ -49,7 +49,7 @@ interface ConsumerConfigItemInterface
 
     /**
      * Get maximum number of messages to be consumed from queue before terminating consumer.
-     * 
+     *
      * @return int
      */
     public function getMaxMessages();

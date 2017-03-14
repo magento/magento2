@@ -40,7 +40,6 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         );
         $this->configParserMock = $this->getMock(ConfigParser::class, [], [], '', false, false);
         $this->converter = new Converter($this->configParserMock, $this->defaultConfigProviderMock);
-
     }
 
     public function testConvert()

@@ -97,7 +97,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
                 . 'Use \Magento\Framework\MessageQueue\ConsumerConfiguration::getConsumerType instead. '
                 . "Multiple topics declared for consumer '{$this->getConsumerName()}'"
             );
-        } else if (count($topics) < 1) {
+        } elseif (count($topics) < 1) {
             throw new \LogicException(
                 "There must be at least one topic declared for consumer '{$this->getConsumerName()}'."
             );

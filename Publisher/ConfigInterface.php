@@ -25,7 +25,7 @@ interface ConfigInterface
 
     /**
      * Get list of all publishers declared in the system.
-     * 
+     *
      * @return PublisherConfigItemInterface[]
      * @throws \LogicException
      */
