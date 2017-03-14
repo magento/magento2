@@ -165,8 +165,8 @@ class ExportAdvancedPricingTest extends Injectable
     /**
      * Setup currency of custom website.
      *
-     * @param $website
-     * @param $currency
+     * @param Website $website
+     * @param array $currency
      * @return void
      */
     private function setupCurrencyForCustomWebsite($website, $currency)
