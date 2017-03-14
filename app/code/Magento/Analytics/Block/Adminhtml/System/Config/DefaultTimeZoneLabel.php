@@ -6,11 +6,9 @@
 namespace Magento\Analytics\Block\Adminhtml\System\Config;
 
 use Magento\Backend\Block\Template\Context;
-use \Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
- * Class DefaultTimeZoneLabelLabel.
- *
  * Provides label with default Time Zone
  */
 class DefaultTimeZoneLabel extends \Magento\Config\Block\System\Config\Form\Field
@@ -21,8 +19,6 @@ class DefaultTimeZoneLabel extends \Magento\Config\Block\System\Config\Form\Fiel
     private $timeZone;
 
     /**
-     * SubscriptionStatusLabel constructor.
-     *
      * @param Context $context
      * @param TimezoneInterface $timeZone
      * @param array $data
