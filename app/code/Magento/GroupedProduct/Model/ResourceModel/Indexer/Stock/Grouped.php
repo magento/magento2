@@ -14,6 +14,11 @@ namespace Magento\GroupedProduct\Model\ResourceModel\Indexer\Stock;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
 
+/**
+ * Stock indexer for grouped product.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock
 {
     /**
@@ -41,9 +46,10 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
         \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
         \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
     ) {
-        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
         parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName, $stateFactory);
+        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()->get(
+            \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class
+        );
     }
 
     /**
