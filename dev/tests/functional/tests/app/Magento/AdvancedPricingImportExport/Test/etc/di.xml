@@ -13,7 +13,7 @@
         </arguments>
     </type>
 
-    <type name="Magento\Mtf\Util\Command\File\Export">
+    <type name="Magento\Mtf\Util\Command\File\ExportInterface">
         <arguments>
             <argument name="type" xsi:type="string">advancedPricing</argument>
         </arguments>

@@ -43,17 +43,6 @@ class Filter extends Grid
     private $continueButton = 'button.action-.scalable';
 
     /**
-     * Return row with given attribute label.
-     *
-     * @param string $attributeLabel
-     * @return \Magento\Mtf\Client\Element\SimpleElement
-     */
-    public function getGridRow($attributeLabel)
-    {
-        return $this->search(['frontend_label' => $attributeLabel]);
-    }
-
-    /**
      * Click on "Continue" button.
      *
      * @return void

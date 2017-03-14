@@ -88,11 +88,7 @@ class TierPrice extends DataSource
         }
         $this->data = $this->repositoryFactory->get($this->params['repository'])->get($this->fixtureData['dataset']);
         if (!empty($this->fixtureData['data']['website'])) {
-            $this->website = $this->fixtureData['data']['website'];
-            $this->fixtureData['data']['website'] = $this->website->getCode();
-            foreach ($this->data as $key => $data) {
-                $this->data[$key] = array_merge($data, $this->fixtureData['data']);
-            }
+            $this->prepareWebsite();
         }
         foreach ($this->data as $key => $item) {
             /** @var CustomerGroup $customerGroup */
@@ -108,6 +104,20 @@ class TierPrice extends DataSource
         }
 
         return parent::getData($key);
+    }
+
+    /**
+     * Prepare website data.
+     *
+     * @return void
+     */
+    private function prepareWebsite()
+    {
+        $this->website = $this->fixtureData['data']['website'];
+        $this->fixtureData['data']['website'] = $this->website->getCode();
+        foreach ($this->data as $key => $data) {
+            $this->data[$key] = array_merge($data, $this->fixtureData['data']);
+        }
     }
 
     /**

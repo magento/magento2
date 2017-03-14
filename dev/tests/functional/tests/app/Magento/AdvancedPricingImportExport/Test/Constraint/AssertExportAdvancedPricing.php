@@ -3,10 +3,9 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ImportExport\Test\Constraint;
+namespace Magento\AdvancedPricingImportExport\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Util\Command\File\Export\Data;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Util\Command\File\Export;
 
@@ -16,33 +15,30 @@ use Magento\Mtf\Util\Command\File\Export;
 class AssertExportAdvancedPricing extends AbstractConstraint
 {
     /**
+     * Export data.
+     *
+     * @var array
+     */
+    private $exportData;
+
+    /**
      * Assert that exported file with advanced pricing options contains product data.
      *
      * @param Export $export
      * @param array $products
      * @param array $exportedFields
-     * @param array $advancedPricingAttributes
      * @return void
      */
     public function processAssert(
         Export $export,
         array $products,
-        array $exportedFields,
-        array $advancedPricingAttributes = []
+        array $exportedFields
     ) {
-        $exportData = $export->getLatest();
-
-        if (!empty($advancedPricingAttributes)) {
-            $products = [$products[$advancedPricingAttributes['product']]];
-        }
-
+        $this->exportData = $export->getLatest();
         foreach ($products as $product) {
+            $regexps = $this->prepareRegexpsForCheck($exportedFields, $product);
             \PHPUnit_Framework_Assert::assertTrue(
-                $this->isProductDataInFile(
-                    $exportedFields,
-                    $product,
-                    $exportData
-                ),
+                $this->isProductDataExists($regexps),
                 'A product with name ' . $product->getName() . ' was not found in exported file.'
             );
         }
@@ -59,22 +55,19 @@ class AssertExportAdvancedPricing extends AbstractConstraint
     }
 
     /**
-     * Get product data from exported file.
+     * Prepare regular expressions for product data in exported file.
      *
      * @param array $fields
      * @param InjectableFixture $product
-     * @param Data $exportData
-     * @param string $quantifiers
-     * @return bool
+     * @return array
      */
-    public function isProductDataInFile(
+    private function prepareRegexpsForCheck(
         array $fields,
-        InjectableFixture $product,
-        Data $exportData,
-        $quantifiers = 'U'
+        InjectableFixture $product
     ) {
-        $dataForCheck = [];
-        for ($i = 0; $i < count($product->getData()['tier_price']); $i++) {
+        $regexpsForCheck = [];
+        $tierPrices = count($product->getData()['tier_price']);
+        for ($i = 0; $i < $tierPrices; $i++) {
             $regexp = '/';
             foreach ($fields as $field) {
                 if (strpos($field, 'tier_price') !== false) {
@@ -88,16 +81,29 @@ class AssertExportAdvancedPricing extends AbstractConstraint
                     $regexp .= '.*(' . $product->getData($field) . ').*';
                 }
             }
-            $regexp .= '/' . $quantifiers;
+            $regexp .= '/U';
 
-            $dataForCheck[] = $regexp;
+            $regexpsForCheck[] = $regexp;
         }
-        foreach ($dataForCheck as $regexp) {
-            preg_match($regexp, $exportData->getContent(), $matches);
+
+        return $regexpsForCheck;
+    }
+
+    /**
+     * Check product data existing in exported file.
+     *
+     * @param array $data
+     * @return bool
+     */
+    private function isProductDataExists(array $data)
+    {
+        foreach ($data as $regexp) {
+            preg_match($regexp, $this->exportData->getContent(), $matches);
             if (empty($matches)) {
                 return false;
             }
         }
+
         return true;
     }
 }

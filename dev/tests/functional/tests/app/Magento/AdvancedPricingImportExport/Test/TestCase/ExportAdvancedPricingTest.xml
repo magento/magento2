@@ -6,14 +6,13 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\ImportExport\Test\TestCase\ExportAdvancedPricingTest" summary="Export with advanced pricing entity type option">
+    <testCase name="Magento\AdvancedPricingImportExport\Test\TestCase\ExportAdvancedPricingTest" summary="Export with advanced pricing entity type option">
         <variation name="ExportAdvancedPricingTestVariation1" summary="Trying export product data with advanced pricing option but without created products" ticketId="MAGETWO-46147">
-            <data name="deleteExistingProducts" xsi:type="string">Yes</data>
-            <data name="exportData/dataset" xsi:type="string">csv_with_advanced_pricing</data>
-            <constraint name="Magento\ImportExport\Test\Constraint\AssertExportAdvancedPricingNoDataErrorMessage"/>
+            <data name="exportData" xsi:type="string">csv_with_advanced_pricing</data>
+            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertExportAdvancedPricingNoDataErrorMessage"/>
         </variation>
         <variation name="ExportAdvancedPricingTestVariation2" summary="Trying export product data with advanced pricing option" ticketId="MAGETWO-46120">
-            <data name="exportData/dataset" xsi:type="string">csv_with_advanced_pricing</data>
+            <data name="exportData" xsi:type="string">csv_with_advanced_pricing</data>
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>
                 <item name="dataset" xsi:type="string">simple_with_tier_price</item>
@@ -25,10 +24,10 @@
                 <item name="3" xsi:type="string">tier_price_qty</item>
                 <item name="4" xsi:type="string">tier_price</item>
             </data>
-            <constraint name="Magento\ImportExport\Test\Constraint\AssertExportAdvancedPricing"/>
+            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertExportAdvancedPricing"/>
         </variation>
         <variation name="ExportAdvancedPricingTestVariation3" summary="Trying export product data with advanced pricing option and sku product attribute" ticketId="MAGETWO-46152">
-            <data name="exportData/dataset" xsi:type="string">csv_with_advanced_pricing</data>
+            <data name="exportData" xsi:type="string">csv_with_advanced_pricing</data>
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>
                 <item name="dataset" xsi:type="string">simple_with_tier_price</item>
@@ -38,8 +37,7 @@
                 <item name="dataset" xsi:type="string">simple_with_tier_price</item>
             </data>
             <data name="advancedPricingAttributes" xsi:type="array">
-                <item name="product" xsi:type="string">0</item>
-                <item name="attribute" xsi:type="string">sku</item>
+                <item name="attributes" xsi:type="string">sku</item>
             </data>
             <data name="exportedFields" xsi:type="array">
                 <item name="0" xsi:type="string">sku</item>
@@ -48,17 +46,17 @@
                 <item name="3" xsi:type="string">tier_price_qty</item>
                 <item name="4" xsi:type="string">tier_price</item>
             </data>
-            <constraint name="Magento\ImportExport\Test\Constraint\AssertExportAdvancedPricing"/>
+            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertExportAdvancedPricing"/>
         </variation>
         <variation name="ExportAdvancedPricingTestVariation4" summary="Trying export product data for product available on main website with default currency and custom website with different currency" ticketId="MAGETWO-48298">
             <data name="issue" xsi:type="string">MAGETWO-65703: Fatal error on creation simple product with tier price in custom website via webapi handler</data>
             <data name="configData" xsi:type="string">price_scope_website</data>
-            <data name="exportData/dataset" xsi:type="string">csv_with_advanced_pricing</data>
+            <data name="exportData" xsi:type="string">csv_with_advanced_pricing</data>
             <data name="products/0" xsi:type="array">
                 <item name="fixture" xsi:type="string">catalogProductSimple</item>
                 <item name="dataset" xsi:type="string">simple_with_tier_price</item>
             </data>
-            <data name="store/dataset" xsi:type="string">custom_store</data>
+            <data name="website/dataset" xsi:type="string">custom_website</data>
             <data name="currencies" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="allowedCurrencies" xsi:type="array">
@@ -79,7 +77,7 @@
                 <item name="3" xsi:type="string">tier_price_qty</item>
                 <item name="4" xsi:type="string">tier_price</item>
             </data>
-            <constraint name="Magento\ImportExport\Test\Constraint\AssertExportAdvancedPricing"/>
+            <constraint name="Magento\AdvancedPricingImportExport\Test\Constraint\AssertExportAdvancedPricing"/>
         </variation>
     </testCase>
 </config>
