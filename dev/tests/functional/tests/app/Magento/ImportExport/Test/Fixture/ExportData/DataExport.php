@@ -18,7 +18,7 @@ class DataExport extends DataSource
      * @constructor
      * @param InjectableFixture $data
      */
-    public function __construct($data)
+    public function __construct(InjectableFixture $data)
     {
         $this->data = $data->getData();
     }
