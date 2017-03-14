@@ -38,7 +38,7 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
     /**
      * Calculate memory size for largest composite product in database.
      *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function estimateRowSize()
     {

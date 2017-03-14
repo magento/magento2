@@ -15,8 +15,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
     /**
-     * {@inheritdoc}
-     * @param null|array $entityIds
+     * @inheritdoc
      */
     protected function reindex($entityIds = null)
     {
