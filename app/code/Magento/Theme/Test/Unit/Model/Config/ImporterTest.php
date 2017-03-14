@@ -95,42 +95,27 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
         $firstThemeMock->expects($this->atLeastOnce())
             ->method('getFullPath')
             ->willReturn('frontend/Magento/luma');
-        $firstThemeMock->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn(1);
         /** @var Data|\PHPUnit_Framework_MockObject_MockObject $secondThemeMock */
         $secondThemeMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $secondThemeMock->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn(2);
         $secondThemeMock->expects($this->once())
             ->method('getFullPath')
             ->willReturn('frontend/Magento/blank');
         /** @var Data|\PHPUnit_Framework_MockObject_MockObject $thirdThemeMock */
         $thirdThemeMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setType', 'setData', 'getId'])
             ->getMock();
-        $thirdThemeMock->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn(null);
         $thirdThemeMock->expects($this->once())
-            ->method('setData')
-            ->with(['area' => 'frontend', 'theme_path' => 'Magento/test', 'parent_id' => '2'])
-            ->willReturnSelf();
-        $thirdThemeMock->expects($this->once())
-            ->method('setType')
-            ->with(ThemeInterface::TYPE_VIRTUAL)
-            ->willReturnSelf();
+            ->method('getFullPath')
+            ->willReturn('frontend/Magento/test');
 
         $this->themeRegistrationMock->expects($this->once())
             ->method('register')
             ->willReturnSelf();
         $this->themeDbCollectionMock->expects($this->once())
             ->method('getItems')
-            ->willReturn([$firstThemeMock, $secondThemeMock]);
+            ->willReturn([$firstThemeMock, $secondThemeMock, $thirdThemeMock]);
         $this->themecollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->themeDbCollectionMock);
@@ -143,19 +128,12 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap([
                 ['frontend/Magento/luma', $firstThemeMock],
                 ['frontend/Magento/blank', $secondThemeMock],
-                ['frontend/Magento/test', $thirdThemeMock],
             ]);
-        $this->themeResourceModelMock->expects($this->once())
-            ->method('save')
-            ->with($thirdThemeMock)
-            ->willReturnSelf();
+        $this->themeFilesystemCollectionMock->expects($this->once())
+            ->method('getAllIds')
+            ->willReturn(['frontend/Magento/luma']);
 
         $result = $this->importer->import([
-            'frontend/Magento/luma' => [
-                'area' => 'frontend',
-                'parent_id' => 'Magento/blank',
-                'theme_path' => 'Magento/luma',
-            ],
             'frontend/Magento/test' => [
                 'area' => 'frontend',
                 'parent_id' => 'Magento/blank',
@@ -203,7 +181,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ->method('getAllIds')
             ->willReturn($inFs);
 
-        $this->assertSame($expectedResult, $this->importer->getWarningMessages($inFile));
+        $this->assertEquals($expectedResult, $this->importer->getWarningMessages($inFile));
     }
 
     /**
@@ -223,11 +201,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
                 ['frontend/Magento/luma' => ['Data of theme']],
                 ['frontend/Magento/luma'],
                 [],
-                [
-                    '<info>As result of themes importing you will get:</info>',
-                    '<info>The following themes will be virtual:</info>',
-                    'frontend/Magento/luma',
-                ]
+                []
             ],
             [
                 ['frontend/Magento/luma' => ['Data of theme']],
@@ -243,22 +217,20 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
                 ['frontend/Magento/luma' => ['Data of theme']],
                 [],
                 [],
-                [
-                    '<info>As result of themes importing you will get:</info>',
-                    '<info>The following themes will be registered:</info>',
-                    'frontend/Magento/luma',
-                    '<info>The following themes will be virtual:</info>',
-                    'frontend/Magento/luma',
-                ]
-            ],
-            [
-                [],
-                [],
-                ['frontend/Magento/luma'],
                 []
             ],
             [
                 [],
+                [],
+                ['frontend/Magento/luma'],
+                [
+                    '<info>As result of themes importing you will get:</info>',
+                    '<info>The following themes will be registered:</info>',
+                    'frontend/Magento/luma',
+                ]
+            ],
+            [
+                [],
                 ['frontend/Magento/luma'],
                 [],
                 [
@@ -271,11 +243,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
                 [],
                 ['frontend/Magento/luma'],
                 ['frontend/Magento/luma'],
-                [
-                    '<info>As result of themes importing you will get:</info>',
-                    '<info>The following themes will be removed:</info>',
-                    'frontend/Magento/luma',
-                ]
+                []
             ],
         ];
     }

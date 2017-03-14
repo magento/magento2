@@ -55,7 +55,7 @@ class QuestionPerformer
      */
     private function getConfirmationQuestion(array $messages)
     {
-        $messages[] = 'Please type yes or no:';
+        $messages[] = 'Do you want to continue [yes/no]?';
 
         /** @var Question $question */
         $question = $this->questionFactory->create([

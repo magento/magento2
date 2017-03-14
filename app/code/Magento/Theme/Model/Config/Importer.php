@@ -7,7 +7,6 @@ namespace Magento\Theme\Model\Config;
 
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\Theme\Collection as ThemeFilesystemCollection;
 use Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory;
 use Magento\Theme\Model\ResourceModel\Theme\Data\Collection as ThemeDbCollection;
@@ -18,17 +17,13 @@ use Magento\Theme\Model\ResourceModel\Theme as ThemeResourceModel;
 /**
  * Imports themes from configurations files.
  *
- * If a theme is presented in the configuration files, in the DB and on the filesystem - does nothing.
- * If a theme is presented in the configuration files, in the DB and is not presented on the filesystem -
- * marks it as virtual.
- * If a theme is presented in the configuration files, but is not presented in the DB and on the filesystem -
- * registers new virtual theme.
- * If a theme is not presented in the configuration files, but is presented in the DB and on the filesystem -
- * removes its registration.
  * If a theme is not presented in the configuration files and on the filesystem, but is presented in the DB -
  * removes its registration.
  * If a theme is not presented in the configuration files and in the DB, but is presented on the filesystem -
- * does nothing.
+ * register the theme in the DB.
+ * If a theme is presented in the configuration files and on the filesystem, but is not presented in the DB -
+ * register the theme in the DB.
+ * In other cases - do nothing.
  */
 class Importer implements ImporterInterface
 {
@@ -92,27 +87,17 @@ class Importer implements ImporterInterface
             /** @var ThemeDbCollection $collection */
             $collection = $this->themeCollectionFactory->create();
 
+            // List of themes full paths which are located on filesystem
+            $themesOnFs = $this->themeFilesystemCollection->getAllIds();
+
             /**
-             * Removes themes if they are not present in configuration files
+             * Removes themes if they are not present in configuration files and filesystem
              * @var Data $theme
              */
             foreach ($collection->getItems() as $theme) {
-                if (!key_exists($theme->getFullPath(), $data)) {
+                $themeFullPath = $theme->getFullPath();
+                if (!key_exists($themeFullPath, $data) && !in_array($themeFullPath, $themesOnFs)) {
                     $this->themeResourceModel->delete($theme);
-                }
-            }
-
-            // Creates virtual theme if its code is absent on filesystem
-            foreach ($data as $themePath => $themeData) {
-                $themeData = $this->resolveThemeParentId($themeData);
-
-                /** @var Data $theme */
-                $theme = $this->themeRegistration->getThemeFromDb($themePath);
-                $pathCheck = $themeData['area'] . '/' . $themeData['theme_path'];
-                if (!$theme->getId() && $themeData['parent_id'] && $themePath === $pathCheck) {
-                    $theme->setData($themeData);
-                    $theme->setType(ThemeInterface::TYPE_VIRTUAL);
-                    $this->themeResourceModel->save($theme);
                 }
             }
         } catch (\Exception $exception) {
@@ -122,26 +107,6 @@ class Importer implements ImporterInterface
         $messages[] = '<info>Theme import was finished.</info>';
 
         return $messages;
-    }
-
-    /**
-     * Resolves theme parent id by theme code.
-     *
-     * @param array $themeData The array of theme data
-     * @return array The array of theme data with resolved parent id
-     */
-    private function resolveThemeParentId(array $themeData)
-    {
-        if (empty($themeData['parent_id'])) {
-            return $themeData;
-        }
-
-        $parentPath = $themeData['area'] . '/' . $themeData['parent_id'];
-        $parentTheme = $this->themeRegistration->getThemeFromDb($parentPath);
-
-        $themeData['parent_id'] = $parentTheme->getId() ?: null;
-
-        return $themeData;
     }
 
     /**
@@ -164,27 +129,16 @@ class Importer implements ImporterInterface
         }
 
         $toBeRegistered = $this->themeFilesystemCollection->getAllIds();
-        $toBeRemoved = array_diff($themesInDb, $themesInFile);
-        $toBeVirtual = array_diff($themesInFile, $toBeRegistered);
-        $newThemes = array_unique(
-            array_merge(
-                array_diff($themesInFile, $themesInDb),
-                array_diff($themesInFile, $toBeRegistered, $themesInDb)
-            )
-        );
+        $toBeRemoved = array_diff($themesInDb, $toBeRegistered, $themesInFile);
+        $newThemes = array_diff($toBeRegistered, $themesInDb);
 
         $messages = [];
-        if ($newThemes || $toBeVirtual || $toBeRemoved) {
+        if ($newThemes || $toBeRemoved) {
             $messages = ['<info>As result of themes importing you will get:</info>'];
 
             if ($newThemes) {
                 $messages[] = '<info>The following themes will be registered:</info>';
                 $messages[] = implode(PHP_EOL, $newThemes);
-            }
-
-            if ($toBeVirtual) {
-                $messages[] = '<info>The following themes will be virtual:</info>';
-                $messages[] = implode(PHP_EOL, $toBeVirtual);
             }
 
             if ($toBeRemoved) {
