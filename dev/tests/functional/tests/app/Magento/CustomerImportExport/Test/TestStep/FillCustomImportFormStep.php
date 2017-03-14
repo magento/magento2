@@ -29,7 +29,6 @@ class FillCustomImportFormStep implements TestStepInterface
      */
     private $import;
 
-
     /**
      * @param AdminImportIndex $adminImportIndex
      * @param ImportData $import
