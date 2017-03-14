@@ -37,6 +37,8 @@ class CustomerNotification
     private $state;
 
     /**
+     * Initialize dependencies.
+     *
      * @param Session $session
      * @param NotificationStorage $notificationStorage
      * @param State $state

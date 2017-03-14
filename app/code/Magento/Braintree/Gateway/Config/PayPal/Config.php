@@ -36,6 +36,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private $icon = [];
 
     /**
+     * Initialize dependencies.
+     *
      * @param ScopeConfigInterface $scopeConfig
      * @param CcConfig $ccConfig
      * @param null $methodCode

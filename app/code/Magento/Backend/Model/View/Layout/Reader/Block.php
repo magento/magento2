@@ -14,11 +14,13 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 class Block extends Layout\Reader\Block
 {
     /**
+     * Initialize dependencies.
+     *
      * @param Layout\ScheduledStructure\Helper $helper
      * @param Layout\Argument\Parser $argumentParser
      * @param Layout\ReaderPool $readerPool
      * @param InterpreterInterface $argumentInterpreter
-     * @param null $scopeType
+     * @param string|null $scopeType
      */
     public function __construct(
         Layout\ScheduledStructure\Helper $helper,

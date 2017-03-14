@@ -29,6 +29,8 @@ class ConfigProvider implements ConfigProviderInterface
     private $resolver;
 
     /**
+     * Initialize dependencies.
+     *
      * @param Config $config
      * @param ResolverInterface $resolver
      */
@@ -39,6 +41,8 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
+     * Retrieve assoc array of checkout configuration
+     *
      * @return array
      */
     public function getConfig()

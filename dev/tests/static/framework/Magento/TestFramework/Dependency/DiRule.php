@@ -141,7 +141,7 @@ class DiRule implements RuleInterface
         $result = [];
         $xpath = new DOMXPath($doc);
         $textNodes = $xpath->query('//*[@xsi:type="object"]');
-/** @var \DOMElement $node */
+        /** @var \DOMElement $node */
         foreach ($textNodes as $node) {
             $result[] = $node->nodeValue;
         }
