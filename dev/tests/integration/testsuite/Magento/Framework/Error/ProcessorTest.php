@@ -9,19 +9,6 @@ require_once __DIR__ . '/../../../../../../../pub/errors/processor.php';
 
 class ProcessorTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Processor */
-    private $processor;
-
-    public function setUp()
-    {
-        $this->processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Processor::class);
-    }
-
-    public function tearDown()
-    {
-        unlink($this->processor->_reportDir . '/' . $this->processor->reportId);
-    }
-
     public function testSaveAndLoadReport()
     {
         $reportData = [
@@ -30,17 +17,26 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             'script_name' => 'processor.php'
         ];
         $expectedReportData = array_merge($reportData, ['url' => '']);
-        $this->processor->saveReport($reportData);
-        $this->assertFileExists($this->processor->_reportDir . '/' . $this->processor->reportId);
-        $this->assertEquals($expectedReportData, $this->processor->reportData);
+        $saveProcessor = $this->createProcessor();
+        $saveProcessor->saveReport($reportData);
+        if (!$saveProcessor->reportId) {
+            $this->fail("Failed to generate report id");
+        }
+        $this->assertFileExists($saveProcessor->_reportDir . '/' . $saveProcessor->reportId);
+        $this->assertEquals($expectedReportData, $saveProcessor->reportData);
 
-        // Store report id and reset our objects
-        $reportId = $this->processor->reportId;
-        $this->setUp();
-        $this->assertEmpty($this->processor->reportData);
+        $loadProcessor = $this->createProcessor();
+        $loadProcessor->loadReport($saveProcessor->reportId);
+        $this->assertEquals($expectedReportData, $loadProcessor->reportData, "File contents of report don't match");
 
-        // Reload report from file and verify contents still match
-        $this->processor->loadReport($reportId);
-        $this->assertEquals($expectedReportData, $this->processor->reportData);
+        unlink($saveProcessor->_reportDir . '/' . $saveProcessor->reportId);
+    }
+
+    /**
+     * @return Processor
+     */
+    private function createProcessor()
+    {
+        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Processor::class);
     }
 }

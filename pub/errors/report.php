@@ -8,8 +8,27 @@ require_once 'processorFactory.php';
 
 $processorFactory = new \Magento\Framework\Error\ProcessorFactory();
 $processor = $processorFactory->createProcessor();
-if (isset($reportData) && is_array($reportData)) {
-    $processor->saveReport($reportData);
+$reportId = (isset($_GET['id'])) ? (int)$_GET['id'] : null;
+
+if ($reportId) {
+    try {
+        $processor->loadReport($reportId);
+    } catch (\Exception $e) {
+        header('Location: '. $processor->getBaseUrl());
+        exit;
+    }
 }
+
+if (isset($reportData) && is_array($reportData)) {
+    $reportUrl = $processor->saveReport($reportData);
+    if (headers_sent()) {
+        echo '<script type="text/javascript">';
+        echo "window.location.href = '{$reportUrl}';";
+        echo '</script>';
+        exit;
+    }
+
+}
+
 $response = $processor->processReport();
 $response->sendResponse();

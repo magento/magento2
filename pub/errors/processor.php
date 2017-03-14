@@ -153,11 +153,7 @@ class Processor
             }
         }
 
-        $reportId = (isset($_GET['id'])) ? (int)$_GET['id'] : null;
-        if ($reportId) {
-            $this->loadReport($reportId);
-        }
-
+        /** @todo Figure out why theme cannot be loaded without a successful loadReport call */
         $this->_indexDir = $this->_getIndexDir();
         $this->_root  = is_dir($this->_indexDir . 'app');
 
@@ -454,7 +450,7 @@ class Processor
      * Create report
      *
      * @param array $reportData
-     * @return void
+     * @return string
      */
     public function saveReport($reportData)
     {
@@ -474,11 +470,7 @@ class Processor
         }
         $this->_setReportUrl();
 
-        if (headers_sent()) {
-            echo '<script type="text/javascript">';
-            echo "window.location.href = '{$this->reportUrl}';";
-            echo '</script>';
-        }
+        return $this->reportUrl;
     }
 
     /**
@@ -493,7 +485,7 @@ class Processor
         $this->_reportFile = $this->_reportDir . '/' . $reportId;
 
         if (!file_exists($this->_reportFile) || !is_readable($this->_reportFile)) {
-            header("Location: " . $this->getHostUrl());
+            throw new \Exception('Report not found');
         }
         $this->_setReportData($this->serializer->unserialize(file_get_contents($this->_reportFile)));
     }
