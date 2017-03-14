@@ -7,12 +7,12 @@
 namespace Magento\Captcha\Test\Block\Form;
 
 use Magento\Mtf\Client\Locator;
-use Magento\Customer\Test\Block\Form\Login;
+use Magento\Customer\Test\Block\Form\Register as CustomerRegister;
 
 /**
- * Form for storefront login with captcha.
+ * Form for storefront register customer with captcha.
  */
-class LoginWithCaptcha extends Login
+class Register extends CustomerRegister
 {
     /**
      * Captcha image selector.
@@ -49,7 +49,7 @@ class LoginWithCaptcha extends Login
     }
 
     /**
-     * Click on reload captcha button.
+     * Click on captcha reload button.
      *
      * @return void
      */
