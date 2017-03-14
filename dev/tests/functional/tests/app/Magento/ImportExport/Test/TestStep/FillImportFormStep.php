@@ -68,7 +68,8 @@ class FillImportFormStep implements TestStepInterface
 
         return [
             'entities' => $file->getEntities(),
-            'import' => $this->import
+            'import' => $this->import,
+            'products' => $file->getEntities()
         ];
     }
 }
