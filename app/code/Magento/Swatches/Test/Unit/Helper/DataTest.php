@@ -5,6 +5,8 @@
  */
 namespace Magento\Swatches\Test\Unit\Helper;
 
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Swatches\Model\SwatchAttributesProvider;
 
 /**
@@ -36,7 +38,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory */
     protected $swatchCollectionFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|Attribute */
     protected $attributeMock;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
@@ -48,7 +50,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Api\ProductRepositoryInterface */
     protected $productRepoMock;
 
-    /** @var   \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\EntityManager\MetadataPool*/
+    /** @var   \PHPUnit_Framework_MockObject_MockObject|MetadataPool*/
     private $metaDataPoolMock;
 
     /**
@@ -108,26 +110,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->attributeMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->metaDataPoolMock = $this->getMock(
-            \Magento\Framework\EntityManager\MetadataPool::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->attributeMock = $this->getMockBuilder(Attribute::class)
+            ->disableOriginalConstructor();
+        $this->metaDataPoolMock = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor();
 
         $serializer = $this->getMock(
             \Magento\Framework\Serialize\Serializer\Json::class,
             ['serialize', 'unserialize']
         );
-
         $serializer->expects($this->any())
             ->method('serialize')->willReturnCallback(function ($parameter) {
                 return json_encode($parameter);
