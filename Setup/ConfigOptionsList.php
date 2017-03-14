@@ -161,7 +161,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
         if (isset($options[self::INPUT_KEY_QUEUE_AMQP_HOST])
             && $options[self::INPUT_KEY_QUEUE_AMQP_HOST] !== '') {
-
             $result = $this->connectionValidator->isConnectionValid(
                 $options[self::INPUT_KEY_QUEUE_AMQP_HOST],
                 $options[self::INPUT_KEY_QUEUE_AMQP_PORT],
