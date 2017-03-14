@@ -110,6 +110,12 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="Magento\Mtf\Util\Command\File\Export\AdvancedPricingReader" type="Magento\Mtf\Util\Command\File\Export\Reader">
+        <arguments>
+            <argument name="template" xsi:type="string">advanced_pricing.*?\.csv</argument>
+        </arguments>
+    </virtualType>
+
     <virtualType name="Magento\Mtf\Util\Command\File\Export\CustomerReader" type="Magento\Mtf\Util\Command\File\Export\Reader">
         <arguments>
             <argument name="template" xsi:type="string">customer.*?\.csv</argument>
