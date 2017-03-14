@@ -198,7 +198,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
     }
 
-    public function testNoViolationsDetectedByPhpCodeSniffer()
+    public function testCodeStyle()
     {
         $reportFile = self::$reportDir . '/phpcs_report.txt';
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
@@ -209,7 +209,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testNoViolationsDetectedByPhpMessDetector()
+    public function testCodeMess()
     {
         $reportFile = self::$reportDir . '/phpmd_report.txt';
         $codeMessDetector = new CodeMessDetector(realpath(__DIR__ . '/_files/phpmd/ruleset.xml'), $reportFile);
@@ -237,7 +237,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function testNoViolationsDetectedByPhpCopyPasteDetector()
+    public function testCopyPaste()
     {
         $reportFile = self::$reportDir . '/phpcpd_report.xml';
         $copyPasteDetector = new CopyPasteDetector($reportFile);
