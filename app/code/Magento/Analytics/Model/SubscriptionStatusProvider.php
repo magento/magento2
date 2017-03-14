@@ -85,12 +85,10 @@ class SubscriptionStatusProvider
      */
     public function getStatusForEnabledSubscription()
     {
-        $attemptsCount = $this->flagManager->getFlagData(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE);
-
         $status = static::ENABLED;
         if (!$this->analyticsToken->isTokenExist()) {
             $status = static::PENDING;
-            if ($attemptsCount === null) {
+            if ($this->flagManager->getFlagData(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE) <= 0) {
                 $status = static::FAILED;
             }
         }
