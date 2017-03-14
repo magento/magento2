@@ -7,7 +7,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Export;
 
 use Magento\Config\Model\Config\Export\Comment;
 use Magento\Config\App\Config\Source\DumpConfigSourceInterface;
-use Magento\Config\Model\Config\Export\DefinitionConfigFieldList;
+use Magento\Config\Model\Config\TypePool;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -25,9 +25,9 @@ class CommentTest extends \PHPUnit_Framework_TestCase
     private $placeholderMock;
 
     /**
-     * @var DefinitionConfigFieldList|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypePool|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $definitionConfigFieldListMock;
+    private $typePoolMock;
 
     /**
      * @var Comment
@@ -55,7 +55,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->definitionConfigFieldListMock = $this->getMockBuilder(DefinitionConfigFieldList::class)
+        $this->typePoolMock = $this->getMockBuilder(TypePool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -65,7 +65,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             [
                 'placeholderFactory' => $placeholderFactoryMock,
                 'source' => $this->configSourceMock,
-                'definitionConfigFieldList' => $this->definitionConfigFieldListMock,
+                'typePool' => $this->typePoolMock,
             ]
         );
     }
@@ -75,8 +75,8 @@ class CommentTest extends \PHPUnit_Framework_TestCase
         $this->configSourceMock->expects($this->once())
             ->method('getExcludedFields')
             ->willReturn([]);
-        $this->definitionConfigFieldListMock->expects($this->never())
-            ->method('belongsTo');
+        $this->typePoolMock->expects($this->never())
+            ->method('isPresent');
         $this->placeholderMock->expects($this->never())
             ->method('generate');
         $this->assertEmpty($this->model->get());
@@ -94,8 +94,9 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             ->method('getExcludedFields')
             ->willReturn([$path]);
 
-        $this->definitionConfigFieldListMock->expects($this->once())
-            ->method('belongsTo')
+        $this->typePoolMock->expects($this->once())
+            ->method('isPresent')
+            ->with($path)
             ->willReturn(true);
 
         $this->placeholderMock->expects($this->once())

@@ -6,6 +6,7 @@
 namespace Magento\Config\Model\Config\Export;
 
 use Magento\Config\App\Config\Source\DumpConfigSourceInterface;
+use Magento\Config\Model\Config\TypePool;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\App\Config\CommentInterface;
@@ -27,27 +28,29 @@ class Comment implements CommentInterface
     private $source;
 
     /**
-     * @var DefinitionConfigFieldList
+     * Checks whether the field is of type.
+     *
+     * @var TypePool
      */
-    private $definitionList;
+    private $typePool;
 
     /**
      * @param PlaceholderFactory $placeholderFactory
      * @param DumpConfigSourceInterface $source
-     * @param DefinitionConfigFieldList|null $definitionConfigFieldList
+     * @param TypePool|null $typePool
      */
     public function __construct(
         PlaceholderFactory $placeholderFactory,
         DumpConfigSourceInterface $source,
-        DefinitionConfigFieldList $definitionConfigFieldList = null
+        TypePool $typePool = null
     ) {
         $this->placeholder = $placeholderFactory->create(PlaceholderFactory::TYPE_ENVIRONMENT);
         $this->source = $source;
-        $this->definitionList = $definitionConfigFieldList ?: ObjectManager::getInstance()->get(DefinitionConfigFieldList::class);
+        $this->typePool = $typePool ?: ObjectManager::getInstance()->get(TypePool::class);
     }
 
     /**
-     * Retrieves comments for config export file.
+     * Retrieves comments for the configuration export file only for fields that have a sensitive type.
      *
      * @return string
      */
@@ -56,7 +59,7 @@ class Comment implements CommentInterface
         $comment = '';
         $fields = $this->source->getExcludedFields();
         foreach ($fields as $path) {
-            if ($this->definitionList->belongsTo($path, DefinitionConfigFieldList::SENSITIVE_FIELDS)) {
+            if ($this->typePool->isPresent($path, TypePool::TYPE_SENSITIVE)) {
                 $comment .= "\n" . $this->placeholder->generate($path) . ' for ' . $path;
             }
         }

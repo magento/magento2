@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\App\Config\Source;
 
-use Magento\Config\Model\Config\Export\DefinitionConfigFieldList;
+use Magento\Config\Model\Config\TypePool;
 use Magento\Config\Model\Config\Export\ExcludeList;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -22,9 +22,11 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     private $excludeList;
 
     /**
-     * @var DefinitionConfigFieldList
+     * Checks whether the field is of type.
+     *
+     * @var TypePool
      */
-    private $definitionConfigFieldList;
+    private $typePool;
 
     /**
      * @var ConfigSourceInterface[]
@@ -44,13 +46,13 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     /**
      * @param ExcludeList $excludeList
      * @param array $sources
-     * @param DefinitionConfigFieldList|null $definitionConfigFieldList
+     * @param TypePool|null $typePool
      */
-    public function __construct(ExcludeList $excludeList, array $sources = [], DefinitionConfigFieldList $definitionConfigFieldList = null)
+    public function __construct(ExcludeList $excludeList, array $sources = [], TypePool $typePool = null)
     {
         $this->excludeList = $excludeList;
         $this->sources = $sources;
-        $this->definitionConfigFieldList = $definitionConfigFieldList ?: ObjectManager::getInstance()->get(DefinitionConfigFieldList::class);
+        $this->typePool = $typePool ?: ObjectManager::getInstance()->get(TypePool::class);
     }
 
     /**
@@ -98,7 +100,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
             if (
                 $filteredPath
                 && !is_array($data[$subKey])
-                && ($this->excludeList->isPresent($filteredPath) || $this->definitionConfigFieldList->isPresent($filteredPath))
+                && $this->isExcludePath($filteredPath)
             ) {
                 $this->excludedFields[$newPath] = $filteredPath;
 
@@ -107,6 +109,19 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
                 $this->filterChain($newPath, $subData);
             }
         }
+    }
+
+    /**
+     * Checks if the configuration field belongs to a sensitive type.
+     *
+     * @param string $path configuration field. For example 'contact/email/recipient_email'
+     * @return boolean
+     */
+    private function isExcludePath($path)
+    {
+        return $this->excludeList->isPresent($path)
+            || $this->typePool->isPresent($path, TypePool::TYPE_ENVIRONMENT)
+            || $this->typePool->isPresent($path, TypePool::TYPE_SENSITIVE);
     }
 
     /**
