@@ -59,7 +59,6 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
             'caseRepository' => $this->caseRepository
         ]);
-
     }
 
     /**
