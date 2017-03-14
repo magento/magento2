@@ -96,10 +96,12 @@ class SetupConfigurationStep implements TestStepInterface
                 $config->persist();
                 $result = array_replace_recursive($result, $config->getSection());
             }
-            if ($this->flushCache) {
-                $this->cache->flush();
-            }
         }
+
+        if ($this->flushCache) {
+            $this->cache->flush();
+        }
+
         $config = $this->fixtureFactory->createByCode('configData', ['data' => $result]);
 
         return ['config' => $config];

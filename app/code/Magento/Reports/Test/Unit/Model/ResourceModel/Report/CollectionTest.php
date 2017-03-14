@@ -143,44 +143,46 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 '_period' => 'day',
-                '_from' => new \DateTime('-3 day'),
-                '_to' => new \DateTime('+3 day'),
+                '_from' => new \DateTime('-3 day', new \DateTimeZone('UTC')),
+                '_to' => new \DateTime('+3 day', new \DateTimeZone('UTC')),
                 'size' => 7
             ],
             [
                 '_period' => 'month',
-                '_from' => new \DateTime('2015-01-15 11:11:11'),
-                '_to' => new \DateTime('2015-01-25 11:11:11'),
+                '_from' => new \DateTime('2015-01-15 11:11:11', new \DateTimeZone('UTC')),
+                '_to' => new \DateTime('2015-01-25 11:11:11', new \DateTimeZone('UTC')),
                 'size' => 1
             ],
             [
                 '_period' => 'month',
-                '_from' => new \DateTime('2015-01-15 11:11:11'),
-                '_to' => new \DateTime('2015-02-25 11:11:11'),
+                '_from' => new \DateTime('2015-01-15 11:11:11', new \DateTimeZone('UTC')),
+                '_to' => new \DateTime('2015-02-25 11:11:11', new \DateTimeZone('UTC')),
                 'size' => 2
             ],
             [
                 '_period' => 'year',
-                '_from' => new \DateTime('2015-01-15 11:11:11'),
-                '_to' => new \DateTime('2015-01-25 11:11:11'),
+                '_from' => new \DateTime('2015-01-15 11:11:11', new \DateTimeZone('UTC')),
+                '_to' => new \DateTime('2015-01-25 11:11:11', new \DateTimeZone('UTC')),
                 'size' => 1
             ],
             [
                 '_period' => 'year',
-                '_from' => new \DateTime('2014-01-15 11:11:11'),
-                '_to' => new \DateTime('2015-01-25 11:11:11'),
+                '_from' => new \DateTime('2014-01-15 11:11:11', new \DateTimeZone('UTC')),
+                '_to' => new \DateTime('2015-01-25 11:11:11', new \DateTimeZone('UTC')),
                 'size' => 2
             ],
             [
                 '_period' => null,
-                '_from' => new \DateTime('-3 day'),
-                '_to' => new \DateTime('+3 day'),
+                '_from' => new \DateTime('-3 day', new \DateTimeZone('UTC')),
+                '_to' => new \DateTime('+3 day', new \DateTimeZone('UTC')),
                 'size' => 0
             ]
         ];
     }
 
     /**
+     * Format datetime.
+     *
      * @return string
      */
     public function formatDateTime()
