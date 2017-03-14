@@ -8,7 +8,6 @@ namespace Magento\Store\Model\Config;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Store\App\Config\Source\RuntimeConfigSource;
 use Magento\Store\Model\Config\Importer\DataDifferenceFactory;
 use Magento\Store\Model\Config\Importer\Process\ProcessFactory;
 use Magento\Store\Model\StoreManager;
@@ -19,45 +18,46 @@ use Magento\Store\Model\StoreManager;
 class Importer implements ImporterInterface
 {
     /**
-     * @var RuntimeConfigSource
-     */
-    private $runtimeConfigSource;
-
-    /**
+     * The factory for data difference calculators.
+     *
      * @var DataDifferenceFactory
      */
     private $dataDifferenceFactory;
 
     /**
+     * The factory for processes.
+     *
      * @var ProcessFactory
      */
     private $processFactory;
 
     /**
+     * The manager for operations with store.
+     *
      * @var StoreManager
      */
     private $storeManager;
 
     /**
-     * @param RuntimeConfigSource $runtimeConfigSource
-     * @param DataDifferenceFactory $dataDifferenceFactory
-     * @param ProcessFactory $processFactory
-     * @param StoreManager $storeManager
+     * @param DataDifferenceFactory $dataDifferenceFactory The factory for data difference calculators
+     * @param ProcessFactory $processFactory The factory for processes
+     * @param StoreManager $storeManager The manager for operations with store
      */
     public function __construct(
-        RuntimeConfigSource $runtimeConfigSource,
         DataDifferenceFactory $dataDifferenceFactory,
         ProcessFactory $processFactory,
         StoreManager $storeManager
     ) {
-        $this->runtimeConfigSource = $runtimeConfigSource;
         $this->dataDifferenceFactory = $dataDifferenceFactory;
         $this->processFactory = $processFactory;
         $this->storeManager = $storeManager;
     }
 
     /**
-     * @inheritdoc
+     * Imports the store data into the application.
+     * After the import it flushes the store cached state.
+     *
+     * {@inheritdoc}
      */
     public function import(array $data)
     {
@@ -81,7 +81,9 @@ class Importer implements ImporterInterface
     }
 
     /**
-     * @inheritdoc
+     * Retrieves all affected entities during the import procedure.
+     *
+     * {@inheritdoc}
      */
     public function getWarningMessages(array $data)
     {
@@ -111,7 +113,7 @@ class Importer implements ImporterInterface
     /**
      * Formats message to appropriate format.
      *
-     * @param string $message The message
+     * @param string $message The message to display
      * @param array $items The items to be used
      * @param string $scope The given scope
      * @return string

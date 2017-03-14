@@ -19,21 +19,23 @@ class ProcessFactory
     /**#@-*/
 
     /**
+     * The Object Manager.
+     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * List of class names that implement config:set processors
+     * List of class names that implement processes.
      *
      * @var array
-     * @see ConfigSetProcessorInterface
+     * @see ProcessInterface
      */
     private $processors;
 
     /**
-     * @param ObjectManagerInterface $objectManager
-     * @param array $processors
+     * @param ObjectManagerInterface $objectManager The Object Manager
+     * @param array $processors List of class names that implement processes
      */
     public function __construct(
         ObjectManagerInterface $objectManager,

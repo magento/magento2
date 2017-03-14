@@ -5,42 +5,63 @@
  */
 namespace Magento\Store\Model\Config\Importer;
 
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Factory class for data difference calculators.
+ *
+ * @see DataDifferenceInterface
+ */
 class DataDifferenceFactory
 {
     /**
+     * The Object Manager.
+     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @param ObjectManagerInterface $objectManager
+     * List of class names that implement data difference.
+     *
+     * @var array
+     * @see DataDifferenceInterface
      */
-    public function __construct(ObjectManagerInterface $objectManager)
+    private $calculators;
+
+    /**
+     * @param ObjectManagerInterface $objectManager The Object Manager
+     * @param array $calculators List of class names that implement data difference
+     */
+    public function __construct(ObjectManagerInterface $objectManager, array $calculators = [])
     {
         $this->objectManager = $objectManager;
+        $this->calculators = $calculators;
     }
 
     /**
-     * @param string $type
-     * @param array $arguments
-     * @return DataDifferenceInterface
-     * @throws InputException
+     * Creates a specific calculator for data difference.
+     *
+     * @param string $type Name of calculator
+     * @return DataDifferenceInterface A calculator for data difference
+     * @throws ConfigurationMismatchException If object type is not exists in instances array
+     * or declared class has wrong implementation
      */
-    public function create($type, array $arguments = [])
+    public function create($type)
     {
-        $diffMap = [
-            'websites' => DataDifference\Websites::class,
-            'stores' => DataDifference\Stores::class,
-            'groups' => DataDifference\Groups::class,
-        ];
-
-        if (!isset($diffMap[$type])) {
-            throw new InputException(__('Wrong data difference type: %1', $type));
+        if (!isset($this->calculators[$type])) {
+            throw new ConfigurationMismatchException(__('Class for type "%1" was not declared', $type));
         }
 
-        return $this->objectManager->create($diffMap[$type], $arguments);
+        $object = $this->objectManager->create($this->calculators[$type]);
+
+        if (!$object instanceof DataDifferenceInterface) {
+            throw new ConfigurationMismatchException(
+                __('%1 should implement %2', get_class($object), DataDifferenceInterface::class)
+            );
+        }
+
+        return $object;
     }
 }
