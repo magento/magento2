@@ -170,12 +170,15 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $store = $storeFactory->create()->load('test', 'code');
         $this->assertSame($store->getSortOrder(), '23');
         $this->assertSame($store->getName(), 'Changed Test Store view');
+        $this->assertSame($store->getGroupId(), $group->getId());
+        $this->assertSame($store->getWebsiteId(), $website->getId());
 
         $website = $websiteFactory->create()->load('test', 'code');
         $this->assertSame($website->getName(), 'Changed Main Test');
 
         $group = $groupFactory->create()->load('test_website_store', 'code');
         $this->assertSame($group->getName(), 'Changed Test Website Store');
+        $this->assertSame($website->getId(), $group->getWebsiteId());
 
         $this->writer->saveConfig(
             [ConfigFilePool::APP_CONFIG => require __DIR__ . '/../../../_files/scopes/config_with_removed_stores.php'],
@@ -189,11 +192,13 @@ class ConfigImportCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('Start import', $commandTester->getDisplay());
         $this->assertContains('Stores were processed', $commandTester->getDisplay());
 
+        $group = $groupFactory->create()->load('test_website_store', 'code');
         $store = $storeFactory->create()->load('test', 'code');
         $website = $websiteFactory->create()->load('test', 'code');
 
         $this->assertSame(null, $store->getId());
         $this->assertSame(null, $website->getId());
+        $this->assertSame(null, $group->getId());
     }
 
     /**

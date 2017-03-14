@@ -37,9 +37,9 @@ class Delete implements ProcessInterface
     private $storeRepository;
 
     /**
-     * @var GroupRepository
+     * @var Group\Collection
      */
-    private $groupRepository;
+    private $groupCollection;
 
     /**
      * @var Website
@@ -66,7 +66,7 @@ class Delete implements ProcessInterface
      * @param DataDifferenceFactory $dataDifferenceFactory
      * @param WebsiteRepository $websiteRepository
      * @param StoreRepository $storeRepository
-     * @param GroupRepository $groupRepository
+     * @param Group\Collection $groupCollection
      * @param Website $websiteResource
      * @param Store $storeResource
      * @param Group $groupResource
@@ -76,7 +76,7 @@ class Delete implements ProcessInterface
         DataDifferenceFactory $dataDifferenceFactory,
         WebsiteRepository $websiteRepository,
         StoreRepository $storeRepository,
-        GroupRepository $groupRepository,
+        Group\Collection $groupCollection,
         Website $websiteResource,
         Store $storeResource,
         Group $groupResource
@@ -85,7 +85,7 @@ class Delete implements ProcessInterface
         $this->dataDifferenceFactory = $dataDifferenceFactory;
         $this->websiteRepository = $websiteRepository;
         $this->storeRepository = $storeRepository;
-        $this->groupRepository = $groupRepository;
+        $this->groupCollection = $groupCollection;
         $this->websiteResource = $websiteResource;
         $this->storeResource = $storeResource;
         $this->groupResource = $groupResource;
@@ -177,16 +177,13 @@ class Delete implements ProcessInterface
      */
     private function deleteGroups(array $items)
     {
-        $groups = $this->groupRepository->getList();
         $items = array_keys($items);
+        $groups = $this->groupCollection
+            ->addFilter('code', ['in' => $items])
+            ->getItems();
 
-        foreach ($items as $groupCode) {
-            /** @var \Magento\Store\Model\Group $group */
-            foreach ($groups as $group) {
-                if ($group->getCode() == $groupCode) {
-                    $this->groupResource->delete($group);
-                }
-            }
+        foreach ($groups as $group) {
+            $this->groupResource->delete($group);
         }
     }
 }
