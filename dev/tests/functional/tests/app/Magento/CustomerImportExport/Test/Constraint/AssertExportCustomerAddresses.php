@@ -61,22 +61,20 @@ class AssertExportCustomerAddresses extends AbstractConstraint
      * @param Customer $customer
      * @param Address $address
      * @param Data $exportData
-     * @param string $quantifiers
      * @return bool
      */
     private function isAddressDataInFile(
         array $fields,
         Customer $customer,
         Address $address,
-        Data $exportData,
-        $quantifiers = 'U'
+        Data $exportData
     ) {
         $regexp = '/';
         foreach ($fields as $field) {
             $fixture = ($field == 'email') ? $customer : $address;
             $regexp .= '.*(' . $fixture->getData($field) . ')';
         }
-        $regexp .= '/' . $quantifiers;
+        $regexp .= '/U';
         preg_match($regexp, $exportData->getContent(), $matches);
         return !empty($matches);
     }

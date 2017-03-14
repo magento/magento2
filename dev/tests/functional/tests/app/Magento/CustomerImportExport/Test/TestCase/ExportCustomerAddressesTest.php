@@ -6,6 +6,7 @@
 namespace Magento\CustomerImportExport\Test\TestCase;
 
 use Magento\ImportExport\Test\Page\Adminhtml\AdminExportIndex;
+use Magento\ImportExport\Test\Fixture\ExportData;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
@@ -59,17 +60,17 @@ class ExportCustomerAddressesTest extends Injectable
     /**
      * Runs Export Customer Addresses test.
      *
-     * @param array $exportData
+     * @param ExportData $exportData
      * @param Customer $customer
      * @return array
      */
     public function test(
-        array $exportData,
+        ExportData $exportData,
         Customer $customer
     ) {
         $customer->persist();
         $this->adminExportIndex->open();
-        $exportData = $this->fixtureFactory->createByCode('exportData', ['dataset' => $exportData['dataset']]);
+        $exportData->persist();
         $this->adminExportIndex->getExportForm()->fill($exportData);
         $this->adminExportIndex->getFilterExport()->clickContinue();
 
