@@ -25,6 +25,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @method string getUpdatedAt()
  * @method \Magento\Wishlist\Model\Wishlist setUpdatedAt(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -126,6 +127,8 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     private $serializer;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Product $catalogProduct
