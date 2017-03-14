@@ -138,7 +138,7 @@ class AssertImportCustomerAddresses extends AbstractConstraint
         $resultCsvData = [];
         foreach ($csvData as $csvRowData) {
             $csvRowData = array_combine($csvKeys, $csvRowData);
-            $csvRowData = $this->deleteDirtData($csvRowData);
+            $csvRowData = $this->deleteWasteData($csvRowData);
             if (isset($this->mappingCountries[$csvRowData['country_id']])) {
                 $csvRowData['country_id'] = $this->mappingCountries[$csvRowData['country_id']];
             };
@@ -153,7 +153,7 @@ class AssertImportCustomerAddresses extends AbstractConstraint
      * @param array $csvData
      * @return array
      */
-    private function deleteDirtData(array $csvData)
+    private function deleteWasteData(array $csvData)
     {
         $necessaryData = array_flip($this->mappingKeys);
         $wasteKeys = array_keys(array_diff_key($csvData, $necessaryData));
