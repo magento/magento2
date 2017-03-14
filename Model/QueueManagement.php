@@ -145,15 +145,15 @@ class QueueManagement
             && strtotime($messageStatus->getUpdatedAt()) < ($now - $this->getCompletedMessageLifetime())) {
             $messageStatus->setStatus(self::MESSAGE_STATUS_TO_BE_DELETED)
                 ->save();
-        } else if ($messageStatus->getStatus() == self::MESSAGE_STATUS_ERROR
+        } elseif ($messageStatus->getStatus() == self::MESSAGE_STATUS_ERROR
             && strtotime($messageStatus->getUpdatedAt()) < ($now - $this->getErrorMessageLifetime())) {
             $messageStatus->setStatus(self::MESSAGE_STATUS_TO_BE_DELETED)
                 ->save();
-        } else if ($messageStatus->getStatus() == self::MESSAGE_STATUS_IN_PROGRESS
+        } elseif ($messageStatus->getStatus() == self::MESSAGE_STATUS_IN_PROGRESS
             && strtotime($messageStatus->getUpdatedAt()) < ($now - $this->getInProgressRetryAfter())
         ) {
             $this->pushToQueueForRetry($messageStatus->getId());
-        } else if ($messageStatus->getStatus() == self::MESSAGE_STATUS_NEW
+        } elseif ($messageStatus->getStatus() == self::MESSAGE_STATUS_NEW
             && strtotime($messageStatus->getUpdatedAt()) < ($now - $this->getNewMessageLifetime())
         ) {
             $messageStatus->setStatus(self::MESSAGE_STATUS_TO_BE_DELETED)
