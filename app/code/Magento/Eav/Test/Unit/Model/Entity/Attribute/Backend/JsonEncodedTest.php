@@ -82,7 +82,6 @@ class JsonEncodedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(json_encode([1, 2, 3]), $product->getData('json_encoded'));
     }
 
-
     /**
      * Test after load handler
      */

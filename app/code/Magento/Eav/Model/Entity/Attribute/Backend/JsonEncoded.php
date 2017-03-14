@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
+
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
